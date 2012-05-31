@@ -16,7 +16,7 @@
  * @param aTimestamp The Timestamp the frame was created for, also used as an ID for the frame.
  * @param theNewFrame Pointer to the newly created frame.
  */
-- (void)coreReceptionist:(VSCoreReceptionist *)theCoreReceptionist didFinishedRenderingFrameAtTimestamp:(double)aTimestamp withResultingFrame:(char *)theNewFrame;
+- (void)coreReceptionist:(VSCoreReceptionist *)theCoreReceptionist didFinishedRenderingFrameAtTimestamp:(double)theTimestamp withResultingTexture:(GLuint)theTexture;
 
 
 @end

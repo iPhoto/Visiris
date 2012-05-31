@@ -60,4 +60,10 @@
  */
 -(NSArray *) visibleParameters;
 
+-(void) setSelectedAndRegisterUndo:(NSUndoManager*) undoManager;
+
+-(void) setUnselectedAndRegisterUndo:(NSUndoManager*) undoManager;
+
+-(void) changeName:(NSString*)newName andRegisterAt:(NSUndoManager*) undoManager;
+
 @end

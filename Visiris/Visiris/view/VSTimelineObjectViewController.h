@@ -25,6 +25,8 @@
  */
 -(BOOL) timelineObjectProxyWillBeSelected:(VSTimelineObjectProxy*) timelineObjectProxy;
 
+-(void) timelineObjectProxyWasSelected:(VSTimelineObjectProxy*) timelineObjectProxy;
+
 @end
 
 /**

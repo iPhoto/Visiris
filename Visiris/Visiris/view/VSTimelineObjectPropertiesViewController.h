@@ -35,5 +35,6 @@
  * Inits the controller with the .nib-File stored in defaultNib (VSBrowserView)
  */
 -(id) initWithDefaultNib;
+- (IBAction)nameTextFieldHasChanged:(NSTextField *)sender;
 
 @end

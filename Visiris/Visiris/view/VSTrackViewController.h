@@ -30,7 +30,7 @@
  * @param aWidth Width of he VSTimelineObject to be added to
  * @return The newly created TimelineObject if it was addedd successfully, NO otherwise
  */
--(VSTimelineObject*) trackViewController:(VSTrackViewController*) trackViewController addTimelineObjectBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *)item  atPosition:(NSPoint) position withWidth:(NSInteger) aWidth;
+-(void) trackViewController:(VSTrackViewController*) trackViewController addTimelineObjectsBasedOnProjectItemRepresentation:(NSArray *)projectItemRepresentations  atPositions:(NSArray*) positionArray withWidths:(NSArray*) widthArray;
 
 /** 
  * Called when an Object that can be added is over a track.
@@ -54,13 +54,15 @@
  * @param timelineObjectProxy VSTimelineObjectProxy that will be removed.
  * @param trackViewController VSTrackViewController the timelineObjectProxy will be removed from
  */
--(void) timelineObjectProxy:(VSTimelineObjectProxy*) timelineObjectProxy willBeRemovedFromTrack:(VSTrackViewController*) trackViewController;
+-(void) timelineObjectProxies:(NSArray *) timelineObjectProxies willBeRemovedFromTrack:(VSTrackViewController*) trackViewController;
 
 /**
  * Called when the view of the VSTrackViewController was clicked.
  * @param trackViewController VSTrackViewController of the view that was clicked
  */
 -(void) didClickViewOfTrackViewController:(VSTrackViewController*) trackViewController;
+
+-(void) timelineObjectProxy:(VSTimelineObjectProxy *) timelineObjectProxy wasSelectedOnTrackViewController:(VSTrackViewController*) trackViewController;
 
 @end
 

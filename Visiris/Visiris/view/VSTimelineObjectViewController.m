@@ -56,6 +56,13 @@ static NSString* defaultNib = @"VSTimelinObjectView";
                 BOOL selected = [[object valueForKey:keyPath] boolValue];
                 if(((VSTimelineObjectView*)self.view).selected != selected){
                     ((VSTimelineObjectView*)self.view).selected = selected;
+                    
+                    if(selected){
+                        if([self delegateRespondsToSelector:@selector(timelineObjectProxyWasSelected:)]){
+                            [self.delegate timelineObjectProxyWasSelected:self.timelineObjectProxy];
+                        }
+                    }
+                    
                     [self.view setNeedsDisplay:YES];
                 }
             }

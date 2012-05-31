@@ -88,6 +88,8 @@ static NSString* defaultNib = @"MainWindow";
     [self initSplitViews];
     
     
+    [self initPlayback];
+    
 }
 
 #pragma mark- Private Methods
@@ -110,7 +112,6 @@ static NSString* defaultNib = @"MainWindow";
     self.previewViewController = [[VSPreviewViewController alloc] initWithDefaultNibForOpenGLContext:[self.preProcessor.renderCoreReceptionist openGLContext]];
                                                                                                       
                                                                                                       
-    self.previewViewController.playbackController = self.playbackController;
     [self loadView:self.previewViewController.view intoSplitView:self.topSplitView replacingViewAtPosition:2];
 }
 
@@ -150,15 +151,18 @@ static NSString* defaultNib = @"MainWindow";
     //** Adding 1 new Audrio-Track to the timeline */
     [self.timeline addNewTrackNamed:[NSString stringWithFormat:@"Audio Track"] ofType:AUDIO_TRACK];
     
-    
-    
-    
-    self.preProcessor = [[VSPreProcessor alloc] initWithTimeline:self.timeline];
-    self.postProcessor = [[VSPostProcessor alloc] init];
 
-    self.preProcessor.renderCoreReceptionist.delegate = self.postProcessor;
+    self.preProcessor = [[VSPreProcessor alloc] initWithTimeline:self.timeline];
     
-    self.playbackController = [[VSPlaybackController alloc] initWithPreProcessor:self.preProcessor timeline:self.timeline];
+}
+
+-(void) initPlayback{
+    self.playbackController = [[VSPlaybackController alloc] initWithPreProcessor:self.preProcessor timeline:self.timeline previewController:self.previewViewController];
+    
+    self.postProcessor = [[VSPostProcessor alloc] initWithPlaybackController:self.playbackController];
+    
+    self.preProcessor.renderCoreReceptionist.delegate = self.postProcessor;
+
 }
 
 #pragma mark - NSSplitViewDelegate implementation

@@ -14,6 +14,7 @@
 @property (strong) NSOpenGLContext *openGLContext;
 @property (strong) NSOpenGLPixelFormat* pixelFormat;
 @property (assign) CVDisplayLinkRef displayLink;
+@property GLuint texture;
 //TODO controller?
 //@property (weak) OpenGLViewController *controller;
 

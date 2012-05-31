@@ -14,6 +14,7 @@
 
 @implementation VSPreviewOpenGLView
 @synthesize openGLContext,pixelFormat,displayLink;
+@synthesize texture = _texture;
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -153,7 +154,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     
     //TODO this is just for testing
     glEnable( GL_TEXTURE_2D );
-    glBindTexture( GL_TEXTURE_2D, 4 );
+    glBindTexture( GL_TEXTURE_2D, self.texture );
     
     glClearColor(0.7, 0.7, 0.7, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -174,5 +175,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	if (displayLink && !CVDisplayLinkIsRunning(displayLink))
 		CVDisplayLinkStart(displayLink);
 }
+
 
 @end
