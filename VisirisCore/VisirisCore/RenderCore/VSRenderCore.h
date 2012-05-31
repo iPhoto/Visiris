@@ -24,7 +24,7 @@
  * @param theFinalFrame the frame that was rendered.
  * @param theTimestamp The timestamp the frame was rendered for.
  */
-- (void)renderCore:(VSRenderCore *)theRenderCore didFinishRenderingFrame:(char *)theFinalFrame forTimestamp:(double) theTimestamp;
+- (void)renderCore:(VSRenderCore *)theRenderCore didFinishRenderingTexture:(GLuint)theTexture forTimestamp:(double) theTimestamp;
 
 @end
 

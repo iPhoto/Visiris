@@ -236,13 +236,22 @@ static NSString* defaultNib = @"VSTimelineView";
 
 #pragma mark- VSTrackViewControlerDelegate implementation
 
--(VSTimelineObject*) trackViewController:(VSTrackViewController *)trackViewController addTimelineObjectBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *)item atPosition:(NSPoint)position withWidth:(NSInteger)aWidth{
+-(void) trackViewController:(VSTrackViewController *)trackViewController addTimelineObjectsBasedOnProjectItemRepresentation:(NSArray *)projectItemRepresentations atPositions:(NSArray *)positionArray withWidths:(NSArray *)widthArray{
+    int i = 0;
     
-    double timePosition = [self getTimestampForPoint:position];
-    NSInteger duration = [self getDurationForPixelWidth:aWidth];
-    
-    
-    return [self.timeline addNewTimelineObjectBasedOnProjectItemRepresentation:item toTrack:trackViewController.track positionedAtTime:timePosition withDuration:duration];
+    for(VSProjectItemRepresentation *projectItem in projectItemRepresentations){
+        
+        NSPoint position = [[positionArray objectAtIndex:i] pointValue];
+        NSInteger width = [[widthArray objectAtIndex:i]intValue];
+        
+        
+        double timePosition = [self getTimestampForPoint:position];
+        NSInteger duration = [self getDurationForPixelWidth:width];
+        
+        
+        [self.timeline addNewTimelineObjectBasedOnProjectItemRepresentation:projectItem toTrack:trackViewController.track positionedAtTime:timePosition withDuration:duration];
+        i++;
+    }
 }
 
 -(VSTimelineObjectProxy*) trackViewController:(VSTrackViewController *)trackViewController createTimelineObjectProxyBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *)item atPosition:(NSPoint)position{
@@ -253,33 +262,77 @@ static NSString* defaultNib = @"VSTimelineView";
 }
 
 -(BOOL) timelineObjectProxy:(VSTimelineObjectProxy *)timelineObjectProxy willBeSelectedOnTrackViewController:(VSTrackViewController *)trackViewController{
-    
+    return [self selectTimelineObjectProxy:timelineObjectProxy onTrack:trackViewController];
+}
+
+-(void) timelineObjectProxy:(VSTimelineObjectProxy *)timelineObjectProxy wasSelectedOnTrackViewController:(VSTrackViewController *)trackViewController{
     if([timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
         
-        [self.timeline unselectAllTimelineObjects];
+        [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectGotSelected object:((VSTimelineObject*) timelineObjectProxy)];
+    }
+}
+
+-(BOOL) selectTimelineObjectProxy:(VSTimelineObjectProxy*) timelineObjectProxy onTrack:(VSTrackViewController*) trackViewController{
+    if([timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
+        
+        [self.view.undoManager setActionName:NSLocalizedString(@"Change Selection", @"Undo Massage of unselecting TimelineObjects")];
+        [self.view.undoManager beginUndoGrouping];
+        
+        NSArray *selectedTimelineObjects = [self.timeline selectedTimelineObjects];
+        
+        for(VSTimelineObject *timelineObject in selectedTimelineObjects){
+            [timelineObject setUnselectedAndRegisterUndo:self.view.undoManager];
+        }
+        
         [self.timeline selectTimelineObject:((VSTimelineObject*) timelineObjectProxy) onTrack:trackViewController.track];
         
         if(timelineObjectProxy.selected){
-            [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectGotSelected object:((VSTimelineObject*) timelineObjectProxy)];
+            [((VSTimelineObject*) timelineObjectProxy) setSelectedAndRegisterUndo:self.view.undoManager];
+            
         }
+        
+        [self.view.undoManager endUndoGrouping];
         
         return YES;
     }
     else {
         return NO;
     }
+    
 }
-
--(void) timelineObjectProxy:(VSTimelineObjectProxy *)timelineObjectProxy willBeRemovedFromTrack:(VSTrackViewController *)trackViewController{
-    if([timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
-        [self.timeline removeTimelineObject:((VSTimelineObject*) timelineObjectProxy) fromTrack:trackViewController.track];
+-(void) timelineObjectProxies:(NSArray *)timelineObjectProxies willBeRemovedFromTrack:(VSTrackViewController *)trackViewController{
+    
+    NSArray *selectedTimelineObjects = [timelineObjectProxies objectsAtIndexes:[timelineObjectProxies indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj isKindOfClass:[VSTimelineObjectProxy class]]){
+            return ((VSTimelineObjectProxy*) obj).selected;
+        }
+        return NO;
+    }]];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectsGotUnselected object:selectedTimelineObjects];
+    
+    for(VSTimelineObjectProxy *timelineObjectProxy in timelineObjectProxies){
+        if([timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
+            [self.timeline removeTimelineObject:((VSTimelineObject*) timelineObjectProxy) fromTrack:trackViewController.track];
+        }
     }
 }
 
 -(void) didClickViewOfTrackViewController:(VSTrackViewController *)trackViewController{
-    [self.timeline unselectAllTimelineObjects];
+    
+    NSArray *selectedTimelineObjects = self.timeline.selectedTimelineObjects;
+    
+    [self.view.undoManager setActionName:NSLocalizedString(@"Change Selection", @"Undo Massage of unselecting TimelineObjects")];
+    
+    [self.view.undoManager beginUndoGrouping];
+    
+    for(VSTimelineObject *timelineObject in selectedTimelineObjects){
+        [timelineObject setUnselectedAndRegisterUndo:self.view.undoManager];
+    }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectsGotUnselected object:[self.timeline selectedTimelineObjects]];
+    
+    [self.view.undoManager endUndoGrouping];
 }
 
 #pragma mark- VSTimelineViewDelegate implementation

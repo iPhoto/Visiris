@@ -19,8 +19,7 @@
 @implementation VSPreviewViewController
 @synthesize openGLViewHolder = _openGLViewHolder;
 @synthesize openGLView = _openGLView;
-
-@synthesize playbackController = _playbackController;
+@synthesize delegate = _delegate;
 @synthesize openGLContext = _openGLContext;
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
@@ -50,6 +49,10 @@ static NSString* defaultNib = @"VSPreviewView";
     return self;
 }
 
+-(void) showTexture:(GLuint) theTexture forTimestamp:(double) theTimestamp{
+    self.openGLView.texture = theTexture;
+}
+
 #pragma  mark - VSViewController
 
 -(void) awakeFromNib{
@@ -60,13 +63,34 @@ static NSString* defaultNib = @"VSPreviewView";
     }
 }
 
+#pragma mark - IBAction
+
 - (IBAction)play:(NSButton *)sender {
-    [self.playbackController startPlaybackFromCurrentTimeStamp];
+    if([self delegateRespondsToSelector:@selector(play) ]){
+        [self.delegate play];
+    }
 }
 
 - (IBAction)stop:(NSButton *)sender {
-    [self.playbackController stopPlayback];
+    if([self delegateRespondsToSelector:@selector(stop) ]){
+        [self.delegate stop];
+    }
 }
+
+#pragma mark - Private Methods
+
+-(BOOL) delegateRespondsToSelector:(SEL) selector{
+    if(self.delegate){
+        if([self.delegate conformsToProtocol:@protocol(VSPreviewViewControllerDelegate) ]){
+            if([self.delegate respondsToSelector:selector]){
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
+}
+
 
 
 @end

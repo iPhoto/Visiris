@@ -31,11 +31,10 @@
 
 #pragma mark - RenderCoreDelegate impl.
 
-- (void)renderCore:(VSRenderCore *)theRenderCore didFinishRenderingFrame:(char *)theFinalFrame forTimestamp:(double)theTimestamp
-{
+- (void)renderCore:(VSRenderCore *)theRenderCore didFinishRenderingTexture:(GLuint)theTexture forTimestamp:(double)theTimestamp{
     if (self.delegate) { 
-        if ([self.delegate respondsToSelector:(@selector(coreReceptionist:didFinishedRenderingFrameAtTimestamp:withResultingFrame:))]) {
-            [self.delegate coreReceptionist:self didFinishedRenderingFrameAtTimestamp:1.0 withResultingFrame:nil];
+        if ([self.delegate respondsToSelector:@selector(coreReceptionist:didFinishedRenderingFrameAtTimestamp:withResultingTexture:)]){
+            [self.delegate coreReceptionist:self didFinishedRenderingFrameAtTimestamp:theTimestamp withResultingTexture:theTexture];
         }
     }
 }

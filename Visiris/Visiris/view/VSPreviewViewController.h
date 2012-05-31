@@ -8,18 +8,31 @@
 
 #import <Cocoa/Cocoa.h>
 
+@protocol VSPreviewViewControllerDelegate <NSObject>
+
+-(void) play;
+
+-(void) stop;
+
+@end
+
 @class VSPlaybackController;
+
 
 @interface VSPreviewViewController : NSViewController
 
 @property (strong) NSOpenGLContext *openGLContext;
 
-@property VSPlaybackController *playbackController;
+@property id<VSPreviewViewControllerDelegate> delegate;
 
 #pragma mark - init
+
 -(id) initWithDefaultNibForOpenGLContext:(NSOpenGLContext*) theOpenGLContext;
 - (IBAction)play:(NSButton *)sender;
 - (IBAction)stop:(NSButton *)sender;
+
 @property (weak) IBOutlet NSView *openGLViewHolder;
+
+-(void) showTexture:(GLuint) theTexture forTimestamp:(double) theTimestamp;
 
 @end

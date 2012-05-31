@@ -76,10 +76,13 @@ static NSString* defaultNib = @"VSParameterView";
     [self.valueSlider setFloatValue:[self.parameter.animation defaultFloatValue]];
 }
 
-- (IBAction)valueSliderHasChanged:(NSSlider *)sender {
+- (IBAction)sliderValueHasChanged:(NSSlider *)sender {
     [self setParameterValueWithText:[sender stringValue]];
     [self.valueSliderText setFloatValue:[self.parameter.animation defaultFloatValue]];
+
 }
+
+
 
 #pragma mark - Private Methods
 
@@ -266,7 +269,7 @@ static NSString* defaultNib = @"VSParameterView";
                 [self setParametersDefaultFloatValue:[self.textValueField floatValue]];
             }
             else {
-                //TODO
+                [self setParametersDefaultFloatValue:[self.valueSliderText floatValue ]];
             }
             break;
         }

@@ -158,8 +158,6 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
 
 -(void)renderFrameOfCoreHandovers:(NSArray *) theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double)theTimestamp{
     
-    char *framePoiner = malloc(theFrameSize.width * theFrameSize.height * 4);
-    
     NSMutableArray *mutableCoreHandovers = [NSMutableArray arrayWithArray:theCoreHandovers];
     
     for(VSCoreHandover *coreHandover in theCoreHandovers){
@@ -203,8 +201,8 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
     
     
     if (self.delegate) {
-        if ([self.delegate respondsToSelector:@selector(renderCore:didFinishRenderingFrame:forTimestamp:)]) {
-            [self.delegate renderCore:self didFinishRenderingFrame:framePoiner forTimestamp:theTimestamp];
+        if ([self.delegate respondsToSelector:@selector(renderCore:didFinishRenderingTexture:forTimestamp:)]) {
+            [self.delegate renderCore:self didFinishRenderingTexture:1 forTimestamp:theTimestamp];
         }
     }
 }

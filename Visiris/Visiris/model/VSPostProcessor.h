@@ -17,5 +17,6 @@
 @interface VSPostProcessor : NSObject <VSCoreReceptionistDelegate>
 
 
+-(id) initWithPlaybackController:(VSPlaybackController*) thePlaybackController;
 
 @end

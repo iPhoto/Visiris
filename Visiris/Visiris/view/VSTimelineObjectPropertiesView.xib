@@ -59,6 +59,7 @@
 												<int key="NSvFlags">268</int>
 												<string key="NSFrameSize">{478, 214}</string>
 												<reference key="NSSuperview" ref="381946043"/>
+												<reference key="NSWindow"/>
 												<reference key="NSNextKeyView" ref="696849061"/>
 												<string key="NSReuseIdentifierKey">_NS:9</string>
 												<string key="NSClassName">VSTestView</string>
@@ -68,6 +69,7 @@
 												<int key="NSvFlags">268</int>
 												<string key="NSFrame">{{17, 235}, {38, 17}}</string>
 												<reference key="NSSuperview" ref="381946043"/>
+												<reference key="NSWindow"/>
 												<reference key="NSNextKeyView" ref="410760356"/>
 												<string key="NSReuseIdentifierKey">_NS:1505</string>
 												<bool key="NSEnabled">YES</bool>
@@ -107,6 +109,7 @@
 												<int key="NSvFlags">268</int>
 												<string key="NSFrame">{{89, 235}, {96, 22}}</string>
 												<reference key="NSSuperview" ref="381946043"/>
+												<reference key="NSWindow"/>
 												<reference key="NSNextKeyView" ref="6214281"/>
 												<string key="NSReuseIdentifierKey">_NS:9</string>
 												<bool key="NSEnabled">YES</bool>
@@ -138,12 +141,14 @@
 										</array>
 										<string key="NSFrameSize">{478, 270}</string>
 										<reference key="NSSuperview" ref="636112554"/>
+										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="693863937"/>
 										<string key="NSReuseIdentifierKey">_NS:13</string>
 									</object>
 								</array>
 								<string key="NSFrame">{{1, 1}, {463, 255}}</string>
 								<reference key="NSSuperview" ref="692284946"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="381946043"/>
 								<string key="NSReuseIdentifierKey">_NS:11</string>
 								<reference key="NSDocView" ref="381946043"/>
@@ -155,6 +160,7 @@
 								<int key="NSvFlags">256</int>
 								<string key="NSFrame">{{464, 1}, {15, 255}}</string>
 								<reference key="NSSuperview" ref="692284946"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="680025222"/>
 								<string key="NSReuseIdentifierKey">_NS:15</string>
 								<bool key="NSEnabled">YES</bool>
@@ -168,6 +174,7 @@
 								<int key="NSvFlags">256</int>
 								<string key="NSFrame">{{1, 256}, {463, 15}}</string>
 								<reference key="NSSuperview" ref="692284946"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:26</string>
 								<bool key="NSEnabled">YES</bool>
@@ -179,6 +186,7 @@
 						</array>
 						<string key="NSFrameSize">{480, 272}</string>
 						<reference key="NSSuperview" ref="1005"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="636112554"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<int key="NSsFlags">133362</int>
@@ -189,6 +197,7 @@
 				</array>
 				<string key="NSFrameSize">{480, 272}</string>
 				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="692284946"/>
 				<string key="NSClassName">NSView</string>
 			</object>
@@ -247,20 +256,12 @@
 					<int key="connectionID">137</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: self.timelineObject.name</string>
-						<reference key="source" ref="410760356"/>
-						<reference key="destination" ref="1001"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="410760356"/>
-							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: self.timelineObject.name</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">self.timelineObject.name</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
+					<object class="IBActionConnection" key="connection">
+						<string key="label">nameTextFieldHasChanged:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="410760356"/>
 					</object>
-					<int key="connectionID">134</int>
+					<int key="connectionID">138</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -719,9 +720,84 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">137</int>
+			<int key="maxID">138</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes"/>
+		<object class="IBClassDescriber" key="IBDocument.Classes">
+			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
+				<object class="IBPartialClassDescription">
+					<string key="className">NSLayoutConstraint</string>
+					<string key="superclassName">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/NSLayoutConstraint.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">VSFlippedView</string>
+					<string key="superclassName">NSView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/VSFlippedView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">VSTestView</string>
+					<string key="superclassName">NSView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/VSTestView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">VSTimelineObjectPropertiesViewController</string>
+					<string key="superclassName">NSViewController</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">nameTextFieldHasChanged:</string>
+						<string key="NS.object.0">NSTextField</string>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">nameTextFieldHasChanged:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">nameTextFieldHasChanged:</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+					</object>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="documentView">NSView</string>
+						<string key="nameLabel">NSTextField</string>
+						<string key="nameTextField">NSTextField</string>
+						<string key="parametersHolder">NSView</string>
+						<string key="scrollView">NSScrollView</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="documentView">
+							<string key="name">documentView</string>
+							<string key="candidateClassName">NSView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="nameLabel">
+							<string key="name">nameLabel</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="nameTextField">
+							<string key="name">nameTextField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="parametersHolder">
+							<string key="name">parametersHolder</string>
+							<string key="candidateClassName">NSView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="scrollView">
+							<string key="name">scrollView</string>
+							<string key="candidateClassName">NSScrollView</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/VSTimelineObjectPropertiesViewController.h</string>
+					</object>
+				</object>
+			</array>
+		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>

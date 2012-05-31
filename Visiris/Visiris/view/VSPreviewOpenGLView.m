@@ -14,6 +14,7 @@
 
 @implementation VSPreviewOpenGLView
 @synthesize openGLContext,pixelFormat,displayLink;
+@synthesize texture = _texture;
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -174,5 +175,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	if (displayLink && !CVDisplayLinkIsRunning(displayLink))
 		CVDisplayLinkStart(displayLink);
 }
+
 
 @end

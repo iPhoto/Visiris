@@ -7,17 +7,32 @@
 //
 
 #import "VSPostProcessor.h"
-
+#import "VSPlaybackController.h"
 #import "VSCoreServices.h"
+
+@interface VSPostProcessor()
+
+@property VSPlaybackController *playbackController;
+@end
 
 @implementation VSPostProcessor
 
+@synthesize playbackController = _playbackController;
+
+#pragma mark - Init
+
+-(id) initWithPlaybackController:(VSPlaybackController *)thePlaybackController{
+    if(self = [super init]){
+        self.playbackController = thePlaybackController;
+    }
+    return self;
+}
 
 #pragma mark - VSCoreReceptionistDelegate implementation
 
-- (void)coreReceptionist:(VSCoreReceptionist *)theCoreReceptionist didFinishedRenderingFrameAtTimestamp:(double)aTimestamp withResultingFrame:(char *)theNewFrame
+- (void)coreReceptionist:(VSCoreReceptionist *)theCoreReceptionist didFinishedRenderingFrameAtTimestamp:(double)theTimestamp withResultingTexture:(GLuint)theTexture
 {
-    DDLogInfo(@"core finished creating frame for timestame: %d", aTimestamp);
+    [self.playbackController finishedRenderingTexture:theTexture forTimestamp:theTimestamp];
 }
 
 @end

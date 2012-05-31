@@ -49,6 +49,7 @@
 						<string key="NSFrame">{{224, 20}, {96, 22}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="931773320">
@@ -93,7 +94,7 @@
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSSliderCell" key="NSCell" id="881477116">
-							<int key="NSCellFlags">-2080244224</int>
+							<int key="NSCellFlags">-2079981824</int>
 							<int key="NSCellFlags2">0</int>
 							<string key="NSContents"/>
 							<string key="NSCellIdentifier">_NS:9</string>
@@ -282,17 +283,25 @@
 					<object class="IBActionConnection" key="connection">
 						<string key="label">textValueHasChanged:</string>
 						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="701390171"/>
-					</object>
-					<int key="connectionID">141</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">textValueHasChanged:</string>
-						<reference key="source" ref="1001"/>
 						<reference key="destination" ref="224204005"/>
 					</object>
 					<int key="connectionID">142</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">sliderValuesHasChanged</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="701390171"/>
+					</object>
+					<int key="connectionID">148</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">sliderValueHasChanged:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="701390171"/>
+					</object>
+					<int key="connectionID">149</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -830,7 +839,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">142</int>
+			<int key="maxID">149</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -847,6 +856,7 @@
 					<string key="superclassName">NSViewController</string>
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="boolValueHasChanged:">NSButton</string>
+						<string key="sliderValueHasChanged:">NSSlider</string>
 						<string key="textValueHasChanged:">id</string>
 						<string key="valueSliderHasChanged:">NSSlider</string>
 						<string key="valueSliderTextHasChanged:">NSTextField</string>
@@ -855,6 +865,10 @@
 						<object class="IBActionInfo" key="boolValueHasChanged:">
 							<string key="name">boolValueHasChanged:</string>
 							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBActionInfo" key="sliderValueHasChanged:">
+							<string key="name">sliderValueHasChanged:</string>
+							<string key="candidateClassName">NSSlider</string>
 						</object>
 						<object class="IBActionInfo" key="textValueHasChanged:">
 							<string key="name">textValueHasChanged:</string>

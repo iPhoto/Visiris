@@ -9,10 +9,13 @@
 #import "VSPlaybackController.h"
 #import "VSPreProcessor.h"
 #import "VSTimeline.h"
+#import "VSPreviewViewController.h"
 
 @interface VSPlaybackController()
 
 @property NSTimer *playbackTimer;
+
+
 
 @end
 
@@ -21,11 +24,15 @@
 @synthesize timeline = _timeline;
 @synthesize currentTimestamp = _currentTimestamp;
 @synthesize playbackTimer = _playbackTimer;
+@synthesize previewViewController = _previewViewController;
 
--(id) initWithPreProcessor:(VSPreProcessor *)preProcessor timeline:(VSTimeline *)timeline{
+-(id) initWithPreProcessor:(VSPreProcessor *)preProcessor timeline:(VSTimeline *)timeline previewController:(VSPreviewViewController *)thePrevieViewController{
     if(self = [super init]){
         _preProcessor = preProcessor;
         _timeline = timeline;
+        _previewViewController = thePrevieViewController;
+        
+        self.previewViewController.delegate = self;
     }
     
     return self;
@@ -58,6 +65,20 @@
     if (self.preProcessor) {
         [self.preProcessor processFrameAtTimestamp:self.currentTimestamp withFrameSize:[self frameSize]];
     }
+}
+
+-(void) finishedRenderingTexture:(GLuint)theTexture forTimestamp:(double)theTimestamp{
+    [self.previewViewController showTexture:theTexture forTimestamp:theTimestamp];
+}
+
+#pragma mark - VSPreviewViewControllerDelegate implementation
+
+-(void) play{
+    [self startPlaybackFromCurrentTimeStamp];
+}
+
+-(void) stop{
+    [self stopPlayback];
 }
 
 

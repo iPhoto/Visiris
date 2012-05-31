@@ -87,4 +87,21 @@
     return tmpArray;
 }
 
+#pragma mark - Undo / Redo
+
+-(void) setSelectedAndRegisterUndo:(NSUndoManager *)undoManager{
+    [[undoManager prepareWithInvocationTarget:self] setUnselectedAndRegisterUndo:undoManager];
+    self.selected = YES;
+}
+
+-(void) setUnselectedAndRegisterUndo:(NSUndoManager *)undoManager{
+    [[undoManager prepareWithInvocationTarget:self] setSelectedAndRegisterUndo:undoManager];
+    self.selected = NO;
+}
+
+-(void) changeName:(NSString *)newName andRegisterAt:(NSUndoManager *)undoManager{
+    [[undoManager prepareWithInvocationTarget:self] changeName:self.name andRegisterAt:undoManager];
+    self.name = newName;
+}
+
 @end

@@ -47,6 +47,8 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 }
 
 
+
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -64,9 +66,23 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     [self initScrollView];
     
     [self.nameLabel setStringValue:NSLocalizedString(@"Name", @"Label for the name of a VSTimelineObject in its properties view")];
+    
+
 }
 
 
+#pragma mark - NSViewController
+
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if ([keyPath isEqualToString:@"name"]) {
+        [self.nameTextField setStringValue:[object valueForKey:keyPath]];
+    }
+}
+
+#pragma mark IBAction
+- (IBAction)nameTextFieldHasChanged:(NSTextField *)sender {
+    [self setTimelineObjectName:[sender stringValue]];
+}
 
 #pragma mark - Private Methods
 
@@ -137,6 +153,12 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
      [self.parametersHolder setFrameSize:NSMakeSize(self.documentView.frame.size.width, [self.parameterViewControllers count] * parameterViewHeight)];
 }
 
+-(void) setTimelineObjectName:(NSString*)newName{
+    if(![self.timelineObject.name isEqualToString:newName]){
+        [self.timelineObject changeName:newName andRegisterAt:self.view.undoManager];
+    }
+}
+
 #pragma mark - Properties
 
 /**
@@ -148,10 +170,16 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 -(void) setTimelineObject:(VSTimelineObject *)timelineObject{
     if(_timelineObject != timelineObject){
         if(_timelineObject){
-            self.timelineObject.name = [self.nameTextField  stringValue];
+            [self.timelineObject removeObserver:self forKeyPath:@"name"];
+            [self setTimelineObjectName:[self.nameTextField stringValue]];
             [self resetParameters];
         }
+           
         _timelineObject = timelineObject;
+        
+            [self.timelineObject addObserver:self forKeyPath:@"name" options:0 context:nil];
+        
+        [self.nameTextField setStringValue:self.timelineObject.name];
         [self showParameters];
         [self resetScrollingPosition];
     }

@@ -52,13 +52,15 @@
  */
 - (IBAction)valueSliderTextHasChanged:(NSTextField *)sender;
 
+
 /** 
  * Called when the value of the slider has been changed. 
  * 
  * The slider displays the value of parameters of the type SParameterDataTypeFloat where hasRange is YES. Min and Max of slider are set according to the valueRange property of the parameter.
  * @param sender Control that called the action.
  */
-- (IBAction)valueSliderHasChanged:(NSSlider *)sender;
+- (IBAction)sliderValueHasChanged:(NSSlider *)sender;
+
 
 
 #pragma mark - init

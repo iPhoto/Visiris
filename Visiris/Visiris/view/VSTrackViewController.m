@@ -123,10 +123,14 @@ static NSString* defaultNib = @"VSTrackView";
             {
                 if([[change valueForKey:@"notificationIsPrior"] boolValue]){ 
                     NSArray *allTimelineObjects = [object valueForKey:keyPath];
-                    NSArray *newTimelineObjects = [allTimelineObjects objectsAtIndexes:[change  objectForKey:@"indexes"]];
+                    NSArray *removedTimelineObjects = [allTimelineObjects objectsAtIndexes:[change  objectForKey:@"indexes"]];
                     
-                    for(VSTimelineObject *object in newTimelineObjects){
+                    for(VSTimelineObject *object in removedTimelineObjects){
                         [self removeTimelineObject:object];
+                    }
+                    
+                    if([self delegateRespondsToSelector:@selector(timelineObjectProxies:willBeRemovedFromTrack:)]){
+                        [self.delegate timelineObjectProxies:removedTimelineObjects willBeRemovedFromTrack:self];
                     }
                 }
                 break;
@@ -183,41 +187,30 @@ static NSString* defaultNib = @"VSTrackView";
         }
         
         
-        if(droppedProjectItems){
+        if(droppedProjectItems.count > 0){
             
             int i = 0;
-            
-            NSMutableArray *addedTimelineObjects = [[NSMutableArray alloc] init];
-            
+
+            NSMutableArray *timelineObjectsWidth  = [[NSMutableArray alloc] init];
+            NSMutableArray *timelineObjectsPositions  = [[NSMutableArray alloc] init];
             
             //for every VSProjectItemRepresentation in droppedProjectItems a VSTimelineObject is created
             for(VSProjectItemRepresentation *item in droppedProjectItems){
-                
-                if([self delegateRespondsToSelector:@selector(trackViewController:addTimelineObjectBasedOnProjectItemRepresentation:atPosition:withWidth:)]){
                     
                     id result = [self.temporaryTimelineObjectViewControllers objectAtIndex:i];
                     
                     if([result isKindOfClass:[VSTimelineObjectViewController class]]){
                         VSTimelineObjectViewController *tmpController = (VSTimelineObjectViewController*) result;
                         
-                        NSPoint itemPosition = tmpController.view.frame.origin;
-                        NSInteger width = tmpController.view.frame.size.width;
-                        VSTimelineObject *tmpObject = [self.delegate trackViewController:self addTimelineObjectBasedOnProjectItemRepresentation:item atPosition:itemPosition withWidth:width];
-                        
-                        if(tmpObject){
-                            [addedTimelineObjects addObject:tmpObject];
-                        }
-                        
+                        [timelineObjectsWidth addObject: [NSNumber numberWithInt:tmpController.view.frame.size.width]];
+                        [timelineObjectsPositions addObject: [NSValue valueWithPoint:tmpController.view.frame.origin]];
                         
                     }
-                }
                 i++;
             }
             
-            if(addedTimelineObjects.count > 0){
-                [self.view.undoManager registerUndoWithTarget:self selector:@selector(undoAddingTimelineObjects:) object:addedTimelineObjects];
-                
-                [self timelineObjectProxyWillBeSelected:[addedTimelineObjects objectAtIndex:0]];
+                if([self delegateRespondsToSelector:@selector(trackViewController:addTimelineObjectsBasedOnProjectItemRepresentation:atPositions:withWidths:)]){
+                    [self.delegate trackViewController:self addTimelineObjectsBasedOnProjectItemRepresentation:droppedProjectItems atPositions:timelineObjectsPositions withWidths:timelineObjectsWidth];
                 
                 result = YES;
             }
@@ -343,6 +336,12 @@ static NSString* defaultNib = @"VSTrackView";
     return NO;
 }
 
+-(void) timelineObjectProxyWasSelected:(VSTimelineObjectProxy *)timelineObjectProxy{
+    if([self delegateRespondsToSelector:@selector(timelineObjectProxy:wasSelectedOnTrackViewController:)]){
+        [self.delegate timelineObjectProxy:timelineObjectProxy wasSelectedOnTrackViewController:self];
+    }
+}
+
 #pragma mark- Private Methods
 
 /**
@@ -377,46 +376,42 @@ static NSString* defaultNib = @"VSTrackView";
     return frame;
 }
 
-/**
- * Calls its delegate to delete the given timelineObjects.
- *
- * Method is used as selector for the registrated Undo when new timelinObjects where added.
- * @param timelineObjects NSArray holding the VSTimelineObjects their adding should be undone
- */
--(void) undoAddingTimelineObjects:(id) timelineObjects{
-    
-    if(!timelineObjects || ![timelineObjects isKindOfClass:[NSArray class]]){
-        return;
-    }
-    
-    for(VSTimelineObject *timelineObject in timelineObjects){
-        
-        if([self delegateRespondsToSelector:@selector(timelineObjectProxy:willBeRemovedFromTrack:)]){
-            [self.delegate timelineObjectProxy:timelineObject willBeRemovedFromTrack:self];
-        }
-    }
-    
-    [self.view.undoManager registerUndoWithTarget:self selector:@selector(undoRemovingTimelineObjects:) object:timelineObjects];
-}
-
-/**
- * Adds the VSTimelineObject stored in timelineObjects to its track
- *
- * Method is used as selector for the registrated Undo of removing TimelineObjects
- * @param timelineObjects NSArray holding the VSTimelineObjects their removing should be undone
- */
--(void) undoRemovingTimelineObjects:(id) timelineObjects{
-    
-    if(!timelineObjects || ![timelineObjects isKindOfClass:[NSArray class]]){
-        return;
-    }
-    
-    for(VSTimelineObject *timelineObject in timelineObjects){
-        [self.track addTimelineObject:timelineObject];
-    }
-    
-    [self.view.undoManager registerUndoWithTarget:self selector:@selector(undoAddingTimelineObjects:) object:timelineObjects];
-}
+///**
+// * Calls its delegate to delete the given timelineObjects.
+// *
+// * Method is used as selector for the registrated Undo when new timelinObjects where added.
+// * @param timelineObjects NSArray holding the VSTimelineObjects their adding should be undone
+// */
+//-(void) undoAddingTimelineObjects:(id) timelineObjects{
+//    
+//    if(!timelineObjects || ![timelineObjects isKindOfClass:[NSArray class]]){
+//        return;
+//    }
+//    
+//    if([self delegateRespondsToSelector:@selector(timelineObjectProxies:willBeRemovedFromTrack:)]){
+//        [self.delegate timelineObjectProxies:timelineObjects willBeRemovedFromTrack:self];
+//    }
+//
+//}
+//
+///**
+// * Adds the VSTimelineObject stored in timelineObjects to its track
+// *
+// * Method is used as selector for the registrated Undo of removing TimelineObjects
+// * @param timelineObjects NSArray holding the VSTimelineObjects their removing should be undone
+// */
+//-(void) undoRemovingTimelineObjects:(id) timelineObjects{
+//    
+//    if(!timelineObjects || ![timelineObjects isKindOfClass:[NSArray class]]){
+//        return;
+//    }
+//    
+//    for(VSTimelineObject *timelineObject in timelineObjects){
+//        [self.track addTimelineObject:timelineObject];
+//    }
+//    
+//    [self.view.undoManager registerUndoWithTarget:self selector:@selector(undoAddingTimelineObjects:) object:timelineObjects];
+//}
 
 #pragma mark - Temporary Timeline Objects
 
