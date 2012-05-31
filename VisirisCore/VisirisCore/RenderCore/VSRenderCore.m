@@ -190,7 +190,9 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
 	// Make sure we draw to the right context
 	[[self openGLContext] makeCurrentContext];
     
-    NSLog(@"textureID: %d",[self combineTexture:blubbTexture.texture with:blubbTexture2.texture]);
+    GLuint finalTexture = [self combineTexture:blubbTexture.texture with:blubbTexture2.texture];
+    
+    //NSLog(@"textureID: %d",[self combineTexture:blubbTexture.texture with:blubbTexture2.texture]);
     
 	[[self openGLContext] flushBuffer];
 	
@@ -202,7 +204,7 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
     
     if (self.delegate) {
         if ([self.delegate respondsToSelector:@selector(renderCore:didFinishRenderingTexture:forTimestamp:)]) {
-            [self.delegate renderCore:self didFinishRenderingTexture:1 forTimestamp:theTimestamp];
+            [self.delegate renderCore:self didFinishRenderingTexture:finalTexture forTimestamp:theTimestamp];
         }
     }
 }
