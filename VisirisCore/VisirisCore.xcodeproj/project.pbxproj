@@ -26,6 +26,10 @@
 		276151351577C7E4005177C5 /* VSRenderCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 276151331577C7E4005177C5 /* VSRenderCore.m */; };
 		276151381577C814005177C5 /* VSFrameBufferObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 276151361577C814005177C5 /* VSFrameBufferObject.h */; };
 		276151391577C814005177C5 /* VSFrameBufferObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 276151371577C814005177C5 /* VSFrameBufferObject.m */; };
+		276151471577D66B005177C5 /* VSTexture.h in Headers */ = {isa = PBXBuildFile; fileRef = 276151451577D66B005177C5 /* VSTexture.h */; };
+		276151481577D66B005177C5 /* VSTexture.m in Sources */ = {isa = PBXBuildFile; fileRef = 276151461577D66B005177C5 /* VSTexture.m */; };
+		2761514B1577F290005177C5 /* VSShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 276151491577F290005177C5 /* VSShader.h */; };
+		2761514C1577F290005177C5 /* VSShader.m in Sources */ = {isa = PBXBuildFile; fileRef = 2761514A1577F290005177C5 /* VSShader.m */; };
 		276AAD581575044400A984E0 /* jolandabregenz.png in Resources */ = {isa = PBXBuildFile; fileRef = 276AAD571575044400A984E0 /* jolandabregenz.png */; };
 		276AAD5B1575046B00A984E0 /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 276AAD5A1575046B00A984E0 /* test.jpg */; };
 		27A135A7157608FD00883B96 /* hellogl.fs.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 27A135A5157608FD00883B96 /* hellogl.fs.glsl */; };
@@ -49,6 +53,10 @@
 		276151331577C7E4005177C5 /* VSRenderCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSRenderCore.m; sourceTree = "<group>"; };
 		276151361577C814005177C5 /* VSFrameBufferObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFrameBufferObject.h; sourceTree = "<group>"; };
 		276151371577C814005177C5 /* VSFrameBufferObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFrameBufferObject.m; sourceTree = "<group>"; };
+		276151451577D66B005177C5 /* VSTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTexture.h; sourceTree = "<group>"; };
+		276151461577D66B005177C5 /* VSTexture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTexture.m; sourceTree = "<group>"; };
+		276151491577F290005177C5 /* VSShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSShader.h; sourceTree = "<group>"; };
+		2761514A1577F290005177C5 /* VSShader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSShader.m; sourceTree = "<group>"; };
 		276AAD571575044400A984E0 /* jolandabregenz.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = jolandabregenz.png; sourceTree = "<group>"; };
 		276AAD5A1575046B00A984E0 /* test.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test.jpg; sourceTree = "<group>"; };
 		27A135A5157608FD00883B96 /* hellogl.fs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hellogl.fs.glsl; sourceTree = "<group>"; };
@@ -88,10 +96,14 @@
 		276151311577C7E4005177C5 /* RenderCore */ = {
 			isa = PBXGroup;
 			children = (
-				276151361577C814005177C5 /* VSFrameBufferObject.h */,
-				276151371577C814005177C5 /* VSFrameBufferObject.m */,
 				276151321577C7E4005177C5 /* VSRenderCore.h */,
 				276151331577C7E4005177C5 /* VSRenderCore.m */,
+				276151361577C814005177C5 /* VSFrameBufferObject.h */,
+				276151371577C814005177C5 /* VSFrameBufferObject.m */,
+				276151451577D66B005177C5 /* VSTexture.h */,
+				276151461577D66B005177C5 /* VSTexture.m */,
+				276151491577F290005177C5 /* VSShader.h */,
+				2761514A1577F290005177C5 /* VSShader.m */,
 			);
 			path = RenderCore;
 			sourceTree = "<group>";
@@ -202,6 +214,8 @@
 				5B14E9AA15641B5D00AFF08C /* VSQuartzComposerHandover.h in Headers */,
 				276151341577C7E4005177C5 /* VSRenderCore.h in Headers */,
 				276151381577C814005177C5 /* VSFrameBufferObject.h in Headers */,
+				276151471577D66B005177C5 /* VSTexture.h in Headers */,
+				2761514B1577F290005177C5 /* VSShader.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,6 +309,8 @@
 				5B14E9AB15641B5D00AFF08C /* VSQuartzComposerHandover.m in Sources */,
 				276151351577C7E4005177C5 /* VSRenderCore.m in Sources */,
 				276151391577C814005177C5 /* VSFrameBufferObject.m in Sources */,
+				276151481577D66B005177C5 /* VSTexture.m in Sources */,
+				2761514C1577F290005177C5 /* VSShader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

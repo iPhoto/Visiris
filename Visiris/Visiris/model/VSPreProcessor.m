@@ -28,9 +28,6 @@
     if(self = [super init]){
         self.timeline = timeline;
         self.renderCoreReceptionist = [[VSCoreReceptionist alloc] init];
-        
-        //TODO this shit is not working, guess why
-        // [self.renderCoreReceptionist openGLContext];
     }
     return self;
 }

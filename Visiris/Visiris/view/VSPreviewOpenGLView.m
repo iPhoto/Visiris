@@ -63,7 +63,7 @@
 												   object:self];
 	}
     
-    //[self startAnimation];
+    [self startAnimation];
 	
 	return self;
 }

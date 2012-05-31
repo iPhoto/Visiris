@@ -50,7 +50,6 @@
 
 -(void) bind{
     glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, self.buffer);
- //   glBindTexture(GL_TEXTURE_2D, self.texture);
 }
 
 -(void) unbind{
@@ -58,7 +57,8 @@
 }
 
 -(void) resize:(NSSize)size{
-    
+    //TODO resizing
+    NSLog(@"Resizing not implemented yet");
 }
 
 @end

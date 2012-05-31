@@ -12,5 +12,5 @@
  * Supplier for VSTimelineObjects with VSVImageSource
  */
 @interface VSImageSourceSupplier : VSFrameSourceSupplier
-
+@property (strong) NSImage *image;
 @end
