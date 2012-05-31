@@ -224,9 +224,7 @@ static NSString* defaultNib = @"VSParameterView";
 }
 
 -(void) registerDefaultValueUndo{
-   [self.view.undoManager registerUndoWithTarget:self.parameter.animation selector:@selector(undoParametersDefaultValueChange:) object:self.parameter.animation.defaultValue];
-    
-//    [self.parameter.animation undoParametersDefaultValueChange:self.parameter.animation.defaultValue];
+    [self.parameter.animation undoParametersDefaultValueChange:self.parameter.animation.defaultValue atUndoManager:self.view.undoManager];
 }
 
 /**

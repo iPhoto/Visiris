@@ -129,10 +129,8 @@ const int defaultKeyFrameTimestamp = -1;
     return NO;
 }
 
--(void) undoParametersDefaultValueChange:(id) oldValue{
-    // registrating the change again for redoing
-//    [self.view.undoManager registerUndoWithTarget:self selector:@selector(undoParametersDefaultValueChange:) object:self.parameter.animation.defaultValue];
-    [[[VSUndoManager sharedManager] undoManager] registerUndoWithTarget:self selector:@selector(undoParametersDefaultValueChange:) object:self.defaultValue];
+-(void) undoParametersDefaultValueChange:(id) oldValue atUndoManager:(NSUndoManager *)undoManager{
+    [[undoManager prepareWithInvocationTarget:self] undoParametersDefaultValueChange:self.defaultValue atUndoManager:undoManager];
     self.defaultValue = oldValue; 
 }
 

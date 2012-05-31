@@ -82,10 +82,6 @@ static NSString* defaultNib = @"MainWindow";
 {
     [super windowDidLoad];
     
-    [VSUndoManager sharedManager].undoManager = self.undoManager;
-    
-    [self.window setDelegate:[VSUndoManager sharedManager]];
-    
     [self initVisiris];
     
     /** inits the spltiview with their subviews */

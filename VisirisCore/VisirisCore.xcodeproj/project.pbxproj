@@ -127,21 +127,13 @@
 		5B19BF67155D0E4E00807769 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				275D8D0E156EB42B0081AB80 /* OpenGL.framework */,
-				5B19BF68155D0E4E00807769 /* Cocoa.framework */,
-				5B19BF6A155D0E4E00807769 /* Other Frameworks */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		5B19BF6A155D0E4E00807769 /* Other Frameworks */ = {
-			isa = PBXGroup;
-			children = (
 				5B19BF6B155D0E4E00807769 /* AppKit.framework */,
 				5B19BF6C155D0E4E00807769 /* CoreData.framework */,
 				5B19BF6D155D0E4E00807769 /* Foundation.framework */,
+				275D8D0E156EB42B0081AB80 /* OpenGL.framework */,
+				5B19BF68155D0E4E00807769 /* Cocoa.framework */,
 			);
-			name = "Other Frameworks";
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		5B19BF6E155D0E4E00807769 /* VisirisCore */ = {

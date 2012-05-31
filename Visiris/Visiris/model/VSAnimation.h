@@ -145,6 +145,6 @@
  * Set as selector for undoing changes of the parameter's default value 
  * @oldValue DefaultValue of the parameter before the change.
  */
--(void) undoParametersDefaultValueChange:(id) oldValue;
+-(void) undoParametersDefaultValueChange:(id) oldValue atUndoManager:(NSUndoManager*) undoManager;
 
 @end

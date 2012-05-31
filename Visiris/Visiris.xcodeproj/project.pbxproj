@@ -17,21 +17,6 @@
 		5B35BFD21577A573009911EC /* VSProjectItemController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF371577A573009911EC /* VSProjectItemController.m */; };
 		5B35BFD31577A573009911EC /* VSProjectItemRepresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF391577A573009911EC /* VSProjectItemRepresentationController.m */; };
 		5B35BFD41577A573009911EC /* NSColor+CGColorSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF3D1577A573009911EC /* NSColor+CGColorSupport.m */; };
-		5B35BFD51577A573009911EC /* VSLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF411577A573009911EC /* VSLogFormatter.m */; };
-		5B35BFD61577A573009911EC /* VSAssortedConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF431577A573009911EC /* VSAssortedConstants.m */; };
-		5B35BFD71577A573009911EC /* VSFileImageCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF461577A573009911EC /* VSFileImageCreator.m */; };
-		5B35BFD81577A573009911EC /* VSFileType.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF491577A573009911EC /* VSFileType.m */; };
-		5B35BFD91577A573009911EC /* VSFileUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF4B1577A573009911EC /* VSFileUtils.m */; };
-		5B35BFDA1577A573009911EC /* VSFormattingUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF4D1577A573009911EC /* VSFormattingUtils.m */; };
-		5B35BFDB1577A573009911EC /* VSImageConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF4F1577A573009911EC /* VSImageConstants.m */; };
-		5B35BFDC1577A573009911EC /* VSNotificationConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF511577A573009911EC /* VSNotificationConstants.m */; };
-		5B35BFDD1577A573009911EC /* VSParameterTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF541577A573009911EC /* VSParameterTypes.m */; };
-		5B35BFDE1577A573009911EC /* VSParameterXMLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF561577A573009911EC /* VSParameterXMLUtils.m */; };
-		5B35BFDF1577A573009911EC /* VSPasteboaredConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF581577A573009911EC /* VSPasteboaredConstants.m */; };
-		5B35BFE01577A573009911EC /* VSProjectSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF5A1577A573009911EC /* VSProjectSettings.m */; };
-		5B35BFE11577A573009911EC /* VSSupportedFilesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF5C1577A573009911EC /* VSSupportedFilesManager.m */; };
-		5B35BFE21577A573009911EC /* VSTimelineConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF5E1577A573009911EC /* VSTimelineConstants.m */; };
-		5B35BFE31577A573009911EC /* VSUndoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF611577A573009911EC /* VSUndoManager.m */; };
 		5B35BFE41577A573009911EC /* VSAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF641577A573009911EC /* VSAnimation.m */; };
 		5B35BFE51577A573009911EC /* VSAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF661577A573009911EC /* VSAudioSource.m */; };
 		5B35BFE61577A573009911EC /* VSAudioSourceSupplier.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF681577A573009911EC /* VSAudioSourceSupplier.m */; };
@@ -122,6 +107,20 @@
 		5B35C06B1577A5EC009911EC /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35C06A1577A5EC009911EC /* OpenGL.framework */; };
 		5B35C06D1577A62D009911EC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35C06C1577A62D009911EC /* QuartzCore.framework */; };
 		5B35C06F1577A63E009911EC /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35C06E1577A63E009911EC /* QTKit.framework */; };
+		5B35C0971577A912009911EC /* VSFileType.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0731577A912009911EC /* VSFileType.m */; };
+		5B35C0981577A912009911EC /* VSFileUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0751577A912009911EC /* VSFileUtils.m */; };
+		5B35C0991577A912009911EC /* VSParameterTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0781577A912009911EC /* VSParameterTypes.m */; };
+		5B35C09A1577A912009911EC /* VSFileImageCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C07C1577A912009911EC /* VSFileImageCreator.m */; };
+		5B35C09B1577A912009911EC /* VSFormattingUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C07E1577A912009911EC /* VSFormattingUtils.m */; };
+		5B35C09C1577A912009911EC /* VSParameterXMLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0801577A912009911EC /* VSParameterXMLUtils.m */; };
+		5B35C09D1577A912009911EC /* VSProjectSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0821577A912009911EC /* VSProjectSettings.m */; };
+		5B35C09E1577A912009911EC /* VSSupportedFilesManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0841577A912009911EC /* VSSupportedFilesManager.m */; };
+		5B35C09F1577A912009911EC /* VSAssortedConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0871577A912009911EC /* VSAssortedConstants.m */; };
+		5B35C0A01577A912009911EC /* VSImageConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0891577A912009911EC /* VSImageConstants.m */; };
+		5B35C0A11577A912009911EC /* VSNotificationConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C08B1577A912009911EC /* VSNotificationConstants.m */; };
+		5B35C0A21577A912009911EC /* VSPasteboaredConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C08D1577A912009911EC /* VSPasteboaredConstants.m */; };
+		5B35C0A31577A912009911EC /* VSTimelineConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C08F1577A912009911EC /* VSTimelineConstants.m */; };
+		5B35C0A51577A912009911EC /* VSLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0961577A912009911EC /* VSLogFormatter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -145,41 +144,6 @@
 		5B35BF391577A573009911EC /* VSProjectItemRepresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSProjectItemRepresentationController.m; sourceTree = "<group>"; };
 		5B35BF3C1577A573009911EC /* NSColor+CGColorSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+CGColorSupport.h"; sourceTree = "<group>"; };
 		5B35BF3D1577A573009911EC /* NSColor+CGColorSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+CGColorSupport.m"; sourceTree = "<group>"; };
-		5B35BF3F1577A573009911EC /* VSLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSLog.h; sourceTree = "<group>"; };
-		5B35BF401577A573009911EC /* VSLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSLogFormatter.h; sourceTree = "<group>"; };
-		5B35BF411577A573009911EC /* VSLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLogFormatter.m; sourceTree = "<group>"; };
-		5B35BF421577A573009911EC /* VSAssortedConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAssortedConstants.h; sourceTree = "<group>"; };
-		5B35BF431577A573009911EC /* VSAssortedConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAssortedConstants.m; sourceTree = "<group>"; };
-		5B35BF441577A573009911EC /* VSCoreServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSCoreServices.h; sourceTree = "<group>"; };
-		5B35BF451577A573009911EC /* VSFileImageCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFileImageCreator.h; sourceTree = "<group>"; };
-		5B35BF461577A573009911EC /* VSFileImageCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFileImageCreator.m; sourceTree = "<group>"; };
-		5B35BF471577A573009911EC /* VSFileKind.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFileKind.h; sourceTree = "<group>"; };
-		5B35BF481577A573009911EC /* VSFileType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFileType.h; sourceTree = "<group>"; };
-		5B35BF491577A573009911EC /* VSFileType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFileType.m; sourceTree = "<group>"; };
-		5B35BF4A1577A573009911EC /* VSFileUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFileUtils.h; sourceTree = "<group>"; };
-		5B35BF4B1577A573009911EC /* VSFileUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFileUtils.m; sourceTree = "<group>"; };
-		5B35BF4C1577A573009911EC /* VSFormattingUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFormattingUtils.h; sourceTree = "<group>"; };
-		5B35BF4D1577A573009911EC /* VSFormattingUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFormattingUtils.m; sourceTree = "<group>"; };
-		5B35BF4E1577A573009911EC /* VSImageConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSImageConstants.h; sourceTree = "<group>"; };
-		5B35BF4F1577A573009911EC /* VSImageConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSImageConstants.m; sourceTree = "<group>"; };
-		5B35BF501577A573009911EC /* VSNotificationConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSNotificationConstants.h; sourceTree = "<group>"; };
-		5B35BF511577A573009911EC /* VSNotificationConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSNotificationConstants.m; sourceTree = "<group>"; };
-		5B35BF521577A573009911EC /* VSParameterDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSParameterDataType.h; sourceTree = "<group>"; };
-		5B35BF531577A573009911EC /* VSParameterTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSParameterTypes.h; sourceTree = "<group>"; };
-		5B35BF541577A573009911EC /* VSParameterTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSParameterTypes.m; sourceTree = "<group>"; };
-		5B35BF551577A573009911EC /* VSParameterXMLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSParameterXMLUtils.h; sourceTree = "<group>"; };
-		5B35BF561577A573009911EC /* VSParameterXMLUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSParameterXMLUtils.m; sourceTree = "<group>"; };
-		5B35BF571577A573009911EC /* VSPasteboaredConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSPasteboaredConstants.h; sourceTree = "<group>"; };
-		5B35BF581577A573009911EC /* VSPasteboaredConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSPasteboaredConstants.m; sourceTree = "<group>"; };
-		5B35BF591577A573009911EC /* VSProjectSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSProjectSettings.h; sourceTree = "<group>"; };
-		5B35BF5A1577A573009911EC /* VSProjectSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSProjectSettings.m; sourceTree = "<group>"; };
-		5B35BF5B1577A573009911EC /* VSSupportedFilesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSSupportedFilesManager.h; sourceTree = "<group>"; };
-		5B35BF5C1577A573009911EC /* VSSupportedFilesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSSupportedFilesManager.m; sourceTree = "<group>"; };
-		5B35BF5D1577A573009911EC /* VSTimelineConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineConstants.h; sourceTree = "<group>"; };
-		5B35BF5E1577A573009911EC /* VSTimelineConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineConstants.m; sourceTree = "<group>"; };
-		5B35BF5F1577A573009911EC /* VSTrackType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTrackType.h; sourceTree = "<group>"; };
-		5B35BF601577A573009911EC /* VSUndoManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSUndoManager.h; sourceTree = "<group>"; };
-		5B35BF611577A573009911EC /* VSUndoManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSUndoManager.m; sourceTree = "<group>"; };
 		5B35BF631577A573009911EC /* VSAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAnimation.h; sourceTree = "<group>"; };
 		5B35BF641577A573009911EC /* VSAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAnimation.m; sourceTree = "<group>"; };
 		5B35BF651577A573009911EC /* VSAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAudioSource.h; sourceTree = "<group>"; };
@@ -330,6 +294,39 @@
 		5B35C06A1577A5EC009911EC /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		5B35C06C1577A62D009911EC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5B35C06E1577A63E009911EC /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
+		5B35C0711577A912009911EC /* VSFileKind.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFileKind.h; sourceTree = "<group>"; };
+		5B35C0721577A912009911EC /* VSFileType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFileType.h; sourceTree = "<group>"; };
+		5B35C0731577A912009911EC /* VSFileType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFileType.m; sourceTree = "<group>"; };
+		5B35C0741577A912009911EC /* VSFileUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFileUtils.h; sourceTree = "<group>"; };
+		5B35C0751577A912009911EC /* VSFileUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFileUtils.m; sourceTree = "<group>"; };
+		5B35C0761577A912009911EC /* VSParameterDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSParameterDataType.h; sourceTree = "<group>"; };
+		5B35C0771577A912009911EC /* VSParameterTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSParameterTypes.h; sourceTree = "<group>"; };
+		5B35C0781577A912009911EC /* VSParameterTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSParameterTypes.m; sourceTree = "<group>"; };
+		5B35C0791577A912009911EC /* VSTrackType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTrackType.h; sourceTree = "<group>"; };
+		5B35C07B1577A912009911EC /* VSFileImageCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFileImageCreator.h; sourceTree = "<group>"; };
+		5B35C07C1577A912009911EC /* VSFileImageCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFileImageCreator.m; sourceTree = "<group>"; };
+		5B35C07D1577A912009911EC /* VSFormattingUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFormattingUtils.h; sourceTree = "<group>"; };
+		5B35C07E1577A912009911EC /* VSFormattingUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFormattingUtils.m; sourceTree = "<group>"; };
+		5B35C07F1577A912009911EC /* VSParameterXMLUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSParameterXMLUtils.h; sourceTree = "<group>"; };
+		5B35C0801577A912009911EC /* VSParameterXMLUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSParameterXMLUtils.m; sourceTree = "<group>"; };
+		5B35C0811577A912009911EC /* VSProjectSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSProjectSettings.h; sourceTree = "<group>"; };
+		5B35C0821577A912009911EC /* VSProjectSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSProjectSettings.m; sourceTree = "<group>"; };
+		5B35C0831577A912009911EC /* VSSupportedFilesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSSupportedFilesManager.h; sourceTree = "<group>"; };
+		5B35C0841577A912009911EC /* VSSupportedFilesManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSSupportedFilesManager.m; sourceTree = "<group>"; };
+		5B35C0861577A912009911EC /* VSAssortedConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAssortedConstants.h; sourceTree = "<group>"; };
+		5B35C0871577A912009911EC /* VSAssortedConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAssortedConstants.m; sourceTree = "<group>"; };
+		5B35C0881577A912009911EC /* VSImageConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSImageConstants.h; sourceTree = "<group>"; };
+		5B35C0891577A912009911EC /* VSImageConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSImageConstants.m; sourceTree = "<group>"; };
+		5B35C08A1577A912009911EC /* VSNotificationConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSNotificationConstants.h; sourceTree = "<group>"; };
+		5B35C08B1577A912009911EC /* VSNotificationConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSNotificationConstants.m; sourceTree = "<group>"; };
+		5B35C08C1577A912009911EC /* VSPasteboaredConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSPasteboaredConstants.h; sourceTree = "<group>"; };
+		5B35C08D1577A912009911EC /* VSPasteboaredConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSPasteboaredConstants.m; sourceTree = "<group>"; };
+		5B35C08E1577A912009911EC /* VSTimelineConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineConstants.h; sourceTree = "<group>"; };
+		5B35C08F1577A912009911EC /* VSTimelineConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineConstants.m; sourceTree = "<group>"; };
+		5B35C0941577A912009911EC /* VSLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSLog.h; sourceTree = "<group>"; };
+		5B35C0951577A912009911EC /* VSLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSLogFormatter.h; sourceTree = "<group>"; };
+		5B35C0961577A912009911EC /* VSLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLogFormatter.m; sourceTree = "<group>"; };
+		5B35C0A61577A926009911EC /* VSCoreServices.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSCoreServices.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -371,25 +368,17 @@
 		5B35BF141577A49C009911EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5B35BF181577A49C009911EC /* AppKit.framework */,
+				5B35BF191577A49C009911EC /* CoreData.framework */,
+				5B35BF1A1577A49C009911EC /* Foundation.framework */,
 				5B35C06E1577A63E009911EC /* QTKit.framework */,
 				5B35C06C1577A62D009911EC /* QuartzCore.framework */,
 				5B35C06A1577A5EC009911EC /* OpenGL.framework */,
 				5B35C0681577A5D3009911EC /* QuickLook.framework */,
 				5B35C0661577A5CE009911EC /* VisirisCore.framework */,
 				5B35BF151577A49C009911EC /* Cocoa.framework */,
-				5B35BF171577A49C009911EC /* Other Frameworks */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		5B35BF171577A49C009911EC /* Other Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				5B35BF181577A49C009911EC /* AppKit.framework */,
-				5B35BF191577A49C009911EC /* CoreData.framework */,
-				5B35BF1A1577A49C009911EC /* Foundation.framework */,
-			);
-			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
 		5B35BF1B1577A49C009911EC /* Visiris */ = {
@@ -435,40 +424,12 @@
 		5B35BF3A1577A573009911EC /* CoreServices */ = {
 			isa = PBXGroup;
 			children = (
+				5B35C0A61577A926009911EC /* VSCoreServices.h */,
+				5B35C0701577A912009911EC /* enums */,
+				5B35C07A1577A912009911EC /* utils */,
+				5B35C0851577A912009911EC /* constants */,
+				5B35C0931577A912009911EC /* logging */,
 				5B35BF3B1577A573009911EC /* categories */,
-				5B35BF3E1577A573009911EC /* logging */,
-				5B35BF421577A573009911EC /* VSAssortedConstants.h */,
-				5B35BF431577A573009911EC /* VSAssortedConstants.m */,
-				5B35BF441577A573009911EC /* VSCoreServices.h */,
-				5B35BF451577A573009911EC /* VSFileImageCreator.h */,
-				5B35BF461577A573009911EC /* VSFileImageCreator.m */,
-				5B35BF471577A573009911EC /* VSFileKind.h */,
-				5B35BF481577A573009911EC /* VSFileType.h */,
-				5B35BF491577A573009911EC /* VSFileType.m */,
-				5B35BF4A1577A573009911EC /* VSFileUtils.h */,
-				5B35BF4B1577A573009911EC /* VSFileUtils.m */,
-				5B35BF4C1577A573009911EC /* VSFormattingUtils.h */,
-				5B35BF4D1577A573009911EC /* VSFormattingUtils.m */,
-				5B35BF4E1577A573009911EC /* VSImageConstants.h */,
-				5B35BF4F1577A573009911EC /* VSImageConstants.m */,
-				5B35BF501577A573009911EC /* VSNotificationConstants.h */,
-				5B35BF511577A573009911EC /* VSNotificationConstants.m */,
-				5B35BF521577A573009911EC /* VSParameterDataType.h */,
-				5B35BF531577A573009911EC /* VSParameterTypes.h */,
-				5B35BF541577A573009911EC /* VSParameterTypes.m */,
-				5B35BF551577A573009911EC /* VSParameterXMLUtils.h */,
-				5B35BF561577A573009911EC /* VSParameterXMLUtils.m */,
-				5B35BF571577A573009911EC /* VSPasteboaredConstants.h */,
-				5B35BF581577A573009911EC /* VSPasteboaredConstants.m */,
-				5B35BF591577A573009911EC /* VSProjectSettings.h */,
-				5B35BF5A1577A573009911EC /* VSProjectSettings.m */,
-				5B35BF5B1577A573009911EC /* VSSupportedFilesManager.h */,
-				5B35BF5C1577A573009911EC /* VSSupportedFilesManager.m */,
-				5B35BF5D1577A573009911EC /* VSTimelineConstants.h */,
-				5B35BF5E1577A573009911EC /* VSTimelineConstants.m */,
-				5B35BF5F1577A573009911EC /* VSTrackType.h */,
-				5B35BF601577A573009911EC /* VSUndoManager.h */,
-				5B35BF611577A573009911EC /* VSUndoManager.m */,
 			);
 			path = CoreServices;
 			sourceTree = "<group>";
@@ -482,75 +443,14 @@
 			path = categories;
 			sourceTree = "<group>";
 		};
-		5B35BF3E1577A573009911EC /* logging */ = {
-			isa = PBXGroup;
-			children = (
-				5B35BF3F1577A573009911EC /* VSLog.h */,
-				5B35BF401577A573009911EC /* VSLogFormatter.h */,
-				5B35BF411577A573009911EC /* VSLogFormatter.m */,
-			);
-			path = logging;
-			sourceTree = "<group>";
-		};
 		5B35BF621577A573009911EC /* model */ = {
 			isa = PBXGroup;
 			children = (
-				5B35BF631577A573009911EC /* VSAnimation.h */,
-				5B35BF641577A573009911EC /* VSAnimation.m */,
-				5B35BF651577A573009911EC /* VSAudioSource.h */,
-				5B35BF661577A573009911EC /* VSAudioSource.m */,
-				5B35BF671577A573009911EC /* VSAudioSourceSupplier.h */,
-				5B35BF681577A573009911EC /* VSAudioSourceSupplier.m */,
-				5B35BF691577A573009911EC /* VSDevice.h */,
-				5B35BF6A1577A573009911EC /* VSDevice.m */,
-				5B35BF6B1577A573009911EC /* VSDeviceManager.h */,
-				5B35BF6C1577A573009911EC /* VSDeviceManager.m */,
-				5B35BF6D1577A573009911EC /* VSDeviceParameterMapper.h */,
-				5B35BF6E1577A573009911EC /* VSDeviceParameterMapper.m */,
-				5B35BF6F1577A573009911EC /* VSFrameSourceSupplier.h */,
-				5B35BF701577A573009911EC /* VSFrameSourceSupplier.m */,
-				5B35BF711577A573009911EC /* VSImageSource.h */,
-				5B35BF721577A573009911EC /* VSImageSource.m */,
-				5B35BF731577A573009911EC /* VSImageSourceSupplier.h */,
-				5B35BF741577A573009911EC /* VSImageSourceSupplier.m */,
-				5B35BF751577A573009911EC /* VSKeyFrame.h */,
-				5B35BF761577A573009911EC /* VSKeyFrame.m */,
-				5B35BF771577A573009911EC /* VSParameter.h */,
-				5B35BF781577A573009911EC /* VSParameter.m */,
-				5B35BF791577A573009911EC /* VSPlaybackController.h */,
-				5B35BF7A1577A573009911EC /* VSPlaybackController.m */,
-				5B35BF7B1577A573009911EC /* VSPlayhead.h */,
-				5B35BF7C1577A573009911EC /* VSPlayhead.m */,
-				5B35BF7D1577A573009911EC /* VSPostProcessor.h */,
-				5B35BF7E1577A573009911EC /* VSPostProcessor.m */,
-				5B35BF7F1577A573009911EC /* VSPreProcessor.h */,
-				5B35BF801577A573009911EC /* VSPreProcessor.m */,
-				5B35BF811577A573009911EC /* VSProjectItem.h */,
-				5B35BF821577A573009911EC /* VSProjectItem.m */,
-				5B35BF831577A573009911EC /* VSProjectItemRepresentation.h */,
-				5B35BF841577A573009911EC /* VSProjectItemRepresentation.m */,
-				5B35BF871577A573009911EC /* VSQuartzComposerSource.h */,
-				5B35BF881577A573009911EC /* VSQuartzComposerSource.m */,
-				5B35BF891577A573009911EC /* VSQuartzComposerSourceSupplier.h */,
-				5B35BF8A1577A573009911EC /* VSQuartzComposerSourceSupplier.m */,
-				5B35BF8B1577A573009911EC /* VSSourceSupplier.h */,
-				5B35BF8C1577A573009911EC /* VSSourceSupplier.m */,
-				5B35BF8D1577A573009911EC /* VSTimeline.h */,
-				5B35BF8E1577A573009911EC /* VSTimeline.m */,
-				5B35BF8F1577A573009911EC /* VSTimelineObject.h */,
-				5B35BF901577A573009911EC /* VSTimelineObject.m */,
-				5B35BF911577A573009911EC /* VSTimelineObjectFactory.h */,
-				5B35BF921577A573009911EC /* VSTimelineObjectFactory.m */,
-				5B35BF931577A573009911EC /* VSTimelineObjectProxy.h */,
-				5B35BF941577A573009911EC /* VSTimelineObjectProxy.m */,
-				5B35BF951577A573009911EC /* VSTimelineObjectSource.h */,
-				5B35BF961577A573009911EC /* VSTimelineObjectSource.m */,
-				5B35BF971577A573009911EC /* VSTrack.h */,
-				5B35BF981577A573009911EC /* VSTrack.m */,
-				5B35BF991577A573009911EC /* VSVideoSource.h */,
-				5B35BF9A1577A573009911EC /* VSVideoSource.m */,
-				5B35BF9B1577A573009911EC /* VSVideoSourceSupplier.h */,
-				5B35BF9C1577A573009911EC /* VSVideoSourceSupplier.m */,
+				5B35C0B91577B0D7009911EC /* device */,
+				5B35C0BB1577B135009911EC /* playback */,
+				5B35C0BC1577B13E009911EC /* coreInterface */,
+				5B35C0BD1577B14E009911EC /* projectItem */,
+				5B35C0BE1577B1CF009911EC /* timeline */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -565,57 +465,12 @@
 		5B35BF9E1577A573009911EC /* view */ = {
 			isa = PBXGroup;
 			children = (
-				5B35BF9F1577A573009911EC /* MainWindow.xib */,
-				5B35BFA01577A573009911EC /* VSBrowserView.xib */,
-				5B35BFA11577A573009911EC /* VSBrowserViewController.h */,
-				5B35BFA21577A573009911EC /* VSBrowserViewController.m */,
-				5B35BFA31577A573009911EC /* VSFlippedView.h */,
-				5B35BFA41577A573009911EC /* VSFlippedView.m */,
-				5B35BFA51577A573009911EC /* VSMainWindowController.h */,
-				5B35BFA61577A573009911EC /* VSMainWindowController.m */,
-				5B35BFA71577A573009911EC /* VSParameterView.h */,
-				5B35BFA81577A573009911EC /* VSParameterView.m */,
-				5B35BFA91577A573009911EC /* VSParameterView.xib */,
-				5B35BFAA1577A573009911EC /* VSParameterViewController.h */,
-				5B35BFAB1577A573009911EC /* VSParameterViewController.m */,
-				5B35BFAC1577A573009911EC /* VSPreviewOpenGLView.h */,
-				5B35BFAD1577A573009911EC /* VSPreviewOpenGLView.m */,
-				5B35BFAE1577A573009911EC /* VSPreviewView.h */,
-				5B35BFAF1577A573009911EC /* VSPreviewView.m */,
-				5B35BFB01577A573009911EC /* VSPreviewView.xib */,
-				5B35BFB11577A573009911EC /* VSPreviewViewController.h */,
-				5B35BFB21577A573009911EC /* VSPreviewViewController.m */,
-				5B35BFB31577A573009911EC /* VSProjectItemBrowserView.xib */,
-				5B35BFB41577A573009911EC /* VSProjectItemBrowserViewController.h */,
-				5B35BFB51577A573009911EC /* VSProjectItemBrowserViewController.m */,
-				5B35BFB61577A573009911EC /* VSProjectItemPropertiesView.xib */,
-				5B35BFB71577A573009911EC /* VSProjectItemPropertiesViewController.h */,
-				5B35BFB81577A573009911EC /* VSProjectItemPropertiesViewController.m */,
-				5B35BFB91577A573009911EC /* VSPropertiesView.xib */,
-				5B35BFBA1577A573009911EC /* VSPropertiesViewController.h */,
-				5B35BFBB1577A573009911EC /* VSPropertiesViewController.m */,
-				5B35BFBC1577A573009911EC /* VSTestView.h */,
-				5B35BFBD1577A573009911EC /* VSTestView.m */,
-				5B35BFBE1577A573009911EC /* VSTimelineObjectPropertiesView.xib */,
-				5B35BFBF1577A573009911EC /* VSTimelineObjectPropertiesViewController.h */,
-				5B35BFC01577A573009911EC /* VSTimelineObjectPropertiesViewController.m */,
-				5B35BFC11577A573009911EC /* VSTimelineObjectView.h */,
-				5B35BFC21577A573009911EC /* VSTimelineObjectView.m */,
-				5B35BFC31577A573009911EC /* VSTimelineObjectViewController.h */,
-				5B35BFC41577A573009911EC /* VSTimelineObjectViewController.m */,
-				5B35BFC51577A573009911EC /* VSTimelineRulerView.h */,
-				5B35BFC61577A573009911EC /* VSTimelineRulerView.m */,
-				5B35BFC71577A573009911EC /* VSTimelineView.h */,
-				5B35BFC81577A573009911EC /* VSTimelineView.m */,
-				5B35BFC91577A573009911EC /* VSTimelineView.xib */,
-				5B35BFCA1577A573009911EC /* VSTimelineViewController.h */,
-				5B35BFCB1577A573009911EC /* VSTimelineViewController.m */,
-				5B35BFCC1577A573009911EC /* VSTimelinObjectView.xib */,
-				5B35BFCD1577A573009911EC /* VSTrackView.h */,
-				5B35BFCE1577A573009911EC /* VSTrackView.m */,
-				5B35BFCF1577A573009911EC /* VSTrackView.xib */,
-				5B35BFD01577A573009911EC /* VSTrackViewController.h */,
-				5B35BFD11577A573009911EC /* VSTrackViewController.m */,
+				5B35C0AD1577AF3C009911EC /* mainWindow */,
+				5B35C0AC1577AF32009911EC /* objectBrowser */,
+				5B35C0AE1577AF43009911EC /* misc */,
+				5B35C0B01577AF92009911EC /* preview */,
+				5B35C0B31577AFBB009911EC /* properties */,
+				5B35C0A71577AE9B009911EC /* timeline */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -702,6 +557,370 @@
 				5B35C04B1577A58D009911EC /* VideoSourceParameterDefinition.xml */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		5B35C0701577A912009911EC /* enums */ = {
+			isa = PBXGroup;
+			children = (
+				5B35C0711577A912009911EC /* VSFileKind.h */,
+				5B35C0721577A912009911EC /* VSFileType.h */,
+				5B35C0731577A912009911EC /* VSFileType.m */,
+				5B35C0741577A912009911EC /* VSFileUtils.h */,
+				5B35C0751577A912009911EC /* VSFileUtils.m */,
+				5B35C0761577A912009911EC /* VSParameterDataType.h */,
+				5B35C0771577A912009911EC /* VSParameterTypes.h */,
+				5B35C0781577A912009911EC /* VSParameterTypes.m */,
+				5B35C0791577A912009911EC /* VSTrackType.h */,
+			);
+			path = enums;
+			sourceTree = "<group>";
+		};
+		5B35C07A1577A912009911EC /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				5B35C07B1577A912009911EC /* VSFileImageCreator.h */,
+				5B35C07C1577A912009911EC /* VSFileImageCreator.m */,
+				5B35C07D1577A912009911EC /* VSFormattingUtils.h */,
+				5B35C07E1577A912009911EC /* VSFormattingUtils.m */,
+				5B35C07F1577A912009911EC /* VSParameterXMLUtils.h */,
+				5B35C0801577A912009911EC /* VSParameterXMLUtils.m */,
+				5B35C0811577A912009911EC /* VSProjectSettings.h */,
+				5B35C0821577A912009911EC /* VSProjectSettings.m */,
+				5B35C0831577A912009911EC /* VSSupportedFilesManager.h */,
+				5B35C0841577A912009911EC /* VSSupportedFilesManager.m */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+		5B35C0851577A912009911EC /* constants */ = {
+			isa = PBXGroup;
+			children = (
+				5B35C0861577A912009911EC /* VSAssortedConstants.h */,
+				5B35C0871577A912009911EC /* VSAssortedConstants.m */,
+				5B35C0881577A912009911EC /* VSImageConstants.h */,
+				5B35C0891577A912009911EC /* VSImageConstants.m */,
+				5B35C08A1577A912009911EC /* VSNotificationConstants.h */,
+				5B35C08B1577A912009911EC /* VSNotificationConstants.m */,
+				5B35C08C1577A912009911EC /* VSPasteboaredConstants.h */,
+				5B35C08D1577A912009911EC /* VSPasteboaredConstants.m */,
+				5B35C08E1577A912009911EC /* VSTimelineConstants.h */,
+				5B35C08F1577A912009911EC /* VSTimelineConstants.m */,
+			);
+			path = constants;
+			sourceTree = "<group>";
+		};
+		5B35C0931577A912009911EC /* logging */ = {
+			isa = PBXGroup;
+			children = (
+				5B35C0941577A912009911EC /* VSLog.h */,
+				5B35C0951577A912009911EC /* VSLogFormatter.h */,
+				5B35C0961577A912009911EC /* VSLogFormatter.m */,
+			);
+			path = logging;
+			sourceTree = "<group>";
+		};
+		5B35C0A71577AE9B009911EC /* timeline */ = {
+			isa = PBXGroup;
+			children = (
+				5B35C0B41577B032009911EC /* timeline */,
+				5B35C0AA1577AEC8009911EC /* track */,
+				5B35C0A81577AEA8009911EC /* timelineObject */,
+			);
+			name = timeline;
+			sourceTree = "<group>";
+		};
+		5B35C0A81577AEA8009911EC /* timelineObject */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BFCC1577A573009911EC /* VSTimelinObjectView.xib */,
+				5B35BFC11577A573009911EC /* VSTimelineObjectView.h */,
+				5B35BFC21577A573009911EC /* VSTimelineObjectView.m */,
+				5B35BFC31577A573009911EC /* VSTimelineObjectViewController.h */,
+				5B35BFC41577A573009911EC /* VSTimelineObjectViewController.m */,
+			);
+			name = timelineObject;
+			sourceTree = "<group>";
+		};
+		5B35C0A91577AEB4009911EC /* ruler */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BFC51577A573009911EC /* VSTimelineRulerView.h */,
+				5B35BFC61577A573009911EC /* VSTimelineRulerView.m */,
+			);
+			name = ruler;
+			sourceTree = "<group>";
+		};
+		5B35C0AA1577AEC8009911EC /* track */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BFCD1577A573009911EC /* VSTrackView.h */,
+				5B35BFCE1577A573009911EC /* VSTrackView.m */,
+				5B35BFCF1577A573009911EC /* VSTrackView.xib */,
+				5B35BFD01577A573009911EC /* VSTrackViewController.h */,
+				5B35BFD11577A573009911EC /* VSTrackViewController.m */,
+			);
+			name = track;
+			sourceTree = "<group>";
+		};
+		5B35C0AB1577AEEE009911EC /* timelineObjectProperties */ = {
+			isa = PBXGroup;
+			children = (
+				5B35C0AF1577AF49009911EC /* parameter */,
+				5B35BFBE1577A573009911EC /* VSTimelineObjectPropertiesView.xib */,
+				5B35BFBF1577A573009911EC /* VSTimelineObjectPropertiesViewController.h */,
+				5B35BFC01577A573009911EC /* VSTimelineObjectPropertiesViewController.m */,
+			);
+			name = timelineObjectProperties;
+			sourceTree = "<group>";
+		};
+		5B35C0AC1577AF32009911EC /* objectBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				5B35C0B11577AF9B009911EC /* projectItemBrowser */,
+				5B35BFA01577A573009911EC /* VSBrowserView.xib */,
+				5B35BFA11577A573009911EC /* VSBrowserViewController.h */,
+				5B35BFA21577A573009911EC /* VSBrowserViewController.m */,
+			);
+			name = objectBrowser;
+			sourceTree = "<group>";
+		};
+		5B35C0AD1577AF3C009911EC /* mainWindow */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BF9F1577A573009911EC /* MainWindow.xib */,
+				5B35BFA51577A573009911EC /* VSMainWindowController.h */,
+				5B35BFA61577A573009911EC /* VSMainWindowController.m */,
+			);
+			name = mainWindow;
+			sourceTree = "<group>";
+		};
+		5B35C0AE1577AF43009911EC /* misc */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BFBC1577A573009911EC /* VSTestView.h */,
+				5B35BFBD1577A573009911EC /* VSTestView.m */,
+				5B35BFA31577A573009911EC /* VSFlippedView.h */,
+				5B35BFA41577A573009911EC /* VSFlippedView.m */,
+			);
+			name = misc;
+			sourceTree = "<group>";
+		};
+		5B35C0AF1577AF49009911EC /* parameter */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BFAA1577A573009911EC /* VSParameterViewController.h */,
+				5B35BFAB1577A573009911EC /* VSParameterViewController.m */,
+				5B35BFA71577A573009911EC /* VSParameterView.h */,
+				5B35BFA81577A573009911EC /* VSParameterView.m */,
+				5B35BFA91577A573009911EC /* VSParameterView.xib */,
+			);
+			name = parameter;
+			sourceTree = "<group>";
+		};
+		5B35C0B01577AF92009911EC /* preview */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BFAC1577A573009911EC /* VSPreviewOpenGLView.h */,
+				5B35BFAD1577A573009911EC /* VSPreviewOpenGLView.m */,
+				5B35BFAE1577A573009911EC /* VSPreviewView.h */,
+				5B35BFAF1577A573009911EC /* VSPreviewView.m */,
+				5B35BFB01577A573009911EC /* VSPreviewView.xib */,
+				5B35BFB11577A573009911EC /* VSPreviewViewController.h */,
+				5B35BFB21577A573009911EC /* VSPreviewViewController.m */,
+			);
+			name = preview;
+			sourceTree = "<group>";
+		};
+		5B35C0B11577AF9B009911EC /* projectItemBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BFB31577A573009911EC /* VSProjectItemBrowserView.xib */,
+				5B35BFB41577A573009911EC /* VSProjectItemBrowserViewController.h */,
+				5B35BFB51577A573009911EC /* VSProjectItemBrowserViewController.m */,
+			);
+			name = projectItemBrowser;
+			sourceTree = "<group>";
+		};
+		5B35C0B21577AFAC009911EC /* projectItemProperties */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BFB61577A573009911EC /* VSProjectItemPropertiesView.xib */,
+				5B35BFB71577A573009911EC /* VSProjectItemPropertiesViewController.h */,
+				5B35BFB81577A573009911EC /* VSProjectItemPropertiesViewController.m */,
+			);
+			name = projectItemProperties;
+			sourceTree = "<group>";
+		};
+		5B35C0B31577AFBB009911EC /* properties */ = {
+			isa = PBXGroup;
+			children = (
+				5B35C0AB1577AEEE009911EC /* timelineObjectProperties */,
+				5B35BFB91577A573009911EC /* VSPropertiesView.xib */,
+				5B35BFBA1577A573009911EC /* VSPropertiesViewController.h */,
+				5B35BFBB1577A573009911EC /* VSPropertiesViewController.m */,
+				5B35C0B21577AFAC009911EC /* projectItemProperties */,
+			);
+			name = properties;
+			sourceTree = "<group>";
+		};
+		5B35C0B41577B032009911EC /* timeline */ = {
+			isa = PBXGroup;
+			children = (
+				5B35C0A91577AEB4009911EC /* ruler */,
+				5B35BFC71577A573009911EC /* VSTimelineView.h */,
+				5B35BFC81577A573009911EC /* VSTimelineView.m */,
+				5B35BFC91577A573009911EC /* VSTimelineView.xib */,
+				5B35BFCA1577A573009911EC /* VSTimelineViewController.h */,
+				5B35BFCB1577A573009911EC /* VSTimelineViewController.m */,
+			);
+			name = timeline;
+			sourceTree = "<group>";
+		};
+		5B35C0B51577B05B009911EC /* timelineObject */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BF8F1577A573009911EC /* VSTimelineObject.h */,
+				5B35BF901577A573009911EC /* VSTimelineObject.m */,
+				5B35BF931577A573009911EC /* VSTimelineObjectProxy.h */,
+				5B35BF941577A573009911EC /* VSTimelineObjectProxy.m */,
+				5B35C0BF1577B1D9009911EC /* factory */,
+				5B35C0BA1577B0E6009911EC /* parameter */,
+				5B35C0B81577B09A009911EC /* sources */,
+				5B35C0B71577B08F009911EC /* animation */,
+				5B35C0B61577B071009911EC /* sourceSuppliers */,
+			);
+			name = timelineObject;
+			sourceTree = "<group>";
+		};
+		5B35C0B61577B071009911EC /* sourceSuppliers */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BF8B1577A573009911EC /* VSSourceSupplier.h */,
+				5B35BF8C1577A573009911EC /* VSSourceSupplier.m */,
+				5B35BF671577A573009911EC /* VSAudioSourceSupplier.h */,
+				5B35BF681577A573009911EC /* VSAudioSourceSupplier.m */,
+				5B35BF731577A573009911EC /* VSImageSourceSupplier.h */,
+				5B35BF741577A573009911EC /* VSImageSourceSupplier.m */,
+				5B35BF891577A573009911EC /* VSQuartzComposerSourceSupplier.h */,
+				5B35BF8A1577A573009911EC /* VSQuartzComposerSourceSupplier.m */,
+				5B35BF9B1577A573009911EC /* VSVideoSourceSupplier.h */,
+				5B35BF9C1577A573009911EC /* VSVideoSourceSupplier.m */,
+				5B35BF6F1577A573009911EC /* VSFrameSourceSupplier.h */,
+				5B35BF701577A573009911EC /* VSFrameSourceSupplier.m */,
+			);
+			name = sourceSuppliers;
+			sourceTree = "<group>";
+		};
+		5B35C0B71577B08F009911EC /* animation */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BF631577A573009911EC /* VSAnimation.h */,
+				5B35BF641577A573009911EC /* VSAnimation.m */,
+			);
+			name = animation;
+			sourceTree = "<group>";
+		};
+		5B35C0B81577B09A009911EC /* sources */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BF991577A573009911EC /* VSVideoSource.h */,
+				5B35BF9A1577A573009911EC /* VSVideoSource.m */,
+				5B35BF951577A573009911EC /* VSTimelineObjectSource.h */,
+				5B35BF961577A573009911EC /* VSTimelineObjectSource.m */,
+				5B35BF871577A573009911EC /* VSQuartzComposerSource.h */,
+				5B35BF881577A573009911EC /* VSQuartzComposerSource.m */,
+				5B35BF751577A573009911EC /* VSKeyFrame.h */,
+				5B35BF761577A573009911EC /* VSKeyFrame.m */,
+				5B35BF711577A573009911EC /* VSImageSource.h */,
+				5B35BF721577A573009911EC /* VSImageSource.m */,
+				5B35BF651577A573009911EC /* VSAudioSource.h */,
+				5B35BF661577A573009911EC /* VSAudioSource.m */,
+			);
+			name = sources;
+			sourceTree = "<group>";
+		};
+		5B35C0B91577B0D7009911EC /* device */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BF691577A573009911EC /* VSDevice.h */,
+				5B35BF6A1577A573009911EC /* VSDevice.m */,
+				5B35BF6B1577A573009911EC /* VSDeviceManager.h */,
+				5B35BF6C1577A573009911EC /* VSDeviceManager.m */,
+			);
+			name = device;
+			sourceTree = "<group>";
+		};
+		5B35C0BA1577B0E6009911EC /* parameter */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BF6D1577A573009911EC /* VSDeviceParameterMapper.h */,
+				5B35BF6E1577A573009911EC /* VSDeviceParameterMapper.m */,
+				5B35BF771577A573009911EC /* VSParameter.h */,
+				5B35BF781577A573009911EC /* VSParameter.m */,
+			);
+			name = parameter;
+			sourceTree = "<group>";
+		};
+		5B35C0BB1577B135009911EC /* playback */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BF791577A573009911EC /* VSPlaybackController.h */,
+				5B35BF7A1577A573009911EC /* VSPlaybackController.m */,
+				5B35BF7B1577A573009911EC /* VSPlayhead.h */,
+				5B35BF7C1577A573009911EC /* VSPlayhead.m */,
+			);
+			name = playback;
+			sourceTree = "<group>";
+		};
+		5B35C0BC1577B13E009911EC /* coreInterface */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BF7D1577A573009911EC /* VSPostProcessor.h */,
+				5B35BF7E1577A573009911EC /* VSPostProcessor.m */,
+				5B35BF7F1577A573009911EC /* VSPreProcessor.h */,
+				5B35BF801577A573009911EC /* VSPreProcessor.m */,
+			);
+			name = coreInterface;
+			sourceTree = "<group>";
+		};
+		5B35C0BD1577B14E009911EC /* projectItem */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BF811577A573009911EC /* VSProjectItem.h */,
+				5B35BF821577A573009911EC /* VSProjectItem.m */,
+				5B35BF831577A573009911EC /* VSProjectItemRepresentation.h */,
+				5B35BF841577A573009911EC /* VSProjectItemRepresentation.m */,
+			);
+			name = projectItem;
+			sourceTree = "<group>";
+		};
+		5B35C0BE1577B1CF009911EC /* timeline */ = {
+			isa = PBXGroup;
+			children = (
+				5B35C0C01577B244009911EC /* track */,
+				5B35C0B51577B05B009911EC /* timelineObject */,
+				5B35BF8D1577A573009911EC /* VSTimeline.h */,
+				5B35BF8E1577A573009911EC /* VSTimeline.m */,
+			);
+			name = timeline;
+			sourceTree = "<group>";
+		};
+		5B35C0BF1577B1D9009911EC /* factory */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BF911577A573009911EC /* VSTimelineObjectFactory.h */,
+				5B35BF921577A573009911EC /* VSTimelineObjectFactory.m */,
+			);
+			name = factory;
+			sourceTree = "<group>";
+		};
+		5B35C0C01577B244009911EC /* track */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BF971577A573009911EC /* VSTrack.h */,
+				5B35BF981577A573009911EC /* VSTrack.m */,
+			);
+			name = track;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -799,21 +1018,6 @@
 				5B35BFD21577A573009911EC /* VSProjectItemController.m in Sources */,
 				5B35BFD31577A573009911EC /* VSProjectItemRepresentationController.m in Sources */,
 				5B35BFD41577A573009911EC /* NSColor+CGColorSupport.m in Sources */,
-				5B35BFD51577A573009911EC /* VSLogFormatter.m in Sources */,
-				5B35BFD61577A573009911EC /* VSAssortedConstants.m in Sources */,
-				5B35BFD71577A573009911EC /* VSFileImageCreator.m in Sources */,
-				5B35BFD81577A573009911EC /* VSFileType.m in Sources */,
-				5B35BFD91577A573009911EC /* VSFileUtils.m in Sources */,
-				5B35BFDA1577A573009911EC /* VSFormattingUtils.m in Sources */,
-				5B35BFDB1577A573009911EC /* VSImageConstants.m in Sources */,
-				5B35BFDC1577A573009911EC /* VSNotificationConstants.m in Sources */,
-				5B35BFDD1577A573009911EC /* VSParameterTypes.m in Sources */,
-				5B35BFDE1577A573009911EC /* VSParameterXMLUtils.m in Sources */,
-				5B35BFDF1577A573009911EC /* VSPasteboaredConstants.m in Sources */,
-				5B35BFE01577A573009911EC /* VSProjectSettings.m in Sources */,
-				5B35BFE11577A573009911EC /* VSSupportedFilesManager.m in Sources */,
-				5B35BFE21577A573009911EC /* VSTimelineConstants.m in Sources */,
-				5B35BFE31577A573009911EC /* VSUndoManager.m in Sources */,
 				5B35BFE41577A573009911EC /* VSAnimation.m in Sources */,
 				5B35BFE51577A573009911EC /* VSAudioSource.m in Sources */,
 				5B35BFE61577A573009911EC /* VSAudioSourceSupplier.m in Sources */,
@@ -874,6 +1078,20 @@
 				5B35C05E1577A58D009911EC /* DDTTYLogger.m in Sources */,
 				5B35C05F1577A58D009911EC /* ContextFilterLogFormatter.m in Sources */,
 				5B35C0601577A58D009911EC /* DispatchQueueLogFormatter.m in Sources */,
+				5B35C0971577A912009911EC /* VSFileType.m in Sources */,
+				5B35C0981577A912009911EC /* VSFileUtils.m in Sources */,
+				5B35C0991577A912009911EC /* VSParameterTypes.m in Sources */,
+				5B35C09A1577A912009911EC /* VSFileImageCreator.m in Sources */,
+				5B35C09B1577A912009911EC /* VSFormattingUtils.m in Sources */,
+				5B35C09C1577A912009911EC /* VSParameterXMLUtils.m in Sources */,
+				5B35C09D1577A912009911EC /* VSProjectSettings.m in Sources */,
+				5B35C09E1577A912009911EC /* VSSupportedFilesManager.m in Sources */,
+				5B35C09F1577A912009911EC /* VSAssortedConstants.m in Sources */,
+				5B35C0A01577A912009911EC /* VSImageConstants.m in Sources */,
+				5B35C0A11577A912009911EC /* VSNotificationConstants.m in Sources */,
+				5B35C0A21577A912009911EC /* VSPasteboaredConstants.m in Sources */,
+				5B35C0A31577A912009911EC /* VSTimelineConstants.m in Sources */,
+				5B35C0A51577A912009911EC /* VSLogFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
