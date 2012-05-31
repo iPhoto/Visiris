@@ -41,6 +41,16 @@
     return YES;
 }
 
+-(BOOL) addTimelineObject:(VSTimelineObject *)timelineObject andRegisterAtUndoManager:(NSUndoManager *)undoManager{
+    BOOL result = [self addTimelineObject:timelineObject];
+    
+    if(result){
+    [[undoManager prepareWithInvocationTarget:self] removTimelineObject:timelineObject andRegisterAtUndoManager:undoManager];
+    }
+    
+    return result;
+}
+
 -(BOOL) removTimelineObject:(VSTimelineObject *)aTimelineObject{
     if([self.timelineObjects containsObject:aTimelineObject]){
         [self.timelineObjects removeObject:aTimelineObject];
@@ -49,6 +59,16 @@
     else{
         return NO;
     }
+}
+
+-(BOOL)removTimelineObject:(VSTimelineObject *)aTimelineObject andRegisterAtUndoManager:(NSUndoManager *)undoManager{
+    BOOL result = [self removTimelineObject:aTimelineObject];
+    
+    if(result){
+        [[undoManager prepareWithInvocationTarget:self] addTimelineObject:aTimelineObject andRegisterAtUndoManager:undoManager];
+    }
+    
+    return result;
 }
 
 #pragma mark - TimelineObject Selection

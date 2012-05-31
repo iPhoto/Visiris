@@ -67,7 +67,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     
     [self.nameLabel setStringValue:NSLocalizedString(@"Name", @"Label for the name of a VSTimelineObject in its properties view")];
     
-
+    
 }
 
 
@@ -138,19 +138,19 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
         [self.parametersHolder addSubview:parameteViewController.view];
         
         
-//        if(self.parameterViewControllers.count > 0){
-//            [[[self.parameterViewControllers lastObject] view] setNextKeyView:parameteViewController.view];        
-//            
-//        }
+        if(self.parameterViewControllers.count > 0){
+            [[[self.parameterViewControllers lastObject] view] setNextKeyView:parameteViewController.view];        
+            
+        }
         
         [self.parameterViewControllers addObject:parameteViewController];
     }
     
     
-   
+    
     [self.documentView setFrameSize:NSMakeSize(self.documentView.frame.size.width, [self.parameterViewControllers count] * parameterViewHeight)];
     
-     [self.parametersHolder setFrameSize:NSMakeSize(self.documentView.frame.size.width, [self.parameterViewControllers count] * parameterViewHeight)];
+    [self.parametersHolder setFrameSize:NSMakeSize(self.documentView.frame.size.width, [self.parameterViewControllers count] * parameterViewHeight)];
 }
 
 -(void) setTimelineObjectName:(NSString*)newName{
@@ -174,10 +174,10 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
             [self setTimelineObjectName:[self.nameTextField stringValue]];
             [self resetParameters];
         }
-           
+        
         _timelineObject = timelineObject;
         
-            [self.timelineObject addObserver:self forKeyPath:@"name" options:0 context:nil];
+        [self.timelineObject addObserver:self forKeyPath:@"name" options:0 context:nil];
         
         [self.nameTextField setStringValue:self.timelineObject.name];
         [self showParameters];

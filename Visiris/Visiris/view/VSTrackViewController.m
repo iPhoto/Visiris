@@ -128,9 +128,9 @@ static NSString* defaultNib = @"VSTrackView";
                     for(VSTimelineObject *object in removedTimelineObjects){
                         [self removeTimelineObject:object];
                     }
-                    
-                    if([self delegateRespondsToSelector:@selector(timelineObjectProxies:willBeRemovedFromTrack:)]){
-                        [self.delegate timelineObjectProxies:removedTimelineObjects willBeRemovedFromTrack:self];
+
+                    if([self delegateRespondsToSelector:@selector(timelineObjectProxies:wereRemovedFromTrack:)]){
+                        [self.delegate timelineObjectProxies:removedTimelineObjects wereRemovedFromTrack:self];
                     }
                 }
                 break;

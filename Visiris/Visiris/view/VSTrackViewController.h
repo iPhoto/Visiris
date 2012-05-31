@@ -54,7 +54,7 @@
  * @param timelineObjectProxy VSTimelineObjectProxy that will be removed.
  * @param trackViewController VSTrackViewController the timelineObjectProxy will be removed from
  */
--(void) timelineObjectProxies:(NSArray *) timelineObjectProxies willBeRemovedFromTrack:(VSTrackViewController*) trackViewController;
+-(void) timelineObjectProxies:(NSArray *) timelineObjectProxies wereRemovedFromTrack:(VSTrackViewController*) trackViewController;
 
 /**
  * Called when the view of the VSTrackViewController was clicked.

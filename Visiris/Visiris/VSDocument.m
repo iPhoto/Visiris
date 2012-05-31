@@ -9,24 +9,27 @@
 #import "VSDocument.h"
 
 #import "VSMainWindowController.h"
+#import "VSProjectItemController.h"
 
 #import "VSCoreServices.h"
 
 @interface VSDocument()
 
 @property (strong) VSMainWindowController *mainWindowController;
+@property VSProjectItemController *projectItemController;
 
 @end
 
 @implementation VSDocument
 
 @synthesize mainWindowController = _mainWindowController;
+@synthesize projectItemController = _projectItemController;
 
 - (id)init
 {
     self = [super init];
     if (self) {
-        // Add your subclass-specific initialization here.
+        self.projectItemController = [VSProjectItemController sharedManager];
     }
     return self;
 }
@@ -48,6 +51,11 @@
     return NO;
 }
 
+-(void) application:(NSApplication*)sender openFiles:(NSArray *)filenames{
+    for(NSString *filename in filenames){
+        [self.projectItemController addNewProjectItemFromFile:filename];
+    }
+}
 - (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError
 {
     // Insert code here to write your document to data of the specified type. If outError != NULL, ensure that you create and set an appropriate error when returning nil.
@@ -66,5 +74,7 @@
     @throw exception;
     return YES;
 }
+
+
 
 @end

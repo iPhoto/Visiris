@@ -42,11 +42,27 @@
 -(BOOL) addTimelineObject:(VSTimelineObject*)timelineObject;
 
 /**
+ * Adds the given TimelineObject to the track and registers the operation at the given undoManager
+ * @param timelineObject Object to add.
+ * @param undoManager NSUndoManger the adding of the timelineObject is registrated
+ * @return YES if the object was added successfully to the track, NO otherwise
+ */
+-(BOOL) addTimelineObject:(VSTimelineObject*)timelineObject andRegisterAtUndoManager:(NSUndoManager*) undoManager;
+
+/**
  * Removes the timeline object from the track.
  * @param aTimelineObject VSTimelineObject that will be removed form the track.
  * @return YES if aTimelineObject was removed successfully, NO otherwise
  */
 -(BOOL) removTimelineObject:(VSTimelineObject*) aTimelineObject;
+
+/**
+ * Removes the timeline object from the track and registers the operation at the given undoManager
+ * @param aTimelineObject VSTimelineObject that will be removed form the track.
+ * @param undoManager NSUndoManger the removal of the timelineObject is registrated
+ * @return YES if aTimelineObject was removed successfully, NO otherwise
+ */
+-(BOOL) removTimelineObject:(VSTimelineObject*) aTimelineObject andRegisterAtUndoManager:(NSUndoManager*) undoManager;
 
 /**
  * Sets the selected property of the given VSTimelineObject to YES.

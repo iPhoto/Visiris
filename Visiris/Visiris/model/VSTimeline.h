@@ -53,6 +53,19 @@
  */
 -(VSTimelineObject*) addNewTimelineObjectBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *) item toTrack :(VSTrack *)track positionedAtTime:(double) timePosition withDuration:(double) duration;
 
+/**
+ * Adds a new Timeline-Object to the given track and registers the adding at the given NSUndoManger
+ *
+ * A new timeline object is created by the VSTimelineObjectFactory according to the given VSProjectItem.
+ * @param item VSTimelineObjectRepresentation the new TimelineObject is connected with
+ * @param track Track the TimelineObject will be added to.
+ * @param timePosition Start-time of the timelineObject.
+ * @param duration Duration of the VSTimelineObject
+ * @return YES if the timeline object was create successfully, NO otherwise.
+ */
+-(VSTimelineObject*) addNewTimelineObjectBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *) item toTrack :(VSTrack *)track positionedAtTime:(double) timePosition withDuration:(double) duration andRegisterUndoOperation:(NSUndoManager*) undoManager;
+
+
 
 /**
  * Removes aTimelineObject from the track and returns if the removal was successful.
@@ -71,6 +84,8 @@
  * @return The TimelineObjectProxy if it was created succesfully, nil otherwise.
  */
 -(VSTimelineObjectProxy*) createNewTimelineObjectProxyBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *) item positionedAtTime:(double) timePosition;
+
+
 
 /**
  * Asks its tracks for all timelineObjects which are active at the given timestamp.
