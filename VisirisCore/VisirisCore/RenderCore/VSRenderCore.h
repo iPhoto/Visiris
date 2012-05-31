@@ -33,8 +33,6 @@
 @property (weak) id<VSRenderCoreDelegate>           delegate;
 @property (strong, readonly) NSOpenGLContext        *openGLContext;
 @property (strong, readonly) NSOpenGLPixelFormat    *pixelFormat;        
-@property (assign) GLuint                           frameBuffer;
-@property (assign) GLuint                           texture;
 @property (strong) VSFrameBufferObject              *frameBufferObjectOne;
 
 /**
