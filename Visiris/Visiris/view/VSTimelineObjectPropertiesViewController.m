@@ -1,0 +1,169 @@
+//
+//  VSTimelineObjectPropertiesControllerViewController.m
+//  VisirisUI
+//
+//  Created by Martin Tiefengrabner on 19.05.12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+#import "VSTimelineObjectPropertiesViewController.h"
+
+#import "VSTimelineObject.h"
+#import "VSParameterViewController.h"
+#import "VSParameterView.h"
+#import "VSTimelineObjectSource.h"
+
+#import "VSCoreServices.h"
+
+@interface VSTimelineObjectPropertiesViewController ()
+
+@end
+
+@implementation VSTimelineObjectPropertiesViewController
+
+/** Height of the parameter views */
+static int parameterViewHeight = 40;
+
+
+@synthesize documentView = _documentView;
+@synthesize scrollView = _scrollView;
+@synthesize timelineObject = _timelineObject;
+@synthesize parameterViewControllers = _parameterViewControllers;
+@synthesize parametersHolder = _parametersHolder;
+@synthesize nameLabel = _nameLabel;
+@synthesize nameTextField = _nameTextField;
+
+/** Name of the nib that will be loaded when initWithDefaultNib is called */
+static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
+
+
+#pragma mark - Init
+
+-(id) initWithDefaultNib{
+    if(self = [self initWithNibName:defaultNib bundle:nil]){
+    }
+    
+    return self;
+}
+
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Initialization code here.
+    }
+    
+    return self;
+}
+
+#pragma mark - VSViewController
+
+- (void) awakeFromNib{
+    self.parameterViewControllers = [[NSMutableArray alloc] init];
+    [self initScrollView];
+    
+    [self.nameLabel setStringValue:NSLocalizedString(@"Name", @"Label for the name of a VSTimelineObject in its properties view")];
+}
+
+
+
+#pragma mark - Private Methods
+
+/**
+ * Inits the scrollView and its documentView
+ */
+-(void) initScrollView{
+    [self.documentView setAutoresizingMask:NSViewWidthSizable];
+    [self.scrollView setDocumentView:self.documentView];
+    [self.documentView setAutoresizesSubviews:YES];
+    [self.parametersHolder setAutoresizingMask:NSViewWidthSizable];
+    [self.documentView setFrameSize:[self.scrollView contentSize]];
+}
+
+/**
+ * Removes all Parameter views
+ */
+-(void) resetParameters{
+    for(VSParameterViewController *ctrl in self.parameterViewControllers){
+        [ctrl saveParameterAndRemoveObserver];
+        [ctrl.view removeFromSuperview];
+    }
+    
+    [self.parameterViewControllers removeAllObjects];
+}
+
+/**
+ * Resets the position of scrollView's scrollBars
+ */
+-(void) resetScrollingPosition{
+    
+    NSPoint newScrollOrigin=NSMakePoint(0.0,0.0);
+    [[self.scrollView documentView] scrollPoint:newScrollOrigin];
+}
+
+/**
+ * Inits and displays a ParameterView for every parameter stored in the timelineObject property
+ */
+-(void) showParameters{    
+    for(VSParameter *parameter in [self.timelineObject visibleParameters]){
+        
+        NSRect viewFrame = NSMakeRect(0, self.parameterViewControllers.count * parameterViewHeight, self.documentView.frame.size.width, parameterViewHeight);
+        
+        
+        VSParameterViewController *parameteViewController = [[VSParameterViewController alloc] initWithDefaultNib];
+        [parameteViewController.view setFrame:viewFrame];
+        
+        parameteViewController.parameter = parameter;
+        
+        [parameteViewController.view setAutoresizingMask:NSViewWidthSizable];
+        [parameteViewController.view setAutoresizesSubviews:YES];
+        
+        [self.parametersHolder addSubview:parameteViewController.view];
+        
+        
+//        if(self.parameterViewControllers.count > 0){
+//            [[[self.parameterViewControllers lastObject] view] setNextKeyView:parameteViewController.view];        
+//            
+//        }
+        
+        [self.parameterViewControllers addObject:parameteViewController];
+    }
+    
+    
+   
+    [self.documentView setFrameSize:NSMakeSize(self.documentView.frame.size.width, [self.parameterViewControllers count] * parameterViewHeight)];
+    
+     [self.parametersHolder setFrameSize:NSMakeSize(self.documentView.frame.size.width, [self.parameterViewControllers count] * parameterViewHeight)];
+}
+
+#pragma mark - Properties
+
+/**
+ * Setter of the classes timelineObject
+ * 
+ * Sets the timelineObject property and calls displays its parameters
+ * param timelineObject VStimelineObject set as value of the classes timelineObject property
+ */
+-(void) setTimelineObject:(VSTimelineObject *)timelineObject{
+    if(_timelineObject != timelineObject){
+        if(_timelineObject){
+            self.timelineObject.name = [self.nameTextField  stringValue];
+            [self resetParameters];
+        }
+        _timelineObject = timelineObject;
+        [self showParameters];
+        [self resetScrollingPosition];
+    }
+}
+
+/**
+ * Getter for the classes timelineObject property
+ * @return The classes timeleinObject property
+ */
+-(VSTimelineObject*) timelineObject{
+    return _timelineObject;
+}
+
+
+@end

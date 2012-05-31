@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+    <parameter name="Volume" type="VSParameterVideoVolume" dataType="float" fromValue="0" toValue="100"  editable="true" hidden="falsen">true</parameter>
+    <parameter name="Position X" type="VSParameterKeyPositionX" dataType="float"  editable="true" hidden="false">1</parameter>
+    <parameter name="Position Y" type="VSParameterKeyPositionY" dataType="float"  editable="true" hidden="false">2</parameter>
+    <parameter name="Position Z" type="VSParameterKeyPositionZ" dataType="float"  editable="true" hidden="false">3</parameter>
+    <parameter name="Rotation X" type="VSParameterKeyRotationX" dataType="float"  editable="true" hidden="false">1</parameter>
+    <parameter name="Rotation Y" type="VSParameterKeyRotationY" dataType="float"  editable="true" hidden="false">2</parameter>
+    <parameter name="Rotation Z" type="VSParameterKeyRotationZ" dataType="float"  editable="true" hidden="false">3</parameter>
+    <parameter name="Width" type="VSParameterKeyScaleWidth" dataType="float" editable="true"  hidden="false">2</parameter>
+    <parameter name="Heigth" type="VSParameterKeyScaleHeight" dataType="float"  editable="true">3</parameter>
+    <parameter name="Visible" type="VSParameterKeyScaleHeight" dataType="bool" editable="true"  hidden="false">true</parameter>
+</parameters>
