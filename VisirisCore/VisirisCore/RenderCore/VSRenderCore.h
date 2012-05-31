@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+@class VSFrameBufferObject;
 @class VSRenderCore;
- 
+
 /**
  * Protocoll the VSRenderCore uses to inform about the rendering states
  */
@@ -34,6 +35,7 @@
 @property (strong, readonly) NSOpenGLPixelFormat    *pixelFormat;        
 @property (assign) GLuint                           frameBuffer;
 @property (assign) GLuint                           texture;
+@property (strong) VSFrameBufferObject              *frameBufferObjectOne;
 
 /**
  * Creates one frame out of the data stored in the give VSCoreHandovers in the given frame size.

@@ -153,7 +153,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     
     //TODO this is just for testing
     glEnable( GL_TEXTURE_2D );
-    glBindTexture( GL_TEXTURE_2D, 2 );
+    glBindTexture( GL_TEXTURE_2D, 4 );
     
     glClearColor(0.7, 0.7, 0.7, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

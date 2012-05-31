@@ -22,22 +22,22 @@
 
 /* Begin PBXBuildFile section */
 		275D8D0F156EB42B0081AB80 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 275D8D0E156EB42B0081AB80 /* OpenGL.framework */; };
+		276151341577C7E4005177C5 /* VSRenderCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 276151321577C7E4005177C5 /* VSRenderCore.h */; };
+		276151351577C7E4005177C5 /* VSRenderCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 276151331577C7E4005177C5 /* VSRenderCore.m */; };
+		276151381577C814005177C5 /* VSFrameBufferObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 276151361577C814005177C5 /* VSFrameBufferObject.h */; };
+		276151391577C814005177C5 /* VSFrameBufferObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 276151371577C814005177C5 /* VSFrameBufferObject.m */; };
 		276AAD581575044400A984E0 /* jolandabregenz.png in Resources */ = {isa = PBXBuildFile; fileRef = 276AAD571575044400A984E0 /* jolandabregenz.png */; };
 		276AAD5B1575046B00A984E0 /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 276AAD5A1575046B00A984E0 /* test.jpg */; };
 		27A135A7157608FD00883B96 /* hellogl.fs.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 27A135A5157608FD00883B96 /* hellogl.fs.glsl */; };
 		27A135A8157608FD00883B96 /* hellogl.vs.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 27A135A6157608FD00883B96 /* hellogl.vs.glsl */; };
-		27F230FC1566ED6400BCC991 /* supertolledummyklasse.h in Headers */ = {isa = PBXBuildFile; fileRef = 27F230FA1566ED6400BCC991 /* supertolledummyklasse.h */; };
-		27F230FD1566ED6400BCC991 /* supertolledummyklasse.m in Sources */ = {isa = PBXBuildFile; fileRef = 27F230FB1566ED6400BCC991 /* supertolledummyklasse.m */; };
 		5B14E9A415641B0200AFF08C /* VSCoreHandover.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B14E9A015641B0200AFF08C /* VSCoreHandover.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B14E9A515641B0200AFF08C /* VSCoreHandover.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B14E9A115641B0200AFF08C /* VSCoreHandover.m */; };
 		5B14E9A615641B0200AFF08C /* VSFrameCoreHandover.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B14E9A215641B0200AFF08C /* VSFrameCoreHandover.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B14E9A715641B0200AFF08C /* VSFrameCoreHandover.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B14E9A315641B0200AFF08C /* VSFrameCoreHandover.m */; };
 		5B14E9AA15641B5D00AFF08C /* VSQuartzComposerHandover.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B14E9A815641B5D00AFF08C /* VSQuartzComposerHandover.h */; };
 		5B14E9AB15641B5D00AFF08C /* VSQuartzComposerHandover.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B14E9A915641B5D00AFF08C /* VSQuartzComposerHandover.m */; };
-		5B14E9B315642E1C00AFF08C /* VSRenderCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B19BF75155D0E4E00807769 /* VSRenderCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B19BF69155D0E4E00807769 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B19BF68155D0E4E00807769 /* Cocoa.framework */; };
 		5B19BF73155D0E4E00807769 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5B19BF71155D0E4E00807769 /* InfoPlist.strings */; };
-		5B19BF77155D0E4E00807769 /* VSRenderCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B19BF76155D0E4E00807769 /* VSRenderCore.m */; };
 		5B6965BE15640F2900C6EABC /* VSCoreReceptionist.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B6965BC15640F2900C6EABC /* VSCoreReceptionist.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B6965BF15640F2900C6EABC /* VSCoreReceptionist.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B6965BD15640F2900C6EABC /* VSCoreReceptionist.m */; };
 		5B7A6101156E2F82000FBEC3 /* AppledocSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B7A6100156E2F82000FBEC3 /* AppledocSettings.plist */; };
@@ -45,12 +45,14 @@
 
 /* Begin PBXFileReference section */
 		275D8D0E156EB42B0081AB80 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		276151321577C7E4005177C5 /* VSRenderCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSRenderCore.h; sourceTree = "<group>"; };
+		276151331577C7E4005177C5 /* VSRenderCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSRenderCore.m; sourceTree = "<group>"; };
+		276151361577C814005177C5 /* VSFrameBufferObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFrameBufferObject.h; sourceTree = "<group>"; };
+		276151371577C814005177C5 /* VSFrameBufferObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFrameBufferObject.m; sourceTree = "<group>"; };
 		276AAD571575044400A984E0 /* jolandabregenz.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = jolandabregenz.png; sourceTree = "<group>"; };
 		276AAD5A1575046B00A984E0 /* test.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test.jpg; sourceTree = "<group>"; };
 		27A135A5157608FD00883B96 /* hellogl.fs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hellogl.fs.glsl; sourceTree = "<group>"; };
 		27A135A6157608FD00883B96 /* hellogl.vs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hellogl.vs.glsl; sourceTree = "<group>"; };
-		27F230FA1566ED6400BCC991 /* supertolledummyklasse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = supertolledummyklasse.h; sourceTree = "<group>"; };
-		27F230FB1566ED6400BCC991 /* supertolledummyklasse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = supertolledummyklasse.m; sourceTree = "<group>"; };
 		5B14E9A015641B0200AFF08C /* VSCoreHandover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSCoreHandover.h; sourceTree = "<group>"; };
 		5B14E9A115641B0200AFF08C /* VSCoreHandover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSCoreHandover.m; sourceTree = "<group>"; };
 		5B14E9A215641B0200AFF08C /* VSFrameCoreHandover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFrameCoreHandover.h; sourceTree = "<group>"; };
@@ -65,8 +67,6 @@
 		5B19BF70155D0E4E00807769 /* VisirisCore-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "VisirisCore-Info.plist"; sourceTree = "<group>"; };
 		5B19BF72155D0E4E00807769 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5B19BF74155D0E4E00807769 /* VisirisCore-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VisirisCore-Prefix.pch"; sourceTree = "<group>"; };
-		5B19BF75155D0E4E00807769 /* VSRenderCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSRenderCore.h; sourceTree = "<group>"; };
-		5B19BF76155D0E4E00807769 /* VSRenderCore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VSRenderCore.m; sourceTree = "<group>"; };
 		5B6965BC15640F2900C6EABC /* VSCoreReceptionist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSCoreReceptionist.h; sourceTree = "<group>"; };
 		5B6965BD15640F2900C6EABC /* VSCoreReceptionist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSCoreReceptionist.m; sourceTree = "<group>"; };
 		5B7A6100156E2F82000FBEC3 /* AppledocSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AppledocSettings.plist; sourceTree = "<group>"; };
@@ -85,6 +85,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		276151311577C7E4005177C5 /* RenderCore */ = {
+			isa = PBXGroup;
+			children = (
+				276151361577C814005177C5 /* VSFrameBufferObject.h */,
+				276151371577C814005177C5 /* VSFrameBufferObject.m */,
+				276151321577C7E4005177C5 /* VSRenderCore.h */,
+				276151331577C7E4005177C5 /* VSRenderCore.m */,
+			);
+			path = RenderCore;
+			sourceTree = "<group>";
+		};
 		27A135A4157608FD00883B96 /* Shader */ = {
 			isa = PBXGroup;
 			children = (
@@ -143,7 +154,7 @@
 				5BFE39411566527D00DC19C9 /* protocolls */,
 				5B14E99F15641B0200AFF08C /* handOvers */,
 				5B6965BB15640F2900C6EABC /* Receptionist */,
-				5BF1CCB51566D9CF00450C20 /* renderCore */,
+				276151311577C7E4005177C5 /* RenderCore */,
 				5B19BF6F155D0E4E00807769 /* Supporting Files */,
 			);
 			path = VisirisCore;
@@ -171,17 +182,6 @@
 			path = Receptionist;
 			sourceTree = "<group>";
 		};
-		5BF1CCB51566D9CF00450C20 /* renderCore */ = {
-			isa = PBXGroup;
-			children = (
-				5B19BF75155D0E4E00807769 /* VSRenderCore.h */,
-				5B19BF76155D0E4E00807769 /* VSRenderCore.m */,
-				27F230FA1566ED6400BCC991 /* supertolledummyklasse.h */,
-				27F230FB1566ED6400BCC991 /* supertolledummyklasse.m */,
-			);
-			name = renderCore;
-			sourceTree = "<group>";
-		};
 		5BFE39411566527D00DC19C9 /* protocolls */ = {
 			isa = PBXGroup;
 			children = (
@@ -200,8 +200,8 @@
 				5B14E9A415641B0200AFF08C /* VSCoreHandover.h in Headers */,
 				5B14E9A615641B0200AFF08C /* VSFrameCoreHandover.h in Headers */,
 				5B14E9AA15641B5D00AFF08C /* VSQuartzComposerHandover.h in Headers */,
-				5B14E9B315642E1C00AFF08C /* VSRenderCore.h in Headers */,
-				27F230FC1566ED6400BCC991 /* supertolledummyklasse.h in Headers */,
+				276151341577C7E4005177C5 /* VSRenderCore.h in Headers */,
+				276151381577C814005177C5 /* VSFrameBufferObject.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,12 +289,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B19BF77155D0E4E00807769 /* VSRenderCore.m in Sources */,
 				5B6965BF15640F2900C6EABC /* VSCoreReceptionist.m in Sources */,
 				5B14E9A515641B0200AFF08C /* VSCoreHandover.m in Sources */,
 				5B14E9A715641B0200AFF08C /* VSFrameCoreHandover.m in Sources */,
 				5B14E9AB15641B5D00AFF08C /* VSQuartzComposerHandover.m in Sources */,
-				27F230FD1566ED6400BCC991 /* supertolledummyklasse.m in Sources */,
+				276151351577C7E4005177C5 /* VSRenderCore.m in Sources */,
+				276151391577C814005177C5 /* VSFrameBufferObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2761513B1577C97A005177C5 /* aaa.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2761513A1577C97A005177C5 /* aaa.jpg */; };
 		5B35BF161577A49C009911EC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35BF151577A49C009911EC /* Cocoa.framework */; };
 		5B35BF201577A49C009911EC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5B35BF1E1577A49C009911EC /* InfoPlist.strings */; };
 		5B35BF221577A49C009911EC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF211577A49C009911EC /* main.m */; };
@@ -124,6 +125,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2761513A1577C97A005177C5 /* aaa.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = aaa.jpg; sourceTree = "<group>"; };
 		5B35BF111577A49C009911EC /* Visiris.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Visiris.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B35BF151577A49C009911EC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		5B35BF181577A49C009911EC /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -551,6 +553,7 @@
 		5B35C0471577A58D009911EC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2761513A1577C97A005177C5 /* aaa.jpg */,
 				5B35C0481577A58D009911EC /* AudioSourceParameterDefinition.xml */,
 				5B35C0491577A58D009911EC /* ImageSourceParameterDefinition.xml */,
 				5B35C04A1577A58D009911EC /* QuartzComposerSourceParameterDefinition.xml */,
@@ -1003,6 +1006,7 @@
 				5B35C0631577A58D009911EC /* ImageSourceParameterDefinition.xml in Resources */,
 				5B35C0641577A58D009911EC /* QuartzComposerSourceParameterDefinition.xml in Resources */,
 				5B35C0651577A58D009911EC /* VideoSourceParameterDefinition.xml in Resources */,
+				2761513B1577C97A005177C5 /* aaa.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1229,6 +1233,7 @@
 				5B35BF341577A49C009911EC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
