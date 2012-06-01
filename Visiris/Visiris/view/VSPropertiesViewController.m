@@ -109,6 +109,7 @@ static NSString* defaultNib = @"VSPropertiesView";
  * @param notification Holding the selected VSTimelineObject
  */
 -(void) timelineObjectGotSelected:(NSNotification *) notification{
+    DDLogInfo(@"hi");
     if([[notification object] isKindOfClass:[VSTimelineObject class]]){
         VSTimelineObject *timelineObject = [notification object];
         [self showSubview:self.timelineObjectPropertiesViewController.view];

@@ -10,4 +10,6 @@
 
 @interface VSDocument : NSDocument
 
+-(BOOL) addFileToProject:(NSString*) fileName;
+
 @end

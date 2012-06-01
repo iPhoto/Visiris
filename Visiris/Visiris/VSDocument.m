@@ -51,11 +51,6 @@
     return NO;
 }
 
--(void) application:(NSApplication*)sender openFiles:(NSArray *)filenames{
-    for(NSString *filename in filenames){
-        [self.projectItemController addNewProjectItemFromFile:filename];
-    }
-}
 - (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError
 {
     // Insert code here to write your document to data of the specified type. If outError != NULL, ensure that you create and set an appropriate error when returning nil.
@@ -75,6 +70,13 @@
     return YES;
 }
 
+-(BOOL) readFromURL:(NSURL *)url ofType:(NSString *)type{
+    DDLogError(@"%@",url);
+    return YES;
+}
 
+-(BOOL) addFileToProject:(NSString*) fileName{
+    return [self.projectItemController addNewProjectItemFromFile:fileName];
+}
 
 @end

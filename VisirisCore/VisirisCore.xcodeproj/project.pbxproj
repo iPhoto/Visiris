@@ -22,7 +22,7 @@
 
 /* Begin PBXBuildFile section */
 		275D8D0F156EB42B0081AB80 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 275D8D0E156EB42B0081AB80 /* OpenGL.framework */; };
-		276151341577C7E4005177C5 /* VSRenderCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 276151321577C7E4005177C5 /* VSRenderCore.h */; };
+		276151341577C7E4005177C5 /* VSRenderCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 276151321577C7E4005177C5 /* VSRenderCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		276151351577C7E4005177C5 /* VSRenderCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 276151331577C7E4005177C5 /* VSRenderCore.m */; };
 		276151381577C814005177C5 /* VSFrameBufferObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 276151361577C814005177C5 /* VSFrameBufferObject.h */; };
 		276151391577C814005177C5 /* VSFrameBufferObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 276151371577C814005177C5 /* VSFrameBufferObject.m */; };
