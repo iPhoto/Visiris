@@ -8,6 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class VSTimeline;
+@class VSPreviewViewController;
+
 /**
  * Window Controller of the main window in the application
  *
@@ -15,11 +18,13 @@
  */
 @interface VSMainWindowController : NSWindowController<NSSplitViewDelegate>
 
+/** Responsible for the preview view which is shown at the top right of the window. */
+@property (strong) VSPreviewViewController *previewViewController;
+
 /** VSSplitView at top of the window. Holds the Browser, the PropertiesView and the Preview View */
 @property (weak) IBOutlet NSSplitView *topSplitView;
 
 /** MainSplitview of Window. At top the topSplitView is placed at the bottom the timeline view. */
 @property (weak) IBOutlet NSSplitView *mainSplitView;
-
 
 @end

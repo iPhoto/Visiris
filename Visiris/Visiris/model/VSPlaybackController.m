@@ -15,24 +15,21 @@
 
 @property NSTimer *playbackTimer;
 
-
-
 @end
 
 @implementation VSPlaybackController
+
 @synthesize preProcessor = _preProcessor;
 @synthesize timeline = _timeline;
 @synthesize currentTimestamp = _currentTimestamp;
 @synthesize playbackTimer = _playbackTimer;
-@synthesize previewViewController = _previewViewController;
+@synthesize delegate = _delegate;
 
--(id) initWithPreProcessor:(VSPreProcessor *)preProcessor timeline:(VSTimeline *)timeline previewController:(VSPreviewViewController *)thePrevieViewController{
+-(id) initWithPreProcessor:(VSPreProcessor *)preProcessor timeline:(VSTimeline *)timeline{
     if(self = [super init]){
         _preProcessor = preProcessor;
         _timeline = timeline;
-        _previewViewController = thePrevieViewController;
         
-        self.previewViewController.delegate = self;
     }
     
     return self;
@@ -68,7 +65,13 @@
 }
 
 -(void) finishedRenderingTexture:(GLuint)theTexture forTimestamp:(double)theTimestamp{
-    [self.previewViewController showTexture:theTexture forTimestamp:theTimestamp];
+    if(self.delegate){
+        if([self.delegate conformsToProtocol:@protocol(VSPlaybackControllerDelegate) ]){
+            if([self.delegate respondsToSelector:@selector(texture:isReadyForTimestamp:)]){
+                [self.delegate texture:theTexture isReadyForTimestamp:theTimestamp];
+            }
+        }
+    }
 }
 
 #pragma mark - VSPreviewViewControllerDelegate implementation
@@ -80,6 +83,5 @@
 -(void) stop{
     [self stopPlayback];
 }
-
 
 @end

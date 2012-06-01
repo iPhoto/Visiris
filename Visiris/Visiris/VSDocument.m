@@ -10,6 +10,10 @@
 
 #import "VSMainWindowController.h"
 #import "VSProjectItemController.h"
+#import "VSTimeline.h"
+#import "VSPostProcessor.h"
+#import "VSPreProcessor.h"
+#import "VSPlaybackController.h"
 
 #import "VSCoreServices.h"
 
@@ -18,18 +22,24 @@
 @property (strong) VSMainWindowController *mainWindowController;
 @property VSProjectItemController *projectItemController;
 
+
 @end
 
 @implementation VSDocument
 
 @synthesize mainWindowController = _mainWindowController;
 @synthesize projectItemController = _projectItemController;
+@synthesize preProcessor = _preProcessor, postProcessor=_postProcessor;
+@synthesize playbackController = _playbackController;
+@synthesize timeline = _timeline;
 
 - (id)init
 {
     self = [super init];
     if (self) {
         self.projectItemController = [VSProjectItemController sharedManager];
+        
+        [self initVisiris];
     }
     return self;
 }
@@ -39,12 +49,50 @@
 {
     [super windowControllerDidLoadNib:aController];
     // Add any code here that needs to be executed once the windowController has loaded the document's window.
+
 }
 
 -(void) makeWindowControllers{
     self.mainWindowController = [[VSMainWindowController alloc] init];
     [self addWindowController:self.mainWindowController];
+    [self.mainWindowController setDocument:self];
 }
+
+/**
+ * Does the base initialisation of the application.
+ */
+-(void) initVisiris{
+    
+    //TODO: where to create the timeline?
+    
+    //** Creates a new timeline an sets its duratio to the DefaultDuration */
+    self.timeline = [[VSTimeline alloc] initWithDuration:VSTimelineDefaultDuration];
+    
+    //** Adding 2 new VisualTracks to the timeline
+    for(int i = 0; i<3; i++){
+        [self.timeline addNewTrackNamed:[NSString stringWithFormat:@"track%ld",i] ofType:VISUAL_TRACK];
+    }
+    
+    //** Adding 1 new Audrio-Track to the timeline */
+    [self.timeline addNewTrackNamed:[NSString stringWithFormat:@"Audio Track"] ofType:AUDIO_TRACK];
+    
+    
+    self.preProcessor = [[VSPreProcessor alloc] initWithTimeline:self.timeline];
+    
+    self.playbackController = [[VSPlaybackController alloc] initWithPreProcessor:self.preProcessor timeline:self.timeline];
+    
+    self.postProcessor = [[VSPostProcessor alloc] initWithPlaybackController:self.playbackController];
+    
+    self.preProcessor.renderCoreReceptionist.delegate = self.postProcessor;
+    
+    self.playbackController = [[VSPlaybackController alloc] initWithPreProcessor:self.preProcessor timeline:self.timeline];
+    
+    self.postProcessor = [[VSPostProcessor alloc] initWithPlaybackController:self.playbackController];
+    
+    self.preProcessor.renderCoreReceptionist.delegate = self.postProcessor;
+    
+}
+
 
 + (BOOL)autosavesInPlace
 {
