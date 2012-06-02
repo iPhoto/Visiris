@@ -71,6 +71,15 @@ static NSString* defaultNib = @"VSTimelineView";
     return self;
 }
 
+-(void) awakeFromNib{
+    [self initTrackHolderScrollView];
+    [self initTracks];
+    [self updatePixelTimeRatio];
+    [self initTimelineRuler];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectPropertesDidTurnInactive:) name:VSTimelineObjectPropertiesDidTurnInactive object:nil];
+}
+
+
 /**
  * Creates a NSTrackView for every track the timeline holds
  */
@@ -111,14 +120,6 @@ static NSString* defaultNib = @"VSTimelineView";
     [self.tracksHolderdocumentView setAutoresizesSubviews:YES];
 }
 
-
--(void) awakeFromNib{
-    [self initTrackHolderScrollView];
-    [self initTracks];
-    [self updatePixelTimeRatio];
-    [self initTimelineRuler];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectPropertesDidTurnInactive:) name:VSTimelineObjectPropertiesDidTurnInactive object:nil];
-}
 
 #pragma mark - NSViewController
 
@@ -230,7 +231,7 @@ static NSString* defaultNib = @"VSTimelineView";
     return width * self.pixelTimeRatio;
 }
 
--(void) timelineObjectPropertesDidTurnInactive:(NSNotification*) notification{
+-(void) timelineObjectPropertIesDidTurnInactive:(NSNotification*) notification{
     [self.timeline unselectAllTimelineObjects];
 }
 
@@ -287,6 +288,14 @@ static NSString* defaultNib = @"VSTimelineView";
     if([timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
         
         [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectGotSelected object:((VSTimelineObject*) timelineObjectProxy)];
+    }
+}
+
+-(void) timelineObjectProxy:(VSTimelineObjectProxy *)timelineObjectProxy wasUnselectedOnTrackViewController:(VSTrackViewController *)trackViewController{
+    
+    if([timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectsGotUnselected object: [NSArray arrayWithObject:((VSTimelineObject*) timelineObjectProxy)]];
     }
 }
 

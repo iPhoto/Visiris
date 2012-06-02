@@ -31,7 +31,9 @@
 /** Kind of the file like stored in the VSFileKind-Enum. E.g.: IMAGE, MOVIE, AUDIO, QUARTZ-COMPOSER. According to the fileKind the classString is set. */
 @property               VSFileKind  fileKind;
 
-@property NSString* supplierClassString;
+/** Name of the child-class of VSSourceSupplier associated with that fileType. The class is usually depending on the the fileKind. 
+ */
+@property (strong) NSString* supplierClassString;
 
 #pragma mark- Init
 
@@ -41,6 +43,7 @@
  @param uti Uniform Type Identifier of the file type.
  @param kind Kind of the file like stored in the VSFileKind-Enum. E.g.: IMAGE, MOVIE, AUDIO, QUARTZ-COMPOSER. According to the fileKind the classString is set.
  @param timelineObjectSourceClassString Name of the child-class of VSTimelineObejctSource associated with that fileType. The class is usually depending on the the fileKind.
+ @param supplierClassString Name of the child-class of VSSourceSupplier associated with that fileType. The class is usually depending on the the fileKind
 */
 -(id) initWithName:(NSString*) name uti:(NSString*) uti ofKind:(VSFileKind) kind timelineObjectSourceClassString:(NSString*)timelineObjectSourceClassString supplierClassString:(NSString*) supplierClassString;
 

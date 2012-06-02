@@ -20,10 +20,10 @@
 
 @interface VSTimelineObjectFactory()
 
-/** Stores the Class objects of all Classes the Factory can create instances of. The name of the class is used as key in the dictionary. */
+/** Stores the  objects of all VSTimelineObjectSource child-classes the Factory can create instances of. The name of the class is used as key in the dictionary. */
 @property (strong) NSMutableDictionary *timelineObjectSourceClasses;
 
-
+/** Stores the Class objects of all VSSourceSupplier child-classes the Factory can create instances of. The name of the class is used as key in the dictionary. */
 @property (strong) NSMutableDictionary *sourceSupplierClasses;
 
 @end
@@ -54,7 +54,7 @@ static VSTimelineObjectFactory* sharedInstance;
 
 #pragma mark- Functions
 
-+(VSTimelineObjectFactory*)sharedManager{
++(VSTimelineObjectFactory*)sharedFactory{
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
@@ -99,7 +99,7 @@ static VSTimelineObjectFactory* sharedInstance;
 #pragma mark- Private Methods
 
 /**
- * Adds a new class object defined by the classString to the timelineObjectSourceClasses Dictionary. The name of the class is used as key in the dictionary
+ * Adds a new object defined by the classString to the timelineObjectSourceClasses Dictionary. The name of the class is used as key in the dictionary
  * @param classString Name of the class to register.
  * @return YES if the class was registrated successfully, NO if the class string was empty, the given class string doesn't name a class subclassed of VSTimelineObjectSource
  */
@@ -122,6 +122,11 @@ static VSTimelineObjectFactory* sharedInstance;
     return YES;
 }
 
+/**
+ * Adds a new class object defined by the classString to the sourceSupplierClasses Dictionary. The name of the class is used as key in the dictionary
+ * @param supplierClassString Name of the class to register.
+ * @return YES if the class was registrated successfully, NO if the class string was empty, the given class string doesn't name a class subclassed of VSSourceSupplier
+ */
 -(BOOL) registerNewSupplierClass:(NSString*) supplierClassString{
     if (!supplierClassString) {
         return NO;
@@ -138,6 +143,11 @@ static VSTimelineObjectFactory* sharedInstance;
     
 }
 
+/**
+ * Creates a NSDictionary of VSParameters according to the parameter information stored in the given xml-file
+ * @param aXMLFile XML-File storing the parameter information
+ * @return NSDictionary of VSParameters as stored inaXMLFile.
+ */
 -(NSDictionary *) createParametersDictionaryFromXMLFile:(NSString*)aXMLFile{
     
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];

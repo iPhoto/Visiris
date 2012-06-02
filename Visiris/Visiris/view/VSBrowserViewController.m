@@ -51,10 +51,6 @@ static NSString* defaultNib = @"VSBrowserView";
     [self showSubViewByIndex:[self.sgmCtrlSelectSubview selectedSegment]];
 }
 
-- (IBAction)selectedSegmentHasBeenChanged:(NSSegmentedControl *)sender {
-    [self showSubViewByIndex:[sender selectedSegment]];
-}
-
 
 /**
  * Inits the controllers responsible for the view's subviews.
@@ -67,6 +63,13 @@ static NSString* defaultNib = @"VSBrowserView";
     self.projectItemBrowserViewController = [[VSProjectItemBrowserViewController alloc] initWithDefaultNib];
     
     [self.subViewControllers setObject:self.projectItemBrowserViewController.view forKey:[NSNumber numberWithInt:0]];
+}
+
+
+#pragma mark -IBAction
+
+- (IBAction)selectedSegmentHasBeenChanged:(NSSegmentedControl *)sender {
+    [self showSubViewByIndex:[sender selectedSegment]];
 }
 
 #pragma mark - Private Methods

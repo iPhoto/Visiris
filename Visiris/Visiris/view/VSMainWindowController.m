@@ -32,9 +32,6 @@
 @property (strong) VSPropertiesViewController *propertiesViewController;
 
 
-
-
-
 @end
 
 @implementation VSMainWindowController
@@ -68,10 +65,15 @@ static NSString* defaultNib = @"MainWindow";
 {
     [super windowDidLoad];
     
-    if([self.document isKindOfClass:[VSDocument class]]){
-        [self initTimelineViewWithTimeline:((VSDocument*) self.document).timeline];
-        [self initPreviewViewWithOpenGLContext:((VSDocument*) self.document).preProcessor.renderCoreReceptionist.openGLContext];
+    //checks if the document is a visirs document
+    if(self.document && [self.document isKindOfClass:[VSDocument class]]){
         
+        self.timelineViewController = [[VSTimelineViewController alloc] initWithDefaultNibAccordingForTimeline:((VSDocument*) self.document).timeline];
+        [self loadView:timelineViewController.view intoSplitView:self.mainSplitView replacingViewAtPosition:1];
+
+        
+        self.previewViewController = [[VSPreviewViewController alloc] initWithDefaultNibForOpenGLContext:((VSDocument*) self.document).preProcessor.renderCoreReceptionist.openGLContext];                                                
+        [self loadView:self.previewViewController.view intoSplitView:self.topSplitView replacingViewAtPosition:2];
         self.previewViewController.delegate = ((VSDocument*) self.document).playbackController;
         ((VSDocument*) self.document).playbackController.delegate = self.previewViewController;
     }
@@ -79,23 +81,9 @@ static NSString* defaultNib = @"MainWindow";
     [self initSplitViews];
 }
 
-#pragma mark - Methods
-
--(void) initTimelineViewWithTimeline:(id)timeline{
-    self.timelineViewController = [[VSTimelineViewController alloc] initWithDefaultNibAccordingForTimeline:timeline];
-    [self loadView:timelineViewController.view intoSplitView:self.mainSplitView replacingViewAtPosition:1];
-}
-
--(void) initPreviewViewWithOpenGLContext:(NSOpenGLContext *)openGLContext{
-    //Addin the VSPreviewView to the top right
-    self.previewViewController = [[VSPreviewViewController alloc] initWithDefaultNibForOpenGLContext:openGLContext];                                        
-    
-    [self loadView:self.previewViewController.view intoSplitView:self.topSplitView replacingViewAtPosition:2];
-    
-
-}
-
 #pragma mark- Private Methods
+
+
 /**
  * Inits the splitViews of the window with different Views according to their positions.
  */
@@ -126,7 +114,6 @@ static NSString* defaultNib = @"MainWindow";
     [view setAutoresizesSubviews:YES];
 }
 
-#pragma mark- Private Methods
 
 
 #pragma mark - NSSplitViewDelegate implementation

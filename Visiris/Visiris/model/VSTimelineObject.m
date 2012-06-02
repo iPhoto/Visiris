@@ -25,6 +25,8 @@
 @synthesize icon = _icon;
 @synthesize supplier = _supplier;
 
+
+#pragma mark - Init
 -(id) initWithSourceObject:(VSTimelineObjectSource*) sourceObject icon:(NSImage *)icon{
     if(self=[super initWithName:sourceObject.projectItem.name atTime:-1 duration:sourceObject.projectItem.duration icon:icon]){
         self.sourceObject = sourceObject;
@@ -33,13 +35,10 @@
     return self;
 }
 
+#pragma mark - Methods
+
 -(double) endTime{
     return self.startTime + self.duration;
-}
-
-- (double)convertGlobalTimestampToLocalTimestamp:(double)aGlobalTimestamp
-{
-    return 2.0f;
 }
 
 - (VSCoreHandover *)handoverForTimestamp:(double)aTimestamp frameSize:(NSSize)aFrameSize{
@@ -102,6 +101,13 @@
 -(void) changeName:(NSString *)newName andRegisterAt:(NSUndoManager *)undoManager{
     [[undoManager prepareWithInvocationTarget:self] changeName:self.name andRegisterAt:undoManager];
     self.name = newName;
+}
+
+
+- (double)convertGlobalTimestampToLocalTimestamp:(double)aGlobalTimestamp
+{
+    DDLogInfo(@"Not implemented");
+    return 2.0f;
 }
 
 @end

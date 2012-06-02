@@ -39,7 +39,6 @@
 {
     NSArray *currentTimeLineObjects = [self.timeline timelineObjectsForTimestamp:aTimestamp];
     
-    
     NSMutableArray *handoverObjects = [[NSMutableArray alloc] init];
     
     for (VSTimelineObject *currentTimeLineObject in currentTimeLineObjects) {
@@ -50,7 +49,6 @@
             [handoverObjects addObject:coreHandover];
         }
     }
-    
     
     if (self.renderCoreReceptionist && handoverObjects) {
         [self.renderCoreReceptionist renderFrameAtTimestamp:aTimestamp withHandovers:handoverObjects forSize:aFrameSize];

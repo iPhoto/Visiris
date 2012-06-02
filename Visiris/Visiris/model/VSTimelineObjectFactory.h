@@ -18,8 +18,11 @@
  */
 @interface VSTimelineObjectFactory : NSObject
 
-
-+(VSTimelineObjectFactory *) sharedManager;
+/**
+ * Returns the shared instance of VSTimelineObjectFactory.
+ * @return Singleton instance of VSTimelineObjectFactory
+ */
++(VSTimelineObjectFactory *) sharedFactory;
 
 /** Creates a new TimelineObject. 
  *

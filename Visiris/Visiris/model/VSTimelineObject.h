@@ -31,7 +31,6 @@
  * Inits a the object with the given sourceObject
  * @param sourceObject SourceObject the timelineObject represents on the timeline
  * @param icon Thumbnail of the file
- * @param startTime Timeposition of the Object on the timeline 
  */
 -(id) initWithSourceObject:(VSTimelineObjectSource*) sourceObject icon:(NSImage *)icon;
 
@@ -44,7 +43,7 @@
 /**
  * Tells the supplier to provide data for the given timestamp, so the VSTimelineObject can return the VSCorHandover for given timestamp and framesize.
  * @param aTimestamp Timstamp the VSCoreHandover is created for.
- * @param aF3rameSize FrameSize the VSCoreHandover is setup for.
+ * @param aFrameSize FrameSize the VSCoreHandover is setup for.
  */
 - (VSCoreHandover *)handoverForTimestamp:(double)aTimestamp frameSize:(NSSize) aFrameSize;
 
@@ -60,10 +59,32 @@
  */
 -(NSArray *) visibleParameters;
 
+/**
+ * Sets the VSTimelineObject as selected and registers the state-change at the give undoManger
+ * @param undoManager NSUndoManager the change of the selection is registrated at.
+ */
 -(void) setSelectedAndRegisterUndo:(NSUndoManager*) undoManager;
 
+
+/**
+ * Sets the VSTimelineObject as unselected and registers the state-change at the give undoManger
+ * @param undoManager NSUndoManager the change of the selection is registrated at.
+ */
 -(void) setUnselectedAndRegisterUndo:(NSUndoManager*) undoManager;
 
+
+/**
+ * Changes the name of VSTimelineObject and registers the change at the give undoManger
+ * @param newName Name the VSTimelineObject's name will be changed to.
+ * @param undoManager NSUndoManager the change of the selection is registrated at.
+ */
 -(void) changeName:(NSString*)newName andRegisterAt:(NSUndoManager*) undoManager;
+
+/**
+ * Converts the given globalTimestamp to one relative to the VSTimelineObject
+ * @param aGlobalTimestamp Global timeStamp to be converted in relative one.
+ * @return Returns the converted relative timestamp
+ */
+- (double)convertGlobalTimestampToLocalTimestamp:(double)aGlobalTimestamp;
 
 @end

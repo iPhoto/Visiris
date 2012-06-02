@@ -13,6 +13,7 @@
 @class VSTimeline;
 @class VSPlaybackController;
 
+
 @interface VSDocument : NSDocument
 
 /** VSPreProcessor is initialized by VSMainWindowController */

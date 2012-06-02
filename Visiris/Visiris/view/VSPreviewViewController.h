@@ -22,6 +22,9 @@
 
 #import "VSPlaybackController.h"
 
+/**
+ * Subclass of NSViewController responsible for the Previw at the top-right of the window
+ */
 @interface VSPreviewViewController : NSViewController<VSPlaybackControllerDelegate>
 
 @property (strong) NSOpenGLContext *openGLContext;

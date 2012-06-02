@@ -46,17 +46,41 @@ static NSString* defaultNib = @"VSParameterView";
     return self;
 }
 
+
 #pragma mark - NSViewController
-
--(void) awakeFromNib{
-
-}
 
 //TODO: change only the value
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     //observers if the defaultValue of the parameter has changed
     if([keyPath isEqualToString:@"defaultValue"]){
         [self showParameter];
+    }
+}
+
+#pragma mark - Methods
+
+-(void) saveParameterAndRemoveObserver{
+    [self.parameter.animation removeObserver:self forKeyPath:@"defaultValue"];
+    switch (self.parameter.dataType) {
+        case VSParameterDataTypeBool:
+            [self setParametersDefaultBoolValue:[self boolValueForButtonState:self.boolValueField.state]];
+            break;
+        case VSParameterDataTypeFloat:
+        {
+            if (!self.parameter.hasRange) {
+                [self setParametersDefaultFloatValue:[self.textValueField floatValue]];
+            }
+            else {
+                [self setParametersDefaultFloatValue:[self.valueSliderText floatValue ]];
+            }
+            break;
+        }
+        case VSParameterDataTypeString:
+            [self setParametersDefaultStringValue:[self.textValueField stringValue]];
+            break;
+        default:
+            [self setParametersDefaultStringValue:[self.textValueField stringValue]];
+            break;
     }
 }
 
@@ -226,6 +250,9 @@ static NSString* defaultNib = @"VSParameterView";
     }
 }
 
+/**
+ * Sets the default value of the VSParamter and registers it for undoing
+ */
 -(void) registerDefaultValueUndo{
     [self.parameter.animation undoParametersDefaultValueChange:self.parameter.animation.defaultValue atUndoManager:self.view.undoManager];
 }
@@ -257,45 +284,14 @@ static NSString* defaultNib = @"VSParameterView";
 
 
 
--(void) saveParameterAndRemoveObserver{
-    [self.parameter.animation removeObserver:self forKeyPath:@"defaultValue"];
-    switch (self.parameter.dataType) {
-        case VSParameterDataTypeBool:
-            [self setParametersDefaultBoolValue:[self boolValueForButtonState:self.boolValueField.state]];
-            break;
-        case VSParameterDataTypeFloat:
-        {
-            if (!self.parameter.hasRange) {
-                [self setParametersDefaultFloatValue:[self.textValueField floatValue]];
-            }
-            else {
-                [self setParametersDefaultFloatValue:[self.valueSliderText floatValue ]];
-            }
-            break;
-        }
-        case VSParameterDataTypeString:
-            [self setParametersDefaultStringValue:[self.textValueField stringValue]];
-            break;
-        default:
-            [self setParametersDefaultStringValue:[self.textValueField stringValue]];
-            break;
-    }
-}
-
-
 #pragma mark - Properties
 
-/**
- * @return VSParameter the view is displaying.
- */
+
 -(VSParameter*) parameter{
     return _parameter;
 }
 
-/*
- * Sets the VSParameter property and inits the displaying of the parameter
- * @param parameter VSParameter the view should display
- */
+
 -(void) setParameter:(VSParameter *)parameter{
     if(parameter != _parameter){
         

@@ -16,7 +16,11 @@
  */
 @interface VSPostProcessor : NSObject <VSCoreReceptionistDelegate>
 
-
+/**
+ * Inits VSPostProcessor and conencts it with the given VSPlaybackController
+ * @param thePlaybackController  VSPlaybackController the VSPostProcessor calls when the rendering of the texture has finished by the core
+ * @return self
+ */
 -(id) initWithPlaybackController:(VSPlaybackController*) thePlaybackController;
 
 @end

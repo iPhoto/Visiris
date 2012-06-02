@@ -57,6 +57,8 @@
  * @param aDataType VSParameterDataType defining the paramters DataType
  * @param theDefaultValue Default value of the parameter. As soon as an parameter is initialized, a new Keyframe for the timestamp -1 with its default value is added.
  * @param aOrderNumber Defines where in the order of all parameters the parameter is shown.
+ * @param editable Indicates wheter the user is allowed to edit the parameter or not.
+ * @param hidden Indicates wheter the parameter is shown in the gui or not.
  * @return self;
  */
 -(id) initWithName:(NSString *) theName asType:(NSString*) aType forDataType:(VSParameterDataType) aDataType withDefaultValue:(id) theDefaultValue orderNumber:(NSInteger) aOrderNumber editable:(BOOL) editable hidden:(BOOL) hidden;
@@ -69,6 +71,8 @@
  * @param theDefaultValue Default value of the parameter. As soon as an parameter is initialized, a new Keyframe for the timestamp -1 with its default value is added.
  * @param aOrderNumber Defines where in the order of all parameters the parameter is shown.
  * @param aRange Range of values valid for this parameters
+ * @param editable Indicates wheter the user is allowed to edit the parameter or not.
+ * @param hidden Indicates wheter the parameter is shown in the gui or not.
  * @return self;
  */
 -(id) initWithName:(NSString *) theName asType:(NSString*) aType forDataType:(VSParameterDataType) aDataType withDefaultValue:(id) theDefaultValue orderNumber:(NSInteger) aOrderNumber editable:(BOOL) editable hidden:(BOOL) hidden validRang:(NSRange) aRange;

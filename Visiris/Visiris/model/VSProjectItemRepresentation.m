@@ -14,6 +14,9 @@
 
 @synthesize icon = _icon;
 
+
+#pragma mark - Init
+
 -(id) initWithFile:(NSString *)file ofType:(VSFileType *)type name:(NSString *)name fileSize:(float)fileSize duration:(float)duration itemID:(NSInteger)itemID fileIcon:(NSImage *)icon{
     if(self = [super initWithFile:file ofType:type name:name fileSize:fileSize duration:duration itemID:itemID]){
         self.icon = icon;
@@ -38,6 +41,16 @@
     [aCoder encodeFloat:self.duration forKey:@"piLength"];
     [aCoder encodeFloat:self.fileSize forKey:@"piFileSize"];
     [aCoder encodeInt:self.itemID forKey:@"piItemID"];
+}
+
+#pragma mark - Methods
+
+-(NSString*) fileSizeString{
+    return [VSFormattingUtils formatedFileSizeStringFromByteValue:self.fileSize];
+}
+
+-(NSString*) durationString{
+    return [VSFormattingUtils formatedTimeStringFromMilliseconds:self.duration];
 }
 
 
@@ -85,12 +98,6 @@
     return nil;
 }
 
--(NSString*) fileSizeString{
-    return [VSFormattingUtils formatedFileSizeStringFromByteValue:self.fileSize];
-}
 
--(NSString*) durationString{
-    return [VSFormattingUtils formatedTimeStringFromMilliseconds:self.duration];
-}
 
 @end

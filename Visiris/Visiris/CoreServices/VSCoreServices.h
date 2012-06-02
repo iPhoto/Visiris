@@ -15,6 +15,7 @@
 #import "VSSupportedFilesManager.h"
 #import "VSFormattingUtils.h"
 #import "VSParameterXMLUtils.h"
+#import "VSViewUtils.h"
 
 /*Constants*/
 #import "VSImageConstants.h"

@@ -10,6 +10,12 @@
 #import <QTKit/QTKit.h>
 
 @class VSProjectItemRepresentation;
+
+/**
+ * Displays the properties of a VSProjectItemRepresentation.
+ *
+ * Shows Information about a selected VSProjectItemRepresentation and a preview image / video of it. Called by VSPropertiesViewController as soon as a  VSProjectItemRepresentation got selected in the VSProjectItemBrowser
+ */
 @interface VSProjectItemPropertiesViewController : NSViewController<NSUserInterfaceValidations>
 
 #pragma mark - init 

@@ -68,13 +68,13 @@
  * Sets the selected property of the given VSTimelineObject to YES.
  * @param timelineObjectToSelect VSTimelineObject to be selected.
  */
--(void) selecteTimelineObject:(VSTimelineObject*) timelineObjectToSelect;
+-(void) selectTimelineObject:(VSTimelineObject*) timelineObjectToSelect;
 
 /**
  * Sets the selected property of the given VSTimelineObject to NO.
- * @param timelineObjectToSelect VSTimelineObject to be unselected.
+ * @param timelineObjectToUnselect VSTimelineObject to be unselected.
  */
--(void) unselecteTimelineObject:(VSTimelineObject*) timelineObjectToUnselect;
+-(void) unselectTimelineObject:(VSTimelineObject*) timelineObjectToUnselect;
 
 /**
  * Sets the selected property of VSTimelineObjects the VSTrack is responsible for to NO

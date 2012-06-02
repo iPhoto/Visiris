@@ -64,10 +64,16 @@
 
 -(void) timelineObjectProxy:(VSTimelineObjectProxy *) timelineObjectProxy wasSelectedOnTrackViewController:(VSTrackViewController*) trackViewController;
 
+-(void) timelineObjectProxy:(VSTimelineObjectProxy *) timelineObjectProxy wasUnselectedOnTrackViewController:(VSTrackViewController*) trackViewController;
+
 @end
 
 
-
+/**
+ * Subclass of NSViewController, representing a VSTrack and its VSTimelineObjects.
+ *
+ * Pleas write more
+ */
 @interface VSTrackViewController : NSViewController<VSTrackViewDelegate, VSTimelineObjectControllerDelegate>
 
 /** Track the view VSTrackViewController is responsible for */
@@ -78,11 +84,6 @@
 
 /** Pixel Item Ratio as set in VSTimelineViewController */
 @property double pixelTimeRatio;
-
-
-
-
-
 
 
 /**

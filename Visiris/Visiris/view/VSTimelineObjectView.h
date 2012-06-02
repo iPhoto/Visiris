@@ -21,7 +21,11 @@
  */
 -(void) timelineObjectViewWasClicked:(VSTimelineObjectView*) timelineObjectView;
 
--(void) timelineObjectViewWasDragged:(VSTimelineObjectView*) timelineObjectView toPosition:(NSPoint) newPosition;
+-(void) timelineObjectIsDragged:(VSTimelineObjectView*) timelineObjectView fromPosition:(NSPoint) oldPosition toPosition:(NSPoint) newPosition;
+
+-(BOOL) timelineObjectViewWillStartDragging:(VSTimelineObjectView*) timelineObjectView;
+
+-(void) timelineObjectDidStopDragging:(VSTimelineObjectView*) timelineObjectView;
 
 @end
 
@@ -38,5 +42,11 @@
 
 /** if true, a frame is drawn around the view */
 @property BOOL selected;
+
+@property BOOL intersected;
+
+@property NSRect intersectionRect;
+
+@property BOOL temporary;
 
 @end

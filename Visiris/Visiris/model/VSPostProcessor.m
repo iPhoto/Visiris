@@ -17,6 +17,7 @@
 
 @implementation VSPostProcessor
 
+/** VSPlaybackController the VSPostProcessor calls when the rendering of the texture has finished by the core */
 @synthesize playbackController = _playbackController;
 
 #pragma mark - Init
@@ -32,7 +33,7 @@
 
 - (void)coreReceptionist:(VSCoreReceptionist *)theCoreReceptionist didFinishedRenderingFrameAtTimestamp:(double)theTimestamp withResultingTexture:(GLuint)theTexture
 {
-    [self.playbackController finishedRenderingTexture:theTexture forTimestamp:theTimestamp];
+    [self.playbackController didFinisheRenderingTexture:theTexture forTimestamp:theTimestamp];
 }
 
 @end

@@ -9,7 +9,9 @@
 #import <Foundation/Foundation.h>
 
 /**
- * Representaiton of VSTimelineObjects
+ * Representation of a VSTimelineObject. 
+ *
+ * !!!!!Please add more here !!!!!
  */
 @interface VSTimelineObjectProxy : NSObject
 
@@ -30,6 +32,31 @@
 
 #pragma mark- Init
 
+/**
+ * Creates VSTimelineObjectProxy and inits it with the given parameters
+ * @param name Name of VSTimelineObject the VSTimelineObjectProxy represents.
+ * @param startTime Time position on the timeline of VSTimelineObject the VSTimelineObjectProxy represents.
+ * @param duration Duration of the VSTimelineObject the VSTimelineObjectProxy represents
+ * @param Icon of the VSTimelineObject the VSTimelineObjectProxy represents
+ * @return self
+ */
 -(id) initWithName:(NSString*) name atTime:(double) startTime duration:(double) duration icon:(NSImage*) icon;
+
+#pragma mark - Methods
+
+/**
+ * Changes the time position of the VSTimelineObjectProxy and registrats the change at the give NSUndoManager
+ * @param startTime New time position the VSTimelineObjectProxy has been moved to
+ * @param undoManager NSUndoManager the change of the start position is registrated at
+ */
+-(void) changeStartTime:(double)startTime andRegisterAtUndoManager:(NSUndoManager *)undoManager;
+
+/**
+ * Changes the duration of the VSTimelineObjectProxy and registrats the change at the give NSUndoManager
+ * @param duration New duration of the VSTimelineObjectProxy 
+ * @param undoManager NSUndoManager the change of the duration is registrated at
+ */
+-(void) changeDuration:(double)duration andRegisterAtUndoManager:(NSUndoManager *)undoManager;
+
 
 @end

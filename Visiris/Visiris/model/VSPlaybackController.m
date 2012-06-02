@@ -13,8 +13,10 @@
 
 @interface VSPlaybackController()
 
+/** Times the playback */
 @property NSTimer *playbackTimer;
 
+@property (strong) NSOperationQueue *queue;
 @end
 
 @implementation VSPlaybackController
@@ -24,17 +26,21 @@
 @synthesize currentTimestamp = _currentTimestamp;
 @synthesize playbackTimer = _playbackTimer;
 @synthesize delegate = _delegate;
+@synthesize queue = _queue;
+
+#pragma mark - Init
 
 -(id) initWithPreProcessor:(VSPreProcessor *)preProcessor timeline:(VSTimeline *)timeline{
     if(self = [super init]){
         _preProcessor = preProcessor;
         _timeline = timeline;
-        
+        self.queue = [[NSOperationQueue alloc] init];
     }
     
     return self;
 }
 
+#pragma mark - Methods
 
 - (void)startPlaybackFromCurrentTimeStamp
 {
@@ -45,9 +51,22 @@
     [self.playbackTimer invalidate];
 }
 
+#pragma mark - VSPreviewViewControllerDelegate implementation
+
+-(void) play{
+    [self startPlaybackFromCurrentTimeStamp];
+}
+
+-(void) stop{
+    [self stopPlayback];
+}
+
+
 #pragma mark - Private Methods
 
-
+/**
+ * Test function to return a valid frameSize
+ */
 - (NSSize)frameSize
 {
     return NSMakeSize(1280, 720);
@@ -59,12 +78,16 @@
  */
 - (void)renderFramesForCurrentTimestamp
 {
-    if (self.preProcessor) {
-        [self.preProcessor processFrameAtTimestamp:self.currentTimestamp withFrameSize:[self frameSize]];
-    }
+        DDLogInfo(@"looping");
+    
+//    if (self.preProcessor) {
+//        [self.preProcessor processFrameAtTimestamp:self.currentTimestamp withFrameSize:[self frameSize]];
+//    }
 }
 
--(void) finishedRenderingTexture:(GLuint)theTexture forTimestamp:(double)theTimestamp{
+
+
+-(void) didFinisheRenderingTexture:(GLuint)theTexture forTimestamp:(double)theTimestamp{
     if(self.delegate){
         if([self.delegate conformsToProtocol:@protocol(VSPlaybackControllerDelegate) ]){
             if([self.delegate respondsToSelector:@selector(texture:isReadyForTimestamp:)]){
@@ -72,16 +95,6 @@
             }
         }
     }
-}
-
-#pragma mark - VSPreviewViewControllerDelegate implementation
-
--(void) play{
-    [self startPlaybackFromCurrentTimeStamp];
-}
-
--(void) stop{
-    [self stopPlayback];
 }
 
 @end

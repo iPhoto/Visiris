@@ -22,26 +22,7 @@
 
 @implementation VSParameterXMLUtils
 
-/**
- * Returns the VSParameterDataType for the given string
- * @param string String name of the data type
- * @return VSParameterDataType found for the given string, -1 if no VSParameterDataType was found
- */
-+(VSParameterDataType) paramaterTypeOfString:(NSString*) string{
-    if([[string lowercaseString] isEqualToString:@"float"]){
-        return VSParameterDataTypeFloat;
-    }
-    
-    if([[string lowercaseString] isEqualToString:@"bool"]){
-        return VSParameterDataTypeBool;
-    }
-    
-    if([[string lowercaseString] isEqualToString:@"string"]){
-        return VSParameterDataTypeString;
-    }
-    
-    return -1;
-}
+#pragma mark - Functions
 
 +(VSParameter*)parameterOfXMLNode:(NSXMLElement *)parameterElement atPosition:(NSInteger) orderNumber{
     VSParameter *newParameter;
@@ -114,5 +95,27 @@
     return newParameter;
 }
 
+#pragma mark - Private Functions
+
+/**
+ * Returns the VSParameterDataType for the given string
+ * @param string String name of the data type
+ * @return VSParameterDataType found for the given string, -1 if no VSParameterDataType was found
+ */
++(VSParameterDataType) paramaterTypeOfString:(NSString*) string{
+if([[string lowercaseString] isEqualToString:@"float"]){
+    return VSParameterDataTypeFloat;
+}
+
+if([[string lowercaseString] isEqualToString:@"bool"]){
+    return VSParameterDataTypeBool;
+}
+
+if([[string lowercaseString] isEqualToString:@"string"]){
+    return VSParameterDataTypeString;
+}
+
+return -1;
+}
 
 @end

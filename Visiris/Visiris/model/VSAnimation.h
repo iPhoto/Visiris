@@ -19,7 +19,7 @@
 @interface VSAnimation : NSObject
 
 /** List of all VSKeyFrames of the animation */
-@property (strong) NSMutableArray *keyFrames;
+@property (strong) NSMutableDictionary *keyFrames;
 
 /** Stores the device connected with the parameter if ther is one */
 @property (strong) VSDeviceParameterMapper *deviceParameterMapper;
@@ -105,16 +105,19 @@
 
 /**
  * Sets the NSString value for the keyframe with the timestamp -1
+ * @param value Value set as DefaultValue
  */
 -(void) setDefaultStringValue:(NSString*) value;
 
 /**
  * Sets the Boolean value for the keyframe with the timestamp -1
+ * @param value Value set as DefaultValue
  */
 -(void) setDefaultBoolValue:(BOOL) value;
 
 /**
  * Sets the float value for the keyframe with the timestamp -1
+ * @param value Value set as DefaultValue
  */
 -(void) setDefaultFloatValue:(float) value;
 
@@ -137,13 +140,13 @@
 /**
  * Removes the keyFrame with the aTimestamp.
  * @param aTimestamp The timestamp the keyfram is deleted for.
- * @return YES if the keyFrame was removed successfully, NO otherwise
  */
--(BOOL) removeKeyFrameAt:(double) aTimestamp;
+-(void) removeKeyFrameAt:(double) aTimestamp;
 
 /**
  * Set as selector for undoing changes of the parameter's default value 
- * @oldValue DefaultValue of the parameter before the change.
+ * @param oldValue DefaultValue of the parameter before the change.
+ * @param undoManager NSUndoManager the change of the defaultValue is registrated at.
  */
 -(void) undoParametersDefaultValueChange:(id) oldValue atUndoManager:(NSUndoManager*) undoManager;
 

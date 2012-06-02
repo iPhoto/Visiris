@@ -66,8 +66,17 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     [self initScrollView];
     
     [self.nameLabel setStringValue:NSLocalizedString(@"Name", @"Label for the name of a VSTimelineObject in its properties view")];
-    
-    
+}
+
+/**
+ * Inits the scrollView and its documentView
+ */
+-(void) initScrollView{
+    [self.documentView setAutoresizingMask:NSViewWidthSizable];
+    [self.scrollView setDocumentView:self.documentView];
+    [self.documentView setAutoresizesSubviews:YES];
+    [self.parametersHolder setAutoresizingMask:NSViewWidthSizable];
+    [self.documentView setFrameSize:[self.scrollView contentSize]];
 }
 
 
@@ -86,16 +95,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 
 #pragma mark - Private Methods
 
-/**
- * Inits the scrollView and its documentView
- */
--(void) initScrollView{
-    [self.documentView setAutoresizingMask:NSViewWidthSizable];
-    [self.scrollView setDocumentView:self.documentView];
-    [self.documentView setAutoresizesSubviews:YES];
-    [self.parametersHolder setAutoresizingMask:NSViewWidthSizable];
-    [self.documentView setFrameSize:[self.scrollView contentSize]];
-}
+
 
 /**
  * Removes all Parameter views
@@ -153,6 +153,9 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     [self.parametersHolder setFrameSize:NSMakeSize(self.documentView.frame.size.width, [self.parameterViewControllers count] * parameterViewHeight)];
 }
 
+/**
+ * Changes the paramters name 
+ */
 -(void) setTimelineObjectName:(NSString*)newName{
     if(![self.timelineObject.name isEqualToString:newName]){
         [self.timelineObject changeName:newName andRegisterAt:self.view.undoManager];
@@ -161,12 +164,6 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 
 #pragma mark - Properties
 
-/**
- * Setter of the classes timelineObject
- * 
- * Sets the timelineObject property and calls displays its parameters
- * param timelineObject VStimelineObject set as value of the classes timelineObject property
- */
 -(void) setTimelineObject:(VSTimelineObject *)timelineObject{
     if(_timelineObject != timelineObject){
         if(_timelineObject){
@@ -185,10 +182,6 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     }
 }
 
-/**
- * Getter for the classes timelineObject property
- * @return The classes timeleinObject property
- */
 -(VSTimelineObject*) timelineObject{
     return _timelineObject;
 }
