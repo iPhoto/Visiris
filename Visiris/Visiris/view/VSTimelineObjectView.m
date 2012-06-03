@@ -10,10 +10,20 @@
 
 #import "VSCoreServices.h"
 
+@interface VSTimelineObjectView ()
+@property BOOL dragged;
+@property NSPoint lastMousePosition;
+@end
+
 @implementation VSTimelineObjectView
 
 @synthesize delegate = _delegate;
 @synthesize selected = _selected;
+@synthesize dragged = _dragged;
+@synthesize temporary = _temporary;
+@synthesize intersectionRect = _intersectionRect;
+@synthesize intersected =_intersected;
+@synthesize lastMousePosition = _lastMousePosition;
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -22,6 +32,7 @@
         [self setWantsLayer:YES];
         self.layer.cornerRadius = 10.0;
         self.layer.backgroundColor = [[NSColor darkGrayColor] CGColor];
+        self.layer.borderColor =  [[NSColor yellowColor] CGColor];
     }
     
     return self;
@@ -39,12 +50,25 @@
 - (void)drawRect:(NSRect)dirtyRect{
     
     if(self.selected){
-        self.layer.borderColor =  [[NSColor yellowColor] CGColor];
+        
         self.layer.borderWidth = 3.0;
     }
     else{
         self.layer.borderWidth = 0.0;
     }
+    
+    if(self.dragged || self.temporary){
+        self.layer.opacity = 0.5;
+        self.layer.borderWidth = 0.0;
+    }
+    else {
+        self.layer.opacity = 1.0;
+    }
+
+if(self.intersected){
+    [[NSColor greenColor] set];
+    NSRectFill(self.intersectionRect);
+}
 }
 
 #pragma mark - Mouse Events
@@ -53,11 +77,34 @@
     if([self delegateImplementsSelector:@selector(timelineObjectViewWasClicked:)]){
         [self.delegate timelineObjectViewWasClicked:self];
     }
+    
+    self.lastMousePosition = [theEvent locationInWindow];
 }
 
+
 -(void) mouseDragged:(NSEvent *)theEvent{
-    if([self delegateImplementsSelector:@selector(timelineObjectViewWasDragged:toPosition:)]){
-        [self.delegate timelineObjectViewWasDragged:self toPosition:[self convertPoint:[NSEvent mouseLocation] fromView:nil]];
+    if(!self.dragged){
+        if([self delegateImplementsSelector:@selector(timelineObjectViewWillStartDragging:)]){
+            self.dragged = [self.delegate timelineObjectViewWillStartDragging:self];
+        }
+        
+    }
+    if(self.dragged){
+        NSPoint newMousePosition =[theEvent locationInWindow];
+        if([self delegateImplementsSelector:@selector(timelineObjectIsDragged:fromPosition:toPosition:)]){
+            [self.delegate timelineObjectIsDragged:self fromPosition:self.lastMousePosition toPosition: newMousePosition ];
+            self.lastMousePosition = newMousePosition;
+        }
+    }
+}
+
+-(void) mouseUp:(NSEvent *)theEvent{
+    if(self.dragged){
+        self.dragged = NO;
+        
+        if([self delegateImplementsSelector:@selector(timelineObjectDidStopDragging:)]){
+            [self.delegate timelineObjectDidStopDragging:self];
+        }
     }
 }
 

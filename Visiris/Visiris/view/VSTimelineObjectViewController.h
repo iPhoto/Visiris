@@ -11,6 +11,7 @@
 #import "VSTimelineObjectView.h"
 
 @class VSTimelineObjectProxy;
+@class VSTimelineObjectViewController;
 
 /**
  * Protocoll that defines how VSTimelineObjectViewController talks to its delegate 
@@ -27,6 +28,15 @@
 
 -(void) timelineObjectProxyWasSelected:(VSTimelineObjectProxy*) timelineObjectProxy;
 
+-(void) timelineObjectProxyWasUnselected:(VSTimelineObjectProxy*) timelineObjectProxy;
+
+-(void) timelineObjectIsDragged:(VSTimelineObjectViewController*) timelineObjectViewController fromPosition:(NSPoint) oldPosition toPosition:(NSPoint) newPosition;
+
+-(BOOL) timelineObjectWillStartDragging:(VSTimelineObjectViewController*) timelineObjectViewController;
+
+-(void) timelineObjectDidStopDragging:(VSTimelineObjectViewController*) timelineObjectViewController;
+
+
 @end
 
 /**
@@ -40,10 +50,22 @@
 /** VSTimelineObjectProxy of the VSTimelineObject the VSTimelineObjectViewController represents*/
 @property (strong) VSTimelineObjectProxy* timelineObjectProxy;
 
+@property BOOL intersected;
+
+@property NSRect intersectionRect;
+
+@property BOOL enteredLeft;
+
+@property BOOL temporary;
+
 /**
  * Inits the controller with the .nib-File stored in defaultNib (VSBrowserView)
  */
 -(id) initWithDefaultNib;
 
+
+#pragma mark - Methods
+
+-(void) changePixelTimeRatio:(double) newPixelTimeRatio;
 
 @end

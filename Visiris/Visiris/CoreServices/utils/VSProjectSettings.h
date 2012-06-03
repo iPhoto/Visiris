@@ -22,7 +22,7 @@
 /** Name of the project */
 @property NSString *projectName;
 
-/*!
+/**
  Returns the singleton Instance
  @return Reference on the Singleton Instance
  */

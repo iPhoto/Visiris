@@ -97,6 +97,7 @@ static NSString* defaultNib = @"VSPropertiesView";
  * Called when a VSProjectItemRepresentationGotUnselected-Notification was received.
  *
  * Hides the currently visible ProjectItemProperties view
+ * @param notification NSNotification storing the VSProjectItemRepresentations got unselected.
  */
 -(void) projectItemsRepresentationsGotUnselected:(NSNotification *) notification{
     DDLogCInfo(@"projectItemsRepresentationsGotUnselected: %@  NOT IMPLEMENTED YET", notification);    
@@ -109,6 +110,7 @@ static NSString* defaultNib = @"VSPropertiesView";
  * @param notification Holding the selected VSTimelineObject
  */
 -(void) timelineObjectGotSelected:(NSNotification *) notification{
+    DDLogInfo(@"hi");
     if([[notification object] isKindOfClass:[VSTimelineObject class]]){
         VSTimelineObject *timelineObject = [notification object];
         [self showSubview:self.timelineObjectPropertiesViewController.view];
@@ -120,6 +122,7 @@ static NSString* defaultNib = @"VSPropertiesView";
  * Called when a VSTimelineObjectGotUnselected-Notification was received.
  *
  * Hides the currently visible TimelineObjectPropertyView
+ * @param notification NSNotification storing the selected VSTimelineObject
  */
 -(void) timelineObjectGotUnselected:(NSNotification *) notification{
     if(self.contentView.subviews.count > 0){

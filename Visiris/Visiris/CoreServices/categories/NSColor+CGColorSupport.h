@@ -19,7 +19,9 @@
  */
 @property (readonly) CGColorRef CGColor;
 /**
- Create new NSColor from a CGColorRef
+ * Create new NSColor from a CGColorRef
+ * @param aColor CGColorRef a NSColor will created for.
+ * @retunr NSColor created corresponding the the given CGColorRef
  */
 + (NSColor*)colorWithCGColor:(CGColorRef)aColor;
 

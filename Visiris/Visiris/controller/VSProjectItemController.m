@@ -39,9 +39,6 @@ static VSProjectItemController* sharedProjectItemController = nil;
 }
 
 
-
-
-
 #pragma mark- Functions
 
 +(VSProjectItemController*)sharedManager{
@@ -54,11 +51,6 @@ static VSProjectItemController* sharedProjectItemController = nil;
     
     return sharedProjectItemController;
 }
-
-
-
-
-
 
 #pragma mark- Methods
 
@@ -135,7 +127,7 @@ static VSProjectItemController* sharedProjectItemController = nil;
 
 #pragma mark- Private Methods
 
-/*!
+/**
  Fills the projectItem with testData
  */
 -(void) setTestData{

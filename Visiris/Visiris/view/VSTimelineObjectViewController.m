@@ -12,12 +12,20 @@
 
 #import "VSCoreServices.h"
 
+@interface VSTimelineObjectViewController()
+@property double pixelTimeRatio;
+@end
+
 
 @implementation VSTimelineObjectViewController
-
+@synthesize pixelTimeRatio = _pixelTimeRatio;
 @synthesize delegate = _delegate;
-
+@synthesize intersected = _intersected;
+@synthesize intersectionRect = _intersectionRect;
 @synthesize timelineObjectProxy = _timelineObjectProxy;
+@synthesize enteredLeft = _enteredLeft;
+@synthesize temporary = _temporary;
+
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
 static NSString* defaultNib = @"VSTimelinObjectView";
@@ -44,7 +52,8 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     }
     
     [self.timelineObjectProxy addObserver:self forKeyPath:@"selected" options:0 context:nil];
-    
+    [self.timelineObjectProxy addObserver:self forKeyPath:@"duration" options:0 context:nil];
+    [self.timelineObjectProxy addObserver:self forKeyPath:@"startTime" options:0 context:nil];
 }
 
 #pragma mark - NSViewController
@@ -62,27 +71,77 @@ static NSString* defaultNib = @"VSTimelinObjectView";
                             [self.delegate timelineObjectProxyWasSelected:self.timelineObjectProxy];
                         }
                     }
+                    else {
+                        if([self delegateRespondsToSelector:@selector(timelineObjectProxyWasUnselected:)]){
+                            [self.delegate timelineObjectProxyWasUnselected:self.timelineObjectProxy];
+                        }
+                    }
                     
                     [self.view setNeedsDisplay:YES];
                 }
             }
         }
     }
+    
+    if([keyPath isEqualToString:@"duration"] || [keyPath isEqualToString:@"startTime"]){
+        [self setViewsFrameAccordingToPixelTimeRatio];
+    }
 }
 
 #pragma mark - VSTimelineObjectViewDelegate implementation
 
 -(void) timelineObjectViewWasClicked:(VSTimelineObjectView *)timelineObjectView{
-    if([self delegateRespondsToSelector:@selector(timelineObjectProxyWillBeSelected:)]){
-        [self.delegate timelineObjectProxyWillBeSelected:self.timelineObjectProxy];
+    if(!self.timelineObjectProxy.selected){
+        if([self delegateRespondsToSelector:@selector(timelineObjectProxyWillBeSelected:)]){
+            [self.delegate timelineObjectProxyWillBeSelected:self.timelineObjectProxy];
+        }
     }
 }
 
--(void) timelineObjectViewWasDragged:(VSTimelineObjectView *)timelineObjectView toPosition:(NSPoint)newPosition{
+-(void) timelineObjectIsDragged:(VSTimelineObjectView *)timelineObjectView fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition{
+    if([self delegateRespondsToSelector:@selector(timelineObjectIsDragged:fromPosition:toPosition:)]){
+        [self.delegate timelineObjectIsDragged:self fromPosition:oldPosition toPosition:newPosition];
+    }
+}
+
+-(BOOL) timelineObjectViewWillStartDragging:(VSTimelineObjectView *)timelineObjectView{
+    if([self delegateRespondsToSelector:@selector(timelineObjectWillStartDragging:)]){
+        return [self.delegate timelineObjectWillStartDragging:self];
+    }
     
+    return NO;
+}
+
+-(void)timelineObjectDidStopDragging:(VSTimelineObjectView *)timelineObjectView{
+    if([self delegateRespondsToSelector:@selector(timelineObjectDidStopDragging:)]){
+        [self.delegate timelineObjectDidStopDragging:self];
+    }
+}
+
+#pragma mark - Methods
+
+-(void) changePixelTimeRatio:(double)newPixelTimeRatio{
+    if(newPixelTimeRatio != self.pixelTimeRatio){
+        self.pixelTimeRatio = newPixelTimeRatio;
+        [self setViewsFrameAccordingToPixelTimeRatio];
+    }
 }
 
 #pragma mark - Private Methods
+
+-(void) setViewsFrameAccordingToPixelTimeRatio{
+    
+    if(self.view){
+        NSRect frame = self.view.frame;
+        frame.origin.x = self.timelineObjectProxy.startTime / self.pixelTimeRatio;
+        frame.size.width = self.timelineObjectProxy.duration / self.pixelTimeRatio;
+        frame.size.height = self.view.frame.size.height;
+        frame.origin.y = 0;
+        
+        [self.view setFrame:frame];
+        [self.view setNeedsDisplay:YES];
+    }
+}
 
 /**
  * Checks if the delegate is able to respond to the given Selector
@@ -90,15 +149,71 @@ static NSString* defaultNib = @"VSTimelinObjectView";
  * @return YES if the delegate is able to respond to the selector, NO otherweis
  */
 -(BOOL) delegateRespondsToSelector:(SEL) selector{
-    if([self.delegate conformsToProtocol:@protocol(VSTimelineObjectControllerDelegate) ]){
-        if([self.delegate respondsToSelector: selector]){
-            return YES;
+    if(self.delegate){
+        if([self.delegate conformsToProtocol:@protocol(VSTimelineObjectControllerDelegate) ]){
+            if([self.delegate respondsToSelector: selector]){
+                return YES;
+            }
         }
     }
     
     return NO;
 }
 
+#pragma mark - Propertes
 
+-(void) setIntersectionRect:(NSRect)intersectionRect{
+    if([self.view isKindOfClass:[VSTimelineObjectView class]]){
+        
+        ((VSTimelineObjectView*) self.view).intersectionRect = intersectionRect;
+        
+        
+        if(self.intersected && !NSEqualRects(intersectionRect, _intersectionRect)){
+            _intersectionRect = intersectionRect;
+            [self.view setNeedsDisplay:YES];
+        }
+    }
+    
+    _intersectionRect = intersectionRect;
+}
+
+-(NSRect) intersectionRect{
+    return _intersectionRect;
+}
+
+-(void) setIntersected:(BOOL)intersected{
+    if([self.view isKindOfClass:[VSTimelineObjectView class]]){
+        
+        ((VSTimelineObjectView*) self.view).intersected = intersected;
+        
+        if (!_intersected && intersected && !NSIsEmptyRect(self.intersectionRect)) {
+            
+            [self.view setNeedsDisplay:YES];
+        }else if(!intersected && _intersected){
+            [self.view setNeedsDisplay:YES];
+        }
+    }
+    
+    _intersected = intersected;
+}
+
+-(BOOL) intersected{
+    return _intersected;
+}
+
+-(BOOL) temporary{
+    return _temporary;
+}
+
+-(void) setTemporary:(BOOL)temporary{
+    if([self.view isKindOfClass:[VSTimelineObjectView class]]){
+        ((VSTimelineObjectView*) self.view).temporary = temporary;
+        if(temporary != _temporary){
+            [self.view setNeedsDisplay:YES];
+        }
+        
+        _temporary = temporary;
+    }
+}
 
 @end

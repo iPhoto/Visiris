@@ -37,7 +37,7 @@ static NSString* imageSupplierClassString;
 static NSString* audioSupplierClassString;
 static NSString* quartzComposerSupplierClassString;
 
-#pragma mark- Functions
+#pragma mark - Init 
 
 +(void) initialize{
     
@@ -53,6 +53,8 @@ static NSString* quartzComposerSupplierClassString;
     [self addSupportedImage:@"public.jpeg" name:@"JPEG"];
     [self addSupportedVideo:@"public.mpeg-4" name:@"MP4"];
 }
+
+#pragma mark- Functions
 
 +(NSDictionary*) supportedFiles{
     return supportedFiles;
@@ -135,12 +137,13 @@ static NSString* quartzComposerSupplierClassString;
     [self addSupportedFile:fileType name:name ofKind:VSFileKindAudio classString:audioClassString supplierClassString:audioSupplierClassString];
 }
 
-/*!
+/**
  Adds a new supported file.
  @param name Name of the VSFileType. Usually its extension. E.g. PNG, MOV,... 
  @param uti Uniform Type Identifier of the file type.
  @param kind Kind of the file like stored in the VSFileKind-Enum. E.g.: IMAGE, MOVIE, AUDIO, QUARTZ-COMPOSER. According to the fileKind the classString is set.
  @param classString Name of the child-class of VSTimelineObejctSource associated with that fileType. The class is usually depending on the the fileKind.
+ @param supplierClassString Name of the child-class of VSSourceSupplier associated with that fileType. The class is usually depending on the the fileKind
  */
 +(void) addSupportedFile: (NSString*) uti name:(NSString*) name ofKind:(VSFileKind) kind  classString:(NSString*) classString supplierClassString:(NSString*) supplierClassString{
     [supportedFiles setObject:[[VSFileType alloc] initWithName:name uti:uti ofKind:kind timelineObjectSourceClassString:classString supplierClassString:supplierClassString ] forKey:uti];

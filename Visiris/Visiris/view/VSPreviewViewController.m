@@ -49,9 +49,6 @@ static NSString* defaultNib = @"VSPreviewView";
     return self;
 }
 
--(void) showTexture:(GLuint) theTexture forTimestamp:(double) theTimestamp{
-    self.openGLView.texture = theTexture;
-}
 
 #pragma  mark - VSViewController
 
@@ -75,6 +72,12 @@ static NSString* defaultNib = @"VSPreviewView";
     if([self delegateRespondsToSelector:@selector(stop) ]){
         [self.delegate stop];
     }
+}
+
+#pragma mark - VSPlaybackControllerDelegate implementation
+
+-(void) texture:(GLuint)theTexture isReadyForTimestamp:(double)theTimestamp{
+    self.openGLView.texture = theTexture;
 }
 
 #pragma mark - Private Methods

@@ -17,6 +17,7 @@
 #import "VSPropertiesViewController.h"
 #import "VSPreviewViewController.h"
 #import "VisirisCore/VSCoreReceptionist.h"
+#import "VSDocument.h"
 
 #import "VSCoreServices.h"
 
@@ -30,32 +31,14 @@
 /** Responsible for the browser view which is shown at the top center of the window. */
 @property (strong) VSPropertiesViewController *propertiesViewController;
 
-/** Responsible for the preview view which is shown at the top right of the window. */
-@property (strong) VSPreviewViewController *previewViewController;
-
-/** VSPreProcessor is initialized by VSMainWindowController */
-@property (strong) VSPreProcessor *preProcessor;
-
-/** VSPostProcessor is initialized by VSMainWindowController */
-@property (strong) VSPostProcessor *postProcessor;
-
-/** VSPlaybackController is initialized by VSMainWindowController */
-@property (strong) VSPlaybackController *playbackController;
-
-/** VSTimeline is initialized by VSMainWindowController */
-@property (strong) VSTimeline* timeline;
 
 @end
 
 @implementation VSMainWindowController
 @synthesize topSplitView = _topSplitView;
 @synthesize mainSplitView = _mainSplitView;
-@synthesize preProcessor = _preProcessor, postProcessor=_postProcessor;
-@synthesize playbackController = _playbackController;
-@synthesize timeline = _timeline;
 @synthesize propertiesViewController = _propertiesViewController;
 @synthesize previewViewController = _previewViewController;
-
 @synthesize browserViewController,timelineViewController;
 
 static NSString* defaultNib = @"MainWindow";
@@ -72,7 +55,7 @@ static NSString* defaultNib = @"MainWindow";
 {
     self = [super initWithWindow:window];
     if (self) {
-    
+        
     }
     
     return self;
@@ -82,17 +65,25 @@ static NSString* defaultNib = @"MainWindow";
 {
     [super windowDidLoad];
     
-    [self initVisiris];
-    
+    //checks if the document is a visirs document
+    if(self.document && [self.document isKindOfClass:[VSDocument class]]){
+        
+        self.timelineViewController = [[VSTimelineViewController alloc] initWithDefaultNibAccordingForTimeline:((VSDocument*) self.document).timeline];
+        [self loadView:timelineViewController.view intoSplitView:self.mainSplitView replacingViewAtPosition:1];
+
+        
+        self.previewViewController = [[VSPreviewViewController alloc] initWithDefaultNibForOpenGLContext:((VSDocument*) self.document).preProcessor.renderCoreReceptionist.openGLContext];                                                
+        [self loadView:self.previewViewController.view intoSplitView:self.topSplitView replacingViewAtPosition:2];
+        self.previewViewController.delegate = ((VSDocument*) self.document).playbackController;
+        ((VSDocument*) self.document).playbackController.delegate = self.previewViewController;
+    }
     /** inits the spltiview with their subviews */
     [self initSplitViews];
-    
-    
-    [self initPlayback];
-    
 }
 
 #pragma mark- Private Methods
+
+
 /**
  * Inits the splitViews of the window with different Views according to their positions.
  */
@@ -101,18 +92,10 @@ static NSString* defaultNib = @"MainWindow";
     self.browserViewController = [[VSBrowserViewController alloc] initWithDefaultNib];
     [self loadView:browserViewController.view intoSplitView:self.topSplitView replacingViewAtPosition:0];
     
-    self.timelineViewController = [[VSTimelineViewController alloc] initWithDefaultNibAccordingForTimeline:self.timeline];
-    [self loadView:timelineViewController.view intoSplitView:self.mainSplitView replacingViewAtPosition:1];
-    
     //Adding the VSPropertiesView to the top center
     self.propertiesViewController = [[VSPropertiesViewController alloc] initWithDefaultNib];
     [self loadView:self.propertiesViewController.view intoSplitView:self.topSplitView replacingViewAtPosition:1];
     
-    //Addin the VSPreviewView to the top right
-    self.previewViewController = [[VSPreviewViewController alloc] initWithDefaultNibForOpenGLContext:[self.preProcessor.renderCoreReceptionist openGLContext]];
-                                                                                                      
-                                                                                                      
-    [self loadView:self.previewViewController.view intoSplitView:self.topSplitView replacingViewAtPosition:2];
 }
 
 /**
@@ -131,39 +114,7 @@ static NSString* defaultNib = @"MainWindow";
     [view setAutoresizesSubviews:YES];
 }
 
-#pragma mark- Private Methods
 
-/**
- * Does the base initialisation of the application.
- */
--(void) initVisiris{
-    
-    //TODO: where to create the timeline?
-    
-    //** Creates a new timeline an sets its duratio to the DefaultDuration */
-    self.timeline = [[VSTimeline alloc] initWithDuration:VSTimelineDefaultDuration];
-    
-    //** Adding 2 new VisualTracks to the timeline
-    for(int i = 0; i<3; i++){
-        [self.timeline addNewTrackNamed:[NSString stringWithFormat:@"track%ld",i] ofType:VISUAL_TRACK];
-    }
-    
-    //** Adding 1 new Audrio-Track to the timeline */
-    [self.timeline addNewTrackNamed:[NSString stringWithFormat:@"Audio Track"] ofType:AUDIO_TRACK];
-    
-
-    self.preProcessor = [[VSPreProcessor alloc] initWithTimeline:self.timeline];
-    
-}
-
--(void) initPlayback{
-    self.playbackController = [[VSPlaybackController alloc] initWithPreProcessor:self.preProcessor timeline:self.timeline previewController:self.previewViewController];
-    
-    self.postProcessor = [[VSPostProcessor alloc] initWithPlaybackController:self.playbackController];
-    
-    self.preProcessor.renderCoreReceptionist.delegate = self.postProcessor;
-
-}
 
 #pragma mark - NSSplitViewDelegate implementation
 

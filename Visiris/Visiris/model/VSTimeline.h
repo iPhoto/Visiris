@@ -53,6 +53,20 @@
  */
 -(VSTimelineObject*) addNewTimelineObjectBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *) item toTrack :(VSTrack *)track positionedAtTime:(double) timePosition withDuration:(double) duration;
 
+/**
+ * Adds a new Timeline-Object to the given track and registers the adding at the given NSUndoManger
+ *
+ * A new timeline object is created by the VSTimelineObjectFactory according to the given VSProjectItem.
+ * @param item VSTimelineObjectRepresentation the new TimelineObject is connected with
+ * @param track Track the TimelineObject will be added to.
+ * @param timePosition Start-time of the timelineObject.
+ * @param duration Duration of the VSTimelineObject
+ * @param undoManager NSUndoManeger the adding of the TimelineObject is registrated at.
+ * @return YES if the timeline object was create successfully, NO otherwise.
+ */
+-(VSTimelineObject*) addNewTimelineObjectBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *) item toTrack :(VSTrack *)track positionedAtTime:(double) timePosition withDuration:(double) duration andRegisterUndoOperation:(NSUndoManager*) undoManager;
+
+
 
 /**
  * Removes aTimelineObject from the track and returns if the removal was successful.
@@ -81,13 +95,15 @@
 
 /**
  * Sets selected of the given VStimelinObject to YES.
- * @param timelineObjecToSelect VSTimelineObject that will be selected
+ * @param timelineObjectToSelect VSTimelineObject that will be selected
+ * @param aTrack VSTrack the timelineObjectToSelect is placed on
  */
 -(void) selectTimelineObject:(VSTimelineObject*) timelineObjectToSelect onTrack:(VSTrack*) aTrack;
 
 /**
  * Sets selected of the given VStimelinObject to NO.
- * @param timelineObjecToSelect VSTimelineObject that will be unselected
+ * @param timelineObjectToUnselect VSTimelineObject that will be unselected
+ * @param aTrack VSTrack the timelineObjectToUnselect is placed on
  */
 -(void) unselectTimelineObject:(VSTimelineObject*) timelineObjectToUnselect onTrack:(VSTrack*) aTrack;
 

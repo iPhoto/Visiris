@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "VSCoreServices.h"
+
 @protocol VSPreviewViewControllerDelegate <NSObject>
 
 -(void) play;
@@ -18,8 +20,12 @@
 
 @class VSPlaybackController;
 
+#import "VSPlaybackController.h"
 
-@interface VSPreviewViewController : NSViewController
+/**
+ * Subclass of NSViewController responsible for the Previw at the top-right of the window
+ */
+@interface VSPreviewViewController : NSViewController<VSPlaybackControllerDelegate>
 
 @property (strong) NSOpenGLContext *openGLContext;
 
@@ -32,7 +38,5 @@
 - (IBAction)stop:(NSButton *)sender;
 
 @property (weak) IBOutlet NSView *openGLViewHolder;
-
--(void) showTexture:(GLuint) theTexture forTimestamp:(double) theTimestamp;
 
 @end

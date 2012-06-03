@@ -46,7 +46,7 @@
 
 -(id) init{
     if(self = [super init]){
-        self.timelineObjectFactory = [VSTimelineObjectFactory sharedManager];
+        self.timelineObjectFactory = [VSTimelineObjectFactory sharedFactory];
         self.projectItemController = [VSProjectItemController sharedManager];
         self.tracks = [NSMutableArray arrayWithCapacity:0];
     }
@@ -62,31 +62,24 @@
     return YES;
 }
 
--(VSTimelineObject*) addNewTimelineObjectBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *) item toTrack :(VSTrack *)track positionedAtTime:(double) timePosition withDuration:(double)duration{
+-(VSTimelineObject*) addNewTimelineObjectBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *)item toTrack:(VSTrack *)track positionedAtTime:(double)timePosition withDuration:(double)duration{
     
-    // Fetches the projectItem corresponding to the given representation */
-    VSProjectItem *newItem = [self.projectItemController projectItemWithID:item.itemID];
-    
-    if(!newItem)
-        return nil;
-    
-    // Tells the factory to create a new TimelineObject according to the given VSProjectItemRepresentation */
-    VSTimelineObject *newObject = [self.timelineObjectFactory createTimelineObjectForProjectItem:newItem];
-    
-    if(!newObject)
-        return nil;
-    
-    newObject.startTime = timePosition;
-    newObject.duration = duration;
-    
-    // If the endposition of the new TimelineObject is greater than the duration of the timeline, the timeline's duration is enlarged */
-    if(newObject.endTime > self.duration)
-        self.duration = newObject.endTime;
+    VSTimelineObject* newTimelineObject = [self createTimelineObjectBasedOnProjectItemRepresentation:item positionedAtTime:timePosition withDuration:duration];
     
     // Adds the new object to the given track */
-    [track addTimelineObject:newObject];
+    [track addTimelineObject:newTimelineObject];
     
-    return newObject;
+    return newTimelineObject;
+}
+
+-(VSTimelineObject*) addNewTimelineObjectBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *)item toTrack:(VSTrack *)track positionedAtTime:(double)timePosition withDuration:(double)duration andRegisterUndoOperation:(NSUndoManager *)undoManager{
+    
+    VSTimelineObject* newTimelineObject = [self createTimelineObjectBasedOnProjectItemRepresentation:item positionedAtTime:timePosition withDuration:duration];
+    
+    // Adds the new object to the given track */
+    [track addTimelineObject:newTimelineObject andRegisterAtUndoManager:undoManager];
+    
+    return newTimelineObject;
 }
 
 -(VSTimelineObjectProxy*) createNewTimelineObjectProxyBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *)item positionedAtTime:(double)timePosition{
@@ -106,13 +99,13 @@
 
 -(void) selectTimelineObject:(VSTimelineObject *)timelineObjectToSelect onTrack:(VSTrack *)aTrack{
     if([self.tracks containsObject:aTrack]){
-        [aTrack selecteTimelineObject:timelineObjectToSelect];
+        [aTrack selectTimelineObject:timelineObjectToSelect];
     }
 }
 
 -(void) unselectTimelineObject:(VSTimelineObject *)timelineObjectToUnselect onTrack:(VSTrack *)aTrack{
     if([self.tracks containsObject:aTrack]){
-        [aTrack selecteTimelineObject:timelineObjectToUnselect];
+        [aTrack selectTimelineObject:timelineObjectToUnselect];
     }
 }
 
@@ -143,6 +136,43 @@
     }
     
     return currentActiveTimeLineObjects;
+}
+
+
+#pragma mark - Private Methods
+
+/**
+ * Creates a new VSTimelineObject.
+ *
+ * A new timeline object is created by the VSTimelineObjectFactory according to the given VSProjectItem.
+ * @param item VSTimelineObjectRepresentation the new TimelineObject is connected with
+ * @param timePosition Start-time of the timelineObject.
+ * @param duration Duration of the VSTimelineObject
+ * @return The newly create VSTimelineObject if the creation was successfully, nil otherwise.
+ */
+-(VSTimelineObject*) createTimelineObjectBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *) item positionedAtTime:(double) timePosition withDuration:(double) duration{
+    
+    
+    // Fetches the projectItem corresponding to the given representation */
+    VSProjectItem *newItem = [self.projectItemController projectItemWithID:item.itemID];
+    
+    if(!newItem)
+        return nil;
+    
+    // Tells the factory to create a new TimelineObject according to the given VSProjectItemRepresentation */
+    VSTimelineObject *newObject = [self.timelineObjectFactory createTimelineObjectForProjectItem:newItem];
+    
+    if(!newObject)
+        return nil;
+    
+    newObject.startTime = timePosition;
+    newObject.duration = duration;
+    
+    // If the endposition of the new TimelineObject is greater than the duration of the timeline, the timeline's duration is enlarged */
+    if(newObject.endTime > self.duration)
+        self.duration = newObject.endTime;
+    
+    return newObject;
 }
 
 @end

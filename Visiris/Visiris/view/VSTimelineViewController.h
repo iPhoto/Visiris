@@ -13,7 +13,12 @@
 
 @class VSTimeline;
 @class VSTimelineRulerView;
-
+/**
+ * Subclass of NSViewController responsible for displaying a VSTimeline.
+ *
+ * VSTimelineViewController holds a various number of VSTrackViewController representing the VSTracks of the VSTimeline and acts as delegate for the VSTrackViewControllers. 
+ * !!!!!!Please add more here
+ */
 @interface VSTimelineViewController : NSViewController<VSTrackViewControllerDelegate, VSTimelineViewDelegate>
 
 /** NSScrollView holding the VSTrackViews representing the single tracks */

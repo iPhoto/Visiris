@@ -6,8 +6,23 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		5BBC2F12157A0CFA0093313A /* Apple Docs */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 5BBC2F13157A0CFA0093313A /* Build configuration list for PBXAggregateTarget "Apple Docs" */;
+			buildPhases = (
+				5BBC2F16157A0D010093313A /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = "Apple Docs";
+			productName = "Apple Docs";
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		2761513B1577C97A005177C5 /* aaa.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2761513A1577C97A005177C5 /* aaa.jpg */; };
+		5B2A59D31578AF4E003938AB /* VSDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2A59D21578AF4E003938AB /* VSDocumentController.m */; };
 		5B35BF161577A49C009911EC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35BF151577A49C009911EC /* Cocoa.framework */; };
 		5B35BF201577A49C009911EC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5B35BF1E1577A49C009911EC /* InfoPlist.strings */; };
 		5B35BF221577A49C009911EC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF211577A49C009911EC /* main.m */; };
@@ -122,10 +137,13 @@
 		5B35C0A21577A912009911EC /* VSPasteboaredConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C08D1577A912009911EC /* VSPasteboaredConstants.m */; };
 		5B35C0A31577A912009911EC /* VSTimelineConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C08F1577A912009911EC /* VSTimelineConstants.m */; };
 		5B35C0A51577A912009911EC /* VSLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0961577A912009911EC /* VSLogFormatter.m */; };
+		5BBC2F19157A26BB0093313A /* VSViewUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BBC2F18157A26BB0093313A /* VSViewUtils.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2761513A1577C97A005177C5 /* aaa.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = aaa.jpg; sourceTree = "<group>"; };
+		5B2A59D11578AF4E003938AB /* VSDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDocumentController.h; sourceTree = "<group>"; };
+		5B2A59D21578AF4E003938AB /* VSDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDocumentController.m; sourceTree = "<group>"; };
 		5B35BF111577A49C009911EC /* Visiris.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Visiris.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B35BF151577A49C009911EC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		5B35BF181577A49C009911EC /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -329,6 +347,8 @@
 		5B35C0951577A912009911EC /* VSLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSLogFormatter.h; sourceTree = "<group>"; };
 		5B35C0961577A912009911EC /* VSLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLogFormatter.m; sourceTree = "<group>"; };
 		5B35C0A61577A926009911EC /* VSCoreServices.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSCoreServices.h; sourceTree = "<group>"; };
+		5BBC2F17157A26BB0093313A /* VSViewUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSViewUtils.h; sourceTree = "<group>"; };
+		5BBC2F18157A26BB0093313A /* VSViewUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSViewUtils.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -396,6 +416,8 @@
 				5B35BF2A1577A49C009911EC /* VSDocument.xib */,
 				5B35BF2D1577A49C009911EC /* MainMenu.xib */,
 				5B35BF1C1577A49C009911EC /* Supporting Files */,
+				5B2A59D11578AF4E003938AB /* VSDocumentController.h */,
+				5B2A59D21578AF4E003938AB /* VSDocumentController.m */,
 			);
 			path = Visiris;
 			sourceTree = "<group>";
@@ -591,6 +613,8 @@
 				5B35C0821577A912009911EC /* VSProjectSettings.m */,
 				5B35C0831577A912009911EC /* VSSupportedFilesManager.h */,
 				5B35C0841577A912009911EC /* VSSupportedFilesManager.m */,
+				5BBC2F17157A26BB0093313A /* VSViewUtils.h */,
+				5BBC2F18157A26BB0093313A /* VSViewUtils.m */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -936,6 +960,7 @@
 				5B35BF0D1577A49C009911EC /* Sources */,
 				5B35BF0E1577A49C009911EC /* Frameworks */,
 				5B35BF0F1577A49C009911EC /* Resources */,
+				5B2A59E21578FF65003938AB /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -968,6 +993,7 @@
 			projectRoot = "";
 			targets = (
 				5B35BF101577A49C009911EC /* Visiris */,
+				5BBC2F12157A0CFA0093313A /* Apple Docs */,
 			);
 		};
 /* End PBXProject section */
@@ -1011,6 +1037,35 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5B2A59E21578FF65003938AB /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "";
+		};
+		5BBC2F16157A0D010093313A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/appledoc -t /Library/Application\\ Support/appledoc  --logformat xcode --project-name Visiris --project-company Visirs ./Visiris";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5B35BF0D1577A49C009911EC /* Sources */ = {
@@ -1096,6 +1151,8 @@
 				5B35C0A21577A912009911EC /* VSPasteboaredConstants.m in Sources */,
 				5B35C0A31577A912009911EC /* VSTimelineConstants.m in Sources */,
 				5B35C0A51577A912009911EC /* VSLogFormatter.m in Sources */,
+				5B2A59D31578AF4E003938AB /* VSDocumentController.m in Sources */,
+				5BBC2F19157A26BB0093313A /* VSViewUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1214,6 +1271,20 @@
 			};
 			name = Release;
 		};
+		5BBC2F14157A0CFA0093313A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		5BBC2F15157A0CFA0093313A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1234,6 +1305,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		5BBC2F13157A0CFA0093313A /* Build configuration list for PBXAggregateTarget "Apple Docs" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5BBC2F14157A0CFA0093313A /* Debug */,
+				5BBC2F15157A0CFA0093313A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

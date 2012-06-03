@@ -51,6 +51,16 @@ static NSString* defaultNib = @"VSProjectItemPropertiesView";
     return self;
 }
 
+-(void) initScrollView{
+    // Inits the scroll view
+    
+    [self.scrollView setDocumentView:self.documentView];
+    [self.documentView setAutoresizesSubviews:YES];
+    [self.documentView setAutoresizingMask: NSViewWidthSizable];
+    
+    [self.previewHolder setAutoresizesSubviews:YES];
+}
+
 #pragma mark - NSViewController
 
 -(void) awakeFromNib{
@@ -80,16 +90,6 @@ static NSString* defaultNib = @"VSProjectItemPropertiesView";
 
 #pragma mark - Private Methods
 
-
--(void) initScrollView{
-    // Inits the scroll view
-    
-    [self.scrollView setDocumentView:self.documentView];
-    [self.documentView setAutoresizesSubviews:YES];
-    [self.documentView setAutoresizingMask: NSViewWidthSizable];
-    
-    [self.previewHolder setAutoresizesSubviews:YES];
-}
 
 -(void) showPreview{
     
@@ -126,12 +126,7 @@ static NSString* defaultNib = @"VSProjectItemPropertiesView";
 
 #pragma mark - Properties
 
-/**
- * Setter for projectItemRepresentation.
- *
- * Inits the controls with the data of the VSProjectItemRepresentation.
- * @param projectItemRepresentation VSProjectItemRepresentation set for self.projectItemRepresentation
- */
+
 -(void) setProjectItemRepresentation:(VSProjectItemRepresentation *)projectItemRepresentation{
     if(projectItemRepresentation != self.projectItemRepresentation){
         _projectItemRepresentation = projectItemRepresentation;
@@ -140,11 +135,6 @@ static NSString* defaultNib = @"VSProjectItemPropertiesView";
 }
 
 
-
-/**
- * Getter for projectItemRepresentation.
- * @return VSProjectItemRepresentation stored in the class
- */
 -(VSProjectItemRepresentation *) projectItemRepresentation{
     return _projectItemRepresentation;
  }

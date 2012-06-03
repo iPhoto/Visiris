@@ -14,6 +14,7 @@
 
 @implementation VSAnimation
 
+/** Timestamp of the default KeyFrame */
 const int defaultKeyFrameTimestamp = -1;
 
 @synthesize keyFrames = _keyFrames;
@@ -24,7 +25,7 @@ const int defaultKeyFrameTimestamp = -1;
 
 -(id) init{
     if(self = [super init]){
-        self.keyFrames =[[NSMutableArray alloc] init];
+        self.keyFrames =[[NSMutableDictionary alloc] init];
     }
     
     return self;
@@ -53,14 +54,9 @@ const int defaultKeyFrameTimestamp = -1;
     return keyFrame.value;
 }
 
-//TODO: better search algorithm
+
 -(VSKeyFrame*) keyFrameForTimestamp:(double)timestamp{
-    for(VSKeyFrame *keyFrame in self.keyFrames){
-        if(keyFrame.timestamp == timestamp){
-            return keyFrame;
-        }
-    }
-    return nil;
+    return [self.keyFrames objectForKey:[NSNumber numberWithDouble:timestamp]];
 }
 
 //TODO: error-handlin
@@ -114,19 +110,11 @@ const int defaultKeyFrameTimestamp = -1;
 
 
 -(void) addKeyFrameWithValue:(id) aValue forTimestamp:(double)aTimestamp{
-    [self.keyFrames addObject:[[VSKeyFrame alloc] initWithValue:aValue forTimestamp:aTimestamp]];
+    [self.keyFrames setObject:[[VSKeyFrame alloc] initWithValue:aValue forTimestamp:aTimestamp] forKey:[NSNumber numberWithDouble:aTimestamp]];
 }
 
-//TODO: noch speicher freigeben? oder reicht das?
--(BOOL) removeKeyFrameAt:(double)aTimestamp{
-    for(VSKeyFrame *keyFrame in self.keyFrames){
-        if(keyFrame.timestamp = aTimestamp){
-            [self.keyFrames removeObject:keyFrame];
-            return YES;
-        }
-    }
-    
-    return NO;
+-(void) removeKeyFrameAt:(double)aTimestamp{
+    [self.keyFrames removeObjectForKey:[NSNumber numberWithDouble:aTimestamp]];
 }
 
 -(void) undoParametersDefaultValueChange:(id) oldValue atUndoManager:(NSUndoManager *)undoManager{

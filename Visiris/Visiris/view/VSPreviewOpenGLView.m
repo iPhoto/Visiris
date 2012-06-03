@@ -7,10 +7,9 @@
 //
 
 #import <OpenGL/glu.h>
-//#import "OpenGLViewController.h"
-//#import "Scene.h"
 
 #import "VSPreviewOpenGLView.h"
+#import "VSCoreServices.h"
 
 @implementation VSPreviewOpenGLView
 @synthesize openGLContext,pixelFormat,displayLink;
@@ -115,6 +114,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (void) drawRect:(NSRect)dirtyRect
 {
+    [super drawRect:dirtyRect];
 	// Ignore if the display link is still running
 	if (!CVDisplayLinkIsRunning(displayLink))
 		[self drawView];

@@ -28,4 +28,20 @@
     
     return self;
 }
+
+#pragma mark - Methods
+
+-(void) changeStartTime:(double)startTime andRegisterAtUndoManager:(NSUndoManager *)undoManager{
+    [[undoManager prepareWithInvocationTarget:self] changeStartTime:self.startTime andRegisterAtUndoManager:undoManager];
+    
+    self.startTime = startTime;
+}
+
+-(void) changeDuration:(double)duration andRegisterAtUndoManager:(NSUndoManager *)undoManager{
+    [[undoManager prepareWithInvocationTarget:self] changeDuration:self.duration andRegisterAtUndoManager:undoManager];
+
+    self.duration = duration;
+}
+
+
 @end

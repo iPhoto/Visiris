@@ -12,7 +12,10 @@
 
 
 /**
- * The VSDeviceParameterMapper is the connector between parameter and device*/
+ * The VSDeviceParameterMapper is the connector between parameter and device
+ *
+ * !!!! Pleas Add more Here !!!!
+ */
 @interface VSDeviceParameterMapper : NSObject
 
 /** The device the mapper takes it values from */

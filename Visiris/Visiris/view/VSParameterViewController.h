@@ -10,7 +10,14 @@
 
 @class VSParameter;
 
+/**
+ * Subclass of NSViewController responsible for displaying a VSParameter.
+ *
+ * Displays controls to edit the parameter's default value depending on the type of the VSParameter the VSParameterViewController represents. 
+ */
 @interface VSParameterViewController : NSViewController
+
+/** Displays the name of paramter the View represents */
 @property (weak) IBOutlet NSTextField *nameLabel;
 
 /** The textField displays the value of parameters of the type VSParameterDataTypeString or VSParameterDataTypeFloat where hasRange is NO. */
@@ -25,7 +32,7 @@
 /** The slider displays the value of parameters of the type SParameterDataTypeFloat where hasRange is YES. Min and Max of slider are set according to the valueRange property of the parameter.*/
 @property (weak) IBOutlet NSTextField *valueSliderText;
 
-
+/** VSParemter the view displayes. */
 @property VSParameter *parameter;
 
 /** 

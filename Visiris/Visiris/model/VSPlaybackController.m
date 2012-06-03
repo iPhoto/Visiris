@@ -13,31 +13,34 @@
 
 @interface VSPlaybackController()
 
+/** Times the playback */
 @property NSTimer *playbackTimer;
 
-
-
+@property (strong) NSOperationQueue *queue;
 @end
 
 @implementation VSPlaybackController
+
 @synthesize preProcessor = _preProcessor;
 @synthesize timeline = _timeline;
 @synthesize currentTimestamp = _currentTimestamp;
 @synthesize playbackTimer = _playbackTimer;
-@synthesize previewViewController = _previewViewController;
+@synthesize delegate = _delegate;
+@synthesize queue = _queue;
 
--(id) initWithPreProcessor:(VSPreProcessor *)preProcessor timeline:(VSTimeline *)timeline previewController:(VSPreviewViewController *)thePrevieViewController{
+#pragma mark - Init
+
+-(id) initWithPreProcessor:(VSPreProcessor *)preProcessor timeline:(VSTimeline *)timeline{
     if(self = [super init]){
         _preProcessor = preProcessor;
         _timeline = timeline;
-        _previewViewController = thePrevieViewController;
-        
-        self.previewViewController.delegate = self;
+        self.queue = [[NSOperationQueue alloc] init];
     }
     
     return self;
 }
 
+#pragma mark - Methods
 
 - (void)startPlaybackFromCurrentTimeStamp
 {
@@ -46,29 +49,6 @@
 
 -(void) stopPlayback{
     [self.playbackTimer invalidate];
-}
-
-#pragma mark - Private Methods
-
-
-- (NSSize)frameSize
-{
-    return NSMakeSize(1280, 720);
-}
-
-
-/**
- * Tells the VSPreProcessor to render the frame for the currentTimestamp for given frame size
- */
-- (void)renderFramesForCurrentTimestamp
-{
-    if (self.preProcessor) {
-        [self.preProcessor processFrameAtTimestamp:self.currentTimestamp withFrameSize:[self frameSize]];
-    }
-}
-
--(void) finishedRenderingTexture:(GLuint)theTexture forTimestamp:(double)theTimestamp{
-    [self.previewViewController showTexture:theTexture forTimestamp:theTimestamp];
 }
 
 #pragma mark - VSPreviewViewControllerDelegate implementation
@@ -81,5 +61,40 @@
     [self stopPlayback];
 }
 
+
+#pragma mark - Private Methods
+
+/**
+ * Test function to return a valid frameSize
+ */
+- (NSSize)frameSize
+{
+    return NSMakeSize(1280, 720);
+}
+
+
+/**
+ * Tells the VSPreProcessor to render the frame for the currentTimestamp for given frame size
+ */
+- (void)renderFramesForCurrentTimestamp
+{
+        DDLogInfo(@"looping");
+    
+//    if (self.preProcessor) {
+//        [self.preProcessor processFrameAtTimestamp:self.currentTimestamp withFrameSize:[self frameSize]];
+//    }
+}
+
+
+
+-(void) didFinisheRenderingTexture:(GLuint)theTexture forTimestamp:(double)theTimestamp{
+    if(self.delegate){
+        if([self.delegate conformsToProtocol:@protocol(VSPlaybackControllerDelegate) ]){
+            if([self.delegate respondsToSelector:@selector(texture:isReadyForTimestamp:)]){
+                [self.delegate texture:theTexture isReadyForTimestamp:theTimestamp];
+            }
+        }
+    }
+}
 
 @end

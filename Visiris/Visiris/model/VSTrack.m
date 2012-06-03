@@ -33,6 +33,8 @@
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
 }
 
+
+
 #pragma mark - Methods
 
 -(BOOL) addTimelineObject:(VSTimelineObject *)timelineObject{
@@ -40,6 +42,7 @@
     [timelineObject addObserver:self forKeyPath:@"parameters" options:0 context:nil];
     return YES;
 }
+
 
 -(BOOL) removTimelineObject:(VSTimelineObject *)aTimelineObject{
     if([self.timelineObjects containsObject:aTimelineObject]){
@@ -51,15 +54,37 @@
     }
 }
 
+#pragma mark - Undo
+
+-(BOOL)removTimelineObject:(VSTimelineObject *)aTimelineObject andRegisterAtUndoManager:(NSUndoManager *)undoManager{
+    BOOL result = [self removTimelineObject:aTimelineObject];
+    
+    if(result){
+        [[undoManager prepareWithInvocationTarget:self] addTimelineObject:aTimelineObject andRegisterAtUndoManager:undoManager];
+    }
+    
+    return result;
+}
+
+-(BOOL) addTimelineObject:(VSTimelineObject *)timelineObject andRegisterAtUndoManager:(NSUndoManager *)undoManager{
+    BOOL result = [self addTimelineObject:timelineObject];
+    
+    if(result){
+        [[undoManager prepareWithInvocationTarget:self] removTimelineObject:timelineObject andRegisterAtUndoManager:undoManager];
+    }
+    
+    return result;
+}
+
 #pragma mark - TimelineObject Selection
 
--(void) selecteTimelineObject:(VSTimelineObject *)timelineObjectToSelect{
+-(void) selectTimelineObject:(VSTimelineObject *)timelineObjectToSelect{
     if([self.timelineObjects containsObject:timelineObjectToSelect]){
         timelineObjectToSelect.selected = YES;
     }
 }
 
--(void) unselecteTimelineObject:(VSTimelineObject *)timelineObjectToUnselect{
+-(void) unselectTimelineObject:(VSTimelineObject *)timelineObjectToUnselect{
     if([self.timelineObjects containsObject:timelineObjectToUnselect]){
         timelineObjectToUnselect.selected = NO;
     }

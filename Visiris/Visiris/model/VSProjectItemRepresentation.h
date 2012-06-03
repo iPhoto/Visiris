@@ -29,7 +29,14 @@
 
 #pragma mark- init
 
-
+/**
+ * Creates a  VSProjectItemRepresentation and inits it with the given parameters
+ * @param file fileName of the file on the hard disk VSProjectItemRepresentation is ment to represent.
+ * @param name Name of VSProjectItemRepresentation.
+ * @param Size of the file the  VSProjectItemRepresentation is ment to represent in bytes.
+ * @param ID of the file the  VSProjectItemRepresentation is ment to represent in milliseconds.
+ * @param itemID ID of the VSProjectItemRepresentation
+ */
 -(id) initWithFile:(NSString *)file ofType:(VSFileType*) type name:(NSString *)name fileSize:(float)fileSize duration:(float)duration itemID:(NSInteger)itemID fileIcon:(NSImage*) icon;
 
 #pragma mark - Methods
