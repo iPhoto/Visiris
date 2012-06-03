@@ -156,8 +156,7 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
 }
 
 
--(void)renderFrameOfCoreHandovers:(NSArray *) theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double)theTimestamp{
-    
+-(void)renderFrameOfCoreHandovers:(NSArray *) theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double)theTimestamp{    
     NSMutableArray *mutableCoreHandovers = [NSMutableArray arrayWithArray:theCoreHandovers];
     
     for(VSCoreHandover *coreHandover in theCoreHandovers){
@@ -170,6 +169,7 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
     if ([mutableCoreHandovers count] < 2) {
         return;
     }
+    
 
     VSTexture *blubbTexture;
     VSTexture *blubbTexture2;
