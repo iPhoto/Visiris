@@ -170,7 +170,7 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
         return;
     }
     
-
+    
     VSTexture *blubbTexture;
     VSTexture *blubbTexture2;
     
@@ -184,9 +184,7 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
         }
     }
      */
-    
-    CGLLockContext([[self openGLContext] CGLContextObj]);
-	
+    	
 	// Make sure we draw to the right context
 	[[self openGLContext] makeCurrentContext];
     
