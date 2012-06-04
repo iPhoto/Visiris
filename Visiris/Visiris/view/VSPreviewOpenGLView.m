@@ -149,10 +149,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	
 	// Delegate to the scene object for rendering
     
-    // rendering scene does not exist
-    //[[controller scene] render];
-    
-    //TODO this is just for testing
     glEnable( GL_TEXTURE_2D );
     glBindTexture( GL_TEXTURE_2D, self.texture );
     

@@ -90,7 +90,7 @@
  */
 - (void)renderFramesForCurrentTimestamp
 {
-        DDLogInfo(@"looping");
+ //       DDLogInfo(@"looping");
     
     if (self.preProcessor) {
         [self.preProcessor processFrameAtTimestamp:self.currentTimestamp withFrameSize:[self frameSize]];
