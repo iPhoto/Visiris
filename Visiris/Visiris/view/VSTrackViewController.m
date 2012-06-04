@@ -352,7 +352,7 @@ static NSString* defaultNib = @"VSTrackView";
 }
 
 -(BOOL) timelineObjectWillStartDragging:(VSTimelineObjectViewController *)timelineObjectViewController{
-    [self.view sortSubviewsUsingFunction:bringViewInContextToFront context:(__bridge  void*)timelineObjectViewController.view];
+//    [self.view sortSubviewsUsingFunction:bringViewInContextToFront context:(__bridge  void*)timelineObjectViewController.view];
     return YES;
 }
 
@@ -366,7 +366,7 @@ static NSString* defaultNib = @"VSTrackView";
     
     
     [self.view.undoManager beginUndoGrouping];
-    [self.view.undoManager setActionName:NSLocalizedString(@"Move Object", @"Undo action name for moving obejcts on timeline")];
+    
     
     if(startTime != timelineObjectViewController.timelineObjectProxy.startTime){
         [timelineObjectViewController.timelineObjectProxy changeStartTime:startTime andRegisterAtUndoManager:self.view.undoManager];
@@ -378,6 +378,7 @@ static NSString* defaultNib = @"VSTrackView";
     
     [self applyIntersectionToTimelineObjects];
     
+    [self.view.undoManager setActionName:NSLocalizedString(@"Move Object", @"Undo action name for moving obejcts on timeline")];
     [self.view.undoManager endUndoGrouping];
 }
 
