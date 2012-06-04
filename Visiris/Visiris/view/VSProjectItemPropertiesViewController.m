@@ -90,7 +90,9 @@ static NSString* defaultNib = @"VSProjectItemPropertiesView";
 
 #pragma mark - Private Methods
 
-
+/**
+ * Shows a image oder video preview according to the type of file represented by the controllers projectItemRepresentation property.
+ */
 -(void) showPreview{
     
     if(self.previewMovie)

@@ -38,6 +38,8 @@
 #define COLUMNID_FILE_PATH  @"filePath"
 
 @implementation VSProjectItemBrowserViewController
+
+
 @synthesize tvwProjectItmes = _tvwProjectItmes;
 @synthesize projectItemRepresentationController = _projectItemRepresentationController;
 @synthesize projectItemController = _projectItemController;
@@ -128,6 +130,7 @@ static NSString* defaultNib = @"VSProjectItemBrowserView";
             ((ImageAndTextCell*) tableColumn.dataCell).image = ((VSProjectItemRepresentation *)[self.projectItemRepresentationController.projectItemRepresentations objectAtIndex:row]).icon;
         }
     }
+    
     return [[self.projectItemRepresentationController.projectItemRepresentations objectAtIndex:row] valueForKey:[tableColumn identifier]];
 }
 

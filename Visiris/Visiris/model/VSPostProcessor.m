@@ -31,8 +31,8 @@
 
 #pragma mark - VSCoreReceptionistDelegate implementation
 
-- (void)coreReceptionist:(VSCoreReceptionist *)theCoreReceptionist didFinishedRenderingFrameAtTimestamp:(double)theTimestamp withResultingTexture:(GLuint)theTexture
-{
+- (void)coreReceptionist:(VSCoreReceptionist*) theCoreReceptionist didFinishedRenderingFrameAtTimestamp:(double)theTimestamp withResultingTexture:(GLuint)theTexture{
+    DDLogInfo(@"im here");
     [self.playbackController didFinisheRenderingTexture:theTexture forTimestamp:theTimestamp];
 }
 

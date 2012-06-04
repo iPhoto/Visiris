@@ -67,22 +67,28 @@ static NSString* defaultNib = @"MainWindow";
     
     //checks if the document is a visirs document
     if(self.document && [self.document isKindOfClass:[VSDocument class]]){
+        [self initMainWindowAccordingToDocument];
         
-        self.timelineViewController = [[VSTimelineViewController alloc] initWithDefaultNibAccordingForTimeline:((VSDocument*) self.document).timeline];
-        [self loadView:timelineViewController.view intoSplitView:self.mainSplitView replacingViewAtPosition:1];
-
-        
-        self.previewViewController = [[VSPreviewViewController alloc] initWithDefaultNibForOpenGLContext:((VSDocument*) self.document).preProcessor.renderCoreReceptionist.openGLContext];                                                
-        [self loadView:self.previewViewController.view intoSplitView:self.topSplitView replacingViewAtPosition:2];
-        self.previewViewController.delegate = ((VSDocument*) self.document).playbackController;
-        ((VSDocument*) self.document).playbackController.delegate = self.previewViewController;
     }
     /** inits the spltiview with their subviews */
     [self initSplitViews];
 }
 
-#pragma mark- Private Methods
-
+/**
+ * Inits the controllers of the subviews in the main window with the information stored in VSMainWindowController's VSDocument.
+ *
+ * Sets the timeleline and connects the different parts of the playback and connection with the core
+ */
+-(void) initMainWindowAccordingToDocument{
+    self.timelineViewController = [[VSTimelineViewController alloc] initWithDefaultNibAccordingForTimeline:((VSDocument*) self.document).timeline];
+    [self loadView:timelineViewController.view intoSplitView:self.mainSplitView replacingViewAtPosition:1];
+    
+    
+    self.previewViewController = [[VSPreviewViewController alloc] initWithDefaultNibForOpenGLContext:((VSDocument*) self.document).preProcessor.renderCoreReceptionist.openGLContext];                                                
+    [self loadView:self.previewViewController.view intoSplitView:self.topSplitView replacingViewAtPosition:2];
+    self.previewViewController.delegate = ((VSDocument*) self.document).playbackController;
+    ((VSDocument*) self.document).playbackController.delegate = self.previewViewController;
+}
 
 /**
  * Inits the splitViews of the window with different Views according to their positions.
@@ -97,6 +103,9 @@ static NSString* defaultNib = @"MainWindow";
     [self loadView:self.propertiesViewController.view intoSplitView:self.topSplitView replacingViewAtPosition:1];
     
 }
+
+#pragma mark- Private Methods
+
 
 /**
  * Replaces given splitView'S subview at the given position with the given view. 
