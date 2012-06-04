@@ -44,10 +44,18 @@
 
 - (void)startPlaybackFromCurrentTimeStamp
 {
+//    [self startTimer];
+    NSThread* timerThread = [[NSThread alloc] initWithTarget:self selector:@selector(startTimer) object:nil]; //Create a new thread
+    [timerThread start];
+}
+
+-(void) startTimer{
     self.playbackTimer = [NSTimer scheduledTimerWithTimeInterval:1/30 target:self selector:@selector(renderFramesForCurrentTimestamp) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:self.playbackTimer forMode:NSDefaultRunLoopMode];
+	[[NSRunLoop currentRunLoop] addTimer:self.playbackTimer forMode:NSModalPanelRunLoopMode];
+	[[NSRunLoop currentRunLoop] addTimer:self.playbackTimer forMode:NSEventTrackingRunLoopMode];
     
-//    NSThread* timerThread = [[NSThread alloc] initWithTarget:self selector:@selector(renderFramesForCurrentTimestamp) object:nil]; //Create a new thread
-//    [timerThread start];
+    [[NSRunLoop currentRunLoop] run];
 }
 
 -(void) stopPlayback{
@@ -84,13 +92,13 @@
 {
         DDLogInfo(@"looping");
     
-//    if (self.preProcessor) {
-//        [self.preProcessor processFrameAtTimestamp:self.currentTimestamp withFrameSize:[self frameSize]];
-//    }
-//    
-    [self.queue addOperationWithBlock:^{
-        [self.preProcessor processFrameAtTimestamp:0 withFrameSize:NSMakeSize(120, 120)];
-    }];
+    if (self.preProcessor) {
+        [self.preProcessor processFrameAtTimestamp:self.currentTimestamp withFrameSize:[self frameSize]];
+    }
+    
+//    [self.queue addOperationWithBlock:^{
+//        [self.preProcessor processFrameAtTimestamp:0 withFrameSize:NSMakeSize(120, 120)];
+//    }];
 }
 
 

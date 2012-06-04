@@ -30,7 +30,7 @@
 
 
 /** NSMutableArray storing all VSTimelineObjectViewControllers of the VSTimelineObjectViews added to the VSTrackViewController */ 
-@property NSMutableArray *timelineObjectViewControllers;
+@property (strong) NSMutableArray *timelineObjectViewControllers;
 
 /** NSMutableArray storing all VSTimelineObjectViewControllers of the VSTimelineObjectViews which's VSTimelineObjects were dragged onto the VSTrackView but not dropped yet. Neccessary to give the user a preview where the newly added VSTimelineObject will be placed on the timeline */
 @property (strong) NSMutableArray *temporaryTimelineObjectViewControllers;
@@ -60,7 +60,8 @@ static NSString* defaultNib = @"VSTrackView";
             
             [self.track addObserver:self forKeyPath:@"timelineObjects" options:NSKeyValueObservingOptionPrior |NSKeyValueObservingOptionNew context:nil];
             
-            self.timelineObjectViewControllers = [NSMutableArray arrayWithCapacity:0];
+            self.timelineObjectViewControllers = [[NSMutableArray alloc] init];
+            self.temporaryTimelineObjectViewControllers = [[NSMutableArray alloc] init];
             
             self.projectItemController = [VSProjectItemController sharedManager];
             
@@ -68,7 +69,7 @@ static NSString* defaultNib = @"VSTrackView";
             
             ((VSTrackView*) self.view).controllerDelegate = self;
             
-            self.temporaryTimelineObjectViewControllers = [[NSMutableArray alloc] init];
+            
         }
     }
     
@@ -91,10 +92,13 @@ static NSString* defaultNib = @"VSTrackView";
 #pragma mark - Methods
 
 -(void) pixelTimeRatioDidChange:(double)newRatio{
+    
+    //only proceeds if the ratio has changed
     if(self.pixelTimeRatio != newRatio){
         self.pixelTimeRatio = newRatio;
-        for(VSTimelineObjectViewController *controller in self.timelineObjectViewControllers){
-            
+        
+        //tells all its VSTimelineObjectViewController's that the ratio has changed
+        for(VSTimelineObjectViewController *controller in self.timelineObjectViewControllers){    
             [controller changePixelTimeRatio:self.pixelTimeRatio];
         }
     }
@@ -145,12 +149,6 @@ static NSString* defaultNib = @"VSTrackView";
 }
 
 
-#pragma mark - VSTimelineObjectViewDelegate implementation
-
--(void)didSelectTimelineObjectView:(VSTimelineObjectView *)timelineObjectView{
-    
-}
-
 
 #pragma mark- VSTrackViewDelegate implementation
 
@@ -161,6 +159,7 @@ static NSString* defaultNib = @"VSTrackView";
     
     if(trackView){
         
+        //stores the 
         NSMutableArray *droppedProjectItems = [[NSMutableArray alloc] init];
         
         //if the draggingPasteboard stored in draggingInfo contains VSProjectItemRepresentation-Objects, they are temporary stored in droppedProjectItems
@@ -189,8 +188,11 @@ static NSString* defaultNib = @"VSTrackView";
             
         }
         
-        [self.view.undoManager beginUndoGrouping];
+        
         if(droppedProjectItems.count > 0){
+            
+            
+            [self.view.undoManager beginUndoGrouping];
             
             int i = 0;
             
@@ -219,10 +221,15 @@ static NSString* defaultNib = @"VSTrackView";
             }
         }
         
+        [self changeIntersectedTimelineObjects];
+        
+        [self.view.undoManager setActionName:droppedProjectItems.count > 1 ? 
+         NSLocalizedString(@"Adding Objects", @"Undo Action for adding objects to the timeline") : 
+         NSLocalizedString(@"Adding Object", @"Undo Action for adding one object to the timeline")];
+        [self.view.undoManager endUndoGrouping];
     }
     
-    [self changeIntersectedTimelineObjects];
-    [self.view.undoManager endUndoGrouping];
+    
     //clears VSTrackView'S temporary stored timelineObjects 
     [self resetTemporaryTimelineObjects];
     
@@ -248,7 +255,7 @@ static NSString* defaultNib = @"VSTrackView";
             newFrame.size.width = timelineObjectViewController.timelineObjectProxy.duration / self.pixelTimeRatio;
             currentTotalWidth += newFrame.size.width;
             
-        
+            
             
             [timelineObjectViewController.view setFrame:newFrame];
             
@@ -432,38 +439,55 @@ static NSComparisonResult bringViewInContextToFront( id view1, id view2, void * 
     }
 }
 
+-(void) resetIntersectedTimelineObjects{
+    for(VSTimelineObjectViewController *timelineObjectViewController in  self.timelineObjectViewControllers){
+        timelineObjectViewController.intersected = NO;
+    }
+}
+
+
+-(NSArray*) intersectedTimelineObjectViewController{
+    NSIndexSet *indexSetOfIntersectedObjects = [self.timelineObjectViewControllers indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj isKindOfClass:[VSTimelineObjectViewController class]]){
+            return ((VSTimelineObjectViewController*) obj).intersected;
+        }
+        return NO;
+    } ];
+    
+   return [self.timelineObjectViewControllers objectsAtIndexes:indexSetOfIntersectedObjects];
+}
+
 -(void) changeIntersectedTimelineObjects{
     
-    for (int i = self.timelineObjectViewControllers.count -1; i >=0 ; i--) {
+    NSArray *interesectedTimelineObjectViewControllers= [self intersectedTimelineObjectViewController];
+    
+    for (VSTimelineObjectViewController *timelineObjectViewController in interesectedTimelineObjectViewControllers){
         
-        VSTimelineObjectViewController *timelineObjectViewController = [self.timelineObjectViewControllers objectAtIndex:i];
-        if(timelineObjectViewController.intersected){
-            if(timelineObjectViewController.view.frame.size.width <= timelineObjectViewController.intersectionRect.size.width && timelineObjectViewController.view.frame.origin.x >= timelineObjectViewController.intersectionRect.origin.x){
-                if([timelineObjectViewController.timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
-                    [self.track removTimelineObject:(VSTimelineObject *) timelineObjectViewController.timelineObjectProxy andRegisterAtUndoManager:self.view.undoManager];
-                }
+        if(timelineObjectViewController.view.frame.size.width <= timelineObjectViewController.intersectionRect.size.width && timelineObjectViewController.view.frame.origin.x >= timelineObjectViewController.intersectionRect.origin.x){
+            if([timelineObjectViewController.timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
+                [self.track removTimelineObject:(VSTimelineObject *) timelineObjectViewController.timelineObjectProxy andRegisterAtUndoManager:self.view.undoManager];
+            }
+        }
+        else {
+            NSRect slice;
+            NSRect rem;
+            
+            NSDivideRect(timelineObjectViewController.view.frame, &slice, &rem, timelineObjectViewController.intersectionRect.size.width, NSMinXEdge);
+            
+            if(!timelineObjectViewController.enteredLeft){
+                NSInteger newXPos = rem.origin.x - self.view.frame.origin.x;
+                double newStartTime = newXPos * self.pixelTimeRatio;
+                
+                [timelineObjectViewController.timelineObjectProxy changeStartTime:newStartTime andRegisterAtUndoManager:self.view.undoManager];
+                [timelineObjectViewController.timelineObjectProxy changeDuration:rem.size.width*self.pixelTimeRatio andRegisterAtUndoManager:self.view.undoManager];
             }
             else {
-                NSRect slice;
-                NSRect rem;
-                
-                NSDivideRect(timelineObjectViewController.view.frame, &slice, &rem, timelineObjectViewController.intersectionRect.size.width, NSMinXEdge);
-                
-                if(!timelineObjectViewController.enteredLeft){
-                    NSInteger newXPos = rem.origin.x - self.view.frame.origin.x;
-                    double newStartTime = newXPos * self.pixelTimeRatio;
-                    
-                    [timelineObjectViewController.timelineObjectProxy changeStartTime:newStartTime andRegisterAtUndoManager:self.view.undoManager];
-                    [timelineObjectViewController.timelineObjectProxy changeDuration:rem.size.width*self.pixelTimeRatio andRegisterAtUndoManager:self.view.undoManager];
-                }
-                else {
-                    double newDuration = rem.size.width*self.pixelTimeRatio;
-                    [timelineObjectViewController.timelineObjectProxy changeDuration:newDuration andRegisterAtUndoManager:self.view.undoManager];
-                }
-                
+                double newDuration = rem.size.width*self.pixelTimeRatio;
+                [timelineObjectViewController.timelineObjectProxy changeDuration:newDuration andRegisterAtUndoManager:self.view.undoManager];
             }
-            timelineObjectViewController.intersected = false;
+            
         }
+        timelineObjectViewController.intersected = false;
     }
 }
 
