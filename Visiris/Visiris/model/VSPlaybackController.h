@@ -74,4 +74,9 @@
  */
 -(void) didFinisheRenderingTexture:(GLuint) theTexture forTimestamp:(double) theTimestamp;
 
+/**
+ * Tells the VSPreProcessor to render the frame for the currentTimestamp for given frame size
+ */
+- (void)renderFramesForCurrentTimestamp;
+
 @end

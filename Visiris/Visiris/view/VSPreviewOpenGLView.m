@@ -10,10 +10,13 @@
 
 #import "VSPreviewOpenGLView.h"
 #import "VSCoreServices.h"
+#import "VSPlaybackController.h"
 
 @implementation VSPreviewOpenGLView
 @synthesize openGLContext,pixelFormat,displayLink;
 @synthesize texture = _texture;
+
+@synthesize playBackcontroller = _playBackcontroller;
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -86,7 +89,9 @@
 
 - (CVReturn) getFrameForTime:(const CVTimeStamp*)outputTime
 {
+    [self.playBackcontroller renderFramesForCurrentTimestamp];
     @autoreleasepool {
+        
         [self drawView];
         return kCVReturnSuccess;
     }
@@ -95,6 +100,7 @@
 static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime, CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext)
 {
     CVReturn result = [(__bridge VSPreviewOpenGLView*)displayLinkContext getFrameForTime:outputTime];
+
     return result;
 }
 
@@ -105,7 +111,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	
 	// Set the renderer output callback function
 	CVDisplayLinkSetOutputCallback(displayLink, &MyDisplayLinkCallback, (__bridge void *)(self));
-	
+
 	// Set the display link for the current renderer
 	CGLContextObj cglContext = [[self openGLContext] CGLContextObj];
 	CGLPixelFormatObj cglPixelFormat = [[self pixelFormat] CGLPixelFormatObj];

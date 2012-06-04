@@ -16,6 +16,7 @@
 -(id)initWithNSImage:(NSImage *)theImage{
     if (self = [super init]) {
         CGImageSourceRef imageSource;
+
         imageSource = CGImageSourceCreateWithData((__bridge CFDataRef)[theImage TIFFRepresentation], NULL);
         CGImageRef image =  CGImageSourceCreateImageAtIndex(imageSource, 0, NULL);
         

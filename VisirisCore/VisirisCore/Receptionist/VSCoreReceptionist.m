@@ -9,6 +9,8 @@
 #import "VSCoreReceptionist.h"
 
 
+
+
 @implementation VSCoreReceptionist
 @synthesize renderCore = _renderCore;
 @synthesize delegate=_delegate;
@@ -24,7 +26,7 @@
 - (void)renderFrameAtTimestamp:(double)aTimestamp withHandovers:(NSArray *)theHandovers forSize:(NSSize)theFrameSize
 {
     if (theHandovers) {
-        
+
         [self.renderCore renderFrameOfCoreHandovers:theHandovers forFrameSize:theFrameSize forTimestamp:aTimestamp];
     }
 }

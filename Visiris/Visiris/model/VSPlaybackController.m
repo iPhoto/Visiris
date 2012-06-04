@@ -17,6 +17,8 @@
 @property NSTimer *playbackTimer;
 
 @property (strong) NSOperationQueue *queue;
+@property BOOL playing;
+
 @end
 
 @implementation VSPlaybackController
@@ -27,6 +29,7 @@
 @synthesize playbackTimer = _playbackTimer;
 @synthesize delegate = _delegate;
 @synthesize queue = _queue;
+@synthesize playing = _playing;
 
 #pragma mark - Init
 
@@ -50,12 +53,10 @@
 }
 
 -(void) startTimer{
-    self.playbackTimer = [NSTimer scheduledTimerWithTimeInterval:1/30 target:self selector:@selector(renderFramesForCurrentTimestamp) userInfo:nil repeats:YES];
-    [[NSRunLoop currentRunLoop] addTimer:self.playbackTimer forMode:NSDefaultRunLoopMode];
-	[[NSRunLoop currentRunLoop] addTimer:self.playbackTimer forMode:NSModalPanelRunLoopMode];
-	[[NSRunLoop currentRunLoop] addTimer:self.playbackTimer forMode:NSEventTrackingRunLoopMode];
-    
-    [[NSRunLoop currentRunLoop] run];
+    NSRunLoop* runLoop = [NSRunLoop currentRunLoop];
+    //Fire timer every second to updated countdown and date/time
+    self.playbackTimer = [NSTimer scheduledTimerWithTimeInterval:1/30 target:self selector:@selector(renderFramesForCurrentTimestamp) userInfo:nil repeats:YES] ;
+    [runLoop run];
 }
 
 -(void) stopPlayback{
@@ -66,11 +67,13 @@
 #pragma mark - VSPreviewViewControllerDelegate implementation
 
 -(void) play{
-    [self startPlaybackFromCurrentTimeStamp];
+//    [self startPlaybackFromCurrentTimeStamp];
+    self.playing = YES;
 }
 
 -(void) stop{
-    [self stopPlayback];
+//    [self stopPlayback];
+    self.playing = NO;
 }
 
 
@@ -85,12 +88,9 @@
 }
 
 
-/**
- * Tells the VSPreProcessor to render the frame for the currentTimestamp for given frame size
- */
 - (void)renderFramesForCurrentTimestamp
 {
- //       DDLogInfo(@"looping");
+    if(self.playing){
     
     if (self.preProcessor) {
         [self.preProcessor processFrameAtTimestamp:self.currentTimestamp withFrameSize:[self frameSize]];
@@ -99,6 +99,7 @@
 //    [self.queue addOperationWithBlock:^{
 //        [self.preProcessor processFrameAtTimestamp:0 withFrameSize:NSMakeSize(120, 120)];
 //    }];
+    }
 }
 
 

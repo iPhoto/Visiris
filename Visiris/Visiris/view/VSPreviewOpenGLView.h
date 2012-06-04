@@ -9,7 +9,13 @@
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/CVDisplayLink.h>
 
+@class VSPlaybackController;
 @interface VSPreviewOpenGLView : NSView
+
+
+
+//for testing only
+@property VSPlaybackController *playBackcontroller;
 
 @property (strong) NSOpenGLContext *openGLContext;
 @property (strong) NSOpenGLPixelFormat* pixelFormat;

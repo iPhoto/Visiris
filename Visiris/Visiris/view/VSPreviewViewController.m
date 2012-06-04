@@ -21,6 +21,7 @@
 @synthesize openGLView = _openGLView;
 @synthesize delegate = _delegate;
 @synthesize openGLContext = _openGLContext;
+@synthesize playBackController = _playBackController;
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
 static NSString* defaultNib = @"VSPreviewView";
@@ -93,6 +94,19 @@ static NSString* defaultNib = @"VSPreviewView";
     
     return NO;
 }
+
+
+-(void) setPlayBackController:(VSPlaybackController *)playBackController{
+
+    self.openGLView.playBackcontroller = playBackController;
+    
+    _playBackController = playBackController;
+}
+
+-(VSPlaybackController*) playBackController{
+    return _playBackController;
+}
+
 
 
 

@@ -219,13 +219,18 @@ static NSString* defaultNib = @"VSTrackView";
                 
                 result = YES;
             }
+            
+            //changes the start points and duration for all intersected TimelinObejcts according to their intersectedRects
+            [self applyIntersectionToTimelineObjects];
         }
         
-        [self changeIntersectedTimelineObjects];
+        //sets the intersected - property of all VSTimleineObjectControlls to NO
+        [self resetIntersectedTimelineObjects];
         
-        [self.view.undoManager setActionName:droppedProjectItems.count > 1 ? 
-         NSLocalizedString(@"Adding Objects", @"Undo Action for adding objects to the timeline") : 
-         NSLocalizedString(@"Adding Object", @"Undo Action for adding one object to the timeline")];
+        //Sets the actino name of the undo action
+        [self.view.undoManager setActionName:droppedProjectItems.count > 1
+         ? NSLocalizedString(@"Adding Objects", @"Undo Action for adding objects to the timeline") 
+                                            : NSLocalizedString(@"Adding Object", @"Undo Action for adding one object to the timeline")];
         [self.view.undoManager endUndoGrouping];
     }
     
@@ -261,7 +266,7 @@ static NSString* defaultNib = @"VSTrackView";
             
         }
         
-        
+        //Checks if any of the existing timeline objects intersected by any of the views stored in temporaryTimelineObjectViewControllers
         [self setTimelineObjectViewsIntersectedByDraggedTimelineObjectViews:self.temporaryTimelineObjectViewControllers];
     }
 }
@@ -312,6 +317,9 @@ static NSString* defaultNib = @"VSTrackView";
     if(!trackView)
         return NO;
     
+    //sets the intersected property of all VSTimelineObjectControllers to NO
+    [self resetIntersectedTimelineObjects];
+    
     //removes the temporary timelineObjects of the trackView
     return [self resetTemporaryTimelineObjects];
 }
@@ -350,19 +358,6 @@ static NSString* defaultNib = @"VSTrackView";
 
 
 
-static NSComparisonResult bringViewInContextToFront( id view1, id view2, void * context )
-{    
-    NSComparisonResult result = NSOrderedSame;
-    if(view1 == (__bridge NSView*) context){
-        result = NSOrderedDescending;
-    }
-    if(view2 == (__bridge NSView*) context){
-        result = NSOrderedAscending;
-    }
-    printf("%ld",result);
-    return result;
-}
-
 -(void) timelineObjectDidStopDragging:(VSTimelineObjectViewController *)timelineObjectViewController{
     
     
@@ -381,7 +376,7 @@ static NSComparisonResult bringViewInContextToFront( id view1, id view2, void * 
         [timelineObjectViewController.timelineObjectProxy changeDuration:duration andRegisterAtUndoManager:self.view.undoManager];
     }
     
-    [self changeIntersectedTimelineObjects];
+    [self applyIntersectionToTimelineObjects];
     
     [self.view.undoManager endUndoGrouping];
 }
@@ -403,10 +398,16 @@ static NSComparisonResult bringViewInContextToFront( id view1, id view2, void * 
 
 #pragma mark- Private Methods
 
+#pragma mark- VSTimelineObject Intersection
+
 -(void) setTimelineObjectViewsIntersectedByDraggedTimelineObjectViews:(NSArray *) timelineObjectViewControllers{
+    
     for(VSTimelineObjectViewController *timelineObjectViewController in self.timelineObjectViewControllers){
+        
         if(![timelineObjectViewControllers containsObject:timelineObjectViewController]){
+            
             for(VSTimelineObjectViewController *draggedTimelineObjectViewController in timelineObjectViewControllers){
+                
                 NSRect intersectionRect =  NSIntersectionRect(draggedTimelineObjectViewController.view.frame, timelineObjectViewController.view.frame);
                 
                 if(!NSIsEmptyRect(intersectionRect)){
@@ -454,10 +455,10 @@ static NSComparisonResult bringViewInContextToFront( id view1, id view2, void * 
         return NO;
     } ];
     
-   return [self.timelineObjectViewControllers objectsAtIndexes:indexSetOfIntersectedObjects];
+    return [self.timelineObjectViewControllers objectsAtIndexes:indexSetOfIntersectedObjects];
 }
 
--(void) changeIntersectedTimelineObjects{
+-(void) applyIntersectionToTimelineObjects{
     
     NSArray *interesectedTimelineObjectViewControllers= [self intersectedTimelineObjectViewController];
     

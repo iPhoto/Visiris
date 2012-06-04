@@ -51,7 +51,7 @@
         coreHandover = [[VSFrameCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp] andAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp] forTimestamp:localTimestamp];
     }
     else {
-        NSLog(@"TODOOOOOOOOOOOOOOOOOOOOO");
+        NSLog(@"TODOOOOOOOOOOOOOOOOOOOOO: Next time you see that, punch in this ugly face right of you!!!!!!");
     }
     
     
@@ -106,7 +106,6 @@
 
 - (double)convertGlobalTimestampToLocalTimestamp:(double)aGlobalTimestamp
 {
-    DDLogInfo(@"Not implemented");
     return 2.0f;
 }
 
