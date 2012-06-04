@@ -243,7 +243,10 @@ static NSString* defaultNib = @"VSTimelineView";
         
         int i = 0;
         
-        [[self.view undoManager] setActionName:projectItemRepresentations.count > 1 ? NSLocalizedString(@"Adding Objects", @"Undo Action for adding objects to the timeline") : NSLocalizedString(@"Adding Object", @"Undo Action for adding one object to the timeline")];
+        [[self.view undoManager] setActionName:projectItemRepresentations.count > 1 ? 
+            NSLocalizedString(@"Adding Objects", @"Undo Action for adding objects to the timeline") : 
+            NSLocalizedString(@"Adding Object", @"Undo Action for adding one object to the timeline")
+         ];
         
         [[self.view undoManager] beginUndoGrouping];
         
@@ -258,11 +261,24 @@ static NSString* defaultNib = @"VSTimelineView";
             double timePosition = [self getTimestampForPoint:position];
             NSInteger duration = [self getDurationForPixelWidth:width];
             
+            //Sets the first object as the selected one wich's properites are shown
             if(i==0){
-                objectToBeSelected = [self.timeline addNewTimelineObjectBasedOnProjectItemRepresentation:projectItem toTrack:trackViewController.track positionedAtTime:timePosition withDuration:duration andRegisterUndoOperation:[self.view undoManager]];
+                objectToBeSelected = [self.timeline 
+                                        addNewTimelineObjectBasedOnProjectItemRepresentation:projectItem 
+                                        toTrack:trackViewController.track 
+                                        positionedAtTime:timePosition 
+                                        withDuration:duration 
+                                        andRegisterUndoOperation:[self.view undoManager]
+                                      ];
             }
             else {
-                [self.timeline addNewTimelineObjectBasedOnProjectItemRepresentation:projectItem toTrack:trackViewController.track positionedAtTime:timePosition withDuration:duration andRegisterUndoOperation:[self.view undoManager]];
+                [self.timeline 
+                    addNewTimelineObjectBasedOnProjectItemRepresentation:projectItem 
+                    toTrack:trackViewController.track 
+                    positionedAtTime:timePosition 
+                    withDuration:duration 
+                    andRegisterUndoOperation:[self.view undoManager]
+                 ];
             }
             i++;
         }

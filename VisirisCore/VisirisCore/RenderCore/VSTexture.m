@@ -12,7 +12,7 @@
 @implementation VSTexture
 @synthesize texture = _texture;
 
-
+//Fixme: die beiden inits machen fast das selbe
 -(id)initWithNSImage:(NSImage *)theImage{
     if (self = [super init]) {
         CGImageSourceRef imageSource;

@@ -8,6 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
+/**
+ * Timecode Ruler of the Timeline
+ * !!!! Please add mor here !!!
+ */
 @interface VSTimelineRulerView : NSRulerView
 
 @end
