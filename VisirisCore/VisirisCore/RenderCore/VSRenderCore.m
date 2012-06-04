@@ -34,7 +34,7 @@ static GLuint make_buffer(GLenum target,const void *buffer_data,GLsizei buffer_s
 
 static struct {
     GLuint vertex_buffer, element_buffer;
-   // GLuint textures[2];
+    GLuint textures[2];
     GLuint vertex_shader, fragment_shader, program;
     
     struct {
@@ -158,7 +158,8 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
 }
 
 
--(void)renderFrameOfCoreHandovers:(NSArray *) theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double)theTimestamp{    
+-(void)renderFrameOfCoreHandovers:(NSArray *) theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double)theTimestamp{
+
     NSMutableArray *mutableCoreHandovers = [NSMutableArray arrayWithArray:theCoreHandovers];
     
     for(VSCoreHandover *coreHandover in theCoreHandovers){
@@ -168,36 +169,31 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
         }
     }
         
-    if ([mutableCoreHandovers count] < 2) {
+    /*if ([mutableCoreHandovers count] < 2) {
         return;
     }
+    */
     
-    
-    VSTexture *blubbTexture;
+    CGLLockContext([[self openGLContext] CGLContextObj]);
+	
+	// Make sure we draw to the right context
+	[[self openGLContext] makeCurrentContext];
+
+    /*VSTexture *blubbTexture;
     VSTexture *blubbTexture2;
     
     blubbTexture = [[VSTexture alloc] initWithNSImage:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).frame];
     blubbTexture2 = [[VSTexture alloc] initWithNSImage:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:1]).frame];
-
-    /*
-    for (VSCoreHandover *coreHandover in mutableCoreHandovers) {
-        if ([coreHandover isKindOfClass:[VSFrameCoreHandover class]]) {
-            blubbTexture = [[VSTexture alloc] initWithNSImage:((VSFrameCoreHandover*)coreHandover).frame];
-        }
-    }
-     */
-    	
-	// Make sure we draw to the right context
-	[[self openGLContext] makeCurrentContext];
+    */
     
-    GLuint finalTexture = [self combineTexture:blubbTexture.texture with:blubbTexture2.texture];
+    //GLuint finalTexture = [self combineTexture:blubbTexture.texture with:blubbTexture2.texture];
+    GLuint finalTexture = [self combineTexture:g_resources.textures[0] with:g_resources.textures[1]];
     
-    //NSLog(@"textureID: %d",[self combineTexture:blubbTexture.texture with:blubbTexture2.texture]);
     
-	[[self openGLContext] flushBuffer];
+	//[[self openGLContext] flushBuffer];
 	
-    [blubbTexture deleteTexture];
-    [blubbTexture2 deleteTexture];
+    //[blubbTexture deleteTexture];
+    //[blubbTexture2 deleteTexture];
     
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
     
@@ -273,6 +269,14 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
     g_resources.vertex_buffer = make_buffer(GL_ARRAY_BUFFER,g_vertex_buffer_data,sizeof(g_vertex_buffer_data));
     
     g_resources.element_buffer = make_buffer(GL_ELEMENT_ARRAY_BUFFER,g_element_buffer_data,sizeof(g_element_buffer_data));
+    
+    //create textures
+    g_resources.textures[0] = [[[VSTexture alloc] initWithName:@"jolandabregenz"] texture];
+    g_resources.textures[1] = [[[VSTexture alloc] initWithName:@"test"] texture];
+    
+    if (g_resources.textures[0] == 0 || g_resources.textures[1] == 0)
+        return 0;
+
     
     //compile shader
     g_resources.vertex_shader = [self compileShader:@"hellogl.vs" withType:GL_VERTEX_SHADER];

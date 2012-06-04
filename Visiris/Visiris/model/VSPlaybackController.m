@@ -84,9 +84,13 @@
 {
  //       DDLogInfo(@"looping");
     
-    if (self.preProcessor) {
-        [self.preProcessor processFrameAtTimestamp:self.currentTimestamp withFrameSize:[self frameSize]];
-    }
+//    if (self.preProcessor) {
+//        [self.preProcessor processFrameAtTimestamp:self.currentTimestamp withFrameSize:[self frameSize]];
+//    }
+//    
+    [self.queue addOperationWithBlock:^{
+        [self.preProcessor processFrameAtTimestamp:0 withFrameSize:NSMakeSize(120, 120)];
+    }];
 }
 
 
