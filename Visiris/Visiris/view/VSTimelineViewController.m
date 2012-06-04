@@ -76,7 +76,7 @@ static NSString* defaultNib = @"VSTimelineView";
     [self initTracks];
     [self updatePixelTimeRatio];
     [self initTimelineRuler];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectPropertesDidTurnInactive:) name:VSTimelineObjectPropertiesDidTurnInactive object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectPropertIesDidTurnInactive:) name:VSTimelineObjectPropertiesDidTurnInactive object:nil];
 }
 
 
@@ -158,14 +158,18 @@ static NSString* defaultNib = @"VSTimelineView";
 -(void) createTrack:(VSTrack*) track{
     
     VSTrackViewController* newTrackViewController = [[VSTrackViewController alloc]initWithDefaultNibAccordingToTrack:track];
+    
+    // The VSTimelineViewControlller acts as the delegate of the VSTrackViewController
     newTrackViewController.delegate = self;
     newTrackViewController.pixelTimeRatio = self.pixelTimeRatio;
+    
     
     [self.tracksHolderdocumentView addSubview:[newTrackViewController view]];
     
     //Size and position of the track
     int width = [self visibleTrackViewHolderWidth];
-    NSRect newFrame = NSMakeRect(0,(VSTrackViewHeight+VSTrackViewMargin) * ([self.tracksHolderdocumentView.subviews count] -1),width,VSTrackViewHeight);
+    int xPos = (VSTrackViewHeight+VSTrackViewMargin) * ([self.tracksHolderdocumentView.subviews count] -1);
+    NSRect newFrame = NSMakeRect(0,xPos,width,VSTrackViewHeight);
     [[newTrackViewController view] setFrame:newFrame];
     
     //set the autoresizing masks
@@ -177,7 +181,8 @@ static NSString* defaultNib = @"VSTimelineView";
     [newTrackViewController.view setNeedsDisplay:YES];
     
     //Rescales the document view of the trackholder ScrollView
-    [self.tracksHolderdocumentView setFrame:NSMakeRect([self.tracksHolderdocumentView frame].size.width, 0, self.tracksHolderdocumentView.frame.size.width, (VSTrackViewHeight+VSTrackViewMargin) * ([self.tracksHolderdocumentView.subviews count])) ];
+    int height = (VSTrackViewHeight+VSTrackViewMargin) * ([self.tracksHolderdocumentView.subviews count]);
+    [self.tracksHolderdocumentView setFrame:NSMakeRect([self.tracksHolderdocumentView frame].size.width, 0, self.tracksHolderdocumentView.frame.size.width,  height)];
 }
 
 /**

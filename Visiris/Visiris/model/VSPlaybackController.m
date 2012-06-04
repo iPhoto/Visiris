@@ -45,9 +45,13 @@
 - (void)startPlaybackFromCurrentTimeStamp
 {
     self.playbackTimer = [NSTimer scheduledTimerWithTimeInterval:1/30 target:self selector:@selector(renderFramesForCurrentTimestamp) userInfo:nil repeats:YES];
+    
+//    NSThread* timerThread = [[NSThread alloc] initWithTarget:self selector:@selector(renderFramesForCurrentTimestamp) object:nil]; //Create a new thread
+//    [timerThread start];
 }
 
 -(void) stopPlayback{
+    [self.queue cancelAllOperations];
     [self.playbackTimer invalidate];
 }
 
@@ -83,6 +87,10 @@
 //    if (self.preProcessor) {
 //        [self.preProcessor processFrameAtTimestamp:self.currentTimestamp withFrameSize:[self frameSize]];
 //    }
+//    
+    [self.queue addOperationWithBlock:^{
+        [self.preProcessor processFrameAtTimestamp:0 withFrameSize:NSMakeSize(120, 120)];
+    }];
 }
 
 

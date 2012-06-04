@@ -33,7 +33,7 @@
 
 - (void)renderCore:(VSRenderCore *)theRenderCore didFinishRenderingTexture:(GLuint)theTexture forTimestamp:(double)theTimestamp{
     if (self.delegate) { 
-        if([self.delegate conformsToProtocol:@protocol(VSRenderCoreDelegate) ]){
+        if([self.delegate conformsToProtocol:@protocol(VSCoreReceptionistDelegate) ]){
             if ([self.delegate respondsToSelector:@selector(coreReceptionist:didFinishedRenderingFrameAtTimestamp:withResultingTexture:)]){
                 [self.delegate coreReceptionist:self didFinishedRenderingFrameAtTimestamp:theTimestamp withResultingTexture:theTexture];
             }

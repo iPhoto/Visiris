@@ -172,6 +172,11 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
     if ([mutableCoreHandovers count] < 2) {
         return;
     }
+    
+    CGLLockContext([[self openGLContext] CGLContextObj]);
+	
+	// Make sure we draw to the right context
+	[[self openGLContext] makeCurrentContext];
 
     VSTexture *blubbTexture;
     VSTexture *blubbTexture2;
@@ -187,10 +192,7 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
     }
      */
     
-    CGLLockContext([[self openGLContext] CGLContextObj]);
-	
-	// Make sure we draw to the right context
-	[[self openGLContext] makeCurrentContext];
+    
     
     GLuint finalTexture = [self combineTexture:blubbTexture.texture with:blubbTexture2.texture];
     
