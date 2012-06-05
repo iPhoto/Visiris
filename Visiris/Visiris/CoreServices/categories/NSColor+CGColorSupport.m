@@ -18,7 +18,10 @@
     CGColorSpaceRef theColorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
     CGColorRef theColor = CGColorCreate(theColorSpace, components);
     CGColorSpaceRelease(theColorSpace);
-    return (__bridge CGColorRef)(__bridge id)theColor;
+    CGColorRef returnColor = (__bridge CGColorRef)(__bridge id)theColor;
+    CGColorRelease(theColor);
+    
+    return returnColor;
 }
 
 + (NSColor*)colorWithCGColor:(CGColorRef)aColor
