@@ -153,7 +153,9 @@ static int resizingAreaWidth = 10;
     NSPoint newMousePosition =[theEvent locationInWindow];
     NSInteger mouseXDelta = newMousePosition.x- self.lastMousePosition.x;
     
+    //sets if the view is moved or resized while dragged
     if(!self.resizing && !self.moving){
+        //if the mouse is over on of the resizingAreas
         if(NSPointInRect([self convertPoint:newMousePosition fromView:nil], self.leftResizingArea) || NSPointInRect([self convertPoint:newMousePosition fromView:nil], self.rightResizingArea)){
             
             if ([self delegateImplementsSelector:@selector(timelineObjectWillStartResizing:)]) {
