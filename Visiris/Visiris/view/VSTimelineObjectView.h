@@ -43,6 +43,12 @@
  */
 -(void) timelineObjectDidStopDragging:(VSTimelineObjectView*) timelineObjectView;
 
+-(void) timelineObjectWillStartResizing:(VSTimelineObjectView*) timelineObjectView;
+
+-(void) timelineObjectIsResizing:(VSTimelineObjectView*) timelineObjectView fromFrame:(NSRect) oldFrame toFrame:(NSRect) newFrame;
+
+-(void) timelineObjectStopsResizing:(VSTimelineObjectView*) timelineObjectView onTheLeftSide:(BOOL) resizingLeft;
+
 @end
 
 @class VSTimelineObject;

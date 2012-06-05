@@ -11,11 +11,26 @@
 #import "VSCoreServices.h"
 
 @interface VSTimelineObjectView ()
+
+/** indicates wheter it's allowed to be dragged around or not */
 @property BOOL dragged;
+
+@property BOOL resizing;
+
+/** stores the last mousePosition during a dragging-Operation */
 @property NSPoint lastMousePosition;
+
+@property NSRect oldFrame;
+
+@property NSRect leftResizingArea;
+
+@property NSRect rightResizingArea;
+
 @end
 
 @implementation VSTimelineObjectView
+
+static int trackingAreaWidth = 10;
 
 @synthesize delegate = _delegate;
 @synthesize selected = _selected;
@@ -24,23 +39,58 @@
 @synthesize intersectionRect = _intersectionRect;
 @synthesize intersected =_intersected;
 @synthesize lastMousePosition = _lastMousePosition;
+@synthesize oldFrame = _oldFrame;
+@synthesize leftResizingArea = _leftResizingArea;
+@synthesize rightResizingArea = _rightResizingArea;
+@synthesize resizing = _resizing;
 
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         [self initLayerStyle];
+        [self setResizingAreas];
+//        [self initTrackingAreas];
     }
     
     return self;
 }
 
+
+/**
+ * Inits the layer of the view
+ */
 -(void) initLayerStyle{
     [self setWantsLayer:YES];
     self.layer.cornerRadius = 10.0;
     self.layer.backgroundColor = [[NSColor darkGrayColor] CGColor];
     self.layer.borderColor =  [[NSColor yellowColor] CGColor];
 }
+
+-(void) setResizingAreas{
+    [self updateResizingRects];
+    
+    [self addCursorRect:self.leftResizingArea cursor:[NSCursor resizeLeftRightCursor]];
+    [self addCursorRect:self.rightResizingArea cursor:[NSCursor resizeLeftRightCursor]];
+    
+}
+
+-(void) resetCursorRects{
+    [super resetCursorRects];
+    
+    [self setResizingAreas];
+}
+
+-(BOOL) acceptsFirstMouse:(NSEvent *)theEvent{
+    return YES;
+}
+
+-(void) updateResizingRects{
+    self.leftResizingArea= NSMakeRect(0, 0, trackingAreaWidth, self.frame.size.height);
+    self.rightResizingArea = NSMakeRect(self.frame.size.width - trackingAreaWidth, 
+                                        0, trackingAreaWidth, self.frame.size.height);
+}
+
 
 -(void) awakeFromNib{
     [self  unregisterDraggedTypes];
@@ -50,14 +100,8 @@
         [subView unregisterDraggedTypes];
     }
 }
--(BOOL) acceptsFirstResponder{
-    return NO;
-    
-}
 
--(BOOL) becomeFirstResponder{
-    return NO;
-}
+
 - (void)drawRect:(NSRect)dirtyRect{
     
     //draws a border around the view if it is selected
@@ -85,10 +129,14 @@
     }
 }
 
+
+
 #pragma mark - Mouse Events
 
 -(void) mouseDown:(NSEvent *)theEvent{
-    if([self delegateImplementsSelector:@selector(timelineObjectViewWasClicked:)]){
+    self.lastMousePosition = [theEvent locationInWindow];
+    
+     if([self delegateImplementsSelector:@selector(timelineObjectViewWasClicked:)]){
         [self.delegate timelineObjectViewWasClicked:self];
     }
     
@@ -97,13 +145,24 @@
 
 
 -(void) mouseDragged:(NSEvent *)theEvent{
-    if(!self.dragged){
-        if([self delegateImplementsSelector:@selector(timelineObjectViewWillStartDragging:)]){
+    
+    if(!self.resizing && !self.dragged){
+        if(NSPointInRect(self.lastMousePosition, self.leftResizingArea) || NSPointInRect(self.lastMousePosition, self.rightResizingArea)){
+            self.resizing = YES;
+        }
+        else if([self delegateImplementsSelector:@selector(timelineObjectViewWillStartDragging:)]){
             self.dragged = [self.delegate timelineObjectViewWillStartDragging:self];
         }
         
     }
-    if(self.dragged){
+    
+    if(self.resizing){
+        if([self delegateImplementsSelector:@selector(timelineObjectIsResizing:fromFrame:toFrame:)]){
+            [self.delegate timelineObjectIsResizing:self fromFrame:self.oldFrame toFrame:self.frame];
+            self.oldFrame = self.frame;
+        }
+    }
+    else if(self.dragged){
         NSPoint newMousePosition =[theEvent locationInWindow];
         if([self delegateImplementsSelector:@selector(timelineObjectIsDragged:fromPosition:toPosition:)]){
             [self.delegate timelineObjectIsDragged:self fromPosition:self.lastMousePosition toPosition: newMousePosition ];
@@ -121,6 +180,11 @@
         }
     }
 }
+
+-(void) mouseMoved:(NSEvent *)theEvent{
+    DDLogInfo(@"movin");
+}
+
 
 #pragma mark - Private Methods
 

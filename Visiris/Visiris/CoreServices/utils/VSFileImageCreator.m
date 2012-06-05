@@ -31,6 +31,9 @@
     
     CGImageRef ref = QLThumbnailImageCreate(kCFAllocatorSystemDefault, (__bridge CFURLRef) url, CGSizeMake(width, height), (__bridge CFDictionaryRef) options);
     
-    return [[NSImage alloc] initWithCGImage:ref size:NSMakeSize(width, height)];
+    NSImage *resultImage = [[NSImage alloc] initWithCGImage:ref size:NSMakeSize(width, height)];
+    CGImageRelease(ref);
+    
+    return resultImage;
 }
 @end
