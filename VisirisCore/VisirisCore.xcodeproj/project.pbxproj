@@ -21,6 +21,9 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		274C70CE157E81DD0031F9B2 /* VSImageContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 274C70CC157E81DD0031F9B2 /* VSImageContext.h */; };
+		274C70CF157E81DD0031F9B2 /* VSImageContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 274C70CD157E81DD0031F9B2 /* VSImageContext.m */; };
+		274C70D1157E82EE0031F9B2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 274C70D0157E82EE0031F9B2 /* QuartzCore.framework */; };
 		275D8D0F156EB42B0081AB80 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 275D8D0E156EB42B0081AB80 /* OpenGL.framework */; };
 		276151341577C7E4005177C5 /* VSRenderCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 276151321577C7E4005177C5 /* VSRenderCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		276151351577C7E4005177C5 /* VSRenderCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 276151331577C7E4005177C5 /* VSRenderCore.m */; };
@@ -48,6 +51,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		274C70CC157E81DD0031F9B2 /* VSImageContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VSImageContext.h; path = CoreServices/VSImageContext.h; sourceTree = "<group>"; };
+		274C70CD157E81DD0031F9B2 /* VSImageContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VSImageContext.m; path = CoreServices/VSImageContext.m; sourceTree = "<group>"; };
+		274C70D0157E82EE0031F9B2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		275D8D0E156EB42B0081AB80 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		276151321577C7E4005177C5 /* VSRenderCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSRenderCore.h; sourceTree = "<group>"; };
 		276151331577C7E4005177C5 /* VSRenderCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSRenderCore.m; sourceTree = "<group>"; };
@@ -85,6 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				274C70D1157E82EE0031F9B2 /* QuartzCore.framework in Frameworks */,
 				275D8D0F156EB42B0081AB80 /* OpenGL.framework in Frameworks */,
 				5B19BF69155D0E4E00807769 /* Cocoa.framework in Frameworks */,
 			);
@@ -93,6 +100,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		274C70CA157E81BA0031F9B2 /* CoreServices */ = {
+			isa = PBXGroup;
+			children = (
+				274C70CC157E81DD0031F9B2 /* VSImageContext.h */,
+				274C70CD157E81DD0031F9B2 /* VSImageContext.m */,
+			);
+			name = CoreServices;
+			sourceTree = "<group>";
+		};
 		276151311577C7E4005177C5 /* RenderCore */ = {
 			isa = PBXGroup;
 			children = (
@@ -133,6 +149,7 @@
 		5B19BF59155D0E4E00807769 = {
 			isa = PBXGroup;
 			children = (
+				274C70CA157E81BA0031F9B2 /* CoreServices */,
 				5B19BF6E155D0E4E00807769 /* VisirisCore */,
 				5B19BF67155D0E4E00807769 /* Frameworks */,
 				5B19BF66155D0E4E00807769 /* Products */,
@@ -150,6 +167,7 @@
 		5B19BF67155D0E4E00807769 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				274C70D0157E82EE0031F9B2 /* QuartzCore.framework */,
 				5B19BF6B155D0E4E00807769 /* AppKit.framework */,
 				5B19BF6C155D0E4E00807769 /* CoreData.framework */,
 				5B19BF6D155D0E4E00807769 /* Foundation.framework */,
@@ -216,6 +234,7 @@
 				276151381577C814005177C5 /* VSFrameBufferObject.h in Headers */,
 				276151471577D66B005177C5 /* VSTexture.h in Headers */,
 				2761514B1577F290005177C5 /* VSShader.h in Headers */,
+				274C70CE157E81DD0031F9B2 /* VSImageContext.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -311,6 +330,7 @@
 				276151391577C814005177C5 /* VSFrameBufferObject.m in Sources */,
 				276151481577D66B005177C5 /* VSTexture.m in Sources */,
 				2761514C1577F290005177C5 /* VSShader.m in Sources */,
+				274C70CF157E81DD0031F9B2 /* VSImageContext.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

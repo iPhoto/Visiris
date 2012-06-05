@@ -151,9 +151,9 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
 		[ _openGLContext setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; 
 		
         
-       /* if([self make_resources] == 0){
+        if([self make_resources] == 0){
             NSLog(@"Error: Making Resources Failed!!!!!");
-        }*/
+        }
         
         self.frameBufferObjectOne = [[VSFrameBufferObject alloc] init];
         
@@ -179,6 +179,7 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
     }
         
     CGLLockContext([[self openGLContext] CGLContextObj]);
+    
 	
 	// Make sure we draw to the right context
 	[[self openGLContext] makeCurrentContext];
@@ -188,6 +189,10 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
     
     GLuint finalTexture = [self combineTexture:self.textureBelow.texture with:self.textureUp.texture];
     
+    GLint texSize;
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &texSize); 
+    NSLog(@"blubb: %d", texSize);
+
   //  GLuint finalTexture = [self combineTexture:g_resources.textures[0] with:g_resources.textures[1]];
     
     	
@@ -265,14 +270,14 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
     return coreHandover;
 }
 
-/*
+
 - (NSInteger)make_resources
 {
     //create buffer
     g_resources.vertex_buffer = make_buffer(GL_ARRAY_BUFFER,g_vertex_buffer_data,sizeof(g_vertex_buffer_data));
     
     g_resources.element_buffer = make_buffer(GL_ELEMENT_ARRAY_BUFFER,g_element_buffer_data,sizeof(g_element_buffer_data));
-    
+    /*
     //create textures
     g_resources.textures[0] = [[[VSTexture alloc] initWithName:@"jolandabregenz"] texture];
     g_resources.textures[1] = [[[VSTexture alloc] initWithName:@"test"] texture];
@@ -302,10 +307,10 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
     g_resources.uniforms.textures[1] = glGetUniformLocation(g_resources.program, "textures[1]");
     
     g_resources.attributes.position = glGetAttribLocation(g_resources.program, "position");
-    
+    */
     return 1;
 }
-
+/*
 - (GLuint)compileShader:(NSString*)shaderName withType:(GLenum)shaderType {
     
     NSString* shaderPath = [[NSBundle bundleWithIdentifier:@"com.visiris.VisirisCore"] pathForResource:shaderName ofType:@"glsl"];
@@ -337,7 +342,7 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
         exit(1);
     }
     
-    return shaderHandle;
+//    return shaderHandle;instru
 }
 */
 
