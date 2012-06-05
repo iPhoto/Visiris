@@ -25,6 +25,7 @@
 
 @implementation VSTimelineViewController
 
+
 @synthesize scvTrackHolder =_scvTrackHolder;
 @synthesize tracksHolderdocumentView = _tracksHolderdocumentView;
 @synthesize rulerView = _rulerView;
@@ -33,11 +34,12 @@
 @synthesize pixelTimeRatio = _pixelTimeRatio;
 
 
-
-/** Name of the nib that will be loaded when initWithDefaultNib is called */
+// Name of the nib that will be loaded when initWithDefaultNib is called 
 static NSString* defaultNib = @"VSTimelineView";
 
 #pragma mark- Init
+
+
 
 -(id) initWithDefaultNib{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
@@ -308,7 +310,7 @@ static NSString* defaultNib = @"VSTimelineView";
 -(void) timelineObjectProxy:(VSTimelineObjectProxy *)timelineObjectProxy wasSelectedOnTrackViewController:(VSTrackViewController *)trackViewController{
     if([timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectGotSelected object:((VSTimelineObject*) timelineObjectProxy)];
+        [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectsGotSelected object: [NSArray arrayWithObject:timelineObjectProxy]];
     }
 }
 

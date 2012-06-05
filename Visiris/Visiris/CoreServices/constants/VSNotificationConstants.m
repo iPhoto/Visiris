@@ -10,7 +10,7 @@ NSString *VSProjectItemRepresentationGotSelected = @"VSProjectItemGotSelected";
 
 NSString *VSProjectItemRepresentationGotUnselected = @"VSProjectItemGotUnselected";
 
-NSString *VSTimelineObjectGotSelected = @"VSTimelineObjectGotSelected";
+NSString *VSTimelineObjectsGotSelected = @"VSTimelineObjectGotSelected";
 
 NSString *VSTimelineObjectsGotUnselected = @"VSTimelineObjectotUnselected";
 

@@ -155,6 +155,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 
 /**
  * Changes the paramters name 
+ * @param newName Name the the VSTimelineObject's name will be changed to
  */
 -(void) setTimelineObjectName:(NSString*)newName{
     if(![self.timelineObject.name isEqualToString:newName]){

@@ -37,7 +37,7 @@
  * @param name Name of VSTimelineObject the VSTimelineObjectProxy represents.
  * @param startTime Time position on the timeline of VSTimelineObject the VSTimelineObjectProxy represents.
  * @param duration Duration of the VSTimelineObject the VSTimelineObjectProxy represents
- * @param Icon of the VSTimelineObject the VSTimelineObjectProxy represents
+ * @param icon of the VSTimelineObject the VSTimelineObjectProxy represents
  * @return self
  */
 -(id) initWithName:(NSString*) name atTime:(double) startTime duration:(double) duration icon:(NSImage*) icon;

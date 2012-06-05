@@ -29,13 +29,17 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self setWantsLayer:YES];
-        self.layer.cornerRadius = 10.0;
-        self.layer.backgroundColor = [[NSColor darkGrayColor] CGColor];
-        self.layer.borderColor =  [[NSColor yellowColor] CGColor];
+        [self initLayerStyle];
     }
     
     return self;
+}
+
+-(void) initLayerStyle{
+    [self setWantsLayer:YES];
+    self.layer.cornerRadius = 10.0;
+    self.layer.backgroundColor = [[NSColor darkGrayColor] CGColor];
+    self.layer.borderColor =  [[NSColor yellowColor] CGColor];
 }
 
 -(void) awakeFromNib{
@@ -49,6 +53,7 @@
 
 - (void)drawRect:(NSRect)dirtyRect{
     
+    //draws a border around the view if it is selected
     if(self.selected){
         
         self.layer.borderWidth = 3.0;
@@ -57,18 +62,20 @@
         self.layer.borderWidth = 0.0;
     }
     
+
     if(self.dragged || self.temporary){
-        self.layer.opacity = 0.5;
+        self.layer.opacity = 0.7;
         self.layer.borderWidth = 0.0;
     }
     else {
         self.layer.opacity = 1.0;
     }
-
-if(self.intersected){
-    [[NSColor greenColor] set];
-    NSRectFill(self.intersectionRect);
-}
+    
+    if(self.intersected){
+        [[NSColor greenColor] set];
+        NSRectFill(self.intersectionRect);
+        self.layer.opacity = 0.7;
+    }
 }
 
 #pragma mark - Mouse Events

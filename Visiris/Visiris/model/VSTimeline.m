@@ -48,7 +48,7 @@
     if(self = [super init]){
         self.timelineObjectFactory = [VSTimelineObjectFactory sharedFactory];
         self.projectItemController = [VSProjectItemController sharedManager];
-        self.tracks = [NSMutableArray arrayWithCapacity:0];
+        self.tracks = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -111,7 +111,9 @@
 
 -(void) unselectAllTimelineObjects{
     for (VSTrack *track in self.tracks){
+        if(track){
         [track unselectAllTimelineObjects];
+        }
     }
 }
 

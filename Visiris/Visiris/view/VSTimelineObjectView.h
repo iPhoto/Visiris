@@ -21,10 +21,26 @@
  */
 -(void) timelineObjectViewWasClicked:(VSTimelineObjectView*) timelineObjectView;
 
+/**
+ * Called everytime the position of the VSTimelineObjectView has been changed during a dragging-operation
+ * @param timelineObjectView VSTimelineObjectView that is dragged.
+ * @param oldPosition NSPoint the VSTimelineObjectView was dragged from.
+ * @param newPosition NSPoint the VSTimelineObjectView will be dragged to.
+ */
 -(void) timelineObjectIsDragged:(VSTimelineObjectView*) timelineObjectView fromPosition:(NSPoint) oldPosition toPosition:(NSPoint) newPosition;
 
+/**
+ * Called when the VSTimelineObjectView will start a dragging operation
+ * @param timelineObjectView VSTimelineObjectView that will be dragged
+ * @return If YES the timelineObjectView is allowed to be dragged, otherweise not. !!!Return value not used by now
+ */
 -(BOOL) timelineObjectViewWillStartDragging:(VSTimelineObjectView*) timelineObjectView;
 
+
+/**
+ * Called when the VSTimelineObjectView's dragging operation has ended.
+ * @param timelineObjectView VSTimelineObjectView the dragging operation has ended of.
+ */
 -(void) timelineObjectDidStopDragging:(VSTimelineObjectView*) timelineObjectView;
 
 @end
@@ -40,13 +56,16 @@
 /** Delegate that is called like definend in VSTimelineObjectViewDelegate Protocol */
 @property id<VSTimelineObjectViewDelegate> delegate;
 
-/** if true, a frame is drawn around the view */
+/** if YES, the VSTimelineObjectView is drawn as selected */
 @property BOOL selected;
 
+/** if YES the VSTimelineObjectView intersectionRect is drawn */
 @property BOOL intersected;
 
+/** Area of the VSTimelineObjectView that's intersected by another VSTimelineObjectView */
 @property NSRect intersectionRect;
 
+/** If yes, the view is drawn differently */
 @property BOOL temporary;
 
 @end

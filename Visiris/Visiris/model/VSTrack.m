@@ -91,13 +91,15 @@
 }
 
 -(void) unselectAllTimelineObjects{
-    for(VSTimelineObject *timelineObject in self.timelineObjects){
-        timelineObject.selected = NO;
+    if(self.timelineObjects && self.timelineObjects.count > 0){
+        for(VSTimelineObject *timelineObject in self.timelineObjects){
+            timelineObject.selected = NO;
+        }
     }
 }
 
 -(NSArray *) selectedTimelineObjects{
-   NSIndexSet *indexSet = [self.timelineObjects indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+    NSIndexSet *indexSet = [self.timelineObjects indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
         if([obj isKindOfClass:[VSTimelineObject class]]){
             return ((VSTimelineObject*) obj).selected;
         }

@@ -84,7 +84,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     }
     
     if([keyPath isEqualToString:@"duration"] || [keyPath isEqualToString:@"startTime"]){
-        [self setViewsFrameAccordingToPixelTimeRatio];
+        [self setViewsFrameAccordingToTimelineObject];
     }
 }
 
@@ -123,13 +123,16 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 -(void) changePixelTimeRatio:(double)newPixelTimeRatio{
     if(newPixelTimeRatio != self.pixelTimeRatio){
         self.pixelTimeRatio = newPixelTimeRatio;
-        [self setViewsFrameAccordingToPixelTimeRatio];
+        [self setViewsFrameAccordingToTimelineObject];
     }
 }
 
 #pragma mark - Private Methods
 
--(void) setViewsFrameAccordingToPixelTimeRatio{
+/**
+ * Sets the frame of the view according to timelineObjectProxies startTime and duration. 
+ */
+-(void) setViewsFrameAccordingToTimelineObject{
     
     if(self.view){
         NSRect frame = self.view.frame;

@@ -22,7 +22,7 @@
 @interface VSTimeline : NSObject
 
 /** Stores the tracks of the timeline */
-@property NSMutableArray *tracks;
+@property (strong) NSMutableArray *tracks;
 
 /** Duration of the timeline */
 @property double duration;
