@@ -19,7 +19,7 @@
     CGColorRef theColor = CGColorCreate(theColorSpace, components);
     CGColorSpaceRelease(theColorSpace);
     CGColorRef returnColor = (__bridge CGColorRef)(__bridge id)theColor;
-    CGColorRelease(theColor);
+//    CGColorRelease(theColor);
     
     return returnColor;
 }
