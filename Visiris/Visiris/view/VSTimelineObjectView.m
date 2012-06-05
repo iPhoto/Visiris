@@ -10,6 +10,9 @@
 
 #import "VSCoreServices.h"
 
+#define RESIZING_FROM_LEFT 0
+#define RESIZING_FROM_RIGHT 1
+
 @interface VSTimelineObjectView ()
 
 /** indicates wheter it's allowed to be dragged around or not */
@@ -17,7 +20,7 @@
 
 @property BOOL resizing;
 
-@property BOOL resizingFromLeft;
+@property NSInteger resizingDirection;
 
 /** stores the last mousePosition during a dragging-Operation */
 @property NSPoint lastMousePosition;
@@ -45,7 +48,7 @@ static int trackingAreaWidth = 10;
 @synthesize leftResizingArea = _leftResizingArea;
 @synthesize rightResizingArea = _rightResizingArea;
 @synthesize resizing = _resizing;
-@synthesize resizingFromLeft = _resizingFromLeft;
+@synthesize resizingDirection = _resizingDirection;
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -82,10 +85,6 @@ static int trackingAreaWidth = 10;
     [super resetCursorRects];
     
     [self setResizingAreas];
-}
-
--(BOOL) acceptsFirstMouse:(NSEvent *)theEvent{
-    return YES;
 }
 
 -(void) updateResizingRects{
@@ -149,9 +148,23 @@ static int trackingAreaWidth = 10;
 
 -(void) mouseDragged:(NSEvent *)theEvent{
     
+    NSPoint newMousePosition =[theEvent locationInWindow];
+    NSInteger mouseXDelta = newMousePosition.x- self.lastMousePosition.x;
+    
     if(!self.resizing && !self.dragged){
-        if(NSPointInRect(self.lastMousePosition, self.leftResizingArea) || NSPointInRect(self.lastMousePosition, self.rightResizingArea)){
-            self.resizing = YES;
+        if(NSPointInRect([self convertPoint:newMousePosition fromView:nil], self.leftResizingArea) || NSPointInRect([self convertPoint:newMousePosition fromView:nil], self.rightResizingArea)){
+            
+            if ([self delegateImplementsSelector:@selector(timelineObjectWillStartResizing:)]) {
+                self.resizing = [self.delegate timelineObjectWillStartResizing:self];
+            }
+            if(self.resizing){
+                if(NSPointInRect([self convertPoint:newMousePosition fromView:nil], self.leftResizingArea)){
+                    self.resizingDirection = RESIZING_FROM_LEFT;
+                }
+                else{
+                    self.resizingDirection = RESIZING_FROM_RIGHT;
+                }
+            }
         }
         else if([self delegateImplementsSelector:@selector(timelineObjectViewWillStartDragging:)]){
             self.dragged = [self.delegate timelineObjectViewWillStartDragging:self];
@@ -161,20 +174,39 @@ static int trackingAreaWidth = 10;
     
     if(self.resizing){
         NSRect resizedFrame = self.frame;
-        
-//        if(self.resizingFromLeft
-        
-        if([self delegateImplementsSelector:@selector(timelineObjectWillResize:oldFrame:)]){
-            
+    
+        if (self.resizingDirection == RESIZING_FROM_LEFT) {
+            resizedFrame.size.width -= mouseXDelta;
+            resizedFrame.origin.x += mouseXDelta;
         }
+        else if(self.resizingDirection == RESIZING_FROM_RIGHT){
+            resizedFrame.size.width += mouseXDelta;
+        }
+        
+        if([self delegateImplementsSelector:@selector(timelineObjectWillResize:fromFrame:toFrame:)]){
+            resizedFrame = [self.delegate timelineObjectWillResize:self fromFrame:self.frame toFrame:resizedFrame];
+        }
+        
+        [self setFrame:resizedFrame];
     }
     else if(self.dragged){
-        NSPoint newMousePosition =[theEvent locationInWindow];
-        if([self delegateImplementsSelector:@selector(timelineObjectIsDragged:fromPosition:toPosition:)]){
-            [self.delegate timelineObjectIsDragged:self fromPosition:self.lastMousePosition toPosition: newMousePosition ];
-            self.lastMousePosition = newMousePosition;
+        
+        NSRect newFrame = self.frame;
+        
+        newFrame.origin.x += mouseXDelta;
+        
+        if([self delegateImplementsSelector:@selector(timelineObjectViewWillBeDragged:fromPosition:toPosition:)]){
+            newFrame.origin = [self.delegate timelineObjectViewWillBeDragged:self fromPosition:self.frame.origin toPosition:newFrame.origin];
+        }
+        
+        [self setFrame:newFrame];
+        
+        if([self delegateImplementsSelector:@selector(timelineObjectViewWasDragged:)]){
+            [self.delegate timelineObjectViewWasDragged:self];
         }
     }
+    
+    self.lastMousePosition = newMousePosition;
 }
 
 -(void) mouseUp:(NSEvent *)theEvent{
@@ -185,12 +217,16 @@ static int trackingAreaWidth = 10;
             [self.delegate timelineObjectDidStopDragging:self];
         }
     }
+    
+    if(self.resizing){
+        self.resizing = NO;
+        self.resizingDirection = -1;
+        
+        if ([self delegateImplementsSelector:@selector(timelineObjectDidStopResizing:)]) {
+            [self.delegate timelineObjectDidStopResizing:self];
+        }
+    }
 }
-
--(void) mouseMoved:(NSEvent *)theEvent{
-    DDLogInfo(@"movin");
-}
-
 
 #pragma mark - Private Methods
 

@@ -99,9 +99,17 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     }
 }
 
--(void) timelineObjectIsDragged:(VSTimelineObjectView *)timelineObjectView fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition{
-    if([self delegateRespondsToSelector:@selector(timelineObjectIsDragged:fromPosition:toPosition:)]){
-        [self.delegate timelineObjectIsDragged:self fromPosition:oldPosition toPosition:newPosition];
+-(NSPoint) timelineObjectViewWillBeDragged:(VSTimelineObjectView *)timelineObjectView fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition{
+    if([self delegateRespondsToSelector:@selector(timelineObjectWillBeDragged:fromPosition:toPosition:)]){
+        return [self.delegate timelineObjectWillBeDragged:self fromPosition:oldPosition toPosition:newPosition];
+    }
+    
+    return newPosition;
+}
+
+-(void) timelineObjectViewWasDragged:(VSTimelineObjectView *)timelineObjectView{
+    if([self delegateRespondsToSelector:@selector(timelineObjectProxyWasDragged:)]){
+        [self.delegate timelineObjectProxyWasDragged:self];
     }
 }
 
@@ -116,6 +124,28 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 -(void)timelineObjectDidStopDragging:(VSTimelineObjectView *)timelineObjectView{
     if([self delegateRespondsToSelector:@selector(timelineObjectDidStopDragging:)]){
         [self.delegate timelineObjectDidStopDragging:self];
+    }
+}
+
+-(BOOL) timelineObjectWillStartResizing:(VSTimelineObjectView *)timelineObjectView{
+    if([self delegateRespondsToSelector:@selector(timelineObjectWillStartResizing:)]){
+        return [self.delegate timelineObjectWillStartResizing:self];
+    }
+    
+    return NO;
+}
+
+-(NSRect) timelineObjectWillResize:(VSTimelineObjectView *)timelineObjectView fromFrame:(NSRect)oldFrame toFrame:(NSRect)newFrame{
+    if([self delegateRespondsToSelector:@selector(timelineObjectWillResize:oldFrame:)]){
+        return [self.delegate timelineObjectWillResize:self fromFrame:oldFrame toFrame:newFrame];
+    }
+    
+    return newFrame;
+}
+
+-(void) timelineObjectDidStopResizing:(VSTimelineObjectView *)timelineObjectView{
+    if([self delegateRespondsToSelector:@selector(timelineObjectDidStopResizing:)]){
+        [self.delegate timelineObjectDidStopResizing:self];
     }
 }
 

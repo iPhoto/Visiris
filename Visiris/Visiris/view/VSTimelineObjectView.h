@@ -27,7 +27,9 @@
  * @param oldPosition NSPoint the VSTimelineObjectView was dragged from.
  * @param newPosition NSPoint the VSTimelineObjectView will be dragged to.
  */
--(void) timelineObjectIsDragged:(VSTimelineObjectView*) timelineObjectView fromPosition:(NSPoint) oldPosition toPosition:(NSPoint) newPosition;
+-(NSPoint) timelineObjectViewWillBeDragged:(VSTimelineObjectView*) timelineObjectView fromPosition:(NSPoint) oldPosition toPosition:(NSPoint) newPosition;
+
+-(void) timelineObjectViewWasDragged:(VSTimelineObjectView*) timelineObjectView;
 
 /**
  * Called when the VSTimelineObjectView will start a dragging operation
@@ -43,11 +45,11 @@
  */
 -(void) timelineObjectDidStopDragging:(VSTimelineObjectView*) timelineObjectView;
 
--(void) timelineObjectWillStartResizing:(VSTimelineObjectView*) timelineObjectView;
+-(BOOL) timelineObjectWillStartResizing:(VSTimelineObjectView*) timelineObjectView;
 
--(NSRect) timelineObjectWillResize:(VSTimelineObjectView*) timelineObjectView oldFrame:(NSRect*) oldFrame;
+-(NSRect) timelineObjectWillResize:(VSTimelineObjectView*) timelineObjectView fromFrame:(NSRect) oldFrame toFrame:(NSRect) newFrame;
 
--(void) timelineObjectStopsResizing:(VSTimelineObjectView*) timelineObjectView onTheLeftSide:(BOOL) resizingLeft;
+-(void) timelineObjectDidStopResizing:(VSTimelineObjectView*) timelineObjectView;
 
 @end
 

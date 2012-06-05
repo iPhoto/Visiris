@@ -10,6 +10,7 @@
 
 @implementation NSColor (GCColorSupport)
 
+//Todo: Release color ref
 - (CGColorRef)CGColor
 {
     NSColor *colorRGB = [self colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
@@ -19,7 +20,6 @@
     CGColorRef theColor = CGColorCreate(theColorSpace, components);
     CGColorSpaceRelease(theColorSpace);
     CGColorRef returnColor = (__bridge CGColorRef)(__bridge id)theColor;
-//    CGColorRelease(theColor);
     
     return returnColor;
 }

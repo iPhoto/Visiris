@@ -40,11 +40,10 @@
 
 /**
  * Called during a Drag and Drop Operation when the VSTimelineObjectProxy is dragged from the fromPosition to the toPosition
- * @param timelineObjectViewController VSTimelineObjectViewController which view is dragged
- * @param fromPosition NSPoint the view of the VSTimelineObjectViewController is dragged from.
- * @param toPosition NSPoint the view of the VSTimelineObjectViewController is dragged to.
- */
--(void) timelineObjectIsDragged:(VSTimelineObjectViewController*) timelineObjectViewController fromPosition:(NSPoint) oldPosition toPosition:(NSPoint) newPosition;
+*/
+-(NSPoint) timelineObjectWillBeDragged:(VSTimelineObjectViewController *)timelineObjectViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition;
+
+-(void) timelineObjectProxyWasDragged:(VSTimelineObjectViewController*) timelineObjectViewController;
 
 /**
  * Called when a drag-Operation on view of the VSTimelineObjectViewController is started
@@ -59,6 +58,12 @@
  * @return YES if the drag-Operation is allowed to start, NO otherwise.
  */
 -(void) timelineObjectDidStopDragging:(VSTimelineObjectViewController*) timelineObjectViewController;
+
+-(BOOL) timelineObjectWillStartResizing:(VSTimelineObjectViewController *)timelineObjectViewController;
+
+-(NSRect) timelineObjectWillResize:(VSTimelineObjectViewController *)timelineObjectViewController fromFrame:(NSRect)oldFrame toFrame:(NSRect)newFrame;
+
+-(void) timelineObjectDidStopResizing:(VSTimelineObjectViewController *)timelineObjectViewController;
 
 
 @end

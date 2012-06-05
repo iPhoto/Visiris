@@ -34,6 +34,10 @@
 
 }
 
+-(BOOL) acceptsFirstResponder{
+    return YES;
+}
+
 -(void) keyDown:(NSEvent *)theEvent{
     DDLogInfo(@"Key Down to %@",[self nextResponder] );
     [[self nextResponder] keyDown:theEvent];
