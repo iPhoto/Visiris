@@ -92,6 +92,71 @@
     return  self;
 }
 
+- (id)initWithNSImage:(NSImage *) inimage WithSize: (NSSize)size
+{
+    if(self = [super init]){
+
+	size.width = floorf( size.width );
+	size.height = floorf( size.height );
+	
+	//GLuint tex;
+	
+	NSBitmapImageRep *imageRep = [[NSBitmapImageRep alloc] 
+                                  initWithBitmapDataPlanes: NULL
+                                  pixelsWide: size.width
+                                  pixelsHigh: size.height
+                                  bitsPerSample: 8
+                                  samplesPerPixel: 4
+                                  hasAlpha: YES
+                                  isPlanar: NO
+                                  colorSpaceName: NSDeviceRGBColorSpace
+                                  bitmapFormat: 0
+                                  bytesPerRow: 0
+                                  bitsPerPixel: 32];
+	bzero( [imageRep bitmapData], size.height * [imageRep bytesPerRow] );
+	
+	NSGraphicsContext *ctx = [NSGraphicsContext graphicsContextWithBitmapImageRep: imageRep];
+	NSGraphicsContext *old = [NSGraphicsContext currentContext];
+	[NSGraphicsContext setCurrentContext: ctx];
+	
+	NSRect fromRect = { NSZeroPoint, [inimage size] };
+	NSRect toRect = { NSZeroPoint, size };
+	[inimage drawInRect: toRect fromRect: fromRect operation: NSCompositeSourceOver fraction: 1.0];
+	
+	[NSGraphicsContext setCurrentContext: old];
+	
+	// create the texture
+	glGenTextures(1, &_texture);
+	
+	glBindTexture( GL_TEXTURE_RECTANGLE_EXT, self.texture);
+//	CheckGLError( "glBindTexture" );
+	glTexParameteri( GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S, GL_CLAMP );
+	glTexParameteri( GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T, GL_CLAMP );
+	glTexParameteri( GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	glTexParameteri( GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+//	CheckGLError( "glTexParameteri" );
+	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+	glPixelStorei( GL_UNPACK_ROW_LENGTH, [imageRep bytesPerRow] / 4 );
+//	CheckGLError( "glPixelStorei" );
+	glTexImage2D( GL_TEXTURE_RECTANGLE_EXT, 
+                 0, 
+                 GL_RGBA, 
+                 size.width, 
+                 size.height, 
+                 0, 
+                 GL_RGBA, 
+                 GL_UNSIGNED_BYTE, 
+                 [imageRep bitmapData] );
+    
+//	CheckGLError("glTexImage2D");
+	
+	//[imageRep release];
+	
+//	return tex;
+    }
+    return  self;
+}
+
 -(void)bind{
     glBindTexture(GL_TEXTURE_2D, self.texture);
 }

@@ -159,9 +159,6 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
 
 
 -(void)renderFrameOfCoreHandovers:(NSArray *) theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double)theTimestamp{
-    
-    
-    
     NSMutableArray *mutableCoreHandovers = [NSMutableArray arrayWithArray:theCoreHandovers];
     
     for(VSCoreHandover *coreHandover in theCoreHandovers){
@@ -171,11 +168,10 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
         }
     }
         
-    /*if ([mutableCoreHandovers count] < 2) {
+    if ([mutableCoreHandovers count] < 2) {
         return;
     }
-    */
-    
+        
     CGLLockContext([[self openGLContext] CGLContextObj]);
 	
 	// Make sure we draw to the right context
@@ -188,18 +184,17 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
     blubbTexture2 = [[VSTexture alloc] initWithNSImage:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:1]).frame];
     
     GLuint finalTexture = [self combineTexture:blubbTexture.texture with:blubbTexture2.texture];
-//    GLuint finalTexture = [self combineTexture:g_resources.textures[0] with:g_resources.textures[1]];
     
+  //  GLuint finalTexture = [self combineTexture:g_resources.textures[0] with:g_resources.textures[1]];
     
-	//[[self openGLContext] flushBuffer];
-	
+    	
     [blubbTexture deleteTexture];
     [blubbTexture2 deleteTexture];
     
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
     
     NSLog(@"renderFrameOfCoreHandovers");
-    return;
+   // return;
     
     
     if (self.delegate) {
