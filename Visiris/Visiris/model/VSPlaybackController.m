@@ -53,10 +53,12 @@
 }
 
 -(void) startTimer{
-    NSRunLoop* runLoop = [NSRunLoop currentRunLoop];
-    //Fire timer every second to updated countdown and date/time
-    self.playbackTimer = [NSTimer scheduledTimerWithTimeInterval:1/30 target:self selector:@selector(renderFramesForCurrentTimestamp) userInfo:nil repeats:YES] ;
-    [runLoop run];
+    @autoreleasepool {
+        NSRunLoop* runLoop = [NSRunLoop currentRunLoop];
+        //Fire timer every second to updated countdown and date/time
+        self.playbackTimer = [NSTimer scheduledTimerWithTimeInterval:1/30 target:self selector:@selector(renderFramesForCurrentTimestamp) userInfo:nil repeats:YES] ;
+        [runLoop run];
+    }
 }
 
 -(void) stopPlayback{

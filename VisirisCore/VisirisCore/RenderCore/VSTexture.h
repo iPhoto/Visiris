@@ -13,6 +13,7 @@
 
 -(id)initWithNSImage:(NSImage *)theImage;
 -(id)initWithName:(NSString *)name;
+- (id)initWithNSImage:(NSImage *) inimage WithSize: (NSSize)size;
 
 -(void)bind;
 -(void)unbind;

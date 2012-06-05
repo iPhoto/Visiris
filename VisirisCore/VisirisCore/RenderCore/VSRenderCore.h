@@ -10,6 +10,8 @@
 
 @class VSFrameBufferObject;
 @class VSRenderCore;
+@class VSTexture;
+@class VSShader;
 
 /**
  * Protocoll the VSRenderCore uses to inform about the rendering states
@@ -34,6 +36,9 @@
 @property (strong, readonly) NSOpenGLContext        *openGLContext;
 @property (strong, readonly) NSOpenGLPixelFormat    *pixelFormat;        
 @property (strong) VSFrameBufferObject              *frameBufferObjectOne;
+@property (strong) VSTexture                        *textureBelow;
+@property (strong) VSTexture                        *textureUp;
+@property (strong) VSShader                         *shader;
 
 /**
  * Creates one frame out of the data stored in the give VSCoreHandovers in the given frame size.

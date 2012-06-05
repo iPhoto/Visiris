@@ -11,6 +11,7 @@
 #import "VSQuartzComposerHandover.h"
 #import "VSFrameBufferObject.h"
 #import "VSTexture.h"
+#import "VSShader.h"
 #import <OpenGL/glu.h>
 
 //FixeMe: Warum sind die static Methoden außerhalb der Klasse definiert?
@@ -34,7 +35,7 @@ static GLuint make_buffer(GLenum target,const void *buffer_data,GLsizei buffer_s
 
 static struct {
     GLuint vertex_buffer, element_buffer;
-    GLuint textures[2];
+ /*   GLuint textures[2];
     GLuint vertex_shader, fragment_shader, program;
     
     struct {
@@ -46,9 +47,9 @@ static struct {
         GLint position;
     } attributes;
     
-    GLfloat fade_factor;
+    GLfloat fade_factor;*/
 } g_resources;
-
+/*
 static GLuint make_shader(GLenum type,NSString* name)
 {
     NSString* shaderPath = [[NSBundle bundleWithIdentifier:@"com.visiris.VisirisCore"] pathForResource:name ofType:@"glsl"];
@@ -111,12 +112,15 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
     }
     return program;
 }
-
+*/
 @implementation VSRenderCore
 @synthesize delegate = _delegate;
 @synthesize pixelFormat = _pixelFormat;
 @synthesize openGLContext = _openGLContext;
 @synthesize frameBufferObjectOne = _frameBufferObjectOne;
+@synthesize textureBelow = _textureBelow;
+@synthesize textureUp = _textureUp;
+@synthesize shader = _shader;
 
 -(id)init{
     
@@ -153,15 +157,14 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
         
         self.frameBufferObjectOne = [[VSFrameBufferObject alloc] init];
         
+        self.shader = [[VSShader alloc] init];
+        
     }
     return self;
 }
 
 
 -(void)renderFrameOfCoreHandovers:(NSArray *) theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double)theTimestamp{
-    
-    
-    
     NSMutableArray *mutableCoreHandovers = [NSMutableArray arrayWithArray:theCoreHandovers];
     
     for(VSCoreHandover *coreHandover in theCoreHandovers){
@@ -171,35 +174,35 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
         }
     }
         
-    /*if ([mutableCoreHandovers count] < 2) {
+    if ([mutableCoreHandovers count] < 2) {
         return;
     }
-    */
-    
+        
     CGLLockContext([[self openGLContext] CGLContextObj]);
+    
 	
 	// Make sure we draw to the right context
 	[[self openGLContext] makeCurrentContext];
+    
+    self.textureBelow = [[VSTexture alloc] initWithNSImage:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).frame];
+    self.textureUp = [[VSTexture alloc] initWithNSImage:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:1]).frame];
+    
+    GLuint finalTexture = [self combineTexture:self.textureBelow.texture with:self.textureUp.texture];
+    
+    GLint texSize;
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &texSize); 
+    NSLog(@"blubb: %d", texSize);
 
-    VSTexture *blubbTexture;
-    VSTexture *blubbTexture2;
+  //  GLuint finalTexture = [self combineTexture:g_resources.textures[0] with:g_resources.textures[1]];
     
-    blubbTexture = [[VSTexture alloc] initWithNSImage:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).frame];
-    blubbTexture2 = [[VSTexture alloc] initWithNSImage:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:1]).frame];
-    
-    GLuint finalTexture = [self combineTexture:blubbTexture.texture with:blubbTexture2.texture];
-//    GLuint finalTexture = [self combineTexture:g_resources.textures[0] with:g_resources.textures[1]];
-    
-    
-	//[[self openGLContext] flushBuffer];
-	
-    [blubbTexture deleteTexture];
-    [blubbTexture2 deleteTexture];
+    	
+    [self.textureBelow deleteTexture];
+    [self.textureUp deleteTexture];
     
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
     
     NSLog(@"renderFrameOfCoreHandovers");
-    return;
+   // return;
     
     
     if (self.delegate) {
@@ -219,29 +222,29 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
     glClearColor(0.7, 0.7, 0.7, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    g_resources.fade_factor = 0.5;
+   // g_resources.fade_factor = 0.5;
     
-    glUseProgram(g_resources.program);
-    glUniform1f(g_resources.uniforms.fade_factor, g_resources.fade_factor);
+    glUseProgram(self.shader.program);
+    glUniform1f(self.shader.uniformFadefactor, 0.5f);
     
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, bottomtexture);
-    glUniform1i(g_resources.uniforms.textures[0], 0);
+    glUniform1i(self.shader.uniformTexture1, 0);
     
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, upperTexture);
-    glUniform1i(g_resources.uniforms.textures[1], 1);
+    glUniform1i(self.shader.uniformTexture2, 1);
     
     
     glBindBuffer(GL_ARRAY_BUFFER, g_resources.vertex_buffer);
-    glVertexAttribPointer(g_resources.attributes.position,  /* attribute */
+    glVertexAttribPointer(self.shader.attributePosition,  /* attribute */
                           2,                                /* size */
                           GL_FLOAT,                         /* type */
                           GL_FALSE,                         /* normalized? */
                           sizeof(GLfloat)*2,                /* stride */
                           (void*)0                          /* array buffer offset */
                           );
-    glEnableVertexAttribArray(g_resources.attributes.position);
+    glEnableVertexAttribArray(self.shader.attributePosition);
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_resources.element_buffer);
     glDrawElements(GL_TRIANGLE_STRIP,  /* mode */
@@ -250,7 +253,7 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
                    (void*)0            /* element array buffer offset */
                    );
     
-    glDisableVertexAttribArray(g_resources.attributes.position);
+    glDisableVertexAttribArray(self.shader.attributePosition);
     
     [self.frameBufferObjectOne unbind];
     return self.frameBufferObjectOne.texture;
@@ -267,13 +270,14 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
     return coreHandover;
 }
 
+
 - (NSInteger)make_resources
 {
     //create buffer
     g_resources.vertex_buffer = make_buffer(GL_ARRAY_BUFFER,g_vertex_buffer_data,sizeof(g_vertex_buffer_data));
     
     g_resources.element_buffer = make_buffer(GL_ELEMENT_ARRAY_BUFFER,g_element_buffer_data,sizeof(g_element_buffer_data));
-    
+    /*
     //create textures
     g_resources.textures[0] = [[[VSTexture alloc] initWithName:@"jolandabregenz"] texture];
     g_resources.textures[1] = [[[VSTexture alloc] initWithName:@"test"] texture];
@@ -303,10 +307,10 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
     g_resources.uniforms.textures[1] = glGetUniformLocation(g_resources.program, "textures[1]");
     
     g_resources.attributes.position = glGetAttribLocation(g_resources.program, "position");
-    
+    */
     return 1;
 }
-
+/*
 - (GLuint)compileShader:(NSString*)shaderName withType:(GLenum)shaderType {
     
     NSString* shaderPath = [[NSBundle bundleWithIdentifier:@"com.visiris.VisirisCore"] pathForResource:shaderName ofType:@"glsl"];
@@ -338,10 +342,9 @@ static GLuint make_program(GLuint vertex_shader, GLuint fragment_shader)
         exit(1);
     }
     
-    return shaderHandle;
-    
+//    return shaderHandle;instru
 }
-
+*/
 
 
 @end
