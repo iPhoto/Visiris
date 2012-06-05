@@ -48,7 +48,7 @@
     if(self = [super init]){
         self.timelineObjectFactory = [VSTimelineObjectFactory sharedFactory];
         self.projectItemController = [VSProjectItemController sharedManager];
-        self.tracks = [NSMutableArray arrayWithCapacity:0];
+        self.tracks = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -97,6 +97,12 @@
     return [track removTimelineObject:aTimelineObject];
 }
 
+-(void) removeSelectedTimelineObjectsAndRegisterAtUndoManager:(NSUndoManager *)undoManager{
+    for(VSTrack* track in self.tracks){
+        [track removeSelectedTimelineObjectsAndRegisterAtUndoManager:undoManager];
+    }
+}
+
 -(void) selectTimelineObject:(VSTimelineObject *)timelineObjectToSelect onTrack:(VSTrack *)aTrack{
     if([self.tracks containsObject:aTrack]){
         [aTrack selectTimelineObject:timelineObjectToSelect];
@@ -111,7 +117,9 @@
 
 -(void) unselectAllTimelineObjects{
     for (VSTrack *track in self.tracks){
+        if(track){
         [track unselectAllTimelineObjects];
+        }
     }
 }
 

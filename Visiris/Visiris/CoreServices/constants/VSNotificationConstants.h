@@ -13,7 +13,7 @@ extern NSString *VSProjectItemRepresentationGotSelected;
 extern NSString *VSProjectItemRepresentationGotUnselected;
 
 /** Name of the Notification sent when a VSTimelineObject got selected in VSTimelineView */
-extern NSString *VSTimelineObjectGotSelected;
+extern NSString *VSTimelineObjectsGotSelected;
 
 /** Name of the Notification sent when a VSTimelineObject got unselected in VSTimelineView */
 extern NSString *VSTimelineObjectsGotUnselected;

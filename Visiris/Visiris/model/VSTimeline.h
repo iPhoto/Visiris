@@ -22,7 +22,7 @@
 @interface VSTimeline : NSObject
 
 /** Stores the tracks of the timeline */
-@property NSMutableArray *tracks;
+@property (strong) NSMutableArray *tracks;
 
 /** Duration of the timeline */
 @property double duration;
@@ -75,6 +75,14 @@
  * @return YES if the removal was successfully, NO otherwise
  */
 -(BOOL) removeTimelineObject:(VSTimelineObject*) aTimelineObject fromTrack:(VSTrack*) track;
+
+/**
+ * Removes all currently selected VSTimelineObjects from the Timeline and registers the operation at the given NSUndoManager
+ @param undoManager NSUndoManager the removal is registrated at.
+ */
+-(void) removeSelectedTimelineObjectsAndRegisterAtUndoManager:(NSUndoManager*) undoManager;
+
+
 
 /**
  * Creates a new TimelineObjectProxy.

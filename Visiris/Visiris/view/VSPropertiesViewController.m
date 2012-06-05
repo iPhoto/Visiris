@@ -62,10 +62,10 @@ static NSString* defaultNib = @"VSPropertiesView";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(projectItemsRepresentationsGotUnselected:) name:VSProjectItemRepresentationGotUnselected object:nil];
     
     //Adding Observer for TimelineObjects got selected
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectGotSelected:) name:VSTimelineObjectGotSelected object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectsGotSelected:) name:VSTimelineObjectsGotSelected object:nil];
     
     //Adding Observer for TimelineObjects got unselected
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectGotUnselected:) name:VSTimelineObjectsGotUnselected object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectsGotUnselected:) name:VSTimelineObjectsGotUnselected object:nil];
     
     //inits the two properties subviews
     self.projectItemPropertiesViewController = [[VSProjectItemPropertiesViewController alloc] initWithDefaultNib];
@@ -104,27 +104,33 @@ static NSString* defaultNib = @"VSPropertiesView";
 }
 
 /**
- * Called when a VSTimelineObjectGotSelected-Notification was received.
+ * Called when a VSTimelineObjectsGotSelected-Notification was received.
  *
  * Calls the TimelineObjectPropertyView to show the properties of the VSTimelineObject stored in the notification's object
  * @param notification Holding the selected VSTimelineObject
  */
--(void) timelineObjectGotSelected:(NSNotification *) notification{
-    DDLogInfo(@"hi");
-    if([[notification object] isKindOfClass:[VSTimelineObject class]]){
-        VSTimelineObject *timelineObject = [notification object];
-        [self showSubview:self.timelineObjectPropertiesViewController.view];
-        self.timelineObjectPropertiesViewController.timelineObject = timelineObject;
+-(void) timelineObjectsGotSelected:(NSNotification *) notification{
+
+    if([[notification object] isKindOfClass:[NSArray class]]){
+        NSArray *selectedTimelineObjects = (NSArray*) [notification object];
+        
+        if(selectedTimelineObjects && selectedTimelineObjects.count > 0){
+            if([[selectedTimelineObjects objectAtIndex:0] isKindOfClass:[VSTimelineObject class]]){
+                VSTimelineObject *timelineObject = (VSTimelineObject*) [selectedTimelineObjects objectAtIndex:0];
+            [self showSubview:self.timelineObjectPropertiesViewController.view];
+            self.timelineObjectPropertiesViewController.timelineObject = timelineObject;
+            }
+        }
     }
 }
 
 /**
- * Called when a VSTimelineObjectGotUnselected-Notification was received.
+ * Called when a VSTimelineObjectsGotUnselected-Notification was received.
  *
  * Hides the currently visible TimelineObjectPropertyView
  * @param notification NSNotification storing the selected VSTimelineObject
  */
--(void) timelineObjectGotUnselected:(NSNotification *) notification{
+-(void) timelineObjectsGotUnselected:(NSNotification *) notification{
     if(self.contentView.subviews.count > 0){
         if([[self.contentView subviews] objectAtIndex:0] == self.timelineObjectPropertiesViewController.view){
             [self.timelineObjectPropertiesViewController.view removeFromSuperview];

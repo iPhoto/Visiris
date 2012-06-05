@@ -25,6 +25,7 @@
 
 @implementation VSTimelineViewController
 
+
 @synthesize scvTrackHolder =_scvTrackHolder;
 @synthesize tracksHolderdocumentView = _tracksHolderdocumentView;
 @synthesize rulerView = _rulerView;
@@ -33,11 +34,12 @@
 @synthesize pixelTimeRatio = _pixelTimeRatio;
 
 
-
-/** Name of the nib that will be loaded when initWithDefaultNib is called */
+// Name of the nib that will be loaded when initWithDefaultNib is called 
 static NSString* defaultNib = @"VSTimelineView";
 
 #pragma mark- Init
+
+
 
 -(id) initWithDefaultNib{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
@@ -138,6 +140,9 @@ static NSString* defaultNib = @"VSTimelineView";
     }
 }
 
+#pragma mark - Event Handling
+
+
 #pragma mark - Private Methods
 
 //TODO: Better way to update VSTimelineRulerMeasurementUnit
@@ -236,8 +241,22 @@ static NSString* defaultNib = @"VSTimelineView";
     return width * self.pixelTimeRatio;
 }
 
+/**
+ * Called when VSTimelineObjectPropertiesDidTurnInactive Notification was received. Unselectes the currently selected timelineObjects.
+ * @param notification NSNotifaction storing the information about which VSTimelineObjects were selected before the propertiesView turned inactive
+ */
 -(void) timelineObjectPropertIesDidTurnInactive:(NSNotification*) notification{
     [self.timeline unselectAllTimelineObjects];
+}
+
+/**
+ * Removes the currently selected TimelineObjects and registers the removal at the view's undoManager
+ */
+-(void) removeSelectedTimelineObjects{
+    [self.view.undoManager beginUndoGrouping];
+    [self.timeline removeSelectedTimelineObjectsAndRegisterAtUndoManager:self.view.undoManager];
+    [self.view.undoManager setActionName:NSLocalizedString(@"Remove Objects", @"Undo Action for removing TimelineObjects from the timeline")];
+    [self.view.undoManager endUndoGrouping];
 }
 
 #pragma mark- VSTrackViewControlerDelegate implementation
@@ -308,7 +327,7 @@ static NSString* defaultNib = @"VSTimelineView";
 -(void) timelineObjectProxy:(VSTimelineObjectProxy *)timelineObjectProxy wasSelectedOnTrackViewController:(VSTrackViewController *)trackViewController{
     if([timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectGotSelected object:((VSTimelineObject*) timelineObjectProxy)];
+        [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectsGotSelected object: [NSArray arrayWithObject:timelineObjectProxy]];
     }
 }
 
@@ -387,6 +406,16 @@ static NSString* defaultNib = @"VSTimelineView";
     [self.tracksHolderdocumentView setFrame:newFrame];
     
     [self updatePixelTimeRatio];
+}
+
+-(void) didReceiveKeyDownEvent:(NSEvent *)theEvent{
+    if(theEvent){
+        unichar keyCode = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];
+        if (keyCode == NSDeleteCharacter || keyCode == NSBackspaceCharacter){
+            
+            
+        }
+    }
 }
 
 #pragma mark- Properties

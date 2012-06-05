@@ -20,7 +20,14 @@
  */
 -(void) viewDidResizeFromWidth:(NSInteger) fromWidth toWidth:(NSInteger) toWidth;
 
+/**
+ * Called when VSTimelineView received an keyDown-Event
+ * @param theEvent NSEvent of the keyDown-Event
+ */
+-(void) didReceiveKeyDownEvent:(NSEvent*) theEvent;
 @end
+
+
 
 /**
  * VSTimelineView is the view for VSTimeline

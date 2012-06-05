@@ -25,16 +25,16 @@
 
 @end
 
-/** identifier of the name column*/
+// identifier of the name column
 #define COLUMNID_NAME       @"name"
 
-/** identifier of the file size column*/
+// identifier of the file size column
 #define COLUMNID_FILE_SIZE  @"fileSize"
 
-/** identifier of the duration column*/
+// identifier of the duration column
 #define COLUMNID_DURATION   @"duration"
 
-/** identifier of the file path column*/
+// identifier of the file path column
 #define COLUMNID_FILE_PATH  @"filePath"
 
 @implementation VSProjectItemBrowserViewController

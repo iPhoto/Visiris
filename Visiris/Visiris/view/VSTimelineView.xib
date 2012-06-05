@@ -358,7 +358,7 @@
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">VSTimelineRulerView</string>
-					<string key="superclassName">NSView</string>
+					<string key="superclassName">NSRulerView</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/VSTimelineRulerView.h</string>
@@ -376,25 +376,10 @@
 					<string key="className">VSTimelineViewController</string>
 					<string key="superclassName">NSViewController</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="mainDocumentView">NSView</string>
-						<string key="rulerView">VSTimelineRulerView</string>
-						<string key="scvMain">NSScrollView</string>
 						<string key="scvTrackHolder">NSScrollView</string>
 						<string key="tracksHolderdocumentView">NSView</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="mainDocumentView">
-							<string key="name">mainDocumentView</string>
-							<string key="candidateClassName">NSView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="rulerView">
-							<string key="name">rulerView</string>
-							<string key="candidateClassName">VSTimelineRulerView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="scvMain">
-							<string key="name">scvMain</string>
-							<string key="candidateClassName">NSScrollView</string>
-						</object>
 						<object class="IBToOneOutletInfo" key="scvTrackHolder">
 							<string key="name">scvTrackHolder</string>
 							<string key="candidateClassName">NSScrollView</string>
