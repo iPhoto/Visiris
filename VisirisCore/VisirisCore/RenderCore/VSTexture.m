@@ -12,7 +12,7 @@
 
 @implementation VSTexture
 @synthesize texture = _texture;
-
+/*
 //Fixme: die beiden inits machen fast das selbe
 -(id)initWithNSImage:(NSImage *)theImage{
     if (self = [super init]) {
@@ -54,6 +54,7 @@
     }
     return self;
 }
+ */
 
 -(id)initWithName:(NSString *)name{
     if(self = [super init]){
@@ -159,7 +160,7 @@
 }
 
 //ANDI STUFF
-/*-(id)initWithNSImage:(NSImage *)theImage{
+-(id)initWithNSImage:(NSImage *)theImage{
     if (self = [super init]) {
                 
         
@@ -169,12 +170,7 @@
         [theImage lockFocus];
         NSBitmapImageRep* bitmap = [[NSBitmapImageRep alloc] initWithFocusedViewRect:NSMakeRect(0.0, 0.0, imgSize.width, imgSize.height)];
         [theImage unlockFocus];
-        
-        // Set proper unpacking row length for bitmap.
-        glPixelStorei(GL_UNPACK_ROW_LENGTH, [bitmap pixelsWide]);
-        
-        // Set byte aligned unpacking (needed for 3 byte per pixel bitmaps).
-        glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
+                
         
         // Generate a new texture name if one was not provided.
         if (self.texture == 0)
@@ -182,10 +178,19 @@
               glGenTextures (1, &_texture);
         }
           
-        glBindTexture (GL_TEXTURE_RECTANGLE_EXT, self.texture);
+        glBindTexture (GL_TEXTURE_2D, self.texture);
+        
+        // Set proper unpacking row length for bitmap.
+        glPixelStorei(GL_UNPACK_ROW_LENGTH, [bitmap pixelsWide]);
+        
+        // Set byte aligned unpacking (needed for 3 byte per pixel bitmaps).
+        glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
         
         // Non-mipmap filtering (redundant for texture_rectangle).
-        glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER,  GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         samplesPerPixel = [bitmap samplesPerPixel];
         
         // Nonplanar, RGB 24 bit bitmap, or RGBA 32 bit bitmap.
@@ -199,41 +204,13 @@
                          samplesPerPixel == 4 ? GL_RGBA : GL_RGB,
                          GL_UNSIGNED_INT_8_8_8_8_REV,
                          [bitmap bitmapData]);
+
         } else {
             // Handle other bitmap formats.
         }
-        
-        
-//        CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFDataRef)[theImage TIFFRepresentation], NULL);
-//        CGImageRef imageRef =  CGImageSourceCreateImageAtIndex(imageSource, 0, NULL);
-//        
-//        
-//        CGDataProviderRef dataProvider = CGImageGetDataProvider(imageRef);
-//        CFDataRef data = CGDataProviderCopyData(dataProvider);
-//        const unsigned char * buffer =  CFDataGetBytePtr(data);
-//        
-//        
-//        size_t width  = theImage.size.width;
-//        size_t height = theImage.size.height;
-//
-//        
-//        glGenTextures(1, &_texture);
-//        
-//        glBindTexture(GL_TEXTURE_2D, self.texture);
-//        
-//        glPixelStorei(GL_UNPACK_ROW_LENGTH, (GLint)width);
-//        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-//        
-//        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, (int)width, (int)height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, (GLvoid *)buffer);
-//        
-//        CFRelease(imageSource);
     }
     return self;
-}*/
+}
 
 -(void)bind{
     glBindTexture(GL_TEXTURE_2D, self.texture);
