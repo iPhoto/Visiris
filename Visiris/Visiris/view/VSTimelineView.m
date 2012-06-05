@@ -1,4 +1,4 @@
- //
+//
 //  VSTimelinView.m
 //  Visiris
 //
@@ -34,16 +34,13 @@
 
 }
 
+#pragma mark - Event Handling
+
 -(BOOL) acceptsFirstResponder{
     return YES;
 }
 
 -(void) keyDown:(NSEvent *)theEvent{
-    DDLogInfo(@"Key Down to %@",[self nextResponder] );
-    [[self nextResponder] keyDown:theEvent];
-    
-    
-    
     if([self delegateRespondsToSelector:@selector(didReceiveKeyDownEvent:)]){
         [self.delegate didReceiveKeyDownEvent:theEvent];
     }

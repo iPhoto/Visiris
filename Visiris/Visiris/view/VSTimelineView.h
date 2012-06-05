@@ -27,8 +27,6 @@
 -(void) didReceiveKeyDownEvent:(NSEvent*) theEvent;
 @end
 
-
-
 /**
  * VSTimelineView is the view for VSTimeline
  */
