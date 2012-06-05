@@ -49,6 +49,8 @@
 
 -(NSRect) timelineObjectWillResize:(VSTimelineObjectView*) timelineObjectView fromFrame:(NSRect) oldFrame toFrame:(NSRect) newFrame;
 
+-(void) timelineObjectViewWasResized:(VSTimelineObjectView*) timelineObjectView;
+
 -(void) timelineObjectDidStopResizing:(VSTimelineObjectView*) timelineObjectView;
 
 @end

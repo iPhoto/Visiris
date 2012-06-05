@@ -142,6 +142,18 @@ static NSString* defaultNib = @"VSTimelineView";
 
 #pragma mark - Event Handling
 
+-(BOOL) acceptsFirstResponder{
+    return YES;
+}
+
+-(void) keyDown:(NSEvent *)theEvent{
+    if(theEvent){
+        unichar keyCode = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];
+        if (keyCode == NSDeleteCharacter || keyCode == NSBackspaceCharacter){
+            [self removeSelectedTimelineObjects];
+        }
+    }
+}
 
 #pragma mark - Private Methods
 
@@ -311,6 +323,8 @@ static NSString* defaultNib = @"VSTimelineView";
         
         [[self.view undoManager] endUndoGrouping];
     }
+    
+    [self.view.window makeFirstResponder:self.view];
 }
 
 -(VSTimelineObjectProxy*) trackViewController:(VSTrackViewController *)trackViewController createTimelineObjectProxyBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *)item atPosition:(NSPoint)position{
@@ -412,8 +426,7 @@ static NSString* defaultNib = @"VSTimelineView";
     if(theEvent){
         unichar keyCode = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];
         if (keyCode == NSDeleteCharacter || keyCode == NSBackspaceCharacter){
-            
-            
+            [self removeSelectedTimelineObjects];
         }
     }
 }

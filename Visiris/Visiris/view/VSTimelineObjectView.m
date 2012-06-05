@@ -15,36 +15,38 @@
 
 @interface VSTimelineObjectView ()
 
-/** indicates wheter it's allowed to be dragged around or not */
-@property BOOL dragged;
+/** If YES the view is moved on mouseDragged-Event */ 
+@property BOOL moving;
 
+/** If YES the view is resized on mouseDragged-Event */
 @property BOOL resizing;
 
+/** Indicates if the the left- or the rightResizingArea was clicked before teh resizing was started */
 @property NSInteger resizingDirection;
 
 /** stores the last mousePosition during a dragging-Operation */
 @property NSPoint lastMousePosition;
 
-@property NSRect oldFrame;
-
+/** Area at the left side of the VSTimelineObject which starts the resizing of the object when clicked */
 @property NSRect leftResizingArea;
 
+/** Area at the right side of the VSTimelineObject which starts the resizing of the object when clicked */
 @property NSRect rightResizingArea;
 
 @end
 
 @implementation VSTimelineObjectView
 
-static int trackingAreaWidth = 10;
+/** Widht of the two resizing areas */
+static int resizingAreaWidth = 10;
 
 @synthesize delegate = _delegate;
 @synthesize selected = _selected;
-@synthesize dragged = _dragged;
+@synthesize moving = _dragged;
 @synthesize temporary = _temporary;
 @synthesize intersectionRect = _intersectionRect;
 @synthesize intersected =_intersected;
 @synthesize lastMousePosition = _lastMousePosition;
-@synthesize oldFrame = _oldFrame;
 @synthesize leftResizingArea = _leftResizingArea;
 @synthesize rightResizingArea = _rightResizingArea;
 @synthesize resizing = _resizing;
@@ -62,6 +64,15 @@ static int trackingAreaWidth = 10;
     return self;
 }
 
+-(void) awakeFromNib{
+    [self  unregisterDraggedTypes];
+    
+    //Unregisters all Subviews from their draggTypes, thus they won't react on dragging
+    for(NSView *subView in [self subviews]){
+        [subView unregisterDraggedTypes];
+    }
+}
+
 
 /**
  * Inits the layer of the view
@@ -73,6 +84,9 @@ static int trackingAreaWidth = 10;
     self.layer.borderColor =  [[NSColor yellowColor] CGColor];
 }
 
+/**
+ * Sets the frames of the two resizing areas and registrates them as cursorRects
+ */
 -(void) setResizingAreas{
     [self updateResizingRects];
     
@@ -81,30 +95,20 @@ static int trackingAreaWidth = 10;
     
 }
 
+#pragma mark - NSView
+
 -(void) resetCursorRects{
     [super resetCursorRects];
-    
     [self setResizingAreas];
 }
 
--(void) updateResizingRects{
-    self.leftResizingArea= NSMakeRect(0, 0, trackingAreaWidth, self.frame.size.height);
-    self.rightResizingArea = NSMakeRect(self.frame.size.width - trackingAreaWidth, 
-                                        0, trackingAreaWidth, self.frame.size.height);
-}
-
-
--(void) awakeFromNib{
-    [self  unregisterDraggedTypes];
-    
-    //Unregisters all Subviews from their draggTypes, thus they won't react on dragging
-    for(NSView *subView in [self subviews]){
-        [subView unregisterDraggedTypes];
-    }
-}
-
-
 - (void)drawRect:(NSRect)dirtyRect{
+    
+    if(self.intersected){
+        [[NSColor greenColor] set];
+        NSRectFill(self.intersectionRect);
+        self.layer.opacity = 0.7;
+    }
     
     //draws a border around the view if it is selected
     if(self.selected){
@@ -115,22 +119,20 @@ static int trackingAreaWidth = 10;
         self.layer.borderWidth = 0.0;
     }
     
-
-    if(self.dragged || self.temporary){
+    if(self.moving || self.temporary || self.resizing){
         self.layer.opacity = 0.7;
         self.layer.borderWidth = 0.0;
     }
     else {
         self.layer.opacity = 1.0;
     }
-    
-    if(self.intersected){
-        [[NSColor greenColor] set];
-        NSRectFill(self.intersectionRect);
-        self.layer.opacity = 0.7;
-    }
 }
 
+#pragma mark - Event Handling
+
+-(BOOL) acceptsFirstResponder{
+    return YES;
+}
 
 
 #pragma mark - Mouse Events
@@ -151,7 +153,7 @@ static int trackingAreaWidth = 10;
     NSPoint newMousePosition =[theEvent locationInWindow];
     NSInteger mouseXDelta = newMousePosition.x- self.lastMousePosition.x;
     
-    if(!self.resizing && !self.dragged){
+    if(!self.resizing && !self.moving){
         if(NSPointInRect([self convertPoint:newMousePosition fromView:nil], self.leftResizingArea) || NSPointInRect([self convertPoint:newMousePosition fromView:nil], self.rightResizingArea)){
             
             if ([self delegateImplementsSelector:@selector(timelineObjectWillStartResizing:)]) {
@@ -167,51 +169,24 @@ static int trackingAreaWidth = 10;
             }
         }
         else if([self delegateImplementsSelector:@selector(timelineObjectViewWillStartDragging:)]){
-            self.dragged = [self.delegate timelineObjectViewWillStartDragging:self];
+            self.moving = [self.delegate timelineObjectViewWillStartDragging:self];
         }
         
     }
     
     if(self.resizing){
-        NSRect resizedFrame = self.frame;
-    
-        if (self.resizingDirection == RESIZING_FROM_LEFT) {
-            resizedFrame.size.width -= mouseXDelta;
-            resizedFrame.origin.x += mouseXDelta;
-        }
-        else if(self.resizingDirection == RESIZING_FROM_RIGHT){
-            resizedFrame.size.width += mouseXDelta;
-        }
-        
-        if([self delegateImplementsSelector:@selector(timelineObjectWillResize:fromFrame:toFrame:)]){
-            resizedFrame = [self.delegate timelineObjectWillResize:self fromFrame:self.frame toFrame:resizedFrame];
-        }
-        
-        [self setFrame:resizedFrame];
+        [self resize:mouseXDelta];
     }
-    else if(self.dragged){
-        
-        NSRect newFrame = self.frame;
-        
-        newFrame.origin.x += mouseXDelta;
-        
-        if([self delegateImplementsSelector:@selector(timelineObjectViewWillBeDragged:fromPosition:toPosition:)]){
-            newFrame.origin = [self.delegate timelineObjectViewWillBeDragged:self fromPosition:self.frame.origin toPosition:newFrame.origin];
-        }
-        
-        [self setFrame:newFrame];
-        
-        if([self delegateImplementsSelector:@selector(timelineObjectViewWasDragged:)]){
-            [self.delegate timelineObjectViewWasDragged:self];
-        }
+    else if(self.moving){
+        [self move:mouseXDelta];
     }
     
     self.lastMousePosition = newMousePosition;
 }
 
 -(void) mouseUp:(NSEvent *)theEvent{
-    if(self.dragged){
-        self.dragged = NO;
+    if(self.moving){
+        self.moving = NO;
         
         if([self delegateImplementsSelector:@selector(timelineObjectDidStopDragging:)]){
             [self.delegate timelineObjectDidStopDragging:self];
@@ -246,5 +221,54 @@ static int trackingAreaWidth = 10;
     
     return NO;
 }
+
+-(void) resize:(NSInteger) deltaSize{
+    NSRect resizedFrame = self.frame;
+    
+    if (self.resizingDirection == RESIZING_FROM_LEFT) {
+        resizedFrame.size.width -= deltaSize;
+        resizedFrame.origin.x += deltaSize;
+    }
+    else if(self.resizingDirection == RESIZING_FROM_RIGHT){
+        resizedFrame.size.width += deltaSize;
+    }
+    
+    if([self delegateImplementsSelector:@selector(timelineObjectWillResize:fromFrame:toFrame:)]){
+        resizedFrame = [self.delegate timelineObjectWillResize:self fromFrame:self.frame toFrame:resizedFrame];
+    }
+    
+    [self setFrame:resizedFrame];
+    
+    if([self delegateImplementsSelector:@selector(timelineObjectViewWasResized:)]){
+        [self.delegate timelineObjectViewWasResized:self];
+    }
+    [self setNeedsDisplay:YES];
+
+}
+
+-(void) move:(NSInteger) deltaX{
+    NSRect newFrame = self.frame;
+    
+    newFrame.origin.x += deltaX;
+    
+    if([self delegateImplementsSelector:@selector(timelineObjectViewWillBeDragged:fromPosition:toPosition:)]){
+        newFrame.origin = [self.delegate timelineObjectViewWillBeDragged:self fromPosition:self.frame.origin toPosition:newFrame.origin];
+    }
+    
+    [self setFrame:newFrame];
+    
+    if([self delegateImplementsSelector:@selector(timelineObjectViewWasDragged:)]){
+        [self.delegate timelineObjectViewWasDragged:self];
+    }
+    
+    [self setNeedsDisplay:YES];
+}
+
+-(void) updateResizingRects{
+    self.leftResizingArea= NSMakeRect(0, 0, resizingAreaWidth, self.frame.size.height);
+    self.rightResizingArea = NSMakeRect(self.frame.size.width - resizingAreaWidth, 
+                                        0, resizingAreaWidth, self.frame.size.height);
+}
+
 
 @end

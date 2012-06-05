@@ -378,9 +378,9 @@ static NSString* defaultNib = @"VSTrackView";
 
 
 
--(void) timelineObjectProxyWasDragged:(VSTimelineObjectViewController *)timelineObjectViewController{
+-(void) timelineObjectWasDragged:(VSTimelineObjectViewController *)timelineObjectViewController{
     
-    if(timelineObjectViewController.view){    
+    if(timelineObjectViewController.view){
         [self setTimelineObjectViewsIntersectedByDraggedTimelineObjectViews:[NSArray arrayWithObject:timelineObjectViewController]];
     }
 }
@@ -400,6 +400,10 @@ static NSString* defaultNib = @"VSTrackView";
     return newFrame;
 }
 
+-(void) timelineObjectProxyWasResized:(VSTimelineObjectViewController *)timelineObjectViewController{
+    [self setTimelineObjectViewsIntersectedByDraggedTimelineObjectViews:[NSArray arrayWithObject:timelineObjectViewController]];
+}
+
 -(void) timelineObjectDidStopResizing:(VSTimelineObjectViewController *)timelineObjectViewController{
     [self.view.undoManager beginUndoGrouping];
     
@@ -415,6 +419,8 @@ static NSString* defaultNib = @"VSTrackView";
     if(newDuration != timelineObjectViewController.timelineObjectProxy.duration){
         [timelineObjectViewController.timelineObjectProxy changeDuration:newDuration andRegisterAtUndoManager:self.view.undoManager];
     }
+    
+    [self applyIntersectionToTimelineObjects];
     
     [self.view.undoManager setActionName:NSLocalizedString(@"Resizing Object", @"Undo Action for resizine an object on the timeline")];
     [self.view.undoManager endUndoGrouping];

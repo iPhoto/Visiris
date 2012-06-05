@@ -100,7 +100,7 @@ static NSString* defaultNib = @"VSPropertiesView";
  * @param notification NSNotification storing the VSProjectItemRepresentations got unselected.
  */
 -(void) projectItemsRepresentationsGotUnselected:(NSNotification *) notification{
-    DDLogCInfo(@"projectItemsRepresentationsGotUnselected: %@  NOT IMPLEMENTED YET", notification);    
+    DDLogInfo(@"projectItemsRepresentationsGotUnselected: %@  NOT IMPLEMENTED YET", notification);    
 }
 
 /**

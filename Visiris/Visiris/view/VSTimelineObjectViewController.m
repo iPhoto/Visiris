@@ -109,7 +109,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 
 -(void) timelineObjectViewWasDragged:(VSTimelineObjectView *)timelineObjectView{
     if([self delegateRespondsToSelector:@selector(timelineObjectProxyWasDragged:)]){
-        [self.delegate timelineObjectProxyWasDragged:self];
+        [self.delegate timelineObjectWasDragged:self];
     }
 }
 
@@ -146,6 +146,12 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 -(void) timelineObjectDidStopResizing:(VSTimelineObjectView *)timelineObjectView{
     if([self delegateRespondsToSelector:@selector(timelineObjectDidStopResizing:)]){
         [self.delegate timelineObjectDidStopResizing:self];
+    }
+}
+
+-(void) timelineObjectViewWasResized:(VSTimelineObjectView *)timelineObjectView{
+    if([self delegateRespondsToSelector:@selector(timelineObjectProxyWasResized:)]){
+        [self.delegate timelineObjectProxyWasResized:self];
     }
 }
 

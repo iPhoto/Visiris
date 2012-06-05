@@ -47,6 +47,10 @@
 
 #pragma mark - Event Handling
 
+-(BOOL) acceptsFirstResponder{
+    return YES;
+    
+}
 
 
 #pragma mark - MouseEvents
