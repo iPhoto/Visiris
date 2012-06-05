@@ -17,6 +17,8 @@
 
 @property BOOL resizing;
 
+@property BOOL resizingFromLeft;
+
 /** stores the last mousePosition during a dragging-Operation */
 @property NSPoint lastMousePosition;
 
@@ -43,6 +45,7 @@ static int trackingAreaWidth = 10;
 @synthesize leftResizingArea = _leftResizingArea;
 @synthesize rightResizingArea = _rightResizingArea;
 @synthesize resizing = _resizing;
+@synthesize resizingFromLeft = _resizingFromLeft;
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -157,9 +160,12 @@ static int trackingAreaWidth = 10;
     }
     
     if(self.resizing){
-        if([self delegateImplementsSelector:@selector(timelineObjectIsResizing:fromFrame:toFrame:)]){
-            [self.delegate timelineObjectIsResizing:self fromFrame:self.oldFrame toFrame:self.frame];
-            self.oldFrame = self.frame;
+        NSRect resizedFrame = self.frame;
+        
+//        if(self.resizingFromLeft
+        
+        if([self delegateImplementsSelector:@selector(timelineObjectWillResize:oldFrame:)]){
+            
         }
     }
     else if(self.dragged){

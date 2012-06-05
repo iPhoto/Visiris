@@ -45,7 +45,7 @@
 
 -(void) timelineObjectWillStartResizing:(VSTimelineObjectView*) timelineObjectView;
 
--(void) timelineObjectIsResizing:(VSTimelineObjectView*) timelineObjectView fromFrame:(NSRect) oldFrame toFrame:(NSRect) newFrame;
+-(NSRect) timelineObjectWillResize:(VSTimelineObjectView*) timelineObjectView oldFrame:(NSRect*) oldFrame;
 
 -(void) timelineObjectStopsResizing:(VSTimelineObjectView*) timelineObjectView onTheLeftSide:(BOOL) resizingLeft;
 
