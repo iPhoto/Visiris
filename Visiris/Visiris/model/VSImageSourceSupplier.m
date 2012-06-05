@@ -17,6 +17,8 @@
 -(NSImage *) getFrameForTimestamp:(double)aTimestamp{
     
     if (self.image == nil) {
+        
+//        CGImageSourceCreateWithURL((__bridge CFURLRef)[NSURL URLWithString:self.timelineObject.sourceObject.projectItem.filePath], NULL)ö
         self.image = [[NSImage alloc] initWithContentsOfFile:self.timelineObject.sourceObject.projectItem.filePath];
     }
     

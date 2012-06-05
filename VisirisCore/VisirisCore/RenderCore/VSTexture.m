@@ -8,10 +8,11 @@
 
 #import "VSTexture.h"
 #import <OpenGL/glu.h>
+#import "VSImageContext.h"
 
 @implementation VSTexture
 @synthesize texture = _texture;
-
+/*
 //Fixme: die beiden inits machen fast das selbe
 -(id)initWithNSImage:(NSImage *)theImage{
     if (self = [super init]) {
@@ -53,6 +54,7 @@
     }
     return self;
 }
+ */
 
 -(id)initWithName:(NSString *)name{
     if(self = [super init]){
@@ -90,6 +92,124 @@
         free(imageData);
     }
     return  self;
+}
+
+- (id)initWithNSImage:(NSImage *) inimage WithSize: (NSSize)size
+{
+    if(self = [super init]){
+
+	size.width = floorf( size.width );
+	size.height = floorf( size.height );
+	
+	//GLuint tex;
+	
+	NSBitmapImageRep *imageRep = [[NSBitmapImageRep alloc] 
+                                  initWithBitmapDataPlanes: NULL
+                                  pixelsWide: size.width
+                                  pixelsHigh: size.height
+                                  bitsPerSample: 8
+                                  samplesPerPixel: 4
+                                  hasAlpha: YES
+                                  isPlanar: NO
+                                  colorSpaceName: NSDeviceRGBColorSpace
+                                  bitmapFormat: 0
+                                  bytesPerRow: 0
+                                  bitsPerPixel: 32];
+	bzero( [imageRep bitmapData], size.height * [imageRep bytesPerRow] );
+	
+	NSGraphicsContext *ctx = [NSGraphicsContext graphicsContextWithBitmapImageRep: imageRep];
+	NSGraphicsContext *old = [NSGraphicsContext currentContext];
+	[NSGraphicsContext setCurrentContext: ctx];
+	
+	NSRect fromRect = { NSZeroPoint, [inimage size] };
+	NSRect toRect = { NSZeroPoint, size };
+	[inimage drawInRect: toRect fromRect: fromRect operation: NSCompositeSourceOver fraction: 1.0];
+	
+	[NSGraphicsContext setCurrentContext: old];
+	
+	// create the texture
+	glGenTextures(1, &_texture);
+	
+	glBindTexture( GL_TEXTURE_RECTANGLE_EXT, self.texture);
+//	CheckGLError( "glBindTexture" );
+	glTexParameteri( GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_S, GL_CLAMP );
+	glTexParameteri( GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_WRAP_T, GL_CLAMP );
+	glTexParameteri( GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	glTexParameteri( GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+//	CheckGLError( "glTexParameteri" );
+	glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+	glPixelStorei( GL_UNPACK_ROW_LENGTH, [imageRep bytesPerRow] / 4 );
+//	CheckGLError( "glPixelStorei" );
+	glTexImage2D( GL_TEXTURE_RECTANGLE_EXT, 
+                 0, 
+                 GL_RGBA, 
+                 size.width, 
+                 size.height, 
+                 0, 
+                 GL_RGBA, 
+                 GL_UNSIGNED_BYTE, 
+                 [imageRep bitmapData] );
+    
+//	CheckGLError("glTexImage2D");
+	
+	//[imageRep release];
+	
+//	return tex;
+    }
+    return  self;
+}
+
+//ANDI STUFF
+-(id)initWithNSImage:(NSImage *)theImage{
+    if (self = [super init]) {
+                
+        
+        int samplesPerPixel = 0;
+        NSSize imgSize = [theImage size];
+        
+        [theImage lockFocus];
+        NSBitmapImageRep* bitmap = [[NSBitmapImageRep alloc] initWithFocusedViewRect:NSMakeRect(0.0, 0.0, imgSize.width, imgSize.height)];
+        [theImage unlockFocus];
+                
+        
+        // Generate a new texture name if one was not provided.
+        if (self.texture == 0)
+        {
+              glGenTextures (1, &_texture);
+        }
+          
+        glBindTexture (GL_TEXTURE_2D, self.texture);
+        
+        // Set proper unpacking row length for bitmap.
+        glPixelStorei(GL_UNPACK_ROW_LENGTH, [bitmap pixelsWide]);
+        
+        // Set byte aligned unpacking (needed for 3 byte per pixel bitmaps).
+        glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
+        
+        // Non-mipmap filtering (redundant for texture_rectangle).
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        samplesPerPixel = [bitmap samplesPerPixel];
+        
+        // Nonplanar, RGB 24 bit bitmap, or RGBA 32 bit bitmap.
+        if(![bitmap isPlanar] && (samplesPerPixel == 3 || samplesPerPixel == 4)) {
+            
+            glTexImage2D(GL_TEXTURE_2D, 0,
+                         samplesPerPixel == 4 ? GL_RGBA8 : GL_RGB8,
+                         [bitmap pixelsWide],
+                         [bitmap pixelsHigh],
+                         0,
+                         samplesPerPixel == 4 ? GL_RGBA : GL_RGB,
+                         GL_UNSIGNED_INT_8_8_8_8_REV,
+                         [bitmap bitmapData]);
+
+        } else {
+            // Handle other bitmap formats.
+        }
+    }
+    return self;
 }
 
 -(void)bind{
