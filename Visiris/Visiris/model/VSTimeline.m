@@ -97,6 +97,12 @@
     return [track removTimelineObject:aTimelineObject];
 }
 
+-(void) removeSelectedTimelineObjectsAndRegisterAtUndoManager:(NSUndoManager *)undoManager{
+    for(VSTrack* track in self.tracks){
+        [track removeSelectedTimelineObjectsAndRegisterAtUndoManager:undoManager];
+    }
+}
+
 -(void) selectTimelineObject:(VSTimelineObject *)timelineObjectToSelect onTrack:(VSTrack *)aTrack{
     if([self.tracks containsObject:aTrack]){
         [aTrack selectTimelineObject:timelineObjectToSelect];

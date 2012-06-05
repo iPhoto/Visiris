@@ -66,6 +66,14 @@
     return result;
 }
 
+-(void) removeSelectedTimelineObjectsAndRegisterAtUndoManager:(NSUndoManager *)undoManager{
+    NSArray *selectedTimelineObjects = [self selectedTimelineObjects];
+    
+    for(VSTimelineObject *timelineObject in selectedTimelineObjects){
+        [self removTimelineObject:timelineObject andRegisterAtUndoManager:undoManager];
+    }
+}
+
 -(BOOL) addTimelineObject:(VSTimelineObject *)timelineObject andRegisterAtUndoManager:(NSUndoManager *)undoManager{
     BOOL result = [self addTimelineObject:timelineObject];
     

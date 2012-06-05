@@ -50,7 +50,14 @@
         [subView unregisterDraggedTypes];
     }
 }
+-(BOOL) acceptsFirstResponder{
+    return NO;
+    
+}
 
+-(BOOL) becomeFirstResponder{
+    return NO;
+}
 - (void)drawRect:(NSRect)dirtyRect{
     
     //draws a border around the view if it is selected

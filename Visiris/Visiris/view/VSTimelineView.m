@@ -1,4 +1,4 @@
-//
+ //
 //  VSTimelinView.m
 //  Visiris
 //
@@ -7,6 +7,8 @@
 //
 
 #import "VSTimelineView.h"
+
+#import "VSCoreServices.h"
 
 @implementation VSTimelineView
 
@@ -28,6 +30,23 @@
     NSRectFill(dirtyRect);
 }
 
+-(void) awakeFromNib{
+
+}
+
+-(void) keyDown:(NSEvent *)theEvent{
+    DDLogInfo(@"Key Down to %@",[self nextResponder] );
+    [[self nextResponder] keyDown:theEvent];
+    
+    
+    
+    if([self delegateRespondsToSelector:@selector(didReceiveKeyDownEvent:)]){
+        [self.delegate didReceiveKeyDownEvent:theEvent];
+    }
+}
+
+#pragma mark- VSTrackViewDelegate implementation
+
 -(void) setFrame:(NSRect)frameRect{
     NSRect oldFrame = self.frame;
     [super setFrame:frameRect];
@@ -45,4 +64,23 @@
     }
 }
     
+#pragma mark - Private Methods
+       
+       /**
+        * Checks if the delegate is able to respond to the given Selector
+        * @param selector Selector the delegate will be checked for if it is able respond to
+        * @return YES if the delegate is able to respond to the selector, NO otherweis
+        */
+       -(BOOL) delegateRespondsToSelector:(SEL) selector{
+           if(self.delegate){
+               if([self.delegate conformsToProtocol:@protocol(VSTimelineViewDelegate) ]){
+                   if([self.delegate respondsToSelector: selector]){
+                       return YES;
+                   }
+               }
+           }
+           
+           return NO;
+       }
+
     @end

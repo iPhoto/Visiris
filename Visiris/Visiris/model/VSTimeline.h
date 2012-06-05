@@ -77,6 +77,14 @@
 -(BOOL) removeTimelineObject:(VSTimelineObject*) aTimelineObject fromTrack:(VSTrack*) track;
 
 /**
+ * Removes all currently selected VSTimelineObjects from the Timeline and registers the operation at the given NSUndoManager
+ @param undoManager NSUndoManager the removal is registrated at.
+ */
+-(void) removeSelectedTimelineObjectsAndRegisterAtUndoManager:(NSUndoManager*) undoManager;
+
+
+
+/**
  * Creates a new TimelineObjectProxy.
  *
  * A new TimelineObjectProxy object is created according to the given VSProjectItemRepresentation object and returned

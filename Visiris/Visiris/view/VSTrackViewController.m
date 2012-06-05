@@ -153,9 +153,6 @@ static NSString* defaultNib = @"VSTrackView";
 
 
 
-#pragma mark- VSTrackViewDelegate implementation
-
-
 -(BOOL) trackView:(VSTrackView *)trackView objectsHaveBeenDropped:(id<NSDraggingInfo>)draggingInfo atPosition:(NSPoint)position{
     
     BOOL result = NO;

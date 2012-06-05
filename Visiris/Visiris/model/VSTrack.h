@@ -57,6 +57,13 @@
 -(BOOL) removTimelineObject:(VSTimelineObject*) aTimelineObject;
 
 /**
+ * Removes all selected TimelineObecjts from the track and registers the operation at the given undoManager
+ * @param undoManager NSUndoManger the removal of the timelineObject is registrated
+ */
+-(void) removeSelectedTimelineObjectsAndRegisterAtUndoManager:(NSUndoManager*) undoManager;
+
+
+/**
  * Removes the timeline object from the track and registers the operation at the given undoManager
  * @param aTimelineObject VSTimelineObject that will be removed form the track.
  * @param undoManager NSUndoManger the removal of the timelineObject is registrated

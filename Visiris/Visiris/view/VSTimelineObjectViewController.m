@@ -88,6 +88,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     }
 }
 
+
 #pragma mark - VSTimelineObjectViewDelegate implementation
 
 -(void) timelineObjectViewWasClicked:(VSTimelineObjectView *)timelineObjectView{
