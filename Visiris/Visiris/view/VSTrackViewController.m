@@ -377,25 +377,47 @@ static NSString* defaultNib = @"VSTrackView";
 
 
 
--(void) timelineObjectIsDragged:(VSTimelineObjectViewController *)timelineObjectViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition{
+
+-(void) timelineObjectProxyWasDragged:(VSTimelineObjectViewController *)timelineObjectViewController{
     
     if(timelineObjectViewController.view){    
-        NSRect newFrame = timelineObjectViewController.view.frame;
-        
-        //calculating new xPosition and sets it
-        newFrame.origin.x += newPosition.x - oldPosition.x;
-        [timelineObjectViewController.view setFrame:newFrame];
-        [timelineObjectViewController.view setNeedsDisplay:YES];
-        
-        //checks if any other VSTimelineObjectView on the track is interesected by the dragged view and sets them as interesected if it is so
         [self setTimelineObjectViewsIntersectedByDraggedTimelineObjectViews:[NSArray arrayWithObject:timelineObjectViewController]];
     }
 }
+
 
 -(BOOL) timelineObjectWillStartDragging:(VSTimelineObjectViewController *)timelineObjectViewController{
     //brings the dragged view to front
     [timelineObjectViewController.view.layer setZPosition:10];
     return YES;
+}
+
+-(BOOL) timelineObjectWillStartResizing:(VSTimelineObjectViewController *)timelineObjectViewController{
+    return YES;
+}
+
+-(NSRect) timelineObjectWillResize:(VSTimelineObjectViewController *)timelineObjectViewController fromFrame:(NSRect)oldFrame toFrame:(NSRect)newFrame{
+    return newFrame;
+}
+
+-(void) timelineObjectDidStopResizing:(VSTimelineObjectViewController *)timelineObjectViewController{
+    [self.view.undoManager beginUndoGrouping];
+    
+    
+    double newStartTime = [self timeValueForPixelValue:timelineObjectViewController.view.frame.origin.x];
+    double newDuration = [self timeValueForPixelValue:timelineObjectViewController.view.frame.size.width];
+    
+        //if the view has been moved, the start time of VSTimelineObjectProxy is updated
+    if(newStartTime != timelineObjectViewController.timelineObjectProxy.startTime){
+        [timelineObjectViewController.timelineObjectProxy changeStartTime:newStartTime andRegisterAtUndoManager:self.view.undoManager];
+    }
+    
+    if(newDuration != timelineObjectViewController.timelineObjectProxy.duration){
+        [timelineObjectViewController.timelineObjectProxy changeDuration:newDuration andRegisterAtUndoManager:self.view.undoManager];
+    }
+    
+    [self.view.undoManager setActionName:NSLocalizedString(@"Resizing Object", @"Undo Action for resizine an object on the timeline")];
+    [self.view.undoManager endUndoGrouping];
 }
 
 #pragma mark- Private Methods

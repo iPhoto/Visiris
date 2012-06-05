@@ -47,15 +47,7 @@
 
 #pragma mark - Event Handling
 
--(BOOL) acceptsFirstResponder{
-    return YES;
-    
-}
 
--(void) keyDown:(NSEvent *)theEvent{
-    //sends the keyDown Event to the nextResponder
-    [[self nextResponder] keyDown:theEvent];
-}
 
 #pragma mark - MouseEvents
 
