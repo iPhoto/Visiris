@@ -45,12 +45,34 @@
  */
 -(void) timelineObjectDidStopDragging:(VSTimelineObjectView*) timelineObjectView;
 
+/**
+ * Called when the VSTimelineObjectView wants to start a resizing-operation. Depending on the returned BOOL value the VSTimelineObjectView is allowed to do so or not.
+ * @param timelineObjectView VSTimelineObjectView that wants to start the resizing-operation
+ * @return If YES the VSTimelineObjectView is allowed to resize, otherwise not.
+ */
 -(BOOL) timelineObjectWillStartResizing:(VSTimelineObjectView*) timelineObjectView;
 
+
+/**
+ * Called before a VSTimelineObjectView is resized.
+ * @param timelineObjectView VSTimelineObjectView that will be resized.
+ * @param fromFrame Current frame of the VSTimelineObjectView
+ * @param toFrame Frame the VSTimelineObjectView wants to be resized to.
+ * @return NSRecte the VSTimelineObjectView's frame will be set to
+ */
 -(NSRect) timelineObjectWillResize:(VSTimelineObjectView*) timelineObjectView fromFrame:(NSRect) oldFrame toFrame:(NSRect) newFrame;
 
+
+/**
+ * Called after a VSTimelineObjectView was resized
+ * @param timelineObjectView VSTimelineObjectView that was resized
+ */
 -(void) timelineObjectViewWasResized:(VSTimelineObjectView*) timelineObjectView;
 
+/**
+ * Called when the VSTimelineObjectView finished it's resize-operation
+ * @param timelineObjectView VSTimelineObjectView that finished it's resize-operation
+ */
 -(void) timelineObjectDidStopResizing:(VSTimelineObjectView*) timelineObjectView;
 
 @end

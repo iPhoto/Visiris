@@ -125,6 +125,8 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     if([self delegateRespondsToSelector:@selector(timelineObjectDidStopDragging:)]){
         [self.delegate timelineObjectDidStopDragging:self];
     }
+    [self setViewsFrameAccordingToTimelineObject];
+    [self.view setNeedsDisplay:YES];
 }
 
 -(BOOL) timelineObjectWillStartResizing:(VSTimelineObjectView *)timelineObjectView{

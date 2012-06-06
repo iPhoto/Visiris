@@ -371,7 +371,6 @@
 		5B35BF061577A49C009911EC = {
 			isa = PBXGroup;
 			children = (
-				5BADEA73157EC25A0003366A /* VisirisCore.framework */,
 				5B35C0201577A58D009911EC /* External */,
 				5B35C0471577A58D009911EC /* Resources */,
 				5B35BF1B1577A49C009911EC /* Visiris */,
@@ -391,6 +390,7 @@
 		5B35BF141577A49C009911EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5BADEA73157EC25A0003366A /* VisirisCore.framework */,
 				5B35BF181577A49C009911EC /* AppKit.framework */,
 				5B35BF191577A49C009911EC /* CoreData.framework */,
 				5B35BF1A1577A49C009911EC /* Foundation.framework */,

@@ -47,6 +47,10 @@
 */
 -(NSPoint) timelineObjectWillBeDragged:(VSTimelineObjectViewController *)timelineObjectViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition;
 
+/**
+ * Called when the view of the VSTimelineObjectViewController has stopped it's dragging operation
+ * @timelineObjectViewController VSTimelineObjectViewController of the view which has stopped it's dragging operation
+ */
 -(void) timelineObjectWasDragged:(VSTimelineObjectViewController*) timelineObjectViewController;
 
 /**

@@ -40,17 +40,17 @@
 // Widht of the two resizing areas 
 static int resizingAreaWidth = 10;
 
-@synthesize delegate = _delegate;
-@synthesize selected = _selected;
-@synthesize moving = _dragged;
-@synthesize temporary = _temporary;
-@synthesize intersectionRect = _intersectionRect;
-@synthesize intersected =_intersected;
-@synthesize lastMousePosition = _lastMousePosition;
-@synthesize leftResizingArea = _leftResizingArea;
-@synthesize rightResizingArea = _rightResizingArea;
-@synthesize resizing = _resizing;
-@synthesize resizingDirection = _resizingDirection;
+@synthesize delegate            = _delegate;
+@synthesize selected            = _selected;
+@synthesize moving              = _dragged;
+@synthesize temporary           = _temporary;
+@synthesize intersectionRect    = _intersectionRect;
+@synthesize intersected         =_intersected;
+@synthesize lastMousePosition   = _lastMousePosition;
+@synthesize leftResizingArea    = _leftResizingArea;
+@synthesize rightResizingArea   = _rightResizingArea;
+@synthesize resizing            = _resizing;
+@synthesize resizingDirection   = _resizingDirection;
 
 - (id)initWithFrame:(NSRect)frame
 {
