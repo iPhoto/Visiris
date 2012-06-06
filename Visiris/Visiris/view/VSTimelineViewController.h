@@ -10,6 +10,7 @@
 
 #import "VSTrackViewController.h"
 #import "VStimelineView.h"
+#import "VSPlayheadViewController.h"
 
 @class VSTimeline;
 @class VSTimelineRulerView;

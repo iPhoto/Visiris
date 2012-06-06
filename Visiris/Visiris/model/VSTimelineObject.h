@@ -27,7 +27,7 @@
 @property (strong) VSSourceSupplier *supplier;
 
 /** ID of the texture stored in VSCore */
-@property NSInteger textureID;
+@property GLuint textureID;
 
 /**
  * Inits a the object with the given sourceObject

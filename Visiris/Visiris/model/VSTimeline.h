@@ -13,6 +13,7 @@
 @class VSProjectItemRepresentation;
 @class VSTimelineObjectFactory;
 @class VSTimelineObjectProxy;
+@class VSPlayHead;
 
 /**
  * Protocoll to inform about changes of the VSTimelineObjects of VSTrack's the VSTimeline is responsible for
@@ -55,6 +56,9 @@
 
 /** Delegate that is informed as definied in the VSTimelineTimelineObjectsDelegate protocoll */
 @property id<VSTimelineTimelineObjectsDelegate> timelineObjectsDelegate;
+
+/** PlayHead of the timeline. */
+@property (strong) VSPlayHead *playHead;
 
 #pragma mark - Init
 

@@ -14,7 +14,7 @@
 #import "VSTimelineObjectProxy.h"
 #import "VSTimelineRulerView.h"
 #import "VSTimelineObject.h"
-#import "VSPlayheadView.h"
+#import "VSPlayheadViewController.h"
 
 #import "VSCoreServices.h"
 
@@ -22,7 +22,7 @@
 
 @property (strong) NSMutableArray *trackViewControllers;
 
-@property (strong) VSPlayHeadView *playheadView;
+@property (strong) VSPlayheadViewController *playheadViewController;
 
 @end
 
@@ -35,7 +35,7 @@
 @synthesize trackViewControllers        = _trackViewControllers;
 @synthesize timeline                    = _timeline;
 @synthesize pixelTimeRatio              = _pixelTimeRatio;
-@synthesize playheadView                = _playheadView;
+@synthesize playheadViewController      = _playheadViewController;
 
 
 // Name of the nib that will be loaded when initWithDefaultNib is called 
@@ -91,11 +91,12 @@ static NSString* defaultNib = @"VSTimelineView";
 }
 
 -(void) initPlayhead{
-    self.playheadView = [[VSPlayHeadView alloc] initWithFrame:NSMakeRect(0, 0, 50, 80)];
-    [self.view addSubview:self.playheadView positioned:NSWindowAbove relativeTo:self.scvTrackHolder];
-    [self.playheadView setWantsLayer:YES];
-    [self.playheadView.layer setZPosition:10];
-    self.playheadView.knobHeight = 80;
+    
+    self.playheadViewController = [[VSPlayheadViewController alloc] initWithPlayHead:self.timeline.playHead forFrame:NSMakeRect(0, self.view.frame.size.height-200, 20, 200)];
+    self.playheadViewController.knobHeight = 50;
+    [self.view addSubview:self.playheadViewController.view positioned:NSWindowAbove relativeTo:self.scvTrackHolder];
+    [self.playheadViewController.view setWantsLayer:YES];
+    [self.playheadViewController.view.layer setZPosition:10];
 }
 
 /**
@@ -183,8 +184,8 @@ static NSString* defaultNib = @"VSTimelineView";
         int i = 0;
         
         [[self.view undoManager] setActionName:projectItemRepresentations.count > 1 ? 
-            NSLocalizedString(@"Adding Objects", @"Undo Action for adding objects to the timeline") : 
-            NSLocalizedString(@"Adding Object", @"Undo Action for adding one object to the timeline")
+         NSLocalizedString(@"Adding Objects", @"Undo Action for adding objects to the timeline") : 
+         NSLocalizedString(@"Adding Object", @"Undo Action for adding one object to the timeline")
          ];
         
         [[self.view undoManager] beginUndoGrouping];
@@ -203,20 +204,20 @@ static NSString* defaultNib = @"VSTimelineView";
             //Sets the first object as the selected one wich's properites are shown
             if(i==0){
                 objectToBeSelected = [self.timeline 
-                                        addNewTimelineObjectBasedOnProjectItemRepresentation:projectItem 
-                                        toTrack:trackViewController.track 
-                                        positionedAtTime:timePosition 
-                                        withDuration:duration 
-                                        andRegisterUndoOperation:[self.view undoManager]
+                                      addNewTimelineObjectBasedOnProjectItemRepresentation:projectItem 
+                                      toTrack:trackViewController.track 
+                                      positionedAtTime:timePosition 
+                                      withDuration:duration 
+                                      andRegisterUndoOperation:[self.view undoManager]
                                       ];
             }
             else {
                 [self.timeline 
-                    addNewTimelineObjectBasedOnProjectItemRepresentation:projectItem 
-                    toTrack:trackViewController.track 
-                    positionedAtTime:timePosition 
-                    withDuration:duration 
-                    andRegisterUndoOperation:[self.view undoManager]
+                 addNewTimelineObjectBasedOnProjectItemRepresentation:projectItem 
+                 toTrack:trackViewController.track 
+                 positionedAtTime:timePosition 
+                 withDuration:duration 
+                 andRegisterUndoOperation:[self.view undoManager]
                  ];
             }
             i++;
@@ -315,14 +316,19 @@ static NSString* defaultNib = @"VSTimelineView";
 
 #pragma mark- VSTimelineViewDelegate implementation
 
--(void) viewDidResizeFromWidth:(NSInteger)fromWidth toWidth:(NSInteger)toWidth{
-    NSRect newFrame = self.tracksHolderdocumentView.frame;
+-(void) viewDidResizeFromFrame:(NSRect)oldFrame toFrame:(NSRect)newFrame{
     
-    //updates the width according to how the width of the view has been resized
-    newFrame.size.width += toWidth - fromWidth;
-    [self.tracksHolderdocumentView setFrame:newFrame];
+    [self updatePlayheadFrame];
     
-    [self updatePixelTimeRatio];
+    if(oldFrame.size.width != newFrame.size.width){
+        
+        NSRect newDocumentFrame = self.tracksHolderdocumentView.frame;
+        
+        //updates the width according to how the width of the view has been resized
+        newDocumentFrame.size.width += newFrame.size.width - oldFrame.size.width;
+        [self.tracksHolderdocumentView setFrame:newDocumentFrame];
+        [self updatePixelTimeRatio];
+    }
 }
 
 -(void) didReceiveKeyDownEvent:(NSEvent *)theEvent{
@@ -333,8 +339,6 @@ static NSString* defaultNib = @"VSTimelineView";
         }
     }
 }
-
-
 
 #pragma mark - Private Methods
 
@@ -452,6 +456,18 @@ static NSString* defaultNib = @"VSTimelineView";
     [self.view.undoManager endUndoGrouping];
 }
 
+#pragma mark - Playhead
 
+-(void) updatePlayheadFrame{
+    NSRect newFrame = self.playheadViewController.view.frame;
+    
+    newFrame.size.height = self.view.frame.size.height + self.scvTrackHolder.horizontalRulerView.frame.size.height;
+    newFrame.origin.y = 0;
+    
+    DDLogInfo(@"newFRam: %@",NSStringFromRect(newFrame));
+    
+    [self.playheadViewController.view setFrame:newFrame];
+    [self.playheadViewController.view setNeedsDisplay:YES];
+}
 
 @end
