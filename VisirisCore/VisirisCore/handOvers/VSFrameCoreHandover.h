@@ -14,7 +14,7 @@
 
 @property (strong) NSImage* frame;
 
-@property NSInteger textureID;
+@property GLuint textureID;
  
 /**
  * Inits the VSCoreHandover for the given timestmap with the given attributes
@@ -23,6 +23,6 @@
  * @param theTimestamp The timestamp the data is set of
  * @return self
  */
--(id) initWithFrame:(NSImage*) inFrame andAttributes:(NSDictionary *) theAttributes forTextureID:(NSInteger) aTextureID forTimestamp:(double)theTimestamp;
+-(id) initWithFrame:(NSImage*) inFrame andAttributes:(NSDictionary *) theAttributes forTextureID:(GLuint) aTextureID forTimestamp:(double)theTimestamp;
 
 @end

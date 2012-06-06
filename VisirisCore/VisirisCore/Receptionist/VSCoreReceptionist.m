@@ -31,11 +31,11 @@
     }
 }
 
--(NSInteger) createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode{
+-(GLuint) createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode{
     return -1;
 }
 
--(void) removeTextureForID:(NSInteger)anID{
+-(void) removeTextureForID:(GLuint)anID{
     
 }
 

@@ -43,9 +43,9 @@
 - (void)renderFrameAtTimestamp:(double)aTimestamp withHandovers:(NSArray *)theHandovers forSize:(NSSize)theFrameSize;
 
 
--(NSInteger) createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode;
+-(GLuint) createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode;
 
--(void) removeTextureForID:(NSInteger) anID;
+-(void) removeTextureForID:(GLuint) anID;
 
 - (NSOpenGLContext *) openGLContext;
 
