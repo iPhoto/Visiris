@@ -10,4 +10,6 @@
 
 @implementation VSPlayHead
 
+@synthesize currentTimePosition = _currentTimePosition;
+
 @end

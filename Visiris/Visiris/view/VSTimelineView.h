@@ -15,10 +15,8 @@
 
 /**
  * Method is called when VSTimelineView was resized.
- * @param fromWidth Widht of the VSTimelineView's frame before it was resized.
- * @param toWidth New widht of the VSTimelineView's frame.
  */
--(void) viewDidResizeFromWidth:(NSInteger) fromWidth toWidth:(NSInteger) toWidth;
+-(void) viewDidResizeFromFrame:(NSRect) oldFrame toFrame:(NSRect) newFrame;
 
 /**
  * Called when VSTimelineView received an keyDown-Event

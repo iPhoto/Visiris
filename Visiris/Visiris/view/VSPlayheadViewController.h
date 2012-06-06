@@ -7,7 +7,16 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "VSPlayHeadView.h"
 
-@interface VSPlayheadViewController : NSViewController
+@class VSPlayHead;
+
+@interface VSPlayheadViewController : NSViewController<VSPlayHeadViewDelegate>
+
+@property VSPlayHead *playHead;
+
+@property NSInteger knobHeight;
+
+-(id) initWithPlayHead:(VSPlayHead*) playHead forFrame:(NSRect) frame;
 
 @end

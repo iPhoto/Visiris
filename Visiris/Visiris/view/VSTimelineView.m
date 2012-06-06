@@ -53,11 +53,11 @@
     [super setFrame:frameRect];
     
     //If the width of the frame has changed, the delegate's viewDidResizeFromWidth is called
-    if(oldFrame.size.width != self.frame.size.width){
+    if(!NSEqualRects(oldFrame, self.frame)){
         if(delegate){
             if([delegate conformsToProtocol:@protocol(VSTimelineViewDelegate) ]){
-                if([delegate respondsToSelector:@selector(viewDidResizeFromWidth:toWidth:)]){
-                    [delegate viewDidResizeFromWidth:oldFrame.size.width toWidth:self.frame.size.width];
+                if([delegate respondsToSelector:@selector(viewDidResizeFromFrame:toFrame:)]){
+                    [delegate viewDidResizeFromFrame:oldFrame toFrame:self.frame];
                 }
             }
         }

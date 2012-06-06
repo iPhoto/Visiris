@@ -10,4 +10,6 @@
 
 @interface VSPlayHead : NSObject
 
+@property double currentTimePosition;
+
 @end

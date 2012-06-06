@@ -15,6 +15,7 @@
 #import "VSProjectItemRepresentation.h"
 #import "VSTimelineObject.h"
 #import "VSTimelineObjectProxy.h"
+#import "VSPlayHead.h"
 
 #import "VSCoreServices.h"
 
@@ -45,6 +46,7 @@
 @synthesize projectItemController   = _projectItemController;
 @synthesize duration                = _duration;
 @synthesize timelineObjectsDelegate = _timelineObjectsDelegate;
+@synthesize playHead                = _playHead;
 
 #pragma mark- Init
 
@@ -61,9 +63,17 @@
         self.timelineObjectFactory = [VSTimelineObjectFactory sharedFactory];
         self.projectItemController = [VSProjectItemController sharedManager];
         self.tracks = [[NSMutableArray alloc] init];
+        
+        [self initPlayHead];
     }
     
     return self;
+}
+
+/**
+ * Inits the VSPlayHead-property*/
+-(void) initPlayHead{
+    self.playHead = [[VSPlayHead alloc] init];
 }
 
 
