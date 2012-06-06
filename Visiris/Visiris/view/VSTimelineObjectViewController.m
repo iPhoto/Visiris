@@ -108,7 +108,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 }
 
 -(void) timelineObjectViewWasDragged:(VSTimelineObjectView *)timelineObjectView{
-    if([self delegateRespondsToSelector:@selector(timelineObjectProxyWasDragged:)]){
+    if([self delegateRespondsToSelector:@selector(timelineObjectWasDragged:)]){
         [self.delegate timelineObjectWasDragged:self];
     }
 }

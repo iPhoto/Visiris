@@ -37,7 +37,7 @@
 
 @implementation VSTimelineObjectView
 
-/** Widht of the two resizing areas */
+// Widht of the two resizing areas 
 static int resizingAreaWidth = 10;
 
 @synthesize delegate = _delegate;
@@ -155,7 +155,7 @@ static int resizingAreaWidth = 10;
     
     //sets if the view is moved or resized while dragged
     if(!self.resizing && !self.moving){
-        //if the mouse is over on of the resizingAreas
+        //if the mouse is over on of the resizingAreas the view can be resized
         if(NSPointInRect([self convertPoint:newMousePosition fromView:nil], self.leftResizingArea) || NSPointInRect([self convertPoint:newMousePosition fromView:nil], self.rightResizingArea)){
             
             if ([self delegateImplementsSelector:@selector(timelineObjectWillStartResizing:)]) {
@@ -187,6 +187,7 @@ static int resizingAreaWidth = 10;
 }
 
 -(void) mouseUp:(NSEvent *)theEvent{
+    
     if(self.moving){
         self.moving = NO;
         
@@ -224,9 +225,14 @@ static int resizingAreaWidth = 10;
     return NO;
 }
 
+/**
+ * Resizes the view according to given size change
+ * @param deltaSize Change of the size since the last call
+ */
 -(void) resize:(NSInteger) deltaSize{
     NSRect resizedFrame = self.frame;
     
+    //if the view is resized from the left, the x-origin and width have to be changed     
     if (self.resizingDirection == RESIZING_FROM_LEFT) {
         resizedFrame.size.width -= deltaSize;
         resizedFrame.origin.x += deltaSize;
@@ -235,12 +241,15 @@ static int resizingAreaWidth = 10;
         resizedFrame.size.width += deltaSize;
     }
     
+    //informs the delegate about the resizing
     if([self delegateImplementsSelector:@selector(timelineObjectWillResize:fromFrame:toFrame:)]){
         resizedFrame = [self.delegate timelineObjectWillResize:self fromFrame:self.frame toFrame:resizedFrame];
     }
     
     [self setFrame:resizedFrame];
     
+    
+    //informs the delegate that view has been resized
     if([self delegateImplementsSelector:@selector(timelineObjectViewWasResized:)]){
         [self.delegate timelineObjectViewWasResized:self];
     }
@@ -248,17 +257,24 @@ static int resizingAreaWidth = 10;
 
 }
 
+/**
+ * Moves the view according to given change of its x-Origin
+ * @param deltaX Change of view's x-Origin
+ */
 -(void) move:(NSInteger) deltaX{
     NSRect newFrame = self.frame;
     
     newFrame.origin.x += deltaX;
     
+    //informs the delegate about the change 
     if([self delegateImplementsSelector:@selector(timelineObjectViewWillBeDragged:fromPosition:toPosition:)]){
         newFrame.origin = [self.delegate timelineObjectViewWillBeDragged:self fromPosition:self.frame.origin toPosition:newFrame.origin];
     }
     
     [self setFrame:newFrame];
     
+    
+    //informs the delegate that the view was moved
     if([self delegateImplementsSelector:@selector(timelineObjectViewWasDragged:)]){
         [self.delegate timelineObjectViewWasDragged:self];
     }
@@ -266,6 +282,9 @@ static int resizingAreaWidth = 10;
     [self setNeedsDisplay:YES];
 }
 
+/**
+ * Recalculates the resizingAreas according to the current frame of the view
+ */
 -(void) updateResizingRects{
     self.leftResizingArea= NSMakeRect(0, 0, resizingAreaWidth, self.frame.size.height);
     self.rightResizingArea = NSMakeRect(self.frame.size.width - resizingAreaWidth, 

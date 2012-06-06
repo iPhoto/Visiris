@@ -22,6 +22,7 @@
  */
 @protocol VSTrackViewControllerDelegate <NSObject>
 
+
 /** 
  * Called when a new ProjectItem was added to the TrackView
  * @param trackViewController VSTrackViewController of the VSTrackView the VSTimelineObject will be added to.

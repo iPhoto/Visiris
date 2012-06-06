@@ -41,8 +41,8 @@
 /**
  * Called during a Drag and Drop Operation when the view of the VSTimelineObjectViewController is dragged from fromPosition to toPosition.
  * @param timelineObjectViewController VSTimelineObjectViewController that will be dragged.
- * @param fromPosition Position the view of the VSTimelineObjectViewController is dragged from
- * @param toPosition NSPoint the view of the VSTimelineObjectViewController wants to be dragged to
+ * @param newPosition Position the view of the VSTimelineObjectViewController is dragged from
+ * @param oldPosition NSPoint the view of the VSTimelineObjectViewController wants to be dragged to
  * @return NSPoint the view of the VSTimelineObjectViewController will be moved to.
 */
 -(NSPoint) timelineObjectWillBeDragged:(VSTimelineObjectViewController *)timelineObjectViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition;
