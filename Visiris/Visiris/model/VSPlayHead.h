@@ -1,13 +1,13 @@
 //
-//  VSPlayhead.h
-//  VisirisUI
+//  VSPlayHead.h
+//  Visiris
 //
-//  Created by Martin Tiefengrabner on 16.05.12.
+//  Created by Martin Tiefengrabner on 06.06.12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
-@interface VSPlayhead : NSObject
+@interface VSPlayHead : NSObject
 
 @end
