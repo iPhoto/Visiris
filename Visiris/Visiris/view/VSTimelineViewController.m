@@ -14,6 +14,7 @@
 #import "VSTimelineObjectProxy.h"
 #import "VSTimelineRulerView.h"
 #import "VSTimelineObject.h"
+#import "VSPlayheadView.h"
 
 #import "VSCoreServices.h"
 
@@ -21,17 +22,20 @@
 
 @property (strong) NSMutableArray *trackViewControllers;
 
+@property (strong) VSPlayHeadView *playheadView;
+
 @end
 
 @implementation VSTimelineViewController
 
 
-@synthesize scvTrackHolder =_scvTrackHolder;
-@synthesize tracksHolderdocumentView = _tracksHolderdocumentView;
-@synthesize rulerView = _rulerView;
-@synthesize trackViewControllers = _trackViewControllers;
-@synthesize timeline = _timeline;
-@synthesize pixelTimeRatio = _pixelTimeRatio;
+@synthesize scvTrackHolder              = _scvTrackHolder;
+@synthesize tracksHolderdocumentView    = _tracksHolderdocumentView;
+@synthesize rulerView                   = _rulerView;
+@synthesize trackViewControllers        = _trackViewControllers;
+@synthesize timeline                    = _timeline;
+@synthesize pixelTimeRatio              = _pixelTimeRatio;
+@synthesize playheadView                = _playheadView;
 
 
 // Name of the nib that will be loaded when initWithDefaultNib is called 
@@ -74,13 +78,25 @@ static NSString* defaultNib = @"VSTimelineView";
 }
 
 -(void) awakeFromNib{
+    [self.view setWantsLayer:YES];
+    
+    [self initPlayhead];
     [self initTrackHolderScrollView];
     [self initTracks];
     [self updatePixelTimeRatio];
     [self initTimelineRuler];
+    
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectPropertIesDidTurnInactive:) name:VSTimelineObjectPropertiesDidTurnInactive object:nil];
 }
 
+-(void) initPlayhead{
+    self.playheadView = [[VSPlayHeadView alloc] initWithFrame:NSMakeRect(0, 0, 50, 80)];
+    [self.view addSubview:self.playheadView positioned:NSWindowAbove relativeTo:self.scvTrackHolder];
+    [self.playheadView setWantsLayer:YES];
+    [self.playheadView.layer setZPosition:10];
+    self.playheadView.knobHeight = 80;
+}
 
 /**
  * Creates a NSTrackView for every track the timeline holds
@@ -120,6 +136,9 @@ static NSString* defaultNib = @"VSTimelineView";
     [self.scvTrackHolder setDocumentView:self.tracksHolderdocumentView];
     [self.tracksHolderdocumentView setAutoresizingMask:NSViewNotSizable];
     [self.tracksHolderdocumentView setAutoresizesSubviews:YES];
+    
+    [self.scvTrackHolder setWantsLayer:YES];
+    [self.scvTrackHolder.layer setZPosition:0];
 }
 
 

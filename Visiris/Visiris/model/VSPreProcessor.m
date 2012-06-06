@@ -10,6 +10,7 @@
 #import "VSTimeline.h"
 #import "VisirisCore/VSCoreReceptionist.h"
 #import "VSTimelineObject.h"
+#import "VSTimelineObjectSource.h"
 #import "VSSourceSupplier.h"
 
 @interface VSPreProcessor()
@@ -66,11 +67,14 @@
     }
 }
 
+//TODO: add colorspace
 -(void) timelineObjects:(NSArray *)newTimelineObjects haveBeenAddedToTrack:(VSTrack *)aTrack{
     DDLogInfo(@"%@",newTimelineObjects);
     
     for(VSTimelineObject *timelineObject in newTimelineObjects){
-        timelineObject.textureID = [self.renderCoreReceptionist createNewTextureAccordingToData:nil];
+        NSSize dimensions = [VSFileUtils dimensionsOfFile:timelineObject.sourceObject.filePath];
+
+        timelineObject.textureID = [self.renderCoreReceptionist createNewTextureForSize:dimensions colorMode:nil];
     }
 }
 

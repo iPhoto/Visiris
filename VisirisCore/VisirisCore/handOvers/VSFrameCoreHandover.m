@@ -13,7 +13,7 @@
 @synthesize frame       = _frame;
 @synthesize textureID   = _textureID;
 
--(id) initWithFrame:(NSImage*) inFrame andAttributes:(NSDictionary *) theAttributes forTextureID:(NSNumber*) aTextureID forTimestamp:(double)theTimestamp{
+-(id) initWithFrame:(NSImage*) inFrame andAttributes:(NSDictionary *) theAttributes forTextureID:(NSInteger) aTextureID forTimestamp:(double)theTimestamp{
     if(self = [super initWithAttributes:theAttributes forTimestamp:theTimestamp]){
         self.frame = inFrame;
         self.textureID = aTextureID;
