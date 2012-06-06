@@ -22,6 +22,7 @@
 
 /* Begin PBXBuildFile section */
 		2761513B1577C97A005177C5 /* aaa.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2761513A1577C97A005177C5 /* aaa.jpg */; };
+		27A18C41157F528A003CCDC5 /* VisirisCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27A18C40157F528A003CCDC5 /* VisirisCore.framework */; };
 		5B2A59D31578AF4E003938AB /* VSDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2A59D21578AF4E003938AB /* VSDocumentController.m */; };
 		5B35BF161577A49C009911EC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35BF151577A49C009911EC /* Cocoa.framework */; };
 		5B35BF201577A49C009911EC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5B35BF1E1577A49C009911EC /* InfoPlist.strings */; };
@@ -136,12 +137,12 @@
 		5B35C0A21577A912009911EC /* VSPasteboaredConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C08D1577A912009911EC /* VSPasteboaredConstants.m */; };
 		5B35C0A31577A912009911EC /* VSTimelineConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C08F1577A912009911EC /* VSTimelineConstants.m */; };
 		5B35C0A51577A912009911EC /* VSLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0961577A912009911EC /* VSLogFormatter.m */; };
-		5BADEA74157EC25A0003366A /* VisirisCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BADEA73157EC25A0003366A /* VisirisCore.framework */; };
 		5BBC2F19157A26BB0093313A /* VSViewUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BBC2F18157A26BB0093313A /* VSViewUtils.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2761513A1577C97A005177C5 /* aaa.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = aaa.jpg; sourceTree = "<group>"; };
+		27A18C40157F528A003CCDC5 /* VisirisCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisirisCore.framework; path = "../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkzpace-drkueispmrybxzdragwerhodoczw/Build/Products/Debug/VisirisCore.framework"; sourceTree = "<group>"; };
 		5B2A59D11578AF4E003938AB /* VSDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDocumentController.h; sourceTree = "<group>"; };
 		5B2A59D21578AF4E003938AB /* VSDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDocumentController.m; sourceTree = "<group>"; };
 		5B35BF111577A49C009911EC /* Visiris.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Visiris.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -346,7 +347,6 @@
 		5B35C0951577A912009911EC /* VSLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSLogFormatter.h; sourceTree = "<group>"; };
 		5B35C0961577A912009911EC /* VSLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLogFormatter.m; sourceTree = "<group>"; };
 		5B35C0A61577A926009911EC /* VSCoreServices.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSCoreServices.h; sourceTree = "<group>"; };
-		5BADEA73157EC25A0003366A /* VisirisCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisirisCore.framework; path = "../../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-eibgtyufaxcnihdtvmkbpcrlzeqh/Build/Products/Debug/VisirisCore.framework"; sourceTree = "<group>"; };
 		5BBC2F17157A26BB0093313A /* VSViewUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSViewUtils.h; sourceTree = "<group>"; };
 		5BBC2F18157A26BB0093313A /* VSViewUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSViewUtils.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -356,7 +356,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5BADEA74157EC25A0003366A /* VisirisCore.framework in Frameworks */,
+				27A18C41157F528A003CCDC5 /* VisirisCore.framework in Frameworks */,
 				5B35C06F1577A63E009911EC /* QTKit.framework in Frameworks */,
 				5B35C06D1577A62D009911EC /* QuartzCore.framework in Frameworks */,
 				5B35C06B1577A5EC009911EC /* OpenGL.framework in Frameworks */,
@@ -390,7 +390,7 @@
 		5B35BF141577A49C009911EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5BADEA73157EC25A0003366A /* VisirisCore.framework */,
+				27A18C40157F528A003CCDC5 /* VisirisCore.framework */,
 				5B35BF181577A49C009911EC /* AppKit.framework */,
 				5B35BF191577A49C009911EC /* CoreData.framework */,
 				5B35BF1A1577A49C009911EC /* Foundation.framework */,
@@ -1249,6 +1249,7 @@
 					"\"$(SRCROOT)/../../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-gonxldfrmxmufedbrfkgsamgekqv/Build/Products/Debug\"",
 					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-djdsvkqzfqifpseflujwilqhfuwq/Build/Products/Debug\"",
 					"\"$(SRCROOT)/../../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-eibgtyufaxcnihdtvmkbpcrlzeqh/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkzpace-drkueispmrybxzdragwerhodoczw/Build/Products/Debug\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Visiris/Visiris-Prefix.pch";
@@ -1266,6 +1267,7 @@
 					"\"$(SRCROOT)/../../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-gonxldfrmxmufedbrfkgsamgekqv/Build/Products/Debug\"",
 					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-djdsvkqzfqifpseflujwilqhfuwq/Build/Products/Debug\"",
 					"\"$(SRCROOT)/../../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-eibgtyufaxcnihdtvmkbpcrlzeqh/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkzpace-drkueispmrybxzdragwerhodoczw/Build/Products/Debug\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Visiris/Visiris-Prefix.pch";

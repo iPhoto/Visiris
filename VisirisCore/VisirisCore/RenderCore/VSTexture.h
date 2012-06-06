@@ -10,10 +10,13 @@
 
 @interface VSTexture : NSObject
 @property (readonly, assign) GLuint     texture;
+@property (readonly, assign) NSSize     size;
 
+-(id)initEmptyTextureWithSize:(NSSize) size;
 -(id)initWithNSImage:(NSImage *)theImage;
 -(id)initWithName:(NSString *)name;
-- (id)initWithNSImage:(NSImage *) inimage WithSize: (NSSize)size;
+
+- (void)replaceContent:(NSImage *) theImage;
 
 -(void)bind;
 -(void)unbind;
