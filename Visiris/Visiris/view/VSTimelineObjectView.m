@@ -58,7 +58,7 @@ static int resizingAreaWidth = 10;
     if (self) {
         [self initLayerStyle];
         [self setResizingAreas];
-//        [self initTrackingAreas];
+        //        [self initTrackingAreas];
     }
     
     return self;
@@ -138,13 +138,17 @@ static int resizingAreaWidth = 10;
 #pragma mark - Mouse Events
 
 -(void) mouseDown:(NSEvent *)theEvent{
+    
     self.lastMousePosition = [theEvent locationInWindow];
     
-     if([self delegateImplementsSelector:@selector(timelineObjectViewWasClicked:)]){
-        [self.delegate timelineObjectViewWasClicked:self];
+    if(!self.selected){
+        if([self delegateImplementsSelector:@selector(timelineObjectViewWasClicked:)]){
+            [self.delegate timelineObjectViewWasClicked:self];
+        }
     }
-    
-    self.lastMousePosition = [theEvent locationInWindow];
+    else{
+        [self setDraggingModeDependingOnMousePosition:self.lastMousePosition];
+    }
 }
 
 
@@ -153,27 +157,8 @@ static int resizingAreaWidth = 10;
     NSPoint newMousePosition =[theEvent locationInWindow];
     NSInteger mouseXDelta = newMousePosition.x- self.lastMousePosition.x;
     
-    //sets if the view is moved or resized while dragged
     if(!self.resizing && !self.moving){
-        //if the mouse is over on of the resizingAreas the view can be resized
-        if(NSPointInRect([self convertPoint:newMousePosition fromView:nil], self.leftResizingArea) || NSPointInRect([self convertPoint:newMousePosition fromView:nil], self.rightResizingArea)){
-            
-            if ([self delegateImplementsSelector:@selector(timelineObjectWillStartResizing:)]) {
-                self.resizing = [self.delegate timelineObjectWillStartResizing:self];
-            }
-            if(self.resizing){
-                if(NSPointInRect([self convertPoint:newMousePosition fromView:nil], self.leftResizingArea)){
-                    self.resizingDirection = RESIZING_FROM_LEFT;
-                }
-                else{
-                    self.resizingDirection = RESIZING_FROM_RIGHT;
-                }
-            }
-        }
-        else if([self delegateImplementsSelector:@selector(timelineObjectViewWillStartDragging:)]){
-            self.moving = [self.delegate timelineObjectViewWillStartDragging:self];
-        }
-        
+        [self setDraggingModeDependingOnMousePosition:newMousePosition];
     }
     
     if(self.resizing){
@@ -184,6 +169,12 @@ static int resizingAreaWidth = 10;
     }
     
     self.lastMousePosition = newMousePosition;
+}
+
+-(void) cursorUpdate:(NSEvent *)event{
+    if(self.resizing){
+        [[NSCursor resizeLeftRightCursor] set];
+    }
 }
 
 -(void) mouseUp:(NSEvent *)theEvent{
@@ -197,6 +188,7 @@ static int resizingAreaWidth = 10;
     }
     
     if(self.resizing){
+        [[NSCursor resizeLeftRightCursor] pop];
         self.resizing = NO;
         self.resizingDirection = -1;
         
@@ -207,6 +199,37 @@ static int resizingAreaWidth = 10;
 }
 
 #pragma mark - Private Methods
+
+-(void) setDraggingModeDependingOnMousePosition:(NSPoint) newMousePosition{
+    //sets if the view is moved or resized while dragged
+    if(!self.resizing && !self.moving){
+        //if the mouse is over on of the resizingAreas the view can be resized
+        if(NSPointInRect([self convertPoint:newMousePosition fromView:nil], self.leftResizingArea) || NSPointInRect([self convertPoint:newMousePosition fromView:nil], self.rightResizingArea)){
+            
+            if ([self delegateImplementsSelector:@selector(timelineObjectWillStartResizing:)]) {
+                self.resizing = [self.delegate timelineObjectWillStartResizing:self];
+            }
+            if(self.resizing){
+                
+                [[NSCursor resizeLeftRightCursor] push];
+                
+                if(NSPointInRect([self convertPoint:newMousePosition fromView:nil], self.leftResizingArea)){
+                    self.resizingDirection = RESIZING_FROM_LEFT;
+                }
+                else{
+                    self.resizingDirection = RESIZING_FROM_RIGHT;
+                }
+            }
+        }
+        else if([self delegateImplementsSelector:@selector(timelineObjectViewWillStartDragging:)]){
+            self.moving = [self.delegate timelineObjectViewWillStartDragging:self];
+        }   
+    }
+    
+    if(self.resizing && self.moving){
+        [self setNeedsDisplay:YES];
+    }
+}
 
 /**
  * Checks if the delegate is able to respond to the given Selector
@@ -254,7 +277,7 @@ static int resizingAreaWidth = 10;
         [self.delegate timelineObjectViewWasResized:self];
     }
     [self setNeedsDisplay:YES];
-
+    
 }
 
 /**

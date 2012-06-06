@@ -42,6 +42,39 @@
     }
 }
 
++(NSSize) dimensionsOfFile:(NSString *)file{
+    NSSize size = NSMakeSize(0, 0);
+    if(file && [[NSFileManager defaultManager] fileExistsAtPath:file]){
+        NSDictionary *metaData = [self metaDataOfFile:file];
+        size.width = [[metaData valueForKey:(id) kMDItemPixelWidth] intValue];
+        size.height = [[metaData valueForKey:(id) kMDItemPixelHeight] intValue];
+    }
+    
+    return size;
+}
+
++(NSString*) colorSpaceOfFile:(NSString *)file{
+    NSString* colorSpace;
+    if(file && [[NSFileManager defaultManager] fileExistsAtPath:file]){
+        NSDictionary *exifData = [self exifDataOfFile:file];
+        colorSpace = [exifData valueForKey:(id)kCGImagePropertyExifColorSpace];
+    }
+    
+    return colorSpace;
+}
+
+//Todo releas CGImageSourceRef
++(NSDictionary*) exifDataOfFile:(NSString*) file{
+    NSURL *fileUrl = [NSURL fileURLWithPath:file];
+    CGImageSourceRef source = CGImageSourceCreateWithURL((__bridge CFURLRef)fileUrl, Nil);
+    
+    NSDictionary *exifData = (__bridge NSDictionary *)CGImageSourceCopyPropertiesAtIndex(source,0,NULL);
+    
+
+    
+    return exifData;
+}
+
 #pragma mark - Private Functions
 
 //TODO: read out all MetaDAta not only duration and size
@@ -56,7 +89,7 @@
         return nil;
     
     MDItemRef fileMetaData = MDItemCreate(NULL, (__bridge CFStringRef) file);
-    NSDictionary *metadataDictionary = (__bridge NSDictionary*)MDItemCopyAttributes (fileMetaData, (__bridge CFArrayRef)[NSArray arrayWithObjects:(id)kMDItemDurationSeconds,(id)kMDItemPixelWidth,nil]);
+    NSDictionary *metadataDictionary = (__bridge NSDictionary*)MDItemCopyAttributes (fileMetaData, (__bridge CFArrayRef)[NSArray arrayWithObjects:(id)kMDItemDurationSeconds,(id)kMDItemPixelWidth,(id)kMDItemPixelHeight,(id)kCGImagePropertyExifColorSpace,nil]);
     
     return metadataDictionary;
 }

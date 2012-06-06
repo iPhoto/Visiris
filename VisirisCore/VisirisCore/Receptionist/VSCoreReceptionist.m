@@ -31,11 +31,11 @@
     }
 }
 
--(NSNumber*) createNewTextureAccordingToData:(NSDictionary *)dataDictionary{
-    return [NSNumber numberWithInt:-1];
+-(NSInteger) createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode{
+    return -1;
 }
 
--(void) removeTextureForID:(NSNumber *)anID{
+-(void) removeTextureForID:(NSInteger)anID{
     
 }
 

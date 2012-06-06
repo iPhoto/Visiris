@@ -28,4 +28,9 @@
  *  @return The duration of file or -1 if the duration couldn't be read out.
 */
 +(float) durationInMillisecondsOfFile:(NSString*)file;
+
++(NSSize) dimensionsOfFile:(NSString *)file;
+
++(NSString*) colorSpaceOfFile:(NSString *)file;
+
 @end

@@ -392,6 +392,8 @@ static NSString* defaultNib = @"VSTrackView";
 }
 
 -(BOOL) timelineObjectWillStartResizing:(VSTimelineObjectViewController *)timelineObjectViewController{
+    //brings the dragged view to front
+    [timelineObjectViewController.view.layer setZPosition:10];
     return YES;
 }
 
@@ -423,6 +425,9 @@ static NSString* defaultNib = @"VSTrackView";
     
     [self.view.undoManager setActionName:NSLocalizedString(@"Resizing Object", @"Undo Action for resizine an object on the timeline")];
     [self.view.undoManager endUndoGrouping];
+    
+    //brings the dragge VSTimelineObjectView back
+    [timelineObjectViewController.view.layer setZPosition:0];
 }
 
 #pragma mark- Private Methods

@@ -793,6 +793,7 @@
 		5B35C0B41577B032009911EC /* timeline */ = {
 			isa = PBXGroup;
 			children = (
+				5B7D8B65157F5E6A0008FFBC /* playHead */,
 				5B35C0A91577AEB4009911EC /* ruler */,
 				5B35BFC71577A573009911EC /* VSTimelineView.h */,
 				5B35BFC81577A573009911EC /* VSTimelineView.m */,
@@ -948,6 +949,17 @@
 				5B35BF981577A573009911EC /* VSTrack.m */,
 			);
 			name = track;
+			sourceTree = "<group>";
+		};
+		5B7D8B65157F5E6A0008FFBC /* playHead */ = {
+			isa = PBXGroup;
+			children = (
+				5B7D8B66157F5E790008FFBC /* VSPlayHeadView.h */,
+				5B7D8B67157F5E790008FFBC /* VSPlayHeadView.m */,
+				5B7D8B69157F5E850008FFBC /* VSPlayheadViewController.h */,
+				5B7D8B6A157F5E850008FFBC /* VSPlayheadViewController.m */,
+			);
+			name = playHead;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1153,6 +1165,8 @@
 				5B35C0A51577A912009911EC /* VSLogFormatter.m in Sources */,
 				5B2A59D31578AF4E003938AB /* VSDocumentController.m in Sources */,
 				5BBC2F19157A26BB0093313A /* VSViewUtils.m in Sources */,
+				5B7D8B68157F5E790008FFBC /* VSPlayHeadView.m in Sources */,
+				5B7D8B6B157F5E850008FFBC /* VSPlayheadViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
