@@ -12,6 +12,7 @@
 @class VSRenderCore;
 @class VSTexture;
 @class VSShader;
+@class VSTextureManager;
 
 /**
  * Protocoll the VSRenderCore uses to inform about the rendering states
@@ -39,6 +40,7 @@
 @property (strong) VSTexture                        *textureBelow;
 @property (strong) VSTexture                        *textureUp;
 @property (strong) VSShader                         *shader;
+@property (strong) VSTextureManager                 *textureManager;
 
 /**
  * Creates one frame out of the data stored in the give VSCoreHandovers in the given frame size.

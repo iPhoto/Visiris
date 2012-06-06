@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		2726745B157F76A400EBE6B0 /* VSTextureManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 27267459157F76A400EBE6B0 /* VSTextureManager.h */; };
+		2726745C157F76A400EBE6B0 /* VSTextureManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2726745A157F76A400EBE6B0 /* VSTextureManager.m */; };
 		274C70CE157E81DD0031F9B2 /* VSImageContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 274C70CC157E81DD0031F9B2 /* VSImageContext.h */; };
 		274C70CF157E81DD0031F9B2 /* VSImageContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 274C70CD157E81DD0031F9B2 /* VSImageContext.m */; };
 		274C70D1157E82EE0031F9B2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 274C70D0157E82EE0031F9B2 /* QuartzCore.framework */; };
@@ -51,6 +53,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		27267459157F76A400EBE6B0 /* VSTextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTextureManager.h; sourceTree = "<group>"; };
+		2726745A157F76A400EBE6B0 /* VSTextureManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTextureManager.m; sourceTree = "<group>"; };
 		274C70CC157E81DD0031F9B2 /* VSImageContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VSImageContext.h; path = CoreServices/VSImageContext.h; sourceTree = "<group>"; };
 		274C70CD157E81DD0031F9B2 /* VSImageContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VSImageContext.m; path = CoreServices/VSImageContext.m; sourceTree = "<group>"; };
 		274C70D0157E82EE0031F9B2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -116,6 +120,8 @@
 				276151331577C7E4005177C5 /* VSRenderCore.m */,
 				276151361577C814005177C5 /* VSFrameBufferObject.h */,
 				276151371577C814005177C5 /* VSFrameBufferObject.m */,
+				27267459157F76A400EBE6B0 /* VSTextureManager.h */,
+				2726745A157F76A400EBE6B0 /* VSTextureManager.m */,
 				276151451577D66B005177C5 /* VSTexture.h */,
 				276151461577D66B005177C5 /* VSTexture.m */,
 				276151491577F290005177C5 /* VSShader.h */,
@@ -235,6 +241,7 @@
 				276151471577D66B005177C5 /* VSTexture.h in Headers */,
 				2761514B1577F290005177C5 /* VSShader.h in Headers */,
 				274C70CE157E81DD0031F9B2 /* VSImageContext.h in Headers */,
+				2726745B157F76A400EBE6B0 /* VSTextureManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,6 +338,7 @@
 				276151481577D66B005177C5 /* VSTexture.m in Sources */,
 				2761514C1577F290005177C5 /* VSShader.m in Sources */,
 				274C70CF157E81DD0031F9B2 /* VSImageContext.m in Sources */,
+				2726745C157F76A400EBE6B0 /* VSTextureManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
