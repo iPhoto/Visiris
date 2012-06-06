@@ -19,6 +19,8 @@
  */
 @protocol VSTimelineObjectControllerDelegate <NSObject>
 
+@required
+
 /**
  * Called when a VSTimelineObjectView was selected by the user on the timeline
  * @param timelineObjectProxy VSTimelineObjectProxy the clicked VSTimelineObjectView represents
@@ -37,15 +39,6 @@
  * @param timelineObjectProxy VSTimelineObjectProxy that got unselected
  */
 -(void) timelineObjectProxyWasUnselected:(VSTimelineObjectProxy*) timelineObjectProxy;
-
-/**
- * Called during a Drag and Drop Operation when the view of the VSTimelineObjectViewController is dragged from fromPosition to toPosition.
- * @param timelineObjectViewController VSTimelineObjectViewController that will be dragged.
- * @param newPosition Position the view of the VSTimelineObjectViewController is dragged from
- * @param oldPosition NSPoint the view of the VSTimelineObjectViewController wants to be dragged to
- * @return NSPoint the view of the VSTimelineObjectViewController will be moved to.
-*/
--(NSPoint) timelineObjectWillBeDragged:(VSTimelineObjectViewController *)timelineObjectViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition;
 
 /**
  * Called when the view of the VSTimelineObjectViewController has stopped it's dragging operation
@@ -74,16 +67,6 @@
  */
 -(BOOL) timelineObjectWillStartResizing:(VSTimelineObjectViewController *)timelineObjectViewController;
 
-
-/**
- * Called before the view of the VSTimelineObjectViewController gets resized.
- * @param timelineObjectViewController VSTimelineObjectViewController of the view wich will be resized
- * @param fromFrame Current frame of the view of the VSTimelineObjectViewController
- * @param toFrame Frame the VSTimelineObjectViewController view will be set to
- * @param NSRect the frame of the VSTimelineObjectViewController's view will be set to
- */
--(NSRect) timelineObjectWillResize:(VSTimelineObjectViewController *)timelineObjectViewController fromFrame:(NSRect)oldFrame toFrame:(NSRect)newFrame;
-
 /**
  * Called when the view of VSTimelineObjectViewController was resized
  * @param timelineObjectViewController VSTimelineObjectViewController which's view was resized
@@ -95,6 +78,27 @@
  * @param timelineObjectViewController VSTimelineObjectViewController whichs' view's operation has been stopped.
  */
 -(void) timelineObjectDidStopResizing:(VSTimelineObjectViewController *)timelineObjectViewController;
+
+@optional
+
+/**
+ * Called during a Drag and Drop Operation when the view of the VSTimelineObjectViewController is dragged from fromPosition to toPosition.
+ * @param timelineObjectViewController VSTimelineObjectViewController that will be dragged.
+ * @param newPosition Position the view of the VSTimelineObjectViewController is dragged from
+ * @param oldPosition NSPoint the view of the VSTimelineObjectViewController wants to be dragged to
+ * @return NSPoint the view of the VSTimelineObjectViewController will be moved to.
+ */
+-(NSPoint) timelineObjectWillBeDragged:(VSTimelineObjectViewController *)timelineObjectViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition;
+
+/**
+ * Called before the view of the VSTimelineObjectViewController gets resized.
+ * @param timelineObjectViewController VSTimelineObjectViewController of the view wich will be resized
+ * @param fromFrame Current frame of the view of the VSTimelineObjectViewController
+ * @param toFrame Frame the VSTimelineObjectViewController view will be set to
+ * @param NSRect the frame of the VSTimelineObjectViewController's view will be set to
+ */
+-(NSRect) timelineObjectWillResize:(VSTimelineObjectViewController *)timelineObjectViewController fromFrame:(NSRect)oldFrame toFrame:(NSRect)newFrame;
+
 
 
 @end

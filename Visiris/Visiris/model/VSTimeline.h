@@ -15,17 +15,48 @@
 @class VSTimelineObjectProxy;
 
 /**
+ * Protocoll to inform about changes of the VSTimelineObjects of VSTrack's the VSTimeline is responsible for
+ */
+@protocol VSTimelineTimelineObjectsDelegate <NSObject>
+
+@required
+
+/**
+ * Called when timelineObjects have been added a track.
+ * @param newTimelineObjects NSArray storing the newly added VSTimelineObjects.
+ * @param aTrack VSTrack the timelineObjects have been added to
+ */
+-(void) timelineObjects:(NSArray*) newTimelineObjects haveBeenAddedToTrack:(VSTrack*) aTrack;
+
+/**
+ * Called before timelineObjects have been removed from a track.
+ * @param removedTimelineObjects NSArray storing the VSTimelineObjects they will removed.
+ * @param aTrack VSTrack the timelineObjects will be removed from
+ */
+-(void) timelineObjects:(NSArray*) removedTimelineObjects willBeRemovedFromTrack:(VSTrack*) aTrack;
+
+@end
+
+
+/**
  * Timeline Model Object
  *
  * Represents the Timeline of Visiris. Stores a several number of tracks where new TimelinObjects can be added. 
  */
 @interface VSTimeline : NSObject
 
+#pragma mark - Properties
+
 /** Stores the tracks of the timeline */
 @property (strong) NSMutableArray *tracks;
 
 /** Duration of the timeline */
 @property double duration;
+
+/** Delegate that is informed as definied in the VSTimelineTimelineObjectsDelegate protocoll */
+@property id<VSTimelineTimelineObjectsDelegate> timelineObjectsDelegate;
+
+#pragma mark - Init
 
 /**
  * Inits a new timeline with the given duration.
@@ -40,6 +71,9 @@
  * @return YES if the track was added successfully, NO otherwise.
  */
 -(BOOL) addNewTrackNamed:(NSString*) name ofType:(VSTrackType) type;
+
+
+#pragma mark - Methods
 
 /**
  * Adds a new Timeline-Object to the given track.

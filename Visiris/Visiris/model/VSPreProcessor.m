@@ -56,4 +56,22 @@
     }
 }
 
+#pragma mark - VSTimelineTimelineObjectsDelegate implementation
+
+-(void) timelineObjects:(NSArray *)removedTimelineObjects willBeRemovedFromTrack:(VSTrack *)aTrack{
+    DDLogInfo(@"%@",removedTimelineObjects);
+    
+    for (VSTimelineObject *timelineObject in removedTimelineObjects){
+        [self.renderCoreReceptionist removeTextureForID:timelineObject.textureID];
+    }
+}
+
+-(void) timelineObjects:(NSArray *)newTimelineObjects haveBeenAddedToTrack:(VSTrack *)aTrack{
+    DDLogInfo(@"%@",newTimelineObjects);
+    
+    for(VSTimelineObject *timelineObject in newTimelineObjects){
+        timelineObject.textureID = [self.renderCoreReceptionist createNewTextureAccordingToData:nil];
+    }
+}
+
 @end

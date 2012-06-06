@@ -11,7 +11,10 @@
  * The VSCoreHandover is used to handover data from the UI/Model-Part of Visiris to the RenderCore. Besides the data the parent class VSCoreHandover provides, VSFrameCoreHandover stores a pointer to the frame of connected TimelineObject at a specifice timestamp.
  */
 @interface VSFrameCoreHandover : VSCoreHandover
+
 @property (strong) NSImage* frame;
+
+@property NSNumber* textureID;
  
 /**
  * Inits the VSCoreHandover for the given timestmap with the given attributes
@@ -20,6 +23,6 @@
  * @param theTimestamp The timestamp the data is set of
  * @return self
  */
--(id) initWithFrame:(NSImage*) inFrame andAttributes:(NSDictionary *) theAttributes  forTimestamp:(double)theTimestamp;
+-(id) initWithFrame:(NSImage*) inFrame andAttributes:(NSDictionary *) theAttributes forTextureID:(NSNumber*) aTextureID forTimestamp:(double)theTimestamp;
 
 @end

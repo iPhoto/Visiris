@@ -31,6 +31,14 @@
     }
 }
 
+-(NSNumber*) createNewTextureAccordingToData:(NSDictionary *)dataDictionary{
+    return [NSNumber numberWithInt:-1];
+}
+
+-(void) removeTextureForID:(NSNumber *)anID{
+    
+}
+
 #pragma mark - RenderCoreDelegate impl.
 
 - (void)renderCore:(VSRenderCore *)theRenderCore didFinishRenderingTexture:(GLuint)theTexture forTimestamp:(double)theTimestamp{

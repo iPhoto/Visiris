@@ -76,7 +76,6 @@
     //** Adding 1 new Audrio-Track to the timeline */
     [self.timeline addNewTrackNamed:[NSString stringWithFormat:@"Audio Track"] ofType:AUDIO_TRACK];
     
-    
     self.preProcessor = [[VSPreProcessor alloc] initWithTimeline:self.timeline];
     
     self.playbackController = [[VSPlaybackController alloc] initWithPreProcessor:self.preProcessor timeline:self.timeline];
@@ -90,6 +89,9 @@
     self.postProcessor = [[VSPostProcessor alloc] initWithPlaybackController:self.playbackController];
     
     self.preProcessor.renderCoreReceptionist.delegate = self.postProcessor;
+    
+    
+    self.timeline.timelineObjectsDelegate = self.preProcessor;
     
 }
 

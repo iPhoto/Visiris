@@ -8,13 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
-@class VSTimeline;
+#import "VSTimeline.h"
+
 @class VSCoreReceptionist;
 
 /**
  * The VSPreProcessor is the interface between the UI/Model and Core of Visiris. With the help of suppliers it process the data of the currently active VSTimelineObjects and hand it over to the Core.
  */
-@interface VSPreProcessor : NSObject
+@interface VSPreProcessor : NSObject<VSTimelineTimelineObjectsDelegate>
 
 /** The timeline is asked for currently active VStimelineObjects */
 @property VSTimeline *timeline;

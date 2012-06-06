@@ -155,122 +155,6 @@ static NSString* defaultNib = @"VSTimelineView";
     }
 }
 
-#pragma mark - Private Methods
-
-//TODO: Better way to update VSTimelineRulerMeasurementUnit
-/**
- * Updates VSTimelineRulerMeasurementUnit according to the pixelTimeRatio
- */
--(void) updateTimelineRulerMeasurement{ 
-    [NSRulerView registerUnitWithName:VSTimelineRulerMeasurementUnit abbreviation:VSTimelineRulerMeasurementAbreviation unitToPointsConversionFactor:1/self.pixelTimeRatio stepUpCycle:[NSArray arrayWithObject:[NSNumber numberWithFloat:10.0]] stepDownCycle:[NSArray arrayWithObject:[NSNumber numberWithFloat:0.5]]];
-    
-    [self.rulerView setMeasurementUnits:VSTimelineRulerMeasurementUnit];
-}
-
-
-/**
- * Creates a new VSTrackView according to the given track.
- * @param track VSTrack the VSTrackView will be created for
- */
--(void) createTrack:(VSTrack*) track{
-    
-    VSTrackViewController* newTrackViewController = [[VSTrackViewController alloc]initWithDefaultNibAccordingToTrack:track];
-    
-    // The VSTimelineViewControlller acts as the delegate of the VSTrackViewController
-    newTrackViewController.delegate = self;
-    newTrackViewController.pixelTimeRatio = self.pixelTimeRatio;
-    
-    
-    [self.tracksHolderdocumentView addSubview:[newTrackViewController view]];
-    
-    //Size and position of the track
-    int width = [self visibleTrackViewHolderWidth];
-    int xPos = (VSTrackViewHeight+VSTrackViewMargin) * ([self.tracksHolderdocumentView.subviews count] -1);
-    NSRect newFrame = NSMakeRect(0,xPos,width,VSTrackViewHeight);
-    [[newTrackViewController view] setFrame:newFrame];
-    
-    //set the autoresizing masks
-    [[newTrackViewController view] setAutoresizingMask:NSViewWidthSizable];
-    [[newTrackViewController view] setAutoresizesSubviews:NO];
-    
-    [self.trackViewControllers addObject:newTrackViewController];
-    
-    [newTrackViewController.view setNeedsDisplay:YES];
-    
-    //Rescales the document view of the trackholder ScrollView
-    int height = (VSTrackViewHeight+VSTrackViewMargin) * ([self.tracksHolderdocumentView.subviews count]);
-    [self.tracksHolderdocumentView setFrame:NSMakeRect([self.tracksHolderdocumentView frame].size.width, 0, self.tracksHolderdocumentView.frame.size.width,  height)];
-}
-
-/**
- * Updates the ratio between the length of trackholder's width and the duration of the timeline
- */
--(void) updatePixelTimeRatio{
-    double newRatio = self.timeline.duration / self.tracksHolderdocumentView.frame.size.width;
-    
-    if(newRatio != self.pixelTimeRatio){
-        self.pixelTimeRatio = newRatio;
-        [self pixelTimeRatioDidChange];
-    }
-}
-
-/**
- * Called when ratio between the length of trackholder's width and the duration of the timeline.
- */
--(void) pixelTimeRatioDidChange{
-    [self updateTimelineRulerMeasurement];
-    
-    //tells all VSTrackViewControlls in the timeline, that the pixelItemRation has been changed
-    for(VSTrackViewController *controller in self.trackViewControllers){
-        [controller pixelTimeRatioDidChange:self.pixelTimeRatio];
-        [controller.view setNeedsDisplay:YES];
-    }
-}
-
-/**
- * The visible widht of the track holder is neccessary to calculation the pixelItemRation
- * @return The visble width of scvTrackHolder
- */
--(int) visibleTrackViewHolderWidth{
-    return [self.scvTrackHolder documentVisibleRect].size.width;
-}
-
-/**
- * Translates the given point to a timestamp according to the pixelTimeRation
- * @param point Point the timestamp will be created for
- * @return Timestamp for the given point
- */
--(double) getTimestampForPoint:(NSPoint) point{
-    return point.x * self.pixelTimeRatio;
-}
-
-/**
- * Translats the given pixel width to time duration according to the pixelTimeRation
- * @param width Width the duration will translated for
- * @result Translated duration for the given width
- */
--(double) getDurationForPixelWidth:(NSInteger) width{
-    return width * self.pixelTimeRatio;
-}
-
-/**
- * Called when VSTimelineObjectPropertiesDidTurnInactive Notification was received. Unselectes the currently selected timelineObjects.
- * @param notification NSNotifaction storing the information about which VSTimelineObjects were selected before the propertiesView turned inactive
- */
--(void) timelineObjectPropertIesDidTurnInactive:(NSNotification*) notification{
-    [self.timeline unselectAllTimelineObjects];
-}
-
-/**
- * Removes the currently selected TimelineObjects and registers the removal at the view's undoManager
- */
--(void) removeSelectedTimelineObjects{
-    [self.view.undoManager beginUndoGrouping];
-    [self.timeline removeSelectedTimelineObjectsAndRegisterAtUndoManager:self.view.undoManager];
-    [self.view.undoManager setActionName:NSLocalizedString(@"Remove Objects", @"Undo Action for removing TimelineObjects from the timeline")];
-    [self.view.undoManager endUndoGrouping];
-}
-
 #pragma mark- VSTrackViewControlerDelegate implementation
 
 -(void) trackViewController:(VSTrackViewController *)trackViewController addTimelineObjectsBasedOnProjectItemRepresentation:(NSArray *)projectItemRepresentations atPositions:(NSArray *)positionArray withWidths:(NSArray *)widthArray{
@@ -431,7 +315,124 @@ static NSString* defaultNib = @"VSTimelineView";
     }
 }
 
-#pragma mark- Properties
+
+
+#pragma mark - Private Methods
+
+//TODO: Better way to update VSTimelineRulerMeasurementUnit
+/**
+ * Updates VSTimelineRulerMeasurementUnit according to the pixelTimeRatio
+ */
+-(void) updateTimelineRulerMeasurement{ 
+    [NSRulerView registerUnitWithName:VSTimelineRulerMeasurementUnit abbreviation:VSTimelineRulerMeasurementAbreviation unitToPointsConversionFactor:1/self.pixelTimeRatio stepUpCycle:[NSArray arrayWithObject:[NSNumber numberWithFloat:10.0]] stepDownCycle:[NSArray arrayWithObject:[NSNumber numberWithFloat:0.5]]];
+    
+    [self.rulerView setMeasurementUnits:VSTimelineRulerMeasurementUnit];
+}
+
+
+/**
+ * Creates a new VSTrackView according to the given track.
+ * @param track VSTrack the VSTrackView will be created for
+ */
+-(void) createTrack:(VSTrack*) track{
+    
+    VSTrackViewController* newTrackViewController = [[VSTrackViewController alloc]initWithDefaultNibAccordingToTrack:track];
+    
+    // The VSTimelineViewControlller acts as the delegate of the VSTrackViewController
+    newTrackViewController.delegate = self;
+    newTrackViewController.pixelTimeRatio = self.pixelTimeRatio;
+    
+    
+    [self.tracksHolderdocumentView addSubview:[newTrackViewController view]];
+    
+    //Size and position of the track
+    int width = [self visibleTrackViewHolderWidth];
+    int xPos = (VSTrackViewHeight+VSTrackViewMargin) * ([self.tracksHolderdocumentView.subviews count] -1);
+    NSRect newFrame = NSMakeRect(0,xPos,width,VSTrackViewHeight);
+    [[newTrackViewController view] setFrame:newFrame];
+    
+    //set the autoresizing masks
+    [[newTrackViewController view] setAutoresizingMask:NSViewWidthSizable];
+    [[newTrackViewController view] setAutoresizesSubviews:NO];
+    
+    [self.trackViewControllers addObject:newTrackViewController];
+    
+    [newTrackViewController.view setNeedsDisplay:YES];
+    
+    //Rescales the document view of the trackholder ScrollView
+    int height = (VSTrackViewHeight+VSTrackViewMargin) * ([self.tracksHolderdocumentView.subviews count]);
+    [self.tracksHolderdocumentView setFrame:NSMakeRect([self.tracksHolderdocumentView frame].size.width, 0, self.tracksHolderdocumentView.frame.size.width,  height)];
+}
+
+/**
+ * Updates the ratio between the length of trackholder's width and the duration of the timeline
+ */
+-(void) updatePixelTimeRatio{
+    double newRatio = self.timeline.duration / self.tracksHolderdocumentView.frame.size.width;
+    
+    if(newRatio != self.pixelTimeRatio){
+        self.pixelTimeRatio = newRatio;
+        [self pixelTimeRatioDidChange];
+    }
+}
+
+/**
+ * Called when ratio between the length of trackholder's width and the duration of the timeline.
+ */
+-(void) pixelTimeRatioDidChange{
+    [self updateTimelineRulerMeasurement];
+    
+    //tells all VSTrackViewControlls in the timeline, that the pixelItemRation has been changed
+    for(VSTrackViewController *controller in self.trackViewControllers){
+        [controller pixelTimeRatioDidChange:self.pixelTimeRatio];
+        [controller.view setNeedsDisplay:YES];
+    }
+}
+
+/**
+ * The visible widht of the track holder is neccessary to calculation the pixelItemRation
+ * @return The visble width of scvTrackHolder
+ */
+-(int) visibleTrackViewHolderWidth{
+    return [self.scvTrackHolder documentVisibleRect].size.width;
+}
+
+/**
+ * Translates the given point to a timestamp according to the pixelTimeRation
+ * @param point Point the timestamp will be created for
+ * @return Timestamp for the given point
+ */
+-(double) getTimestampForPoint:(NSPoint) point{
+    return point.x * self.pixelTimeRatio;
+}
+
+/**
+ * Translats the given pixel width to time duration according to the pixelTimeRation
+ * @param width Width the duration will translated for
+ * @result Translated duration for the given width
+ */
+-(double) getDurationForPixelWidth:(NSInteger) width{
+    return width * self.pixelTimeRatio;
+}
+
+/**
+ * Called when VSTimelineObjectPropertiesDidTurnInactive Notification was received. Unselectes the currently selected timelineObjects.
+ * @param notification NSNotifaction storing the information about which VSTimelineObjects were selected before the propertiesView turned inactive
+ */
+-(void) timelineObjectPropertIesDidTurnInactive:(NSNotification*) notification{
+    [self.timeline unselectAllTimelineObjects];
+}
+
+/**
+ * Removes the currently selected TimelineObjects and registers the removal at the view's undoManager
+ */
+-(void) removeSelectedTimelineObjects{
+    [self.view.undoManager beginUndoGrouping];
+    [self.timeline removeSelectedTimelineObjectsAndRegisterAtUndoManager:self.view.undoManager];
+    [self.view.undoManager setActionName:NSLocalizedString(@"Remove Objects", @"Undo Action for removing TimelineObjects from the timeline")];
+    [self.view.undoManager endUndoGrouping];
+}
+
 
 
 @end

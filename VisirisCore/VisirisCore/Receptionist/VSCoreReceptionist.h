@@ -42,6 +42,11 @@
  */
 - (void)renderFrameAtTimestamp:(double)aTimestamp withHandovers:(NSArray *)theHandovers forSize:(NSSize)theFrameSize;
 
+
+-(NSNumber*) createNewTextureAccordingToData:(NSDictionary*) dataDictionary;
+
+-(void) removeTextureForID:(NSNumber*) anID;
+
 - (NSOpenGLContext *) openGLContext;
 
 @end

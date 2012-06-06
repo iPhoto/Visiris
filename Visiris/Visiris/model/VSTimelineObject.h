@@ -26,6 +26,8 @@
 /** Supplier responsible for the this timelineObject */
 @property (strong) VSSourceSupplier *supplier;
 
+/** ID of the texture stored in VSCore */
+@property NSNumber* textureID;
 
 /**
  * Inits a the object with the given sourceObject

@@ -18,6 +18,11 @@
 
 #import "VSCoreServices.h"
 
+
+
+
+
+
 @interface VSTimeline()
 
 /** Reference of the Singleton of the timeline object factory. The Factory creates new TimelineObject according to the information stored in their corresponding ProjectItems */
@@ -25,14 +30,21 @@
 
 /** Reference of the Singleton of VSProjectItemController. Used to get the ProjectItem corresponding to its VSProjectItem representation */
 @property VSProjectItemController *projectItemController;
+
 @end
+
+
+
+
+
 
 @implementation VSTimeline
 
-@synthesize tracks = _tracks;
-@synthesize timelineObjectFactory = _timelineObjectFactory;
-@synthesize projectItemController = _projectItemController;
-@synthesize duration = _duration;
+@synthesize tracks                  = _tracks;
+@synthesize timelineObjectFactory   = _timelineObjectFactory;
+@synthesize projectItemController   = _projectItemController;
+@synthesize duration                = _duration;
+@synthesize timelineObjectsDelegate = _timelineObjectsDelegate;
 
 #pragma mark- Init
 
@@ -54,11 +66,60 @@
     return self;
 }
 
+
+#pragma mark - NSObject
+
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    
+    if([object isKindOfClass:[VSTrack class]]){
+        
+        VSTrack *affectedTrack = (VSTrack*) object;
+        
+        if([keyPath isEqualToString:@"timelineObjects"]){
+            
+            NSInteger kind = [[change valueForKey:@"kind"] intValue];
+            
+            switch (kind) {
+                case NSKeyValueChangeInsertion:
+                {
+                    if(![[change valueForKey:@"notificationIsPrior"] boolValue]){ 
+                        NSArray *allTimelineObjects = [affectedTrack valueForKey:keyPath];
+                        NSArray *newTimelineObjects = [allTimelineObjects objectsAtIndexes:[change  objectForKey:@"indexes"]];
+                        
+                        if([self timelineObjectsDelegateImplementsSelector:@selector(timelineObjects:haveBeenAddedToTrack:)]){
+                            [self.timelineObjectsDelegate timelineObjects:newTimelineObjects haveBeenAddedToTrack:affectedTrack];
+                        }
+                    }
+                    break;
+                }
+                case NSKeyValueChangeRemoval:
+                {
+                    if([[change valueForKey:@"notificationIsPrior"] boolValue]){ 
+                        NSArray *allTimelineObjects = [affectedTrack valueForKey:keyPath];
+                        NSArray *removedTimelineObjects = [allTimelineObjects objectsAtIndexes:[change  objectForKey:@"indexes"]];
+                        
+                        if([self timelineObjectsDelegateImplementsSelector:@selector(timelineObjects:haveBeenAddedToTrack:)]){
+                            [self.timelineObjectsDelegate timelineObjects:removedTimelineObjects haveBeenAddedToTrack:affectedTrack];
+                        }
+                        
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+    }
+}
+
 #pragma mark- Methods
 
 -(BOOL) addNewTrackNamed:(NSString *)name ofType:(VSTrackType)type{
-    [self.tracks addObject:[[VSTrack alloc] initWithName:name type:type]];
+    VSTrack* newTrack = [[VSTrack alloc] initWithName:name type:type];
     
+    [newTrack addObserver:self forKeyPath:@"timelineObjects" options:NSKeyValueObservingOptionPrior |NSKeyValueObservingOptionNew context:nil];
+    
+    [self.tracks addObject:newTrack];
     return YES;
 }
 
@@ -92,7 +153,6 @@
     
 }
 
-
 -(BOOL) removeTimelineObject:(VSTimelineObject *)aTimelineObject fromTrack:(VSTrack *)track{
     return [track removTimelineObject:aTimelineObject];
 }
@@ -118,7 +178,7 @@
 -(void) unselectAllTimelineObjects{
     for (VSTrack *track in self.tracks){
         if(track){
-        [track unselectAllTimelineObjects];
+            [track unselectAllTimelineObjects];
         }
     }
 }
@@ -132,7 +192,7 @@
     return selectdTimelineObjects;
 }
 
-#pragma mark - AccessTimeLineObjects
+#pragma mark AccessTimeLineObjects
 
 //TODO: read out the objects
 - (NSArray *)timelineObjectsForTimestamp:(double)aTimestamp
@@ -181,6 +241,23 @@
         self.duration = newObject.endTime;
     
     return newObject;
+}
+
+/**
+ * Checks if the delegate is able to respond to the given Selector
+ * @param selector Selector the delegate will be checked for if it is able respond to
+ * @return YES if the delegate is able to respond to the selector, NO otherweis
+ */
+-(BOOL) timelineObjectsDelegateImplementsSelector:(SEL) selector{
+    if(self.timelineObjectsDelegate){
+        if([self.timelineObjectsDelegate conformsToProtocol:@protocol(VSTimelineTimelineObjectsDelegate) ]){
+            if([self.timelineObjectsDelegate respondsToSelector: selector]){
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
 }
 
 @end

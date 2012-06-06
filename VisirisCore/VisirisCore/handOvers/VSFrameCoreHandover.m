@@ -9,11 +9,14 @@
 #import "VSFrameCoreHandover.h"
 
 @implementation VSFrameCoreHandover
-@synthesize frame = _frame;
 
--(id) initWithFrame:(NSImage*) inFrame andAttributes:(NSDictionary *) theAttributes forTimestamp:(double)theTimestamp{
+@synthesize frame       = _frame;
+@synthesize textureID   = _textureID;
+
+-(id) initWithFrame:(NSImage*) inFrame andAttributes:(NSDictionary *) theAttributes forTextureID:(NSNumber*) aTextureID forTimestamp:(double)theTimestamp{
     if(self = [super initWithAttributes:theAttributes forTimestamp:theTimestamp]){
         self.frame = inFrame;
+        self.textureID = aTextureID;
     }
     return self;
 }
