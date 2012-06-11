@@ -23,6 +23,7 @@
     }
     
 //    return [NSImage imageNamed:@"aaa.jpg"];
+    NSLog(@"size: %f - %f", self.image.size.width, self.image.size.height);
     return self.image;
 }
 

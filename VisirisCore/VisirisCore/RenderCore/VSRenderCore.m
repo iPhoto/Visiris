@@ -105,22 +105,25 @@ static struct {
     }
         
     CGLLockContext([[self openGLContext] CGLContextObj]);
-    
-	
+
 	// Make sure we draw to the right context
 	[[self openGLContext] makeCurrentContext];
     
-    self.textureBelow = [[VSTexture alloc] initWithNSImage:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).frame];
+    
+    VSTexture *temp = [self.textureManager getVSTextureForTexId:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).textureID];
+    
+   // VSTexture *blubb = [[VSTexture alloc] initEmptyTextureWithSize:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).frame.size];
+   // [blubb replaceContent:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).frame];
+    
+    [temp replaceContent:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).frame];
+   // self.textureBelow = [[VSTexture alloc] initWithNSImage:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).frame];
     self.textureUp = [[VSTexture alloc] initWithNSImage:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:1]).frame];
     
-    GLuint finalTexture = [self combineTexture:self.textureBelow.texture with:self.textureUp.texture];
-    
-    GLint texSize;
-    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &texSize); 
-    NSLog(@"blubb: %d", texSize);    
+    GLuint finalTexture = [self combineTexture:temp.texture with:self.textureUp.texture];
     	
-    [self.textureBelow deleteTexture];
+   // [self.textureBelow deleteTexture];
     [self.textureUp deleteTexture];
+  //  [blubb deleteTexture];
     
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
     
@@ -192,6 +195,10 @@ static struct {
     g_resources.vertex_buffer = make_buffer(GL_ARRAY_BUFFER,g_vertex_buffer_data,sizeof(g_vertex_buffer_data));
     g_resources.element_buffer = make_buffer(GL_ELEMENT_ARRAY_BUFFER,g_element_buffer_data,sizeof(g_element_buffer_data));
     return 1;
+}
+
+-(GLuint) createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode{
+    return [self.textureManager createTextureWithSize:textureSize];
 }
 
 @end

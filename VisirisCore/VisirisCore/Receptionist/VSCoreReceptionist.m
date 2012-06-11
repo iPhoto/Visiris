@@ -32,7 +32,8 @@
 }
 
 -(GLuint) createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode{
-    return -1;
+    return [self.renderCore createNewTextureForSize:textureSize colorMode:colorMode];
+    //return 0;
 }
 
 -(void) removeTextureForID:(GLuint)anID{

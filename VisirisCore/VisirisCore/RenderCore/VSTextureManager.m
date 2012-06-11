@@ -11,7 +11,7 @@
 #import <OpenGL/glu.h>
 
 @interface VSTextureManager()
-@property (strong) NSMutableArray   *textureArray;
+@property (strong) NSMutableDictionary   *textureArray;
 
 @end
 
@@ -20,7 +20,7 @@
 
 -(id)init{
     if (self = [super init]) {
-        self.textureArray = [[NSMutableArray alloc] init];
+        self.textureArray = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -36,9 +36,14 @@
     }
     
     VSTexture *tempTexture = [[VSTexture alloc] initEmptyTextureWithSize:size];
-    [_textureArray addObject:tempTexture];
+   // [_textureArray addObject:tempTexture];
+    [self.textureArray setObject:tempTexture forKey:[NSNumber numberWithInt:tempTexture.texture]];
     
     return tempTexture.texture;
+}
+
+- (VSTexture *)getVSTextureForTexId:(GLuint) texId{
+    return [self.textureArray objectForKey:[NSNumber numberWithInt:texId]];
 }
 
 @end

@@ -167,7 +167,7 @@
 
 - (void)replaceContent:(NSImage *) theImage{
     int samplesPerPixel = 0;    
-    _size = [theImage size];
+   // _size = [theImage size];
     
     [theImage lockFocus];
     NSBitmapImageRep* bitmap = [[NSBitmapImageRep alloc] initWithFocusedViewRect:NSMakeRect(0.0, 0.0, _size.width, _size.height)];
