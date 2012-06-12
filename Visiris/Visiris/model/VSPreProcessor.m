@@ -43,8 +43,6 @@
     NSMutableArray *handoverObjects = [[NSMutableArray alloc] init];
     
     for (VSTimelineObject *currentTimeLineObject in currentTimeLineObjects) {
-        
-        
         VSCoreHandover *coreHandover = [currentTimeLineObject handoverForTimestamp:aTimestamp frameSize:aFrameSize];
         if (coreHandover) {
             [handoverObjects addObject:coreHandover];

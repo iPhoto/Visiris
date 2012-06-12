@@ -7,13 +7,14 @@
 //
 
 #import "VSFrameCoreHandover.h"
+#import "VSImage.h"
 
 @implementation VSFrameCoreHandover
 
 @synthesize frame       = _frame;
 @synthesize textureID   = _textureID;
 
--(id) initWithFrame:(NSImage*) inFrame andAttributes:(NSDictionary *) theAttributes forTextureID:(GLuint) aTextureID forTimestamp:(double)theTimestamp{
+-(id) initWithFrame:(VSImage *) inFrame andAttributes:(NSDictionary *) theAttributes forTextureID:(GLuint) aTextureID forTimestamp:(double)theTimestamp{
     if(self = [super initWithAttributes:theAttributes forTimestamp:theTimestamp]){
         self.frame = inFrame;
         self.textureID = aTextureID;

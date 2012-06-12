@@ -8,11 +8,13 @@
 
 #import "VSFrameSourceSupplier.h"
 #import "VSProjectSettings.h"
+#import "VisirisCore/VSImage.h"
 
 @implementation VSFrameSourceSupplier
 
--(NSImage *) getFrameForTimestamp:(double)aTimestamp{
-    return [NSImage imageNamed:@"aaa.jpg"];
+-(VSImage *) getFrameForTimestamp:(double)aTimestamp{
+    NSLog(@"MARTIN IS ALLOWED TO PUNCH ME IN SE FACE...because this little shit shouldnt appear");
+    return [[VSImage alloc] init];
 }
 
 @end

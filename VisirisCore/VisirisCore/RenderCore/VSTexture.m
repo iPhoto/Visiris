@@ -9,6 +9,7 @@
 #import "VSTexture.h"
 #import <OpenGL/glu.h>
 #import "VSImageContext.h"
+#import "VSImage.h"
 
 @implementation VSTexture
 @synthesize texture = _texture;
@@ -165,10 +166,9 @@
     return self;
 }
 
-- (void)replaceContent:(NSImage *) theImage{
+/*- (void)replaceContent:(NSImage *) theImage{
     int samplesPerPixel = 0;    
-   // _size = [theImage size];
-    
+
     [theImage lockFocus];
     NSBitmapImageRep* bitmap = [[NSBitmapImageRep alloc] initWithFocusedViewRect:NSMakeRect(0.0, 0.0, _size.width, _size.height)];
     [theImage unlockFocus];
@@ -191,19 +191,24 @@
     if(![bitmap isPlanar] && (samplesPerPixel == 3 || samplesPerPixel == 4)) {
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, self.size.width, self.size.height, samplesPerPixel == 4 ? GL_RGBA8 : GL_RGB8, GL_UNSIGNED_INT_8_8_8_8_REV, [bitmap bitmapData]);
         
-       /* glTexImage2D(GL_TEXTURE_2D, 0,
-                     samplesPerPixel == 4 ? GL_RGBA8 : GL_RGB8,
-                     [bitmap pixelsWide],
-                     [bitmap pixelsHigh],
-                     0,
-                     samplesPerPixel == 4 ? GL_RGBA : GL_RGB,
-                     GL_UNSIGNED_INT_8_8_8_8_REV,
-                     [bitmap bitmapData]);*/
+//        glTexImage2D(GL_TEXTURE_2D, 0,
+//                     samplesPerPixel == 4 ? GL_RGBA8 : GL_RGB8,
+//                     [bitmap pixelsWide],
+//                     [bitmap pixelsHigh],
+//                     0,
+//                     samplesPerPixel == 4 ? GL_RGBA : GL_RGB,
+//                     GL_UNSIGNED_INT_8_8_8_8_REV,
+//                     [bitmap bitmapData]);
         
     } else {
         NSLog(@"Shit happens");
         // Handle other bitmap formats.
     }
+}*/
+
+- (void)replaceContent:(VSImage *)theImage{
+    glBindTexture(GL_TEXTURE_2D, self.texture);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, self.size.width, self.size.height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, theImage.data);
 }
 
 -(void)bind{

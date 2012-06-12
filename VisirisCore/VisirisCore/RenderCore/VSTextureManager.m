@@ -26,7 +26,7 @@
 }
 
 - (GLuint)createTextureWithSize:(NSSize) size{
-    for(VSTexture *vstexture in _textureArray)
+    for(VSTexture *vstexture in [_textureArray allValues])
     {
         if (vstexture.size.width == size.width &&
             vstexture.size.height == size.height) {

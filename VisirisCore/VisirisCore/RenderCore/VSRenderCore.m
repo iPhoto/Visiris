@@ -105,25 +105,21 @@ static struct {
     }
         
     CGLLockContext([[self openGLContext] CGLContextObj]);
-
+    
 	// Make sure we draw to the right context
 	[[self openGLContext] makeCurrentContext];
     
     
     VSTexture *temp = [self.textureManager getVSTextureForTexId:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).textureID];
-    
-   // VSTexture *blubb = [[VSTexture alloc] initEmptyTextureWithSize:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).frame.size];
-   // [blubb replaceContent:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).frame];
+    VSTexture *temp2 = [self.textureManager getVSTextureForTexId:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:1]).textureID];
     
     [temp replaceContent:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).frame];
-   // self.textureBelow = [[VSTexture alloc] initWithNSImage:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).frame];
-    self.textureUp = [[VSTexture alloc] initWithNSImage:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:1]).frame];
+    [temp2 replaceContent:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:1]).frame];
+ //   self.textureUp = [[VSTexture alloc] initWithNSImage:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:1]).frame];
     
-    GLuint finalTexture = [self combineTexture:temp.texture with:self.textureUp.texture];
+    GLuint finalTexture = [self combineTexture:temp.texture with:temp2.texture];
     	
-   // [self.textureBelow deleteTexture];
-    [self.textureUp deleteTexture];
-  //  [blubb deleteTexture];
+   // [self.textureUp deleteTexture];
     
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
     

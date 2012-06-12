@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "VSSourceSupplier.h"
 
+@class VSImage;
+
 /**
  * Supplier for frame based VSTimlelineObjects like Videos and imags. Subclassed of VSSourceSupplier. Adds a function to return a frame for a given timestamp to its parent class.
  */
@@ -19,6 +21,6 @@
  * @param aTimestamp Defines the frame that will be rendered. The timestamp has to be in local time of the timelineObject.
  * @returns Pointer to the created frame.
  */
--(NSImage*) getFrameForTimestamp:(double) aTimestamp;
+-(VSImage*) getFrameForTimestamp:(double) aTimestamp;
 
 @end

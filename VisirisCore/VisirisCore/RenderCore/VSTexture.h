@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class VSImage;
+
 @interface VSTexture : NSObject
 @property (readonly, assign) GLuint     texture;
 @property (readonly, assign) NSSize     size;
@@ -16,7 +18,7 @@
 -(id)initWithNSImage:(NSImage *)theImage;
 -(id)initWithName:(NSString *)name;
 
-- (void)replaceContent:(NSImage *) theImage;
+- (void)replaceContent:(VSImage *) theImage;
 
 -(void)bind;
 -(void)unbind;

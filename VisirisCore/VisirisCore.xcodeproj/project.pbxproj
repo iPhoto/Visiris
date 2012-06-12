@@ -39,6 +39,8 @@
 		276AAD5B1575046B00A984E0 /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 276AAD5A1575046B00A984E0 /* test.jpg */; };
 		27A135A7157608FD00883B96 /* hellogl.fs.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 27A135A5157608FD00883B96 /* hellogl.fs.glsl */; };
 		27A135A8157608FD00883B96 /* hellogl.vs.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 27A135A6157608FD00883B96 /* hellogl.vs.glsl */; };
+		27C5606915877DAC00E14DCE /* VSImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 27C5606715877DAC00E14DCE /* VSImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		27C5606A15877DAC00E14DCE /* VSImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C5606815877DAC00E14DCE /* VSImage.m */; };
 		5B14E9A415641B0200AFF08C /* VSCoreHandover.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B14E9A015641B0200AFF08C /* VSCoreHandover.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B14E9A515641B0200AFF08C /* VSCoreHandover.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B14E9A115641B0200AFF08C /* VSCoreHandover.m */; };
 		5B14E9A615641B0200AFF08C /* VSFrameCoreHandover.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B14E9A215641B0200AFF08C /* VSFrameCoreHandover.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -71,6 +73,8 @@
 		276AAD5A1575046B00A984E0 /* test.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test.jpg; sourceTree = "<group>"; };
 		27A135A5157608FD00883B96 /* hellogl.fs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hellogl.fs.glsl; sourceTree = "<group>"; };
 		27A135A6157608FD00883B96 /* hellogl.vs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hellogl.vs.glsl; sourceTree = "<group>"; };
+		27C5606715877DAC00E14DCE /* VSImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSImage.h; sourceTree = "<group>"; };
+		27C5606815877DAC00E14DCE /* VSImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSImage.m; sourceTree = "<group>"; };
 		5B14E9A015641B0200AFF08C /* VSCoreHandover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSCoreHandover.h; sourceTree = "<group>"; };
 		5B14E9A115641B0200AFF08C /* VSCoreHandover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSCoreHandover.m; sourceTree = "<group>"; };
 		5B14E9A215641B0200AFF08C /* VSFrameCoreHandover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFrameCoreHandover.h; sourceTree = "<group>"; };
@@ -126,6 +130,8 @@
 				276151461577D66B005177C5 /* VSTexture.m */,
 				276151491577F290005177C5 /* VSShader.h */,
 				2761514A1577F290005177C5 /* VSShader.m */,
+				27C5606715877DAC00E14DCE /* VSImage.h */,
+				27C5606815877DAC00E14DCE /* VSImage.m */,
 			);
 			path = RenderCore;
 			sourceTree = "<group>";
@@ -242,6 +248,7 @@
 				2761514B1577F290005177C5 /* VSShader.h in Headers */,
 				274C70CE157E81DD0031F9B2 /* VSImageContext.h in Headers */,
 				2726745B157F76A400EBE6B0 /* VSTextureManager.h in Headers */,
+				27C5606915877DAC00E14DCE /* VSImage.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,6 +346,7 @@
 				2761514C1577F290005177C5 /* VSShader.m in Sources */,
 				274C70CF157E81DD0031F9B2 /* VSImageContext.m in Sources */,
 				2726745C157F76A400EBE6B0 /* VSTextureManager.m in Sources */,
+				27C5606A15877DAC00E14DCE /* VSImage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
