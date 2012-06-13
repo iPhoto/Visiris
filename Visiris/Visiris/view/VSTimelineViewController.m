@@ -516,7 +516,7 @@ static NSString* defaultNib = @"VSTimelineView";
 }
 
 #pragma mark - Playhead
-
+ 
 -(void) updatePlayhead{
     NSRect newFrame = self.playheadViewController.view.frame;
     
