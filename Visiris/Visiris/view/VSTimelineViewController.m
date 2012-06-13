@@ -464,7 +464,7 @@ static NSString* defaultNib = @"VSTimelineView";
     newFrame.size.height = self.view.frame.size.height + self.scvTrackHolder.horizontalRulerView.frame.size.height;
     newFrame.origin.y = 0;
     
-    DDLogInfo(@"newFRam: %@",NSStringFromRect(newFrame));
+    //DDLogInfo(@"newFRam: %@",NSStringFromRect(newFrame));
     
     [self.playheadViewController.view setFrame:newFrame];
     [self.playheadViewController.view setNeedsDisplay:YES];

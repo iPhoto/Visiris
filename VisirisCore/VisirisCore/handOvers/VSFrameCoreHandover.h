@@ -25,6 +25,6 @@
  * @param theTimestamp The timestamp the data is set of
  * @return self
  */
--(id) initWithFrame:(VSImage*) inFrame andAttributes:(NSDictionary *) theAttributes forTextureID:(GLuint) aTextureID forTimestamp:(double)theTimestamp;
+-(id) initWithFrame:(VSImage*) inFrame andAttributes:(NSDictionary *) theAttributes forTextureID:(GLuint) aTextureID forTimestamp:(double)theTimestamp forId:(NSInteger) theId;
 
 @end

@@ -9,38 +9,6 @@
 #import "VSShader.h"
 #import "OpenGL/glu.h"
 
-/*
-static const GLfloat g_vertex_buffer_data[] = { 
-    -1.0f, -1.0f,
-    1.0f, -1.0f,
-    -1.0f,  1.0f,
-    1.0f,  1.0f
-};
-
-static const GLushort g_element_buffer_data[] = { 0, 1, 2, 3 };
-*/
-
-
-
-/*
-static struct {
-    GLuint vertex_buffer, element_buffer;
-   // GLuint textures[2];
-    GLuint vertex_shader, fragment_shader, program;
-    
-    struct {
-        GLint fade_factor;
-        GLint textures[2];
-    } uniforms;
-    
-    struct {
-        GLint position;
-    } attributes;
-    
-    GLfloat fade_factor;
-} g_resources;
- */
-
 static GLuint make_shader(GLenum type,NSString* name)
 {
     NSString* shaderPath = [[NSBundle bundleWithIdentifier:@"com.visiris.VisirisCore"] pathForResource:name ofType:@"glsl"];
@@ -100,7 +68,6 @@ static GLuint make_shader(GLenum type,NSString* name)
             NSLog(@"Error: Making Resources Failed!!!!!");
         }
     }
-    
     return self;
 }
 
@@ -114,21 +81,6 @@ static GLuint make_shader(GLenum type,NSString* name)
 
 - (NSInteger)make_resources
 {
-    //create buffer
-    //g_resources.vertex_buffer = make_buffer(GL_ARRAY_BUFFER,g_vertex_buffer_data,sizeof(g_vertex_buffer_data));
-    
-    
-    
-    //g_resources.element_buffer = make_buffer(GL_ELEMENT_ARRAY_BUFFER,g_element_buffer_data,sizeof(g_element_buffer_data));
-    
-    //create textures
-    //g_resources.textures[0] = [[[VSTexture alloc] initWithName:@"jolandabregenz"] texture];
-    //g_resources.textures[1] = [[[VSTexture alloc] initWithName:@"test"] texture];
-    
-   // if (g_resources.textures[0] == 0 || g_resources.textures[1] == 0)
-   //     return 0;
-    
-    
     //compile shader
     self.vertexShader = [self compileShader:@"hellogl.vs" withType:GL_VERTEX_SHADER];
     
@@ -143,7 +95,6 @@ static GLuint make_shader(GLenum type,NSString* name)
     
     //create shaderprogram
     self.program = [self make_program:self.vertexShader fragmentshader:(self.fragmentShader)];
-    //self.program = make_program(g_resources.vertex_shader, g_resources.fragment_shader);
     if (self.program == 0)
         return 0;
     
@@ -202,7 +153,6 @@ static GLuint make_shader(GLenum type,NSString* name)
     glGetProgramiv(program, GL_LINK_STATUS, &program_ok);
     if (!program_ok) {
         fprintf(stderr, "Failed to link shader program:\n");
-        //   show_info_log(program, glGetProgramiv, glGetProgramInfoLog);
         glDeleteProgram(program);
         return 0;
     }

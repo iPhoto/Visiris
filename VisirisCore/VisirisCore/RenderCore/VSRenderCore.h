@@ -37,10 +37,14 @@
 @property (strong, readonly) NSOpenGLContext        *openGLContext;
 @property (strong, readonly) NSOpenGLPixelFormat    *pixelFormat;        
 @property (strong) VSFrameBufferObject              *frameBufferObjectOne;
-@property (strong) VSTexture                        *textureBelow;
-@property (strong) VSTexture                        *textureUp;
+@property (strong) VSFrameBufferObject              *frameBufferObjectTwo;
+@property (strong) VSFrameBufferObject              *frameBufferObjectCurrent;
+@property (strong) VSFrameBufferObject              *frameBufferObjectOld;
+//@property (strong) VSTexture                        *textureBelow;
+//@property (strong) VSTexture                        *textureUp;
 @property (strong) VSShader                         *shader;
 @property (strong) VSTextureManager                 *textureManager;
+@property (assign) GLuint                           outPutTexture;
 
 /**
  * Creates one frame out of the data stored in the give VSCoreHandovers in the given frame size.

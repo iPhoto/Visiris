@@ -49,15 +49,11 @@
     double localTimestamp = [self convertGlobalTimestampToLocalTimestamp:aTimestamp];
     //TODO richtiges corehandover basteln
     if ([self.supplier isKindOfClass:[VSFrameSourceSupplier class]] ) {
-        coreHandover = [[VSFrameCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp] andAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp] forTextureID:self.textureID forTimestamp:localTimestamp];
+        coreHandover = [[VSFrameCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp] andAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp] forTextureID:self.textureID forTimestamp:localTimestamp forId: 0];
     }
     else {
         NSLog(@"TODOOOOOOOOOOOOOOOOOOOOO: Next time you see that, punch in this ugly face right of you!!!!!!");
     }
-    
-    
-    
-//    return [[VSCoreHandover alloc] initWithAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp] forTimestamp:localTimestamp];
     
     return coreHandover;
 }

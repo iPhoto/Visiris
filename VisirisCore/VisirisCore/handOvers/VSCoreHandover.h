@@ -17,6 +17,7 @@
 
 //TODO: is the time stamp local or global?
 @property double timestamp;
+@property NSInteger timeLineObjectId;
 
 /** NSDictionary containing the parameters, the VSParemterType property of the VSParameter object is used as Key. */
 @property NSDictionary *attributes;
@@ -29,6 +30,6 @@
  * @param theAttributes NSDictionary containing the parameters, the VSParemterType property of the VSParameter object is used as Key.
  * @param The timestamp the data is set of
  */
--(id) initWithAttributes:(NSDictionary *) theAttributes forTimestamp:(double) theTimestamp;
+-(id) initWithAttributes:(NSDictionary *) theAttributes forTimestamp:(double) theTimestamp forId:(NSInteger) theId;
 
 @end

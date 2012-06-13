@@ -23,6 +23,6 @@
  * @param theFilePath file path of the quartz composer patch
  * @return self
  */
--(id) initWithAttributes:(NSDictionary *)theAttributes forTimestamp:(double)theTimestamp andFilePath:(NSString*) theFilePath;
+-(id) initWithAttributes:(NSDictionary *)theAttributes forTimestamp:(double)theTimestamp andFilePath:(NSString*) theFilePath forId:(NSInteger) theId;
 
 @end

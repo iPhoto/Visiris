@@ -30,13 +30,11 @@
     {
         if (vstexture.size.width == size.width &&
             vstexture.size.height == size.height) {
-            NSLog(@"same texture");
             return vstexture.texture;
         }
     }
     
     VSTexture *tempTexture = [[VSTexture alloc] initEmptyTextureWithSize:size];
-   // [_textureArray addObject:tempTexture];
     [self.textureArray setObject:tempTexture forKey:[NSNumber numberWithInt:tempTexture.texture]];
     
     return tempTexture.texture;

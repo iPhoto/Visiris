@@ -907,10 +907,10 @@
 		5B35C0BC1577B13E009911EC /* coreInterface */ = {
 			isa = PBXGroup;
 			children = (
-				5B35BF7D1577A573009911EC /* VSPostProcessor.h */,
-				5B35BF7E1577A573009911EC /* VSPostProcessor.m */,
 				5B35BF7F1577A573009911EC /* VSPreProcessor.h */,
 				5B35BF801577A573009911EC /* VSPreProcessor.m */,
+				5B35BF7D1577A573009911EC /* VSPostProcessor.h */,
+				5B35BF7E1577A573009911EC /* VSPostProcessor.m */,
 			);
 			name = coreInterface;
 			sourceTree = "<group>";

@@ -43,10 +43,14 @@ static struct {
 @synthesize pixelFormat = _pixelFormat;
 @synthesize openGLContext = _openGLContext;
 @synthesize frameBufferObjectOne = _frameBufferObjectOne;
-@synthesize textureBelow = _textureBelow;
-@synthesize textureUp = _textureUp;
+@synthesize frameBufferObjectTwo = _frameBufferObjectTwo;
+@synthesize frameBufferObjectCurrent = _frameBufferObjectCurrent;
+@synthesize frameBufferObjectOld = _frameBufferObjectOld;
+//@synthesize textureBelow = _textureBelow;
+//@synthesize textureUp = _textureUp;
 @synthesize shader = _shader;
 @synthesize textureManager = _textureManager;
+@synthesize outPutTexture = _outPutTexture;
 
 -(id)init{
     self = [super init];
@@ -81,6 +85,9 @@ static struct {
         }
         
         self.frameBufferObjectOne = [[VSFrameBufferObject alloc] init];
+        self.frameBufferObjectTwo = [[VSFrameBufferObject alloc] init];
+        self.frameBufferObjectCurrent = self.frameBufferObjectOne;
+        self.frameBufferObjectOld = self.frameBufferObjectTwo;
         
         self.shader = [[VSShader alloc] init];
         self.textureManager = [[VSTextureManager alloc] init];
@@ -100,34 +107,57 @@ static struct {
         }
     }
         
+    //For now we need more than 2 Objects
     if ([mutableCoreHandovers count] < 2) {
+        NSLog(@"need at least 2 objects");
         return;
     }
-        
+    
+    //Check if every Corehandover is a Framecorehandover. If not, return.
+    for(VSCoreHandover *coreHandover in theCoreHandovers){
+        if ([coreHandover isKindOfClass:[VSFrameCoreHandover class]] == NO) {
+            NSLog(@"Theres a little bitch in here");
+            return;
+        }
+    }
+    
+    
     CGLLockContext([[self openGLContext] CGLContextObj]);
     
-	// Make sure we draw to the right context
+    // Make sure we draw to the right context
 	[[self openGLContext] makeCurrentContext];
+/*
     
-    
+    for (NSInteger i = 2; i < theCoreHandovers.count -1; i++) {
+        VSFrameCoreHandover *handOver = (VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:(i+1)];
+        VSTexture *handOverTexture = [self.textureManager getVSTextureForTexId:handOver.textureID];
+        
+        //Replace Content of the VSTexture EXPENSIVE 
+        //TODO: should only replace when the timeLineObjectId is not identical
+        [handOverTexture replaceContent:handOver.frame timeLineObjectId:handOver.timeLineObjectId];
+        
+        
+        
+    }
+    */
     VSTexture *temp = [self.textureManager getVSTextureForTexId:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).textureID];
     VSTexture *temp2 = [self.textureManager getVSTextureForTexId:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:1]).textureID];
+
     
-    [temp replaceContent:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).frame];
-    [temp2 replaceContent:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:1]).frame];
+
+
+    [temp replaceContent:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).frame timeLineObjectId:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).timeLineObjectId];
+    [temp2 replaceContent:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:1]).frame timeLineObjectId: ((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:1]).timeLineObjectId];
  //   self.textureUp = [[VSTexture alloc] initWithNSImage:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:1]).frame];
     
-    GLuint finalTexture = [self combineTexture:temp.texture with:temp2.texture];
+    self.outPutTexture = [self combineTexture:temp.texture with:temp2.texture];
     	
-   // [self.textureUp deleteTexture];
     
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
     
-    NSLog(@"renderFrameOfCoreHandovers");    
-    
     if (self.delegate) {
         if ([self.delegate respondsToSelector:@selector(renderCore:didFinishRenderingTexture:forTimestamp:)]) {
-            [self.delegate renderCore:self didFinishRenderingTexture:finalTexture forTimestamp:theTimestamp];
+            [self.delegate renderCore:self didFinishRenderingTexture:self.outPutTexture forTimestamp:theTimestamp];
         }
     }
 }
@@ -138,8 +168,8 @@ static struct {
     
     glViewport(0, 0, self.frameBufferObjectOne.size.width,self.frameBufferObjectOne.size.height);
     
-    glClearColor(0.7, 0.7, 0.7, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //glClearColor(0.7, 0.7, 0.7, 1.0);
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
     glUseProgram(self.shader.program);
     glUniform1f(self.shader.uniformFadefactor, 0.5f);
@@ -151,7 +181,6 @@ static struct {
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, upperTexture);
     glUniform1i(self.shader.uniformTexture2, 1);
-    
     
     glBindBuffer(GL_ARRAY_BUFFER, g_resources.vertex_buffer);
     glVertexAttribPointer(self.shader.attributePosition,  /* attribute */
@@ -193,8 +222,19 @@ static struct {
     return 1;
 }
 
--(GLuint) createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode{
+- (GLuint)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode{
     return [self.textureManager createTextureWithSize:textureSize];
+}
+
+- (void)swapFBO{
+    if (self.frameBufferObjectCurrent == self.frameBufferObjectOne) {
+        self.frameBufferObjectCurrent = self.frameBufferObjectTwo;
+        self.frameBufferObjectOld = self.frameBufferObjectOne;
+    }
+    else {
+        self.frameBufferObjectCurrent = self.frameBufferObjectOne;
+        self.frameBufferObjectOld = self.frameBufferObjectTwo;
+    }
 }
 
 @end

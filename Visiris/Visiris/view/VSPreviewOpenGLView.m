@@ -66,6 +66,8 @@
 	}
     
     [self startAnimation];
+    
+    //[self setPostsFrameChangedNotifications:YES];
 	
 	return self;
 }
@@ -131,12 +133,10 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	// This method will be called on the main thread when resizing, but we may be drawing on a secondary thread through the display link
 	// Add a mutex around to avoid the threads accessing the context simultaneously
 	CGLLockContext([[self openGLContext] CGLContextObj]);
-	
-	// Delegate to the scene object to update for a change in the view size
-    
-    //TODO Controller does not exist
-	//[[controller scene] setViewportRect:[self bounds]];
+	    
     glViewport(0, 0, [self bounds].size.width, [self bounds].size.height);
+    //NSLog(@"glview frame size: %@", NSStringFromSize([self frame].size));
+    //NSLog(@"glview bounds size: %@", NSStringFromSize([self bounds].size));
 
 	[[self openGLContext] update];
 	
@@ -152,19 +152,21 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	
 	// Make sure we draw to the right context
 	[[self openGLContext] makeCurrentContext];
-	
-	// Delegate to the scene object for rendering
+	    
+    //glViewport(0, 0, [self bounds].size.width, [self bounds].size.height);
+
     
     glEnable( GL_TEXTURE_2D );
     glBindTexture( GL_TEXTURE_2D, self.texture );
     
-    glClearColor(0.7, 0.7, 0.7, 1.0);
+    glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
     glBegin( GL_QUADS );
-    glTexCoord2d(0.0,0.0); glVertex2d(1.0,1.0);
-    glTexCoord2d(1.0,0.0); glVertex2d(-1.0,1.0);
-    glTexCoord2d(1.0,1.0); glVertex2d(-1.0,-1.0);
-    glTexCoord2d(0.0,1.0); glVertex2d(1.0,-1.0);
+    glTexCoord2d(0.0,0.0); glVertex2d(-1.0,-1.0);
+    glTexCoord2d(1.0,0.0); glVertex2d(1.0,-1.0);
+    glTexCoord2d(1.0,1.0); glVertex2d(1.0,1.0);
+    glTexCoord2d(0.0,1.0); glVertex2d(-1.0,1.0);
     glEnd();
 
 	[[self openGLContext] flushBuffer];
@@ -177,6 +179,5 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	if (displayLink && !CVDisplayLinkIsRunning(displayLink))
 		CVDisplayLinkStart(displayLink);
 }
-
 
 @end

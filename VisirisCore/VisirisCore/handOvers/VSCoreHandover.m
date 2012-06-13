@@ -11,13 +11,15 @@
 @implementation VSCoreHandover
 @synthesize timestamp = _timestamp;
 @synthesize attributes = _attributes;
+@synthesize timeLineObjectId = _timeLineObjectId;
 
 #pragma mark - Init
 
--(id) initWithAttributes:(NSDictionary *) theAttributes forTimestamp:(double) theTimestamp{
+-(id) initWithAttributes:(NSDictionary *) theAttributes forTimestamp:(double) theTimestamp forId:(NSInteger) theId{
     if(self = [super init]){
         self.timestamp = theTimestamp;
         self.attributes = theAttributes;
+        self.timeLineObjectId = theId;
     }
     
     return self;

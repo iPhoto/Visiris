@@ -10,24 +10,18 @@
 #import <QuartzCore/CVDisplayLink.h>
 
 @class VSPlaybackController;
+
 @interface VSPreviewOpenGLView : NSView
 
-
-
-//for testing only
-@property VSPlaybackController *playBackcontroller;
-
-@property (strong) NSOpenGLContext *openGLContext;
-@property (strong) NSOpenGLPixelFormat* pixelFormat;
-@property (assign) CVDisplayLinkRef displayLink;
-@property GLuint texture;
-//TODO controller?
-//@property (weak) OpenGLViewController *controller;
+@property (strong) VSPlaybackController     *playBackcontroller;
+@property (strong) NSOpenGLContext          *openGLContext;
+@property (strong) NSOpenGLPixelFormat      *pixelFormat;
+@property (assign) CVDisplayLinkRef         displayLink;
+@property (assign) GLuint                   texture;
 
 - (id) initWithFrame:(NSRect)frameRect;
 - (id) initWithFrame:(NSRect)frameRect shareContext:(NSOpenGLContext*)context;
 - (void) drawView;
 - (void) startAnimation;
-
 
 @end

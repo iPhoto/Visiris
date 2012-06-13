@@ -12,8 +12,8 @@
 
 @synthesize filePath = _filePath;
 
--(id) initWithAttributes:(NSDictionary *)theAttributes forTimestamp:(double)theTimestamp andFilePath:(NSString *)theFilePath{
-    if(self = [super initWithAttributes:theAttributes forTimestamp:theTimestamp]){
+-(id) initWithAttributes:(NSDictionary *)theAttributes forTimestamp:(double)theTimestamp andFilePath:(NSString *)theFilePath forId:(NSInteger) theId{
+    if(self = [super initWithAttributes:theAttributes forTimestamp:theTimestamp forId:theId]){
         self.filePath = theFilePath;
     }
     return self;

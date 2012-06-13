@@ -14,8 +14,8 @@
 @synthesize frame       = _frame;
 @synthesize textureID   = _textureID;
 
--(id) initWithFrame:(VSImage *) inFrame andAttributes:(NSDictionary *) theAttributes forTextureID:(GLuint) aTextureID forTimestamp:(double)theTimestamp{
-    if(self = [super initWithAttributes:theAttributes forTimestamp:theTimestamp]){
+-(id) initWithFrame:(VSImage *) inFrame andAttributes:(NSDictionary *) theAttributes forTextureID:(GLuint) aTextureID forTimestamp:(double)theTimestamp forId:(NSInteger) theId{
+    if(self = [super initWithAttributes:theAttributes forTimestamp:theTimestamp forId:theId]){
         self.frame = inFrame;
         self.textureID = aTextureID;
     }

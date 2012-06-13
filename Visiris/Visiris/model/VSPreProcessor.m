@@ -50,7 +50,7 @@
     }
     
     if (self.renderCoreReceptionist && handoverObjects) {
-        DDLogInfo(@"out");
+        //DDLogInfo(@"out");
         [self.renderCoreReceptionist renderFrameAtTimestamp:aTimestamp withHandovers:handoverObjects forSize:aFrameSize];
     }
 }

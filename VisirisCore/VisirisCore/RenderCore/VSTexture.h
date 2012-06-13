@@ -13,15 +13,12 @@
 @interface VSTexture : NSObject
 @property (readonly, assign) GLuint     texture;
 @property (readonly, assign) NSSize     size;
+@property (readonly, assign) NSInteger  timeLineObjectId;
 
--(id)initEmptyTextureWithSize:(NSSize) size;
--(id)initWithNSImage:(NSImage *)theImage;
--(id)initWithName:(NSString *)name;
-
-- (void)replaceContent:(VSImage *) theImage;
-
--(void)bind;
--(void)unbind;
--(void)deleteTexture;
+- (id)initEmptyTextureWithSize:(NSSize) size;
+- (void)replaceContent:(VSImage *) theImage timeLineObjectId:(NSInteger) timeLineObjectId;
+- (void)bind;
+- (void)unbind;
+- (void)deleteTexture;
 
 @end

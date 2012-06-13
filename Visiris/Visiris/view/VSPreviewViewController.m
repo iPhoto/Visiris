@@ -56,6 +56,7 @@ static NSString* defaultNib = @"VSPreviewView";
 -(void) awakeFromNib{
     if(self.view){
         self.openGLView = [[VSPreviewOpenGLView alloc] initWithFrame:[self.openGLViewHolder frame] shareContext:self.openGLContext];
+        [self.openGLView setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
         
         [self.openGLViewHolder addSubview:self.openGLView];
     }
