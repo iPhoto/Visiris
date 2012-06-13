@@ -516,14 +516,16 @@ static NSString* defaultNib = @"VSTimelineView";
 }
 
 #pragma mark - Playhead
- 
+
 -(void) updatePlayhead{
     NSRect newFrame = self.playheadViewController.view.frame;
     
-    newFrame.size.height = self.view.frame.size.height + self.scvTrackHolder.horizontalRulerView.frame.size.height;
-    newFrame.origin.y = 0;
-    
-    //DDLogInfo(@"newFRam: %@",NSStringFromRect(newFrame));
+    newFrame.size.width = PLAYHEAD_WIDTH;
+    newFrame.size.height = self.scvTrackHolder.documentVisibleRect.size.height + self.rulerView.frame.size.height;    
+    newFrame.origin.y = self.view.frame.size.height - newFrame.size.height;
+    newFrame.origin.x = newFrame.origin.x < self.scvTrackHolder.verticalRulerView.frame.size.width ? self.scvTrackHolder.verticalRulerView.frame.size.width : newFrame.origin.x;
+    self.playheadViewController.knobHeight = self.rulerView.frame.size.height;
+    self.playheadViewController.xOffset = self.scvTrackHolder.verticalRulerView.frame.size.width;
     
     [self.playheadViewController.view setFrame:newFrame];
     [self.playheadViewController.view setNeedsDisplay:YES];

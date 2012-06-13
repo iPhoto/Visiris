@@ -28,7 +28,7 @@
 @synthesize playHeadView    = _playHeadView;
 @synthesize knobHeight      = _knobHeight;
 @synthesize pixelTimeRatio  = _pixelTimeRation;
-@synthesize xOffset         = _yOffest;
+@synthesize xOffset         = _xOffest;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
