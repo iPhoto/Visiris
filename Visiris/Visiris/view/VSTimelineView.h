@@ -33,4 +33,5 @@
 /** Delegate confirming to VSTimelineViewDelegate */
 @property id<VSTimelineViewDelegate> delegate;
 
+
 @end
