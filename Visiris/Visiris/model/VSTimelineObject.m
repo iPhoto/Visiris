@@ -18,19 +18,21 @@
 
 @implementation VSTimelineObject
 
-@synthesize sourceObject    = _sourceObject;
-@synthesize startTime       =_startTime;
-@synthesize duration        = _duration;
-@synthesize name            = _name;
-@synthesize icon            = _icon;
-@synthesize supplier        = _supplier;
-@synthesize textureID       = _textureID;
+@synthesize sourceObject        = _sourceObject;
+@synthesize startTime           = _startTime;
+@synthesize duration            = _duration;
+@synthesize name                = _name;
+@synthesize icon                = _icon;
+@synthesize supplier            = _supplier;
+@synthesize textureID           = _textureID;
+@synthesize timelineObjectID    = _timelineObjectID;
 
 
 #pragma mark - Init
--(id) initWithSourceObject:(VSTimelineObjectSource*) sourceObject icon:(NSImage *)icon{
+-(id) initWithSourceObject:(VSTimelineObjectSource*) sourceObject icon:(NSImage *)icon objectID:(NSInteger)objectID{
     if(self=[super initWithName:sourceObject.projectItem.name atTime:-1 duration:sourceObject.projectItem.duration icon:icon]){
         self.sourceObject = sourceObject;
+        self.timelineObjectID = objectID;
     }
     
     return self;
@@ -49,7 +51,7 @@
     double localTimestamp = [self convertGlobalTimestampToLocalTimestamp:aTimestamp];
     //TODO richtiges corehandover basteln
     if ([self.supplier isKindOfClass:[VSFrameSourceSupplier class]] ) {
-        coreHandover = [[VSFrameCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp] andAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp] forTextureID:self.textureID forTimestamp:localTimestamp forId: 0];
+        coreHandover = [[VSFrameCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp] andAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp] forTextureID:self.textureID forTimestamp:localTimestamp forId: self.timelineObjectID];
     }
     else {
         NSLog(@"TODOOOOOOOOOOOOOOOOOOOOO: Next time you see that, punch in this ugly face right of you!!!!!!");
