@@ -32,6 +32,9 @@
 /** Reference of the Singleton of VSProjectItemController. Used to get the ProjectItem corresponding to its VSProjectItem representation */
 @property VSProjectItemController *projectItemController;
 
+/** Stores the last assigned track id*/
+@property NSInteger lastTrackID;
+
 @end
 
 
@@ -47,6 +50,7 @@
 @synthesize duration                = _duration;
 @synthesize timelineObjectsDelegate = _timelineObjectsDelegate;
 @synthesize playHead                = _playHead;
+@synthesize lastTrackID             = _lastTrackID;
 
 #pragma mark- Init
 
@@ -122,16 +126,20 @@
     }
 }
 
-#pragma mark- Methods
+#pragma mark - Methods
+
+#pragma mark Tracks
 
 -(BOOL) addNewTrackNamed:(NSString *)name ofType:(VSTrackType)type{
-    VSTrack* newTrack = [[VSTrack alloc] initWithName:name type:type];
+    VSTrack* newTrack = [[VSTrack alloc] initWithName:name trackID:[self nextAvailableTrackID] type:type];
     
     [newTrack addObserver:self forKeyPath:@"timelineObjects" options:NSKeyValueObservingOptionPrior |NSKeyValueObservingOptionNew context:nil];
     
     [self.tracks addObject:newTrack];
     return YES;
 }
+
+#pragma mark Add TimelineObjects
 
 -(VSTimelineObject*) addNewTimelineObjectBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *)item toTrack:(VSTrack *)track positionedAtTime:(double)timePosition withDuration:(double)duration{
     
@@ -163,9 +171,13 @@
     
 }
 
+#pragma mark Remove TimelineObjects
+
 -(BOOL) removeTimelineObject:(VSTimelineObject *)aTimelineObject fromTrack:(VSTrack *)track{
     return [track removTimelineObject:aTimelineObject];
 }
+
+#pragma mark TimelineObject-Selection
 
 -(void) removeSelectedTimelineObjectsAndRegisterAtUndoManager:(NSUndoManager *)undoManager{
     for(VSTrack* track in self.tracks){
@@ -204,13 +216,16 @@
 
 #pragma mark AccessTimeLineObjects
 
-//TODO: read out the objects
 - (NSArray *)timelineObjectsForTimestamp:(double)aTimestamp
 {
     NSMutableArray *currentActiveTimeLineObjects = [[NSMutableArray alloc] init ];
     
+    //iteratres through the timeline's tracks and adds the VSTimlineObject active at this timestamp to the currentActiveTimeLineObjects-Array
     for(VSTrack *track in self.tracks){
-        [currentActiveTimeLineObjects addObjectsFromArray:track.timelineObjects];
+        VSTimelineObject *currentObject = [ track timelineObjectAtTimestamp:aTimestamp];
+        if(currentObject){
+            [currentActiveTimeLineObjects addObject:currentObject];
+        }
     }
     
     return currentActiveTimeLineObjects;
@@ -268,6 +283,14 @@
     }
     
     return NO;
+}
+
+/**
+ * Increments the lastAssignedTrackID and returns it.
+ * @return A new unique track id
+ */
+-(NSInteger) nextAvailableTrackID{
+    return ++self.lastTrackID;
 }
 
 @end

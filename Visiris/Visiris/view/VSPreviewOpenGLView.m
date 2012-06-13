@@ -57,6 +57,7 @@
 		
 		[self setupDisplayLink];
 		
+
 		// Look for changes in view size
 		// Note, -reshape will not be called automatically on size changes because NSView does not export it to override 
 		[[NSNotificationCenter defaultCenter] addObserver:self 
@@ -91,7 +92,7 @@
 
 - (CVReturn) getFrameForTime:(const CVTimeStamp*)outputTime
 {
-    [self.playBackcontroller renderFramesForCurrentTimestamp];
+//    [self.playBackcontroller renderFramesForCurrentTimestamp];
     @autoreleasepool {
         
         [self drawView];

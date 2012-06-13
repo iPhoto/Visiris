@@ -27,12 +27,15 @@
 /** Indicates if the Track is an audio- or an Visual-Track */
 @property VSTrackType type;
 
+/** id of the track */
+@property NSInteger trackID;
+
 /**
  * Inits a new Track with the given values.
  * @param name Name of the track
  * @param type Indicates if the Track is an audio- or an Visual-Track 
  */
--(id) initWithName:(NSString*) name type:(VSTrackType) type;
+-(id) initWithName:(NSString*) name trackID:(NSInteger) trackID type:(VSTrackType) type;
 
 /**
  * Adds the given TimelineObject to the track.
@@ -93,5 +96,12 @@
  * @return NSArray of the selected VSTimelineObjects of the track.
  */
 -(NSArray*) selectedTimelineObjects;
+
+/**
+ * Goes through its VSTimelineObject stored in the timelineObjects-Property and returns thoes where the aTimestamp ist between the startTime and the endTime of the VSTimelineObject
+ * @param aTimestamp VSTimelineObjects active at the given timestamp are returned
+ * @return The VSTimelineObject where the given timestamp is between its startTime and endTime, nil if no VSTimelineObject was found.
+ */
+-(VSTimelineObject*) timelineObjectAtTimestamp:(double) aTimestamp; 
 
 @end

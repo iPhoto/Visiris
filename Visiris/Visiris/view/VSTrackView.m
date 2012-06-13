@@ -41,7 +41,7 @@
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    [[NSColor redColor] set];
+    [[NSColor lightGrayColor] set];
     NSRectFill(dirtyRect);
 }
 

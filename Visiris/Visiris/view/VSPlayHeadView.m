@@ -24,6 +24,8 @@
 @synthesize formerMousePosition     = _formerMousePosition;
 @synthesize moving                  = _moving;
 
+#pragma mark - Init
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
@@ -35,18 +37,6 @@
     return self;
 }
 
-- (void)drawRect:(NSRect)dirtyRect
-{
-    [super drawRect:dirtyRect];
-    
-    NSPoint startPoint = NSMakePoint(dirtyRect.size.width/2, 0);
-    NSPoint endPoint = NSMakePoint(dirtyRect.size.width/2, dirtyRect.size.height);
-    
-    [NSBezierPath strokeLineFromPoint:startPoint toPoint:endPoint];
-    
-    [[NSColor darkGrayColor] set];
-    NSRectFill(self.knobRect);
-}
 
 #pragma mark - NSView
 
@@ -56,13 +46,26 @@
     [self updateKnobRect];
 }
 
+- (void)drawRect:(NSRect)dirtyRect
+{
+    [super drawRect:dirtyRect];
+    [[NSColor redColor] set];
+    NSPoint startPoint = NSMakePoint(dirtyRect.size.width/2, 0);
+    NSPoint endPoint = NSMakePoint(dirtyRect.size.width/2, dirtyRect.size.height);
+    
+    [NSBezierPath strokeLineFromPoint:startPoint toPoint:endPoint];
+    
+    [[NSColor redColor] set];
+    NSRectFill(self.knobRect);
+}
+
 #pragma mark- Mouse Events
 
 -(void) mouseDown:(NSEvent *)theEvent{
     if([self delegateRespondsToSelector:@selector(willStartMovingPlayHeadView:)]){
         self.moving =[self.delegate willStartMovingPlayHeadView:self];
     }
-
+    
     self.formerMousePosition = [theEvent locationInWindow];
 }
 
@@ -70,12 +73,16 @@
     NSPoint currentMousePosition = [theEvent locationInWindow];
     
     if(self.moving){
-        NSInteger newXPos = currentMousePosition.x;
-        NSPoint newOrigin = NSMakePoint(newXPos, self.frame.origin.y);
-       
+        NSInteger newXPos = currentMousePosition.x + self.frame.size.width / 2.0;
+        NSPoint newCenter = NSMakePoint(newXPos, self.frame.origin.y);
+        
+        NSPoint currentCenter = NSMakePoint(NSMidX(self.frame), self.frame.origin.y);  
+        
         if([self delegateRespondsToSelector:@selector(willMovePlayHeadView:FromPosition:toPosition:)]){
-            [self.delegate willMovePlayHeadView:self FromPosition:self.frame.origin toPosition:newOrigin];
+            newCenter =[self.delegate willMovePlayHeadView:self FromPosition:currentCenter toPosition:newCenter];
         }
+        
+        NSPoint newOrigin = NSMakePoint(newCenter.x - self.frame.size.width / 2.0, newCenter.y);
         
         [self setFrameOrigin:newOrigin];
         
@@ -88,8 +95,10 @@
 }
 
 -(void) mouseUp:(NSEvent *)theEvent{
-    if([self delegateRespondsToSelector:@selector(didStopMovingPlayHeadView:)]){
-        [self.delegate didStopMovingPlayHeadView:self];
+    if(self.moving){
+        if([self delegateRespondsToSelector:@selector(didStopMovingPlayHeadView:)]){
+            [self.delegate didStopMovingPlayHeadView:self];
+        }
     }
     
     self.moving = NO;
@@ -121,8 +130,9 @@
 
 -(void) setKnobHeight:(NSInteger)knobHeight{
     _knobHeight = knobHeight;
-    [self updateKnobRect];
     
+    // if the knobheight has changed the view has to be drawn again
+    [self updateKnobRect];
     [self setNeedsDisplay:YES];
 }
 

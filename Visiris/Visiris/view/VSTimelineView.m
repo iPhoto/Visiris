@@ -26,12 +26,16 @@
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    [[NSColor greenColor] set];
+    [[NSColor darkGrayColor] set];
     NSRectFill(dirtyRect);
 }
 
 -(void) awakeFromNib{
+    
+}
 
+-(BOOL) isFlipped{
+    return YES;
 }
 
 #pragma mark - Event Handling
@@ -64,24 +68,24 @@
         
     }
 }
-    
-#pragma mark - Private Methods
-       
-       /**
-        * Checks if the delegate is able to respond to the given Selector
-        * @param selector Selector the delegate will be checked for if it is able respond to
-        * @return YES if the delegate is able to respond to the selector, NO otherweis
-        */
-       -(BOOL) delegateRespondsToSelector:(SEL) selector{
-           if(self.delegate){
-               if([self.delegate conformsToProtocol:@protocol(VSTimelineViewDelegate) ]){
-                   if([self.delegate respondsToSelector: selector]){
-                       return YES;
-                   }
-               }
-           }
-           
-           return NO;
-       }
 
-    @end
+#pragma mark - Private Methods
+
+/**
+ * Checks if the delegate is able to respond to the given Selector
+ * @param selector Selector the delegate will be checked for if it is able respond to
+ * @return YES if the delegate is able to respond to the selector, NO otherweis
+ */
+-(BOOL) delegateRespondsToSelector:(SEL) selector{
+    if(self.delegate){
+        if([self.delegate conformsToProtocol:@protocol(VSTimelineViewDelegate) ]){
+            if([self.delegate respondsToSelector: selector]){
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
+}
+
+@end

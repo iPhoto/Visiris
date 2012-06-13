@@ -12,16 +12,17 @@
 
 @implementation VSTrack
 @synthesize timelineObjects = _timelineObjects;
-@synthesize name = _name;
-@synthesize type=_type;
+@synthesize name            = _name;
+@synthesize type            = _type;
+@synthesize trackID         = _trackID;
 
 #pragma mark - Init
 
--(id) initWithName:(NSString*) name type:(VSTrackType) type{
+-(id) initWithName:(NSString*) name trackID:(NSInteger)trackID type:(VSTrackType)type{
     if(self = [super init]){
         self.name = name;
         self.type = type;
-        
+        self.trackID = trackID;
         _timelineObjects = [NSMutableArray arrayWithCapacity:0];
     }
     
@@ -54,7 +55,18 @@
     }
 }
 
-#pragma mark - Undo
+//TODO: Faster algorithm to find the current VSTimelineObject
+-(VSTimelineObject*)timelineObjectAtTimestamp:(double)aTimestamp{
+    for (VSTimelineObject *timelineObject in self.timelineObjects){
+        if(timelineObject.startTime < aTimestamp && timelineObject.endTime > aTimestamp){
+            return timelineObject;
+        }
+    }
+    
+    return nil;
+}
+
+#pragma mark Undo
 
 -(BOOL)removTimelineObject:(VSTimelineObject *)aTimelineObject andRegisterAtUndoManager:(NSUndoManager *)undoManager{
     BOOL result = [self removTimelineObject:aTimelineObject];
@@ -84,7 +96,7 @@
     return result;
 }
 
-#pragma mark - TimelineObject Selection
+#pragma mark TimelineObject Selection
 
 -(void) selectTimelineObject:(VSTimelineObject *)timelineObjectToSelect{
     if([self.timelineObjects containsObject:timelineObjectToSelect]){

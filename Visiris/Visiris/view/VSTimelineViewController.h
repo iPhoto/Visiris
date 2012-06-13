@@ -25,17 +25,12 @@
 /** NSScrollView holding the VSTrackViews representing the single tracks */
 @property (weak) IBOutlet NSScrollView *scvTrackHolder;
 
-/** DocumentView of scvTrackHolder*/
-@property (weak) IBOutlet NSView *tracksHolderdocumentView;
-
-/** Displaying the timecode above the tracks */
-@property (strong) NSRulerView *rulerView;
-
 /** VSTimeline the controller represents */
 @property VSTimeline* timeline;
 
 /** Ratio between the duration of the timeline and the pixel length of tracksHolderdocumentView */
 @property double pixelTimeRatio;
+
 
 #pragma mark - Init
 
