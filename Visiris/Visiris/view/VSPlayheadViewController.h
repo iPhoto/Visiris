@@ -16,6 +16,7 @@
 /** VSPlayHead the VSPlayheadViewController represents */
 @property VSPlayHead *playHead;
 
+@property NSInteger xOffset;
 
 /** Height of the knob at the top of the view */
 @property NSInteger knobHeight;
@@ -25,10 +26,9 @@
 /**
  * Inits the VSPlayheadViewController with the given values
  * @param playHead VSPlayHead the VSPlayheadViewController represents
- * @param frame NSRect the frame of VSPlayheadViewController's view will be init with
- * @retunr self
+ * @return self
  */
--(id) initWithPlayHead:(VSPlayHead*) playHead forFrame:(NSRect) frame;
+-(id) initWithPlayHead:(VSPlayHead *)playHead;
 
 
 #pragma mark - Methods

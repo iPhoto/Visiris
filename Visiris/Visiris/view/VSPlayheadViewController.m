@@ -27,7 +27,8 @@
 @synthesize playHead        = _playHead;
 @synthesize playHeadView    = _playHeadView;
 @synthesize knobHeight      = _knobHeight;
-@synthesize pixelTimeRatio = _pixelTimeRation;
+@synthesize pixelTimeRatio  = _pixelTimeRation;
+@synthesize xOffset         = _yOffest;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -39,11 +40,11 @@
     return self;
 }
 
--(id) initWithPlayHead:(VSPlayHead *)playHead forFrame:(NSRect)frame{
+-(id) initWithPlayHead:(VSPlayHead *)playHead{
     if(self = [super init]){
         self.playHead = playHead;
-
-        self.playHeadView = [[VSPlayHeadView alloc] initWithFrame:frame];
+        
+        self.playHeadView = [[VSPlayHeadView alloc] init];
         self.view = self.playHeadView;
         self.playHeadView.delegate = self;
     }
@@ -55,8 +56,8 @@
 #pragma mark - VSPlayHeadViewDelegate
 
 -(NSPoint) willMovePlayHeadView:(VSPlayHeadView *)playheadView FromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition{
-    if(newPosition.x < 0){
-        return NSMakePoint(0, newPosition.y);
+    if(newPosition.x < self.xOffset){
+        return NSMakePoint(self.xOffset, newPosition.y);
     }
     return newPosition;
 }
@@ -70,7 +71,7 @@
 }
 
 -(void) didMovePlayHeadView:(VSPlayHeadView *)playheadView{
-    double newTimePosition = NSMidX(self.view.frame) * self.pixelTimeRatio;
+    double newTimePosition = (NSMidX(self.view.frame) - self.xOffset) * self.pixelTimeRatio;
     self.playHead.currentTimePosition = newTimePosition;
 }
 

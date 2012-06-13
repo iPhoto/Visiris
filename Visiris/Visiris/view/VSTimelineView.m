@@ -34,6 +34,10 @@
     
 }
 
+-(BOOL) isFlipped{
+    return YES;
+}
+
 #pragma mark - Event Handling
 
 -(BOOL) acceptsFirstResponder{

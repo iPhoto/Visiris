@@ -49,13 +49,13 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
     [super drawRect:dirtyRect];
-    
+    [[NSColor redColor] set];
     NSPoint startPoint = NSMakePoint(dirtyRect.size.width/2, 0);
     NSPoint endPoint = NSMakePoint(dirtyRect.size.width/2, dirtyRect.size.height);
     
     [NSBezierPath strokeLineFromPoint:startPoint toPoint:endPoint];
     
-    [[NSColor darkGrayColor] set];
+    [[NSColor redColor] set];
     NSRectFill(self.knobRect);
 }
 
