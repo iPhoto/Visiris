@@ -126,9 +126,9 @@ static struct {
     
     // Make sure we draw to the right context
 	[[self openGLContext] makeCurrentContext];
-/*
-    
-    for (NSInteger i = 2; i < theCoreHandovers.count -1; i++) {
+
+   
+    /*for (NSInteger i = 2; i < theCoreHandovers.count -1; i++) {
         VSFrameCoreHandover *handOver = (VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:(i+1)];
         VSTexture *handOverTexture = [self.textureManager getVSTextureForTexId:handOver.textureID];
         
@@ -138,8 +138,8 @@ static struct {
         
         
         
-    }
-    */
+    }*/
+    
     VSTexture *temp = [self.textureManager getVSTextureForTexId:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).textureID];
     VSTexture *temp2 = [self.textureManager getVSTextureForTexId:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:1]).textureID];
 
