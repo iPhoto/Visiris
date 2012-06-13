@@ -10,6 +10,7 @@
 #import "VSPreProcessor.h"
 #import "VSTimeline.h"
 #import "VSPreviewViewController.h"
+#import "VSPlayHead.h"
 
 @interface VSPlaybackController()
 
@@ -23,13 +24,13 @@
 
 @implementation VSPlaybackController
 
-@synthesize preProcessor = _preProcessor;
-@synthesize timeline = _timeline;
-@synthesize currentTimestamp = _currentTimestamp;
-@synthesize playbackTimer = _playbackTimer;
-@synthesize delegate = _delegate;
-@synthesize queue = _queue;
-@synthesize playing = _playing;
+@synthesize preProcessor        = _preProcessor;
+@synthesize timeline            = _timeline;
+@synthesize currentTimestamp    = _currentTimestamp;
+@synthesize playbackTimer       = _playbackTimer;
+@synthesize delegate            = _delegate;
+@synthesize queue               = _queue;
+@synthesize playing             = _playing;
 
 #pragma mark - Init
 
@@ -38,9 +39,19 @@
         _preProcessor = preProcessor;
         _timeline = timeline;
         self.queue = [[NSOperationQueue alloc] init];
+        [self.timeline.playHead addObserver:self forKeyPath:@"currentTimePosition" options:0 context:nil];
     }
     
     return self;
+}
+
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if([keyPath isEqualToString:@"currentTimePosition"]){
+        double timePos = [[object valueForKey:keyPath] doubleValue];
+        
+        [self.preProcessor processFrameAtTimestamp:timePos withFrameSize:NSMakeSize(1024, 768)];
+
+    }
 }
 
 #pragma mark - Methods
@@ -52,18 +63,33 @@
     [timerThread start];
 }
 
--(void) startTimer{
-    @autoreleasepool {
-        NSRunLoop* runLoop = [NSRunLoop currentRunLoop];
-        //Fire timer every second to updated countdown and date/time
-        self.playbackTimer = [NSTimer scheduledTimerWithTimeInterval:1/30 target:self selector:@selector(renderFramesForCurrentTimestamp) userInfo:nil repeats:YES] ;
-        [runLoop run];
-    }
-}
-
 -(void) stopPlayback{
     [self.queue cancelAllOperations];
     [self.playbackTimer invalidate];
+}
+
+-(void) didFinisheRenderingTexture:(GLuint)theTexture forTimestamp:(double)theTimestamp{
+    if(self.delegate){
+        if([self.delegate conformsToProtocol:@protocol(VSPlaybackControllerDelegate) ]){
+            if([self.delegate respondsToSelector:@selector(texture:isReadyForTimestamp:)]){
+                [self.delegate texture:theTexture isReadyForTimestamp:theTimestamp];
+            }
+        }
+    }
+}
+
+- (void)renderFramesForCurrentTimestamp
+{
+    if(self.playing){
+        
+        if (self.preProcessor) {
+            [self.preProcessor processFrameAtTimestamp:self.currentTimestamp withFrameSize:[self frameSize]];
+        }
+        
+        //    [self.queue addOperationWithBlock:^{
+        //        [self.preProcessor processFrameAtTimestamp:0 withFrameSize:NSMakeSize(120, 120)];
+        //    }];
+    }
 }
 
 #pragma mark - VSPreviewViewControllerDelegate implementation
@@ -89,30 +115,12 @@
     return NSMakeSize(1280, 720);
 }
 
-
-- (void)renderFramesForCurrentTimestamp
-{
-    if(self.playing){
-    
-    if (self.preProcessor) {
-        [self.preProcessor processFrameAtTimestamp:self.currentTimestamp withFrameSize:[self frameSize]];
-    }
-    
-//    [self.queue addOperationWithBlock:^{
-//        [self.preProcessor processFrameAtTimestamp:0 withFrameSize:NSMakeSize(120, 120)];
-//    }];
-    }
-}
-
-
-
--(void) didFinisheRenderingTexture:(GLuint)theTexture forTimestamp:(double)theTimestamp{
-    if(self.delegate){
-        if([self.delegate conformsToProtocol:@protocol(VSPlaybackControllerDelegate) ]){
-            if([self.delegate respondsToSelector:@selector(texture:isReadyForTimestamp:)]){
-                [self.delegate texture:theTexture isReadyForTimestamp:theTimestamp];
-            }
-        }
+-(void) startTimer{
+    @autoreleasepool {
+        NSRunLoop* runLoop = [NSRunLoop currentRunLoop];
+        //Fire timer every second to updated countdown and date/time
+        self.playbackTimer = [NSTimer scheduledTimerWithTimeInterval:1/30 target:self selector:@selector(renderFramesForCurrentTimestamp) userInfo:nil repeats:YES] ;
+        [runLoop run];
     }
 }
 

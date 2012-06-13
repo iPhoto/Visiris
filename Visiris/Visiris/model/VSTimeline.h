@@ -104,8 +104,6 @@
  */
 -(VSTimelineObject*) addNewTimelineObjectBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *) item toTrack :(VSTrack *)track positionedAtTime:(double) timePosition withDuration:(double) duration andRegisterUndoOperation:(NSUndoManager*) undoManager;
 
-
-
 /**
  * Removes aTimelineObject from the track and returns if the removal was successful.
  * @param aTimelineObject VSTimelineObject to be removed

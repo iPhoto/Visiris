@@ -28,9 +28,6 @@
 /** DocumentView of scvTrackHolder*/
 @property (weak) IBOutlet NSView *tracksHolderdocumentView;
 
-/** Displaying the timecode above the tracks */
-@property (strong) NSRulerView *rulerView;
-
 /** VSTimeline the controller represents */
 @property VSTimeline* timeline;
 

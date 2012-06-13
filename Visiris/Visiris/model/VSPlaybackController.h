@@ -42,7 +42,7 @@
 @property (readonly) VSPreProcessor *preProcessor;
 
 /** The VSTimline is called when the current timestamp has changed. */
-@property (readonly) VSTimeline *timeline;
+@property  VSTimeline *timeline;
 
 /** The currently active TimeStamp */
 @property double currentTimestamp;

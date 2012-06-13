@@ -78,7 +78,6 @@
     
     self.preProcessor = [[VSPreProcessor alloc] initWithTimeline:self.timeline];
     
-    self.playbackController = [[VSPlaybackController alloc] initWithPreProcessor:self.preProcessor timeline:self.timeline];
     
     self.postProcessor = [[VSPostProcessor alloc] initWithPlaybackController:self.playbackController];
     

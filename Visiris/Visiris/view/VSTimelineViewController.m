@@ -15,6 +15,8 @@
 #import "VSTimelineRulerView.h"
 #import "VSTimelineObject.h"
 #import "VSPlayheadViewController.h"
+#import "VSTrackLabelsViewController.h"
+#import "VSTrackLabel.h"
 
 #import "VSCoreServices.h"
 
@@ -24,7 +26,16 @@
 
 @property (strong) VSPlayheadViewController *playheadViewController;
 
+/** Displaying the timecode above the tracks */
+@property (strong) NSRulerView *rulerView;
+
+@property (strong) VSTrackLabelsViewController *trackLabelsViewController;
+
 @end
+
+
+#define TRACK_LABEL_WIDTH 30
+
 
 @implementation VSTimelineViewController
 
@@ -36,6 +47,7 @@
 @synthesize timeline                    = _timeline;
 @synthesize pixelTimeRatio              = _pixelTimeRatio;
 @synthesize playheadViewController      = _playheadViewController;
+@synthesize trackLabelsViewController   = _trackLabelsViewController;
 
 
 // Name of the nib that will be loaded when initWithDefaultNib is called 
@@ -82,6 +94,7 @@ static NSString* defaultNib = @"VSTimelineView";
     
     [self initPlayhead];
     [self initTrackHolderScrollView];
+    [self initTrackLabelsView];
     [self initTracks];
     [self updatePixelTimeRatio];
     [self initTimelineRuler];
@@ -93,7 +106,8 @@ static NSString* defaultNib = @"VSTimelineView";
 -(void) initPlayhead{
     
     self.playheadViewController = [[VSPlayheadViewController alloc] initWithPlayHead:self.timeline.playHead forFrame:NSMakeRect(0, self.view.frame.size.height-200, 20, 200)];
-    self.playheadViewController.knobHeight = 50;
+    self.playheadViewController.knobHeight = 30;
+    [self.playheadViewController changePixelItemRatio:self.pixelTimeRatio];
     [self.view addSubview:self.playheadViewController.view positioned:NSWindowAbove relativeTo:self.scvTrackHolder];
     [self.playheadViewController.view setWantsLayer:YES];
     [self.playheadViewController.view.layer setZPosition:10];
@@ -117,10 +131,8 @@ static NSString* defaultNib = @"VSTimelineView";
     
     [self updateTimelineRulerMeasurement];
     
-    self.rulerView = [[NSRulerView alloc] initWithScrollView:self.scvTrackHolder orientation:NSHorizontalRuler];
-    
     //sets the custom measurement unit VSTimelineRulerMeasurementUnit as measuerement unit of the timeline ruler
-    [self.rulerView setMeasurementUnits:VSTimelineRulerMeasurementUnit];
+    //[self.rulerView setMeasurementUnits:VSTimelineRulerMeasurementUnit];
     
     [self.scvTrackHolder setHorizontalRulerView:self.rulerView];
     
@@ -129,12 +141,25 @@ static NSString* defaultNib = @"VSTimelineView";
     
 }
 
+
+-(void) initTrackLabelsView{
+    self.trackLabelsViewController = [[VSTrackLabelsViewController alloc] init];
+    
+    if ([self.trackLabelsViewController.view isKindOfClass:[NSRulerView class]]) {
+        [self.scvTrackHolder setVerticalRulerView:(NSRulerView*) self.trackLabelsViewController.view];
+        [((NSRulerView*) self.trackLabelsViewController.view) setOrientation:NSVerticalRuler];
+        [self.scvTrackHolder setHasVerticalRuler:YES];
+    }
+}
+
 /**
  * Initializes the trackHolderScrollView and its document view
  */
 -(void) initTrackHolderScrollView{
-    [self.tracksHolderdocumentView setFrame:NSMakeRect(0, 0, [self visibleTrackViewHolderWidth], self.scvTrackHolder.frame.size.height)];
-    [self.scvTrackHolder setDocumentView:self.tracksHolderdocumentView];
+    //[self.scvTrackHolder setDocumentView:self.tracksHolderdocumentView];
+
+    [self.scvTrackHolder setAutoresizingMask:NSViewNotSizable];
+    
     [self.tracksHolderdocumentView setAutoresizingMask:NSViewNotSizable];
     [self.tracksHolderdocumentView setAutoresizesSubviews:YES];
     
@@ -145,8 +170,8 @@ static NSString* defaultNib = @"VSTimelineView";
 
 #pragma mark - NSViewController
 
+
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-    
     //updates the length of the tracks and their timeline objects when the duration of the timeline has been changed
     if([keyPath isEqualToString:@"duration"]){
         
@@ -157,6 +182,8 @@ static NSString* defaultNib = @"VSTimelineView";
         
         //updates the pixelItemRatio
         [self updatePixelTimeRatio];
+        
+        
     }
 }
 
@@ -173,7 +200,10 @@ static NSString* defaultNib = @"VSTimelineView";
             [self removeSelectedTimelineObjects];
         }
     }
+    
 }
+
+
 
 #pragma mark- VSTrackViewControlerDelegate implementation
 
@@ -250,7 +280,7 @@ static NSString* defaultNib = @"VSTimelineView";
 }
 
 -(void) timelineObjectProxy:(VSTimelineObjectProxy *)timelineObjectProxy wasUnselectedOnTrackViewController:(VSTrackViewController *)trackViewController{
-    
+    [[self.scvTrackHolder horizontalRulerView] setNeedsDisplay:YES];
     if([timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
         
         [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectsGotUnselected object: [NSArray arrayWithObject:((VSTimelineObject*) timelineObjectProxy)]];
@@ -338,6 +368,8 @@ static NSString* defaultNib = @"VSTimelineView";
             [self removeSelectedTimelineObjects];
         }
     }
+    
+   
 }
 
 #pragma mark - Private Methods
@@ -365,13 +397,14 @@ static NSString* defaultNib = @"VSTimelineView";
     newTrackViewController.delegate = self;
     newTrackViewController.pixelTimeRatio = self.pixelTimeRatio;
     
-    
     [self.tracksHolderdocumentView addSubview:[newTrackViewController view]];
     
     //Size and position of the track
     int width = [self visibleTrackViewHolderWidth];
-    int xPos = (VSTrackViewHeight+VSTrackViewMargin) * ([self.tracksHolderdocumentView.subviews count] -1);
-    NSRect newFrame = NSMakeRect(0,xPos,width,VSTrackViewHeight);
+    int yPosition = (VSTrackViewHeight+VSTrackViewMargin) * ([self.tracksHolderdocumentView.subviews count] -1);
+    
+    NSRect newFrame = NSMakeRect(self.scvTrackHolder.visibleRect.origin.x,yPosition,width,VSTrackViewHeight);
+    
     [[newTrackViewController view] setFrame:newFrame];
     
     //set the autoresizing masks
@@ -385,6 +418,13 @@ static NSString* defaultNib = @"VSTimelineView";
     //Rescales the document view of the trackholder ScrollView
     int height = (VSTrackViewHeight+VSTrackViewMargin) * ([self.tracksHolderdocumentView.subviews count]);
     [self.tracksHolderdocumentView setFrame:NSMakeRect([self.tracksHolderdocumentView frame].size.width, 0, self.tracksHolderdocumentView.frame.size.width,  height)];
+    
+    [self addNewTrackLabelForTrack:newTrackViewController];
+}
+
+-(void) addNewTrackLabelForTrack:(VSTrackViewController*) aTrack{
+    NSRect labelRect = NSMakeRect(self.scvTrackHolder.verticalRulerView.frame.size.height - aTrack.view.frame.origin.y, aTrack.view.frame.origin.y, TRACK_LABEL_WIDTH, aTrack.view.frame.size.height);
+    [self.trackLabelsViewController addTrackLabel:[[VSTrackLabel alloc] initWithName:aTrack.track.name forTrack:aTrack.track.trackID forFrame:labelRect]];
 }
 
 /**
@@ -396,6 +436,7 @@ static NSString* defaultNib = @"VSTimelineView";
     if(newRatio != self.pixelTimeRatio){
         self.pixelTimeRatio = newRatio;
         [self pixelTimeRatioDidChange];
+        [self.playheadViewController changePixelItemRatio:self.pixelTimeRatio];
     }
 }
 
@@ -417,7 +458,7 @@ static NSString* defaultNib = @"VSTimelineView";
  * @return The visble width of scvTrackHolder
  */
 -(int) visibleTrackViewHolderWidth{
-    return [self.scvTrackHolder documentVisibleRect].size.width;
+    return self.scvTrackHolder.visibleRect.size.width;
 }
 
 /**
@@ -461,10 +502,9 @@ static NSString* defaultNib = @"VSTimelineView";
 -(void) updatePlayheadFrame{
     NSRect newFrame = self.playheadViewController.view.frame;
     
-    newFrame.size.height = self.view.frame.size.height + self.scvTrackHolder.horizontalRulerView.frame.size.height;
-    newFrame.origin.y = 0;
-    
-    DDLogInfo(@"newFRam: %@",NSStringFromRect(newFrame));
+    newFrame.size.height = self.view.frame.size.height - self.scvTrackHolder.horizontalScroller.frame.size.height;
+    newFrame.origin.y = self.view.frame.size.height - newFrame.size.height;
+
     
     [self.playheadViewController.view setFrame:newFrame];
     [self.playheadViewController.view setNeedsDisplay:YES];

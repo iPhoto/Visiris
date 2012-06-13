@@ -44,6 +44,7 @@
     
     for (VSTimelineObject *currentTimeLineObject in currentTimeLineObjects) {
         
+        DDLogInfo(@"currentObject: %@",currentTimeLineObject.name);
         
         VSCoreHandover *coreHandover = [currentTimeLineObject handoverForTimestamp:aTimestamp frameSize:aFrameSize];
         if (coreHandover) {
@@ -52,7 +53,6 @@
     }
     
     if (self.renderCoreReceptionist && handoverObjects) {
-        DDLogInfo(@"out");
         [self.renderCoreReceptionist renderFrameAtTimestamp:aTimestamp withHandovers:handoverObjects forSize:aFrameSize];
     }
 }

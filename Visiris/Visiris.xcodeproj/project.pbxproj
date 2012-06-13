@@ -23,6 +23,9 @@
 /* Begin PBXBuildFile section */
 		2761513B1577C97A005177C5 /* aaa.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2761513A1577C97A005177C5 /* aaa.jpg */; };
 		27A18C41157F528A003CCDC5 /* VisirisCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27A18C40157F528A003CCDC5 /* VisirisCore.framework */; };
+		5B0E366615876E9300F15026 /* VSTrackLabelsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366515876E9300F15026 /* VSTrackLabelsView.m */; };
+		5B0E366915876EA900F15026 /* VSTrackLabelsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366815876EA900F15026 /* VSTrackLabelsViewController.m */; };
+		5B0E366C15876EEB00F15026 /* VSTrackLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366B15876EEB00F15026 /* VSTrackLabel.m */; };
 		5B2A59D31578AF4E003938AB /* VSDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2A59D21578AF4E003938AB /* VSDocumentController.m */; };
 		5B35BF161577A49C009911EC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35BF151577A49C009911EC /* Cocoa.framework */; };
 		5B35BF201577A49C009911EC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5B35BF1E1577A49C009911EC /* InfoPlist.strings */; };
@@ -145,6 +148,12 @@
 /* Begin PBXFileReference section */
 		2761513A1577C97A005177C5 /* aaa.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = aaa.jpg; sourceTree = "<group>"; };
 		27A18C40157F528A003CCDC5 /* VisirisCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisirisCore.framework; path = "../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkzpace-drkueispmrybxzdragwerhodoczw/Build/Products/Debug/VisirisCore.framework"; sourceTree = "<group>"; };
+		5B0E366415876E9300F15026 /* VSTrackLabelsView.h */ = {isa = PBXFileReference; fileEncoding = 4; path = VSTrackLabelsView.h; sourceTree = "<group>"; };
+		5B0E366515876E9300F15026 /* VSTrackLabelsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTrackLabelsView.m; sourceTree = "<group>"; };
+		5B0E366715876EA900F15026 /* VSTrackLabelsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTrackLabelsViewController.h; sourceTree = "<group>"; };
+		5B0E366815876EA900F15026 /* VSTrackLabelsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTrackLabelsViewController.m; sourceTree = "<group>"; };
+		5B0E366A15876EEB00F15026 /* VSTrackLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTrackLabel.h; sourceTree = "<group>"; };
+		5B0E366B15876EEB00F15026 /* VSTrackLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTrackLabel.m; sourceTree = "<group>"; };
 		5B2A59D11578AF4E003938AB /* VSDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDocumentController.h; sourceTree = "<group>"; };
 		5B2A59D21578AF4E003938AB /* VSDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDocumentController.m; sourceTree = "<group>"; };
 		5B35BF111577A49C009911EC /* Visiris.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Visiris.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -374,6 +383,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5B0E366215876E6A00F15026 /* trackLabel */ = {
+			isa = PBXGroup;
+			children = (
+				5B0E366415876E9300F15026 /* VSTrackLabelsView.h */,
+				5B0E366515876E9300F15026 /* VSTrackLabelsView.m */,
+				5B0E366715876EA900F15026 /* VSTrackLabelsViewController.h */,
+				5B0E366815876EA900F15026 /* VSTrackLabelsViewController.m */,
+				5B0E366A15876EEB00F15026 /* VSTrackLabel.h */,
+				5B0E366B15876EEB00F15026 /* VSTrackLabel.m */,
+			);
+			name = trackLabel;
+			sourceTree = "<group>";
+		};
 		5B35BF061577A49C009911EC = {
 			isa = PBXGroup;
 			children = (
@@ -799,6 +821,7 @@
 		5B35C0B41577B032009911EC /* timeline */ = {
 			isa = PBXGroup;
 			children = (
+				5B0E366215876E6A00F15026 /* trackLabel */,
 				5B7D8B65157F5E6A0008FFBC /* playHead */,
 				5B35C0A91577AEB4009911EC /* ruler */,
 				5B35BFC71577A573009911EC /* VSTimelineView.h */,
@@ -1173,6 +1196,9 @@
 				5B7D8B68157F5E790008FFBC /* VSPlayHeadView.m in Sources */,
 				5B7D8B6B157F5E850008FFBC /* VSPlayheadViewController.m in Sources */,
 				5B603FA9157F824A0045A1EA /* VSPlayHead.m in Sources */,
+				5B0E366615876E9300F15026 /* VSTrackLabelsView.m in Sources */,
+				5B0E366915876EA900F15026 /* VSTrackLabelsViewController.m in Sources */,
+				5B0E366C15876EEB00F15026 /* VSTrackLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

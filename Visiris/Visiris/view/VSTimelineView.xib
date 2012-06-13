@@ -96,6 +96,7 @@
 								<string key="NSFrame">{{1, 218}, {565, 15}}</string>
 								<reference key="NSSuperview" ref="161326648"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:26</string>
 								<int key="NSsFlags">1</int>
 								<reference key="NSTarget" ref="161326648"/>
@@ -321,7 +322,7 @@
 				<string key="1.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="NO" key="179.IBNSViewMetadataTranslatesAutoresizingMaskIntoConstraints"/>
 				<string key="179.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="180.CustomClassName">VSTestView</string>
+				<string key="180.CustomClassName">VSFlippedView</string>
 				<string key="180.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="181.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="182.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -348,11 +349,11 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
-					<string key="className">VSTestView</string>
+					<string key="className">VSFlippedView</string>
 					<string key="superclassName">NSView</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/VSTestView.h</string>
+						<string key="minorKey">./Classes/VSFlippedView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
