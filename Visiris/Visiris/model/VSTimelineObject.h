@@ -29,12 +29,16 @@
 /** ID of the texture stored in VSCore */
 @property GLuint textureID;
 
+/** unique ID of the timelineObject */
+@property NSInteger timelineObjectID;
+
 /**
  * Inits a the object with the given sourceObject
  * @param sourceObject SourceObject the timelineObject represents on the timeline
  * @param icon Thumbnail of the file
+ * @param objectID Unique ID of the timelineObject
  */
--(id) initWithSourceObject:(VSTimelineObjectSource*) sourceObject icon:(NSImage *)icon;
+-(id) initWithSourceObject:(VSTimelineObjectSource*) sourceObject icon:(NSImage *)icon objectID:(NSInteger) objectID;
 
 /**
  * Adds the startTime and the duration to get the timeposition where the object ends on the timeline

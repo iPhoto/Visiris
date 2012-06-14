@@ -26,12 +26,15 @@
 /** Stores the Class objects of all VSSourceSupplier child-classes the Factory can create instances of. The name of the class is used as key in the dictionary. */
 @property (strong) NSMutableDictionary *sourceSupplierClasses;
 
+/** last unique timelineObjectID */
+@property NSInteger lastAssignedTimelineObjectID;
 @end
 
 @implementation VSTimelineObjectFactory
 
-@synthesize timelineObjectSourceClasses = _timelineObjectSourceClasses;
-@synthesize sourceSupplierClasses = _sourceSupplierClasses;
+@synthesize timelineObjectSourceClasses     = _timelineObjectSourceClasses;
+@synthesize sourceSupplierClasses           = _sourceSupplierClasses;
+@synthesize lastAssignedTimelineObjectID    = _lastAssignedTimelineObjectID;
 
 /** Sigleton instance */
 static VSTimelineObjectFactory* sharedInstance;
@@ -84,7 +87,7 @@ static VSTimelineObjectFactory* sharedInstance;
         sourceObject.projectItem = projectItem;
         NSImage* icon = [VSFileImageCreator createIconForTimelineObject:projectItem.filePath];
         
-        VSTimelineObject *newTimelineObject = [[VSTimelineObject alloc] initWithSourceObject:sourceObject icon:icon];
+        VSTimelineObject *newTimelineObject = [[VSTimelineObject alloc] initWithSourceObject:sourceObject icon:icon objectID:[self assignNewTimelineObjectID]];
         
         sourceSupplier.timelineObject = newTimelineObject;
         
@@ -168,6 +171,14 @@ static VSTimelineObjectFactory* sharedInstance;
     }
     
     return parameters;
+}
+
+/**
+ * Increments lastAssignedTimelineObjectID and returns it
+ * @return New unique TimelineObjectID
+ */
+-(NSInteger) assignNewTimelineObjectID{
+    return ++self.lastAssignedTimelineObjectID;
 }
 
 

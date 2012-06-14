@@ -9,9 +9,11 @@
 #import "VSCoreHandover.h"
 
 @implementation VSCoreHandover
+
 @synthesize timestamp = _timestamp;
 @synthesize attributes = _attributes;
-@synthesize timeLineObjectId = _timeLineObjectId;
+@synthesize timeLineObjectID = _timeLineObjectId;
+
 
 #pragma mark - Init
 
@@ -19,7 +21,7 @@
     if(self = [super init]){
         self.timestamp = theTimestamp;
         self.attributes = theAttributes;
-        self.timeLineObjectId = theId;
+        self.timeLineObjectID = theId;
     }
     
     return self;
