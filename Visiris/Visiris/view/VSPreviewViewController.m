@@ -8,11 +8,11 @@
 
 #import "VSPreviewViewController.h"
 #import "VSPlaybackController.h"
-#import "VSPreviewOpenGLView.h"
+
 
 @interface VSPreviewViewController ()
 
-@property (strong) VSPreviewOpenGLView *openGLView;
+
 
 @end
 
@@ -39,7 +39,6 @@ static NSString* defaultNib = @"VSPreviewView";
 }
 
 
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -55,10 +54,13 @@ static NSString* defaultNib = @"VSPreviewView";
 
 -(void) awakeFromNib{
     if(self.view){
-        self.openGLView = [[VSPreviewOpenGLView alloc] initWithFrame:[self.openGLViewHolder frame] shareContext:self.openGLContext];
-        [self.openGLView setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
-        
-        [self.openGLViewHolder addSubview:self.openGLView];
+        [self.openGLView initOpenGLWithSharedContext:self.openGLContext];
+//        NSLog(@"view placeHolder: %@", NSStringFromRect(self.openGLViewHolder.frame));
+//        
+//        self.openGLView = [[VSPreviewOpenGLView alloc] initWithFrame:[self.openGLViewHolder frame] shareContext:self.openGLContext];
+//        [self.openGLView setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
+//        
+//        [self.openGLViewHolder addSubview:self.openGLView];
     }
 }
 

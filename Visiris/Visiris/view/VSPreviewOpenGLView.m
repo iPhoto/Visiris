@@ -13,7 +13,7 @@
 #import "VSPlaybackController.h"
 
 @implementation VSPreviewOpenGLView
-@synthesize openGLContext,pixelFormat,displayLink;
+@synthesize openGLContext=_openGLContext,pixelFormat,displayLink;
 @synthesize texture = _texture;
 
 @synthesize playBackcontroller = _playBackcontroller;
@@ -22,14 +22,19 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        NSLog(@"initWithFrame");
+        [[NSNotificationCenter defaultCenter] addObserver:self 
+												 selector:@selector(reshape) 
+													 name:NSViewGlobalFrameDidChangeNotification
+												   object:self];
 
     }
     
     return self;
 }
 
-- (id) initWithFrame:(NSRect)frameRect shareContext:(NSOpenGLContext*)context
-{    
+- (void)initOpenGLWithSharedContext:(NSOpenGLContext *)openGLContext
+{
     NSOpenGLPixelFormatAttribute attribs[] =
     {
 		kCGLPFAAccelerated,
@@ -46,32 +51,19 @@
 		NSLog(@"No OpenGL pixel format");
 	
 	// NSOpenGLView does not handle context sharing, so we draw to a custom NSView instead
-	openGLContext = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:context];
+	_openGLContext = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:openGLContext];
 	
-	if (self = [super initWithFrame:frameRect]) {
-		[[self openGLContext] makeCurrentContext];
-		
-		// Synchronize buffer swaps with vertical refresh rate
-		GLint swapInt = 1;
-		[[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; 
-		
-		[self setupDisplayLink];
-		
+    [[self openGLContext] makeCurrentContext];
+    
+    // Synchronize buffer swaps with vertical refresh rate
+    GLint swapInt = 1;
+    [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; 
+    
+    [self setupDisplayLink];
 
-		// Look for changes in view size
-		// Note, -reshape will not be called automatically on size changes because NSView does not export it to override 
-		[[NSNotificationCenter defaultCenter] addObserver:self 
-												 selector:@selector(reshape) 
-													 name:NSViewGlobalFrameDidChangeNotification
-												   object:self];
-	}
-    
     [self startAnimation];
-    
-    //[self setPostsFrameChangedNotifications:YES];
-	
-	return self;
 }
+
 
 - (void)lockFocus
 {
@@ -87,12 +79,12 @@
 {
     [super viewDidMoveToWindow];
     if ([self window] == nil)
-        [openGLContext clearDrawable];
+        [_openGLContext clearDrawable];
 }
 
 - (CVReturn) getFrameForTime:(const CVTimeStamp*)outputTime
 {
-//    [self.playBackcontroller renderFramesForCurrentTimestamp];
+    [self.playBackcontroller renderFramesForCurrentTimestamp];
     @autoreleasepool {
         
         [self drawView];
@@ -124,9 +116,13 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 - (void) drawRect:(NSRect)dirtyRect
 {
     [super drawRect:dirtyRect];
+    
 	// Ignore if the display link is still running
 	if (!CVDisplayLinkIsRunning(displayLink))
-		[self drawView];
+    {
+		[self drawView];    
+    }
+
 }
 
 - (void) reshape
@@ -136,8 +132,8 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	CGLLockContext([[self openGLContext] CGLContextObj]);
 	    
     glViewport(0, 0, [self bounds].size.width, [self bounds].size.height);
-    //NSLog(@"glview frame size: %@", NSStringFromSize([self frame].size));
-    //NSLog(@"glview bounds size: %@", NSStringFromSize([self bounds].size));
+   // NSLog(@"glview frame size: %@", NSStringFromSize([self frame].size));
+   // NSLog(@"glview bounds size: %@", NSStringFromSize([self bounds].size));
 
 	[[self openGLContext] update];
 	
@@ -146,14 +142,18 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (void) drawView
 {
+    
+//    NSLog(@"drawView bounds size: %@", NSStringFromSize([self bounds].size));
+    
 	// This method will be called on both the main thread (through -drawRect:) and a secondary thread (through the display link rendering loop)
 	// Also, when resizing the view, -reshape is called on the main thread, but we may be drawing on a secondary thread
 	// Add a mutex around to avoid the threads accessing the context simultaneously
-	CGLLockContext([[self openGLContext] CGLContextObj]);
-	
+    CGLLockContext([[self openGLContext] CGLContextObj]);
+
 	// Make sure we draw to the right context
 	[[self openGLContext] makeCurrentContext];
 	    
+
     //glViewport(0, 0, [self bounds].size.width, [self bounds].size.height);
 
     

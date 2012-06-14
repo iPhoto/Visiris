@@ -11,16 +11,16 @@
 #import <OpenGL/glu.h>
 
 @interface VSTextureManager()
-@property (strong) NSMutableDictionary   *textureArray;
+@property (strong) NSMutableDictionary   *texturesForId;
 
 @end
 
 @implementation VSTextureManager
-@synthesize textureArray = _textureArray;
+@synthesize texturesForId = _textureArray;
 
 -(id)init{
     if (self = [super init]) {
-        self.textureArray = [[NSMutableDictionary alloc] init];
+        self.texturesForId = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -35,13 +35,13 @@
     }
     
     VSTexture *tempTexture = [[VSTexture alloc] initEmptyTextureWithSize:size];
-    [self.textureArray setObject:tempTexture forKey:[NSNumber numberWithInt:tempTexture.texture]];
+    [self.texturesForId setObject:tempTexture forKey:[NSNumber numberWithInt:tempTexture.texture]];
     
     return tempTexture.texture;
 }
 
 - (VSTexture *)getVSTextureForTexId:(GLuint) texId{
-    return [self.textureArray objectForKey:[NSNumber numberWithInt:texId]];
+    return [self.texturesForId objectForKey:[NSNumber numberWithInt:texId]];
 }
 
 @end
