@@ -24,6 +24,7 @@
 
 /** NSScrollView holding the VSTrackViews representing the single tracks */
 @property (weak) IBOutlet NSScrollView *scvTrackHolder;
+@property (weak) IBOutlet NSView *scrollViewHolder;
 
 /** VSTimeline the controller represents */
 @property VSTimeline* timeline;
@@ -45,5 +46,9 @@
  * @return self
  */
 -(id) initWithDefaultNibAccordingForTimeline:(VSTimeline*)timeline;
+
+#pragma mark - Methods
+
+
 
 @end

@@ -47,6 +47,7 @@
 
 
 @synthesize scvTrackHolder              = _scvTrackHolder;
+@synthesize scrollViewHolder            = _scrollViewHolder;
 @synthesize tracksHolderdocumentView    = _tracksHolderdocumentView;
 @synthesize rulerView                   = _rulerView;
 @synthesize trackViewControllers        = _trackViewControllers;
@@ -96,19 +97,20 @@ static NSString* defaultNib = @"VSTimelineView";
 }
 
 -(void) awakeFromNib{
-    [self.view setWantsLayer:YES];
+//    [self.view setWantsLayer:YES];
     
+    [self.scrollViewHolder setWantsLayer:YES];
+    [self.scrollViewHolder.layer setZPosition:1];
     
     [self initScrollView];
     
-    
-    
     [self initTracks];
-    //    [self updatePixelTimeRatio];
     
     [self initTimelineRuler];
-    [self initTrackLabelsView];
+//    [self initTrackLabelsView];
     [self initPlayhead];
+    
+    [self updatePixelTimeRatio];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectPropertIesDidTurnInactive:) name:VSTimelineObjectPropertiesDidTurnInactive object:nil];
 }
@@ -132,19 +134,27 @@ static NSString* defaultNib = @"VSTimelineView";
 -(void) documentViewsBoundsDidChange:(NSNotification*) notification{
     [self.scvTrackHolder.horizontalRulerView setNeedsDisplay:YES];
     [self.scvTrackHolder.verticalRulerView setNeedsDisplay:YES];
+    
+    NSRect newFrame = [self.tracksHolderdocumentView convertRect:self.playheadViewController.view.frame fromView:self.scvTrackHolder];
+    
+    NSInteger x = [[self.scvTrackHolder contentView] bounds].origin.x - self.tracksHolderdocumentView.frame.origin.x;
+    
+    self.playheadViewController.xScrollOffset = x;
+//    [self updatePlayhead];
+//
+//    [self.playheadViewController.view.layer setNeedsDisplay];
 }
 
 -(void) initPlayhead{
     
     self.playheadViewController = [[VSPlayheadViewController alloc] initWithPlayHead:self.timeline.playHead];
     
-    [self.view addSubview:self.playheadViewController.view positioned:NSWindowAbove relativeTo:self.scvTrackHolder];
-    
-    
-    [self updatePlayhead];
+    [self.view addSubview:self.playheadViewController.view positioned:NSWindowAbove relativeTo:nil];
     
     [self.playheadViewController.view setWantsLayer:YES];
-    [self.playheadViewController.view.layer setZPosition:10];
+    [self.playheadViewController.view.layer setZPosition:20];
+    
+    [self updatePlayhead];
 }
 
 /**
@@ -170,7 +180,7 @@ static NSString* defaultNib = @"VSTimelineView";
     //sets the custom measurement unit VSTimelineRulerMeasurementUnit as measuerement unit of the timeline ruler
     [self.rulerView setMeasurementUnits:VSTimelineRulerMeasurementUnit];
     
-    
+
     
 }
 
@@ -220,6 +230,8 @@ static NSString* defaultNib = @"VSTimelineView";
     }
     
 }
+
+
 
 
 
@@ -376,6 +388,8 @@ static NSString* defaultNib = @"VSTimelineView";
         newDocumentFrame.size.width += newFrame.size.width - oldFrame.size.width;
         [self.tracksHolderdocumentView setFrame:newDocumentFrame];
         [self updatePixelTimeRatio];
+        
+
     }
 }
 
@@ -518,17 +532,16 @@ static NSString* defaultNib = @"VSTimelineView";
 #pragma mark - Playhead
 
 -(void) updatePlayhead{
-    NSRect newFrame = self.playheadViewController.view.frame;
+    if(self.scvTrackHolder.verticalRulerView){
+        self.playheadViewController.xOffset = self.scvTrackHolder.verticalRulerView.frame.size.width;
+    }
     
-    newFrame.size.width = PLAYHEAD_WIDTH;
-    newFrame.size.height = self.scvTrackHolder.documentVisibleRect.size.height + self.rulerView.frame.size.height;    
-    newFrame.origin.y = self.view.frame.size.height - newFrame.size.height;
-    newFrame.origin.x = newFrame.origin.x < self.scvTrackHolder.verticalRulerView.frame.size.width ? self.scvTrackHolder.verticalRulerView.frame.size.width : newFrame.origin.x;
+    NSInteger newHeight = self.scvTrackHolder.documentVisibleRect.size.height + self.rulerView.frame.size.height;
     self.playheadViewController.knobHeight = self.rulerView.frame.size.height;
-    self.playheadViewController.xOffset = self.scvTrackHolder.verticalRulerView.frame.size.width;
+    [self.playheadViewController updatePlayheadFrameWith:PLAYHEAD_WIDTH andHeight:newHeight];
     
-    [self.playheadViewController.view setFrame:newFrame];
     [self.playheadViewController.view setNeedsDisplay:YES];
+//    [self.playheadViewController.view.layer setNeedsDisplay];
 }
 
 @end

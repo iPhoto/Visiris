@@ -62,7 +62,7 @@
 												<reference key="NSWindow"/>
 												<reference key="NSNextKeyView" ref="696849061"/>
 												<string key="NSReuseIdentifierKey">_NS:9</string>
-												<string key="NSClassName">VSTestView</string>
+												<string key="NSClassName">NSView</string>
 											</object>
 											<object class="NSTextField" id="693863937">
 												<reference key="NSNextResponder" ref="381946043"/>
@@ -738,14 +738,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/VSFlippedView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">VSTestView</string>
-					<string key="superclassName">NSView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/VSTestView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

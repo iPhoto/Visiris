@@ -72,8 +72,10 @@
 -(void) mouseDragged:(NSEvent *)theEvent{
     NSPoint currentMousePosition = [theEvent locationInWindow];
     
+    NSInteger deltaX = currentMousePosition.x - self.formerMousePosition.x;
+    
     if(self.moving){
-        NSInteger newXPos = currentMousePosition.x + self.frame.size.width / 2.0;
+        NSInteger newXPos = self.frame.origin.x + deltaX + self.frame.size.width / 2.0;
         NSPoint newCenter = NSMakePoint(newXPos, self.frame.origin.y);
         
         NSPoint currentCenter = NSMakePoint(NSMidX(self.frame), self.frame.origin.y);  

@@ -22,7 +22,6 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-
     }
     
     return self;
@@ -30,25 +29,27 @@
 
 - (id) initWithFrame:(NSRect)frameRect shareContext:(NSOpenGLContext*)context
 {    
-    NSOpenGLPixelFormatAttribute attribs[] =
-    {
-		kCGLPFAAccelerated,
-		kCGLPFANoRecovery,
-		kCGLPFADoubleBuffer,
-		kCGLPFAColorSize, 24,
-		kCGLPFADepthSize, 16,
-		0
-    };
-	
-    pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attribs];
-	
-    if (!pixelFormat)
-		NSLog(@"No OpenGL pixel format");
-	
-	// NSOpenGLView does not handle context sharing, so we draw to a custom NSView instead
-	openGLContext = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:context];
-	
+
 	if (self = [super initWithFrame:frameRect]) {
+        
+        NSOpenGLPixelFormatAttribute attribs[] =
+        {
+            kCGLPFAAccelerated,
+            kCGLPFANoRecovery,
+            kCGLPFADoubleBuffer,
+            kCGLPFAColorSize, 24,
+            kCGLPFADepthSize, 16,
+            0
+        };
+        
+        pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attribs];
+        
+        if (!pixelFormat)
+            NSLog(@"No OpenGL pixel format");
+        
+        // NSOpenGLView does not handle context sharing, so we draw to a custom NSView instead
+        openGLContext = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:context];
+        
 		[[self openGLContext] makeCurrentContext];
 		
 		// Synchronize buffer swaps with vertical refresh rate
@@ -57,7 +58,8 @@
 		
 		[self setupDisplayLink];
 		
-
+        
+        
 		// Look for changes in view size
 		// Note, -reshape will not be called automatically on size changes because NSView does not export it to override 
 		[[NSNotificationCenter defaultCenter] addObserver:self 
@@ -135,13 +137,17 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	// Add a mutex around to avoid the threads accessing the context simultaneously
 	CGLLockContext([[self openGLContext] CGLContextObj]);
 	    
-    glViewport(0, 0, [self bounds].size.width, [self bounds].size.height);
-    //NSLog(@"glview frame size: %@", NSStringFromSize([self frame].size));
-    //NSLog(@"glview bounds size: %@", NSStringFromSize([self bounds].size));
+    glViewport(0, 0, [self frame].size.width, [self frame].size.height);
 
 	[[self openGLContext] update];
 	
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
+    
+    [self setNeedsDisplay:YES];
+}
+
+-(NSString*) description{
+    return @"gl view";
 }
 
 - (void) drawView
