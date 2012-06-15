@@ -12,7 +12,7 @@
 
 @interface VSTextureManager : NSObject
 
-- (GLuint)createTextureWithSize:(NSSize) size;
+- (GLuint)createTextureWithSize:(NSSize) size trackId:(NSInteger) trackId;
 - (VSTexture *)getVSTextureForTexId:(GLuint) texId;
 
 @end

@@ -14,8 +14,9 @@
 @property (readonly, assign) GLuint     texture;
 @property (readonly, assign) NSSize     size;
 @property (readonly, assign) NSInteger  timeLineObjectId;
+@property (readonly, assign) NSInteger  trackId;
 
-- (id)initEmptyTextureWithSize:(NSSize) size;
+-(id)initEmptyTextureWithSize:(NSSize) size trackId:(NSInteger) trackId;
 - (void)replaceContent:(VSImage *) theImage timeLineObjectId:(NSInteger) timeLineObjectId;
 - (void)bind;
 - (void)unbind;
