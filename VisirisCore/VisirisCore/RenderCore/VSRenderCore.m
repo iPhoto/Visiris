@@ -141,16 +141,18 @@ static struct {
         }
         case 1:
         {
-            VSTexture *temp = [self.textureManager getVSTextureForTexId:((VSFrameCoreHandover*)[validCoreHandovers objectAtIndex:0]).textureID];
-            [temp replaceContent:((VSFrameCoreHandover*)[validCoreHandovers objectAtIndex:0]).frame timeLineObjectId:((VSFrameCoreHandover*)[validCoreHandovers objectAtIndex:0]).timeLineObjectID];
-            self.outPutTexture = temp.texture;
-
+            VSFrameCoreHandover *handOver = (VSFrameCoreHandover*)[validCoreHandovers objectAtIndex:0];
+            VSTexture *handOverTexture = [self.textureManager getVSTextureForTexId:handOver.textureID];
+            [handOverTexture replaceContent:handOver.frame timeLineObjectId:handOver.timeLineObjectID];
+            self.outPutTexture = handOverTexture.texture;
+            [[self openGLContext] flushBuffer];
             break;
         }
         case 2:
         {
             [self combineTheFirstTwoObjects:validCoreHandovers];
             self.outPutTexture = self.frameBufferObjectCurrent.texture;
+            [[self openGLContext] flushBuffer];
             break;
         }
         default:
@@ -176,6 +178,8 @@ static struct {
             break;
         }
     }
+    
+    
 
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
 

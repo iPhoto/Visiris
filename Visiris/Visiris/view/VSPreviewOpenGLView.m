@@ -153,6 +153,8 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     if (self.texture != 0) {        
         glEnable( GL_TEXTURE_2D );
         glBindTexture( GL_TEXTURE_2D, self.texture );
+        
+       // NSLog(@"view texture: %d", self.texture);
                 
         glBegin( GL_QUADS );
         glTexCoord2d(0.0,0.0); glVertex2d(-1.0,-1.0);
