@@ -18,8 +18,11 @@
 
 @property NSInteger xOffset;
 
+@property NSInteger xScrollOffset;
+
 /** Height of the knob at the top of the view */
 @property NSInteger knobHeight;
+
 
 #pragma mark - Init
 
@@ -38,5 +41,7 @@
  * @param newPixelItemRation Double value the ratio has been changed to
  */
 -(void) changePixelItemRatio:(double) newPixelItemRatio;
+
+-(void) updatePlayheadFrameWith:(NSInteger) width andHeight:(NSInteger) height;
 
 @end

@@ -27,7 +27,7 @@
 												 selector:@selector(reshape) 
 													 name:NSViewGlobalFrameDidChangeNotification
 												   object:self];
-
+        
     }
     
     return self;
@@ -92,7 +92,7 @@
 static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime, CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext)
 {
     CVReturn result = [(__bridge VSPreviewOpenGLView*)displayLinkContext getFrameForTime:outputTime];
-
+    
     return result;
 }
 
@@ -103,7 +103,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	
 	// Set the renderer output callback function
 	CVDisplayLinkSetOutputCallback(displayLink, &MyDisplayLinkCallback, (__bridge void *)(self));
-
+    
 	// Set the display link for the current renderer
 	CGLContextObj cglContext = [[self openGLContext] CGLContextObj];
 	CGLPixelFormatObj cglPixelFormat = [[self pixelFormat] CGLPixelFormatObj];
@@ -119,7 +119,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     {
 		[self drawView];    
     }
-
+    
 }
 
 - (void) reshape
@@ -127,11 +127,11 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	// This method will be called on the main thread when resizing, but we may be drawing on a secondary thread through the display link
 	// Add a mutex around to avoid the threads accessing the context simultaneously
 	CGLLockContext([[self openGLContext] CGLContextObj]);
-	    
+    
     glViewport(0, 0, [self bounds].size.width, [self bounds].size.height);
-   // NSLog(@"glview frame size: %@", NSStringFromSize([self frame].size));
-   // NSLog(@"glview bounds size: %@", NSStringFromSize([self bounds].size));
-
+    // NSLog(@"glview frame size: %@", NSStringFromSize([self frame].size));
+    // NSLog(@"glview bounds size: %@", NSStringFromSize([self bounds].size));
+    
 	[[self openGLContext] update];
 	
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
@@ -140,19 +140,19 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 - (void) drawView
 {
     
-//    NSLog(@"drawView bounds size: %@", NSStringFromSize([self bounds].size));
+    //    NSLog(@"drawView bounds size: %@", NSStringFromSize([self bounds].size));
     
 	// This method will be called on both the main thread (through -drawRect:) and a secondary thread (through the display link rendering loop)
 	// Also, when resizing the view, -reshape is called on the main thread, but we may be drawing on a secondary thread
 	// Add a mutex around to avoid the threads accessing the context simultaneously
     CGLLockContext([[self openGLContext] CGLContextObj]);
-
+    
 	// Make sure we draw to the right context
 	[[self openGLContext] makeCurrentContext];
-	    
-
+    
+    
     //glViewport(0, 0, [self bounds].size.width, [self bounds].size.height);
-
+    
     
     glEnable( GL_TEXTURE_2D );
     glBindTexture( GL_TEXTURE_2D, self.texture );
@@ -166,7 +166,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     glTexCoord2d(1.0,1.0); glVertex2d(1.0,1.0);
     glTexCoord2d(0.0,1.0); glVertex2d(-1.0,1.0);
     glEnd();
-
+    
 	[[self openGLContext] flushBuffer];
 	
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);

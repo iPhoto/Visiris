@@ -10,20 +10,22 @@
 
 #import "VSTrackViewController.h"
 #import "VStimelineView.h"
-#import "VSPlayheadViewController.h"
+#import "VSTrackHolderView.h"
 
 @class VSTimeline;
 @class VSTimelineRulerView;
+@class VSTrackHolderView;
 /**
  * Subclass of NSViewController responsible for displaying a VSTimeline.
  *
  * VSTimelineViewController holds a various number of VSTrackViewController representing the VSTracks of the VSTimeline and acts as delegate for the VSTrackViewControllers. 
  * !!!!!!Please add more here
  */
-@interface VSTimelineViewController : NSViewController<VSTrackViewControllerDelegate, VSTimelineViewDelegate>
+@interface VSTimelineViewController : NSViewController<VSTrackViewControllerDelegate, VSTimelineViewDelegate, VSPlayHeadRulerMarkerDelegate>
 
 /** NSScrollView holding the VSTrackViews representing the single tracks */
-@property (weak) IBOutlet NSScrollView *scvTrackHolder;
+@property (weak) IBOutlet NSScrollView *scrollView;
+@property (weak) IBOutlet VSTrackHolderView *trackHolder;
 
 /** VSTimeline the controller represents */
 @property VSTimeline* timeline;
@@ -45,5 +47,9 @@
  * @return self
  */
 -(id) initWithDefaultNibAccordingForTimeline:(VSTimeline*)timeline;
+
+#pragma mark - Methods
+
+
 
 @end

@@ -22,7 +22,7 @@
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    [[NSColor greenColor] set];
+    [[NSColor darkGrayColor] set];
     NSRectFill(dirtyRect);
 }
 -(BOOL) isFlipped{

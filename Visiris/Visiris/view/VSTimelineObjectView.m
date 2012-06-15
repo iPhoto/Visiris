@@ -79,8 +79,10 @@ static int resizingAreaWidth = 10;
  */
 -(void) initLayerStyle{
     [self setWantsLayer:YES];
-    self.layer.cornerRadius = 10.0;
-    self.layer.backgroundColor = [[NSColor darkGrayColor] CGColor];
+    [self.layer setZPosition:0];
+    
+    self.layer.cornerRadius = 4.0;
+    self.layer.backgroundColor = [[NSColor lightGrayColor] CGColor];
     self.layer.borderColor =  [[NSColor yellowColor] CGColor];
 }
 

@@ -29,6 +29,7 @@
 @synthesize knobHeight      = _knobHeight;
 @synthesize pixelTimeRatio  = _pixelTimeRation;
 @synthesize xOffset         = _xOffest;
+@synthesize xScrollOffset   = _xScrollOffset;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -51,13 +52,20 @@
     return self;
 }
 
+#pragma mark - Methods
+
+-(void) updatePlayheadFrameWith:(NSInteger) width andHeight:(NSInteger) height{
+    NSInteger newX = (self.playHead.currentTimePosition * self.pixelTimeRatio) - width / 2 + self.xOffset - self.xScrollOffset;
+    [self.playHeadView setFrame:NSMakeRect(newX, 0, width, height)];
+}
+
 
 
 #pragma mark - VSPlayHeadViewDelegate
 
 -(NSPoint) willMovePlayHeadView:(VSPlayHeadView *)playheadView FromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition{
     if(newPosition.x < self.xOffset){
-        return NSMakePoint(self.xOffset, newPosition.y);
+        return NSMakePoint(self.xOffset + self.xScrollOffset, newPosition.y);
     }
     return newPosition;
 }

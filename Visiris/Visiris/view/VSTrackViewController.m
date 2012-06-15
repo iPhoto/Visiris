@@ -89,7 +89,6 @@ static NSString* defaultNib = @"VSTrackView";
 }
 
 -(void) awakeFromNib{
-    [self.view setWantsLayer:YES];
 }
 
 #pragma mark - Methods

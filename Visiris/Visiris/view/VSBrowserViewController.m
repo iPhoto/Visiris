@@ -49,6 +49,20 @@ static NSString* defaultNib = @"VSBrowserView";
 
 -(void) awakeFromNib{
     [self showSubViewByIndex:[self.sgmCtrlSelectSubview selectedSegment]];
+    [self.sgmCtrlSelectSubview setAutoresizingMask:NSViewWidthSizable];
+    
+    [self setSegmentControllsSegmentsNames];
+}
+
+/**
+ * Sets the names of the segments of the Segment control
+ */
+-(void) setSegmentControllsSegmentsNames{
+    [self.sgmCtrlSelectSubview setLabel:NSLocalizedString(@"Project Items", @"Segment label for the Project-Items-Browser in the BrowserView") forSegment:0];
+    
+    [self.sgmCtrlSelectSubview setLabel:NSLocalizedString(@"Files", @"Segment label for the FileBrowser in the BrowserView") forSegment:1];
+    
+    [self.sgmCtrlSelectSubview setLabel:NSLocalizedString(@"Devices", @"Segment label for the Devices-Browser in the BrowserView") forSegment:2];
 }
 
 
