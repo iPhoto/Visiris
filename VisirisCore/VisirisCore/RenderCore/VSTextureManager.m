@@ -25,16 +25,17 @@
     return self;
 }
 
-- (GLuint)createTextureWithSize:(NSSize) size{
+- (GLuint)createTextureWithSize:(NSSize) size trackId:(NSInteger) trackId{
     for(VSTexture *vstexture in [_textureArray allValues])
     {
         if (vstexture.size.width == size.width &&
-            vstexture.size.height == size.height) {
+            vstexture.size.height == size.height &&
+            vstexture.trackId == trackId) {
             return vstexture.texture;
         }
     }
     
-    VSTexture *tempTexture = [[VSTexture alloc] initEmptyTextureWithSize:size];
+    VSTexture *tempTexture = [[VSTexture alloc] initEmptyTextureWithSize:size trackId:trackId];
     [self.texturesForId setObject:tempTexture forKey:[NSNumber numberWithInt:tempTexture.texture]];
     
     return tempTexture.texture;

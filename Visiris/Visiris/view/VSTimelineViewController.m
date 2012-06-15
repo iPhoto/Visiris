@@ -176,7 +176,7 @@ static NSString* defaultNib = @"VSTimelineView";
     
     if([keyPath isEqualToString:@"currentTimePosition"]){
         if(!self.timeline.playHead.scrubbing){
-          //  [self setPlayheadMarkerLocation];
+            [self setPlayheadMarkerLocation];
         }
     }
 }

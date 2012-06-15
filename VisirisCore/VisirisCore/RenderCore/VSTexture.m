@@ -15,11 +15,13 @@
 @synthesize texture = _texture;
 @synthesize size = _size;
 @synthesize timeLineObjectId = _timeLineObjectId;
+@synthesize trackId = _trackId;
 
--(id)initEmptyTextureWithSize:(NSSize) size{
+-(id)initEmptyTextureWithSize:(NSSize) size trackId:(NSInteger) trackId{
     if(self = [super init]){
+        _timeLineObjectId = -1;
         _size = size;
-        _timeLineObjectId = 0;
+        _trackId = trackId;
         
         void *imageData = malloc(_size.width * _size.height * 4);
         

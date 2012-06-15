@@ -264,7 +264,7 @@ static struct {
 }
 
 - (GLuint)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger)trackID{
-    return [self.textureManager createTextureWithSize:textureSize];
+    return [self.textureManager createTextureWithSize:textureSize trackId:trackID];
 }
 
 - (void)swapFBO{
