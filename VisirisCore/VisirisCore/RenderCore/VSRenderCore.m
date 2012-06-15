@@ -108,29 +108,31 @@ static struct {
         }
     }
         
-    /*//For now we need more than 2 Objects
-    if ([mutableCoreHandovers count] < 2) {
-        NSLog(@"need at least 2 objects");
-        return;
-    }*/
     
-    //Check if every Corehandover is a Framecorehandover. If not, return.
-    for(VSCoreHandover *coreHandover in theCoreHandovers){
-        if ([coreHandover isKindOfClass:[VSFrameCoreHandover class]] == NO) {
-            NSLog(@"Theres a little bitch in here");
-            return;
+    /////
+    NSIndexSet *indexSet = [theCoreHandovers indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[VSFrameCoreHandover class]]) {
+            if (((VSFrameCoreHandover *)obj).frame) {
+                return YES;
+            }
         }
-    }
+        return NO;
+    } ];
+    
+    NSArray *validCoreHandovers = [[NSArray alloc] initWithArray:[theCoreHandovers objectsAtIndexes:indexSet]];
+    //////
+    
     
     CGLLockContext([[self openGLContext] CGLContextObj]);
     
     // Make sure we draw to the right context
 	[[self openGLContext] makeCurrentContext];
 
+
     
     
     
-    switch (theCoreHandovers.count) {
+    switch (validCoreHandovers.count) {
         case 0:
         {
             NSLog(@"ERROR: you shouldn't be here - because there is no object to render");
@@ -139,28 +141,28 @@ static struct {
         }
         case 1:
         {
-            VSTexture *temp = [self.textureManager getVSTextureForTexId:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).textureID];
-            [temp replaceContent:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).frame timeLineObjectId:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).timeLineObjectID];
+            VSTexture *temp = [self.textureManager getVSTextureForTexId:((VSFrameCoreHandover*)[validCoreHandovers objectAtIndex:0]).textureID];
+            [temp replaceContent:((VSFrameCoreHandover*)[validCoreHandovers objectAtIndex:0]).frame timeLineObjectId:((VSFrameCoreHandover*)[validCoreHandovers objectAtIndex:0]).timeLineObjectID];
             self.outPutTexture = temp.texture;
 
             break;
         }
         case 2:
         {
-            [self combineTheFirstTwoObjects:mutableCoreHandovers];
+            [self combineTheFirstTwoObjects:validCoreHandovers];
             self.outPutTexture = self.frameBufferObjectCurrent.texture;
             break;
         }
         default:
         {            
-            [self combineTheFirstTwoObjects:mutableCoreHandovers];
+            [self combineTheFirstTwoObjects:validCoreHandovers];
             
 
             
-            for (NSInteger i = 1; i < theCoreHandovers.count -1; i++) {
+            for (NSInteger i = 1; i < validCoreHandovers.count -1; i++) {
                 [self swapFBO];
 
-                VSFrameCoreHandover *handOver = (VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:(i+1)];
+                VSFrameCoreHandover *handOver = (VSFrameCoreHandover*)[validCoreHandovers objectAtIndex:(i+1)];
                 VSTexture *handOverTexture = [self.textureManager getVSTextureForTexId:handOver.textureID];
                 
                 //Replace Content of the VSTexture EXPENSIVE 
@@ -184,7 +186,7 @@ static struct {
     }
 }
 
-- (void)combineTheFirstTwoObjects:(NSMutableArray *) mutableCoreHandovers{
+- (void)combineTheFirstTwoObjects:(NSArray *) mutableCoreHandovers{
     VSTexture *temp = [self.textureManager getVSTextureForTexId:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).textureID];
     VSTexture *temp2 = [self.textureManager getVSTextureForTexId:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:1]).textureID];
     

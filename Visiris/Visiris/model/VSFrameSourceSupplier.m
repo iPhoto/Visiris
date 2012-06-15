@@ -13,8 +13,7 @@
 @implementation VSFrameSourceSupplier
 
 -(VSImage *) getFrameForTimestamp:(double)aTimestamp{
-    NSLog(@"MARTIN IS ALLOWED TO PUNCH ME IN SE FACE...because this little shit shouldnt appear");
-    return [[VSImage alloc] init];
+    return nil;
 }
 
 @end

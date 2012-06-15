@@ -49,10 +49,7 @@
         }
     }
     
-    if (self.renderCoreReceptionist && handoverObjects && handoverObjects.count > 0) {
-        //DDLogInfo(@"out");
-        [self.renderCoreReceptionist renderFrameAtTimestamp:aTimestamp withHandovers:handoverObjects forSize:aFrameSize];
-    }
+    [self.renderCoreReceptionist renderFrameAtTimestamp:aTimestamp withHandovers:handoverObjects forSize:aFrameSize];
 }
 
 #pragma mark - VSTimelineTimelineObjectsDelegate implementation
