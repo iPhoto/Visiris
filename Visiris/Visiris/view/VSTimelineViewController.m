@@ -92,15 +92,17 @@ static NSString* defaultNib = @"VSTimelineView";
     
     [self initScrollView];
     
-    [self initTracks];
-    
     [self initTimelineRuler];
-
+    
     [self initTrackLabelsView];
     
     [self initPlayhead];
     
     [self updatePixelTimeRatio];
+    
+    [self initTracks];
+    
+    
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectPropertIesDidTurnInactive:) name:VSTimelineObjectPropertiesDidTurnInactive object:nil];
 }
@@ -444,8 +446,6 @@ static NSString* defaultNib = @"VSTimelineView";
     NSRect labelRect = NSMakeRect(0, aTrack.view.frame.origin.y, TRACK_LABEL_WIDTH, aTrack.view.frame.size.height);
     
     NSLog(@"labelRect: %@",NSStringFromRect(labelRect));
-    [self.trackHolder convertRect:labelRect toView:self.trackHolder.enclosingScrollView.verticalRulerView];
-        NSLog(@"labelRect: %@",NSStringFromRect(labelRect));
     [self.trackLabelsViewController addTrackLabel:[[VSTrackLabel alloc] initWithName:aTrack.track.name forTrack:aTrack.track.trackID forFrame:labelRect]];
 }
 

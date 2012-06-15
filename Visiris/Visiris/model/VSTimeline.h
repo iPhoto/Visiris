@@ -34,7 +34,7 @@
  * @param removedTimelineObjects NSArray storing the VSTimelineObjects they will removed.
  * @param aTrack VSTrack the timelineObjects will be removed from
  */
--(void) timelineObjects:(NSArray*) removedTimelineObjects willBeRemovedFromTrack:(VSTrack*) aTrack;
+-(void) timelineObjectsWillBeRemoved:(NSArray*) removedTimelineObjects;
 
 @end
 

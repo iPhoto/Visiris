@@ -112,8 +112,8 @@
                         NSArray *allTimelineObjects = [affectedTrack valueForKey:keyPath];
                         NSArray *removedTimelineObjects = [allTimelineObjects objectsAtIndexes:[change  objectForKey:@"indexes"]];
                         
-                        if([self timelineObjectsDelegateImplementsSelector:@selector(timelineObjects:haveBeenAddedToTrack:)]){
-                            [self.timelineObjectsDelegate timelineObjects:removedTimelineObjects haveBeenAddedToTrack:affectedTrack];
+                        if([self timelineObjectsDelegateImplementsSelector:@selector(timelineObjectsWillBeRemoved:)]){
+                            [self.timelineObjectsDelegate timelineObjectsWillBeRemoved:removedTimelineObjects];
                         }
                         
                     }
