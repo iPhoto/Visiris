@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 #import "VSCoreServices.h"
+#import "VSPreviewOpenGLView.h"
 
 @protocol VSPreviewViewControllerDelegate <NSObject>
 
@@ -33,6 +34,8 @@
 @property (strong) NSOpenGLContext *openGLContext;
 
 @property id<VSPreviewViewControllerDelegate> delegate;
+
+@property (weak) IBOutlet VSPreviewOpenGLView *openGLView;
 
 #pragma mark - init
 

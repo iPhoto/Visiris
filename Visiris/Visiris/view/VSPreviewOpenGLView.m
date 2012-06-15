@@ -13,7 +13,7 @@
 #import "VSPlaybackController.h"
 
 @implementation VSPreviewOpenGLView
-@synthesize openGLContext,pixelFormat,displayLink;
+@synthesize openGLContext=_openGLContext,pixelFormat,displayLink;
 @synthesize texture = _texture;
 
 @synthesize playBackcontroller = _playBackcontroller;
@@ -68,12 +68,15 @@
 												   object:self];
 	}
     
-    [self startAnimation];
+    // Synchronize buffer swaps with vertical refresh rate
+    GLint swapInt = 1;
+    [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; 
     
-    //[self setPostsFrameChangedNotifications:YES];
-	
-	return self;
+    [self setupDisplayLink];
+
+    [self startAnimation];
 }
+
 
 - (void)lockFocus
 {
@@ -89,12 +92,12 @@
 {
     [super viewDidMoveToWindow];
     if ([self window] == nil)
-        [openGLContext clearDrawable];
+        [_openGLContext clearDrawable];
 }
 
 - (CVReturn) getFrameForTime:(const CVTimeStamp*)outputTime
 {
-//    [self.playBackcontroller renderFramesForCurrentTimestamp];
+    [self.playBackcontroller renderFramesForCurrentTimestamp];
     @autoreleasepool {
         
         [self drawView];
@@ -126,9 +129,13 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 - (void) drawRect:(NSRect)dirtyRect
 {
     [super drawRect:dirtyRect];
+    
 	// Ignore if the display link is still running
 	if (!CVDisplayLinkIsRunning(displayLink))
-		[self drawView];
+    {
+		[self drawView];    
+    }
+
 }
 
 - (void) reshape
@@ -152,14 +159,18 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (void) drawView
 {
+    
+//    NSLog(@"drawView bounds size: %@", NSStringFromSize([self bounds].size));
+    
 	// This method will be called on both the main thread (through -drawRect:) and a secondary thread (through the display link rendering loop)
 	// Also, when resizing the view, -reshape is called on the main thread, but we may be drawing on a secondary thread
 	// Add a mutex around to avoid the threads accessing the context simultaneously
-	CGLLockContext([[self openGLContext] CGLContextObj]);
-	
+    CGLLockContext([[self openGLContext] CGLContextObj]);
+
 	// Make sure we draw to the right context
 	[[self openGLContext] makeCurrentContext];
 	    
+
     //glViewport(0, 0, [self bounds].size.width, [self bounds].size.height);
 
     

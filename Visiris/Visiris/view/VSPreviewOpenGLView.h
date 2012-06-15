@@ -11,7 +11,7 @@
 
 @class VSPlaybackController;
 
-@interface VSPreviewOpenGLView : NSView
+@interface VSPreviewOpenGLView : NSView <NSCoding>
 
 @property (strong) VSPlaybackController     *playBackcontroller;
 @property (strong) NSOpenGLContext          *openGLContext;
@@ -20,7 +20,8 @@
 @property (assign) GLuint                   texture;
 
 - (id) initWithFrame:(NSRect)frameRect;
-- (id) initWithFrame:(NSRect)frameRect shareContext:(NSOpenGLContext*)context;
+- (void)initOpenGLWithSharedContext:(NSOpenGLContext *)openGLContext;
+
 - (void) drawView;
 - (void) startAnimation;
 

@@ -49,7 +49,7 @@
     if([keyPath isEqualToString:@"currentTimePosition"]){
         double timePos = [[object valueForKey:keyPath] doubleValue];
         
-        [self.preProcessor processFrameAtTimestamp:timePos withFrameSize:NSMakeSize(1024, 768)];
+      //  [self.preProcessor processFrameAtTimestamp:timePos withFrameSize:NSMakeSize(1024, 768)];
 
     }
 }
@@ -83,7 +83,7 @@
     if(self.playing){
         
         if (self.preProcessor) {
-            [self.preProcessor processFrameAtTimestamp:self.currentTimestamp withFrameSize:[self frameSize]];
+            [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:[self frameSize]];
         }
         
         //    [self.queue addOperationWithBlock:^{
