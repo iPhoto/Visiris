@@ -22,4 +22,6 @@
 
 @property id<VSPlayHeadRulerMarkerDelegate> playheadMarkerDelegate;
 
+-(void) setPlayHeadMarkerToLocation:(CGFloat) location;
+
 @end

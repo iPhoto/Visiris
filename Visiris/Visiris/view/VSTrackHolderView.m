@@ -29,6 +29,8 @@
 @synthesize scrollOffset            = _scrollOffset;
 @synthesize playheadMarkerDelegate  = _playheadMarkerDelegate;
 
+#pragma mark - Init
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
@@ -37,11 +39,6 @@
     }
     
     return self;
-}
-
-- (void)drawRect:(NSRect)dirtyRect{
-    [self.guideLine setFrame:[self convertRect:dirtyRect toView:self.guideLine]];
-    [self setGuideLinesStartAndEndPoint];
 }
 
 -(void) awakeFromNib{
@@ -65,24 +62,7 @@
     [self.guideLine setWantsLayer:YES];
     [self.guideLine.layer setZPosition:100];
     
-    [self setGuideLinesStartAndEndPoint];
-}
-
--(void) setGuideLinesStartAndEndPoint{
-    NSPoint startPoint = [self convertPoint:self.playheadMarker.imageRectInRuler.origin toView:self.guideLine];
-    NSPoint endPoint = [self convertPoint:NSMakePoint(self.playheadMarker.imageRectInRuler.origin.x, self.bounds.size.height) toView:self.guideLine];
-    
-    startPoint.x += self.scrollOffset.x;
-    startPoint.y += self.scrollOffset.y;
-    
-    endPoint.x += self.scrollOffset.x;
-    endPoint.y += self.scrollOffset.y;
-    
-    
-    self.guideLine.lineStartPoint =  startPoint;
-    self.guideLine.lineEndPoint = endPoint;
-    
-    [self.guideLine.layer setNeedsDisplay];
+    [self updateGuideline];
 }
 
 -(void) initEnclosingScrollView{
@@ -107,44 +87,27 @@
     }
 }
 
+
+#pragma mark - NSView
+
+- (void)drawRect:(NSRect)dirtyRect{
+    [self.guideLine setFrame:[self convertRect:dirtyRect toView:self.guideLine]];
+    [self updateGuideline];
+}
+
+
 -(BOOL) isFlipped{
     return YES;
 }
--(void) boundsDidChange:(NSNotification*) notification{
-    
-    NSInteger xOffset = self.enclosingScrollView.contentView.bounds.origin.x - self.frame.origin.x;
-    NSInteger yOffset = self.enclosingScrollView.contentView.bounds.origin.y - self.frame.origin.y;
-    
-    self.scrollOffset = NSMakePoint(xOffset, yOffset);
-    
-    
-    [self updateGuideline];
-    
-}
--(void) updateGuideline{
-    NSRect newFrame = self.bounds; 
-    newFrame.size = self.enclosingScrollView.contentSize;
-    newFrame.origin.x += self.scrollOffset.x;
-    newFrame.origin.y += self.scrollOffset.y;
-    //  newFrame = [self convertRect:newFrame toView:self.guideLine];
-    
-    [self.guideLine setFrame:newFrame];
-    
-    [self setGuideLinesStartAndEndPoint];
-    
-    [self.guideLine setNeedsDisplay:YES];
-}
 
--(void) setFrame:(NSRect)frameRect{
-    [super setFrame:frameRect];
-    
-}
 
-#pragma mark - RulerView
+
+
+#pragma mark - RulerViewDelegate
 
 -(void) rulerView:(NSRulerView *)ruler didMoveMarker:(NSRulerMarker *)marker{
     if(marker == self.playheadMarker){
-        [self setGuideLinesStartAndEndPoint];
+        [self updateGuideline];
         
         if([self delegateRespondsToSelector:@selector(didMovePlayHeadRulerMarker:inContainingView:)]){
             [self.playheadMarkerDelegate didMovePlayHeadRulerMarker:self.playheadMarker inContainingView:self];
@@ -164,13 +127,29 @@
 -(CGFloat) rulerView:(NSRulerView *)ruler willMoveMarker:(NSRulerMarker *)marker toLocation:(CGFloat)location{
     if(marker == self.playheadMarker){
         if ([self delegateRespondsToSelector:@selector(willMovePlayHeadRulerMarker:inContainingView:toLocation:)]) {
-            return [self.playheadMarkerDelegate willMovePlayHeadRulerMarker:self.playheadMarker inContainingView:self
-            toLocation:location];
+            location = [self.playheadMarkerDelegate willMovePlayHeadRulerMarker:self.playheadMarker inContainingView:self
+                                                                 toLocation:location];
         }
     }
     
+    [self updateGuidelineAtMarkerLocation:location];
+    
     return location;
 }
+
+-(void) rulerView:(NSRulerView *)ruler handleMouseDown:(NSEvent *)event{
+    
+}
+
+#pragma mark - Methods
+
+-(void) setPlayHeadMarkerToLocation:(CGFloat)location{
+    [self.playheadMarker setMarkerLocation:location];
+    
+    [self updateGuideline];
+}
+
+
 
 #pragma mark - Private Methods
 
@@ -190,6 +169,46 @@
     return NO;
 }
 
+#pragma mark - Private Methods
+
+-(void) boundsDidChange:(NSNotification*) notification{
+    
+    DDLogInfo(@"Notification: %@",[notification.object class]);
+    
+    if(notification.object == self.enclosingScrollView.contentView){
+    
+    NSInteger xOffset = self.enclosingScrollView.contentView.bounds.origin.x - self.frame.origin.x;
+    NSInteger yOffset = self.enclosingScrollView.contentView.bounds.origin.y - self.frame.origin.y;
+    
+    self.scrollOffset = NSMakePoint(xOffset, yOffset);
+    
+    
+    [self updateGuideline];
+    }
+    
+}
+
+-(void) updateGuideline{
+    [self updateGuidelineAtMarkerLocation:self.playheadMarker.markerLocation];
+}
+
+-(void) updateGuidelineAtMarkerLocation:(CGFloat) location{
+    NSRect newFrame = self.bounds; 
+    newFrame.size = self.enclosingScrollView.contentSize;
+    newFrame.origin.x += self.scrollOffset.x;
+    newFrame.origin.y += self.scrollOffset.y;
+    //  newFrame = [self convertRect:newFrame toView:self.guideLine];
+    
+    [self.guideLine setFrame:newFrame];
+    
+    NSPoint startPoint = [self convertPoint:self.playheadMarker.imageRectInRuler.origin toView:self.guideLine];
+    startPoint.x = location - self.scrollOffset.x;
+    startPoint.y += self.scrollOffset.y;
+    
+    self.guideLine.lineStartPoint = startPoint;
+    
+    [self.guideLine setNeedsDisplay:YES];
+}
 
 
 

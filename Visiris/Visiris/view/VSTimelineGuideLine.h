@@ -11,6 +11,5 @@
 @interface VSTimelineGuideLine : NSView
 
 @property NSPoint lineStartPoint;
-@property NSPoint lineEndPoint;
 
 @end

@@ -8,6 +8,12 @@
 
 #import "VSTimelineGuideLine.h"
 
+@interface VSTimelineGuideLine()
+
+@property NSPoint lineEndPoint;
+
+@end
+
 @implementation VSTimelineGuideLine
 @synthesize lineStartPoint  = _lineStartPoint;
 @synthesize lineEndPoint    = _lineEndPoint;

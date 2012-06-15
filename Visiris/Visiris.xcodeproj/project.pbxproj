@@ -142,8 +142,6 @@
 		5B35C0A31577A912009911EC /* VSTimelineConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C08F1577A912009911EC /* VSTimelineConstants.m */; };
 		5B35C0A51577A912009911EC /* VSLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0961577A912009911EC /* VSLogFormatter.m */; };
 		5B603FA9157F824A0045A1EA /* VSPlayHead.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B603FA8157F824A0045A1EA /* VSPlayHead.m */; };
-		5B7D8B68157F5E790008FFBC /* VSPlayHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7D8B67157F5E790008FFBC /* VSPlayHeadView.m */; };
-		5B7D8B6B157F5E850008FFBC /* VSPlayheadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7D8B6A157F5E850008FFBC /* VSPlayheadViewController.m */; };
 		5BBC2F19157A26BB0093313A /* VSViewUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BBC2F18157A26BB0093313A /* VSViewUtils.m */; };
 		5BF08B92158A2E7500D64144 /* VSTimelineGuideLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF08B91158A2E7500D64144 /* VSTimelineGuideLine.m */; };
 /* End PBXBuildFile section */
@@ -151,7 +149,6 @@
 /* Begin PBXFileReference section */
 		275936F715891F87002C88DA /* VisirisCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisirisCore.framework; path = "../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkzpace-drkueispmrybxzdragwerhodoczw/Build/Products/Debug/VisirisCore.framework"; sourceTree = "<group>"; };
 		2761513A1577C97A005177C5 /* aaa.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = aaa.jpg; sourceTree = "<group>"; };
-		27A18C40157F528A003CCDC5 /* VisirisCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisirisCore.framework; path = "../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkzpace-drkueispmrybxzdragwerhodoczw/Build/Products/Debug/VisirisCore.framework"; sourceTree = "<group>"; };
 		5B0E366415876E9300F15026 /* VSTrackLabelsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTrackLabelsView.h; sourceTree = "<group>"; };
 		5B0E366515876E9300F15026 /* VSTrackLabelsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTrackLabelsView.m; sourceTree = "<group>"; };
 		5B0E366715876EA900F15026 /* VSTrackLabelsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTrackLabelsViewController.h; sourceTree = "<group>"; };
@@ -365,10 +362,6 @@
 		5B35C0A61577A926009911EC /* VSCoreServices.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSCoreServices.h; sourceTree = "<group>"; };
 		5B603FA7157F824A0045A1EA /* VSPlayHead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSPlayHead.h; sourceTree = "<group>"; };
 		5B603FA8157F824A0045A1EA /* VSPlayHead.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSPlayHead.m; sourceTree = "<group>"; };
-		5B7D8B66157F5E790008FFBC /* VSPlayHeadView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSPlayHeadView.h; sourceTree = "<group>"; };
-		5B7D8B67157F5E790008FFBC /* VSPlayHeadView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSPlayHeadView.m; sourceTree = "<group>"; };
-		5B7D8B69157F5E850008FFBC /* VSPlayheadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSPlayheadViewController.h; sourceTree = "<group>"; };
-		5B7D8B6A157F5E850008FFBC /* VSPlayheadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSPlayheadViewController.m; sourceTree = "<group>"; };
 		5BBC2F17157A26BB0093313A /* VSViewUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSViewUtils.h; sourceTree = "<group>"; };
 		5BBC2F18157A26BB0093313A /* VSViewUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSViewUtils.m; sourceTree = "<group>"; };
 		5BF08B90158A2E7500D64144 /* VSTimelineGuideLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineGuideLine.h; sourceTree = "<group>"; };
@@ -840,7 +833,6 @@
 			isa = PBXGroup;
 			children = (
 				5B0E366215876E6A00F15026 /* trackLabel */,
-				5B7D8B65157F5E6A0008FFBC /* playHead */,
 				5B35C0A91577AEB4009911EC /* ruler */,
 				5B35BFC71577A573009911EC /* VSTimelineView.h */,
 				5B35BFC81577A573009911EC /* VSTimelineView.m */,
@@ -1000,17 +992,6 @@
 				5B35BF981577A573009911EC /* VSTrack.m */,
 			);
 			name = track;
-			sourceTree = "<group>";
-		};
-		5B7D8B65157F5E6A0008FFBC /* playHead */ = {
-			isa = PBXGroup;
-			children = (
-				5B7D8B66157F5E790008FFBC /* VSPlayHeadView.h */,
-				5B7D8B67157F5E790008FFBC /* VSPlayHeadView.m */,
-				5B7D8B69157F5E850008FFBC /* VSPlayheadViewController.h */,
-				5B7D8B6A157F5E850008FFBC /* VSPlayheadViewController.m */,
-			);
-			name = playHead;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1216,8 +1197,6 @@
 				5B35C0A51577A912009911EC /* VSLogFormatter.m in Sources */,
 				5B2A59D31578AF4E003938AB /* VSDocumentController.m in Sources */,
 				5BBC2F19157A26BB0093313A /* VSViewUtils.m in Sources */,
-				5B7D8B68157F5E790008FFBC /* VSPlayHeadView.m in Sources */,
-				5B7D8B6B157F5E850008FFBC /* VSPlayheadViewController.m in Sources */,
 				5B603FA9157F824A0045A1EA /* VSPlayHead.m in Sources */,
 				5B0E366615876E9300F15026 /* VSTrackLabelsView.m in Sources */,
 				5B0E366915876EA900F15026 /* VSTrackLabelsViewController.m in Sources */,

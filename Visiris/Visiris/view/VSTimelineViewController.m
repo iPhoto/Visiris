@@ -15,7 +15,6 @@
 #import "VSTimelineObjectProxy.h"
 #import "VSTimelineRulerView.h"
 #import "VSTimelineObject.h"
-#import "VSPlayheadViewController.h"
 #import "VSTrackLabelsViewController.h"
 #import "VSTrackLabel.h"
 #import "VSTrackHolderView.h"
@@ -371,9 +370,6 @@ static NSString* defaultNib = @"VSTimelineView";
     
     double newTimePosition = location * self.pixelTimeRatio;
     self.timeline.playHead.currentTimePosition = newTimePosition;
-    
-    DDLogInfo(@"Playhead's new Location: %f",location);
-    DDLogInfo(@"Playhead's new Timepositoin: %f",self.timeline.playHead.currentTimePosition);
 
     return location;
 }
@@ -390,6 +386,11 @@ static NSString* defaultNib = @"VSTimelineView";
     [self.rulerView setMeasurementUnits:VSTimelineRulerMeasurementUnit];
 }
 
+-(void) setPlayheadMarkerLocation{
+    CGFloat newLocation = self.timeline.playHead.currentTimePosition / self.pixelTimeRatio;
+    
+    [self.trackHolder setPlayHeadMarkerToLocation:newLocation];
+}
 
 /**
  * Creates a new VSTrackView according to the given track.
@@ -454,6 +455,8 @@ static NSString* defaultNib = @"VSTimelineView";
  */
 -(void) pixelTimeRatioDidChange{
     [self updateTimelineRulerMeasurement];
+    
+    [self setPlayheadMarkerLocation];
     
     //tells all VSTrackViewControlls in the timeline, that the pixelItemRation has been changed
     for(VSTrackViewController *controller in self.trackViewControllers){
