@@ -259,7 +259,7 @@ static struct {
     return 1;
 }
 
-- (GLuint)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode{
+- (GLuint)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger)trackID{
     return [self.textureManager createTextureWithSize:textureSize];
 }
 

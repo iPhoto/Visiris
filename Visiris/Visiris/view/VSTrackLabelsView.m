@@ -29,10 +29,8 @@
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    [[NSColor lightGrayColor] set];
-    NSRectFill(dirtyRect);
     
-    [[NSColor darkGrayColor] set];
+    [[NSColor redColor] set];
     for(VSTrackLabel *trackLabel in self.trackLabels){
         NSRectFill(trackLabel.frame);
         [trackLabel.name drawInRect:trackLabel.frame withAttributes:nil];

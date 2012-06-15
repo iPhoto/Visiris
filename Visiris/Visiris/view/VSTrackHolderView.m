@@ -128,7 +128,7 @@
     if(marker == self.playheadMarker){
         if ([self delegateRespondsToSelector:@selector(willMovePlayHeadRulerMarker:inContainingView:toLocation:)]) {
             location = [self.playheadMarkerDelegate willMovePlayHeadRulerMarker:self.playheadMarker inContainingView:self
-                                                                 toLocation:location];
+                                                                     toLocation:location];
         }
     }
     
@@ -138,17 +138,39 @@
 }
 
 -(void) rulerView:(NSRulerView *)ruler handleMouseDown:(NSEvent *)event{
-    
+    if(ruler == self.enclosingScrollView.horizontalRulerView){
+        
+//        if([self delegateRespondsToSelector:@selector(shouldMovePlayHeadRulerMarker:inContainingView:)]){
+//            [self.playheadMarkerDelegate shouldMovePlayHeadRulerMarker:self.playheadMarker inContainingView:self];
+//        }
+        
+        NSPoint pointInView = [self.window.contentView convertPoint:[event locationInWindow] toView:self.enclosingScrollView.horizontalRulerView];
+        
+        CGFloat location = pointInView.x - self.playheadMarker.imageRectInRuler.size.width / 2 - self.playheadMarker.imageOrigin.x;
+        
+        if([self delegateRespondsToSelector:@selector(willMovePlayHeadRulerMarker:inContainingView:toLocation:)]){
+            location = [self.playheadMarkerDelegate willMovePlayHeadRulerMarker:self.playheadMarker inContainingView:self toLocation:location];
+        }
+        
+        [self setPlayHeadMarkerToLocation:location];
+        
+//        if([self delegateRespondsToSelector:@selector(didMovePlayHeadRulerMarker:inContainingView:)]){
+//            [self.playheadMarkerDelegate didMovePlayHeadRulerMarker:self.playheadMarker inContainingView:self];
+//        }
+        
+    }
 }
 
 #pragma mark - Methods
 
 -(void) setPlayHeadMarkerToLocation:(CGFloat)location{
+    NSRect formerImageRect = self.playheadMarker.imageRectInRuler;
     [self.playheadMarker setMarkerLocation:location];
     
     [self updateGuideline];
     
     [self.enclosingScrollView.horizontalRulerView setNeedsDisplayInRect:self.playheadMarker.imageRectInRuler];
+    [self.enclosingScrollView.horizontalRulerView setNeedsDisplayInRect:formerImageRect];
 }
 
 
@@ -177,14 +199,14 @@
     
     
     if(notification.object == self.enclosingScrollView.contentView){
-    
-    NSInteger xOffset = self.enclosingScrollView.contentView.bounds.origin.x - self.frame.origin.x;
-    NSInteger yOffset = self.enclosingScrollView.contentView.bounds.origin.y - self.frame.origin.y;
-    
-    self.scrollOffset = NSMakePoint(xOffset, yOffset);
-    
-    
-    [self updateGuideline];
+        
+        NSInteger xOffset = self.enclosingScrollView.contentView.bounds.origin.x - self.frame.origin.x;
+        NSInteger yOffset = self.enclosingScrollView.contentView.bounds.origin.y - self.frame.origin.y;
+        
+        self.scrollOffset = NSMakePoint(xOffset, yOffset);
+        
+        
+        [self updateGuideline];
     }
     
 }
