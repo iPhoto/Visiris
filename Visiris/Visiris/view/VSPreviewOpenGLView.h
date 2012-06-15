@@ -23,6 +23,7 @@
 - (void)initOpenGLWithSharedContext:(NSOpenGLContext *)openGLContext;
 
 - (void) drawView;
-- (void) startAnimation;
+- (void) startDisplayLink;
+- (void) stopDisplayLink;
 
 @end

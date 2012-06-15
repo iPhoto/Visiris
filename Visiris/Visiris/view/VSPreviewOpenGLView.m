@@ -60,8 +60,6 @@
     [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; 
     
     [self setupDisplayLink];
-
-    [self startAnimation];
 }
 
 
@@ -84,9 +82,8 @@
 
 - (CVReturn) getFrameForTime:(const CVTimeStamp*)outputTime
 {
-    [self.playBackcontroller renderFramesForCurrentTimestamp];
     @autoreleasepool {
-        
+        [self.playBackcontroller renderFramesForCurrentTimestamp];
         [self drawView];
         return kCVReturnSuccess;
     }
@@ -175,10 +172,14 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
 }
 
-- (void) startAnimation
-{
+- (void) startDisplayLink{
 	if (displayLink && !CVDisplayLinkIsRunning(displayLink))
 		CVDisplayLinkStart(displayLink);
+}
+
+- (void)stopDisplayLink{
+	if (displayLink && CVDisplayLinkIsRunning(displayLink))
+		CVDisplayLinkStop(displayLink);
 }
 
 @end

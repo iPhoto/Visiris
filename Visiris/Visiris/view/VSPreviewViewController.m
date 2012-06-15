@@ -68,12 +68,14 @@ static NSString* defaultNib = @"VSPreviewView";
 
 - (IBAction)play:(NSButton *)sender {
     if([self delegateRespondsToSelector:@selector(play) ]){
+        [self.openGLView startDisplayLink];
         [self.delegate play];
     }
 }
 
 - (IBAction)stop:(NSButton *)sender {
     if([self delegateRespondsToSelector:@selector(stop) ]){
+        [self.openGLView stopDisplayLink];
         [self.delegate stop];
     }
 }
