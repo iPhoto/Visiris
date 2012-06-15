@@ -32,6 +32,7 @@
     
     [[NSColor redColor] set];
     for(VSTrackLabel *trackLabel in self.trackLabels){
+        DDLogInfo(@"hier");
         NSRectFill(trackLabel.frame);
         [trackLabel.name drawInRect:trackLabel.frame withAttributes:nil];
     }

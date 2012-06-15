@@ -54,7 +54,7 @@
 
 #pragma mark - VSTimelineTimelineObjectsDelegate implementation
 
--(void) timelineObjects:(NSArray *)removedTimelineObjects willBeRemovedFromTrack:(VSTrack *)aTrack{
+-(void) timelineObjectsWillBeRemoved:(NSArray *)removedTimelineObjects{
     DDLogInfo(@"%@",removedTimelineObjects);
     
     for (VSTimelineObject *timelineObject in removedTimelineObjects){
