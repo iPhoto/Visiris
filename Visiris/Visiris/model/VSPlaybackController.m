@@ -42,7 +42,7 @@
         _timeline = timeline;
         self.queue = [[NSOperationQueue alloc] init];
         
-        
+        [self.timeline.playHead addObserver:self forKeyPath:@"currentTimePosition" options:0 context:nil];
         [self.timeline.playHead addObserver:self forKeyPath:@"scrubbing" options:0 context:nil];
     }
     
@@ -51,6 +51,14 @@
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     
+    if([keyPath isEqualToString:@"currentTimePosition"]){
+        if(!self.playing && !self.timeline.playHead.scrubbing){
+            self.currentTimestamp = [[object valueForKey:keyPath] doubleValue];
+            if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
+                [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
+            }
+        }
+    }
     
     if([keyPath isEqualToString:@"scrubbing"]){
         BOOL scrubbing = [[object valueForKey:keyPath] boolValue];
@@ -104,9 +112,23 @@
 
         
         double currentTime = [[NSDate date] timeIntervalSince1970]*1000;
+        
+        
         self.currentTimestamp += currentTime - self.playbackStartTime;
+        
+        if(self.currentTimestamp > self.timeline.duration){
+            self.currentTimestamp = 0;
+        }
+        
         self.timeline.playHead.currentTimePosition = self.currentTimestamp;
         self.playbackStartTime = currentTime;
+    }
+    else{
+        if(!self.timeline.playHead.scrubbing){
+            if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
+                [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
+            }
+        }
     }
     if (self.preProcessor) {
         [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:[self frameSize]];

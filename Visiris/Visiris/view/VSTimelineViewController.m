@@ -95,7 +95,9 @@ static NSString* defaultNib = @"VSTimelineView";
     [self initTracks];
     
     [self initTimelineRuler];
-//    [self initTrackLabelsView];
+
+    [self initTrackLabelsView];
+    
     [self initPlayhead];
     
     [self updatePixelTimeRatio];
@@ -436,14 +438,14 @@ static NSString* defaultNib = @"VSTimelineView";
     [self.trackHolder setFrame:NSMakeRect([self.trackHolder frame].size.width, 0, self.trackHolder.frame.size.width,  height)];
     
     [self addNewTrackLabelForTrack:newTrackViewController];
-    
-    [newTrackViewController.view setWantsLayer:YES];
-    [newTrackViewController.view.layer setZPosition:0];
-    [newTrackViewController.view setNeedsDisplay:YES];
 }
 
 -(void) addNewTrackLabelForTrack:(VSTrackViewController*) aTrack{
-    NSRect labelRect = NSMakeRect(self.scrollView.verticalRulerView.frame.size.height - aTrack.view.frame.origin.y, aTrack.view.frame.origin.y, TRACK_LABEL_WIDTH, aTrack.view.frame.size.height);
+    NSRect labelRect = NSMakeRect(0, aTrack.view.frame.origin.y, TRACK_LABEL_WIDTH, aTrack.view.frame.size.height);
+    
+    NSLog(@"labelRect: %@",NSStringFromRect(labelRect));
+    [self.trackHolder convertRect:labelRect toView:self.trackHolder.enclosingScrollView.verticalRulerView];
+        NSLog(@"labelRect: %@",NSStringFromRect(labelRect));
     [self.trackLabelsViewController addTrackLabel:[[VSTrackLabel alloc] initWithName:aTrack.track.name forTrack:aTrack.track.trackID forFrame:labelRect]];
 }
 

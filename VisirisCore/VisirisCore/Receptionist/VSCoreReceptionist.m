@@ -39,8 +39,8 @@
     
 }
 
--(GLuint) createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode{
-    return [self.renderCore createNewTextureForSize:textureSize colorMode:colorMode];
+-(GLuint) createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger)trackID{
+    return [self.renderCore createNewTextureForSize:textureSize colorMode:colorMode forTrack:trackID];
 }
 
 -(void) removeTextureForID:(GLuint)anID{

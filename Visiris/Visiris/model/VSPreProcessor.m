@@ -69,7 +69,7 @@
     for(VSTimelineObject *timelineObject in newTimelineObjects){
         NSSize dimensions = [VSFileUtils dimensionsOfFile:timelineObject.sourceObject.filePath];
 
-        timelineObject.textureID = [self.renderCoreReceptionist createNewTextureForSize:dimensions colorMode:nil];
+        timelineObject.textureID = [self.renderCoreReceptionist createNewTextureForSize:dimensions colorMode:nil forTrack:aTrack.trackID];
     }
 }
 
