@@ -69,7 +69,7 @@
     self.timeline = [[VSTimeline alloc] initWithDuration:VSTimelineDefaultDuration];
     
     //** Adding 2 new VisualTracks to the timeline
-    for(int i = 0; i<3; i++){
+    for(int i = 0; i<5; i++){
         [self.timeline addNewTrackNamed:[NSString stringWithFormat:@"track%ld",i] ofType:VISUAL_TRACK];
     }
     
