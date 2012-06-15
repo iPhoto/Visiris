@@ -12,4 +12,6 @@
 
 @property double currentTimePosition;
 
+@property BOOL scrubbing;
+
 @end

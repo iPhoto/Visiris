@@ -54,7 +54,7 @@
         coreHandover = [[VSFrameCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp] andAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp] forTextureID:self.textureID forTimestamp:localTimestamp forId: self.timelineObjectID];
     }
     else {
-        NSLog(@"TODOOOOOOOOOOOOOOOOOOOOO: Next time you see that, punch in this ugly face right of you!!!!!!");
+        DDLogInfo(@"Its an audio file");
     }
     
     return coreHandover;

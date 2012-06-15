@@ -21,6 +21,10 @@
  */
 -(void) texture:(GLuint) theTexture isReadyForTimestamp:(double) theTimestamp;
 
+-(void) didStartScrubbingAtTimestamp:(double) aTimestamp;
+
+-(void) didStopScrubbingAtTimestamp:(double) aTimestamp;
+
 @end
 
 @class VSPreProcessor;

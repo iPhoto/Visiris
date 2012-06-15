@@ -10,7 +10,7 @@
 
 
 /** Default length of the Timeline in milliseconds */
-extern float VSTimelineDefaultDuration;
+extern double VSTimelineDefaultDuration;
 
 /** Ratio between the Duration and the Pixel-Length of the timeline */
 extern float VSTimelineDefaultPixelRatio;

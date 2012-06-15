@@ -147,6 +147,8 @@
     [self.playheadMarker setMarkerLocation:location];
     
     [self updateGuideline];
+    
+    [self.enclosingScrollView.horizontalRulerView setNeedsDisplayInRect:self.playheadMarker.imageRectInRuler];
 }
 
 
@@ -173,7 +175,6 @@
 
 -(void) boundsDidChange:(NSNotification*) notification{
     
-    DDLogInfo(@"Notification: %@",[notification.object class]);
     
     if(notification.object == self.enclosingScrollView.contentView){
     

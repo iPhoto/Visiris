@@ -86,6 +86,14 @@ static NSString* defaultNib = @"VSPreviewView";
     self.openGLView.texture = theTexture;
 }
 
+-(void) didStartScrubbingAtTimestamp:(double)aTimestamp{
+    [self.openGLView startDisplayLink];
+}
+
+-(void) didStopScrubbingAtTimestamp:(double)aTimestamp{
+    [self.openGLView stopDisplayLink];
+}
+
 #pragma mark - Private Methods
 
 -(BOOL) delegateRespondsToSelector:(SEL) selector{

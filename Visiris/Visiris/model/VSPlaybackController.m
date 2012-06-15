@@ -19,6 +19,7 @@
 
 @property (strong) NSOperationQueue *queue;
 @property BOOL playing;
+@property double playbackStartTime;
 
 @end
 
@@ -31,6 +32,7 @@
 @synthesize delegate            = _delegate;
 @synthesize queue               = _queue;
 @synthesize playing             = _playing;
+@synthesize playbackStartTime   = _playbackStartTime;
 
 #pragma mark - Init
 
@@ -39,26 +41,44 @@
         _preProcessor = preProcessor;
         _timeline = timeline;
         self.queue = [[NSOperationQueue alloc] init];
-        [self.timeline.playHead addObserver:self forKeyPath:@"currentTimePosition" options:0 context:nil];
+        
+        
+        [self.timeline.playHead addObserver:self forKeyPath:@"scrubbing" options:0 context:nil];
     }
     
     return self;
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-    if([keyPath isEqualToString:@"currentTimePosition"]){
-        double timePos = [[object valueForKey:keyPath] doubleValue];
+    
+    
+    if([keyPath isEqualToString:@"scrubbing"]){
+        BOOL scrubbing = [[object valueForKey:keyPath] boolValue];
         
-      //  [self.preProcessor processFrameAtTimestamp:timePos withFrameSize:NSMakeSize(1024, 768)];
-
+        self.currentTimestamp = [[object valueForKey:@"currentTimePosition"] doubleValue];
+        
+        if(scrubbing){
+            
+            self.playing = false;
+            
+            if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
+                [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
+            }
+        }
+        else {
+            if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
+                [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
+            }
+        }
     }
+    
 }
 
 #pragma mark - Methods
 
 - (void)startPlaybackFromCurrentTimeStamp
 {
-//    [self startTimer];
+    //    [self startTimer];
     NSThread* timerThread = [[NSThread alloc] initWithTarget:self selector:@selector(startTimer) object:nil]; //Create a new thread
     [timerThread start];
 }
@@ -81,26 +101,29 @@
 - (void)renderFramesForCurrentTimestamp
 {
     if(self.playing){
+
         
-        if (self.preProcessor) {
-            [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:[self frameSize]];
-        }
-        
-        //    [self.queue addOperationWithBlock:^{
-        //        [self.preProcessor processFrameAtTimestamp:0 withFrameSize:NSMakeSize(120, 120)];
-        //    }];
+        double currentTime = [[NSDate date] timeIntervalSince1970]*1000;
+        self.currentTimestamp += currentTime - self.playbackStartTime;
+        self.timeline.playHead.currentTimePosition = self.currentTimestamp;
+        self.playbackStartTime = currentTime;
+    }
+    if (self.preProcessor) {
+        [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:[self frameSize]];
     }
 }
 
 #pragma mark - VSPreviewViewControllerDelegate implementation
 
 -(void) play{
-//    [self startPlaybackFromCurrentTimeStamp];
+    //    [self startPlaybackFromCurrentTimeStamp];
     self.playing = YES;
+    
+    self.playbackStartTime = [[NSDate date] timeIntervalSince1970]*1000;
 }
 
 -(void) stop{
-//    [self stopPlayback];
+    //    [self stopPlayback];
     self.playing = NO;
 }
 
@@ -122,6 +145,22 @@
         self.playbackTimer = [NSTimer scheduledTimerWithTimeInterval:1/30 target:self selector:@selector(renderFramesForCurrentTimestamp) userInfo:nil repeats:YES] ;
         [runLoop run];
     }
+}
+
+/**
+ * Checks if the delegate of VSPlaybackControllerDelegate is able to respond to the given Selector
+ * @param selector Selector the delegate will be checked for if it is able respond to
+ * @return YES if the delegate is able to respond to the selector, NO otherweis
+ */
+-(BOOL) delegateRespondsToSelector:(SEL) selector{
+    if(self.delegate){
+        if([self.delegate conformsToProtocol:@protocol(VSPlaybackControllerDelegate)]){
+            if([self.delegate respondsToSelector:selector]){
+                return YES;
+            }
+        }
+    }
+    return NO;
 }
 
 @end

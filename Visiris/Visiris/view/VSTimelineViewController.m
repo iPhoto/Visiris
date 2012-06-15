@@ -69,6 +69,7 @@ static NSString* defaultNib = @"VSTimelineView";
         self.timeline = timeline;
         
         [self.timeline addObserver:self forKeyPath:@"duration" options:0 context:nil];
+        [self.timeline.playHead addObserver:self forKeyPath:@"currentTimePosition" options:0 context:nil];
         
         if([self.view isKindOfClass:[VSTimelineView class]]){
             ((VSTimelineView*) self.view).delegate = self;
@@ -169,6 +170,12 @@ static NSString* defaultNib = @"VSTimelineView";
         [self updatePixelTimeRatio];
         
         
+    }
+    
+    if([keyPath isEqualToString:@"currentTimePosition"]){
+        if(!self.timeline.playHead.scrubbing){
+            [self setPlayheadMarkerLocation];
+        }
     }
 }
 
@@ -360,10 +367,12 @@ static NSString* defaultNib = @"VSTimelineView";
 #pragma mark - VSPlayHeadRulerMarkerDelegate Implementation
 
 -(BOOL) shouldMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView{
+    self.timeline.playHead.scrubbing = YES;
     return YES;
 }
 
 -(void) didMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView{
+    self.timeline.playHead.scrubbing = NO;
 }
 
 -(CGFloat) willMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView toLocation:(CGFloat)location{

@@ -12,4 +12,6 @@
 
 @synthesize currentTimePosition = _currentTimePosition;
 
+@synthesize scrubbing           = _scrubbing;
+
 @end
