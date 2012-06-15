@@ -139,9 +139,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (void) drawView
 {
-    
-    //    NSLog(@"drawView bounds size: %@", NSStringFromSize([self bounds].size));
-    
 	// This method will be called on both the main thread (through -drawRect:) and a secondary thread (through the display link rendering loop)
 	// Also, when resizing the view, -reshape is called on the main thread, but we may be drawing on a secondary thread
 	// Add a mutex around to avoid the threads accessing the context simultaneously
@@ -149,23 +146,21 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     
 	// Make sure we draw to the right context
 	[[self openGLContext] makeCurrentContext];
-    
-    
-    //glViewport(0, 0, [self bounds].size.width, [self bounds].size.height);
-    
-    
-    glEnable( GL_TEXTURE_2D );
-    glBindTexture( GL_TEXTURE_2D, self.texture );
-    
+   
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    glBegin( GL_QUADS );
-    glTexCoord2d(0.0,0.0); glVertex2d(-1.0,-1.0);
-    glTexCoord2d(1.0,0.0); glVertex2d(1.0,-1.0);
-    glTexCoord2d(1.0,1.0); glVertex2d(1.0,1.0);
-    glTexCoord2d(0.0,1.0); glVertex2d(-1.0,1.0);
-    glEnd();
+
+    if (self.texture != 0) {        
+        glEnable( GL_TEXTURE_2D );
+        glBindTexture( GL_TEXTURE_2D, self.texture );
+                
+        glBegin( GL_QUADS );
+        glTexCoord2d(0.0,0.0); glVertex2d(-1.0,-1.0);
+        glTexCoord2d(1.0,0.0); glVertex2d(1.0,-1.0);
+        glTexCoord2d(1.0,1.0); glVertex2d(1.0,1.0);
+        glTexCoord2d(0.0,1.0); glVertex2d(-1.0,1.0);
+        glEnd();
+    }
     
 	[[self openGLContext] flushBuffer];
 	

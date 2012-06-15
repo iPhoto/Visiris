@@ -25,15 +25,22 @@
 
 - (void)renderFrameAtTimestamp:(double)aTimestamp withHandovers:(NSArray *)theHandovers forSize:(NSSize)theFrameSize
 {
-    if (theHandovers) {
-
+    //return if Handovers is nil
+    if (theHandovers == nil)
+        return;
+        
+    //send the texture 0 to the postprocessor if there is object to render
+    if (theHandovers.count < 1) {
+        [self renderCore:self.renderCore didFinishRenderingTexture:0 forTimestamp:aTimestamp];
+    }
+    else {
         [self.renderCore renderFrameOfCoreHandovers:theHandovers forFrameSize:theFrameSize forTimestamp:aTimestamp];
     }
+    
 }
 
 -(GLuint) createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode{
     return [self.renderCore createNewTextureForSize:textureSize colorMode:colorMode];
-    //return 0;
 }
 
 -(void) removeTextureForID:(GLuint)anID{

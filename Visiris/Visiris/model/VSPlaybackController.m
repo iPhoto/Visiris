@@ -49,7 +49,7 @@
     if([keyPath isEqualToString:@"currentTimePosition"]){
         double timePos = [[object valueForKey:keyPath] doubleValue];
         
-        [self.preProcessor processFrameAtTimestamp:timePos withFrameSize:NSMakeSize(1024, 768)];
+      //  [self.preProcessor processFrameAtTimestamp:timePos withFrameSize:NSMakeSize(1024, 768)];
 
     }
 }
