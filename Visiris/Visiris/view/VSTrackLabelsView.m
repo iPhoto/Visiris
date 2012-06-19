@@ -30,6 +30,11 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
     
+    
+}
+
+-(void) drawHashMarksAncdLabelsInRect:(NSRect)rect{
+    DDLogInfo(@"drawHashMarksAndLabelsInRect");
     [[NSColor redColor] set];
     for(VSTrackLabel *trackLabel in self.trackLabels){
         DDLogInfo(@"hier");
