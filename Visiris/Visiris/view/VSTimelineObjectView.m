@@ -15,8 +15,6 @@
 
 @interface VSTimelineObjectView ()
 
-/** If YES the view is moved on mouseDragged-Event */ 
-@property BOOL moving;
 
 /** If YES the view is resized on mouseDragged-Event */
 @property BOOL resizing;

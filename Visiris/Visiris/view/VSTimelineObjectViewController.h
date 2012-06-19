@@ -127,6 +127,7 @@
 /** Indicates wheter the VSTimelineObjectViewController's VSTimelineObjectProxy is only a temporary object on the track. */
 @property BOOL temporary;
 
+@property BOOL moving;
 
 -(id) initWithDefaultNib;
 

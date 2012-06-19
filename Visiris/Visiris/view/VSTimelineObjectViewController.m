@@ -18,13 +18,14 @@
 
 
 @implementation VSTimelineObjectViewController
-@synthesize pixelTimeRatio = _pixelTimeRatio;
-@synthesize delegate = _delegate;
-@synthesize intersected = _intersected;
-@synthesize intersectionRect = _intersectionRect;
-@synthesize timelineObjectProxy = _timelineObjectProxy;
-@synthesize enteredLeft = _enteredLeft;
-@synthesize temporary = _temporary;
+@synthesize pixelTimeRatio          = _pixelTimeRatio;
+@synthesize delegate                = _delegate;
+@synthesize intersected             = _intersected;
+@synthesize intersectionRect        = _intersectionRect;
+@synthesize timelineObjectProxy     = _timelineObjectProxy;
+@synthesize enteredLeft             = _enteredLeft;
+@synthesize temporary               = _temporary;
+@synthesize moving                  = _moving;
 
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
@@ -67,6 +68,8 @@ static NSString* defaultNib = @"VSTimelinObjectView";
                     ((VSTimelineObjectView*)self.view).selected = selected;
                     
                     if(selected){
+                        [self.view.layer setZPosition:10];
+                        
                         if([self delegateRespondsToSelector:@selector(timelineObjectProxyWasSelected:)]){
                             [self.delegate timelineObjectProxyWasSelected:self.timelineObjectProxy];
                         }
@@ -75,6 +78,8 @@ static NSString* defaultNib = @"VSTimelinObjectView";
                         if([self delegateRespondsToSelector:@selector(timelineObjectProxyWasUnselected:)]){
                             [self.delegate timelineObjectProxyWasUnselected:self.timelineObjectProxy];
                         }
+                        
+                        [self.view.layer setZPosition:0];
                     }
                     
                     [self.view setNeedsDisplay:YES];
@@ -92,8 +97,9 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 #pragma mark - VSTimelineObjectViewDelegate implementation
 
 -(void) timelineObjectViewWasClicked:(VSTimelineObjectView *)timelineObjectView withModifierFlags:(NSUInteger)modifierFlags {
-
-    BOOL exclusiveSelection = modifierFlags & NSCommandKeyMask;
+    
+    BOOL exclusiveSelection = !(modifierFlags & NSCommandKeyMask);
+    
     if(!self.timelineObjectProxy.selected){
         if([self delegateRespondsToSelector:@selector(timelineObjectProxyWillBeSelected:exclusively:)]){
             [self.delegate timelineObjectProxyWillBeSelected:self.timelineObjectProxy exclusively:exclusiveSelection];
@@ -258,6 +264,22 @@ static NSString* defaultNib = @"VSTimelinObjectView";
         
         _temporary = temporary;
     }
+}
+
+-(void) setMoving:(BOOL)moving{
+    if(moving != _moving){
+        if([self.view isKindOfClass:[VSTimelineObjectView class]]){
+            ((VSTimelineObjectView*) self.view).moving = moving;
+            
+            [self.view setNeedsDisplay:YES];
+            
+        }
+    }
+    _moving = moving;
+}
+
+-(BOOL) moving{
+    return _moving;
 }
 
 @end

@@ -79,6 +79,23 @@
  */
 -(void) timelineObjectProxy:(VSTimelineObjectProxy *) timelineObjectProxy wasUnselectedOnTrackViewController:(VSTrackViewController*) trackViewController;
 
+-(NSPoint) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController WillBeDraggedOnTrack:(VSTrackViewController*) trackViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition withSnappingDeltaX:(float) snappingDeltaX;
+
+@optional
+
+-(void) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController wasDraggedOnTrack:(VSTrackViewController*) trackViewController;
+
+-(void) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController willStartDraggingOnTrack:(VSTrackViewController*) trackViewController;
+
+-(void) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController didStopDraggingOnTrack:(VSTrackViewController*) trackViewController;
+
+/**
+ * Applies the current intersection to the intersected VSTimelineObjectViewControllers to their VSTimelineObjectProxys.
+ *
+ * The intersectionRect of the VSTimelineObjectViewController is cut off and startTime and duration are updated.
+ */
+-(void) applyIntersectionToTimelineObjects;
+
 @end
 
 
@@ -118,5 +135,19 @@
  * @param newRatio The value the pixelItemRatio was changed to
  */
 -(void) pixelTimeRatioDidChange:(double) newRatio;
+
+-(void) moveSelectedTimemlineObjects:(float) deltaX;
+
+-(float) computeSnappingXValueForSelectedTimelineObjectsMovedAccordingToDeltaX:(float) deltaX;
+
+-(void) setTimelineObjectViewsIntersectedBySelectedTimelineObjects;
+
+-(void) setStartTimeOfSelectedTimelineObjects;
+
+-(void) applyIntersectionToTimelineObjects;
+
+-(void) unsetsetSelectedTimelineObjectsAsMoving;
+
+-(void) setSelectedTimelineObjectsAsMoving;
 
 @end
