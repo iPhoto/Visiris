@@ -131,10 +131,15 @@ static VSProjectItemController* sharedProjectItemController = nil;
  Fills the projectItem with testData
  */
 -(void) setTestData{
-    NSArray* files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:@"/Users/martin/Documents/FH/MMT/Master Projekt/testfiles" error:nil];
+    
+    NSString *relativeTestDataPath = @"~/Desktop/visiris-testfiles/";
+    
+   NSString *fullPath = [relativeTestDataPath stringByExpandingTildeInPath];
+    
+    NSArray* files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:fullPath error:nil];
     
     for(NSString* s  in files){
-        [self addNewProjectItemFromFile:[NSString stringWithFormat:@"/Users/martin/Documents/FH/MMT/Master Projekt/testfiles/%@",s]];
+        [self addNewProjectItemFromFile:[NSString stringWithFormat:@"%@/%@",fullPath,s]];
     }
 }
 
