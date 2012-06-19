@@ -11,5 +11,13 @@
 @implementation VSImage
 @synthesize data = _data;
 @synthesize size = _size;
+@synthesize needsUpdate = _needsUpdate;
+
+-(id)init{
+    if (self = [super init]) {
+        _needsUpdate = YES;
+    }
+    return self;
+}
 
 @end

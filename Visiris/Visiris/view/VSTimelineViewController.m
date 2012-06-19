@@ -443,7 +443,7 @@ static NSString* defaultNib = @"VSTimelineView";
 -(void) addNewTrackLabelForTrack:(VSTrackViewController*) aTrack{
     NSRect labelRect = NSMakeRect(0, aTrack.view.frame.origin.y, TRACK_LABEL_WIDTH, aTrack.view.frame.size.height);
     
-    NSLog(@"labelRect: %@",NSStringFromRect(labelRect));
+    //NSLog(@"labelRect: %@",NSStringFromRect(labelRect));
     [self.trackLabelsViewController addTrackLabel:[[VSTrackLabel alloc] initWithName:aTrack.track.name forTrack:aTrack.track.trackID forFrame:labelRect]];
 }
 

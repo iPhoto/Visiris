@@ -13,16 +13,51 @@
 #import "VSTimelineObjectSource.h"
 #import "VSProjectItem.h"
 
+@interface VSSourceSupplier()
+
+@property (assign) double           videoDuration;
+@property (strong) AVAssetReader    *movieReader;
+@property (strong) NSURL            *url;
+@property (strong) NSDate           *startTime;
+//@property (strong) AVPlayer         *player;
+
+- (void) readMovie:(NSURL *)url;
+- (void) readNextMovieFrame;
+- (void) updateInfo: (id*)message;
+
+@end
+
 
 @implementation VSVideoSourceSupplier
+@synthesize videoDuration   = _videoDuration;
+@synthesize movieReader     = _movieReader;
+@synthesize url             = _url;
+@synthesize startTime       = _startTime;
+//@synthesize player          = _player;
 
 -(VSImage *) getFrameForTimestamp:(double)aTimestamp{
     
+    aTimestamp /= 1000.0;
     
-   
     
-    NSLog(@"timestamp: %@", [NSNumber numberWithDouble:aTimestamp]);
+
+
+    if (self.url == nil) {
+        self.url = [[NSURL alloc] initFileURLWithPath:self.timelineObject.sourceObject.projectItem.filePath]; 
+        [self readMovie:self.url];
+    }
+
+       
+   // CMTime timePoint = ;  
+
+  //   [self.player seekToTime:CMTimeMakeWithSeconds(aTimestamp, 600)];
+
+    [self readNextMovieFrame];
     
+    self.url = nil;
+    
+    
+    /*NSLog(@"timestamp: %@", [NSNumber numberWithDouble:aTimestamp]);
     
     NSURL *url = [[NSURL alloc] initFileURLWithPath:self.timelineObject.sourceObject.projectItem.filePath]; 
 
@@ -38,11 +73,9 @@
     CGImageRef image = [imageGenerator copyCGImageAtTime:timePoint actualTime:&actualTime error:&error];
 
     if (image != NULL) {
-        NSString *actualTimeString = (__bridge NSString *)CMTimeCopyDescription(NULL, actualTime);
-        NSString *requestedTimeString = (__bridge NSString *)CMTimeCopyDescription(NULL, timePoint);
-        
-        NSLog(@"got image: Asked for %@, got %@", requestedTimeString, actualTimeString);
-        
+        //NSString *actualTimeString = (__bridge NSString *)CMTimeCopyDescription(NULL, actualTime);
+        //NSString *requestedTimeString = (__bridge NSString *)CMTimeCopyDescription(NULL, timePoint);
+       // NSLog(@"got image: Asked for %@, got %@", requestedTimeString, actualTimeString);
         
         if (self.vsImage == nil) {
             self.vsImage = [[VSImage alloc] init];
@@ -66,74 +99,106 @@
         
         self.vsImage.data = (char *)imageData;
         self.vsImage.size = NSMakeSize(width, height);
-
-        //
-        
-        //CGImageRelease(image);
     }
+    */
     
     return self.vsImage;
-    
-    /*if (self.vsImage == nil) {
-        self.vsImage = [[VSImage alloc] init];
-        
-        NSURL *url = [[NSURL alloc] initFileURLWithPath:self.timelineObject.sourceObject.projectItem.filePath]; 
-        
-        CGImageSourceRef imageSource = CGImageSourceCreateWithURL((__bridge CFURLRef)url, NULL);
-        CGImageRef image = CGImageSourceCreateImageAtIndex(imageSource, 0, NULL);
-        CFRelease(imageSource);
-        size_t width  = CGImageGetWidth (image);
-        size_t height = CGImageGetHeight(image);
-        CGRect rect = CGRectMake(0.0f, 0.0f, width, height);
-        
-        void *imageData = malloc(width * height * 4);
-        CGColorSpaceRef colourSpace = CGColorSpaceCreateDeviceRGB();
-        CGContextRef ctx = CGBitmapContextCreate(imageData, width, height, 8, width * 4, colourSpace, kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst);
-        CFRelease(colourSpace);
-        CGContextTranslateCTM(ctx, 0, height);
-        CGContextScaleCTM(ctx, 1.0f, -1.0f);
-        CGContextSetBlendMode(ctx, kCGBlendModeCopy);
-        CGContextDrawImage(ctx, rect, image);
-        CGContextRelease(ctx);
-        CFRelease(image);
-        
-        self.vsImage.data = (char *)imageData;
-        self.vsImage.size = NSMakeSize(width, height);
-    }*/
 }
 
-/*- (NSImage *)imageFromVideoURL:(NSURL *)videoUrl {
+- (void) readMovie:(NSURL *)url{
+    //[self performSelectorOnMainThread:@selector(updateInfo:) withObject:@"scanning" waitUntilDone:YES];
     
-    // result
-    NSImage *image = nil;
+    self.startTime = [NSDate date];
     
-    // AVAssetImageGenerator
-    AVAsset *asset = [[AVURLAsset alloc] initWithURL:videoUrl options:nil];;
-    AVAssetImageGenerator *imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-    imageGenerator.appliesPreferredTrackTransform = YES;
+    AVURLAsset * asset = [AVURLAsset URLAssetWithURL:url options:nil];
     
-    // calc midpoint time of video
-    Float64 durationSeconds = CMTimeGetSeconds([asset duration]);
-    CMTime midpoint = CMTimeMakeWithSeconds(durationSeconds/2.0, 600);
-    
-    // get the image from
-    NSError *error = nil;
-    CMTime actualTime;
-    CGImageRef halfWayImage = [imageGenerator copyCGImageAtTime:midpoint actualTime:&actualTime error:&error];
-    
-    if (halfWayImage != NULL) {
-        // cgimage to uiimage
-        image = [[NSImage alloc] initWithCGImage:halfWayImage];
-        CGImageRelease(halfWayImage);
+    [asset loadValuesAsynchronouslyForKeys:[NSArray arrayWithObject:@"tracks"] completionHandler:
+     ^{
+         dispatch_async(dispatch_get_main_queue(),
+                        ^{
+                            AVAssetTrack* videoTrack = nil;
+                            NSArray* tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
+                            if ([tracks count] == 1)
+                            {
+                                videoTrack = [tracks objectAtIndex:0];
+                                
+                                self.videoDuration = CMTimeGetSeconds([videoTrack timeRange].duration);
+                                
+                                NSError * error = nil;
+                                
+                                self.movieReader = [[AVAssetReader alloc] initWithAsset:asset error:&error];
+                                if (error)
+                                    NSLog(@"%@", error.localizedDescription);       
+                                
+                                NSString* key = (NSString*)kCVPixelBufferPixelFormatTypeKey;
+                                NSNumber* value = [NSNumber numberWithUnsignedInt: kCVPixelFormatType_32BGRA];
+                                NSDictionary* videoSettings = [NSDictionary dictionaryWithObject:value forKey:key]; 
+                                
+                                AVAssetReaderTrackOutput* output = [AVAssetReaderTrackOutput 
+                                                                    assetReaderTrackOutputWithTrack:videoTrack 
+                                                                    outputSettings:videoSettings];
+                                //    output.alwaysCopiesSampleData = NO;
+                                
+                                [self.movieReader addOutput:output];
+                                
+                                //CMTimeRange timeRange = CMTimeRangeMake(CMTimeMakeWithSeconds(20, 600), kCMTimePositiveInfinity);
+                                //[self.movieReader setTimeRange:timeRange];
+                                
+                                if ([self.movieReader startReading]){
+                                    NSLog(@"Video Reading ready");
+                                }
+                                else{
+                                    NSLog(@"reading can't be started");
+                                }
+                            }
+                        });
+     }];
+}
+
+- (void) updateInfo: (id*)message{
+    NSString* info = [NSString stringWithFormat:@"%@", message];
+    NSLog(@"%@",info);
+}
+
+- (void) readNextMovieFrame{        
+   // NSLog(@"readNextMovieFrame");
+    if (self.movieReader.status == AVAssetReaderStatusReading){        
+        AVAssetReaderTrackOutput * output = [self.movieReader.outputs objectAtIndex:0];
+        //[output ]
+        CMSampleBufferRef sampleBuffer = [output copyNextSampleBuffer]; // this is the most expensive call
+        if (sampleBuffer)
+        { 
+            //CVImageBufferRef
+            CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer); 
+                        
+            // Lock the image buffer
+            CVPixelBufferLockBaseAddress(imageBuffer,0);
+
+            if (self.vsImage == nil) {
+                self.vsImage = [[VSImage alloc] init];
+            }
+            
+            self.vsImage.data = (char *)CVPixelBufferGetBaseAddress(imageBuffer);
+            self.vsImage.size = NSMakeSize(CVPixelBufferGetWidth(imageBuffer), CVPixelBufferGetHeight(imageBuffer));
+            
+            // Unlock the image buffer
+            CVPixelBufferUnlockBaseAddress(imageBuffer,0);
+            
+            CFRelease(sampleBuffer);
+        }
+        else{
+            NSLog(@"could not copy next sample buffer. status is %ld", self.movieReader.status);
+            NSTimeInterval scanDuration = -[self.startTime timeIntervalSinceNow];
+            float scanMultiplier = self.videoDuration / scanDuration;
+            NSString* info = [NSString stringWithFormat:@"Done\n\nvideo duration: %f seconds\nscan duration: %f seconds\nmultiplier: %f", self.videoDuration, scanDuration, scanMultiplier];
+            [self performSelectorOnMainThread:@selector(updateInfo:) withObject:info waitUntilDone:YES];
+        }
+    }
+    else{
+        NSLog(@"status is now %ld", self.movieReader.status);
     }
     
-    // release
-    [imageGenerator release];
-    [asset release];
-    
-    // return
-    return [image autorelease];
-    
-}*/
+}
+
 
 @end

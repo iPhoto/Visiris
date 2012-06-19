@@ -11,5 +11,6 @@
 @interface VSImage : NSObject
 @property (assign) NSSize   size;
 @property (assign) char*    data;
+@property (assign) BOOL     needsUpdate;
 
 @end

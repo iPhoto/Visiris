@@ -105,7 +105,7 @@
 
 - (double)convertGlobalTimestampToLocalTimestamp:(double)aGlobalTimestamp
 {
-    return self.startTime -  aGlobalTimestamp;
+    return aGlobalTimestamp - self.startTime;
 }
 
 @end

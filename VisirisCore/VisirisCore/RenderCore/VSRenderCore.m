@@ -135,7 +135,8 @@ static struct {
     switch (validCoreHandovers.count) {
         case 0:
         {
-            NSLog(@"ERROR: you shouldn't be here - because there is no object to render");
+            //TODO
+            //NSLog(@"ERROR: you shouldn't be here - because there is no object to render");
             self.outPutTexture = 0;
             break;
         }
