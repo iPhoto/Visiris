@@ -44,14 +44,14 @@
     return self.startTime + self.duration;
 }
 
-- (VSCoreHandover *)handoverForTimestamp:(double)aTimestamp frameSize:(NSSize)aFrameSize{
+- (VSCoreHandover *)handoverForTimestamp:(double)aTimestamp frameSize:(NSSize)aFrameSize isPlaying:(BOOL)playing{
     
     VSCoreHandover *coreHandover = nil;
     
     double localTimestamp = [self convertGlobalTimestampToLocalTimestamp:aTimestamp];
     //TODO richtiges corehandover basteln
     if ([self.supplier isKindOfClass:[VSFrameSourceSupplier class]] ) {
-        coreHandover = [[VSFrameCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp] andAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp] forTextureID:self.textureID forTimestamp:localTimestamp forId: self.timelineObjectID];
+        coreHandover = [[VSFrameCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp isPlaying:playing] andAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp] forTextureID:self.textureID forTimestamp:localTimestamp forId: self.timelineObjectID];
     }
     else {
         DDLogInfo(@"Its an audio file");

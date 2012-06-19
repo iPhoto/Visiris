@@ -222,7 +222,7 @@
     
     //iteratres through the timeline's tracks and adds the VSTimlineObject active at this timestamp to the currentActiveTimeLineObjects-Array
     for(VSTrack *track in self.tracks){
-        VSTimelineObject *currentObject = [ track timelineObjectAtTimestamp:aTimestamp];
+        VSTimelineObject *currentObject = [track timelineObjectAtTimestamp:aTimestamp];
         if(currentObject){
             [currentActiveTimeLineObjects addObject:currentObject];
         }

@@ -14,7 +14,7 @@
 @synthesize vsImage = _vsImage;
 
 
--(VSImage *) getFrameForTimestamp:(double)aTimestamp{
+-(VSImage *) getFrameForTimestamp:(double)aTimestamp isPlaying:(BOOL)playing{
     NSLog(@"getFrameForTimestamp in FrameSourceSupplier is called - dunno why...");
     return nil;
 }

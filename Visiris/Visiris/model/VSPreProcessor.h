@@ -39,8 +39,9 @@
 /**
  * Tells the VStimelineObjects which are active at the given timestamp to give back their current parameter- and image-data, so they VSPreProcessor can hand-over the data to the Core 
  * @param aTimestamp Timestamp the frame will be processed for.
- * @param aFrameSize Frame size the fram will be processed for.
+ * @param aFrameSize Frame size the frame will be processed for.
+ * @param playing Tells if currently is playing or scrubbing.
  */
-- (void)processFrameAtTimestamp:(double)aTimestamp withFrameSize:(NSSize)aFrameSize;
+- (void)processFrameAtTimestamp:(double)aTimestamp withFrameSize:(NSSize)aFrameSize isPlaying:(BOOL)playing;
 
 @end

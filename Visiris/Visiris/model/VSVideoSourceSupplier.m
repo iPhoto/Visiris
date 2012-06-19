@@ -19,9 +19,10 @@
 @property (strong) AVAssetReader    *movieReader;
 @property (strong) NSURL            *url;
 @property (strong) NSDate           *startTime;
+@property (assign) BOOL             isReadingVideo;
 //@property (strong) AVPlayer         *player;
 
-- (void) readMovie:(NSURL *)url atTime:(CMTime) time;
+- (void) readMovie:(NSURL *)url atTime:(double) time;
 - (void) readNextMovieFrame;
 - (void) updateInfo: (id*)message;
 
@@ -34,58 +35,53 @@
 @synthesize url             = _url;
 @synthesize startTime       = _startTime;
 //@synthesize player          = _player;
+@synthesize vsImage         = _vsImage;
+@synthesize isReadingVideo  = _isReadingVideo;
 
--(VSImage *) getFrameForTimestamp:(double)aTimestamp{
-    
+-(VSImage *) getFrameForTimestamp:(double)aTimestamp isPlaying:(BOOL)playing{
     aTimestamp /= 1000.0;
     
-    //TODO this is shit
-    //self.url = nil;
-    //[self.movieReader cancelReading];
-    //self.movieReader = nil;
-
-
-    if (self.url == nil) {
-        self.url = [[NSURL alloc] initFileURLWithPath:self.timelineObject.sourceObject.projectItem.filePath]; 
-        [self readMovie:self.url atTime:CMTimeMakeWithSeconds(aTimestamp, 600)];
-    }
+     if (self.url == nil) {
+         self.url = [[NSURL alloc] initFileURLWithPath:self.timelineObject.sourceObject.projectItem.filePath]; 
+     }
     
-    /*
-    if (self.movieReader.status == 1) {
-        [self.movieReader cancelReading];
-        NSLog(@"status = 1");
-        [self readMovie:self.url atTime:CMTimeMakeWithSeconds(aTimestamp, 600)];
-    }
-    else {
-        NSLog(@"status != 1");
-    }
-
-       */
-
-
-    //[self readNextMovieFrame];
+    switch (playing) {
+        case 0:
+            [self getPreviewImageAtTime:aTimestamp];
+            self.isReadingVideo = NO;
+            [self.movieReader cancelReading];
+            break;
+        case 1:
+            if (self.isReadingVideo == NO) {
+                self.isReadingVideo = YES;
+                [self readMovie:self.url atTime:aTimestamp];
+            }
+            [self readNextMovieFrame];
+            break;
+        default:
+            NSLog(@"There went something terribly wrong!");
+            break;
+    }   
     
-    
-    
-    /*NSLog(@"timestamp: %@", [NSNumber numberWithDouble:aTimestamp]);
-    
-    NSURL *url = [[NSURL alloc] initFileURLWithPath:self.timelineObject.sourceObject.projectItem.filePath]; 
+    return self.vsImage;
+}
 
-    AVAsset *asset = [[AVURLAsset alloc] initWithURL:url options:nil];;
+- (void)getPreviewImageAtTime:(double) timeStamp{         
+    AVAsset *asset = [[AVURLAsset alloc] initWithURL:self.url options:nil];;
     AVAssetImageGenerator *imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
     imageGenerator.appliesPreferredTrackTransform = YES;
     
-    CMTime timePoint = CMTimeMakeWithSeconds(aTimestamp, 600);  
-
+    CMTime timePoint = CMTimeMakeWithSeconds(timeStamp, 600);  
+    
     CMTime actualTime;
     NSError *error = nil;
     
     CGImageRef image = [imageGenerator copyCGImageAtTime:timePoint actualTime:&actualTime error:&error];
-
+    
     if (image != NULL) {
         //NSString *actualTimeString = (__bridge NSString *)CMTimeCopyDescription(NULL, actualTime);
         //NSString *requestedTimeString = (__bridge NSString *)CMTimeCopyDescription(NULL, timePoint);
-       // NSLog(@"got image: Asked for %@, got %@", requestedTimeString, actualTimeString);
+        // NSLog(@"got image: Asked for %@, got %@", requestedTimeString, actualTimeString);
         
         if (self.vsImage == nil) {
             self.vsImage = [[VSImage alloc] init];
@@ -110,14 +106,9 @@
         self.vsImage.data = (char *)imageData;
         self.vsImage.size = NSMakeSize(width, height);
     }
-    */
-    
-    return self.vsImage;
 }
 
-- (void) readMovie:(NSURL *)url atTime:(CMTime) time{
-    //[self performSelectorOnMainThread:@selector(updateInfo:) withObject:@"scanning" waitUntilDone:YES];
-    
+- (void) readMovie:(NSURL *)url atTime:(double) time{    
     self.startTime = [NSDate date];
     
     AVURLAsset * asset = [AVURLAsset URLAssetWithURL:url options:nil];
@@ -151,11 +142,11 @@
                                 
                                 [self.movieReader addOutput:output];
                                 
-                                CMTimeRange timeRange = CMTimeRangeMake(time, kCMTimePositiveInfinity);
+                                //TODO maybe
+                                CMTimeRange timeRange = CMTimeRangeMake(CMTimeMakeWithSeconds(time,600), kCMTimePositiveInfinity);
                                 [self.movieReader setTimeRange:timeRange];
                                 
                                 if ([self.movieReader startReading]){
-                                    [self readNextMovieFrame];
                                     NSLog(@"Video Reading ready");
                                 }
                                 else{
@@ -172,7 +163,6 @@
 }
 
 - (void) readNextMovieFrame{        
-   // NSLog(@"readNextMovieFrame");
     if (self.movieReader.status == AVAssetReaderStatusReading){        
         AVAssetReaderTrackOutput * output = [self.movieReader.outputs objectAtIndex:0];
         //[output ]
@@ -206,9 +196,8 @@
         }
     }
     else{
-        //NSLog(@"status is now %ld", self.movieReader.status);
+        //NSLog(@"Video status is now %ld", self.movieReader.status);
     }
-    
 }
 
 

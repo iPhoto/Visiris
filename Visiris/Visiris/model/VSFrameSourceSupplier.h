@@ -24,6 +24,6 @@
  * @param aTimestamp Defines the frame that will be rendered. The timestamp has to be in local time of the timelineObject.
  * @returns Pointer to the created frame.
  */
--(VSImage*) getFrameForTimestamp:(double) aTimestamp;
+-(VSImage*) getFrameForTimestamp:(double) aTimestamp isPlaying:(BOOL)playing;
 
 @end

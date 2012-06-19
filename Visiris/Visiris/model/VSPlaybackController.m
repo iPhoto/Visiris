@@ -110,9 +110,7 @@
 {
     if(self.playing){
 
-        
-        double currentTime = [[NSDate date] timeIntervalSince1970]*1000;
-        
+        double currentTime = [[NSDate date] timeIntervalSince1970]*1000;        
         
         self.currentTimestamp += currentTime - self.playbackStartTime;
         
@@ -131,7 +129,7 @@
         }
     }
     if (self.preProcessor) {
-        [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:[self frameSize]];
+        [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:[self frameSize] isPlaying:self.playing];
     }
 }
 
@@ -160,6 +158,7 @@
     return NSMakeSize(1280, 720);
 }
 
+//TODO who needs this?
 -(void) startTimer{
     @autoreleasepool {
         NSRunLoop* runLoop = [NSRunLoop currentRunLoop];

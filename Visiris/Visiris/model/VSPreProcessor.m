@@ -36,14 +36,14 @@
 
 #pragma mark - Methods
 
-- (void)processFrameAtTimestamp:(double)aTimestamp withFrameSize:(NSSize)aFrameSize
+- (void)processFrameAtTimestamp:(double)aTimestamp withFrameSize:(NSSize)aFrameSize isPlaying:(BOOL)playing
 {
     NSArray *currentTimeLineObjects = [self.timeline timelineObjectsForTimestamp:aTimestamp];
     
     NSMutableArray *handoverObjects = [[NSMutableArray alloc] init];
     
     for (VSTimelineObject *currentTimeLineObject in currentTimeLineObjects) {
-        VSCoreHandover *coreHandover = [currentTimeLineObject handoverForTimestamp:aTimestamp frameSize:aFrameSize];
+        VSCoreHandover *coreHandover = [currentTimeLineObject handoverForTimestamp:aTimestamp frameSize:aFrameSize isPlaying:playing];
         if (coreHandover) {
             [handoverObjects addObject:coreHandover];
         }

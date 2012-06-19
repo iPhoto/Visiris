@@ -14,7 +14,7 @@
 
 @implementation VSImageSourceSupplier
 
--(VSImage *) getFrameForTimestamp:(double)aTimestamp{
+-(VSImage *) getFrameForTimestamp:(double)aTimestamp isPlaying:(BOOL)playing{
     if (self.vsImage == nil) {
         self.vsImage = [[VSImage alloc] init];
         
