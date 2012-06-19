@@ -352,8 +352,6 @@ static NSString* defaultNib = @"VSTimelineView";
         newDocumentFrame.size.width += newFrame.size.width - oldFrame.size.width;
         [self.trackHolder setFrame:newDocumentFrame];
         [self updatePixelTimeRatio];
-        
-
     }
 }
 

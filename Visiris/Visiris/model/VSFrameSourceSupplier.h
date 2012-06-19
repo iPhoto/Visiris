@@ -16,6 +16,9 @@
  */
 @interface VSFrameSourceSupplier : VSSourceSupplier
 
+@property (strong) VSImage *vsImage;
+
+
 /**
  * Renders a frame for the content the timlineObject represents for the given timestamp in the given size.
  * @param aTimestamp Defines the frame that will be rendered. The timestamp has to be in local time of the timelineObject.

@@ -11,8 +11,11 @@
 #import "VisirisCore/VSImage.h"
 
 @implementation VSFrameSourceSupplier
+@synthesize vsImage = _vsImage;
+
 
 -(VSImage *) getFrameForTimestamp:(double)aTimestamp{
+    NSLog(@"getFrameForTimestamp in FrameSourceSupplier is called - dunno why...");
     return nil;
 }
 

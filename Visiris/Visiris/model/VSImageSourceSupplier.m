@@ -13,14 +13,8 @@
 #import "VisirisCore/VSImage.h"
 
 @implementation VSImageSourceSupplier
-//@synthesize image = _image;
-@synthesize vsImage = _vsImage;
 
 -(VSImage *) getFrameForTimestamp:(double)aTimestamp{
-    /*if (self.image == nil) {
-        self.image = [[NSImage alloc] initWithContentsOfFile:self.timelineObject.sourceObject.projectItem.filePath];
-    }*/
-    
     if (self.vsImage == nil) {
         self.vsImage = [[VSImage alloc] init];
         
