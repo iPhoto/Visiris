@@ -162,6 +162,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
         glTexCoord2d(1.0,0.0); glVertex2d(1.0,1.0);
         glTexCoord2d(0.0,0.0); glVertex2d(-1.0,1.0);
         glEnd();
+        
     }
     
 	[[self openGLContext] flushBuffer];
