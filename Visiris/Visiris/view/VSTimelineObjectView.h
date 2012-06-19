@@ -15,11 +15,12 @@
  */
 @protocol VSTimelineObjectViewDelegate <NSObject>
 
+
 /**
  * Called by VSTimelineObjectView when i got Selected
  * @param timelineObjectview The View invoked the method.
  */
--(void) timelineObjectViewWasClicked:(VSTimelineObjectView*) timelineObjectView;
+-(void) timelineObjectViewWasClicked:(VSTimelineObjectView*) timelineObjectView withModifierFlags:(NSUInteger) modifierFlags;
 
 /**
  * Called when the VSTimelineObjectView has stopped it's dragging operation
@@ -103,5 +104,8 @@
 
 /** If yes, the view is drawn differently */
 @property BOOL temporary;
+
+/** If YES the view is moved on mouseDragged-Event */ 
+@property BOOL moving;
 
 @end

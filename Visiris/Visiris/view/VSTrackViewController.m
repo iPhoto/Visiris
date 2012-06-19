@@ -37,6 +37,9 @@
 
 @end
 
+
+#define SNAPPING_OVERHEAD 20
+
 @implementation VSTrackViewController
 
 @synthesize delegate = _delegate;
@@ -329,11 +332,13 @@ static NSString* defaultNib = @"VSTrackView";
     }
 }
 
-#pragma mark- VSTimelineObjectControllerDelegate implementation
+#pragma mark- VSTimelineObjectViewControllerDelegate implementation
 
--(BOOL)timelineObjectProxyWillBeSelected:(VSTimelineObjectProxy *)timelineObjectProxy{
-    if([self delegateRespondsToSelector:@selector(timelineObjectProxy:willBeSelectedOnTrackViewController:)]){
-        return [self.delegate timelineObjectProxy:timelineObjectProxy willBeSelectedOnTrackViewController:self];
+#pragma mark Selecting
+
+-(BOOL)timelineObjectProxyWillBeSelected:(VSTimelineObjectProxy *)timelineObjectProxy exclusively:(BOOL)exclusiveSelection{
+    if([self delegateRespondsToSelector:@selector(timelineObjectProxy:willBeSelectedOnTrackViewController:exclusively:)]){
+        return [self.delegate timelineObjectProxy:timelineObjectProxy willBeSelectedOnTrackViewController:self exclusively:exclusiveSelection];
     }
     return NO;
 }
@@ -350,47 +355,9 @@ static NSString* defaultNib = @"VSTrackView";
     }
 }
 
-
--(void) timelineObjectDidStopDragging:(VSTimelineObjectViewController *)timelineObjectViewController{
-    
-    
-    double startTime = [self timeValueForPixelValue:timelineObjectViewController.view.frame.origin.x];
-    
-    [self.view.undoManager beginUndoGrouping];
-    
-    //if the view has been moved, the start time of VSTimelineObjectProxy is updated
-    if(startTime != timelineObjectViewController.timelineObjectProxy.startTime){
-        [timelineObjectViewController.timelineObjectProxy changeStartTime:startTime andRegisterAtUndoManager:self.view.undoManager];
-    }
-    
-    //applys the interscetions
-    [self applyIntersectionToTimelineObjects];
-    
-    [self.view.undoManager setActionName:NSLocalizedString(@"Move Object", @"Undo action name for moving obejcts on timeline")];
-    [self.view.undoManager endUndoGrouping];
-    
-    //brings the dragge VSTimelineObjectView back
-    [timelineObjectViewController.view.layer setZPosition:0];
-}
-
-
--(void) timelineObjectWasDragged:(VSTimelineObjectViewController *)timelineObjectViewController{
-    
-    if(timelineObjectViewController.view){
-        [self setTimelineObjectViewsIntersectedByTimelineObjectViews:[NSArray arrayWithObject:timelineObjectViewController]];
-    }
-}
-
-
--(BOOL) timelineObjectWillStartDragging:(VSTimelineObjectViewController *)timelineObjectViewController{
-    //brings the dragged view to front
-    [timelineObjectViewController.view.layer setZPosition:10];
-    return YES;
-}
+#pragma mark Resizing
 
 -(BOOL) timelineObjectWillStartResizing:(VSTimelineObjectViewController *)timelineObjectViewController{
-    //brings the dragged view to front
-    [timelineObjectViewController.view.layer setZPosition:10];
     return YES;
 }
 
@@ -422,53 +389,263 @@ static NSString* defaultNib = @"VSTrackView";
     
     [self.view.undoManager setActionName:NSLocalizedString(@"Resizing Object", @"Undo Action for resizine an object on the timeline")];
     [self.view.undoManager endUndoGrouping];
-    
-    //brings the dragge VSTimelineObjectView back
-    [timelineObjectViewController.view.layer setZPosition:0];
 }
+
+#pragma mark Dragging (Moving)
 
 -(NSPoint) timelineObjectWillBeDragged:(VSTimelineObjectViewController *)timelineObjectViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition{
     
-    [self snapTimelineObjects:[NSArray arrayWithObject:timelineObjectViewController] movingToPositions:[NSArray arrayWithObject:[NSValue valueWithPoint:newPosition]]];
-    return newPosition;
-}
-#pragma mark- Private Methods
+    float deltaXPosition = newPosition.x - oldPosition.x;
+    float snappingDeltaX = [self computeSnappingXValueForSelectedTimelineObjectsMovedAccordingToDeltaX:deltaXPosition];
 
--(void) snapTimelineObjects:(NSArray*) movingTimelineObjectViewControllers movingToPositions:(NSArray*) toPoints{
-    NSMutableArray *newFrames = [[NSMutableArray alloc] init];
     
-    NSRect unionRect;      
-    int i = 0;
-    
-    for(VSTimelineObjectViewController *timelineObjectViewController in movingTimelineObjectViewControllers){
-        NSRect frame = timelineObjectViewController.view.frame;
-        frame.origin = [[toPoints objectAtIndex:i] pointValue];
-        
-        
-        if(i != 0){
-            unionRect = NSUnionRect(frame,unionRect);
-        }
-        else{
-            unionRect = frame;
-        }
-        
-        i++;
+    if([self delegateRespondsToSelector:@selector(timelineObject:WillBeDraggedOnTrack:fromPosition:toPosition: withSnappingDeltaX:)]){
+        newPosition = [self.delegate timelineObject:timelineObjectViewController WillBeDraggedOnTrack:self fromPosition:oldPosition toPosition:newPosition withSnappingDeltaX:snappingDeltaX];
     }
+    else{
+        newPosition.x += snappingDeltaX;
+    }
+    
+    deltaXPosition = newPosition.x - oldPosition.x;
+    
+    [self moveSelectedTimemlineObjects:deltaXPosition];
+    
+    return newPosition;
+    
+}
+
+-(void) timelineObjectDidStopDragging:(VSTimelineObjectViewController *)timelineObjectViewController{
+    
+    if([self delegateRespondsToSelector:@selector(timelineObject:didStopDraggingOnTrack:)]){
+        [self.delegate timelineObject:timelineObjectViewController didStopDraggingOnTrack:self];
+    }
+    
+    
+    
+    [self.view.undoManager beginUndoGrouping];
+    
+    [self setStartTimeOfSelectedTimelineObjects];
+    
+    //applys the interscetions
+    [self applyIntersectionToTimelineObjects];
+    
+    [self.view.undoManager setActionName:NSLocalizedString(@"Move Object", @"Undo action name for moving obejcts on timeline")];
+    [self.view.undoManager endUndoGrouping];
+    
+}
+
+
+-(void) timelineObjectWasDragged:(VSTimelineObjectViewController *)timelineObjectViewController{
+    if([self delegateRespondsToSelector:@selector(timelineObject:wasDraggedOnTrack:)]){
+        [self.delegate timelineObject:timelineObjectViewController wasDraggedOnTrack:self];
+    }
+    if(timelineObjectViewController.view){
+        [self setTimelineObjectViewsIntersectedByTimelineObjectViews:[NSArray arrayWithObject:timelineObjectViewController]];
+    }
+}
+
+
+-(BOOL) timelineObjectWillStartDragging:(VSTimelineObjectViewController *)timelineObjectViewController{
+    
+    if([self delegateRespondsToSelector:@selector(timelineObject:willStartDraggingOnTrack:)]){
+        [self.delegate timelineObject:timelineObjectViewController willStartDraggingOnTrack:self];
+    }
+    
+    return YES;
+}
+
+#pragma mark - pleas move me to mehtods
+
+-(void) setSelectedTimelineObjectsAsMoving{
+    NSArray *selectedObjects = [self selectedTimelineObjectViewControllers];
+    
+    if(selectedObjects.count == 0)
+        return;
+    
+    for(VSTimelineObjectViewController *timelineObjectViewController in self.timelineObjectViewControllers){
+        timelineObjectViewController.moving = YES;
+    }
+}
+
+-(void) unsetsetSelectedTimelineObjectsAsMoving{
+    NSArray *selectedObjects = [self selectedTimelineObjectViewControllers];
+    
+    if(selectedObjects.count == 0)
+        return;
+    
+    for(VSTimelineObjectViewController *timelineObjectViewController in self.timelineObjectViewControllers){
+        timelineObjectViewController.moving = NO;
+    }
+}
+
+-(void) setStartTimeOfSelectedTimelineObjects{
+    NSArray *selectedObjects = [self selectedTimelineObjectViewControllers];
+    
+    if(selectedObjects.count == 0)
+        return;
+    
+    for(VSTimelineObjectViewController *timelineObjectViewController in self.timelineObjectViewControllers){
+        double startTime = [self timeValueForPixelValue:timelineObjectViewController.view.frame.origin.x];
+        
+        //if the view has been moved, the start time of VSTimelineObjectProxy is updated
+        if(startTime != timelineObjectViewController.timelineObjectProxy.startTime){
+            [timelineObjectViewController.timelineObjectProxy changeStartTime:startTime andRegisterAtUndoManager:self.view.undoManager];
+        }
+    }
+}
+
+-(void) moveSelectedTimemlineObjects:(float) deltaX{
+    if(deltaX != 0.0){
+        
+        NSArray *selectedTimelineObjects = [self selectedTimelineObjectViewControllers];
+        
+        for(VSTimelineObjectViewController *timelineObjectViewController in selectedTimelineObjects){
+                NSPoint newPosition = timelineObjectViewController.view.frame.origin;
+                newPosition.x += deltaX;
+                [timelineObjectViewController.view setFrameOrigin:newPosition];
+        }
+        
+    }
+}
+
+
+-(float) computeSnappingXValueForSelectedTimelineObjectsMovedAccordingToDeltaX:(float)deltaX{
+    return [self computeSnappingXValueForTimelineObjects:[self selectedTimelineObjectViewControllers]  movedAccordingToDeltaX:deltaX];
+}
+
+-(float) computeSnappingXValueForTimelineObjects:(NSArray*) timelineObjectViewControllersToMove movedAccordingToDeltaX:(float) deltaX{
+    
+    float snappingDeltaX = 0;
+    
+    if(timelineObjectViewControllersToMove.count ==0){
+        return snappingDeltaX;
+    }
+    
+    
     
     NSIndexSet *indexesOfOtherTimelineObjects = [self.timelineObjectViewControllers indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
         if([obj isKindOfClass:[VSTimelineObjectViewController class]]){
-            if ([movingTimelineObjectViewControllers containsObject:obj]) {
+            if (![timelineObjectViewControllersToMove containsObject:obj]) {
                 return YES;
             }
         }
         return NO;
     }];
     
-
+    NSArray *staticObjects = [self.timelineObjectViewControllers objectsAtIndexes:indexesOfOtherTimelineObjects];
     
-    DDLogInfo(@"Snapping Rect: %@",NSStringFromRect(unionRect));
+    if(!staticObjects || staticObjects.count == 0){
+        return snappingDeltaX;
+    }
+    
+    NSRect unionRect = ((VSTimelineObjectViewController*) [timelineObjectViewControllersToMove objectAtIndex:0]).view.frame;
+    unionRect.origin.x += deltaX;
+    
+    if(timelineObjectViewControllersToMove.count >0){
+        
+        int i = 0;
+        
+        for(VSTimelineObjectViewController *timelineObjectViewController in timelineObjectViewControllersToMove){
+            NSRect frame = timelineObjectViewController.view.frame;
+            NSPoint newOrigin = NSMakePoint(frame.origin.x + deltaX, frame.origin.y);
+            frame.origin = newOrigin;
+            
+            
+            if(i > 0){
+                unionRect = NSUnionRect(frame,unionRect);
+            }
+            else{
+                unionRect = frame;
+            }
+            
+            i++;
+        }
+    }
+    
+    
+    NSRect leftSnappingSourceRect = NSMakeRect(unionRect.origin.x - SNAPPING_OVERHEAD / 2.0, unionRect.origin.y,SNAPPING_OVERHEAD, unionRect.size.height);
+    NSRect rightSnappingSourceRect = leftSnappingSourceRect;
+    rightSnappingSourceRect.origin.x = NSMaxX(unionRect) - SNAPPING_OVERHEAD / 2.0f;    
+    
+    for(VSTimelineObjectViewController *timelineObjectViewController in staticObjects){
+        NSRect targetSnappingRect = NSMakeRect(NSMaxX(timelineObjectViewController.view.frame)-SNAPPING_OVERHEAD / 2.0, timelineObjectViewController.view.frame.origin.y, SNAPPING_OVERHEAD, timelineObjectViewController.view.frame.size.height);
+        
+        if(NSIntersectsRect(leftSnappingSourceRect, targetSnappingRect)){
+            snappingDeltaX = NSMaxX(timelineObjectViewController.view.frame) - unionRect.origin.x;
+            DDLogInfo(@"snapped left");
+            break;
+        }
+        targetSnappingRect.origin.x = timelineObjectViewController.view.frame.origin.x - SNAPPING_OVERHEAD / 2.0f;
+        if(NSIntersectsRect(rightSnappingSourceRect, targetSnappingRect)){
+            DDLogInfo(@"snapped right");
+            snappingDeltaX = timelineObjectViewController.view.frame.origin.x - NSMaxX(unionRect);
+            break;
+        }
+        
+    }
+    
+    
+    return snappingDeltaX;
 }
+
+-(void) setTimelineObjectViewsIntersectedBySelectedTimelineObjects{
+    [self setTimelineObjectViewsIntersectedByTimelineObjectViews:[self selectedTimelineObjectViewControllers]];
+}
+
+
+-(void) applyIntersectionToTimelineObjects{
     
+    NSArray *interesectedTimelineObjectViewControllers= [self intersectedTimelineObjectViewController];
+    
+    for (VSTimelineObjectViewController *timelineObjectViewController in interesectedTimelineObjectViewControllers){
+        
+        //if the intersectionRect is wider as timelineObjectViewController.view.frame, the object is removed
+        if(timelineObjectViewController.view.frame.size.width <= timelineObjectViewController.intersectionRect.size.width && timelineObjectViewController.view.frame.origin.x >= timelineObjectViewController.intersectionRect.origin.x){
+            if([timelineObjectViewController.timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
+                [self.track removTimelineObject:(VSTimelineObject *) timelineObjectViewController.timelineObjectProxy andRegisterAtUndoManager:self.view.undoManager];
+            }
+        }
+        else {
+            
+            //divides timelineObjectViewController.view.frame according to its intersectionRect
+            NSRect slice;
+            NSRect rem;
+            NSDivideRect(timelineObjectViewController.view.frame, &slice, &rem, timelineObjectViewController.intersectionRect.size.width, NSMinXEdge);
+            
+            
+            //depending of the intersection entered left or right, the object is cut differntly
+            if(!timelineObjectViewController.enteredLeft){
+                NSInteger newXPos = rem.origin.x - self.view.frame.origin.x;
+                double newStartTime = newXPos * self.pixelTimeRatio;
+                
+                [timelineObjectViewController.timelineObjectProxy changeStartTime:newStartTime andRegisterAtUndoManager:self.view.undoManager];
+                [timelineObjectViewController.timelineObjectProxy changeDuration:rem.size.width*self.pixelTimeRatio andRegisterAtUndoManager:self.view.undoManager];
+            }
+            else {
+                double newDuration = rem.size.width*self.pixelTimeRatio;
+                [timelineObjectViewController.timelineObjectProxy changeDuration:newDuration andRegisterAtUndoManager:self.view.undoManager];
+            }
+            
+        }
+        timelineObjectViewController.intersected = false;
+    }
+}
+
+#pragma mark- Private Methods
+
+-(NSArray*) selectedTimelineObjectViewControllers{
+    NSIndexSet *indexSetOfSelectedTimelineObjects = [self.timelineObjectViewControllers indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj isKindOfClass:[VSTimelineObjectViewController class]]){
+            if(((VSTimelineObjectViewController*) obj).timelineObjectProxy.selected){
+                return YES;
+            }
+        }
+        return NO;
+    }];
+    
+    return [self.timelineObjectViewControllers objectsAtIndexes:indexSetOfSelectedTimelineObjects];
+}
+
 
 /**
  * Returns a time value in milliseconds according to the current pixelTimeRatio
@@ -571,48 +748,7 @@ static NSString* defaultNib = @"VSTrackView";
     return [self.timelineObjectViewControllers objectsAtIndexes:indexSetOfIntersectedObjects];
 }
 
-/**
- * Applies the current intersection to the intersected VSTimelineObjectViewControllers to their VSTimelineObjectProxys.
- *
- * The intersectionRect of the VSTimelineObjectViewController is cut off and startTime and duration are updated.
- */
--(void) applyIntersectionToTimelineObjects{
-    
-    NSArray *interesectedTimelineObjectViewControllers= [self intersectedTimelineObjectViewController];
-    
-    for (VSTimelineObjectViewController *timelineObjectViewController in interesectedTimelineObjectViewControllers){
-        
-        //if the intersectionRect is wider as timelineObjectViewController.view.frame, the object is removed
-        if(timelineObjectViewController.view.frame.size.width <= timelineObjectViewController.intersectionRect.size.width && timelineObjectViewController.view.frame.origin.x >= timelineObjectViewController.intersectionRect.origin.x){
-            if([timelineObjectViewController.timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
-                [self.track removTimelineObject:(VSTimelineObject *) timelineObjectViewController.timelineObjectProxy andRegisterAtUndoManager:self.view.undoManager];
-            }
-        }
-        else {
-            
-            //divides timelineObjectViewController.view.frame according to its intersectionRect
-            NSRect slice;
-            NSRect rem;
-            NSDivideRect(timelineObjectViewController.view.frame, &slice, &rem, timelineObjectViewController.intersectionRect.size.width, NSMinXEdge);
-            
-            
-            //depending of the intersection entered left or right, the object is cut differntly
-            if(!timelineObjectViewController.enteredLeft){
-                NSInteger newXPos = rem.origin.x - self.view.frame.origin.x;
-                double newStartTime = newXPos * self.pixelTimeRatio;
-                
-                [timelineObjectViewController.timelineObjectProxy changeStartTime:newStartTime andRegisterAtUndoManager:self.view.undoManager];
-                [timelineObjectViewController.timelineObjectProxy changeDuration:rem.size.width*self.pixelTimeRatio andRegisterAtUndoManager:self.view.undoManager];
-            }
-            else {
-                double newDuration = rem.size.width*self.pixelTimeRatio;
-                [timelineObjectViewController.timelineObjectProxy changeDuration:newDuration andRegisterAtUndoManager:self.view.undoManager];
-            }
-            
-        }
-        timelineObjectViewController.intersected = false;
-    }
-}
+
 
 /**
  * Checks if the delegate of VSTrackViewController is able to respond to the given Selector

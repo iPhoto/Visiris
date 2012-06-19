@@ -15,8 +15,6 @@
 
 @interface VSTimelineObjectView ()
 
-/** If YES the view is moved on mouseDragged-Event */ 
-@property BOOL moving;
 
 /** If YES the view is resized on mouseDragged-Event */
 @property BOOL resizing;
@@ -26,6 +24,10 @@
 
 /** stores the last mousePosition during a dragging-Operation */
 @property NSPoint lastMousePosition;
+
+@property NSPoint mouseDownMousePosition;
+
+@property NSInteger mouseDownXOffset;
 
 /** Area at the left side of the VSTimelineObject which starts the resizing of the object when clicked */
 @property NSRect leftResizingArea;
@@ -40,17 +42,19 @@
 // Widht of the two resizing areas 
 static int resizingAreaWidth = 10;
 
-@synthesize delegate            = _delegate;
-@synthesize selected            = _selected;
-@synthesize moving              = _dragged;
-@synthesize temporary           = _temporary;
-@synthesize intersectionRect    = _intersectionRect;
-@synthesize intersected         =_intersected;
-@synthesize lastMousePosition   = _lastMousePosition;
-@synthesize leftResizingArea    = _leftResizingArea;
-@synthesize rightResizingArea   = _rightResizingArea;
-@synthesize resizing            = _resizing;
-@synthesize resizingDirection   = _resizingDirection;
+@synthesize delegate                = _delegate;
+@synthesize selected                = _selected;
+@synthesize moving                  = _dragged;
+@synthesize temporary               = _temporary;
+@synthesize intersectionRect        = _intersectionRect;
+@synthesize intersected             = _intersected;
+@synthesize lastMousePosition       = _lastMousePosition;
+@synthesize mouseDownMousePosition  = _mouseDownMousePosition;
+@synthesize mouseDownXOffset        = _mouseDownXOffset;
+@synthesize leftResizingArea        = _leftResizingArea;
+@synthesize rightResizingArea       = _rightResizingArea;
+@synthesize resizing                = _resizing;
+@synthesize resizingDirection       = _resizingDirection;
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -142,10 +146,15 @@ static int resizingAreaWidth = 10;
 -(void) mouseDown:(NSEvent *)theEvent{
     
     self.lastMousePosition = [theEvent locationInWindow];
+    self.mouseDownMousePosition = self.lastMousePosition;
+    self.mouseDownXOffset = self.mouseDownMousePosition.x - self.frame.origin.x;
     
     if(!self.selected){
-        if([self delegateImplementsSelector:@selector(timelineObjectViewWasClicked:)]){
-            [self.delegate timelineObjectViewWasClicked:self];
+        if(theEvent.modifierFlags & NSCommandKeyMask){
+            DDLogInfo(@"Multiselect");
+        }
+        if([self delegateImplementsSelector:@selector(timelineObjectViewWasClicked:withModifierFlags:)]){
+            [self.delegate timelineObjectViewWasClicked:self withModifierFlags:theEvent.modifierFlags];
         }
     }
     else{
@@ -167,7 +176,7 @@ static int resizingAreaWidth = 10;
         [self resize:mouseXDelta];
     }
     else if(self.moving){
-        [self move:mouseXDelta];
+        [self move:newMousePosition];
     }
     
     self.lastMousePosition = newMousePosition;
@@ -286,18 +295,16 @@ static int resizingAreaWidth = 10;
  * Moves the view according to given change of its x-Origin
  * @param deltaX Change of view's x-Origin
  */
--(void) move:(NSInteger) deltaX{
-    NSRect newFrame = self.frame;
+-(void) move:(NSPoint) currentMousePosition{
     
-    newFrame.origin.x += deltaX;
+    NSPoint newFramesOrigin = NSMakePoint(currentMousePosition.x-self.mouseDownXOffset, self.frame.origin.y);
     
     //informs the delegate about the change 
     if([self delegateImplementsSelector:@selector(timelineObjectViewWillBeDragged:fromPosition:toPosition:)]){
-        newFrame.origin = [self.delegate timelineObjectViewWillBeDragged:self fromPosition:self.frame.origin toPosition:newFrame.origin];
+        newFramesOrigin = [self.delegate timelineObjectViewWillBeDragged:self fromPosition:self.frame.origin toPosition:newFramesOrigin];
     }
     
-    [self setFrame:newFrame];
-    
+    [self setFrameOrigin:newFramesOrigin];  
     
     //informs the delegate that the view was moved
     if([self delegateImplementsSelector:@selector(timelineObjectViewWasDragged:)]){

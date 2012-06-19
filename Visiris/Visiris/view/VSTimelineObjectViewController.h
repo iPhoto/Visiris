@@ -26,7 +26,7 @@
  * @param timelineObjectProxy VSTimelineObjectProxy the clicked VSTimelineObjectView represents
  * @return YES if the VSTimelineObjectView is allowed to get selected, NO otherwise
  */
--(BOOL) timelineObjectProxyWillBeSelected:(VSTimelineObjectProxy*) timelineObjectProxy;
+-(BOOL)timelineObjectProxyWillBeSelected:(VSTimelineObjectProxy *)timelineObjectProxy exclusively:(BOOL) exclusiveSelection;
 
 /**
  * Called when the VSTimelineObjectProxy got selected
@@ -127,6 +127,7 @@
 /** Indicates wheter the VSTimelineObjectViewController's VSTimelineObjectProxy is only a temporary object on the track. */
 @property BOOL temporary;
 
+@property BOOL moving;
 
 -(id) initWithDefaultNib;
 
