@@ -50,14 +50,20 @@
         [self readMovie:self.url atTime:CMTimeMakeWithSeconds(aTimestamp, 600)];
     }
     
+    /*
     if (self.movieReader.status == 1) {
-        NSLog(@"blubbidiblubb");
+        [self.movieReader cancelReading];
+        NSLog(@"status = 1");
+        [self readMovie:self.url atTime:CMTimeMakeWithSeconds(aTimestamp, 600)];
+    }
+    else {
+        NSLog(@"status != 1");
     }
 
-       
+       */
 
 
-    [self readNextMovieFrame];
+    //[self readNextMovieFrame];
     
     
     
@@ -149,6 +155,7 @@
                                 [self.movieReader setTimeRange:timeRange];
                                 
                                 if ([self.movieReader startReading]){
+                                    [self readNextMovieFrame];
                                     NSLog(@"Video Reading ready");
                                 }
                                 else{
