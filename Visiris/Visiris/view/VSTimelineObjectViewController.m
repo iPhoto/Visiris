@@ -91,10 +91,12 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 
 #pragma mark - VSTimelineObjectViewDelegate implementation
 
--(void) timelineObjectViewWasClicked:(VSTimelineObjectView *)timelineObjectView{
+-(void) timelineObjectViewWasClicked:(VSTimelineObjectView *)timelineObjectView withModifierFlags:(NSUInteger)modifierFlags {
+
+    BOOL exclusiveSelection = modifierFlags & NSCommandKeyMask;
     if(!self.timelineObjectProxy.selected){
-        if([self delegateRespondsToSelector:@selector(timelineObjectProxyWillBeSelected:)]){
-            [self.delegate timelineObjectProxyWillBeSelected:self.timelineObjectProxy];
+        if([self delegateRespondsToSelector:@selector(timelineObjectProxyWillBeSelected:exclusively:)]){
+            [self.delegate timelineObjectProxyWillBeSelected:self.timelineObjectProxy exclusively:exclusiveSelection];
         }
     }
 }

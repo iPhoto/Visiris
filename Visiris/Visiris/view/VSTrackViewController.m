@@ -37,6 +37,9 @@
 
 @end
 
+
+#define SNAPPING_OVERHEAD 20
+
 @implementation VSTrackViewController
 
 @synthesize delegate = _delegate;
@@ -329,11 +332,11 @@ static NSString* defaultNib = @"VSTrackView";
     }
 }
 
-#pragma mark- VSTimelineObjectControllerDelegate implementation
+#pragma mark- VSTimelineObjectViewControllerDelegate implementation
 
--(BOOL)timelineObjectProxyWillBeSelected:(VSTimelineObjectProxy *)timelineObjectProxy{
-    if([self delegateRespondsToSelector:@selector(timelineObjectProxy:willBeSelectedOnTrackViewController:)]){
-        return [self.delegate timelineObjectProxy:timelineObjectProxy willBeSelectedOnTrackViewController:self];
+-(BOOL)timelineObjectProxyWillBeSelected:(VSTimelineObjectProxy *)timelineObjectProxy exclusively:(BOOL)exclusiveSelection{
+    if([self delegateRespondsToSelector:@selector(timelineObjectProxy:willBeSelectedOnTrackViewController:exclusively:)]){
+        return [self.delegate timelineObjectProxy:timelineObjectProxy willBeSelectedOnTrackViewController:self exclusively:exclusiveSelection];
     }
     return NO;
 }
@@ -429,46 +432,96 @@ static NSString* defaultNib = @"VSTrackView";
 
 -(NSPoint) timelineObjectWillBeDragged:(VSTimelineObjectViewController *)timelineObjectViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition{
     
-    [self snapTimelineObjects:[NSArray arrayWithObject:timelineObjectViewController] movingToPositions:[NSArray arrayWithObject:[NSValue valueWithPoint:newPosition]]];
-    return newPosition;
+    DDLogInfo(@"newPosition: %@",NSStringFromPoint(newPosition));
+    
+    NSArray *snappedPoints = [self snapTimelineObjects:[NSArray arrayWithObject:timelineObjectViewController] movingToPositions:[NSArray arrayWithObject:[NSValue valueWithPoint:newPosition]]];
+    return [[snappedPoints objectAtIndex:0] pointValue];
 }
 #pragma mark- Private Methods
 
--(void) snapTimelineObjects:(NSArray*) movingTimelineObjectViewControllers movingToPositions:(NSArray*) toPoints{
-    NSMutableArray *newFrames = [[NSMutableArray alloc] init];
+-(NSArray*) snapTimelineObjects:(NSArray*) movingTimelineObjectViewControllers movingToPositions:(NSArray*) toPoints{
     
-    NSRect unionRect;      
-    int i = 0;
-    
-    for(VSTimelineObjectViewController *timelineObjectViewController in movingTimelineObjectViewControllers){
-        NSRect frame = timelineObjectViewController.view.frame;
-        frame.origin = [[toPoints objectAtIndex:i] pointValue];
-        
-        
-        if(i != 0){
-            unionRect = NSUnionRect(frame,unionRect);
-        }
-        else{
-            unionRect = frame;
-        }
-        
-        i++;
-    }
     
     NSIndexSet *indexesOfOtherTimelineObjects = [self.timelineObjectViewControllers indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
         if([obj isKindOfClass:[VSTimelineObjectViewController class]]){
-            if ([movingTimelineObjectViewControllers containsObject:obj]) {
+            if (![movingTimelineObjectViewControllers containsObject:obj]) {
                 return YES;
             }
         }
         return NO;
     }];
     
-
+    NSArray *staticObjects = [self.timelineObjectViewControllers objectsAtIndexes:indexesOfOtherTimelineObjects];
     
-    DDLogInfo(@"Snapping Rect: %@",NSStringFromRect(unionRect));
+    if(!staticObjects || staticObjects.count == 0){
+        return toPoints;
+    }
+    
+    NSRect unionRect = ((VSTimelineObjectViewController*) [movingTimelineObjectViewControllers objectAtIndex:0]).view.frame;
+    
+    
+    if(movingTimelineObjectViewControllers.count >0){
+        
+        int i = 0;
+        
+        for(VSTimelineObjectViewController *timelineObjectViewController in movingTimelineObjectViewControllers){
+            NSRect frame = timelineObjectViewController.view.frame;
+            frame.origin = [[toPoints objectAtIndex:i] pointValue];
+            
+            
+            if(i > 0){
+                unionRect = NSUnionRect(frame,unionRect);
+            }
+            else{
+                unionRect = frame;
+            }
+            
+            i++;
+        }
+    }
+    
+    
+    NSRect leftSnappingSourceRect = NSMakeRect(unionRect.origin.x - SNAPPING_OVERHEAD / 2.0, unionRect.origin.y,SNAPPING_OVERHEAD, unionRect.size.height);
+    NSRect rightSnappingSourceRect = leftSnappingSourceRect;
+    rightSnappingSourceRect.origin.x = NSMaxX(unionRect) - SNAPPING_OVERHEAD / 2.0f;    
+    
+    
+    float snappingDeltaX = 0;
+    
+    DDLogInfo(@"UnionRect: %@",NSStringFromRect(unionRect));
+    DDLogInfo(@"leftSnappingSourceRect: %@",NSStringFromRect(leftSnappingSourceRect));
+    DDLogInfo(@"rightSnappingSourceRect: %@",NSStringFromRect(rightSnappingSourceRect));
+    
+    for(VSTimelineObjectViewController *timelineObjectViewController in staticObjects){
+        NSRect targetSnappingRect = NSMakeRect(NSMaxX(timelineObjectViewController.view.frame)-SNAPPING_OVERHEAD / 2.0, timelineObjectViewController.view.frame.origin.y, SNAPPING_OVERHEAD, timelineObjectViewController.view.frame.size.height);
+        
+        if(NSIntersectsRect(leftSnappingSourceRect, targetSnappingRect)){
+            snappingDeltaX = NSMaxX(timelineObjectViewController.view.frame) - unionRect.origin.x;
+            DDLogInfo(@"snapped left");
+            break;
+        }
+        DDLogInfo(@"targetSnappingRect: %@",NSStringFromRect(targetSnappingRect));
+        targetSnappingRect.origin.x = timelineObjectViewController.view.frame.origin.x - SNAPPING_OVERHEAD / 2.0f;
+        DDLogInfo(@"targetSnappingRect: %@",NSStringFromRect(targetSnappingRect));
+        if(NSIntersectsRect(rightSnappingSourceRect, targetSnappingRect)){
+            DDLogInfo(@"snapped right");
+            snappingDeltaX = timelineObjectViewController.view.frame.origin.x - NSMaxX(unionRect);
+            break;
+        }
+        
+    }
+    
+    NSMutableArray *snappedPoints = [[NSMutableArray alloc] init];
+    
+    for (NSValue *value in toPoints){
+        NSPoint snappedPoint = [value pointValue];
+        snappedPoint.x += snappingDeltaX;
+        [snappedPoints addObject:[NSValue valueWithPoint:snappedPoint]];
+    }
+    
+    return snappedPoints;
 }
-    
+
 
 /**
  * Returns a time value in milliseconds according to the current pixelTimeRatio

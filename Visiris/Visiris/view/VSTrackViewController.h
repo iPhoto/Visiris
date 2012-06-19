@@ -48,7 +48,7 @@
  * @param trackViewController VSTrackViewController the VSTimelineObjectView representing the timelineObjectProxy is subview of
  * @return YES if the VSTimelineObjectProxy is allowed to get selected, NO otherwise
  */
--(BOOL) timelineObjectProxy:(VSTimelineObjectProxy *) timelineObjectProxy willBeSelectedOnTrackViewController:(VSTrackViewController*) trackViewController;
+-(BOOL) timelineObjectProxy:(VSTimelineObjectProxy *) timelineObjectProxy willBeSelectedOnTrackViewController:(VSTrackViewController*) trackViewController exclusively:(BOOL)exclusiveSelection;
 
 /**
  * Called before a TimelineObject is removed from a track

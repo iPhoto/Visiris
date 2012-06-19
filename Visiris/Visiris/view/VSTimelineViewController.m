@@ -249,7 +249,7 @@ static NSString* defaultNib = @"VSTimelineView";
             i++;
         }
         
-        [self selectTimelineObjectProxy:objectToBeSelected onTrack:trackViewController];
+        [self selectTimelineObjectProxy:objectToBeSelected onTrack:trackViewController exclusively:YES];
         
         [[self.view undoManager] endUndoGrouping];
     }
@@ -264,8 +264,9 @@ static NSString* defaultNib = @"VSTimelineView";
     return [self.timeline createNewTimelineObjectProxyBasedOnProjectItemRepresentation:item positionedAtTime:timePosition];
 }
 
--(BOOL) timelineObjectProxy:(VSTimelineObjectProxy *)timelineObjectProxy willBeSelectedOnTrackViewController:(VSTrackViewController *)trackViewController{
-    return [self selectTimelineObjectProxy:timelineObjectProxy onTrack:trackViewController];
+-(BOOL) timelineObjectProxy:(VSTimelineObjectProxy *)timelineObjectProxy willBeSelectedOnTrackViewController:(VSTrackViewController *)trackViewController exclusively:(BOOL)exclusiveSelection{
+    
+    return [self selectTimelineObjectProxy:timelineObjectProxy onTrack:trackViewController exclusively:exclusiveSelection];
 }
 
 -(void) timelineObjectProxy:(VSTimelineObjectProxy *)timelineObjectProxy wasSelectedOnTrackViewController:(VSTrackViewController *)trackViewController{
@@ -283,34 +284,7 @@ static NSString* defaultNib = @"VSTimelineView";
     }
 }
 
--(BOOL) selectTimelineObjectProxy:(VSTimelineObjectProxy*) timelineObjectProxy onTrack:(VSTrackViewController*) trackViewController{
-    if([timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
-        
-        [self.view.undoManager setActionName:NSLocalizedString(@"Change Selection", @"Undo Massage of unselecting TimelineObjects")];
-        [self.view.undoManager beginUndoGrouping];
-        
-        NSArray *selectedTimelineObjects = [self.timeline selectedTimelineObjects];
-        
-        for(VSTimelineObject *timelineObject in selectedTimelineObjects){
-            [timelineObject setUnselectedAndRegisterUndo:self.view.undoManager];
-        }
-        
-        [self.timeline selectTimelineObject:((VSTimelineObject*) timelineObjectProxy) onTrack:trackViewController.track];
-        
-        if(timelineObjectProxy.selected){
-            [((VSTimelineObject*) timelineObjectProxy) setSelectedAndRegisterUndo:self.view.undoManager];
-            
-        }
-        
-        [self.view.undoManager endUndoGrouping];
-        
-        return YES;
-    }
-    else {
-        return NO;
-    }
-    
-}
+
 -(void) timelineObjectProxies:(NSArray *)timelineObjectProxies wereRemovedFromTrack:(VSTrackViewController *)trackViewController{
     
     NSArray *selectedTimelineObjects = [timelineObjectProxies objectsAtIndexes:[timelineObjectProxies indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
@@ -353,7 +327,7 @@ static NSString* defaultNib = @"VSTimelineView";
         [self.trackHolder setFrame:newDocumentFrame];
         [self updatePixelTimeRatio];
         
-
+        
     }
 }
 
@@ -383,7 +357,7 @@ static NSString* defaultNib = @"VSTimelineView";
     
     double newTimePosition = location * self.pixelTimeRatio;
     self.timeline.playHead.currentTimePosition = newTimePosition;
-
+    
     return location;
 }
 
@@ -397,6 +371,37 @@ static NSString* defaultNib = @"VSTimelineView";
     [NSRulerView registerUnitWithName:VSTimelineRulerMeasurementUnit abbreviation:VSTimelineRulerMeasurementAbreviation unitToPointsConversionFactor:1/self.pixelTimeRatio stepUpCycle:[NSArray arrayWithObject:[NSNumber numberWithFloat:10.0]] stepDownCycle:[NSArray arrayWithObject:[NSNumber numberWithFloat:0.5]]];
     
     [self.rulerView setMeasurementUnits:VSTimelineRulerMeasurementUnit];
+}
+
+-(BOOL) selectTimelineObjectProxy:(VSTimelineObjectProxy*) timelineObjectProxy onTrack:(VSTrackViewController*) trackViewController exclusively:(BOOL) exclusiveSelection{
+    if([timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
+        [self.view.undoManager setActionName:NSLocalizedString(@"Change Selection", @"Undo Massage of unselecting TimelineObjects")];
+        [self.view.undoManager beginUndoGrouping];
+        
+        if(exclusiveSelection){
+            
+            NSArray *selectedTimelineObjects = [self.timeline selectedTimelineObjects];
+            
+            for(VSTimelineObject *timelineObject in selectedTimelineObjects){
+                [timelineObject setUnselectedAndRegisterUndo:self.view.undoManager];
+            }
+        }
+        
+        [self.timeline selectTimelineObject:((VSTimelineObject*) timelineObjectProxy) onTrack:trackViewController.track];
+        
+        if(timelineObjectProxy.selected){
+            [((VSTimelineObject*) timelineObjectProxy) setSelectedAndRegisterUndo:self.view.undoManager];
+            
+        }
+        
+        [self.view.undoManager endUndoGrouping];
+        
+        return YES;
+    }
+    else {
+        return NO;
+    }
+    
 }
 
 -(void) setPlayheadMarkerLocation{

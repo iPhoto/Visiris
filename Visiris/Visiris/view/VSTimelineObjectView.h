@@ -19,7 +19,7 @@
  * Called by VSTimelineObjectView when i got Selected
  * @param timelineObjectview The View invoked the method.
  */
--(void) timelineObjectViewWasClicked:(VSTimelineObjectView*) timelineObjectView;
+-(void) timelineObjectViewWasClicked:(VSTimelineObjectView*) timelineObjectView withModifierFlags:(NSUInteger) modifierFlags;
 
 /**
  * Called when the VSTimelineObjectView has stopped it's dragging operation
