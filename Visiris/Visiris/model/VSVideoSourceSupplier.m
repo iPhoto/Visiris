@@ -142,12 +142,11 @@
                                 
                                 [self.movieReader addOutput:output];
                                 
-                                //TODO maybe
                                 CMTimeRange timeRange = CMTimeRangeMake(CMTimeMakeWithSeconds(time,600), kCMTimePositiveInfinity);
                                 [self.movieReader setTimeRange:timeRange];
                                 
                                 if ([self.movieReader startReading]){
-                                    NSLog(@"Video Reading ready");
+                                    //NSLog(@"Video Reading ready");
                                 }
                                 else{
                                     NSLog(@"reading can't be started");
