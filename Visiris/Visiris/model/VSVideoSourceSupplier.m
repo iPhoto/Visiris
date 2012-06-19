@@ -96,8 +96,8 @@
         CGColorSpaceRef colourSpace = CGColorSpaceCreateDeviceRGB();
         CGContextRef ctx = CGBitmapContextCreate(imageData, width, height, 8, width * 4, colourSpace, kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst);
         CFRelease(colourSpace);
-        CGContextTranslateCTM(ctx, 0, height);
-        CGContextScaleCTM(ctx, 1.0f, -1.0f);
+        //CGContextTranslateCTM(ctx, 0, height);
+        //CGContextScaleCTM(ctx, 1.0f, -1.0f);
         CGContextSetBlendMode(ctx, kCGBlendModeCopy);
         CGContextDrawImage(ctx, rect, image);
         CGContextRelease(ctx);
@@ -198,6 +198,5 @@
         //NSLog(@"Video status is now %ld", self.movieReader.status);
     }
 }
-
 
 @end
