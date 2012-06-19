@@ -374,8 +374,6 @@ static NSString* defaultNib = @"VSTrackView";
 }
 
 
-
-
 -(void) timelineObjectWasDragged:(VSTimelineObjectViewController *)timelineObjectViewController{
     
     if(timelineObjectViewController.view){
@@ -429,7 +427,48 @@ static NSString* defaultNib = @"VSTrackView";
     [timelineObjectViewController.view.layer setZPosition:0];
 }
 
+-(NSPoint) timelineObjectWillBeDragged:(VSTimelineObjectViewController *)timelineObjectViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition{
+    
+    [self snapTimelineObjects:[NSArray arrayWithObject:timelineObjectViewController] movingToPositions:[NSArray arrayWithObject:[NSValue valueWithPoint:newPosition]]];
+    return newPosition;
+}
 #pragma mark- Private Methods
+
+-(void) snapTimelineObjects:(NSArray*) movingTimelineObjectViewControllers movingToPositions:(NSArray*) toPoints{
+    NSMutableArray *newFrames = [[NSMutableArray alloc] init];
+    
+    NSRect unionRect;      
+    int i = 0;
+    
+    for(VSTimelineObjectViewController *timelineObjectViewController in movingTimelineObjectViewControllers){
+        NSRect frame = timelineObjectViewController.view.frame;
+        frame.origin = [[toPoints objectAtIndex:i] pointValue];
+        
+        
+        if(i != 0){
+            unionRect = NSUnionRect(frame,unionRect);
+        }
+        else{
+            unionRect = frame;
+        }
+        
+        i++;
+    }
+    
+    NSIndexSet *indexesOfOtherTimelineObjects = [self.timelineObjectViewControllers indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj isKindOfClass:[VSTimelineObjectViewController class]]){
+            if ([movingTimelineObjectViewControllers containsObject:obj]) {
+                return YES;
+            }
+        }
+        return NO;
+    }];
+    
+
+    
+    DDLogInfo(@"Snapping Rect: %@",NSStringFromRect(unionRect));
+}
+    
 
 /**
  * Returns a time value in milliseconds according to the current pixelTimeRatio
@@ -493,7 +532,7 @@ static NSString* defaultNib = @"VSTrackView";
                     else {
                         NSInteger relativeDraggedFrameX = draggedTimelineObjectViewController.view.frame.origin.x -timelineObjectViewController.view.frame.origin.x;
                         intersectionRect.size.width = draggedTimelineObjectViewController.view.frame.size.width + relativeDraggedFrameX;
-                         intersectionRect.origin.x = 0;
+                        intersectionRect.origin.x = 0;
                     }
                     
                     
