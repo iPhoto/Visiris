@@ -21,7 +21,7 @@
 @property (strong) NSDate           *startTime;
 //@property (strong) AVPlayer         *player;
 
-- (void) readMovie:(NSURL *)url;
+- (void) readMovie:(NSURL *)url atTime:(CMTime) time;
 - (void) readNextMovieFrame;
 - (void) updateInfo: (id*)message;
 
@@ -39,22 +39,26 @@
     
     aTimestamp /= 1000.0;
     
-    
+    //TODO this is shit
+    //self.url = nil;
+    //[self.movieReader cancelReading];
+    //self.movieReader = nil;
 
 
     if (self.url == nil) {
         self.url = [[NSURL alloc] initFileURLWithPath:self.timelineObject.sourceObject.projectItem.filePath]; 
-        [self readMovie:self.url];
+        [self readMovie:self.url atTime:CMTimeMakeWithSeconds(aTimestamp, 600)];
+    }
+    
+    if (self.movieReader.status == 1) {
+        NSLog(@"blubbidiblubb");
     }
 
        
-   // CMTime timePoint = ;  
 
-  //   [self.player seekToTime:CMTimeMakeWithSeconds(aTimestamp, 600)];
 
     [self readNextMovieFrame];
     
-    self.url = nil;
     
     
     /*NSLog(@"timestamp: %@", [NSNumber numberWithDouble:aTimestamp]);
@@ -105,7 +109,7 @@
     return self.vsImage;
 }
 
-- (void) readMovie:(NSURL *)url{
+- (void) readMovie:(NSURL *)url atTime:(CMTime) time{
     //[self performSelectorOnMainThread:@selector(updateInfo:) withObject:@"scanning" waitUntilDone:YES];
     
     self.startTime = [NSDate date];
@@ -141,8 +145,8 @@
                                 
                                 [self.movieReader addOutput:output];
                                 
-                                //CMTimeRange timeRange = CMTimeRangeMake(CMTimeMakeWithSeconds(20, 600), kCMTimePositiveInfinity);
-                                //[self.movieReader setTimeRange:timeRange];
+                                CMTimeRange timeRange = CMTimeRangeMake(time, kCMTimePositiveInfinity);
+                                [self.movieReader setTimeRange:timeRange];
                                 
                                 if ([self.movieReader startReading]){
                                     NSLog(@"Video Reading ready");
@@ -195,7 +199,7 @@
         }
     }
     else{
-        NSLog(@"status is now %ld", self.movieReader.status);
+        //NSLog(@"status is now %ld", self.movieReader.status);
     }
     
 }
