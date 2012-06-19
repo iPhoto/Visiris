@@ -420,7 +420,7 @@ static NSString* defaultNib = @"VSTrackView";
         [self.delegate timelineObject:timelineObjectViewController didStopDraggingOnTrack:self];
     }
     
-    
+    [self unsetsetSelectedTimelineObjectsAsMoving];
     
     [self.view.undoManager beginUndoGrouping];
     
@@ -451,6 +451,8 @@ static NSString* defaultNib = @"VSTrackView";
         [self.delegate timelineObject:timelineObjectViewController willStartDraggingOnTrack:self];
     }
     
+    [self setSelectedTimelineObjectsAsMoving];
+    
     return YES;
 }
 
@@ -462,7 +464,7 @@ static NSString* defaultNib = @"VSTrackView";
     if(selectedObjects.count == 0)
         return;
     
-    for(VSTimelineObjectViewController *timelineObjectViewController in self.timelineObjectViewControllers){
+    for(VSTimelineObjectViewController *timelineObjectViewController in selectedObjects){
         timelineObjectViewController.moving = YES;
     }
 }
@@ -473,7 +475,7 @@ static NSString* defaultNib = @"VSTrackView";
     if(selectedObjects.count == 0)
         return;
     
-    for(VSTimelineObjectViewController *timelineObjectViewController in self.timelineObjectViewControllers){
+    for(VSTimelineObjectViewController *timelineObjectViewController in selectedObjects){
         timelineObjectViewController.moving = NO;
     }
 }
