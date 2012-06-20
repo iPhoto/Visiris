@@ -11,17 +11,20 @@
 #import "VisirisCore/VSImage.h"
 #import "VSTimelineObject.h"
 #import "VSTimelineObjectSource.h"
-#import "VSProjectItem.h"
+//#import "VSProjectItem.h"
 
 @interface VSSourceSupplier()
 
-@property (assign) double           videoDuration;
-@property (strong) AVAssetReader    *movieReader;
-@property (strong) NSURL            *url;
-@property (strong) NSDate           *startTime;
-@property (assign) BOOL             isReadingVideo;
-//@property (assign) float            framesPerSecond;
-@property (assign) char*            imageData;
+@property (assign) double                   videoDuration;
+@property (strong) AVAssetReader            *movieReader;
+@property (strong) NSURL                    *url;
+@property (strong) NSDate                   *startTime;
+@property (assign) BOOL                     isReadingVideo;
+@property (assign) char*                    imageData;
+@property (strong) AVURLAsset               *asset;
+@property (strong) AVAssetImageGenerator    *imageGenerator;
+@property (assign) float                    frameRate;
+@property (assign) int                      currentFrame;
 
 - (void) readMovie:(NSURL *)url atTime:(double) time;
 - (void) readNextMovieFrame;
@@ -38,71 +41,66 @@
 @synthesize vsImage         = _vsImage;
 @synthesize isReadingVideo  = _isReadingVideo;
 @synthesize imageData       = _imageData;
-//@synthesize framesPerSecond = _framesPerSecond;
+@synthesize asset           = _asset;
+@synthesize imageGenerator  = _imageGenerator;
+@synthesize frameRate       = _frameRate;
+@synthesize currentFrame    = _currentFrame;
 
-- (id)init{
-    if (self = [super init]) {
-        //self.url = [[NSURL alloc] initFileURLWithPath:self.timelineObject.sourceObject.projectItem.filePath]; 
-
+- (id)initWithTimelineObject:(VSTimelineObject *)aTimelineObject{
+    if (self = [super initWithTimelineObject:aTimelineObject]) {
+        self.url = [[NSURL alloc] initFileURLWithPath:self.timelineObject.sourceObject.filePath]; 
+        self.vsImage = [[VSImage alloc] init];
+        self.asset = [AVURLAsset URLAssetWithURL:self.url options:nil];
+        self.imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:self.asset];
+        self.imageGenerator.appliesPreferredTrackTransform = YES;
+        self.vsImage.size = self.asset.naturalSize;
+        self.imageData = malloc(self.vsImage.size.width * self.vsImage.size.height * 4);
+        
+        [self readMovie:self.url atTime:0];
+        self.isReadingVideo = YES;
     }
     return self;
 }
 
--(VSImage *) getFrameForTimestamp:(double)aTimestamp isPlaying:(BOOL)playing{
+-(VSImage *) getFrameForTimestamp:(double)aTimestamp isPlaying:(BOOL)playing{    
+
     //TODO this is sparta - no its slow!
     aTimestamp /= 1000.0;
     
-     if (self.url == nil) {
-         self.url = [[NSURL alloc] initFileURLWithPath:self.timelineObject.sourceObject.projectItem.filePath]; 
-     }
-
-    switch (playing) {
-        case 0:
-            [self getPreviewImageAtTime:aTimestamp];
-            self.isReadingVideo = NO;
-            [self.movieReader cancelReading];
-            break;
-        case 1:
-            if (self.isReadingVideo == NO) {
-                self.isReadingVideo = YES;
-                [self readMovie:self.url atTime:aTimestamp];
-            }
+    if (playing) {
+        if (self.isReadingVideo == NO) {
+            self.isReadingVideo = YES;
+            [self readMovie:self.url atTime:aTimestamp];
+        }
+        
+        if (self.currentFrame < [self framesFromSeconds:aTimestamp]) {
             [self readNextMovieFrame];
-            break;
-        default:
-            NSLog(@"There went something terribly wrong!");
-            break;
-    }   
-        
-    NSLog(@"timescale: %d", self.movieReader.asset.duration.timescale);
-    NSLog(@"value: %lld", self.movieReader.asset.duration.value);
-        
+            self.currentFrame++;
+            self.vsImage.needsUpdate = YES;
+        }
+    }
+    else {
+        [self getPreviewImageAtTime:aTimestamp];
+        self.isReadingVideo = NO;
+        [self.movieReader cancelReading];
+        self.vsImage.needsUpdate = YES;
+    }
     return self.vsImage;
 }
 
 - (void)getPreviewImageAtTime:(double) timeStamp{         
-    AVAsset *asset = [[AVURLAsset alloc] initWithURL:self.url options:nil];;
-    AVAssetImageGenerator *imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-    imageGenerator.appliesPreferredTrackTransform = YES;
-    
-    CMTime timePoint = CMTimeMakeWithSeconds(timeStamp, 600);  
+    CMTime timePoint = CMTimeMakeWithSeconds(timeStamp, self.asset.duration.timescale);  
     
     CMTime actualTime;
     NSError *error = nil;
     
-    CGImageRef image = [imageGenerator copyCGImageAtTime:timePoint actualTime:&actualTime error:&error];
+    CGImageRef image = [self.imageGenerator copyCGImageAtTime:timePoint actualTime:&actualTime error:&error];
     
     if (image != NULL) {
         //NSString *actualTimeString = (__bridge NSString *)CMTimeCopyDescription(NULL, actualTime);
         //NSString *requestedTimeString = (__bridge NSString *)CMTimeCopyDescription(NULL, timePoint);
-        // NSLog(@"got image: Asked for %@, got %@", requestedTimeString, actualTimeString);
-        
-        if (self.vsImage == nil) {
-            self.vsImage = [[VSImage alloc] init];
-            self.vsImage.size = NSMakeSize(CGImageGetWidth (image), CGImageGetHeight(image));
-            self.imageData = malloc(self.vsImage.size.width * self.vsImage.size.height * 4);
-        }
-        
+        //NSLog(@"got image: Asked for %@, got %@", requestedTimeString, actualTimeString);
+                
         CGRect rect = CGRectMake(0.0f, 0.0f, self.vsImage.size.width, self.vsImage.size.height);        
         CGColorSpaceRef colourSpace = CGColorSpaceCreateDeviceRGB();
         CGContextRef ctx = CGBitmapContextCreate(self.imageData, self.vsImage.size.width, self.vsImage.size.height, 8, self.vsImage.size.width * 4, colourSpace, kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst);
@@ -119,15 +117,13 @@
 
 - (void) readMovie:(NSURL *)url atTime:(double) time{    
     self.startTime = [NSDate date];
-    
-    AVURLAsset * asset = [AVURLAsset URLAssetWithURL:url options:nil];
-    
-    [asset loadValuesAsynchronouslyForKeys:[NSArray arrayWithObject:@"tracks"] completionHandler:
+        
+    [self.asset loadValuesAsynchronouslyForKeys:[NSArray arrayWithObject:@"tracks"] completionHandler:
      ^{
          dispatch_async(dispatch_get_main_queue(),
                         ^{
                             AVAssetTrack* videoTrack = nil;
-                            NSArray* tracks = [asset tracksWithMediaType:AVMediaTypeVideo];
+                            NSArray* tracks = [self.asset tracksWithMediaType:AVMediaTypeVideo];
                             if ([tracks count] == 1)
                             {
                                 videoTrack = [tracks objectAtIndex:0];
@@ -136,7 +132,7 @@
                                 
                                 NSError * error = nil;
                                 
-                                self.movieReader = [[AVAssetReader alloc] initWithAsset:asset error:&error];
+                                self.movieReader = [[AVAssetReader alloc] initWithAsset:self.asset error:&error];
                                 if (error)
                                     NSLog(@"%@", error.localizedDescription);       
                                 
@@ -151,9 +147,19 @@
                                 
                                 [self.movieReader addOutput:output];
                                 
-                                CMTimeRange timeRange = CMTimeRangeMake(CMTimeMakeWithSeconds(time,600), kCMTimePositiveInfinity);
+                                
+                                CMTime cmtime = CMTimeMakeWithSeconds(time,self.asset.duration.timescale);
+                                
+                                CMTimeRange timeRange = CMTimeRangeMake(cmtime, kCMTimePositiveInfinity);
                                 [self.movieReader setTimeRange:timeRange];
-                                                                
+                                
+                                NSLog(@"timeRange: %@", (__bridge NSString *)CMTimeCopyDescription(NULL, cmtime));
+                                NSLog(@"insgesammt frames: %lld", self.movieReader.asset.duration.value);
+                                NSLog(@"framerate: %f", videoTrack.nominalFrameRate);
+                                
+                                self.frameRate = videoTrack.nominalFrameRate;
+                                self.currentFrame = [self framesFromSeconds:time];
+
                                 if ([self.movieReader startReading]){
                                     //NSLog(@"Video Reading ready");
                                 }
@@ -169,6 +175,8 @@
     NSString* info = [NSString stringWithFormat:@"%@", message];
     NSLog(@"%@",info);
 }
+
+
 
 - (void) readNextMovieFrame{        
     if (self.movieReader.status == AVAssetReaderStatusReading){        
@@ -206,6 +214,23 @@
     else{
         //NSLog(@"Video status is now %ld", self.movieReader.status);
     }
+}
+- (double)framesFromSeconds:(double)seconds{
+    int intSeconds;
+    double frames;
+//    seconds = (int)(miliSeconds / 1000.0);
+//    frames = seconds * self.frameRate;
+//    double remain = miliSeconds - (seconds*1000);
+//    frames += (self.frameRate/1000.0)*remain;
+    intSeconds = (int)seconds;
+    frames = intSeconds * self.frameRate;
+ //   NSLog(@"framesfirst: %f", frames);
+
+    double remain = seconds - intSeconds;
+  //  NSLog(@"remain: %f", remain);
+
+    frames += self.frameRate*remain;
+    return frames;
 }
 
 @end
