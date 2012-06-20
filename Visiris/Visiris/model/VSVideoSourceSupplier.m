@@ -20,7 +20,8 @@
 @property (strong) NSURL            *url;
 @property (strong) NSDate           *startTime;
 @property (assign) BOOL             isReadingVideo;
-//@property (strong) AVPlayer         *player;
+//@property (assign) float            framesPerSecond;
+@property (assign) char*            imageData;
 
 - (void) readMovie:(NSURL *)url atTime:(double) time;
 - (void) readNextMovieFrame;
@@ -34,17 +35,27 @@
 @synthesize movieReader     = _movieReader;
 @synthesize url             = _url;
 @synthesize startTime       = _startTime;
-//@synthesize player          = _player;
 @synthesize vsImage         = _vsImage;
 @synthesize isReadingVideo  = _isReadingVideo;
+@synthesize imageData       = _imageData;
+//@synthesize framesPerSecond = _framesPerSecond;
+
+- (id)init{
+    if (self = [super init]) {
+        //self.url = [[NSURL alloc] initFileURLWithPath:self.timelineObject.sourceObject.projectItem.filePath]; 
+
+    }
+    return self;
+}
 
 -(VSImage *) getFrameForTimestamp:(double)aTimestamp isPlaying:(BOOL)playing{
+    //TODO this is sparta - no its slow!
     aTimestamp /= 1000.0;
     
      if (self.url == nil) {
          self.url = [[NSURL alloc] initFileURLWithPath:self.timelineObject.sourceObject.projectItem.filePath]; 
      }
-    
+
     switch (playing) {
         case 0:
             [self getPreviewImageAtTime:aTimestamp];
@@ -62,7 +73,10 @@
             NSLog(@"There went something terribly wrong!");
             break;
     }   
-    
+        
+    NSLog(@"timescale: %d", self.movieReader.asset.duration.timescale);
+    NSLog(@"value: %lld", self.movieReader.asset.duration.value);
+        
     return self.vsImage;
 }
 
@@ -85,16 +99,13 @@
         
         if (self.vsImage == nil) {
             self.vsImage = [[VSImage alloc] init];
+            self.vsImage.size = NSMakeSize(CGImageGetWidth (image), CGImageGetHeight(image));
+            self.imageData = malloc(self.vsImage.size.width * self.vsImage.size.height * 4);
         }
         
-        // Do something interesting with the image.
-        size_t width  = CGImageGetWidth (image);
-        size_t height = CGImageGetHeight(image);
-        CGRect rect = CGRectMake(0.0f, 0.0f, width, height);
-        
-        void *imageData = malloc(width * height * 4);
+        CGRect rect = CGRectMake(0.0f, 0.0f, self.vsImage.size.width, self.vsImage.size.height);        
         CGColorSpaceRef colourSpace = CGColorSpaceCreateDeviceRGB();
-        CGContextRef ctx = CGBitmapContextCreate(imageData, width, height, 8, width * 4, colourSpace, kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst);
+        CGContextRef ctx = CGBitmapContextCreate(self.imageData, self.vsImage.size.width, self.vsImage.size.height, 8, self.vsImage.size.width * 4, colourSpace, kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst);
         CFRelease(colourSpace);
         //CGContextTranslateCTM(ctx, 0, height);
         //CGContextScaleCTM(ctx, 1.0f, -1.0f);
@@ -102,9 +113,7 @@
         CGContextDrawImage(ctx, rect, image);
         CGContextRelease(ctx);
         CFRelease(image);
-        
-        self.vsImage.data = (char *)imageData;
-        self.vsImage.size = NSMakeSize(width, height);
+        self.vsImage.data = self.imageData;
     }
 }
 
@@ -144,7 +153,7 @@
                                 
                                 CMTimeRange timeRange = CMTimeRangeMake(CMTimeMakeWithSeconds(time,600), kCMTimePositiveInfinity);
                                 [self.movieReader setTimeRange:timeRange];
-                                
+                                                                
                                 if ([self.movieReader startReading]){
                                     //NSLog(@"Video Reading ready");
                                 }
