@@ -153,9 +153,9 @@
                                 CMTimeRange timeRange = CMTimeRangeMake(cmtime, kCMTimePositiveInfinity);
                                 [self.movieReader setTimeRange:timeRange];
                                 
-                                NSLog(@"timeRange: %@", (__bridge NSString *)CMTimeCopyDescription(NULL, cmtime));
-                                NSLog(@"insgesammt frames: %lld", self.movieReader.asset.duration.value);
-                                NSLog(@"framerate: %f", videoTrack.nominalFrameRate);
+//                                NSLog(@"timeRange: %@", (__bridge NSString *)CMTimeCopyDescription(NULL, cmtime));
+//                                NSLog(@"insgesammt frames: %lld", self.movieReader.asset.duration.value);
+//                                NSLog(@"framerate: %f", videoTrack.nominalFrameRate);
                                 
                                 self.frameRate = videoTrack.nominalFrameRate;
                                 self.currentFrame = [self framesFromSeconds:time];
@@ -218,17 +218,9 @@
 - (double)framesFromSeconds:(double)seconds{
     int intSeconds;
     double frames;
-//    seconds = (int)(miliSeconds / 1000.0);
-//    frames = seconds * self.frameRate;
-//    double remain = miliSeconds - (seconds*1000);
-//    frames += (self.frameRate/1000.0)*remain;
     intSeconds = (int)seconds;
     frames = intSeconds * self.frameRate;
- //   NSLog(@"framesfirst: %f", frames);
-
     double remain = seconds - intSeconds;
-  //  NSLog(@"remain: %f", remain);
-
     frames += self.frameRate*remain;
     return frames;
 }
