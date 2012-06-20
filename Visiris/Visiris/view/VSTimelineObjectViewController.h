@@ -129,6 +129,8 @@
 
 @property BOOL moving;
 
+@property BOOL splitted;
+
 -(id) initWithDefaultNib;
 
 

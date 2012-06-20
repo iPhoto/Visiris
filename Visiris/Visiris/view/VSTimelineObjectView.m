@@ -48,6 +48,7 @@ static int resizingAreaWidth = 10;
 @synthesize temporary               = _temporary;
 @synthesize intersectionRect        = _intersectionRect;
 @synthesize intersected             = _intersected;
+@synthesize splitted                = _splitted;
 @synthesize lastMousePosition       = _lastMousePosition;
 @synthesize mouseDownMousePosition  = _mouseDownMousePosition;
 @synthesize mouseDownXOffset        = _mouseDownXOffset;
@@ -111,8 +112,14 @@ static int resizingAreaWidth = 10;
 - (void)drawRect:(NSRect)dirtyRect{
     
     if(self.intersected){
-        [[NSColor greenColor] set];
-        NSRectFill(self.intersectionRect);
+        if(self.splitted){
+            [[NSColor greenColor] set];
+            NSRectFill(self.intersectionRect);  
+        }
+        else {
+            [[NSColor greenColor] set];
+            NSRectFill(self.intersectionRect);  
+        }
         self.layer.opacity = 0.7;
     }
     

@@ -96,6 +96,8 @@
  */
 -(void) applyIntersectionToTimelineObjects;
 
+
+-(BOOL) splitTimelineObject:(VSTimelineObjectViewController*) timelineObjectViewController ofTrack:(VSTrackViewController*) trackViewController byRect:(NSRect) splittingRect;
 @end
 
 

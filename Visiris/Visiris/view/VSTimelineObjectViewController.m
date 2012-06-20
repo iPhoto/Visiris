@@ -21,6 +21,7 @@
 @synthesize pixelTimeRatio          = _pixelTimeRatio;
 @synthesize delegate                = _delegate;
 @synthesize intersected             = _intersected;
+@synthesize splitted                = _splitted;
 @synthesize intersectionRect        = _intersectionRect;
 @synthesize timelineObjectProxy     = _timelineObjectProxy;
 @synthesize enteredLeft             = _enteredLeft;
@@ -253,6 +254,26 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 
 -(BOOL) intersected{
     return _intersected;
+}
+
+-(void) setSplitted:(BOOL)splitted{
+    if([self.view isKindOfClass:[VSTimelineObjectView class]]){
+        
+        ((VSTimelineObjectView*) self.view).splitted = splitted;
+        
+        if (!_splitted && splitted && !NSIsEmptyRect(self.intersectionRect)) {
+            
+            [self.view setNeedsDisplay:YES];
+        }else if(!splitted && _splitted){
+            [self.view setNeedsDisplay:YES];
+        }
+    }
+    
+    _splitted = splitted;
+}
+
+-(BOOL) splitted{
+    return _splitted;
 }
 
 -(BOOL) temporary{

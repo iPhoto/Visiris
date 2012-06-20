@@ -397,7 +397,7 @@ static NSString* defaultNib = @"VSTrackView";
     
     float deltaXPosition = newPosition.x - oldPosition.x;
     float snappingDeltaX = [self computeSnappingXValueForSelectedTimelineObjectsMovedAccordingToDeltaX:deltaXPosition];
-
+    
     
     if([self delegateRespondsToSelector:@selector(timelineObject:WillBeDraggedOnTrack:fromPosition:toPosition: withSnappingDeltaX:)]){
         newPosition = [self.delegate timelineObject:timelineObjectViewController WillBeDraggedOnTrack:self fromPosition:oldPosition toPosition:newPosition withSnappingDeltaX:snappingDeltaX];
@@ -502,9 +502,9 @@ static NSString* defaultNib = @"VSTrackView";
         NSArray *selectedTimelineObjects = [self selectedTimelineObjectViewControllers];
         
         for(VSTimelineObjectViewController *timelineObjectViewController in selectedTimelineObjects){
-                NSPoint newPosition = timelineObjectViewController.view.frame.origin;
-                newPosition.x += deltaX;
-                [timelineObjectViewController.view setFrameOrigin:newPosition];
+            NSPoint newPosition = timelineObjectViewController.view.frame.origin;
+            newPosition.x += deltaX;
+            [timelineObjectViewController.view setFrameOrigin:newPosition];
         }
         
     }
@@ -520,23 +520,6 @@ static NSString* defaultNib = @"VSTrackView";
     float snappingDeltaX = 0;
     
     if(timelineObjectViewControllersToMove.count ==0){
-        return snappingDeltaX;
-    }
-    
-    
-    
-    NSIndexSet *indexesOfOtherTimelineObjects = [self.timelineObjectViewControllers indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-        if([obj isKindOfClass:[VSTimelineObjectViewController class]]){
-            if (![timelineObjectViewControllersToMove containsObject:obj]) {
-                return YES;
-            }
-        }
-        return NO;
-    }];
-    
-    NSArray *staticObjects = [self.timelineObjectViewControllers objectsAtIndexes:indexesOfOtherTimelineObjects];
-    
-    if(!staticObjects || staticObjects.count == 0){
         return snappingDeltaX;
     }
     
@@ -563,6 +546,28 @@ static NSString* defaultNib = @"VSTrackView";
             i++;
         }
     }
+    
+    //snap to the zero Point of the timeline
+    
+    if(unionRect.origin.x < 0)
+        return unionRect.origin.x * (-1);
+    
+    NSIndexSet *indexesOfOtherTimelineObjects = [self.timelineObjectViewControllers indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj isKindOfClass:[VSTimelineObjectViewController class]]){
+            if (![timelineObjectViewControllersToMove containsObject:obj]) {
+                return YES;
+            }
+        }
+        return NO;
+    }];
+    
+    NSArray *staticObjects = [self.timelineObjectViewControllers objectsAtIndexes:indexesOfOtherTimelineObjects];
+    
+    if(!staticObjects || staticObjects.count == 0){
+        return snappingDeltaX;
+    }
+    
+    
     
     
     NSRect leftSnappingSourceRect = NSMakeRect(unionRect.origin.x - SNAPPING_OVERHEAD / 2.0, unionRect.origin.y,SNAPPING_OVERHEAD, unionRect.size.height);
@@ -596,40 +601,47 @@ static NSString* defaultNib = @"VSTrackView";
 
 
 -(void) applyIntersectionToTimelineObjects{
-    
-    NSArray *interesectedTimelineObjectViewControllers= [self intersectedTimelineObjectViewController];
-    
-    for (VSTimelineObjectViewController *timelineObjectViewController in interesectedTimelineObjectViewControllers){
+    for (VSTimelineObjectViewController *timelineObjectViewController in [self intersectedTimelineObjectViewController]){
         
-        //if the intersectionRect is wider as timelineObjectViewController.view.frame, the object is removed
-        if(timelineObjectViewController.view.frame.size.width <= timelineObjectViewController.intersectionRect.size.width && timelineObjectViewController.view.frame.origin.x >= timelineObjectViewController.intersectionRect.origin.x){
-            if([timelineObjectViewController.timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
-                [self.track removTimelineObject:(VSTimelineObject *) timelineObjectViewController.timelineObjectProxy andRegisterAtUndoManager:self.view.undoManager];
-            }
-        }
-        else {
+        if(!timelineObjectViewController.splitted){
             
-            //divides timelineObjectViewController.view.frame according to its intersectionRect
-            NSRect slice;
-            NSRect rem;
-            NSDivideRect(timelineObjectViewController.view.frame, &slice, &rem, timelineObjectViewController.intersectionRect.size.width, NSMinXEdge);
-            
-            
-            //depending of the intersection entered left or right, the object is cut differntly
-            if(!timelineObjectViewController.enteredLeft){
-                NSInteger newXPos = rem.origin.x - self.view.frame.origin.x;
-                double newStartTime = newXPos * self.pixelTimeRatio;
-                
-                [timelineObjectViewController.timelineObjectProxy changeStartTime:newStartTime andRegisterAtUndoManager:self.view.undoManager];
-                [timelineObjectViewController.timelineObjectProxy changeDuration:rem.size.width*self.pixelTimeRatio andRegisterAtUndoManager:self.view.undoManager];
+            //if the intersectionRect is wider as timelineObjectViewController.view.frame, the object is removed
+            if(timelineObjectViewController.view.frame.size.width <= timelineObjectViewController.intersectionRect.size.width && timelineObjectViewController.view.frame.origin.x >= timelineObjectViewController.intersectionRect.origin.x){
+                if([timelineObjectViewController.timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
+                    [self.track removTimelineObject:(VSTimelineObject *) timelineObjectViewController.timelineObjectProxy andRegisterAtUndoManager:self.view.undoManager];
+                }
             }
             else {
-                double newDuration = rem.size.width*self.pixelTimeRatio;
-                [timelineObjectViewController.timelineObjectProxy changeDuration:newDuration andRegisterAtUndoManager:self.view.undoManager];
+                
+                //divides timelineObjectViewController.view.frame according to its intersectionRect
+                NSRect slice;
+                NSRect rem;
+                NSDivideRect(timelineObjectViewController.view.frame, &slice, &rem, timelineObjectViewController.intersectionRect.size.width, NSMinXEdge);
+                
+                
+                //depending of the intersection entered left or right, the object is cut differntly
+                if(!timelineObjectViewController.enteredLeft){
+                    NSInteger newXPos = rem.origin.x - self.view.frame.origin.x;
+                    double newStartTime = newXPos * self.pixelTimeRatio;
+                    
+                    [timelineObjectViewController.timelineObjectProxy changeStartTime:newStartTime andRegisterAtUndoManager:self.view.undoManager];
+                    [timelineObjectViewController.timelineObjectProxy changeDuration:rem.size.width*self.pixelTimeRatio andRegisterAtUndoManager:self.view.undoManager];
+                }
+                else {
+                    double newDuration = rem.size.width*self.pixelTimeRatio;
+                    [timelineObjectViewController.timelineObjectProxy changeDuration:newDuration andRegisterAtUndoManager:self.view.undoManager];
+                }
+                
             }
-            
         }
-        timelineObjectViewController.intersected = false;
+        else { 
+            if([self delegateRespondsToSelector:@selector(splitTimelineObject:ofTrack:byRect:)]){
+                [self.delegate splitTimelineObject:timelineObjectViewController ofTrack:self byRect:timelineObjectViewController.intersectionRect];
+            }  
+        }
+        
+        timelineObjectViewController.intersected = NO;
+        timelineObjectViewController.splitted = NO;
     }
 }
 
@@ -669,58 +681,132 @@ static NSString* defaultNib = @"VSTrackView";
 -(void) setTimelineObjectViewsIntersectedByTimelineObjectViews:(NSArray *) timelineObjectViewControllers{
     
     for(VSTimelineObjectViewController *timelineObjectViewController in self.timelineObjectViewControllers){
+        [self setIntersectionAndSplittingForTimelineObjectViewController:timelineObjectViewController intersetctedBy:timelineObjectViewControllers];
+    }
+}
+
+-(void) setIntersectionAndSplittingForTimelineObjectViewController:(VSTimelineObjectViewController*) timelineObjectViewController intersetctedBy:(NSArray *) timelineObjectViewControllers{
+    if(![timelineObjectViewControllers containsObject:timelineObjectViewController]){
         
-        //intersections are detected only when the timelineObjectViewController is not in the given array of VSTimelineObjectViewController
-        if(![timelineObjectViewControllers containsObject:timelineObjectViewController]){
+        //Checks for every view in the given NSArray if an intersection can be found
+        for(VSTimelineObjectViewController *draggedTimelineObjectViewController in timelineObjectViewControllers){
             
-            //Checks for every view in the given NSArray if an intersection can be found
-            for(VSTimelineObjectViewController *draggedTimelineObjectViewController in timelineObjectViewControllers){
+            NSRect intersectionRect =  NSIntersectionRect(draggedTimelineObjectViewController.view.frame, timelineObjectViewController.view.frame);
+            
+            if(!NSIsEmptyRect(intersectionRect)){
                 
-                NSRect intersectionRect =  NSIntersectionRect(draggedTimelineObjectViewController.view.frame, timelineObjectViewController.view.frame);
+                intersectionRect.origin.x -= timelineObjectViewController.view.frame.origin.x;
                 
-                if(!NSIsEmptyRect(intersectionRect)){
-                    
-                    intersectionRect.origin.x -= timelineObjectViewController.view.frame.origin.x;
-                    
-                    //When an intersection was newly found, it's set if the view intersects from left or from right
-                    if(!timelineObjectViewController.intersected){
-                        timelineObjectViewController.enteredLeft = intersectionRect.origin.x == 0 ? NO : YES;
-                    }
-                    else {
-                        
-                        //if the draggedView is over the middle of the timelineObjectViewController's view the intersection direction is changed
-                        if(!timelineObjectViewController.enteredLeft){
-                            if(NSMidX([timelineObjectViewController view].frame) < draggedTimelineObjectViewController.view.frame.origin.x){ 
-                                timelineObjectViewController.enteredLeft = YES;
-                                DDLogInfo(@"changed from right to left");
-                            }
-                            
-                        }
-                        else {
-                            if(NSMidX([timelineObjectViewController view].frame)  > NSMaxX(draggedTimelineObjectViewController.view.frame)){
-                                timelineObjectViewController.enteredLeft = NO;
-                                DDLogInfo(@"changed from left to right");
-                            }
-                        }
-                    }
-                    
-                    if(timelineObjectViewController.enteredLeft){
-                        intersectionRect.size.width = timelineObjectViewController.view.frame.size.width - intersectionRect.origin.x;
-                        
-                    }
-                    else {
-                        NSInteger relativeDraggedFrameX = draggedTimelineObjectViewController.view.frame.origin.x -timelineObjectViewController.view.frame.origin.x;
-                        intersectionRect.size.width = draggedTimelineObjectViewController.view.frame.size.width + relativeDraggedFrameX;
-                        intersectionRect.origin.x = 0;
-                    }
-                    
-                    
-                    timelineObjectViewController.intersected = YES;
-                    timelineObjectViewController.intersectionRect = intersectionRect;
+                //When an intersection was newly found, it's set if the view intersects from left or from right
+                if(!timelineObjectViewController.intersected){
+                    timelineObjectViewController.enteredLeft = intersectionRect.origin.x == 0 ? NO : YES;
                 }
                 else {
-                    timelineObjectViewController.intersected = NO;
+                    if(intersectionRect.size.width < draggedTimelineObjectViewController.view.frame.size.width){
+                        timelineObjectViewController.splitted = NO;
+                        [self setIntersectionRect:intersectionRect forTimelineObjectViewController:timelineObjectViewController intersectedBy:draggedTimelineObjectViewController];
+                        
+                    }
+                    else{
+                        [self setSplittingRect:intersectionRect forTimelineObjectViewController:timelineObjectViewController splittedBy:draggedTimelineObjectViewController];
+                    }
                 }
+                timelineObjectViewController.intersected = YES;
+            }
+            else {
+                timelineObjectViewController.intersected =NO;
+                timelineObjectViewController.splitted = NO;
+            }
+        }
+    }
+}
+
+-(void) setSplittingRect:(NSRect) splittingRect forTimelineObjectViewController:(VSTimelineObjectViewController*) timelineObjectViewController splittedBy:(VSTimelineObjectViewController*) splittingTimelineObjectViewController{
+    timelineObjectViewController.splitted = YES;
+    timelineObjectViewController.intersectionRect = splittingRect;
+}
+
+-(void) setIntersectionRect:(NSRect) intersectionRect forTimelineObjectViewController:(VSTimelineObjectViewController*) timelineObjectViewController intersectedBy:(VSTimelineObjectViewController*) intersectingTimelineObjectViewController {
+    
+    //if the draggedView is over the middle of the timelineObjectViewController's view the intersection direction is changed
+    if(!timelineObjectViewController.enteredLeft){
+        if(NSMidX([timelineObjectViewController view].frame) < intersectingTimelineObjectViewController.view.frame.origin.x){ 
+            timelineObjectViewController.enteredLeft = YES;
+        }
+        
+    }
+    else {
+        if(NSMidX([timelineObjectViewController view].frame)  > NSMaxX(intersectingTimelineObjectViewController.view.frame)){
+            timelineObjectViewController.enteredLeft = NO;
+        }
+    }
+    
+    
+    
+    if(timelineObjectViewController.enteredLeft){
+        intersectionRect.size.width = timelineObjectViewController.view.frame.size.width - intersectionRect.origin.x;
+        
+    }
+    else {
+        NSInteger relativeDraggedFrameX = intersectingTimelineObjectViewController.view.frame.origin.x -timelineObjectViewController.view.frame.origin.x;
+        intersectionRect.size.width = intersectingTimelineObjectViewController.view.frame.size.width + relativeDraggedFrameX;
+        intersectionRect.origin.x = 0;
+    }
+    
+    timelineObjectViewController.intersectionRect = intersectionRect;
+}
+
+-(void) setIntersectionLeftAndRightForTimelineObjectViewController:(VSTimelineObjectViewController*) timelineObjectViewController intersetctedBy:(NSArray *) timelineObjectViewControllers{
+    //intersections are detected only when the timelineObjectViewController is not in the given array of VSTimelineObjectViewController
+    if(![timelineObjectViewControllers containsObject:timelineObjectViewController]){
+        
+        //Checks for every view in the given NSArray if an intersection can be found
+        for(VSTimelineObjectViewController *draggedTimelineObjectViewController in timelineObjectViewControllers){
+            
+            NSRect intersectionRect =  NSIntersectionRect(draggedTimelineObjectViewController.view.frame, timelineObjectViewController.view.frame);
+            
+            if(!NSIsEmptyRect(intersectionRect)){
+                
+                intersectionRect.origin.x -= timelineObjectViewController.view.frame.origin.x;
+                
+                //When an intersection was newly found, it's set if the view intersects from left or from right
+                if(!timelineObjectViewController.intersected){
+                    timelineObjectViewController.enteredLeft = intersectionRect.origin.x == 0 ? NO : YES;
+                }
+                else {
+                    
+                    //if the draggedView is over the middle of the timelineObjectViewController's view the intersection direction is changed
+                    if(!timelineObjectViewController.enteredLeft){
+                        if(NSMidX([timelineObjectViewController view].frame) < draggedTimelineObjectViewController.view.frame.origin.x){ 
+                            timelineObjectViewController.enteredLeft = YES;
+                            DDLogInfo(@"changed from right to left");
+                        }
+                        
+                    }
+                    else {
+                        if(NSMidX([timelineObjectViewController view].frame)  > NSMaxX(draggedTimelineObjectViewController.view.frame)){
+                            timelineObjectViewController.enteredLeft = NO;
+                            DDLogInfo(@"changed from left to right");
+                        }
+                    }
+                }
+                
+                if(timelineObjectViewController.enteredLeft){
+                    intersectionRect.size.width = timelineObjectViewController.view.frame.size.width - intersectionRect.origin.x;
+                    
+                }
+                else {
+                    NSInteger relativeDraggedFrameX = draggedTimelineObjectViewController.view.frame.origin.x -timelineObjectViewController.view.frame.origin.x;
+                    intersectionRect.size.width = draggedTimelineObjectViewController.view.frame.size.width + relativeDraggedFrameX;
+                    intersectionRect.origin.x = 0;
+                }
+                
+                
+                timelineObjectViewController.intersected = YES;
+                timelineObjectViewController.intersectionRect = intersectionRect;
+            }
+            else {
+                timelineObjectViewController.intersected = NO;
             }
         }
     }
@@ -855,7 +941,6 @@ static NSString* defaultNib = @"VSTrackView";
  * Creates a new VSTimelineObjectView sets it as subView of VSTrackViewerController's view and initis it with the given VSTimelineObject
  * @param aTimelineObject VSTimlineObject the newly added VSTimelineObjectView will represent.
  */
-
 -(void) addNewTimelineObject:(VSTimelineObject*) aTimelineObject{
     VSTimelineObjectViewController* newController = [[VSTimelineObjectViewController alloc] initWithDefaultNib];
     

@@ -371,6 +371,36 @@ static NSString* defaultNib = @"VSTimelineView";
     
 }
 
+-(BOOL) splitTimelineObject:(VSTimelineObjectViewController *) timelineObjectViewController ofTrack:(VSTrackViewController *)trackViewController byRect:(NSRect)splittingRect{
+    
+    NSRect viewsFrame = timelineObjectViewController.view.frame;
+    
+    NSRect leftRect = NSMakeRect(viewsFrame.origin.x, viewsFrame.origin.y, splittingRect.origin.x, viewsFrame.origin.y);
+    NSRect rightRect = NSMakeRect(viewsFrame.origin.x+ NSMaxX(splittingRect), viewsFrame.origin.y, viewsFrame.size.width - NSMaxX(splittingRect), viewsFrame.origin.y);
+    
+    double leftStartTime = [self getTimestampForPoint:leftRect.origin];
+    double leftDuration = [self getDurationForPixelWidth:leftRect.size.width];
+    
+    double rightStartTime = [self getTimestampForPoint:rightRect.origin];
+    double rightDuration = [self getDurationForPixelWidth:rightRect.size.width];
+    
+    VSTimelineObject *leftObjet = [self.timeline copyTimelineObject:(VSTimelineObject*) timelineObjectViewController.timelineObjectProxy toTrack:trackViewController.track atPosition:leftStartTime withDuration:leftDuration andRegisterUndoOperation:self.trackLabelsViewController.view.undoManager];
+    
+    if(!leftObjet)
+        return NO;
+    
+    VSTimelineObject *rightObject = [self.timeline copyTimelineObject:(VSTimelineObject*) timelineObjectViewController.timelineObjectProxy toTrack:trackViewController.track atPosition:rightStartTime withDuration:rightDuration andRegisterUndoOperation:self.trackLabelsViewController.view.undoManager];
+    
+    if(!rightObject){
+        [self.timeline removeTimelineObject:leftObjet fromTrack:trackViewController.track];
+        return NO;
+    }
+    
+    [self removeTimlineObject:((VSTimelineObject*) timelineObjectViewController.timelineObjectProxy) fromTrack:trackViewController.track];
+    
+    return YES;
+}
+
 #pragma mark- VSTimelineViewDelegate implementation
 
 -(void) viewDidResizeFromFrame:(NSRect)oldFrame toFrame:(NSRect)newFrame{
@@ -585,6 +615,13 @@ static NSString* defaultNib = @"VSTimelineView";
     [self.timeline removeSelectedTimelineObjectsAndRegisterAtUndoManager:self.view.undoManager];
     [self.view.undoManager setActionName:NSLocalizedString(@"Remove Objects", @"Undo Action for removing TimelineObjects from the timeline")];
     [self.view.undoManager endUndoGrouping];
+}
+
+-(void) removeTimlineObject:(VSTimelineObject*) timelineObject fromTrack:(VSTrack*) track{
+    [self.view.undoManager beginUndoGrouping];
+    [self.timeline removeTimelineObject:timelineObject fromTrack:track];
+    [self.view.undoManager setActionName:NSLocalizedString(@"Remove Objects", @"Undo Action for removing TimelineObjects from the timeline")];
+    [self.view.undoManager endUndoGrouping]; 
 }
 
 #pragma mark - Playhead
