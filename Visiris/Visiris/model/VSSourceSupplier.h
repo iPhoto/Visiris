@@ -16,7 +16,14 @@
 @interface VSSourceSupplier : NSObject
 
 /** VSTimelineObject the Supplier is responsible for */
-@property (weak) VSTimelineObject *timelineObject;
+@property (weak, readonly) VSTimelineObject *timelineObject;
+
+/**
+ * Inits the VSSourceSupplier and sets the timelineObject-Property it is connected to
+ * @param aTimelineObject VSTimelineObject the VSSourceSupplier is connected to
+ * @return self;
+ */
+-(id) initWithTimelineObject:(VSTimelineObject*) aTimelineObject;
 
 /**
  * The supplier creates an NSDictionary containing the values of its VSTimelineObject's parameters at the given timestamp.

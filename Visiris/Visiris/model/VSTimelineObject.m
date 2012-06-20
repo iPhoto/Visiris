@@ -105,7 +105,12 @@
 
 - (double)convertGlobalTimestampToLocalTimestamp:(double)aGlobalTimestamp
 {
-    return aGlobalTimestamp - self.startTime;
+    double localTimestamp = aGlobalTimestamp - self.startTime;
+        
+    localTimestamp = localTimestamp <= self.sourceObject.projectItem.duration ? localTimestamp :  fmod(localTimestamp, self.sourceObject.projectItem.duration);
+    
+    return localTimestamp;
+    
 }
 
 @end

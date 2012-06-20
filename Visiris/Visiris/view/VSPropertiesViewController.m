@@ -55,6 +55,15 @@ static NSString* defaultNib = @"VSPropertiesView";
 #pragma mark - NSViewController
 
 -(void) awakeFromNib{
+    
+    //inits the two properties subviews
+    self.projectItemPropertiesViewController = [[VSProjectItemPropertiesViewController alloc] initWithDefaultNib];
+    self.timelineObjectPropertiesViewController = [[VSTimelineObjectPropertiesViewController alloc] initWithDefaultNib];
+    
+    [self initObservers];
+}
+
+-(void) initObservers{
     //Adding Observer for Project Items got selected
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(projectItemsRepresentationsGotSelected:) name:VSProjectItemRepresentationGotSelected object:nil];
     
@@ -66,12 +75,6 @@ static NSString* defaultNib = @"VSPropertiesView";
     
     //Adding Observer for TimelineObjects got unselected
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectsGotUnselected:) name:VSTimelineObjectsGotUnselected object:nil];
-    
-    //inits the two properties subviews
-    self.projectItemPropertiesViewController = [[VSProjectItemPropertiesViewController alloc] initWithDefaultNib];
-    self.timelineObjectPropertiesViewController = [[VSTimelineObjectPropertiesViewController alloc] initWithDefaultNib];
-    
-    
 }
 
 #pragma mark - Private Methods
@@ -144,7 +147,7 @@ static NSString* defaultNib = @"VSPropertiesView";
  */
 -(void) showSubview:(NSView*) subView{
     
-    if([self.contentView.subviews count] == 0){
+    if(!self.contentView.subviews.count){
         [self.contentView addSubview:subView];
         
     }
@@ -152,10 +155,15 @@ static NSString* defaultNib = @"VSPropertiesView";
         
         //Sends a notification if the timelineObjects Properties are hidden
         if([[self.contentView subviews] objectAtIndex:0] == self.timelineObjectPropertiesViewController.view){
-            [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectPropertiesDidTurnInactive object:self.timelineObjectPropertiesViewController.timelineObject];
+            [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectPropertiesDidTurnInactive object:[NSArray arrayWithObject:self.timelineObjectPropertiesViewController.timelineObject]];
         }
         
-        [self.contentView replaceSubview:[self.contentView.subviews objectAtIndex:0] with:subView];
+        //Neccessary to check once more if the contentView has any subviews because timelineObjectsGotUnselected got have been called meanwhile
+
+        if(!self.contentView.subviews.count)
+            [self.contentView addSubview:subView];
+        else
+            [self.contentView replaceSubview:[self.contentView.subviews objectAtIndex:0] with:subView];
     }
     
     [subView setFrame:[self.contentView frame]];

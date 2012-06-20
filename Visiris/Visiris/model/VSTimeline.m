@@ -198,6 +198,8 @@
 }
 
 -(void) unselectAllTimelineObjects{
+    if(self.tracks.count == 0)
+        return;
     for (VSTrack *track in self.tracks){
         if(track){
             [track unselectAllTimelineObjects];
