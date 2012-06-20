@@ -102,8 +102,11 @@ static NSString* defaultNib = @"VSTimelineView";
     
     [self initTracks];
     
+    [self initObservers];
     
-    
+}
+
+-(void) initObservers{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectPropertIesDidTurnInactive:) name:VSTimelineObjectPropertiesDidTurnInactive object:nil];
 }
 

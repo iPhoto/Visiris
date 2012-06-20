@@ -20,6 +20,16 @@
 
 @synthesize timelineObject = _timelineObject;
 
+#pragma mark Init
+
+-(id) initWithTimelineObject:(VSTimelineObject *)aTimelineObject{
+    if(self = [super init]){
+        _timelineObject = aTimelineObject;
+    }
+    
+    return self;
+}
+
 //TODO: returns only the defaultValueForNow
 - (NSDictionary *)getAtrributesForTimestamp:(double)aTimestamp{
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];

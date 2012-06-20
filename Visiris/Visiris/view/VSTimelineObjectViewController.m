@@ -52,9 +52,13 @@ static NSString* defaultNib = @"VSTimelinObjectView";
         ((VSTimelineObjectView*) self.view).delegate = self;
     }
     
+    [self initObservers];
+}
+
+-(void) initObservers{
     [self.timelineObjectProxy addObserver:self forKeyPath:@"selected" options:0 context:nil];
     [self.timelineObjectProxy addObserver:self forKeyPath:@"duration" options:0 context:nil];
-    [self.timelineObjectProxy addObserver:self forKeyPath:@"startTime" options:0 context:nil];
+    [self.timelineObjectProxy addObserver:self forKeyPath:@"startTime" options:0 context:nil];  
 }
 
 #pragma mark - NSViewController

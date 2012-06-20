@@ -26,10 +26,10 @@
 @property               NSString* filePath;
 
 /** Duration of the file the ProjectItem represents. For non-time-based files the duration stored in VSDefaultProjectItemDuration is used. */
-@property               float duration;
+@property               double duration;
 
 /** size of the represented file in bytes */
-@property               float fileSize;
+@property               double fileSize;
 
 /** Unique id of the item created by the controller*/
 @property               NSInteger itemID;

@@ -75,12 +75,7 @@ static VSTimelineObjectFactory* sharedInstance;
     
     VSTimelineObjectSource *objectSourceBase = [self.timelineObjectSourceClasses objectForKey:projectItem.fileType.timelineObjectSourceClassString];
     
-    Class sourceSupplierClass = [self.sourceSupplierClasses objectForKey:projectItem.fileType.supplierClassString];
     
-    if(!sourceSupplierClass)
-        return nil;
-    
-    VSSourceSupplier *sourceSupplier = [[sourceSupplierClass alloc] init];
     
     if(objectSourceBase){
         VSTimelineObjectSource *sourceObject = [objectSourceBase copy];
@@ -89,7 +84,13 @@ static VSTimelineObjectFactory* sharedInstance;
         
         VSTimelineObject *newTimelineObject = [[VSTimelineObject alloc] initWithSourceObject:sourceObject icon:icon objectID:[self assignNewTimelineObjectID]];
         
-        sourceSupplier.timelineObject = newTimelineObject;
+        
+        Class sourceSupplierClass = [self.sourceSupplierClasses objectForKey:projectItem.fileType.supplierClassString];
+        
+        if(!sourceSupplierClass)
+            return nil;
+        
+        VSSourceSupplier *sourceSupplier = [[sourceSupplierClass alloc] initWithTimelineObject:newTimelineObject];
         
         newTimelineObject.supplier = sourceSupplier;
         
