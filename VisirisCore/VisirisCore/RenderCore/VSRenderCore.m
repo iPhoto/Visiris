@@ -127,10 +127,6 @@ static struct {
     
     // Make sure we draw to the right context
 	[[self openGLContext] makeCurrentContext];
-
-
-    
-    
     
     switch (validCoreHandovers.count) {
         case 0:
@@ -247,17 +243,6 @@ static struct {
     [self.frameBufferObjectCurrent unbind];
 }
 
--(VSFrameCoreHandover *) createFrameCoreHandOverFrameQuartzComposerHandover:(VSQuartzComposerHandover *) quartzComposerHandover{
-    
-    VSFrameCoreHandover *coreHandover = nil;
-    
-    if (quartzComposerHandover) {
-        NSLog(@"Not Implemented Yet");
-    }
-    
-    return coreHandover;
-}
-
 - (NSInteger)make_resources{
     g_resources.vertex_buffer = make_buffer(GL_ARRAY_BUFFER,g_vertex_buffer_data,sizeof(g_vertex_buffer_data));
     g_resources.element_buffer = make_buffer(GL_ELEMENT_ARRAY_BUFFER,g_element_buffer_data,sizeof(g_element_buffer_data));
@@ -277,6 +262,17 @@ static struct {
         self.frameBufferObjectCurrent = self.frameBufferObjectOne;
         self.frameBufferObjectOld = self.frameBufferObjectTwo;
     }
+}
+
+-(VSFrameCoreHandover *) createFrameCoreHandOverFrameQuartzComposerHandover:(VSQuartzComposerHandover *) quartzComposerHandover{
+    
+    VSFrameCoreHandover *coreHandover = nil;
+    
+    if (quartzComposerHandover) {
+        NSLog(@"Not Implemented Yet");
+    }
+    
+    return coreHandover;
 }
 
 @end

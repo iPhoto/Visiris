@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		5B7A60FA156E2EF1000FBEC3 /* AppleDoc */ = {
+		5B7A60FA156E2EF1000FBEC3 /* VisirisCoreDocs */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 5B7A60FD156E2EF1000FBEC3 /* Build configuration list for PBXAggregateTarget "AppleDoc" */;
+			buildConfigurationList = 5B7A60FD156E2EF1000FBEC3 /* Build configuration list for PBXAggregateTarget "VisirisCoreDocs" */;
 			buildPhases = (
 				5B7A60FF156E2EF5000FBEC3 /* ShellScript */,
 			);
 			dependencies = (
 			);
-			name = AppleDoc;
+			name = VisirisCoreDocs;
 			productName = AppleDoc;
 		};
 /* End PBXAggregateTarget section */
@@ -294,7 +294,7 @@
 			projectRoot = "";
 			targets = (
 				5B19BF64155D0E4E00807769 /* VisirisCore */,
-				5B7A60FA156E2EF1000FBEC3 /* AppleDoc */,
+				5B7A60FA156E2EF1000FBEC3 /* VisirisCoreDocs */,
 			);
 		};
 /* End PBXProject section */
@@ -474,7 +474,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5B7A60FD156E2EF1000FBEC3 /* Build configuration list for PBXAggregateTarget "AppleDoc" */ = {
+		5B7A60FD156E2EF1000FBEC3 /* Build configuration list for PBXAggregateTarget "VisirisCoreDocs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5B7A60FB156E2EF1000FBEC3 /* Debug */,
