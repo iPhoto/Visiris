@@ -145,7 +145,6 @@
 		5B35C0A51577A912009911EC /* VSLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0961577A912009911EC /* VSLogFormatter.m */; };
 		5B603FA9157F824A0045A1EA /* VSPlayHead.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B603FA8157F824A0045A1EA /* VSPlayHead.m */; };
 		5B7BFFC71592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BFFC61592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m */; };
-		5BBC2F19157A26BB0093313A /* VSViewUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BBC2F18157A26BB0093313A /* VSViewUtils.m */; };
 		5BF08B92158A2E7500D64144 /* VSTimelineGuideLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF08B91158A2E7500D64144 /* VSTimelineGuideLine.m */; };
 /* End PBXBuildFile section */
 
@@ -369,8 +368,6 @@
 		5B603FA8157F824A0045A1EA /* VSPlayHead.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSPlayHead.m; sourceTree = "<group>"; };
 		5B7BFFC51592143C00CEA1E8 /* VSTimelineObjectViewIntersection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineObjectViewIntersection.h; sourceTree = "<group>"; };
 		5B7BFFC61592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineObjectViewIntersection.m; sourceTree = "<group>"; };
-		5BBC2F17157A26BB0093313A /* VSViewUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSViewUtils.h; sourceTree = "<group>"; };
-		5BBC2F18157A26BB0093313A /* VSViewUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSViewUtils.m; sourceTree = "<group>"; };
 		5BF08B90158A2E7500D64144 /* VSTimelineGuideLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineGuideLine.h; sourceTree = "<group>"; };
 		5BF08B91158A2E7500D64144 /* VSTimelineGuideLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineGuideLine.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -663,8 +660,6 @@
 				5B35C0821577A912009911EC /* VSProjectSettings.m */,
 				5B35C0831577A912009911EC /* VSSupportedFilesManager.h */,
 				5B35C0841577A912009911EC /* VSSupportedFilesManager.m */,
-				5BBC2F17157A26BB0093313A /* VSViewUtils.h */,
-				5BBC2F18157A26BB0093313A /* VSViewUtils.m */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -1209,7 +1204,6 @@
 				5B35C0A31577A912009911EC /* VSTimelineConstants.m in Sources */,
 				5B35C0A51577A912009911EC /* VSLogFormatter.m in Sources */,
 				5B2A59D31578AF4E003938AB /* VSDocumentController.m in Sources */,
-				5BBC2F19157A26BB0093313A /* VSViewUtils.m in Sources */,
 				5B603FA9157F824A0045A1EA /* VSPlayHead.m in Sources */,
 				5B0E366615876E9300F15026 /* VSTrackLabelsView.m in Sources */,
 				5B0E366915876EA900F15026 /* VSTrackLabelsViewController.m in Sources */,

@@ -63,7 +63,7 @@
     return colorSpace;
 }
 
-//Todo releas CGImageSourceRef
+//Todo release CGImageSourceRef
 +(NSDictionary*) exifDataOfFile:(NSString*) file{
     NSURL *fileUrl = [NSURL fileURLWithPath:file];
     CGImageSourceRef source = CGImageSourceCreateWithURL((__bridge CFURLRef)fileUrl, Nil);

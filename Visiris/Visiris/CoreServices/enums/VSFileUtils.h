@@ -36,7 +36,11 @@
  */
 +(NSSize) dimensionsOfFile:(NSString *)file;
 
-
+/**
+ * Reads out the color space of the given file's exif data if it's an image
+ * @param file file the colorspace will be read out.
+ * @return Color space of the given file if it is an image
+ */
 +(NSString*) colorSpaceOfFile:(NSString *)file;
 
 @end

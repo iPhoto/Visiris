@@ -80,6 +80,15 @@
 #pragma mark - Methods
 
 /**
+ * Asks its tracks for all timelineObjects which are active at the given timestamp.
+ * @param aTimestamp Timestamp, the active timelineObjects are looked up for.
+ * @return Array of the timelineObjects acitve at the given timestamp
+ */
+- (NSArray *)timelineObjectsForTimestamp:(double)aTimestamp;
+
+#pragmg mark Adding TimelineObjects
+
+/**
  * Adds a new Timeline-Object to the given track.
  *
  * A new timeline object is created by the VSTimelineObjectFactory according to the given VSProjectItem.
@@ -128,6 +137,19 @@
  */
 -(VSTimelineObject*) copyTimelineObject:(VSTimelineObject*) baseTimelineObject toTrack:(VSTrack*) track atPosition:(double) position withDuration:(double) duration;
 
+
+/**
+ * Creates a new TimelineObjectProxy.
+ *
+ * A new TimelineObjectProxy object is created according to the given VSProjectItemRepresentation object and returned
+ * @param item VSTimelineObjectRepresentation the new TimelineObject is connected with
+ * @param timePosition Start-time of the timelineObject.
+ * @return The TimelineObjectProxy if it was created succesfully, nil otherwise.
+ */
+-(VSTimelineObjectProxy*) createNewTimelineObjectProxyBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *) item positionedAtTime:(double) timePosition;
+
+#pragmg mark Removing TimelineObjects
+
 /**
  * Removes aTimelineObject from the track and returns if the removal was successful.
  * @param aTimelineObject VSTimelineObject to be removed
@@ -151,24 +173,7 @@
  */
 -(void) removeSelectedTimelineObjectsAndRegisterAtUndoManager:(NSUndoManager*) undoManager;
 
-
-
-/**
- * Creates a new TimelineObjectProxy.
- *
- * A new TimelineObjectProxy object is created according to the given VSProjectItemRepresentation object and returned
- * @param item VSTimelineObjectRepresentation the new TimelineObject is connected with
- * @param timePosition Start-time of the timelineObject.
- * @return The TimelineObjectProxy if it was created succesfully, nil otherwise.
- */
--(VSTimelineObjectProxy*) createNewTimelineObjectProxyBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *) item positionedAtTime:(double) timePosition;
-
-/**
- * Asks its tracks for all timelineObjects which are active at the given timestamp.
- * @param aTimestamp Timestamp, the active timelineObjects are looked up for.
- * @return Array of the timelineObjects acitve at the given timestamp
- */
-- (NSArray *)timelineObjectsForTimestamp:(double)aTimestamp;
+#pragma mark Selecting TimelineObejcts
 
 /**
  * Sets selected of the given VStimelinObject to YES.
