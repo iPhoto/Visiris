@@ -113,7 +113,7 @@ static VSProjectItemRepresentationController* sharedProjectItemController = nil;
 
 #pragma mark- Properties
 
-/* Stores all VSProjectItmeRepresentations the controller is responsible for */
+/** Stores all VSProjectItmeRepresentations the controller is responsible for */
 -(NSMutableArray*) projectItemRepresentations{
     return [self mutableArrayValueForKey:@"projectItemRepresentations"];
 }

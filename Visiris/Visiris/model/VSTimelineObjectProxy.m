@@ -9,11 +9,12 @@
 #import "VSTimelineObjectProxy.h"
 
 @implementation VSTimelineObjectProxy
-@synthesize startTime = _startTime;
-@synthesize duration = _duration;
-@synthesize name = _name;
-@synthesize icon = _icon;
-@synthesize selected = _selected;
+@synthesize startTime           = _startTime;
+@synthesize duration            = _duration;
+@synthesize name                = _name;
+@synthesize icon                = _icon;
+@synthesize selected            = _selected;
+@synthesize timelineObjectID    = _timelineObjectID;
 
 #pragma mark- Init
 

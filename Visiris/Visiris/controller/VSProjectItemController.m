@@ -19,7 +19,7 @@
 
 @implementation VSProjectItemController
 
-@synthesize projectItems=_projectItems;
+@synthesize projectItems    =_projectItems;
 
 
 /** Instance of the Singleton */

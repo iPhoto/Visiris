@@ -195,6 +195,7 @@
 
 #pragma mark - Private Methods
 
+ 
 -(void) boundsDidChange:(NSNotification*) notification{
     
     

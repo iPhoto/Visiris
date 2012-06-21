@@ -25,7 +25,6 @@
 @synthesize icon                = _icon;
 @synthesize supplier            = _supplier;
 @synthesize textureID           = _textureID;
-@synthesize timelineObjectID    = _timelineObjectID;
 
 
 #pragma mark - Init
@@ -106,7 +105,7 @@
 - (double)convertGlobalTimestampToLocalTimestamp:(double)aGlobalTimestamp
 {
     double localTimestamp = aGlobalTimestamp - self.startTime;
-        
+
     localTimestamp = localTimestamp <= self.sourceObject.projectItem.duration ? localTimestamp :  fmod(localTimestamp, self.sourceObject.projectItem.duration);
     
     return localTimestamp;

@@ -30,6 +30,9 @@
 /** Indicates if object is selected or not */
 @property BOOL selected;
 
+/** unique ID of the timelineObject */
+@property NSInteger timelineObjectID;
+
 #pragma mark- Init
 
 /**

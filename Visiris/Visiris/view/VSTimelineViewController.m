@@ -371,32 +371,72 @@ static NSString* defaultNib = @"VSTimelineView";
     
 }
 
--(BOOL) splitTimelineObject:(VSTimelineObjectViewController *) timelineObjectViewController ofTrack:(VSTrackViewController *)trackViewController byRect:(NSRect)splittingRect{
+-(BOOL) splitTimelineObject:(VSTimelineObjectViewController *) timelineObjectViewController ofTrack:(VSTrackViewController *)trackViewController byRects:(NSArray *)splittingRects{
     
     NSRect viewsFrame = timelineObjectViewController.view.frame;
     
-    NSRect leftRect = NSMakeRect(viewsFrame.origin.x, viewsFrame.origin.y, splittingRect.origin.x, viewsFrame.origin.y);
-    NSRect rightRect = NSMakeRect(viewsFrame.origin.x+ NSMaxX(splittingRect), viewsFrame.origin.y, viewsFrame.size.width - NSMaxX(splittingRect), viewsFrame.origin.y);
-    
-    double leftStartTime = [self getTimestampForPoint:leftRect.origin];
-    double leftDuration = [self getDurationForPixelWidth:leftRect.size.width];
-    
-    double rightStartTime = [self getTimestampForPoint:rightRect.origin];
-    double rightDuration = [self getDurationForPixelWidth:rightRect.size.width];
-    
-    VSTimelineObject *leftObjet = [self.timeline copyTimelineObject:(VSTimelineObject*) timelineObjectViewController.timelineObjectProxy toTrack:trackViewController.track atPosition:leftStartTime withDuration:leftDuration andRegisterUndoOperation:self.trackLabelsViewController.view.undoManager];
-    
-    if(!leftObjet)
-        return NO;
-    
-    VSTimelineObject *rightObject = [self.timeline copyTimelineObject:(VSTimelineObject*) timelineObjectViewController.timelineObjectProxy toTrack:trackViewController.track atPosition:rightStartTime withDuration:rightDuration andRegisterUndoOperation:self.trackLabelsViewController.view.undoManager];
-    
-    if(!rightObject){
-        [self.timeline removeTimelineObject:leftObjet fromTrack:trackViewController.track];
-        return NO;
+    if(splittingRects.count > 0){
+        
+        splittingRects =  [splittingRects sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            
+            NSNumber *obj1X = [NSNumber numberWithInt:[obj1 rectValue].origin.x];
+            NSNumber *obj2X = [NSNumber numberWithInt:[obj2 rectValue].origin.x];
+            return [obj1X compare:obj2X];
+        } ];
     }
     
-    [self removeTimlineObject:((VSTimelineObject*) timelineObjectViewController.timelineObjectProxy) fromTrack:trackViewController.track];
+    int i = 0;
+    
+    NSMutableArray* newFrames = [[NSMutableArray alloc] init];
+    
+    for (NSValue *value in splittingRects){
+        NSRect splittingRect = [value rectValue];
+        
+        if(i== 0){
+            NSRect leftFrame = viewsFrame;
+            leftFrame.size.width = splittingRect.origin.x - leftFrame.origin.x;
+            [newFrames addObject:[NSValue valueWithRect:leftFrame]];
+        }
+        
+        
+        
+        NSRect leftFrame = [[newFrames lastObject] rectValue];
+        leftFrame.size.width = splittingRect.origin.x - leftFrame.origin.x;
+        
+        [newFrames removeObjectAtIndex:newFrames.count-1];
+        
+        if(leftFrame.size.width > 0){
+            [newFrames addObject:[NSValue valueWithRect:leftFrame]];
+        }
+        
+        NSRect rightFrame = leftFrame;
+        rightFrame.origin.x = NSMaxX(splittingRect);
+        rightFrame.size.width = NSMaxX(viewsFrame) - rightFrame.origin.x;
+        
+        if(rightFrame.size.width > 0){
+            [newFrames addObject:[NSValue valueWithRect:rightFrame]];
+        }
+        
+        i++;
+    }
+    
+    for(NSValue *value in newFrames){
+        NSRect frameRect = [value rectValue];
+        double startTime = [self getTimestampForPoint:frameRect.origin];
+        double duration = [self getDurationForPixelWidth:frameRect.size.width];   
+        
+        [self.timeline copyTimelineObject:(VSTimelineObject*) timelineObjectViewController.timelineObjectProxy toTrack:trackViewController.track atPosition:startTime withDuration:duration andRegisterUndoOperation:self.trackLabelsViewController.view.undoManager];
+    }
+    
+    
+    [self.timeline removeTimelineObject:((VSTimelineObject*) timelineObjectViewController.timelineObjectProxy) fromTrack:trackViewController.track];
+    return YES;
+}
+
+-(BOOL) removeTimelineObjects:(NSArray *)timelineObjectViewControllers fromTrack:(VSTrackViewController *)trackViewController{
+    for(VSTimelineObjectViewController* timelineObjectViewController in timelineObjectViewControllers){
+        [self removeTimlineObject:((VSTimelineObject*) timelineObjectViewController.timelineObjectProxy) fromTrack:trackViewController.track];
+    }
     
     return YES;
 }

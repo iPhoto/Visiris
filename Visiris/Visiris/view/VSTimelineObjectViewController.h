@@ -114,22 +114,13 @@
 /** VSTimelineObjectProxy of the VSTimelineObject the VSTimelineObjectViewController represents*/
 @property (strong) VSTimelineObjectProxy* timelineObjectProxy;
 
-/** Indicates wheter the view of VSTimelineObjectViewController is intersected by an other VSTimelineObjectViewController's view while it is dragged around. */
-@property BOOL intersected;
-
-/** Area where the VSTimelineObjectViewController's view is intersected */
-@property NSRect intersectionRect;
-
-/** Indicates wheter the intersection started from left or not */
-@property BOOL enteredLeft;
-
 
 /** Indicates wheter the VSTimelineObjectViewController's VSTimelineObjectProxy is only a temporary object on the track. */
 @property BOOL temporary;
 
 @property BOOL moving;
 
-@property BOOL splitted;
+@property (strong) NSMutableDictionary *intersectedTimelineObjectViews;
 
 -(id) initWithDefaultNib;
 
@@ -141,5 +132,9 @@
  * @param newPixelTimeRatio New pixel-time-ratio
  */
 -(void) changePixelTimeRatio:(double) newPixelTimeRatio;
+
+-(void) intersectsTimelineObjectView:(VSTimelineObjectViewController*) timelineObjectViewController intersects:(NSRect) intersectionRect;
+
+-(void) removeIntersectionWith:(VSTimelineObjectViewController*) timelineObjectViewController;
 
 @end

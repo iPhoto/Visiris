@@ -49,7 +49,7 @@
  * @param Position relative to trackView where the objects are currently positioned
  * @return YES if the objects were handled succesfully, NO otherwise
  */
--(void) trackView:(VSTrackView*) trackView objectsOverTrack:(id<NSDraggingInfo>)draggingInfo atPosition:(NSPoint) position;
+-(void) trackView:(VSTrackView*) trackView draggedObjects:(id<NSDraggingInfo>)draggingInfo movedFromPosition:(NSPoint) oldPosition toPosition:(NSPoint) newPosition;
 
 /**
  * Called when mouseDown event of VSTrackView is called

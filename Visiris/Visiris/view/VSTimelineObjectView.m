@@ -48,7 +48,6 @@ static int resizingAreaWidth = 10;
 @synthesize temporary               = _temporary;
 @synthesize intersectionRect        = _intersectionRect;
 @synthesize intersected             = _intersected;
-@synthesize splitted                = _splitted;
 @synthesize lastMousePosition       = _lastMousePosition;
 @synthesize mouseDownMousePosition  = _mouseDownMousePosition;
 @synthesize mouseDownXOffset        = _mouseDownXOffset;
