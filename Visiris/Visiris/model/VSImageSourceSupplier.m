@@ -40,6 +40,7 @@
         
         self.vsImage.data = (char *)imageData;
         self.vsImage.size = NSMakeSize(width, height);
+        self.vsImage.needsUpdate = YES;
     }
     return self.vsImage;
 }
