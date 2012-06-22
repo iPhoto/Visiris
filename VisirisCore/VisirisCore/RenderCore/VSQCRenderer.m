@@ -59,7 +59,6 @@
 }
 
 - (GLuint) texture{
-    NSLog(@"textureID: %d", self.fbo.texture);
     return self.fbo.texture;
 }
 
