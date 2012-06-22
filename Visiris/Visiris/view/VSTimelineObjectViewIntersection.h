@@ -10,11 +10,23 @@
 
 @class VSTimelineObjectViewController;
 
+/**
+ * Stores the intersection of an VSTimelineObjectViewController with another VSTimelineObjectViewController
+ */
 @interface VSTimelineObjectViewIntersection : NSObject
 
+/** Stores where the intersectino happend */
 @property NSRect intersectionRect;
+
+/** VSTimelineObjectViewController which intersects */
 @property VSTimelineObjectViewController* intersectedTimelineObjectView;
 
+/**
+ * Inits the intersection for the given values
+ * @param intersectedTimelineObjectView VSTimelineObjectViewController which intersects another VSTimelineObjectViewController
+ * @param intersectionRect NSRect storing where the intersection happend
+ * @return self
+ */
 -(id) initWithIntersectedTimelineObejctView:(VSTimelineObjectViewController*) intersectedTimelineObjectView intersectedAt:(NSRect) intersectionRect;
 
 @end

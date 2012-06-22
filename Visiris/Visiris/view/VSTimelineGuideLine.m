@@ -10,6 +10,7 @@
 
 @interface VSTimelineGuideLine()
 
+/** Endpoint of the guideline */
 @property NSPoint lineEndPoint;
 
 @end

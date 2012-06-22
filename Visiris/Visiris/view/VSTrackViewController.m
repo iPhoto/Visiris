@@ -38,8 +38,8 @@
 
 @end
 
-
-#define SNAPPING_OVERHEAD 20
+// Size of the area objects can be snapped to other objects on the timelien
+#define SNAPPING_AREA 20
 
 @implementation VSTrackViewController
 
@@ -58,23 +58,13 @@ static NSString* defaultNib = @"VSTrackView";
 
 -(id) initWithDefaultNibAccordingToTrack:(VSTrack*) track{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
-        if([self.view isKindOfClass:[VSTrackView class]]){
-            
-            self.track = track;
-            
-            [self.track addObserver:self forKeyPath:@"timelineObjects" options:NSKeyValueObservingOptionPrior |NSKeyValueObservingOptionNew context:nil];
-            
-            self.timelineObjectViewControllers = [[NSMutableArray alloc] init];
-            self.temporaryTimelineObjectViewControllers = [[NSMutableArray alloc] init];
-            
-            self.projectItemController = [VSProjectItemController sharedManager];
-            
-            self.projectItemRepresentationController = [VSProjectItemRepresentationController sharedManager];
-            
-            ((VSTrackView*) self.view).controllerDelegate = self;
-            
-            
-        }
+        
+        self.track = track;
+        
+        [self.track addObserver:self forKeyPath:@"timelineObjects" options:NSKeyValueObservingOptionPrior |NSKeyValueObservingOptionNew context:nil];
+        
+        self.projectItemController = [VSProjectItemController sharedManager];
+        self.projectItemRepresentationController = [VSProjectItemRepresentationController sharedManager];
     }
     
     return self;
@@ -93,6 +83,12 @@ static NSString* defaultNib = @"VSTrackView";
 }
 
 -(void) awakeFromNib{
+    self.timelineObjectViewControllers = [[NSMutableArray alloc] init];
+    self.temporaryTimelineObjectViewControllers = [[NSMutableArray alloc] init];
+    if([self.view isKindOfClass:[VSTrackView class]]){
+        
+        ((VSTrackView*) self.view).controllerDelegate = self;
+    }
 }
 
 #pragma mark - Methods
@@ -109,6 +105,179 @@ static NSString* defaultNib = @"VSTrackView";
         }
     }
 }
+
+-(void) setSelectedTimelineObjectsAsMoving{
+    NSArray *selectedObjects = [self selectedTimelineObjectViewControllers];
+    
+    if(selectedObjects.count == 0)
+        return;
+    
+    for(VSTimelineObjectViewController *timelineObjectViewController in selectedObjects){
+        timelineObjectViewController.moving = YES;
+    }
+}
+
+-(void) unsetsetSelectedTimelineObjectsAsMoving{
+    NSArray *selectedObjects = [self selectedTimelineObjectViewControllers];
+    
+    if(selectedObjects.count == 0)
+        return;
+    
+    for(VSTimelineObjectViewController *timelineObjectViewController in selectedObjects){
+        timelineObjectViewController.moving = NO;
+    }
+}
+
+-(void) setStartTimeOfSelectedTimelineObjects{
+    NSArray *selectedObjects = [self selectedTimelineObjectViewControllers];
+    
+    if(selectedObjects.count == 0)
+        return;
+    
+    for(VSTimelineObjectViewController *timelineObjectViewController in self.timelineObjectViewControllers){
+        double startTime = [self timeValueForPixelValue:timelineObjectViewController.view.frame.origin.x];
+        
+        //if the view has been moved, the start time of VSTimelineObjectProxy is updated
+        if(startTime != timelineObjectViewController.timelineObjectProxy.startTime){
+            [timelineObjectViewController.timelineObjectProxy changeStartTime:startTime andRegisterAtUndoManager:self.view.undoManager];
+        }
+    }
+}
+
+-(void) moveSelectedTimemlineObjects:(float) deltaX{
+    if(deltaX != 0.0){
+        
+        NSArray *selectedTimelineObjects = [self selectedTimelineObjectViewControllers];
+        
+        for(VSTimelineObjectViewController *timelineObjectViewController in selectedTimelineObjects){
+            NSPoint newPosition = timelineObjectViewController.view.frame.origin;
+            newPosition.x += deltaX;
+            [timelineObjectViewController.view setFrameOrigin:newPosition];
+        }
+        
+    }
+}
+
+
+-(BOOL) computeSnappingXValueForSelectedTimelineObjectsMovedAccordingToDeltaX:(float)deltaX snappingDeltaX:(float *)snappingDeltaX{
+    return [self computeSnappingXValueForTimelineObjects:[self selectedTimelineObjectViewControllers]  movedAccordingToDeltaX:deltaX snappingDelta:snappingDeltaX];
+}
+
+-(BOOL) computeSnappingXValueForTimelineObjects:(NSArray*) timelineObjectViewControllers movedAccordingToDeltaX:(float) deltaX snappingDelta:(float *)snappingDeltaX{
+    
+    BOOL returnValue = NO;
+    
+    *snappingDeltaX = 0;
+    
+    if(timelineObjectViewControllers.count){
+        
+        //The unionRect is created by combining the frames of the views of the timelineObjectViewControllers
+        NSRect unionRect = ((VSTimelineObjectViewController*) [timelineObjectViewControllers objectAtIndex:0]).view.frame;
+        unionRect.origin.x += deltaX;
+        
+        if(timelineObjectViewControllers.count >0){
+            
+            int i = 0;
+            
+            for(VSTimelineObjectViewController *timelineObjectViewController in timelineObjectViewControllers){
+                NSRect frame = timelineObjectViewController.view.frame;
+                NSPoint newOrigin = NSMakePoint(frame.origin.x + deltaX, frame.origin.y);
+                frame.origin = newOrigin;
+                
+                
+                if(i > 0){
+                    unionRect = NSUnionRect(frame,unionRect);
+                }
+                else{
+                    unionRect = frame;
+                }
+                
+                i++;
+            }
+        }
+        
+        //snap to the zero Point of the timeline
+        if(unionRect.origin.x < 0){
+            *snappingDeltaX = unionRect.origin.x * (-1);
+            returnValue = YES;
+        }
+        else {
+            
+            NSIndexSet *indexesOfOtherTimelineObjects = [self.timelineObjectViewControllers indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+                if([obj isKindOfClass:[VSTimelineObjectViewController class]]){
+                    if (![timelineObjectViewControllers containsObject:obj]) {
+                        return YES;
+                    }
+                }
+                return NO;
+            }];
+            
+            
+            NSArray *staticObjects = [self.timelineObjectViewControllers objectsAtIndexes:indexesOfOtherTimelineObjects];
+            
+            if(staticObjects && staticObjects.count){
+                
+                //creates the rects where unionRect is able to snap
+                NSRect leftSnappingSourceRect = NSMakeRect(unionRect.origin.x - SNAPPING_AREA / 2.0, unionRect.origin.y,SNAPPING_AREA, unionRect.size.height);
+                NSRect rightSnappingSourceRect = leftSnappingSourceRect;
+                rightSnappingSourceRect.origin.x = NSMaxX(unionRect) - SNAPPING_AREA / 2.0f;    
+                
+                //iterates through all timelineObjectViewController in staticObjects and checks if the snappinRects of the unionRect are intersecting the snapping-rects of the objects in staticObjects
+                for(VSTimelineObjectViewController *timelineObjectViewController in staticObjects){
+                    
+                     //creates the rect where the timelineObjectViewController is able to snap
+                    NSRect targetSnappingRect = NSMakeRect(NSMaxX(timelineObjectViewController.view.frame)-SNAPPING_AREA / 2.0, timelineObjectViewController.view.frame.origin.y, SNAPPING_AREA, timelineObjectViewController.view.frame.size.height);
+                    
+                    if(NSIntersectsRect(leftSnappingSourceRect, targetSnappingRect)){
+                        *snappingDeltaX = NSMaxX(timelineObjectViewController.view.frame) - unionRect.origin.x;
+                        returnValue = YES;
+                        break;
+                    }
+                    targetSnappingRect.origin.x = timelineObjectViewController.view.frame.origin.x - SNAPPING_AREA / 2.0f;
+                    if(NSIntersectsRect(rightSnappingSourceRect, targetSnappingRect)){
+                        *snappingDeltaX = timelineObjectViewController.view.frame.origin.x - NSMaxX(unionRect);
+                        returnValue = YES;
+                        break;
+                    }
+                    
+                }
+                
+            }
+        }
+        
+    } 
+    return returnValue;
+}
+
+-(void) applyIntersectionToTimelineObjects{
+    
+    NSArray *intersectedTimelineObjectViewControllers = [self intersectedTimelineObjectViewControllers];
+    
+    for(VSTimelineObjectViewController *intersectedTimelineObjectViewController in intersectedTimelineObjectViewControllers){
+        
+        if(intersectedTimelineObjectViewController.intersectedTimelineObjectViews.count){
+            
+            NSArray *intersections = [intersectedTimelineObjectViewController.intersectedTimelineObjectViews allValues];
+            
+            NSMutableArray *intersectionRects = [[NSMutableArray alloc] init];
+            
+            for(VSTimelineObjectViewIntersection *intersection in intersections){
+                [intersectionRects addObject: [NSValue valueWithRect:intersection.intersectedTimelineObjectView.view.frame]];
+            }
+            
+            if([self delegateRespondsToSelector:@selector(splitTimelineObject:ofTrack:byRects:)]){
+                [self.delegate splitTimelineObject:intersectedTimelineObjectViewController ofTrack:self byRects:intersectionRects];
+            }
+            
+        }
+    }
+}
+
+
+-(void) setTimelineObjectViewsIntersectedBySelectedTimelineObjects{    
+    [self setTimelineObjectViews:[self unselectedTimelineObjectViewControllers] IntersectedByTimelineObjectViews:[self selectedTimelineObjectViewControllers]];
+}
+
 
 
 #pragma mark - NSViewController
@@ -155,6 +324,8 @@ static NSString* defaultNib = @"VSTrackView";
 }
 
 
+#pragma mark - VSTrackViewDelegate Implmentation
+
 -(BOOL) trackView:(VSTrackView *)trackView objectsHaveBeenDropped:(id<NSDraggingInfo>)draggingInfo atPosition:(NSPoint)position{
     
     BOOL result = NO;
@@ -193,6 +364,7 @@ static NSString* defaultNib = @"VSTrackView";
         
         if(droppedProjectItems.count > 0){
             
+            [self setTimelineObjectViews:self.timelineObjectViewControllers IntersectedByTimelineObjectViews:self.temporaryTimelineObjectViewControllers];
             
             [self.view.undoManager beginUndoGrouping];
             
@@ -254,7 +426,8 @@ static NSString* defaultNib = @"VSTrackView";
         if(firstTimelineObjectViewController){
             
             float deltaX = newPosition.x - firstTimelineObjectViewController.view.frame.origin.x;
-            float snappingDeltaX =  [self computeSnappingXValueForTimelineObjects:self.temporaryTimelineObjectViewControllers movedAccordingToDeltaX:deltaX];
+            float snappingDeltaX =0;
+            [self computeSnappingXValueForTimelineObjects:self.temporaryTimelineObjectViewControllers movedAccordingToDeltaX:deltaX snappingDelta:&snappingDeltaX];
             
             //if more than one VSTimelineObjectViewControllers is stored in self.temporaryTimelineObjectViewControllers their views are positioned next to each other
             for(VSTimelineObjectViewController *timelineObjectViewController in self.temporaryTimelineObjectViewControllers){
@@ -393,6 +566,14 @@ static NSString* defaultNib = @"VSTrackView";
 }
 
 -(void) timelineObjectDidStopResizing:(VSTimelineObjectViewController *)timelineObjectViewController{
+    
+    NSMutableArray *otherTimelineObjectViewControllers = [NSMutableArray arrayWithArray:self.timelineObjectViewControllers];
+    
+    [otherTimelineObjectViewControllers removeObject:timelineObjectViewController];
+    
+    [self setTimelineObjectViews:otherTimelineObjectViewControllers IntersectedByTimelineObjectViews:[NSArray arrayWithObject:timelineObjectViewController]];
+    
+    
     [self.view.undoManager beginUndoGrouping];
     
     
@@ -408,6 +589,7 @@ static NSString* defaultNib = @"VSTrackView";
         [timelineObjectViewController.timelineObjectProxy changeDuration:newDuration andRegisterAtUndoManager:self.view.undoManager];
     }
     
+    
     [self applyIntersectionToTimelineObjects];
     
     [self.view.undoManager setActionName:NSLocalizedString(@"Resizing Object", @"Undo Action for resizine an object on the timeline")];
@@ -419,7 +601,8 @@ static NSString* defaultNib = @"VSTrackView";
 -(NSPoint) timelineObjectWillBeDragged:(VSTimelineObjectViewController *)timelineObjectViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition{
     
     float deltaXPosition = newPosition.x - oldPosition.x;
-    float snappingDeltaX = [self computeSnappingXValueForSelectedTimelineObjectsMovedAccordingToDeltaX:deltaXPosition];
+    float snappingDeltaX;
+    [self computeSnappingXValueForSelectedTimelineObjectsMovedAccordingToDeltaX:deltaXPosition snappingDeltaX:&snappingDeltaX];
     
     
     if([self delegateRespondsToSelector:@selector(timelineObject:WillBeDraggedOnTrack:fromPosition:toPosition: withSnappingDeltaX:)]){
@@ -439,6 +622,8 @@ static NSString* defaultNib = @"VSTrackView";
 
 -(void) timelineObjectDidStopDragging:(VSTimelineObjectViewController *)timelineObjectViewController{
     
+    [self setTimelineObjectViewsIntersectedBySelectedTimelineObjects];
+    
     if([self delegateRespondsToSelector:@selector(timelineObject:didStopDraggingOnTrack:)]){
         [self.delegate timelineObject:timelineObjectViewController didStopDraggingOnTrack:self];
     }
@@ -450,6 +635,7 @@ static NSString* defaultNib = @"VSTrackView";
     [self setStartTimeOfSelectedTimelineObjects];
     
     //applys the interscetions
+    
     [self applyIntersectionToTimelineObjects];
     
     [self.view.undoManager setActionName:NSLocalizedString(@"Move Object", @"Undo action name for moving obejcts on timeline")];
@@ -481,167 +667,7 @@ static NSString* defaultNib = @"VSTrackView";
 
 #pragma mark - pleas move me to mehtods
 
--(void) setSelectedTimelineObjectsAsMoving{
-    NSArray *selectedObjects = [self selectedTimelineObjectViewControllers];
-    
-    if(selectedObjects.count == 0)
-        return;
-    
-    for(VSTimelineObjectViewController *timelineObjectViewController in selectedObjects){
-        timelineObjectViewController.moving = YES;
-    }
-}
 
--(void) unsetsetSelectedTimelineObjectsAsMoving{
-    NSArray *selectedObjects = [self selectedTimelineObjectViewControllers];
-    
-    if(selectedObjects.count == 0)
-        return;
-    
-    for(VSTimelineObjectViewController *timelineObjectViewController in selectedObjects){
-        timelineObjectViewController.moving = NO;
-    }
-}
-
--(void) setStartTimeOfSelectedTimelineObjects{
-    NSArray *selectedObjects = [self selectedTimelineObjectViewControllers];
-    
-    if(selectedObjects.count == 0)
-        return;
-    
-    for(VSTimelineObjectViewController *timelineObjectViewController in self.timelineObjectViewControllers){
-        double startTime = [self timeValueForPixelValue:timelineObjectViewController.view.frame.origin.x];
-        
-        //if the view has been moved, the start time of VSTimelineObjectProxy is updated
-        if(startTime != timelineObjectViewController.timelineObjectProxy.startTime){
-            [timelineObjectViewController.timelineObjectProxy changeStartTime:startTime andRegisterAtUndoManager:self.view.undoManager];
-        }
-    }
-}
-
--(void) moveSelectedTimemlineObjects:(float) deltaX{
-    if(deltaX != 0.0){
-        
-        NSArray *selectedTimelineObjects = [self selectedTimelineObjectViewControllers];
-        
-        for(VSTimelineObjectViewController *timelineObjectViewController in selectedTimelineObjects){
-            NSPoint newPosition = timelineObjectViewController.view.frame.origin;
-            newPosition.x += deltaX;
-            [timelineObjectViewController.view setFrameOrigin:newPosition];
-        }
-        
-    }
-}
-
-
--(float) computeSnappingXValueForSelectedTimelineObjectsMovedAccordingToDeltaX:(float)deltaX{
-    return [self computeSnappingXValueForTimelineObjects:[self selectedTimelineObjectViewControllers]  movedAccordingToDeltaX:deltaX];
-}
-
--(float) computeSnappingXValueForTimelineObjects:(NSArray*) timelineObjectViewControllersToMove movedAccordingToDeltaX:(float) deltaX{
-    
-    float snappingDeltaX = 0;
-    
-    if(timelineObjectViewControllersToMove.count ==0){
-        return snappingDeltaX;
-    }
-    
-    NSRect unionRect = ((VSTimelineObjectViewController*) [timelineObjectViewControllersToMove objectAtIndex:0]).view.frame;
-    unionRect.origin.x += deltaX;
-    
-    if(timelineObjectViewControllersToMove.count >0){
-        
-        int i = 0;
-        
-        for(VSTimelineObjectViewController *timelineObjectViewController in timelineObjectViewControllersToMove){
-            NSRect frame = timelineObjectViewController.view.frame;
-            NSPoint newOrigin = NSMakePoint(frame.origin.x + deltaX, frame.origin.y);
-            frame.origin = newOrigin;
-            
-            
-            if(i > 0){
-                unionRect = NSUnionRect(frame,unionRect);
-            }
-            else{
-                unionRect = frame;
-            }
-            
-            i++;
-        }
-    }
-    
-    //snap to the zero Point of the timeline
-    
-    if(unionRect.origin.x < 0)
-        return unionRect.origin.x * (-1);
-    
-    NSIndexSet *indexesOfOtherTimelineObjects = [self.timelineObjectViewControllers indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-        if([obj isKindOfClass:[VSTimelineObjectViewController class]]){
-            if (![timelineObjectViewControllersToMove containsObject:obj]) {
-                return YES;
-            }
-        }
-        return NO;
-    }];
-    
-    NSArray *staticObjects = [self.timelineObjectViewControllers objectsAtIndexes:indexesOfOtherTimelineObjects];
-    
-    if(!staticObjects || staticObjects.count == 0){
-        return snappingDeltaX;
-    }
-    
-    
-    
-    
-    NSRect leftSnappingSourceRect = NSMakeRect(unionRect.origin.x - SNAPPING_OVERHEAD / 2.0, unionRect.origin.y,SNAPPING_OVERHEAD, unionRect.size.height);
-    NSRect rightSnappingSourceRect = leftSnappingSourceRect;
-    rightSnappingSourceRect.origin.x = NSMaxX(unionRect) - SNAPPING_OVERHEAD / 2.0f;    
-    
-    for(VSTimelineObjectViewController *timelineObjectViewController in staticObjects){
-        NSRect targetSnappingRect = NSMakeRect(NSMaxX(timelineObjectViewController.view.frame)-SNAPPING_OVERHEAD / 2.0, timelineObjectViewController.view.frame.origin.y, SNAPPING_OVERHEAD, timelineObjectViewController.view.frame.size.height);
-        
-        if(NSIntersectsRect(leftSnappingSourceRect, targetSnappingRect)){
-            snappingDeltaX = NSMaxX(timelineObjectViewController.view.frame) - unionRect.origin.x;
-            break;
-        }
-        targetSnappingRect.origin.x = timelineObjectViewController.view.frame.origin.x - SNAPPING_OVERHEAD / 2.0f;
-        if(NSIntersectsRect(rightSnappingSourceRect, targetSnappingRect)){
-            snappingDeltaX = timelineObjectViewController.view.frame.origin.x - NSMaxX(unionRect);
-            break;
-        }
-        
-    }
-    
-    
-    return snappingDeltaX;
-}
-
--(void) applyIntersectionToTimelineObjects{
-    
-    NSArray *intersectedTimelineObjectViewControllers = [self intersectedTimelineObjectViewControllers];
-    
-    for(VSTimelineObjectViewController *intersectedTimelineObjectViewController in intersectedTimelineObjectViewControllers){
-        
-        if(intersectedTimelineObjectViewController.intersectedTimelineObjectViews.count){
-            
-            NSArray *intersections = [intersectedTimelineObjectViewController.intersectedTimelineObjectViews allValues];
-            
-            NSMutableArray *intersectionRects = [[NSMutableArray alloc] init];
-            
-            for(VSTimelineObjectViewIntersection *intersection in intersections){
-                NSRect intersectionRect = intersection.intersectedTimelineObjectView.view.frame;
-                
-                
-                [intersectionRects addObject: [NSValue valueWithRect:intersectionRect]];
-            }
-            
-            if([self delegateRespondsToSelector:@selector(splitTimelineObject:ofTrack:byRects:)]){
-                [self.delegate splitTimelineObject:intersectedTimelineObjectViewController ofTrack:self byRects:intersectionRects];
-            }
-            
-        }
-    }
-}
 
 
 #pragma mark- Private Methods
@@ -697,17 +723,13 @@ static NSString* defaultNib = @"VSTrackView";
 
 #pragma mark VSTimelineObject Intersection
 
-
 /**
- * Detects if any of the views the VSTimelineObjectControllers in the given NSArray are responsibel for are intersecting with any other VSTimelineObjectView on the Track.
+ * Detects if any of the views in intersectingTimelineObjectViewControllers intersects any of one in timelineObjectViewControllers.
  *
  * If an intersection is found, the VSTimelineObjectViewController of the intersected view is informed about it and the NSRect where the intersection happens is sent to it.
  * @param timelineObjectViewControllers NSArray of VSTimelineObjectViewControllers intersection will be detected for.
+ * @param intersectingTimelineObjectViewControllers NSArray of VSTimelineObjectViewControllers which will be checked for intersecting any of VSTimelineObjectViewControllers in timelineObjectViewControllers.
  */
--(void) setTimelineObjectViewsIntersectedBySelectedTimelineObjects{    
-    [self setTimelineObjectViews:[self unselectedTimelineObjectViewControllers] IntersectedByTimelineObjectViews:[self selectedTimelineObjectViewControllers]];
-}
-
 -(void) setTimelineObjectViews:(NSArray*) timelineObjectViewControllers IntersectedByTimelineObjectViews:(NSArray*) intersectingTimelineObjectViewControllers{
     
     for(VSTimelineObjectViewController *intersectingTimelineObjectViewController in intersectingTimelineObjectViewControllers){
@@ -778,6 +800,7 @@ static NSString* defaultNib = @"VSTrackView";
  * @param aProjectItem VSProjectItemRepresentation the VSTimelineObjectProxy will be based on
  * @param aPosition NSPoint where the VSTimelineObjectView is positioned
  * @param aTrackView VSTrackView the new TimelineObject will be added to
+ * @param temporaryID Temporarily set ID for the temporary timeline object
  * @return YES if it was created successfully, NO otherwise
  */
 -(VSTimelineObjectViewController*) addNewTemporaryTimelineObjectProxyBasedOn:(VSProjectItemRepresentation*) aProjectItem atPosition:(NSPoint) aPosition toTrack:(VSTrackView*)aTrackView temporaryID:(NSInteger) temporaryID{
@@ -815,6 +838,9 @@ static NSString* defaultNib = @"VSTrackView";
     return NO;
 }
 
+/**
+ * Removes the intersections of all timeline objects
+ */
 -(void) resetIntersections{
     NSArray *intersectedTimelineObjectViewControllers = [self intersectedTimelineObjectViewControllers];
     

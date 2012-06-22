@@ -13,7 +13,9 @@
 #import "VSCoreServices.h"
 
 @interface VSProjectItemRepresentationController()
+
 @property VSProjectItemController *projectItemController;
+
 @end
 
 @implementation VSProjectItemRepresentationController
@@ -113,7 +115,6 @@ static VSProjectItemRepresentationController* sharedProjectItemController = nil;
 
 #pragma mark- Properties
 
-/** Stores all VSProjectItmeRepresentations the controller is responsible for */
 -(NSMutableArray*) projectItemRepresentations{
     return [self mutableArrayValueForKey:@"projectItemRepresentations"];
 }

@@ -99,9 +99,6 @@
 /** if YES the VSTimelineObjectView intersectionRect is drawn */
 @property BOOL intersected;
 
-/** if YES the VSTimelineObjectView is splitted by another timelineObject whichs's frame is stored in the intersectionRect */
-@property BOOL splitted;
-
 /** Area of the VSTimelineObjectView that's intersected by another VSTimelineObjectView */
 @property NSRect intersectionRect;
 

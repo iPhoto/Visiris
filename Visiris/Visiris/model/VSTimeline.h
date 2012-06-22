@@ -86,7 +86,7 @@
  */
 - (NSArray *)timelineObjectsForTimestamp:(double)aTimestamp;
 
-#pragmg mark Adding TimelineObjects
+#pragma mark Adding TimelineObjects
 
 /**
  * Adds a new Timeline-Object to the given track.
@@ -148,7 +148,7 @@
  */
 -(VSTimelineObjectProxy*) createNewTimelineObjectProxyBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *) item positionedAtTime:(double) timePosition;
 
-#pragmg mark Removing TimelineObjects
+#pragma mark Removing TimelineObjects
 
 /**
  * Removes aTimelineObject from the track and returns if the removal was successful.

@@ -118,9 +118,13 @@
 /** Indicates wheter the VSTimelineObjectViewController's VSTimelineObjectProxy is only a temporary object on the track. */
 @property BOOL temporary;
 
+/** Indicates wheter the views is currently moved */
 @property BOOL moving;
 
+/** Stores the VSTimelineObjectViewController which's views intersecting the view of the VSTimelineObjectViewController as VSTimelineObjectIntersection */
 @property (strong) NSMutableDictionary *intersectedTimelineObjectViews;
+
+#pragma mark - Init
 
 -(id) initWithDefaultNib;
 
@@ -133,8 +137,17 @@
  */
 -(void) changePixelTimeRatio:(double) newPixelTimeRatio;
 
+/**
+ * Creates a new VSTimelineObjectIntersection for the given parameters and stores it in the intersectedTimelineObjectViews-property
+ * @param timelineObjectViewController VSTimelineObjectViewController which's view intersects.
+ * @param intersectionRect NSRect defining where on the view the intersetion happens
+ */
 -(void) intersectsTimelineObjectView:(VSTimelineObjectViewController*) timelineObjectViewController intersects:(NSRect) intersectionRect;
 
+/**
+ * Removes the any intersections for the given VSTimelineObjectViewController from the intersectedTimelineObjectViews-property
+ * @param timelineObjectViewController VSTimelineObjectViewController which intersections are removed.
+ */
 -(void) removeIntersectionWith:(VSTimelineObjectViewController*) timelineObjectViewController;
 
 @end
