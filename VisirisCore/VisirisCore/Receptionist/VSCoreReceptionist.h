@@ -2,6 +2,7 @@
 
 #import <Foundation/Foundation.h>
 #import "VSRenderCore.h"
+#import "VSFileKind.h"
 
 @class VSCoreReceptionist;
 
@@ -43,7 +44,7 @@
 - (void)renderFrameAtTimestamp:(double)aTimestamp withHandovers:(NSArray *)theHandovers forSize:(NSSize)theFrameSize;
 
 
--(GLuint) createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger) trackID;
+-(GLuint) createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger) trackID withType:(VSFileKind )type withOutputSize:(NSSize)size withPath:(NSString *)path;
 
 -(void) removeTextureForID:(GLuint) anID;
 

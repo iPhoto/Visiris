@@ -13,6 +13,8 @@
 #import "VSTexture.h"
 #import "VSShader.h"
 #import "VSTextureManager.h"
+#import "VSQCManager.h"
+#import "VSQCRenderer.h"
 #import <OpenGL/glu.h>
 
 //FixeMe: Warum sind die static Methoden außerhalb der Klasse definiert?
@@ -39,18 +41,17 @@ static struct {
 } g_resources;
     
 @implementation VSRenderCore
-@synthesize delegate = _delegate;
-@synthesize pixelFormat = _pixelFormat;
-@synthesize openGLContext = _openGLContext;
-@synthesize frameBufferObjectOne = _frameBufferObjectOne;
-@synthesize frameBufferObjectTwo = _frameBufferObjectTwo;
-@synthesize frameBufferObjectCurrent = _frameBufferObjectCurrent;
-@synthesize frameBufferObjectOld = _frameBufferObjectOld;
-//@synthesize textureBelow = _textureBelow;
-//@synthesize textureUp = _textureUp;
-@synthesize shader = _shader;
-@synthesize textureManager = _textureManager;
-@synthesize outPutTexture = _outPutTexture;
+@synthesize delegate                    = _delegate;
+@synthesize pixelFormat                 = _pixelFormat;
+@synthesize openGLContext               = _openGLContext;
+@synthesize frameBufferObjectOne        = _frameBufferObjectOne;
+@synthesize frameBufferObjectTwo        = _frameBufferObjectTwo;
+@synthesize frameBufferObjectCurrent    = _frameBufferObjectCurrent;
+@synthesize frameBufferObjectOld        = _frameBufferObjectOld;
+@synthesize shader                      = _shader;
+@synthesize textureManager              = _textureManager;
+@synthesize outPutTexture               = _outPutTexture;
+@synthesize qcpManager                  = _qcpManager;
 
 -(id)init{
     self = [super init];
@@ -90,9 +91,8 @@ static struct {
         self.frameBufferObjectOld = self.frameBufferObjectTwo;
         
         self.shader = [[VSShader alloc] init];
-        self.textureManager = [[VSTextureManager alloc] init];
-        //self.outPutTexture = [[VSTexture alloc] initEmptyTextureWithSize:(NSMakeSize(640, 480)];
-        
+        self.textureManager = [[VSTextureManager alloc] init];        
+        self.qcpManager = [[VSQCManager alloc] init];       
     }
     return self;
 }
@@ -101,36 +101,14 @@ static struct {
 -(void)renderFrameOfCoreHandovers:(NSArray *) theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double)theTimestamp{
     NSMutableArray *mutableCoreHandovers = [NSMutableArray arrayWithArray:theCoreHandovers];
     
-    for(VSCoreHandover *coreHandover in theCoreHandovers){
-        if ([coreHandover isKindOfClass:[VSQuartzComposerHandover class]]) {
-            VSFrameCoreHandover *convertedQuartzComposerHandover = [self createFrameCoreHandOverFrameQuartzComposerHandover:(VSQuartzComposerHandover *) coreHandover];
-            [mutableCoreHandovers replaceObjectAtIndex:[mutableCoreHandovers indexOfObject:coreHandover] withObject:convertedQuartzComposerHandover];
-        }
-    }
-        
-    
-    /////
-    NSIndexSet *indexSet = [theCoreHandovers indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:[VSFrameCoreHandover class]]) {
-            if (((VSFrameCoreHandover *)obj).frame) {
-                return YES;
-            }
-        }
-        return NO;
-    } ];
-    
-    NSArray *validCoreHandovers = [[NSArray alloc] initWithArray:[theCoreHandovers objectsAtIndexes:indexSet]];
-    //////
-    
-    
     CGLLockContext([[self openGLContext] CGLContextObj]);
     
-    // Make sure we draw to the right context
 	[[self openGLContext] makeCurrentContext];
+
+    //Create a array with only glTextures in it
+    NSMutableArray *textures = [self createTextures:mutableCoreHandovers atTime:theTimestamp];
     
-    NSMutableArray *textures = [self createTextures:mutableCoreHandovers];
-    
-    switch (validCoreHandovers.count) {
+    switch (textures.count) {
         case 0:
         {
             //TODO
@@ -140,39 +118,26 @@ static struct {
         }
         case 1:
         {
-            VSFrameCoreHandover *handOver = (VSFrameCoreHandover*)[validCoreHandovers objectAtIndex:0];
-            VSTexture *handOverTexture = [self.textureManager getVSTextureForTexId:handOver.textureID];
-            [handOverTexture replaceContent:handOver.frame timeLineObjectId:handOver.timeLineObjectID];
-            self.outPutTexture = handOverTexture.texture;
+            NSNumber *texture = (NSNumber *)[textures objectAtIndex:0];
+            self.outPutTexture = texture.intValue;
             [[self openGLContext] flushBuffer];
             break;
         }
         case 2:
         {
-            NSLog(@"unsupported");
-            [self combineTheFirstTwoObjects:validCoreHandovers];
+            [self combineTheFirstTwoObjects:textures];
             self.outPutTexture = self.frameBufferObjectCurrent.texture;
             [[self openGLContext] flushBuffer];
             break;
         }
         default:
         {            
-            NSLog(@"unsupported");
-            [self combineTheFirstTwoObjects:validCoreHandovers];
-            
+            [self combineTheFirstTwoObjects:textures];
 
-            
-            for (NSInteger i = 1; i < validCoreHandovers.count -1; i++) {
+            for (NSInteger i = 1; i < textures.count -1; i++) {
                 [self swapFBO];
-
-                VSFrameCoreHandover *handOver = (VSFrameCoreHandover*)[validCoreHandovers objectAtIndex:(i+1)];
-                VSTexture *handOverTexture = [self.textureManager getVSTextureForTexId:handOver.textureID];
-                
-                //Replace Content of the VSTexture EXPENSIVE 
-                //TODO: should only replace when the timeLineObjectId is not identical
-                [handOverTexture replaceContent:handOver.frame timeLineObjectId:handOver.timeLineObjectID];
-                
-                [self combineTexture:self.frameBufferObjectOld.texture with:handOverTexture.texture];
+                NSNumber *texture = (NSNumber *)[textures objectAtIndex:(i+1)];
+                [self combineTexture:self.frameBufferObjectOld.texture with:texture.intValue];
             }
              
             self.outPutTexture = self.frameBufferObjectCurrent.texture;
@@ -180,8 +145,6 @@ static struct {
         }
     }
     
-    
-
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
 
     if (self.delegate) {
@@ -191,25 +154,19 @@ static struct {
     }
 }
 
-- (void)combineTheFirstTwoObjects:(NSArray *) mutableCoreHandovers{
-    VSTexture *temp = [self.textureManager getVSTextureForTexId:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).textureID];
-    VSTexture *temp2 = [self.textureManager getVSTextureForTexId:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:1]).textureID];
+- (void)combineTheFirstTwoObjects:(NSArray *) textures{
+    NSNumber *texture0 = (NSNumber *)[textures objectAtIndex:0];
+    NSNumber *texture1 = (NSNumber *)[textures objectAtIndex:1];
     
-    [temp replaceContent:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).frame timeLineObjectId:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:0]).timeLineObjectID];
-    [temp2 replaceContent:((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:1]).frame timeLineObjectId: ((VSFrameCoreHandover*)[mutableCoreHandovers objectAtIndex:1]).timeLineObjectID];
-    
-    [self combineTexture:temp.texture with:temp2.texture];
+    [self combineTexture:texture0.intValue with:texture1.intValue];
 }
 
 
-- (void)combineTexture:(GLuint)bottomtexture with:(GLuint)upperTexture
-{	
+- (void)combineTexture:(GLuint)bottomtexture with:(GLuint)upperTexture{	
     [self.frameBufferObjectCurrent bind];
     
     glViewport(0, 0, self.frameBufferObjectCurrent.size.width,self.frameBufferObjectCurrent.size.height);
    
-    //do i need this?
-   // glClearColor(0.0, 0.0, 0.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
     glUseProgram(self.shader.program);
@@ -253,8 +210,29 @@ static struct {
     return 1;
 }
 
-- (GLuint)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger)trackID{
-    return [self.textureManager createTextureWithSize:textureSize trackId:trackID];
+- (GLuint)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*)colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path{
+    
+    GLuint texture;
+    
+    switch (type) {
+        case VSFileKindImage:
+            texture = [self.textureManager createTextureWithSize:textureSize trackId:trackID];
+            break;
+        case VSFileKindVideo:
+            texture = [self.textureManager createTextureWithSize:textureSize trackId:trackID];
+            break;
+        case VSFileKindQuartzComposerPatch:
+            texture = [self.qcpManager createQCRendererWithSize:size withTrackId:trackID withPath:path withContext:self.openGLContext withFormat:self.pixelFormat];
+            break;
+        case VSFileKindAudio:
+            NSLog(@"Audio not implemented yet");
+            break;
+            
+        default:
+            break;
+    }
+    
+    return texture;
 }
 
 - (void)swapFBO{
@@ -268,37 +246,30 @@ static struct {
     }
 }
 
-- (NSMutableArray *)createTextures:(NSArray *)handovers{
+- (NSMutableArray *)createTextures:(NSArray *)handovers atTime:(double)time{
     NSMutableArray *textures = [[NSMutableArray alloc] init];
     
     for(VSCoreHandover *coreHandover in handovers){
-        if ([coreHandover isKindOfClass:[VSFrameCoreHandover class]]) {
-            //NSLog(@"FrameCoreHandover");
+        
+        if ([coreHandover isKindOfClass:[VSFrameCoreHandover class]]){         
             
-            VSFrameCoreHandover *handOver = (VSFrameCoreHandover*)coreHandover;
+            VSFrameCoreHandover *handOver = (VSFrameCoreHandover *)coreHandover;
             VSTexture *handOverTexture = [self.textureManager getVSTextureForTexId:handOver.textureID];
             [handOverTexture replaceContent:handOver.frame timeLineObjectId:handOver.timeLineObjectID];
-            [textures addObject:handOverTexture];
+            [textures addObject:[NSNumber numberWithInt:handOverTexture.texture]];
+            
         }
         else if ([coreHandover isKindOfClass:[VSQuartzComposerHandover class]]) {
-            NSLog(@"QuartzCoreHandover not implemented yet");
+            
+            VSQuartzComposerHandover *handover = (VSQuartzComposerHandover *)coreHandover;
+            VSQCRenderer *qcRenderer = [self.qcpManager getQCRendererForId:handover.textureID];
+            [qcRenderer renderAtTme:time];
+            
+            [textures addObject:[NSNumber numberWithInt:[qcRenderer texture]]];
+            //NSLog(@"path: %@", handover.filePath);
         }
     }
-    
-    
-    
     return textures;
-}
-
--(VSFrameCoreHandover *) createFrameCoreHandOverFrameQuartzComposerHandover:(VSQuartzComposerHandover *) quartzComposerHandover{
-    
-    VSFrameCoreHandover *coreHandover = nil;
-    
-    if (quartzComposerHandover) {
-        NSLog(@"Not Implemented Yet");
-    }
-    
-    return coreHandover;
 }
 
 @end

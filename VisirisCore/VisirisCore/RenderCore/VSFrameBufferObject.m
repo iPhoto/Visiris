@@ -9,7 +9,6 @@
 #import "VSFrameBufferObject.h"
 #import <OpenGL/glu.h>
 
-
 @interface VSFrameBufferObject()
 @property (assign) GLuint   buffer;
 
@@ -20,10 +19,14 @@
 @synthesize size = _size;
 @synthesize texture = _texture;
 
--(id)init{
+-(id)init{    
+    return [self initWithSize:NSMakeSize(640, 480)];
+}
+
+-(id)initWithSize:(NSSize)size{
     if (self = [super init])
     {
-        _size = NSMakeSize(640, 480);
+        _size = size;
         
         GLenum status;
         glGenFramebuffersEXT(1, &_buffer);
@@ -37,7 +40,7 @@
         glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, self.texture, 0);
         
         status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
-       
+        
         if (status != GL_FRAMEBUFFER_COMPLETE_EXT){
             NSLog(@"ERROF: FrameBuffer creation failed - fuck you, because thats why");
         }
