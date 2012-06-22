@@ -86,9 +86,10 @@
  * @param timelineObjectViewController VSTimelineObjectViewController that will be dragged.
  * @param newPosition Position the view of the VSTimelineObjectViewController is dragged from
  * @param oldPosition NSPoint the view of the VSTimelineObjectViewController wants to be dragged to
+ * @param mousePosition Current position of the mouse
  * @return NSPoint the view of the VSTimelineObjectViewController will be moved to.
  */
--(NSPoint) timelineObjectWillBeDragged:(VSTimelineObjectViewController *)timelineObjectViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition;
+-(NSPoint) timelineObjectWillBeDragged:(VSTimelineObjectViewController *)timelineObjectViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition forMousePosition:(NSPoint) mousePosition;
 
 /**
  * Called before the view of the VSTimelineObjectViewController gets resized.

@@ -114,9 +114,9 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     }
 }
 
--(NSPoint) timelineObjectViewWillBeDragged:(VSTimelineObjectView *)timelineObjectView fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition{
-    if([self delegateRespondsToSelector:@selector(timelineObjectWillBeDragged:fromPosition:toPosition:)]){
-        return [self.delegate timelineObjectWillBeDragged:self fromPosition:oldPosition toPosition:newPosition];
+-(NSPoint) timelineObjectViewWillBeDragged:(VSTimelineObjectView *)timelineObjectView fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition forMousePosition:(NSPoint)currentMousePosition{
+    if([self delegateRespondsToSelector:@selector(timelineObjectWillBeDragged:fromPosition:toPosition:forMousePosition:)]){
+        return [self.delegate timelineObjectWillBeDragged:self fromPosition:oldPosition toPosition:newPosition forMousePosition:currentMousePosition];
     }
     
     return newPosition;
@@ -127,6 +127,8 @@ static NSString* defaultNib = @"VSTimelinObjectView";
         [self.delegate timelineObjectWasDragged:self];
     }
 }
+
+
 
 -(BOOL) timelineObjectViewWillStartDragging:(VSTimelineObjectView *)timelineObjectView{
     if([self delegateRespondsToSelector:@selector(timelineObjectWillStartDragging:)]){
@@ -199,7 +201,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 
 -(void) removeIntersectionWith:(VSTimelineObjectViewController *)timelineObjectViewController{
     NSNumber *key = [NSNumber numberWithInt: timelineObjectViewController.timelineObjectProxy.timelineObjectID];
-
+    
     [self.intersectedTimelineObjectViews removeObjectForKey:key];
 }
 

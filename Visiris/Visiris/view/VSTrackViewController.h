@@ -101,7 +101,12 @@
  */
 -(void) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController wasDraggedOnTrack:(VSTrackViewController*) trackViewController;
 
+
 -(void) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController willStartDraggingOnTrack:(VSTrackViewController*) trackViewController;
+
+
+-(BOOL) moveTimelineObjectTemporary:(VSTimelineObjectViewController*) timelineObject fromTrack:(VSTrackViewController*) fromTrack toTrackAtPosition:(NSPoint) position;
+
 
 /**
  * Called when the dragging operation of the VSTimelineObjectViewController's view has ended
@@ -175,6 +180,7 @@
  */
 -(BOOL) computeSnappingXValueForSelectedTimelineObjectsMovedAccordingToDeltaX:(float) deltaX snappingDeltaX:(float*) snappingDeltaX;
 
+
 /**
  * Detects if any of the selected view intersects any of the not selected once on the timeline.
  *
@@ -201,5 +207,12 @@
  * Sets the moving-property of all selected VSTimlineObjectView's to YES
  */
 -(void) setSelectedTimelineObjectsAsMoving;
+
+/**
+ * Adds a new VSTimelineObjectViewController to self.temporaryTimelineObjectViewControllers and inits it with the given trackView
+ * @param aProxyObject VSTimelineObjectProxy the VSTimelineObjectViewController will be init with
+ * @param aTrackView VSTrackView the view of VSTimelineObjectViewController is added to
+ **/
+-(VSTimelineObjectViewController*) addTemporaryTimelineObject:(VSTimelineObjectProxy*) aProxyObject;
 
 @end

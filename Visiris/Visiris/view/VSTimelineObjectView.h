@@ -77,8 +77,9 @@
  * @param timelineObjectView VSTimelineObjectView that is dragged.
  * @param oldPosition NSPoint the VSTimelineObjectView was dragged from.
  * @param newPosition NSPoint the VSTimelineObjectView will be dragged to.
+ * @param mousePosition Current position of the mouse
  */
--(NSPoint) timelineObjectViewWillBeDragged:(VSTimelineObjectView*) timelineObjectView fromPosition:(NSPoint) oldPosition toPosition:(NSPoint) newPosition;
+-(NSPoint) timelineObjectViewWillBeDragged:(VSTimelineObjectView*) timelineObjectView fromPosition:(NSPoint) oldPosition toPosition:(NSPoint) newPosition forMousePosition:(NSPoint) currentMousePosition;
 
 @end
 

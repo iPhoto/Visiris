@@ -278,7 +278,23 @@ static NSString* defaultNib = @"VSTrackView";
     [self setTimelineObjectViews:[self unselectedTimelineObjectViewControllers] IntersectedByTimelineObjectViews:[self selectedTimelineObjectViewControllers]];
 }
 
-
+-(VSTimelineObjectViewController*) addTemporaryTimelineObject:(VSTimelineObjectProxy*) aProxyObject{
+    
+    VSTimelineObjectViewController *newController = [[VSTimelineObjectViewController alloc] initWithDefaultNib];
+    newController.timelineObjectProxy = aProxyObject;
+    
+    [[newController view] setFrame:[self frameForTimelineObjectProxy:aProxyObject]];
+    
+    [self.temporaryTimelineObjectViewControllers addObject:newController];
+    
+    newController.temporary = YES;
+    
+    [self.view addSubview:[newController view]];
+    [newController.view setNeedsDisplay:YES];
+    [self.view setNeedsDisplay:YES];
+    
+    return newController;
+}
 
 #pragma mark - NSViewController
 
@@ -598,7 +614,16 @@ static NSString* defaultNib = @"VSTrackView";
 
 #pragma mark Dragging (Moving)
 
--(NSPoint) timelineObjectWillBeDragged:(VSTimelineObjectViewController *)timelineObjectViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition{
+-(NSPoint) timelineObjectWillBeDragged:(VSTimelineObjectViewController *)timelineObjectViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition forMousePosition:(NSPoint)mousePosition{
+    
+    DDLogInfo(@"MousePos %@",NSStringFromPoint(mousePosition));
+    
+    if(!NSPointInRect([self.view convertPoint:mousePosition fromView:nil], self.view.frame)){
+        DDLogInfo(@"not in");
+        if ([self delegateRespondsToSelector:@selector(moveTimelineObjectTemporary:fromTrack:toTrackAtPosition:)]){
+            [self.delegate moveTimelineObjectTemporary:timelineObjectViewController fromTrack:self toTrackAtPosition:mousePosition];
+        }
+    }
     
     float deltaXPosition = newPosition.x - oldPosition.x;
     float snappingDeltaX;
@@ -772,30 +797,6 @@ static NSString* defaultNib = @"VSTrackView";
 #pragma mark  Temporary Timeline Objects
 
 /**
- * Adds a new VSTimelineObjectViewController to self.temporaryTimelineObjectViewControllers and inits it with the given trackView
- * @param aProxyObject VSTimelineObjectProxy the VSTimelineObjectViewController will be init with
- * @param aTrackView VSTrackView the view of VSTimelineObjectViewController is added to
- **/
--(VSTimelineObjectViewController*) setTemporaryTimelineObject:(VSTimelineObjectProxy*) aProxyObject toTrackView:(VSTrackView *) aTrackView{
-    
-    VSTimelineObjectViewController *newController = [[VSTimelineObjectViewController alloc] initWithDefaultNib];
-    newController.timelineObjectProxy = aProxyObject;
-    
-    [[newController view] setFrame:[self frameForTimelineObjectProxy:aProxyObject]];
-    
-    [self.temporaryTimelineObjectViewControllers addObject:newController];
-    
-    newController.temporary = YES;
-    
-    [aTrackView addSubview:[newController view]];
-    [newController.view setNeedsDisplay:YES];
-    [aTrackView setNeedsDisplay:YES];
-    
-    return newController;
-}
-
-
-/**
  * Adds a new TimelineObject for the given VSProjectItemRepresentation to the given VSTrackView at the given position.
  * @param aProjectItem VSProjectItemRepresentation the VSTimelineObjectProxy will be based on
  * @param aPosition NSPoint where the VSTimelineObjectView is positioned
@@ -815,7 +816,7 @@ static NSString* defaultNib = @"VSTrackView";
         
         newProxy.timelineObjectID = temporaryID;
         
-        return [self setTemporaryTimelineObject:newProxy toTrackView:aTrackView];
+        return [self addTemporaryTimelineObject:newProxy];
         
     }
     

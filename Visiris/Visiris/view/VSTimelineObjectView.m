@@ -302,8 +302,8 @@ static int resizingAreaWidth = 10;
     NSPoint newFramesOrigin = NSMakePoint(currentMousePosition.x-self.mouseDownXOffset, self.frame.origin.y);
     
     //informs the delegate about the change 
-    if([self delegateImplementsSelector:@selector(timelineObjectViewWillBeDragged:fromPosition:toPosition:)]){
-        newFramesOrigin = [self.delegate timelineObjectViewWillBeDragged:self fromPosition:self.frame.origin toPosition:newFramesOrigin];
+    if([self delegateImplementsSelector:@selector(timelineObjectViewWillBeDragged:fromPosition:toPosition:forMousePosition:)]){
+        newFramesOrigin = [self.delegate timelineObjectViewWillBeDragged:self fromPosition:self.frame.origin toPosition:newFramesOrigin forMousePosition:  currentMousePosition];
     }
     
     [self setFrameOrigin:newFramesOrigin];  

@@ -375,6 +375,34 @@ static NSString* defaultNib = @"VSTimelineView";
     return newPosition;
 }
 
+-(BOOL) moveTimelineObjectTemporary:(VSTimelineObjectViewController *)timelineObject fromTrack:(VSTrackViewController *)fromTrack toTrackAtPosition:(NSPoint)position{
+    
+    VSTrackViewController *toTrack = nil;
+    
+    int tracksIndex = [self.trackViewControllers indexOfObject:fromTrack];
+    
+    if(fromTrack.view.frame.origin.y > position.y){
+        ++tracksIndex;
+        if(tracksIndex < [self.trackViewControllers count]){
+           toTrack = (VSTrackViewController*) [self.trackViewControllers objectAtIndex:tracksIndex]; 
+        }
+    }
+    else{
+        --tracksIndex;
+        
+        if(tracksIndex >= 0){
+            toTrack = (VSTrackViewController*) [self.trackViewControllers objectAtIndex:tracksIndex];
+        }
+        
+    }
+    
+    if(toTrack){
+//        [toTrack addTemporaryTimelineObject:timelineObject.timelineObjectProxy];
+    }
+    
+    return NO;
+}
+
 -(void) timelineObject: timelineObjectViewController wasDraggedOnTrack:(VSTrackViewController *)trackViewController{
     for(VSTrackViewController *tmpTrackViewController in self.trackViewControllers){
         if(tmpTrackViewController != trackViewController){
