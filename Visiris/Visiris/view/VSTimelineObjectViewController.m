@@ -21,7 +21,7 @@
 @implementation VSTimelineObjectViewController
 
 #define VIEWS_HIGHLIGHTED_ZPOSITION 20
-#define VIEWS_DEFAULT_ZPOSITION 20
+#define VIEWS_DEFAULT_ZPOSITION 10
 
 @synthesize pixelTimeRatio                  = _pixelTimeRatio;
 @synthesize delegate                        = _delegate;

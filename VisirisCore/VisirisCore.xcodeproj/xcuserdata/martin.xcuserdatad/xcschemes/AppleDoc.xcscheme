@@ -14,8 +14,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "5B7A60FA156E2EF1000FBEC3"
-               BuildableName = "AppleDoc"
-               BlueprintName = "AppleDoc"
+               BuildableName = "VisirisCoreDocs"
+               BlueprintName = "VisirisCoreDocs"
                ReferencedContainer = "container:VisirisCore.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
