@@ -128,6 +128,8 @@ static struct {
     // Make sure we draw to the right context
 	[[self openGLContext] makeCurrentContext];
     
+    NSMutableArray *textures = [self createTextures:mutableCoreHandovers];
+    
     switch (validCoreHandovers.count) {
         case 0:
         {
@@ -147,6 +149,7 @@ static struct {
         }
         case 2:
         {
+            NSLog(@"unsupported");
             [self combineTheFirstTwoObjects:validCoreHandovers];
             self.outPutTexture = self.frameBufferObjectCurrent.texture;
             [[self openGLContext] flushBuffer];
@@ -154,6 +157,7 @@ static struct {
         }
         default:
         {            
+            NSLog(@"unsupported");
             [self combineTheFirstTwoObjects:validCoreHandovers];
             
 
@@ -262,6 +266,28 @@ static struct {
         self.frameBufferObjectCurrent = self.frameBufferObjectOne;
         self.frameBufferObjectOld = self.frameBufferObjectTwo;
     }
+}
+
+- (NSMutableArray *)createTextures:(NSArray *)handovers{
+    NSMutableArray *textures = [[NSMutableArray alloc] init];
+    
+    for(VSCoreHandover *coreHandover in handovers){
+        if ([coreHandover isKindOfClass:[VSFrameCoreHandover class]]) {
+            //NSLog(@"FrameCoreHandover");
+            
+            VSFrameCoreHandover *handOver = (VSFrameCoreHandover*)coreHandover;
+            VSTexture *handOverTexture = [self.textureManager getVSTextureForTexId:handOver.textureID];
+            [handOverTexture replaceContent:handOver.frame timeLineObjectId:handOver.timeLineObjectID];
+            [textures addObject:handOverTexture];
+        }
+        else if ([coreHandover isKindOfClass:[VSQuartzComposerHandover class]]) {
+            NSLog(@"QuartzCoreHandover not implemented yet");
+        }
+    }
+    
+    
+    
+    return textures;
 }
 
 -(VSFrameCoreHandover *) createFrameCoreHandOverFrameQuartzComposerHandover:(VSQuartzComposerHandover *) quartzComposerHandover{
