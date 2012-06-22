@@ -16,6 +16,7 @@
 #import "VSTimelineObject.h"
 #import "VSTimelineObjectProxy.h"
 #import "VSPlayHead.h"
+#import "VSTimelineObjectSource.h"
 
 #import "VSCoreServices.h"
 
@@ -171,10 +172,27 @@
     
 }
 
+#pragma mark Copy TimlineObjects
+
+-(VSTimelineObject*) copyTimelineObject:(VSTimelineObject *)baseTimelineObject toTrack:(VSTrack *)track atPosition:(double)position withDuration:(double)duration{
+    
+    
+   return [self addNewTimelineObjectBasedOnProjectItemRepresentation:(VSProjectItemRepresentation*) baseTimelineObject.sourceObject.projectItem toTrack:track positionedAtTime:position withDuration:duration];
+}
+
+-(VSTimelineObject*) copyTimelineObject:(VSTimelineObject *)baseTimelineObject toTrack:(VSTrack *)track atPosition:(double)position withDuration:(double)duration andRegisterUndoOperation:(NSUndoManager *)undoManager{
+
+    return [self addNewTimelineObjectBasedOnProjectItemRepresentation:(VSProjectItemRepresentation*) baseTimelineObject.sourceObject.projectItem toTrack:track positionedAtTime:position withDuration:duration andRegisterUndoOperation:undoManager];
+}
+
 #pragma mark Remove TimelineObjects
 
 -(BOOL) removeTimelineObject:(VSTimelineObject *)aTimelineObject fromTrack:(VSTrack *)track{
     return [track removTimelineObject:aTimelineObject];
+}
+
+-(BOOL) removeTimelineObject:(VSTimelineObject *)aTimelineObject fromTrack:(VSTrack *)track andRegisterAtUndoManager:(NSUndoManager *)undoManager{
+    return [track removTimelineObject:aTimelineObject andRegisterAtUndoManager:undoManager];
 }
 
 #pragma mark TimelineObject-Selection

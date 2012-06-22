@@ -58,7 +58,7 @@
 //TODO: Faster algorithm to find the current VSTimelineObject
 -(VSTimelineObject*)timelineObjectAtTimestamp:(double)aTimestamp{
     for (VSTimelineObject *timelineObject in self.timelineObjects){
-        if(timelineObject.startTime < aTimestamp && timelineObject.endTime > aTimestamp){
+        if(timelineObject.startTime <= aTimestamp && timelineObject.endTime >= aTimestamp){
             return timelineObject;
         }
     }

@@ -29,9 +29,6 @@
 /** ID of the texture stored in VSCore */
 @property GLuint textureID;
 
-/** unique ID of the timelineObject */
-@property NSInteger timelineObjectID;
-
 /**
  * Inits a the object with the given sourceObject
  * @param sourceObject SourceObject the timelineObject represents on the timeline

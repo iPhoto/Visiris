@@ -25,8 +25,10 @@
 /** stores the last mousePosition during a dragging-Operation */
 @property NSPoint lastMousePosition;
 
+/** Mouse position when a mous down event happend */
 @property NSPoint mouseDownMousePosition;
 
+/** Stores the distance from the x-Origin of the frame and mouse position in the mouseDown. */
 @property NSInteger mouseDownXOffset;
 
 /** Area at the left side of the VSTimelineObject which starts the resizing of the object when clicked */
@@ -112,7 +114,7 @@ static int resizingAreaWidth = 10;
     
     if(self.intersected){
         [[NSColor greenColor] set];
-        NSRectFill(self.intersectionRect);
+        NSRectFill(self.intersectionRect);  
         self.layer.opacity = 0.7;
     }
     
@@ -149,9 +151,9 @@ static int resizingAreaWidth = 10;
     self.mouseDownMousePosition = self.lastMousePosition;
     self.mouseDownXOffset = self.mouseDownMousePosition.x - self.frame.origin.x;
     
+    //If the cmd key is pressed the object gets selected additionally
     if(!self.selected){
         if(theEvent.modifierFlags & NSCommandKeyMask){
-            DDLogInfo(@"Multiselect");
         }
         if([self delegateImplementsSelector:@selector(timelineObjectViewWasClicked:withModifierFlags:)]){
             [self.delegate timelineObjectViewWasClicked:self withModifierFlags:theEvent.modifierFlags];
@@ -293,15 +295,15 @@ static int resizingAreaWidth = 10;
 
 /**
  * Moves the view according to given change of its x-Origin
- * @param deltaX Change of view's x-Origin
+ * @param currentMousePosition Current Position of the mouse
  */
 -(void) move:(NSPoint) currentMousePosition{
     
     NSPoint newFramesOrigin = NSMakePoint(currentMousePosition.x-self.mouseDownXOffset, self.frame.origin.y);
     
     //informs the delegate about the change 
-    if([self delegateImplementsSelector:@selector(timelineObjectViewWillBeDragged:fromPosition:toPosition:)]){
-        newFramesOrigin = [self.delegate timelineObjectViewWillBeDragged:self fromPosition:self.frame.origin toPosition:newFramesOrigin];
+    if([self delegateImplementsSelector:@selector(timelineObjectViewWillBeDragged:fromPosition:toPosition:forMousePosition:)]){
+        newFramesOrigin = [self.delegate timelineObjectViewWillBeDragged:self fromPosition:self.frame.origin toPosition:newFramesOrigin forMousePosition:  currentMousePosition];
     }
     
     [self setFrameOrigin:newFramesOrigin];  

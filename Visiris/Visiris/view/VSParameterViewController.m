@@ -282,8 +282,6 @@ static NSString* defaultNib = @"VSParameterView";
 }
 
 
-
-
 #pragma mark - Properties
 
 

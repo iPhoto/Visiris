@@ -29,8 +29,18 @@
 */
 +(float) durationInMillisecondsOfFile:(NSString*)file;
 
+/**
+ * Returns the pixel width and height of the given file
+ * @param file Path of the file the the dimensions will be read out
+ * @return NSSize with widht and height for the given file
+ */
 +(NSSize) dimensionsOfFile:(NSString *)file;
 
+/**
+ * Reads out the color space of the given file's exif data if it's an image
+ * @param file file the colorspace will be read out.
+ * @return Color space of the given file if it is an image
+ */
 +(NSString*) colorSpaceOfFile:(NSString *)file;
 
 @end

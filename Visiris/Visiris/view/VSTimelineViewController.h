@@ -26,6 +26,8 @@
 
 /** NSScrollView holding the VSTrackViews representing the single tracks */
 @property (weak) IBOutlet NSScrollView *scrollView;
+
+/** DocumentView of the NSSCrollView */
 @property (weak) IBOutlet VSTrackHolderView *trackHolder;
 
 /** VSTimeline the controller represents */

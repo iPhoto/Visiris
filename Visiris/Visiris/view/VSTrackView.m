@@ -17,13 +17,16 @@
 
 @property NSDragOperation currentDragOperation;
 
+@property NSPoint formerMousePosition;
+
 @end
 
 
 @implementation VSTrackView
 
-@synthesize controllerDelegate = _controllerDelegate;
-@synthesize currentDragOperation = _currentDragOperation;
+@synthesize controllerDelegate      = _controllerDelegate;
+@synthesize currentDragOperation    = _currentDragOperation;
+@synthesize formerMousePosition     = _formerMousePosition;
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -68,6 +71,7 @@
 #pragma mark - VSDraggingDestination implementation
 
 -(NSDragOperation) draggingEntered:(id<NSDraggingInfo>)sender{
+    self.formerMousePosition = [self convertPoint:[sender draggingLocation] fromView:nil];
     self.currentDragOperation = NSDragOperationNone;
     
     if([self controllerDelegateImplementsSelector:@selector(trackView:objectsHaveEntered:atPosition:)]){
@@ -118,9 +122,13 @@
 
 -(NSDragOperation) draggingUpdated:(id<NSDraggingInfo>)sender{
     
-    if([self controllerDelegateImplementsSelector:@selector(trackView:objectsOverTrack:atPosition:)]){
-        [self.controllerDelegate trackView:self  objectsOverTrack:sender atPosition:[self convertPoint:[sender draggingLocation] fromView:nil]];
+    NSPoint currentMousePosition = [self convertPoint:[sender draggingLocation] fromView:nil];
+    
+    if([self controllerDelegateImplementsSelector:@selector(trackView:draggedObjects:movedFromPosition:toPosition:)]){
+        [self.controllerDelegate trackView:self draggedObjects:sender movedFromPosition:self.formerMousePosition toPosition:currentMousePosition];
     }
+    
+    self.formerMousePosition = currentMousePosition;
    
 
    

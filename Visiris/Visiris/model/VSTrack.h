@@ -33,6 +33,7 @@
 /**
  * Inits a new Track with the given values.
  * @param name Name of the track
+ * @param trackID Unique ID of the track
  * @param type Indicates if the Track is an audio- or an Visual-Track 
  */
 -(id) initWithName:(NSString*) name trackID:(NSInteger) trackID type:(VSTrackType) type;

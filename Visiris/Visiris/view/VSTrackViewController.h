@@ -79,22 +79,52 @@
  */
 -(void) timelineObjectProxy:(VSTimelineObjectProxy *) timelineObjectProxy wasUnselectedOnTrackViewController:(VSTrackViewController*) trackViewController;
 
+/**
+ * Called when a timelineObejct wants to be moved to the given position.
+ *
+ * @param timelineObject VSTimelineObjectViewController's view that wants to change its position
+ * @param trackViewController VSTrackViewController holding the VSTimelineObjectViewController's view
+ * @param oldPosition Current position of the VSTrackViewController's view
+ * @param newPosition Position the VSTrackViewController's view wants to be moved to
+ * @param snappingDeltaX Distance to the nearest active snapping point
+ * @return NSPoint the VSTimelineObjectViewController's view will be moved to
+ */
 -(NSPoint) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController WillBeDraggedOnTrack:(VSTrackViewController*) trackViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition withSnappingDeltaX:(float) snappingDeltaX;
 
 @optional
 
+/**
+ * Called when the VSTimelineObjectViewController's view was moved
+ *
+ * @param timelineObjectViewController VSTimelineObjectViewController which's view was moved
+ * @param trackViewController VSTrackViewController holding the VSTimelineObjectViewController's view 
+ */
 -(void) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController wasDraggedOnTrack:(VSTrackViewController*) trackViewController;
+
 
 -(void) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController willStartDraggingOnTrack:(VSTrackViewController*) trackViewController;
 
+
+-(BOOL) moveTimelineObjectTemporary:(VSTimelineObjectViewController*) timelineObject fromTrack:(VSTrackViewController*) fromTrack toTrackAtPosition:(NSPoint) position;
+
+
+/**
+ * Called when the dragging operation of the VSTimelineObjectViewController's view has ended
+ *
+ * @param timelineObjectViewController VSTimelineObjectViewController which's views draggin operation has ended
+ * @param trackViewController VSTrackViewController holding the VSTimelineObjectViewController's view 
+ */
 -(void) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController didStopDraggingOnTrack:(VSTrackViewController*) trackViewController;
 
 /**
- * Applies the current intersection to the intersected VSTimelineObjectViewControllers to their VSTimelineObjectProxys.
+ * Called when the timelineObject stored in the VSTimelineObjectViewController needs to be splitted up according to the NSRects in splittingRects
  *
- * The intersectionRect of the VSTimelineObjectViewController is cut off and startTime and duration are updated.
+ * @param timelineObjectViewController VSTimelineObjectViewController holding the VSTimelineObejct to be splitted up
+ * @param trackViewController VSTrackViewController holding the timelineObjectViewController
+ * @param splittingRects NSArray storing NSValues for NSRects defining the areas where the timelineObject will be split up
+ * @return YES if the splitting was sucessfully, NO otherwise
  */
--(void) applyIntersectionToTimelineObjects;
+-(BOOL) splitTimelineObject:(VSTimelineObjectViewController*) timelineObjectViewController ofTrack:(VSTrackViewController*) trackViewController byRects:(NSArray*) splittingRects;
 
 @end
 
@@ -136,18 +166,53 @@
  */
 -(void) pixelTimeRatioDidChange:(double) newRatio;
 
+/**
+ * Moves all selected timelineObjects on the track according to the given deltaX
+ * @param deltaX Distance the selected timelineObjects are moved
+ */
 -(void) moveSelectedTimemlineObjects:(float) deltaX;
 
--(float) computeSnappingXValueForSelectedTimelineObjectsMovedAccordingToDeltaX:(float) deltaX;
+/**
+ * Checks if any of the currently selected timelineObjects of the track are in snapping distance to another object when the timelineObejct was moved according to deltaX. If a timlineObject is in snapping distance the additional distance the object has to be moved to be snaped are stored in snappingDeltaX
+ * @param deltaX Distance the timelineObejcts will be moved
+ * @param snappingDeltaX Additional distance the timelineObjects have to be moved to snap to be snapped to the nearet object in snapping distance.
+ * @return YES if the any of the selected timelineObjects is in snapping distance to any other timelineObject of the track, NO otherwise
+ */
+-(BOOL) computeSnappingXValueForSelectedTimelineObjectsMovedAccordingToDeltaX:(float) deltaX snappingDeltaX:(float*) snappingDeltaX;
 
+
+/**
+ * Detects if any of the selected view intersects any of the not selected once on the timeline.
+ *
+ * If an intersection is found, the VSTimelineObjectViewController of the intersected view is informed about it and the NSRect where the intersection happens is sent to it.
+ */
 -(void) setTimelineObjectViewsIntersectedBySelectedTimelineObjects;
 
+/**
+ * Sets the current position of the selected VSTimlineObjectView's as startTime of their VSTimlineObjects according to current pixelTimeRatio
+ */
 -(void) setStartTimeOfSelectedTimelineObjects;
 
+/**
+ * Applies the Intersections stored in the intersected timelineObjects like set in setTimelineObjectViewsIntersectedBySelectedTimelineObjects. 
+ */
 -(void) applyIntersectionToTimelineObjects;
 
+/**
+ * Sets the moving-property of all selected VSTimlineObjectView's to NO
+ */
 -(void) unsetsetSelectedTimelineObjectsAsMoving;
 
+/**
+ * Sets the moving-property of all selected VSTimlineObjectView's to YES
+ */
 -(void) setSelectedTimelineObjectsAsMoving;
+
+/**
+ * Adds a new VSTimelineObjectViewController to self.temporaryTimelineObjectViewControllers and inits it with the given trackView
+ * @param aProxyObject VSTimelineObjectProxy the VSTimelineObjectViewController will be init with
+ * @param aTrackView VSTrackView the view of VSTimelineObjectViewController is added to
+ **/
+-(VSTimelineObjectViewController*) addTemporaryTimelineObject:(VSTimelineObjectProxy*) aProxyObject;
 
 @end

@@ -28,7 +28,6 @@
  */
 @interface VSPreviewViewController : NSViewController<VSPlaybackControllerDelegate>
 
-//for testing purpose only
 @property (strong) VSPlaybackController *playBackController;
 
 @property (strong) NSOpenGLContext *openGLContext;

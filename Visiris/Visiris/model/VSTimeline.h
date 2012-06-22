@@ -80,6 +80,15 @@
 #pragma mark - Methods
 
 /**
+ * Asks its tracks for all timelineObjects which are active at the given timestamp.
+ * @param aTimestamp Timestamp, the active timelineObjects are looked up for.
+ * @return Array of the timelineObjects acitve at the given timestamp
+ */
+- (NSArray *)timelineObjectsForTimestamp:(double)aTimestamp;
+
+#pragma mark Adding TimelineObjects
+
+/**
  * Adds a new Timeline-Object to the given track.
  *
  * A new timeline object is created by the VSTimelineObjectFactory according to the given VSProjectItem.
@@ -87,9 +96,10 @@
  * @param track Track the TimelineObject will be added to.
  * @param timePosition Start-time of the timelineObject.
  * @param duration Duration of the VSTimelineObject
- * @return YES if the timeline object was create successfully, NO otherwise.
+ * @return Returens the VSTimelineObject if it was create successfully, nil otherwise.
  */
 -(VSTimelineObject*) addNewTimelineObjectBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *) item toTrack :(VSTrack *)track positionedAtTime:(double) timePosition withDuration:(double) duration;
+
 
 /**
  * Adds a new Timeline-Object to the given track and registers the adding at the given NSUndoManger
@@ -100,24 +110,32 @@
  * @param timePosition Start-time of the timelineObject.
  * @param duration Duration of the VSTimelineObject
  * @param undoManager NSUndoManeger the adding of the TimelineObject is registrated at.
- * @return YES if the timeline object was create successfully, NO otherwise.
+ * @return Returens the VSTimelineObject if it was create successfully, nil otherwise.
  */
 -(VSTimelineObject*) addNewTimelineObjectBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *) item toTrack :(VSTrack *)track positionedAtTime:(double) timePosition withDuration:(double) duration andRegisterUndoOperation:(NSUndoManager*) undoManager;
 
-/**
- * Removes aTimelineObject from the track and returns if the removal was successful.
- * @param aTimelineObject VSTimelineObject to be removed
- * @param track VSTrack aTimelineObject is placed on
- * @return YES if the removal was successfully, NO otherwise
- */
--(BOOL) removeTimelineObject:(VSTimelineObject*) aTimelineObject fromTrack:(VSTrack*) track;
 
 /**
- * Removes all currently selected VSTimelineObjects from the Timeline and registers the operation at the given NSUndoManager
- @param undoManager NSUndoManager the removal is registrated at.
+ * Creates a new VSTimelineObject based on the given one. The newly create VSTimlineObjct is added to to given track at the given position with the given duration.
+ * @param baseTimelineObject VSTimlineObject which a copy will be created of
+ * @param track VSTrack the copy of the baseTimelineObject will be added to
+ * @param position TimePosition the copy of the baseTimelineObject will be placed on the track
+ * @param duration Duration of the copy of the baseTimelineObject.
+  * @param undoManager NSUndoManeger the copying of the TimelineObject is registrated at.
+  * @return Returens the VSTimelineObject if it was create successfully, nil otherwise.
  */
--(void) removeSelectedTimelineObjectsAndRegisterAtUndoManager:(NSUndoManager*) undoManager;
+-(VSTimelineObject*) copyTimelineObject:(VSTimelineObject*) baseTimelineObject toTrack:(VSTrack*) track atPosition:(double) position withDuration:(double) duration andRegisterUndoOperation:(NSUndoManager*) undoManager;
 
+
+/**
+ * Creates a new VSTimelineObject based on the given one. The newly create VSTimlineObjct is added to to given track at the given position with the given duration.
+ * @param baseTimelineObject VSTimlineObject which a copy will be created of
+ * @param track VSTrack the copy of the baseTimelineObject will be added to
+ * @param position TimePosition the copy of the baseTimelineObject will be placed on the track
+ * @param duration Duration of the copy of the baseTimelineObject.
+  * @return Returens the VSTimelineObject if it was create successfully, nil otherwise.
+ */
+-(VSTimelineObject*) copyTimelineObject:(VSTimelineObject*) baseTimelineObject toTrack:(VSTrack*) track atPosition:(double) position withDuration:(double) duration;
 
 
 /**
@@ -130,12 +148,32 @@
  */
 -(VSTimelineObjectProxy*) createNewTimelineObjectProxyBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *) item positionedAtTime:(double) timePosition;
 
+#pragma mark Removing TimelineObjects
+
 /**
- * Asks its tracks for all timelineObjects which are active at the given timestamp.
- * @param aTimestamp Timestamp, the active timelineObjects are looked up for.
- * @return Array of the timelineObjects acitve at the given timestamp
+ * Removes aTimelineObject from the track and returns if the removal was successful.
+ * @param aTimelineObject VSTimelineObject to be removed
+ * @param track VSTrack aTimelineObject is placed on
+ * @return YES if the removal was successfully, NO otherwise
  */
-- (NSArray *)timelineObjectsForTimestamp:(double)aTimestamp;
+-(BOOL) removeTimelineObject:(VSTimelineObject*) aTimelineObject fromTrack:(VSTrack*) track;
+
+/**
+ * Removes aTimelineObject from the track and returns if the removal was successful.
+ * @param aTimelineObject VSTimelineObject to be removed
+ * @param track VSTrack aTimelineObject is placed on
+ * @param undoManager NSUndoManager the removal is registrated at.
+ * @return YES if the removal was successfully, NO otherwise
+ */
+-(BOOL) removeTimelineObject:(VSTimelineObject*) aTimelineObject fromTrack:(VSTrack*) track andRegisterAtUndoManager:(NSUndoManager*) undoManager;
+
+/**
+ * Removes all currently selected VSTimelineObjects from the Timeline and registers the operation at the given NSUndoManager
+ * @param undoManager NSUndoManager the removal is registrated at.
+ */
+-(void) removeSelectedTimelineObjectsAndRegisterAtUndoManager:(NSUndoManager*) undoManager;
+
+#pragma mark Selecting TimelineObejcts
 
 /**
  * Sets selected of the given VStimelinObject to YES.

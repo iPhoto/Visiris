@@ -14,10 +14,13 @@
 
 @interface VSTrackHolderView()
 
+/** NSRulerMarker represanting the Playhead in the horizontal rulerview */
 @property (strong) NSRulerMarker *playheadMarker;
 
+/** guideline always at the location of the playhead marker */
 @property (strong) VSTimelineGuideLine *guideLine;
 
+/** current offset of view's enclosing scrollView */
 @property NSPoint scrollOffset;
 
 @end
@@ -55,6 +58,9 @@
     [self initGuideLine];
 }
 
+/**
+ * Inits the guideline and sets its position
+ */
 -(void) initGuideLine{
     self.guideLine = [[VSTimelineGuideLine alloc] initWithFrame:self.frame];
     
@@ -65,6 +71,9 @@
     [self updateGuideline];
 }
 
+/**
+ * Inits the views enclosing scrollView and its rulers
+ */
 -(void) initEnclosingScrollView{
     
     [self.enclosingScrollView setHasHorizontalRuler:YES];
@@ -75,6 +84,9 @@
     [self.enclosingScrollView.verticalRulerView setClientView:self];
 }
 
+/**
+ * Inits the marker representing the playhead for the horizontal ruler of enclosing scroll view.
+ */
 -(void) initPlayheadMarker{
     if(self.enclosingScrollView){
         
@@ -99,8 +111,6 @@
 -(BOOL) isFlipped{
     return YES;
 }
-
-
 
 
 #pragma mark - RulerViewDelegate
@@ -139,11 +149,6 @@
 
 -(void) rulerView:(NSRulerView *)ruler handleMouseDown:(NSEvent *)event{
     if(ruler == self.enclosingScrollView.horizontalRulerView){
-        
-//        if([self delegateRespondsToSelector:@selector(shouldMovePlayHeadRulerMarker:inContainingView:)]){
-//            [self.playheadMarkerDelegate shouldMovePlayHeadRulerMarker:self.playheadMarker inContainingView:self];
-//        }
-        
         NSPoint pointInView = [self.window.contentView convertPoint:[event locationInWindow] toView:self.enclosingScrollView.horizontalRulerView];
         
         CGFloat location = pointInView.x - self.playheadMarker.imageRectInRuler.size.width / 2 - self.playheadMarker.imageOrigin.x;
@@ -153,10 +158,6 @@
         }
         
         [self setPlayHeadMarkerToLocation:location];
-        
-//        if([self delegateRespondsToSelector:@selector(didMovePlayHeadRulerMarker:inContainingView:)]){
-//            [self.playheadMarkerDelegate didMovePlayHeadRulerMarker:self.playheadMarker inContainingView:self];
-//        }
         
     }
 }
@@ -193,8 +194,10 @@
     return NO;
 }
 
-#pragma mark - Private Methods
-
+/**
+ * Receiver of the NSViewBoundsDidChangeNotification. Updates the scrollOffset and tells the guideline to be updated
+ * @param notification NSNotification of the NSViewBoundsDidChangeNotification
+ */
 -(void) boundsDidChange:(NSNotification*) notification{
     
     
@@ -211,10 +214,17 @@
     
 }
 
+/**
+ * Updates the playhead marker at its current location
+ */
 -(void) updateGuideline{
     [self updateGuidelineAtMarkerLocation:self.playheadMarker.markerLocation];
 }
 
+/**
+ * Updates the guideline for the given location
+ * @param location Location the guidelin is updated for
+ */
 -(void) updateGuidelineAtMarkerLocation:(CGFloat) location{
     NSRect newFrame = self.bounds; 
     newFrame.size = self.enclosingScrollView.contentSize;

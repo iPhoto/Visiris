@@ -86,9 +86,10 @@
  * @param timelineObjectViewController VSTimelineObjectViewController that will be dragged.
  * @param newPosition Position the view of the VSTimelineObjectViewController is dragged from
  * @param oldPosition NSPoint the view of the VSTimelineObjectViewController wants to be dragged to
+ * @param mousePosition Current position of the mouse
  * @return NSPoint the view of the VSTimelineObjectViewController will be moved to.
  */
--(NSPoint) timelineObjectWillBeDragged:(VSTimelineObjectViewController *)timelineObjectViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition;
+-(NSPoint) timelineObjectWillBeDragged:(VSTimelineObjectViewController *)timelineObjectViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition forMousePosition:(NSPoint) mousePosition;
 
 /**
  * Called before the view of the VSTimelineObjectViewController gets resized.
@@ -114,20 +115,17 @@
 /** VSTimelineObjectProxy of the VSTimelineObject the VSTimelineObjectViewController represents*/
 @property (strong) VSTimelineObjectProxy* timelineObjectProxy;
 
-/** Indicates wheter the view of VSTimelineObjectViewController is intersected by an other VSTimelineObjectViewController's view while it is dragged around. */
-@property BOOL intersected;
-
-/** Area where the VSTimelineObjectViewController's view is intersected */
-@property NSRect intersectionRect;
-
-/** Indicates wheter the intersection started from left or not */
-@property BOOL enteredLeft;
-
 
 /** Indicates wheter the VSTimelineObjectViewController's VSTimelineObjectProxy is only a temporary object on the track. */
 @property BOOL temporary;
 
+/** Indicates wheter the views is currently moved */
 @property BOOL moving;
+
+/** Stores the VSTimelineObjectViewController which's views intersecting the view of the VSTimelineObjectViewController as VSTimelineObjectIntersection */
+@property (strong) NSMutableDictionary *intersectedTimelineObjectViews;
+
+#pragma mark - Init
 
 -(id) initWithDefaultNib;
 
@@ -139,5 +137,18 @@
  * @param newPixelTimeRatio New pixel-time-ratio
  */
 -(void) changePixelTimeRatio:(double) newPixelTimeRatio;
+
+/**
+ * Creates a new VSTimelineObjectIntersection for the given parameters and stores it in the intersectedTimelineObjectViews-property
+ * @param timelineObjectViewController VSTimelineObjectViewController which's view intersects.
+ * @param intersectionRect NSRect defining where on the view the intersetion happens
+ */
+-(void) intersectsTimelineObjectView:(VSTimelineObjectViewController*) timelineObjectViewController intersects:(NSRect) intersectionRect;
+
+/**
+ * Removes the any intersections for the given VSTimelineObjectViewController from the intersectedTimelineObjectViews-property
+ * @param timelineObjectViewController VSTimelineObjectViewController which intersections are removed.
+ */
+-(void) removeIntersectionWith:(VSTimelineObjectViewController*) timelineObjectViewController;
 
 @end

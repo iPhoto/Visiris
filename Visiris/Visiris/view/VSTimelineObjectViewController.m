@@ -9,6 +9,7 @@
 #import "VSTimelineObjectViewController.h"
 
 #import "VSTimelineObjectProxy.h"
+#import "VSTimelineObjectViewIntersection.h"
 
 #import "VSCoreServices.h"
 
@@ -18,14 +19,16 @@
 
 
 @implementation VSTimelineObjectViewController
-@synthesize pixelTimeRatio          = _pixelTimeRatio;
-@synthesize delegate                = _delegate;
-@synthesize intersected             = _intersected;
-@synthesize intersectionRect        = _intersectionRect;
-@synthesize timelineObjectProxy     = _timelineObjectProxy;
-@synthesize enteredLeft             = _enteredLeft;
-@synthesize temporary               = _temporary;
-@synthesize moving                  = _moving;
+
+#define VIEWS_HIGHLIGHTED_ZPOSITION 20
+#define VIEWS_DEFAULT_ZPOSITION 10
+
+@synthesize pixelTimeRatio                  = _pixelTimeRatio;
+@synthesize delegate                        = _delegate;
+@synthesize timelineObjectProxy             = _timelineObjectProxy;
+@synthesize temporary                       = _temporary;
+@synthesize moving                          = _moving;
+@synthesize intersectedTimelineObjectViews  = _intersectedTimelineObjectViews;
 
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
@@ -48,6 +51,8 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 }
 
 -(void) awakeFromNib{
+    
+    self.intersectedTimelineObjectViews = [[NSMutableDictionary alloc] init];
     if([self.view isKindOfClass:[VSTimelineObjectView class]]){
         ((VSTimelineObjectView*) self.view).delegate = self;
     }
@@ -72,7 +77,6 @@ static NSString* defaultNib = @"VSTimelinObjectView";
                     ((VSTimelineObjectView*)self.view).selected = selected;
                     
                     if(selected){
-                        [self.view.layer setZPosition:10];
                         
                         if([self delegateRespondsToSelector:@selector(timelineObjectProxyWasSelected:)]){
                             [self.delegate timelineObjectProxyWasSelected:self.timelineObjectProxy];
@@ -83,7 +87,6 @@ static NSString* defaultNib = @"VSTimelinObjectView";
                             [self.delegate timelineObjectProxyWasUnselected:self.timelineObjectProxy];
                         }
                         
-                        [self.view.layer setZPosition:0];
                     }
                     
                     [self.view setNeedsDisplay:YES];
@@ -111,9 +114,9 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     }
 }
 
--(NSPoint) timelineObjectViewWillBeDragged:(VSTimelineObjectView *)timelineObjectView fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition{
-    if([self delegateRespondsToSelector:@selector(timelineObjectWillBeDragged:fromPosition:toPosition:)]){
-        return [self.delegate timelineObjectWillBeDragged:self fromPosition:oldPosition toPosition:newPosition];
+-(NSPoint) timelineObjectViewWillBeDragged:(VSTimelineObjectView *)timelineObjectView fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition forMousePosition:(NSPoint)currentMousePosition{
+    if([self delegateRespondsToSelector:@selector(timelineObjectWillBeDragged:fromPosition:toPosition:forMousePosition:)]){
+        return [self.delegate timelineObjectWillBeDragged:self fromPosition:oldPosition toPosition:newPosition forMousePosition:currentMousePosition];
     }
     
     return newPosition;
@@ -124,6 +127,8 @@ static NSString* defaultNib = @"VSTimelinObjectView";
         [self.delegate timelineObjectWasDragged:self];
     }
 }
+
+
 
 -(BOOL) timelineObjectViewWillStartDragging:(VSTimelineObjectView *)timelineObjectView{
     if([self delegateRespondsToSelector:@selector(timelineObjectWillStartDragging:)]){
@@ -178,6 +183,28 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     }
 }
 
+-(void) intersectsTimelineObjectView:(VSTimelineObjectViewController *)timelineObjectViewController intersects:(NSRect)intersectionRect{
+    
+    NSNumber *key = [NSNumber numberWithInt: timelineObjectViewController.timelineObjectProxy.timelineObjectID];
+    
+    VSTimelineObjectViewIntersection *intersection = [self.intersectedTimelineObjectViews objectForKey:key];
+    
+    if(intersection){
+        intersection.intersectionRect = intersectionRect;
+    }
+    else {
+        intersection = [[VSTimelineObjectViewIntersection alloc] initWithIntersectedTimelineObejctView:timelineObjectViewController intersectedAt:intersectionRect];
+        
+        [self.intersectedTimelineObjectViews setObject:intersection forKey:key];
+    }
+}
+
+-(void) removeIntersectionWith:(VSTimelineObjectViewController *)timelineObjectViewController{
+    NSNumber *key = [NSNumber numberWithInt: timelineObjectViewController.timelineObjectProxy.timelineObjectID];
+    
+    [self.intersectedTimelineObjectViews removeObjectForKey:key];
+}
+
 #pragma mark - Private Methods
 
 /**
@@ -216,45 +243,6 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 
 #pragma mark - Propertes
 
--(void) setIntersectionRect:(NSRect)intersectionRect{
-    if([self.view isKindOfClass:[VSTimelineObjectView class]]){
-        
-        ((VSTimelineObjectView*) self.view).intersectionRect = intersectionRect;
-        
-        
-        if(self.intersected && !NSEqualRects(intersectionRect, _intersectionRect)){
-            _intersectionRect = intersectionRect;
-            [self.view setNeedsDisplay:YES];
-        }
-    }
-    
-    _intersectionRect = intersectionRect;
-}
-
--(NSRect) intersectionRect{
-    return _intersectionRect;
-}
-
--(void) setIntersected:(BOOL)intersected{
-    if([self.view isKindOfClass:[VSTimelineObjectView class]]){
-        
-        ((VSTimelineObjectView*) self.view).intersected = intersected;
-        
-        if (!_intersected && intersected && !NSIsEmptyRect(self.intersectionRect)) {
-            
-            [self.view setNeedsDisplay:YES];
-        }else if(!intersected && _intersected){
-            [self.view setNeedsDisplay:YES];
-        }
-    }
-    
-    _intersected = intersected;
-}
-
--(BOOL) intersected{
-    return _intersected;
-}
-
 -(BOOL) temporary{
     return _temporary;
 }
@@ -264,6 +252,13 @@ static NSString* defaultNib = @"VSTimelinObjectView";
         ((VSTimelineObjectView*) self.view).temporary = temporary;
         if(temporary != _temporary){
             [self.view setNeedsDisplay:YES];
+            
+            if(temporary){
+                [self.view.layer setZPosition:VIEWS_HIGHLIGHTED_ZPOSITION];
+            }
+            else {
+                [self.view.layer setZPosition:VIEWS_DEFAULT_ZPOSITION];
+            }
         }
         
         _temporary = temporary;
@@ -274,6 +269,13 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     if(moving != _moving){
         if([self.view isKindOfClass:[VSTimelineObjectView class]]){
             ((VSTimelineObjectView*) self.view).moving = moving;
+            
+            if(moving){
+                [self.view.layer setZPosition:VIEWS_HIGHLIGHTED_ZPOSITION];
+            }
+            else {
+                [self.view.layer setZPosition:VIEWS_DEFAULT_ZPOSITION];
+            }
             
             [self.view setNeedsDisplay:YES];
             
