@@ -33,9 +33,6 @@
 /** NSMutableArray storing all VSTimelineObjectViewControllers of the VSTimelineObjectViews added to the VSTrackViewController */ 
 @property (strong) NSMutableArray *timelineObjectViewControllers;
 
-/** NSMutableArray storing all VSTimelineObjectViewControllers of the VSTimelineObjectViews which's VSTimelineObjects were dragged onto the VSTrackView but not dropped yet. Neccessary to give the user a preview where the newly added VSTimelineObject will be placed on the timeline */
-@property (strong) NSMutableArray *temporaryTimelineObjectViewControllers;
-
 @end
 
 // Size of the area objects can be snapped to other objects on the timelien

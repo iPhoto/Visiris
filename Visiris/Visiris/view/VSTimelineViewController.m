@@ -32,7 +32,7 @@
 /** NSViewcController responsible for displaying the track labels in next to the timeline */
 @property (strong) VSTrackLabelsViewController *trackLabelsViewController;
 
-
+@property int offsetTrack;
 
 @end
 
@@ -49,6 +49,7 @@
 @synthesize timeline                    = _timeline;
 @synthesize pixelTimeRatio              = _pixelTimeRatio;
 @synthesize trackLabelsViewController   = _trackLabelsViewController;
+@synthesize offsetTrack                 = _offsetTrack;
 
 
 // Name of the nib that will be loaded when initWithDefaultNib is called 
@@ -375,33 +376,45 @@ static NSString* defaultNib = @"VSTimelineView";
     return newPosition;
 }
 
+-(void) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController willStartDraggingOnTrack:(VSTrackViewController *)trackViewController{
+    self.offsetTrack = [self.trackViewControllers indexOfObject:trackViewController];
+}
+
 -(BOOL) moveTimelineObjectTemporary:(VSTimelineObjectViewController *)timelineObject fromTrack:(VSTrackViewController *)fromTrack toTrackAtPosition:(NSPoint)position{
+    
+
     
     VSTrackViewController *toTrack = nil;
     
-    int tracksIndex = [self.trackViewControllers indexOfObject:fromTrack];
+    int newTrackOffset = self.offsetTrack;
+ 
     
-    if(fromTrack.view.frame.origin.y > position.y){
-        ++tracksIndex;
-        if(tracksIndex < [self.trackViewControllers count]){
-           toTrack = (VSTrackViewController*) [self.trackViewControllers objectAtIndex:tracksIndex]; 
+    int i = 0;
+    for(VSTrackViewController *trackViewController in self.trackViewControllers){
+        if(NSPointInRect(position, trackViewController.view.frame)){
+            newTrackOffset = [self.trackViewControllers indexOfObject:fromTrack] -i;
         }
     }
-    else{
-        --tracksIndex;
-        
-        if(tracksIndex >= 0){
-            toTrack = (VSTrackViewController*) [self.trackViewControllers objectAtIndex:tracksIndex];
+    
+    if(newTrackOffset != self.offsetTrack){
+//        int difference = 
+        if(newTrackOffset > self.offsetTrack){
+            NSArray *temporaryTimelineObjects = [[NSArray alloc] init];
+            for(int i = 0; i<self.trackViewControllers.count - 1; i++){
+                
+                VSTrackViewController *trackViewControlller = (VSTrackViewController*) [self.trackViewControllers objectAtIndex:i];
+            }
         }
-        
     }
+    
     
     if(toTrack){
-//        [toTrack addTemporaryTimelineObject:timelineObject.timelineObjectProxy];
+        [toTrack addTemporaryTimelineObject:timelineObject.timelineObjectProxy];
     }
     
     return NO;
 }
+
 
 -(void) timelineObject: timelineObjectViewController wasDraggedOnTrack:(VSTrackViewController *)trackViewController{
     for(VSTrackViewController *tmpTrackViewController in self.trackViewControllers){

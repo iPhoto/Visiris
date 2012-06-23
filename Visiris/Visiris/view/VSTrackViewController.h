@@ -152,6 +152,9 @@
 /** Pixel Item Ratio as set in VSTimelineViewController */
 @property double pixelTimeRatio;
 
+/** NSMutableArray storing all VSTimelineObjectViewControllers of the VSTimelineObjectViews which's VSTimelineObjects were dragged onto the VSTrackView but not dropped yet. Neccessary to give the user a preview where the newly added VSTimelineObject will be placed on the timeline */
+@property (strong) NSMutableArray *temporaryTimelineObjectViewControllers;
+
 
 /**
  * Inits the controller with the .nib-File stored in defaultNib (VSBrowserView) for the given timeline.
