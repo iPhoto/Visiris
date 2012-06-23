@@ -12,9 +12,11 @@
 #import "VSTimelineObjectSource.h"
 #import "VSSourceSupplier.h"
 #import "VSFrameSourceSupplier.h"
+#import "VSQuartzComposerSourceSupplier.h"
 #import "VisirisCore/VSCoreHandover.h"
 #import "VSParameter.h"
 #import "VisirisCore/VSFrameCoreHandover.h"
+#import "VisirisCore/VSQuartzComposerHandover.h"
 
 @implementation VSTimelineObject
 
@@ -50,10 +52,21 @@
     double localTimestamp = [self convertGlobalTimestampToLocalTimestamp:aTimestamp];
     //TODO richtiges corehandover basteln
     if ([self.supplier isKindOfClass:[VSFrameSourceSupplier class]] ) {
-        coreHandover = [[VSFrameCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp isPlaying:playing] andAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp] forTextureID:self.textureID forTimestamp:localTimestamp forId: self.timelineObjectID];
+        coreHandover = [[VSFrameCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp isPlaying:playing]
+                                                    andAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp]
+                                                     forTextureID:self.textureID
+                                                     forTimestamp:localTimestamp
+                                                            forId:self.timelineObjectID];
     }
-    else {
-        DDLogInfo(@"Its an audio file");
+    else if ([self.supplier isKindOfClass:[VSQuartzComposerSourceSupplier class]]){
+        coreHandover = [[VSQuartzComposerHandover alloc] initWithAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp]
+                                                               forTimestamp:localTimestamp
+                                                                andFilePath:[(VSQuartzComposerSourceSupplier *)self.supplier getQuartzComposerPatchFilePath] 
+                                                                      forId:self.timelineObjectID
+                                                               forTextureID:self.textureID];
+    }
+    else{
+        DDLogInfo(@"unsuported file/handover");
     }
     
     return coreHandover;

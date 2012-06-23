@@ -12,6 +12,8 @@
 #import "VSTimelineObject.h"
 #import "VSTimelineObjectSource.h"
 #import "VSSourceSupplier.h"
+#import "VSProjectSettings.h"
+#import "VSFileType.h"
 
 @interface VSPreProcessor()
 @end
@@ -64,12 +66,23 @@
 
 //TODO: add colorspace
 -(void) timelineObjects:(NSArray *)newTimelineObjects haveBeenAddedToTrack:(VSTrack *)aTrack{
-    DDLogInfo(@"%@",newTimelineObjects);
+    //DDLogInfo(@"%@",newTimelineObjects);
     
     for(VSTimelineObject *timelineObject in newTimelineObjects){
+        
         NSSize dimensions = [VSFileUtils dimensionsOfFile:timelineObject.sourceObject.filePath];
-
-        timelineObject.textureID = [self.renderCoreReceptionist createNewTextureForSize:dimensions colorMode:nil forTrack:aTrack.trackID];
+        VSFileType *type = [VSSupportedFilesManager typeOFile:timelineObject.sourceObject.filePath];
+       
+        NSLog(@"[VSProjectSettings sharedProjectSettings].frameSize still missing");
+        //NSSize outputSize = [VSProjectSettings sharedProjectSettings].frameSize;
+        NSSize outputSize = NSMakeSize(800, 600);
+                        
+        timelineObject.textureID = [self.renderCoreReceptionist createNewTextureForSize:dimensions 
+                                                                              colorMode:nil 
+                                                                               forTrack:aTrack.trackID 
+                                                                               withType:type.fileKind 
+                                                                         withOutputSize:outputSize
+                                                                               withPath:timelineObject.sourceObject.filePath];
     }
 }
 

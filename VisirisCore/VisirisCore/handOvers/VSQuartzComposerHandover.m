@@ -11,10 +11,12 @@
 @implementation VSQuartzComposerHandover
 
 @synthesize filePath = _filePath;
+@synthesize textureID = _textureID;
 
--(id) initWithAttributes:(NSDictionary *)theAttributes forTimestamp:(double)theTimestamp andFilePath:(NSString *)theFilePath forId:(NSInteger) theId{
+-(id) initWithAttributes:(NSDictionary *)theAttributes forTimestamp:(double)theTimestamp andFilePath:(NSString *)theFilePath forId:(NSInteger)theId forTextureID:(GLuint)aTextureID{
     if(self = [super initWithAttributes:theAttributes forTimestamp:theTimestamp forId:theId]){
         self.filePath = theFilePath;
+        self.textureID = aTextureID;
     }
     return self;
 }

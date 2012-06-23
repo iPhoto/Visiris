@@ -9,10 +9,12 @@
 #import <Foundation/Foundation.h>
 
 @interface VSFrameBufferObject : NSObject
-@property (readonly, assign) GLuint   texture;
-@property (readonly, assign) NSSize   size;
+@property (readonly, assign) GLuint     texture;
+@property (readonly, assign) NSSize     size;
 
 -(id) init;
+-(id)initWithSize:(NSSize)size;
+
 -(void) bind;
 -(void) unbind;
 -(void) resize:(NSSize)size;

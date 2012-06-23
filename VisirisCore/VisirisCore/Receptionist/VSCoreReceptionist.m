@@ -8,8 +8,7 @@
 
 #import "VSCoreReceptionist.h"
 
-
-
+//@class ;
 
 @implementation VSCoreReceptionist
 @synthesize renderCore = _renderCore;
@@ -39,8 +38,8 @@
     
 }
 
--(GLuint) createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger)trackID{
-    return [self.renderCore createNewTextureForSize:textureSize colorMode:colorMode forTrack:trackID];
+-(GLuint) createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path{
+    return [self.renderCore createNewTextureForSize:textureSize colorMode:colorMode forTrack:trackID withType:type withOutputSize:size withPath:path];
 }
 
 -(void) removeTextureForID:(GLuint)anID{

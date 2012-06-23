@@ -16,13 +16,18 @@
 /** File path of the quartz composer path the handover stores the data for */
 @property NSString* filePath;
 
+@property GLuint textureID;
+
+
 /**
  * Inits the VSCoreHandover for the given timestmap with the given attributes
  * @param theAttributes NSDictionary containing the parameters, the VSParemterType property of the VSParameter object is used as Key.
  * @param The timestamp the data is set of
  * @param theFilePath file path of the quartz composer patch
+ * @param aTextureID the openGL Id for the core
  * @return self
  */
--(id) initWithAttributes:(NSDictionary *)theAttributes forTimestamp:(double)theTimestamp andFilePath:(NSString*) theFilePath forId:(NSInteger) theId;
+-(id) initWithAttributes:(NSDictionary *)theAttributes forTimestamp:(double)theTimestamp andFilePath:(NSString *)theFilePath forId:(NSInteger)theId forTextureID:(GLuint)aTextureID;
+
 
 @end

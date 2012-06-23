@@ -7,12 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VSFileKind.h"
 
 @class VSFrameBufferObject;
 @class VSRenderCore;
 @class VSTexture;
 @class VSShader;
 @class VSTextureManager;
+@class VSQCManager;
 
 /**
  * Protocoll the VSRenderCore uses to inform about the rendering states
@@ -40,11 +42,10 @@
 @property (strong) VSFrameBufferObject              *frameBufferObjectTwo;
 @property (strong) VSFrameBufferObject              *frameBufferObjectCurrent;
 @property (strong) VSFrameBufferObject              *frameBufferObjectOld;
-//@property (strong) VSTexture                        *textureBelow;
-//@property (strong) VSTexture                        *textureUp;
 @property (strong) VSShader                         *shader;
 @property (strong) VSTextureManager                 *textureManager;
 @property (assign) GLuint                           outPutTexture;
+@property (strong) VSQCManager                      *qcpManager;
 
 /**
  * Creates one frame out of the data stored in the give VSCoreHandovers in the given frame size.
@@ -55,6 +56,6 @@
 -(void)renderFrameOfCoreHandovers:(NSArray *)theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double) theTimestamp;
 
 
--(GLuint) createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger) trackID;
+-(GLuint) createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger) trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path;
 
 @end
