@@ -8,6 +8,12 @@
 
 #import "VSCoreHandover.h"
 
+@interface VSCoreHandover()
+
+
+@end
+
+
 @implementation VSCoreHandover
 
 @synthesize timestamp = _timestamp;

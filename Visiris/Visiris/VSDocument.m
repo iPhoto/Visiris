@@ -14,6 +14,7 @@
 #import "VSPostProcessor.h"
 #import "VSPreProcessor.h"
 #import "VSPlaybackController.h"
+#import "VSProjectSettings.h"
 
 #import "VSCoreServices.h"
 
@@ -39,6 +40,7 @@
     if (self) {
         self.projectItemController = [VSProjectItemController sharedManager];
         
+        
         [self initVisiris];
     }
     return self;
@@ -62,6 +64,8 @@
  * Does the base initialisation of the application.
  */
 -(void) initVisiris{
+    
+    [[VSProjectSettings sharedProjectSettings] setFrameSize:NSMakeSize(800, 600)];
     
     //TODO: where to create the timeline?
     

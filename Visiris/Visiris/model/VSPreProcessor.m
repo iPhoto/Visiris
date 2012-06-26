@@ -14,6 +14,7 @@
 #import "VSSourceSupplier.h"
 #import "VSProjectSettings.h"
 #import "VSFileType.h"
+#import "VSQuartzCompositionReader.h"
 
 @interface VSPreProcessor()
 @end
@@ -68,14 +69,21 @@
 -(void) timelineObjects:(NSArray *)newTimelineObjects haveBeenAddedToTrack:(VSTrack *)aTrack{
     //DDLogInfo(@"%@",newTimelineObjects);
     
+    
+    
     for(VSTimelineObject *timelineObject in newTimelineObjects){
+        
         
         NSSize dimensions = [VSFileUtils dimensionsOfFile:timelineObject.sourceObject.filePath];
         VSFileType *type = [VSSupportedFilesManager typeOFile:timelineObject.sourceObject.filePath];
        
-        NSLog(@"[VSProjectSettings sharedProjectSettings].frameSize still missing");
-        //NSSize outputSize = [VSProjectSettings sharedProjectSettings].frameSize;
-        NSSize outputSize = NSMakeSize(800, 600);
+        NSSize outputSize = [VSProjectSettings sharedProjectSettings].frameSize;
+        
+
+        if (type.fileKind == VSFileKindQuartzComposerPatch) {
+            VSQuartzCompositionReader *qcReader = [[VSQuartzCompositionReader alloc] initWithFilepath:timelineObject.sourceObject.filePath];
+        }
+
                         
         timelineObject.textureID = [self.renderCoreReceptionist createNewTextureForSize:dimensions 
                                                                               colorMode:nil 

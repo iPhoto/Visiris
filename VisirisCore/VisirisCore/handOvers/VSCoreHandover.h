@@ -16,11 +16,12 @@
 @interface VSCoreHandover : NSObject
 
 //TODO: is the time stamp local or global?
-@property double timestamp;
-@property NSInteger timeLineObjectID;
+/** current Time */
+@property (assign) double       timestamp;
+@property (assign) NSInteger    timeLineObjectID;
 
 /** NSDictionary containing the parameters, the VSParemterType property of the VSParameter object is used as Key. */
-@property NSDictionary *attributes;
+@property NSDictionary          *attributes;
  
 
 #pragma mark - Init
@@ -28,7 +29,8 @@
 /**
  * Inits the VSCoreHandover for the given timestmap with the given attributes
  * @param theAttributes NSDictionary containing the parameters, the VSParemterType property of the VSParameter object is used as Key.
- * @param The timestamp the data is set of
+ * @param theTimestamp The timestamp the data is set of
+ * @param theId ID of the Timelineobject
  */
 -(id) initWithAttributes:(NSDictionary *) theAttributes forTimestamp:(double) theTimestamp forId:(NSInteger) theId;
 
