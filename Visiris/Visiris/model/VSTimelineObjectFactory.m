@@ -100,6 +100,14 @@ static VSTimelineObjectFactory* sharedInstance;
         return nil;
 }
 
+-(VSTimelineObject*) createCopyOfTimelineObject:(VSTimelineObject *)objectToCopy atStartTime:(double)aStartTime withDuration:(double)aDuration{
+    VSTimelineObject *copiedTimelineObject = [objectToCopy copy];
+    copiedTimelineObject.duration = aDuration;
+    copiedTimelineObject.startTime = aStartTime;
+    copiedTimelineObject.timelineObjectID = [self assignNewTimelineObjectID];
+    return copiedTimelineObject;
+}
+
 #pragma mark- Private Methods
 
 /**

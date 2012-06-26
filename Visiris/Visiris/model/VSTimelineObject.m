@@ -10,13 +10,13 @@
 
 #import "VSProjectItem.h"
 #import "VSTimelineObjectSource.h"
-#import "VSSourceSupplier.h"
 #import "VSFrameSourceSupplier.h"
 #import "VSQuartzComposerSourceSupplier.h"
 #import "VisirisCore/VSCoreHandover.h"
 #import "VSParameter.h"
 #import "VisirisCore/VSFrameCoreHandover.h"
 #import "VisirisCore/VSQuartzComposerHandover.h"
+#import "VSSourceSupplier.h"
 
 @implementation VSTimelineObject
 
@@ -37,6 +37,47 @@
     }
     
     return self;
+}
+
+//#pragma mark - NSCoding implementation
+//
+//-(void) encodeWithCoder:(NSCoder *)aCoder{
+//    
+//    [aCoder encodeObject:self.sourceObject forKey:@"sourceObject"];
+//    [aCoder encodeInt:self.textureID forKey:@"textureID"];
+//}
+//
+//-(id) initWithCoder:(NSCoder *)aDecoder{
+//    self.sourceObject = [aDecoder decodeObjectForKey:@"sourceObject"];
+//    self.textureID = [aDecoder decodeIntForKey:@"textureID"];
+//    
+//    self.supplier = [[VSSourceSupplier alloc] initWithTimelineObject:self];
+//    
+//    return self;
+//}
+
+#pragma mark - NSCopying Implementation
+
+-(id) copyWithZone:(NSZone *)zone{
+    VSTimelineObjectProxy *superCopy = [super copyWithZone:zone];
+    
+    VSTimelineObject *copy = [[VSTimelineObject allocWithZone:zone] init];
+    
+    if(superCopy){
+        
+        copy.sourceObject = [self.sourceObject copy];
+        copy.supplier = [[[self.supplier class] alloc] initWithTimelineObject:copy];
+        
+        copy.startTime = superCopy.startTime;
+        copy.duration = superCopy.duration;
+        copy.name = superCopy.name;
+        copy.icon = superCopy.icon;
+        copy.selected = superCopy.selected;
+        copy.timelineObjectID = superCopy.timelineObjectID;
+        copy.textureID = self.textureID;
+    }
+    
+    return copy;
 }
 
 #pragma mark - Methods
@@ -75,7 +116,7 @@
 -(NSDictionary *) parameters{
     if(!self.sourceObject)
         return nil;
-        
+    
     return self.sourceObject.parameters;
 }
 
@@ -97,28 +138,12 @@
     return tmpArray;
 }
 
-#pragma mark - Undo / Redo
-
--(void) setSelectedAndRegisterUndo:(NSUndoManager *)undoManager{
-    [[undoManager prepareWithInvocationTarget:self] setUnselectedAndRegisterUndo:undoManager];
-    self.selected = YES;
-}
-
--(void) setUnselectedAndRegisterUndo:(NSUndoManager *)undoManager{
-    [[undoManager prepareWithInvocationTarget:self] setSelectedAndRegisterUndo:undoManager];
-    self.selected = NO;
-}
-
--(void) changeName:(NSString *)newName andRegisterAt:(NSUndoManager *)undoManager{
-    [[undoManager prepareWithInvocationTarget:self] changeName:self.name andRegisterAt:undoManager];
-    self.name = newName;
-}
 
 
 - (double)convertGlobalTimestampToLocalTimestamp:(double)aGlobalTimestamp
 {
     double localTimestamp = aGlobalTimestamp - self.startTime;
-
+    
     localTimestamp = localTimestamp <= self.sourceObject.projectItem.duration ? localTimestamp :  fmod(localTimestamp, self.sourceObject.projectItem.duration);
     
     return localTimestamp;

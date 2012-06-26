@@ -39,6 +39,13 @@ const int defaultKeyFrameTimestamp = -1;
     return self;
 }
 
+#pragma mark - NSCopying Implementation
+
+-(id) copyWithZone:(NSZone *)zone{
+    VSAnimation *copy = [[VSAnimation allocWithZone:zone] initWithDefaultValue:self.defaultValue];
+    
+    return copy;
+}
 
 #pragma mark - Methods
 

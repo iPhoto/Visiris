@@ -64,10 +64,6 @@
     }
 }
 
--(void) mouseDragged:(NSEvent *)theEvent{
-    DDLogInfo(@"Mousedragged on trackView");
-}
-
 #pragma mark - VSDraggingDestination implementation
 
 -(NSDragOperation) draggingEntered:(id<NSDraggingInfo>)sender{
@@ -100,12 +96,9 @@
     }
 }
 
-
 -(BOOL) wantsPeriodicDraggingUpdates{
     return YES;
 }
-
-
 
 -(BOOL) prepareForDragOperation:(id<NSDraggingInfo>)sender{
     

@@ -28,7 +28,9 @@
 @synthesize timelineObjectProxy             = _timelineObjectProxy;
 @synthesize temporary                       = _temporary;
 @synthesize moving                          = _moving;
+@synthesize inactive                        = _inactive;
 @synthesize intersectedTimelineObjectViews  = _intersectedTimelineObjectViews;
+@synthesize timelineObjectView              = _timelineObjectView;
 
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
@@ -52,15 +54,19 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 
 -(void) awakeFromNib{
     
-    self.intersectedTimelineObjectViews = [[NSMutableDictionary alloc] init];
+    _intersectedTimelineObjectViews = [[NSMutableDictionary alloc] init];
     if([self.view isKindOfClass:[VSTimelineObjectView class]]){
-        ((VSTimelineObjectView*) self.view).delegate = self;
+        self.timelineObjectView = (VSTimelineObjectView*) self.view;
+        self.timelineObjectView.delegate = self;
+        self.inactive = NO;
     }
     
-    [self initObservers];
+    [self initTimelineObjectProxyObservers];
+    
 }
 
--(void) initObservers{
+-(void) initTimelineObjectProxyObservers{
+    
     [self.timelineObjectProxy addObserver:self forKeyPath:@"selected" options:0 context:nil];
     [self.timelineObjectProxy addObserver:self forKeyPath:@"duration" options:0 context:nil];
     [self.timelineObjectProxy addObserver:self forKeyPath:@"startTime" options:0 context:nil];  
@@ -69,6 +75,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 #pragma mark - NSViewController
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    //if the selection-state of the observed TimelineObject has been changed, the view is set selected or unselected
     if([keyPath isEqualToString:@"selected"]){
         if(self.view){
             if([self.view isKindOfClass:[VSTimelineObjectView class]]){
@@ -105,6 +112,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 
 -(void) timelineObjectViewWasClicked:(VSTimelineObjectView *)timelineObjectView withModifierFlags:(NSUInteger)modifierFlags {
     
+    //if the commandKey was pressed while the timelineObjectView was clicked it's selected additionally othwise it selected exclusively and the currenlty selected objects get unselected
     BOOL exclusiveSelection = !(modifierFlags & NSCommandKeyMask);
     
     if(!self.timelineObjectProxy.selected){
@@ -142,8 +150,8 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     if([self delegateRespondsToSelector:@selector(timelineObjectDidStopDragging:)]){
         [self.delegate timelineObjectDidStopDragging:self];
     }
+    //after the moving or resizing of the timeline object is done, the position and length are updated according to the startTime and duration stored in the timelineObject-Proxy property
     [self setViewsFrameAccordingToTimelineObject];
-    [self.view setNeedsDisplay:YES];
 }
 
 -(BOOL) timelineObjectWillStartResizing:(VSTimelineObjectView *)timelineObjectView{
@@ -155,7 +163,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 }
 
 -(NSRect) timelineObjectWillResize:(VSTimelineObjectView *)timelineObjectView fromFrame:(NSRect)oldFrame toFrame:(NSRect)newFrame{
-    if([self delegateRespondsToSelector:@selector(timelineObjectWillResize:oldFrame:)]){
+    if([self delegateRespondsToSelector:@selector(timelineObjectWillResize:fromFrame:toFrame:)]){
         return [self.delegate timelineObjectWillResize:self fromFrame:oldFrame toFrame:newFrame];
     }
     
@@ -183,26 +191,55 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     }
 }
 
--(void) intersectsTimelineObjectView:(VSTimelineObjectViewController *)timelineObjectViewController intersects:(NSRect)intersectionRect{
+
+-(void) intersectedByTimelineObjectView:(VSTimelineObjectViewController *)timelineObjectViewController atRect:(NSRect)intersectionRect{
     
     NSNumber *key = [NSNumber numberWithInt: timelineObjectViewController.timelineObjectProxy.timelineObjectID];
     
     VSTimelineObjectViewIntersection *intersection = [self.intersectedTimelineObjectViews objectForKey:key];
     
     if(intersection){
-        intersection.intersectionRect = intersectionRect;
+        if(!NSEqualRects(intersection.intersectionRect, intersectionRect)){
+            intersection.intersectionRect = intersectionRect;
+            if(self.timelineObjectView){
+                [self.timelineObjectView.intersectionRects setObject:[NSValue valueWithRect:intersection.intersectionRect] forKey:key];
+                [self.view setNeedsDisplay:YES];
+            }
+        }
     }
     else {
         intersection = [[VSTimelineObjectViewIntersection alloc] initWithIntersectedTimelineObejctView:timelineObjectViewController intersectedAt:intersectionRect];
         
         [self.intersectedTimelineObjectViews setObject:intersection forKey:key];
+        
+        if(self.timelineObjectView){
+            [self.timelineObjectView.intersectionRects setObject:[NSValue valueWithRect:intersection.intersectionRect] forKey:key];
+            [self.view setNeedsDisplay:YES];
+        }
     }
 }
 
 -(void) removeIntersectionWith:(VSTimelineObjectViewController *)timelineObjectViewController{
     NSNumber *key = [NSNumber numberWithInt: timelineObjectViewController.timelineObjectProxy.timelineObjectID];
     
-    [self.intersectedTimelineObjectViews removeObjectForKey:key];
+    if(self.intersectedTimelineObjectViews.count){
+        [self.intersectedTimelineObjectViews removeObjectForKey:key];
+        
+        if(self.timelineObjectView){
+            NSRect rectToRemove = [[self.timelineObjectView.intersectionRects objectForKey:key] rectValue];
+            [self.timelineObjectView.intersectionRects removeObjectForKey:key];
+            [self.view setNeedsDisplayInRect:rectToRemove];
+        }
+    }
+}
+
+-(void) removeAllIntersections{
+    [self.intersectedTimelineObjectViews removeAllObjects];
+    
+    if(self.timelineObjectView){
+        [self.timelineObjectView.intersectionRects removeAllObjects];
+        [self.view setNeedsDisplay:YES];
+    }
 }
 
 #pragma mark - Private Methods
@@ -212,7 +249,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
  */
 -(void) setViewsFrameAccordingToTimelineObject{
     
-    if(self.view){
+    if(self.view && self.pixelTimeRatio > 0){
         NSRect frame = self.view.frame;
         frame.origin.x = self.timelineObjectProxy.startTime / self.pixelTimeRatio;
         frame.size.width = self.timelineObjectProxy.duration / self.pixelTimeRatio;
@@ -248,8 +285,8 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 }
 
 -(void) setTemporary:(BOOL)temporary{
-    if([self.view isKindOfClass:[VSTimelineObjectView class]]){
-        ((VSTimelineObjectView*) self.view).temporary = temporary;
+    if(self.timelineObjectView){
+        self.timelineObjectView.temporary = temporary;
         if(temporary != _temporary){
             [self.view setNeedsDisplay:YES];
             
@@ -267,9 +304,10 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 
 -(void) setMoving:(BOOL)moving{
     if(moving != _moving){
-        if([self.view isKindOfClass:[VSTimelineObjectView class]]){
-            ((VSTimelineObjectView*) self.view).moving = moving;
+        if(self.timelineObjectView){
+            self.timelineObjectView.moving = moving;
             
+            //the zPosition of the views layer is changed according to the moving flag
             if(moving){
                 [self.view.layer setZPosition:VIEWS_HIGHLIGHTED_ZPOSITION];
             }
@@ -286,6 +324,45 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 
 -(BOOL) moving{
     return _moving;
+}
+
+-(BOOL) inactive{
+    return _inactive;
+}
+
+-(void) setInactive:(BOOL)inactive{
+    if(self.timelineObjectView){
+        self.timelineObjectView.inactive = inactive;
+        if(inactive != _inactive)
+            [self.view setNeedsDisplay:YES];
+    }
+    
+    _inactive = inactive;
+}
+
+-(void) setTimelineObjectProxy:(VSTimelineObjectProxy *)timelineObjectProxy{
+    //if the VSTimelineObjectProxy has been changed, the observers are removed and newly added als the selection state is updated
+    
+    if(timelineObjectProxy != _timelineObjectProxy){
+        
+        if(_timelineObjectProxy){
+            [_timelineObjectProxy removeObserver:self forKeyPath:@"selected"];
+            [_timelineObjectProxy removeObserver:self forKeyPath:@"duration"];
+            [_timelineObjectProxy removeObserver:self forKeyPath:@"startTime"];
+        }
+        
+        _timelineObjectProxy = timelineObjectProxy;
+        [self initTimelineObjectProxyObservers];
+        
+        if(self.timelineObjectView){  
+            self.timelineObjectView.selected = self.timelineObjectProxy.selected;
+        }
+        
+    }
+}
+
+-(VSTimelineObjectProxy*) timelineObjectProxy{
+    return _timelineObjectProxy;
 }
 
 @end

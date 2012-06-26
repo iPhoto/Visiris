@@ -14,5 +14,5 @@ float VSTimelineDefaultPixelRatio =  2;
 double VSDefaultProjectItemDuration = 3000.0;
 NSString *VSTimelineRulerMeasurementUnit = @"VSTimelineRulerMeasurementUnit";
 NSString *VSTimelineRulerMeasurementAbreviation = @"fr";
-NSInteger VSTrackViewHeight = 80;
+NSInteger VSTrackViewHeight = 40;
 NSInteger VSTrackViewMargin = 5;

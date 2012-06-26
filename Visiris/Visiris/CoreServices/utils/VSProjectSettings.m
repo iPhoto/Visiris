@@ -28,4 +28,5 @@ static VSProjectSettings* sharedProjectSettings = nil;
     return sharedProjectSettings;
 }
 
+
 @end

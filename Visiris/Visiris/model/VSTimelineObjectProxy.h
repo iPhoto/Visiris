@@ -13,7 +13,7 @@
  *
  * !!!!!Please add more here !!!!!
  */
-@interface VSTimelineObjectProxy : NSObject
+@interface VSTimelineObjectProxy : NSObject<NSCopying>
 
 /** Timeposition of the Object on the timeline */
 @property double startTime;
@@ -22,16 +22,16 @@
 @property double duration;
 
 /** Name of the object, by defualt the same name as it's sourceObject */
-@property NSString* name;
+@property (strong) NSString* name;
 
 /** Thumbnail of the file */
-@property NSImage* icon;
+@property (strong) NSImage* icon;
 
 /** Indicates if object is selected or not */
 @property BOOL selected;
 
 /** unique ID of the timelineObject */
-@property NSInteger timelineObjectID;
+@property NSUInteger timelineObjectID;
 
 #pragma mark- Init
 
@@ -60,6 +60,19 @@
  * @param undoManager NSUndoManager the change of the duration is registrated at
  */
 -(void) changeDuration:(double)duration andRegisterAtUndoManager:(NSUndoManager *)undoManager;
+
+/**
+ * Sets the VSTimelineObject as selected and registers the state-change at the give undoManger
+ * @param undoManager NSUndoManager the change of the selection is registrated at.
+ */
+-(void) setSelectedAndRegisterUndo:(NSUndoManager*) undoManager;
+
+
+/**
+ * Sets the VSTimelineObject as unselected and registers the state-change at the give undoManger
+ * @param undoManager NSUndoManager the change of the selection is registrated at.
+ */
+-(void) setUnselectedAndRegisterUndo:(NSUndoManager*) undoManager;
 
 
 @end

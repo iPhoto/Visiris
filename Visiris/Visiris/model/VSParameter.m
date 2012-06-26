@@ -65,6 +65,8 @@
         copy = [[VSParameter allocWithZone:zone] initWithName:self.name asType:self.type forDataType:self.dataType withDefaultValue:self.configuredDefaultValue orderNumber:self.orderNumber editable:self.editable hidden:self.hidden];
     }
     
+    copy.animation = [self.animation copy];
+    
     return copy;
 }
 

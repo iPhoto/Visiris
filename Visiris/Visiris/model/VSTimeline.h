@@ -144,9 +144,10 @@
  * A new TimelineObjectProxy object is created according to the given VSProjectItemRepresentation object and returned
  * @param item VSTimelineObjectRepresentation the new TimelineObject is connected with
  * @param timePosition Start-time of the timelineObject.
+ * @param duration Duration of the timelineObject.
  * @return The TimelineObjectProxy if it was created succesfully, nil otherwise.
  */
--(VSTimelineObjectProxy*) createNewTimelineObjectProxyBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *) item positionedAtTime:(double) timePosition;
+-(VSTimelineObjectProxy*) createNewTimelineObjectProxyBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *) item positionedAtTime:(double) timePosition withDuration:(double) duration;
 
 #pragma mark Removing TimelineObjects
 

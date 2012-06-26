@@ -109,6 +109,8 @@
  */
 @interface VSTimelineObjectViewController : NSViewController<VSTimelineObjectViewDelegate>
 
+@property VSTimelineObjectView *timelineObjectView;
+
 /** Called according to VSTimelineObjectControllerDelegate protocoll */
 @property id<VSTimelineObjectControllerDelegate> delegate;
 
@@ -122,8 +124,11 @@
 /** Indicates wheter the views is currently moved */
 @property BOOL moving;
 
+/** if YES the timelineObejct is hidden */
+@property BOOL inactive;
+
 /** Stores the VSTimelineObjectViewController which's views intersecting the view of the VSTimelineObjectViewController as VSTimelineObjectIntersection */
-@property (strong) NSMutableDictionary *intersectedTimelineObjectViews;
+@property (strong,readonly) NSMutableDictionary *intersectedTimelineObjectViews;
 
 #pragma mark - Init
 
@@ -143,12 +148,14 @@
  * @param timelineObjectViewController VSTimelineObjectViewController which's view intersects.
  * @param intersectionRect NSRect defining where on the view the intersetion happens
  */
--(void) intersectsTimelineObjectView:(VSTimelineObjectViewController*) timelineObjectViewController intersects:(NSRect) intersectionRect;
+-(void) intersectedByTimelineObjectView:(VSTimelineObjectViewController*) timelineObjectViewController atRect:(NSRect) intersectionRect;
 
 /**
  * Removes the any intersections for the given VSTimelineObjectViewController from the intersectedTimelineObjectViews-property
  * @param timelineObjectViewController VSTimelineObjectViewController which intersections are removed.
  */
 -(void) removeIntersectionWith:(VSTimelineObjectViewController*) timelineObjectViewController;
+
+-(void) removeAllIntersections;
 
 @end

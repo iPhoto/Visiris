@@ -12,15 +12,15 @@
 #import <Foundation/Foundation.h>
 
 
-NSString* VSParameterKeyPositionX = @"VSParameterKeyPositionX";
-NSString* VSParameterKeyPositionY = @"VSParameterKeyPositionY";
-NSString* VSParameterKeyPositionZ = @"VSParameterKeyPositionZ";
-NSString* VSParameterKeyRotationX = @"VSParameterKeyRotationX";
-NSString* VSParameterKeyRotationY = @"VSParameterKeyRotationY";
-NSString* VSParameterKeyRotationZ = @"VSParameterKeyRotationZ";
-NSString* VSParameterKeyScaleWidth  = @"VSParameterKeyScaleWidth";
-NSString* VSParameterKeyScaleHeight  = @"VSParameterKeyScaleWidth";
-NSString* VSParameterVideoVolume  = @"VSParameterVideoVolume";
+NSString* VSParameterKeyPositionX       = @"VSParameterKeyPositionX";
+NSString* VSParameterKeyPositionY       = @"VSParameterKeyPositionY";
+NSString* VSParameterKeyPositionZ       = @"VSParameterKeyPositionZ";
+NSString* VSParameterKeyRotationX       = @"VSParameterKeyRotationX";
+NSString* VSParameterKeyRotationY       = @"VSParameterKeyRotationY";
+NSString* VSParameterKeyRotationZ       = @"VSParameterKeyRotationZ";
+NSString* VSParameterKeyScaleWidth      = @"VSParameterKeyScaleWidth";
+NSString* VSParameterKeyScaleHeight     = @"VSParameterKeyScaleWidth";
+NSString* VSParameterVideoVolume        = @"VSParameterVideoVolume";
 
 
 

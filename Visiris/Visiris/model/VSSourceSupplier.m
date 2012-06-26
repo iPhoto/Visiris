@@ -30,6 +30,7 @@
     return self;
 }
 
+
 //TODO: returns only the defaultValueForNow
 - (NSDictionary *)getAtrributesForTimestamp:(double)aTimestamp{
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
