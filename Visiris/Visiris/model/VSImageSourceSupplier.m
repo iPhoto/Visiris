@@ -16,6 +16,7 @@
 
 -(VSImage *) getFrameForTimestamp:(double)aTimestamp isPlaying:(BOOL)playing{
     if (self.vsImage == nil) {
+        
         self.vsImage = [[VSImage alloc] init];
         
         NSURL *url = [[NSURL alloc] initFileURLWithPath:self.timelineObject.sourceObject.projectItem.filePath]; 
@@ -41,6 +42,7 @@
         self.vsImage.data = (char *)imageData;
         self.vsImage.size = NSMakeSize(width, height);
         self.vsImage.needsUpdate = YES;
+         
     }
     return self.vsImage;
 }

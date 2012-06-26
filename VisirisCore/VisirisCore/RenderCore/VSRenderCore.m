@@ -39,6 +39,23 @@ static GLuint make_buffer(GLenum target,const void *buffer_data,GLsizei buffer_s
 static struct {
     GLuint vertex_buffer, element_buffer;
 } g_resources;
+
+
+@interface VSRenderCore()
+
+@property (strong) NSOpenGLContext                  *openGLContext;
+@property (strong) NSOpenGLPixelFormat              *pixelFormat;        
+@property (strong) VSFrameBufferObject              *frameBufferObjectOne;
+@property (strong) VSFrameBufferObject              *frameBufferObjectTwo;
+@property (strong) VSFrameBufferObject              *frameBufferObjectCurrent;
+@property (strong) VSFrameBufferObject              *frameBufferObjectOld;
+@property (strong) VSShader                         *shader;
+@property (strong) VSTextureManager                 *textureManager;
+@property (assign) GLuint                           outPutTexture;
+@property (strong) VSQCManager                      *qcpManager;
+
+@end
+
     
 @implementation VSRenderCore
 @synthesize delegate                    = _delegate;
@@ -72,7 +89,6 @@ static struct {
         if (!_pixelFormat)
             NSLog(@"No OpenGL pixel format");
         
-        // NSOpenGLView does not handle context sharing, so we draw to a custom NSView instead
         _openGLContext = [[NSOpenGLContext alloc] initWithFormat:_pixelFormat shareContext:nil];
         
         [ _openGLContext makeCurrentContext];
@@ -270,6 +286,10 @@ static struct {
         }
     }
     return textures;
+}
+
+- (NSOpenGLContext *)openglContext{
+    return self.openGLContext;
 }
 
 @end

@@ -22,8 +22,9 @@
 /**
  * Inits the VSCoreHandover for the given timestmap with the given attributes
  * @param theAttributes NSDictionary containing the parameters, the VSParemterType property of the VSParameter object is used as Key.
- * @param The timestamp the data is set of
+ * @param theTimestamp the data is set of
  * @param theFilePath file path of the quartz composer patch
+ * @param theId ID of the Timelineobject
  * @param aTextureID the openGL Id for the core
  * @return self
  */

@@ -14,8 +14,8 @@
 /**
  * Called when the VSCoreRenderer has returned the newly created frame.
  * @param theCoreReceptionist VSCoreReception which has called the method
- * @param aTimestamp The Timestamp the frame was created for, also used as an ID for the frame.
- * @param theNewFrame Pointer to the newly created frame.
+ * @param theTimestamp The Timestamp the frame was created for, also used as an ID for the frame.
+ * @param theTexture Texture in the Opengl Context of the final Image.
  */
 - (void)coreReceptionist:(VSCoreReceptionist *)theCoreReceptionist didFinishedRenderingFrameAtTimestamp:(double)theTimestamp withResultingTexture:(GLuint)theTexture;
 
@@ -38,7 +38,7 @@
 /**
  * Tells the VSRenderCore to render a frame with the given data.
  * @param aTimestamp The current timestamp of the Visiris Project. Is used as an ID
- * @param theAttributes NSDictionary containing the parameter values for the frame at the given timestamp. The type-Property of VSParameter is used as Key as declared in VSParameterType
+ * @param theHandovers NSArray of all Handovers 
  * @param theFrameSize The size the frame will be created for.
  */
 - (void)renderFrameAtTimestamp:(double)aTimestamp withHandovers:(NSArray *)theHandovers forSize:(NSSize)theFrameSize;

@@ -33,19 +33,14 @@
 
 @end
 
+/**
+ * Creates the final Texture
+ * 
+ * In the Rendercore Textures are created with the Info of the Handovers. These Textures are merged correctly together to one final Texture which is returned at the and of the renderprocess.
+ */
 @interface VSRenderCore : NSObject
 
 @property (weak) id<VSRenderCoreDelegate>           delegate;
-@property (strong, readonly) NSOpenGLContext        *openGLContext;
-@property (strong, readonly) NSOpenGLPixelFormat    *pixelFormat;        
-@property (strong) VSFrameBufferObject              *frameBufferObjectOne;
-@property (strong) VSFrameBufferObject              *frameBufferObjectTwo;
-@property (strong) VSFrameBufferObject              *frameBufferObjectCurrent;
-@property (strong) VSFrameBufferObject              *frameBufferObjectOld;
-@property (strong) VSShader                         *shader;
-@property (strong) VSTextureManager                 *textureManager;
-@property (assign) GLuint                           outPutTexture;
-@property (strong) VSQCManager                      *qcpManager;
 
 /**
  * Creates one frame out of the data stored in the give VSCoreHandovers in the given frame size.
@@ -55,7 +50,21 @@
  */
 -(void)renderFrameOfCoreHandovers:(NSArray *)theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double) theTimestamp;
 
+/**
+ * When a object is dropped on the timeline it needs a reference to a texture in the openglcontext for performance reasons. When the size and the track is new the core creates a new texture. 
+ * @param textureSize Size of the texture
+ * @param colorMode Currently unused - later to create a texture with or without alpha (optimization)
+ * @param trackID Each track has it own textures
+ * @param type The Type is Image, Video, Quartzcomposer or Audio
+ * @param size The size of the Output (not preview)
+ * @param path Needed for Quartzcomposer patches
+ * @return Returns the texture id of the openglcontext 
+ */
+-(GLuint) createNewTextureForSize:(NSSize)textureSize colorMode:(NSString*)colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path;
 
--(GLuint) createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger) trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path;
+/**
+ * @return the OpenglContext
+ */
+- (NSOpenGLContext *)openglContext;
 
 @end
