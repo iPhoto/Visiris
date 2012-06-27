@@ -171,7 +171,7 @@ const int defaultKeyFrameTimestamp = -1;
         return (NSString*) value;
     }
     else {
-        return nil;
+        return @"";
     }
 }
 

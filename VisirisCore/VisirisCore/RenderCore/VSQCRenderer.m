@@ -97,4 +97,17 @@
     return self.fbo.texture;
 }
 
+-(void) setPublicInputsWithValues:(NSDictionary *)inputValues{
+    for(id key in inputValues){
+        if (key) {
+            id value = [inputValues objectForKey:key];
+            if(value){
+                if([self.qcRenderer.inputKeys containsObject:key]){
+                    [self.qcRenderer setValue:value forInputKey:key];
+                }
+            }
+        }
+    }
+}
+
 @end

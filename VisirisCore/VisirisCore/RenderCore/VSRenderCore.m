@@ -8,6 +8,7 @@
 
 #import "VSRenderCore.h"
 #import "VSFrameCoreHandover.h"
+#import "VSParameterTypes.h"
 #import "VSQuartzComposerHandover.h"
 #import "VSFrameBufferObject.h"
 #import "VSTexture.h"
@@ -279,6 +280,13 @@ static struct {
             
             VSQuartzComposerHandover *handover = (VSQuartzComposerHandover *)coreHandover;
             VSQCRenderer *qcRenderer = [self.qcpManager getQCRendererForId:handover.textureID];
+            
+            id qcPublicInputValues = [handover.attributes objectForKey:VSParameterQuartzComposerPublicInputs];
+            
+            if([qcPublicInputValues isKindOfClass:[NSDictionary class]]){
+                [qcRenderer setPublicInputsWithValues:qcPublicInputValues];
+            }
+            
             [qcRenderer renderAtTme:time];
             
             [textures addObject:[NSNumber numberWithInt:[qcRenderer texture]]];

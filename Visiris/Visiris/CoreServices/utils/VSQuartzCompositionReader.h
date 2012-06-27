@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 
 @interface VSQuartzCompositionReader : NSObject
-- (id)initWithFilepath:(NSString *)path;
+
++(NSMutableDictionary*) publicInputsOfQuartzComposerPath:(NSString*) filePath;
+
++(NSInteger) visirisParameterDataTypeOfQCPortAttributeTypeKey:(NSString*) attributeKey;
 
 @end

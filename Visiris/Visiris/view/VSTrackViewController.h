@@ -167,7 +167,15 @@
 
 
 
-
+/**
+ * Types of Data the Parameters of VSTimelineObjectSources can have
+ */
+typedef enum{
+    VSSnapLeftSideOnly,
+    VSSnapRightSideOnly,
+    VSSnapBothSides
+    
+} VSSnapAtSide;
 
 
 

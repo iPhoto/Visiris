@@ -47,13 +47,12 @@
     
     NSString *type = [tmpValue stringValue];
     
-    NSRange range = NSMakeRange(0, 0);
+    float minimumValue = 0;
+    float maximumValue = 0;
     
     if([parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_RANGE_FROM] && [parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_RANGE_TO]){
-        float toValue = [[[parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_RANGE_TO] stringValue] floatValue];
-        float fromValue = [[[parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_RANGE_FROM] stringValue] floatValue];
-        
-        range = NSMakeRange(fromValue, toValue-fromValue);
+        float maximumValue = [[[parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_RANGE_TO] stringValue] floatValue];
+        float minimumValue = [[[parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_RANGE_FROM] stringValue] floatValue];
     }
     
     BOOL hidden = NO;
@@ -83,13 +82,9 @@
             break;
     }
 
-    if(range.length == 0 && range.location == 0){
-        newParameter = [[VSParameter alloc] initWithName:name asType:type forDataType:dataType withDefaultValue:defaultValue orderNumber:orderNumber editable:editable hidden:hidden];
-    }
-    else {
-        newParameter = [[VSParameter alloc] initWithName:name asType:type forDataType:dataType withDefaultValue:defaultValue orderNumber:orderNumber editable:editable hidden:hidden validRang:range];
-    }
-    
+
+    newParameter = [[VSParameter alloc] initWithName:name asType:type forDataType:dataType withDefaultValue:defaultValue orderNumber:orderNumber editable:editable hidden:hidden rangeMinValue:minimumValue rangeMaxValue:maximumValue];
+
     
     
     return newParameter;

@@ -73,13 +73,14 @@ static VSTimelineObjectFactory* sharedInstance;
 
 -(VSTimelineObject*) createTimelineObjectForProjectItem:(VSProjectItem *)projectItem{
     
-    VSTimelineObjectSource *objectSourceBase = [self.timelineObjectSourceClasses objectForKey:projectItem.fileType.timelineObjectSourceClassString];
+    VSTimelineObjectSource *sourceBaseObject = [self.timelineObjectSourceClasses objectForKey:projectItem.fileType.timelineObjectSourceClassString];
     
     
     
-    if(objectSourceBase){
-        VSTimelineObjectSource *sourceObject = [objectSourceBase copy];
-        sourceObject.projectItem = projectItem;
+    if(sourceBaseObject){
+        
+        VSTimelineObjectSource *sourceObject = [[NSClassFromString(projectItem.fileType.timelineObjectSourceClassString) alloc] initWithProjectItem:projectItem andParameters:sourceBaseObject.parameters];
+        
         NSImage* icon = [VSFileImageCreator createIconForTimelineObject:projectItem.filePath];
         
         VSTimelineObject *newTimelineObject = [[VSTimelineObject alloc] initWithSourceObject:sourceObject icon:icon objectID:[self assignNewTimelineObjectID]];

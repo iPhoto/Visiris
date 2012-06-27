@@ -121,21 +121,7 @@
 }
 
 -(NSArray *) visibleParameters{
-    NSSet *set = [self.sourceObject.parameters keysOfEntriesPassingTest:^BOOL(id key, id obj, BOOL *stop) {
-        if([obj isKindOfClass:[VSParameter class]]){
-            if(!((VSParameter*) obj).hidden){
-                return YES;
-            }
-        }
-        return NO;
-    }];
-    
-    NSString *notFoundMarker = @"not found";
-    
-    NSArray *tmpArray = [self.sourceObject.parameters objectsForKeys:[set allObjects] notFoundMarker:notFoundMarker];
-    tmpArray = [tmpArray sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"orderNumber" ascending:YES]]];
-    
-    return tmpArray;
+    return [self.sourceObject visibleParameters];
 }
 
 

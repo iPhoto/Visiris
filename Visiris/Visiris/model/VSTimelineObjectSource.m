@@ -9,6 +9,7 @@
 #import "VSTimelineObjectSource.h"
 
 #import "VSProjectItem.h"
+#import "VSParameter.h"
 
 #import "VSCoreServices.h"
 
@@ -17,6 +18,14 @@
 @synthesize projectItem=_projectItem;
 @synthesize parameters=_parameters;
 
+-(id) initWithProjectItem:(VSProjectItem*) aProjectItem andParameters:(NSDictionary*) parameters{
+    if(self = [super init]){
+        self.projectItem = aProjectItem;
+        self.parameters  = [[NSDictionary alloc] initWithDictionary:parameters copyItems:YES];
+    }
+    
+    return self;
+}
 
 #pragma mark - Functions
 
@@ -49,5 +58,24 @@
     
     return copy;
 }
+
+-(NSArray *) visibleParameters{
+    NSSet *set = [self.parameters keysOfEntriesPassingTest:^BOOL(id key, id obj, BOOL *stop) {
+        if([obj isKindOfClass:[VSParameter class]]){
+            if(!((VSParameter*) obj).hidden){
+                return YES;
+            }
+        }
+        return NO;
+    }];
+    
+    NSString *notFoundMarker = @"not found";
+    
+    NSArray *tmpArray = [self.parameters objectsForKeys:[set allObjects] notFoundMarker:notFoundMarker];
+    tmpArray = [tmpArray sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"orderNumber" ascending:YES]]];
+    
+    return tmpArray;
+}
+
 
 @end

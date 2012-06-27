@@ -7,13 +7,44 @@
 //
 
 #import "VSQuartzComposerSourceSupplier.h"
+
 #import "VSTimelineObject.h"
 #import "VSTimelineObjectSource.h"
+#import "VSParameter.h"
+#import "VSAnimation.h"
+
+#import "VSCoreServices.h"
 
 @implementation VSQuartzComposerSourceSupplier
 
+
 -(NSString*) getQuartzComposerPatchFilePath{
     return self.timelineObject.sourceObject.filePath;
+}
+
+- (NSDictionary *)getAtrributesForTimestamp:(double)aTimestamp{
+    NSMutableDictionary *attributes = [NSMutableDictionary dictionaryWithDictionary:[super getAtrributesForTimestamp:aTimestamp]];
+    
+    NSMutableDictionary *qcAttributes = [[NSMutableDictionary alloc] init];
+    
+    id result = [self.timelineObject.parameters objectForKey:VSParameterQuartzComposerPublicInputs];
+    
+    if([result isKindOfClass:[NSDictionary class]]){
+        
+        NSDictionary *qcDictionary = (NSDictionary*) result;
+        for(id key in qcDictionary){
+            id value = [qcDictionary valueForKey:key];
+            
+            if([value isKindOfClass:[VSParameter class]]){
+                [qcAttributes setValue:((VSParameter*) value).animation.defaultValue forKey:key];
+            }
+        }
+        
+        [attributes setObject:qcAttributes forKey:VSParameterQuartzComposerPublicInputs];
+    }
+    
+    return attributes;
+    
 }
 
 @end

@@ -23,6 +23,9 @@
 
 #pragma mark - Functins
 
+
+-(id) initWithProjectItem:(VSProjectItem*) aProjectItem andParameters:(NSDictionary*) parameters;
+
 /** 
  * Returns the name of the xml-File holding the definition of the source's parameter 
  * @return Resources-path of the xml-Files
@@ -50,5 +53,5 @@
  */
 -(float) fileSize;
 
-
+-(NSArray *) visibleParameters;
 @end

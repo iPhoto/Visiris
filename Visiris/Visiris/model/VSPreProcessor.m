@@ -78,12 +78,6 @@
         VSFileType *type = [VSSupportedFilesManager typeOFile:timelineObject.sourceObject.filePath];
        
         NSSize outputSize = [VSProjectSettings sharedProjectSettings].frameSize;
-        
-
-        if (type.fileKind == VSFileKindQuartzComposerPatch) {
-            VSQuartzCompositionReader *qcReader = [[VSQuartzCompositionReader alloc] initWithFilepath:timelineObject.sourceObject.filePath];
-        }
-
                         
         timelineObject.textureID = [self.renderCoreReceptionist createNewTextureForSize:dimensions 
                                                                               colorMode:nil 

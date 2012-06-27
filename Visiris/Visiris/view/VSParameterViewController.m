@@ -169,8 +169,8 @@ static NSString* defaultNib = @"VSParameterView";
         [self.valueSlider setHidden:NO];
         [self.valueSliderText setHidden:NO];
         
-        [self.valueSlider setMinValue:self.parameter.valueRange.location];
-        [self.valueSlider setMaxValue:self.parameter.valueRange.length + self.parameter.valueRange.location];
+        [self.valueSlider setMinValue:self.parameter.rangeMinValue];
+        [self.valueSlider setMaxValue:self.parameter.rangeMaxValue];
         [self.valueSlider setFloatValue:self.parameter.animation.defaultFloatValue];
         
         [self.valueSliderText setFloatValue:self.parameter.animation.defaultFloatValue];

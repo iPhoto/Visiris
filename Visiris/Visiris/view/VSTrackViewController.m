@@ -194,12 +194,11 @@ static NSString* defaultNib = @"VSTrackView";
 #pragma mark Snapping
 
 -(BOOL) computeSnappingXValueForMoveableActiveTimelineObjectsMovedAccordingToDeltaX:(float)deltaX snappingDeltaX:(float *)snappingDeltaX{
-    return [self computeSnappingXValueForTimelineObjects:[self activeSelectedAndTemporaryTimelineObjectViewControllers]  movedAccordingToDeltaX:deltaX snappingDelta:snappingDeltaX];
+    return [self computeSnappingDeltaX:snappingDeltaX atSide:VSSnapBothSides forTimelineObjects:[self activeSelectedAndTemporaryTimelineObjectViewControllers] movedAccordingToDeltaX:deltaX];
 }
 
--(BOOL) computeSnappingXValueForTimelineObjects:(NSArray*) timelineObjectViewControllers movedAccordingToDeltaX:(float) deltaX snappingDelta:(float *)snappingDeltaX{
+-(BOOL) computeSnappingDeltaX:(float *)snappingDeltaX atSide:(VSSnapAtSide) snapAtSide forTimelineObjects:(NSArray*) timelineObjectViewControllers movedAccordingToDeltaX:(float) deltaX{
     
-    BOOL returnValue = NO;
     
     *snappingDeltaX = 0;
     
@@ -232,59 +231,64 @@ static NSString* defaultNib = @"VSTrackView";
             }
         }
         
-        //snap to the zero Point of the timeline
-        if(unionRect.origin.x < 0){
-            *snappingDeltaX = unionRect.origin.x * (-1);
-            returnValue = YES;
-        }
-        else {
-            
-            //Reads out the indixes of the tracks timelineObjects not in the given timelineObjectViewControllers
-            NSIndexSet *indexesOfOtherTimelineObjects = [self.timelineObjectViewControllers indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-                if([obj isKindOfClass:[VSTimelineObjectViewController class]]){
-                    if (![timelineObjectViewControllers containsObject:obj]) {
-                        return YES;
-                    }
-                }
-                return NO;
-            }];
-            
-            
-            NSArray *staticObjects = [self.timelineObjectViewControllers objectsAtIndexes:indexesOfOtherTimelineObjects];
-            
-            
-            if(staticObjects && staticObjects.count){
-                
-                //creates the rects where unionRect is able to snap
-                NSRect leftSnappingSourceRect = NSMakeRect(unionRect.origin.x - SNAPPING_AREA / 2.0, unionRect.origin.y,SNAPPING_AREA, unionRect.size.height);
-                NSRect rightSnappingSourceRect = leftSnappingSourceRect;
-                rightSnappingSourceRect.origin.x = NSMaxX(unionRect) - SNAPPING_AREA / 2.0f;    
-                
-                //iterates through all timelineObjectViewController in staticObjects and checks if the snappinRects of the unionRect are intersecting the snapping-rects of the objects in staticObjects
-                for(VSTimelineObjectViewController *timelineObjectViewController in staticObjects){
-                    
-                    //creates the rect where the timelineObjectViewController is able to snap
-                    NSRect targetSnappingRect = NSMakeRect(NSMaxX(timelineObjectViewController.view.frame)-SNAPPING_AREA / 2.0, timelineObjectViewController.view.frame.origin.y, SNAPPING_AREA, timelineObjectViewController.view.frame.size.height);
-                    
-                    if(NSIntersectsRect(leftSnappingSourceRect, targetSnappingRect)){
-                        *snappingDeltaX = NSMaxX(timelineObjectViewController.view.frame) - unionRect.origin.x;
-                        returnValue = YES;
-                        break;
-                    }
-                    targetSnappingRect.origin.x = timelineObjectViewController.view.frame.origin.x - SNAPPING_AREA / 2.0f;
-                    if(NSIntersectsRect(rightSnappingSourceRect, targetSnappingRect)){
-                        *snappingDeltaX = timelineObjectViewController.view.frame.origin.x - NSMaxX(unionRect);
-                        returnValue = YES;
-                        break;
-                    }
-                    
-                }
-                
+        
+        if(snapAtSide == VSSnapBothSides || snapAtSide == VSSnapLeftSideOnly){
+            //snap to the zero Point of the timeline
+            if(unionRect.origin.x < 0){
+                *snappingDeltaX = unionRect.origin.x * (-1);
+                return YES;
             }
         }
         
+        
+        //Reads out the indixes of the tracks timelineObjects not in the given timelineObjectViewControllers
+        NSIndexSet *indexesOfOtherTimelineObjects = [self.timelineObjectViewControllers indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            if([obj isKindOfClass:[VSTimelineObjectViewController class]]){
+                if (![timelineObjectViewControllers containsObject:obj]) {
+                    return YES;
+                }
+            }
+            return NO;
+        }];
+        
+        
+        NSArray *staticObjects = [self.timelineObjectViewControllers objectsAtIndexes:indexesOfOtherTimelineObjects];
+        
+        if(staticObjects && staticObjects.count){
+            
+            //creates the rects where unionRect is able to snap
+            NSRect leftSnappingSourceRect = NSMakeRect(unionRect.origin.x - SNAPPING_AREA / 2.0, unionRect.origin.y,SNAPPING_AREA, unionRect.size.height);
+            NSRect rightSnappingSourceRect = leftSnappingSourceRect;
+            rightSnappingSourceRect.origin.x = NSMaxX(unionRect) - SNAPPING_AREA / 2.0f;    
+            
+            //iterates through all timelineObjectViewController in staticObjects and checks if the snappinRects of the unionRect are intersecting the snapping-rects of the objects in staticObjects
+            for(VSTimelineObjectViewController *timelineObjectViewController in staticObjects){
+                
+                //creates the rect where the timelineObjectViewController is able to snap
+                NSRect targetSnappingRect = NSMakeRect(NSMaxX(timelineObjectViewController.view.frame)-SNAPPING_AREA / 2.0, timelineObjectViewController.view.frame.origin.y, SNAPPING_AREA, timelineObjectViewController.view.frame.size.height);
+                if(snapAtSide == VSSnapBothSides || snapAtSide == VSSnapLeftSideOnly){
+                    if(NSIntersectsRect(leftSnappingSourceRect, targetSnappingRect)){
+                        *snappingDeltaX = NSMaxX(timelineObjectViewController.view.frame) - unionRect.origin.x;
+                        return YES;
+                        break;
+                    }
+                }
+                
+                if(snapAtSide == VSSnapBothSides || snapAtSide == VSSnapRightSideOnly){
+                    targetSnappingRect.origin.x = timelineObjectViewController.view.frame.origin.x - SNAPPING_AREA / 2.0f;
+                    if(NSIntersectsRect(rightSnappingSourceRect, targetSnappingRect)){
+                        *snappingDeltaX = timelineObjectViewController.view.frame.origin.x - NSMaxX(unionRect);
+                        return YES;
+                        break;
+                    }
+                }
+                
+            }
+            
+        }
+        
     } 
-    return returnValue;
+    return NO;
 }
 
 
@@ -555,7 +559,8 @@ static NSString* defaultNib = @"VSTrackView";
             
             float deltaX = newPosition.x - firstTimelineObjectViewController.view.frame.origin.x;
             float snappingDeltaX =0;
-            [self computeSnappingXValueForTimelineObjects:self.temporaryTimelineObjectViewControllers movedAccordingToDeltaX:deltaX snappingDelta:&snappingDeltaX];
+            
+            [self computeSnappingDeltaX:&snappingDeltaX atSide:VSSnapBothSides forTimelineObjects:self.temporaryTimelineObjectViewControllers movedAccordingToDeltaX:deltaX];
             
             //if more than one VSTimelineObjectViewControllers is stored in self.temporaryTimelineObjectViewControllers their views are positioned next to each other
             for(VSTimelineObjectViewController *timelineObjectViewController in self.temporaryTimelineObjectViewControllers){
@@ -685,7 +690,9 @@ static NSString* defaultNib = @"VSTrackView";
     
     float deltaXPosition = newFrame.origin.x - oldFrame.origin.x;
     float snappingDeltaX;
-    if([self computeSnappingXValueForTimelineObjects:[NSArray arrayWithObject:timelineObjectViewController] movedAccordingToDeltaX:deltaXPosition snappingDelta:&snappingDeltaX]){
+    
+    
+    if([self computeSnappingDeltaX:&snappingDeltaX atSide:VSSnapBothSides forTimelineObjects:[NSArray arrayWithObject:timelineObjectViewController] movedAccordingToDeltaX:deltaXPosition]){
         newFrame.origin.x += snappingDeltaX;
     }
     return newFrame;
