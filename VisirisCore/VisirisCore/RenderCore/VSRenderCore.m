@@ -118,13 +118,14 @@ static struct {
 -(void)renderFrameOfCoreHandovers:(NSArray *) theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double)theTimestamp{
     NSMutableArray *mutableCoreHandovers = [NSMutableArray arrayWithArray:theCoreHandovers];
     
-    CGLLockContext([[self openGLContext] CGLContextObj]);
     
 	[[self openGLContext] makeCurrentContext];
 
     //Create a array with only glTextures in it
     NSMutableArray *textures = [self createTextures:mutableCoreHandovers atTime:theTimestamp];
     
+    CGLLockContext([[self openGLContext] CGLContextObj]);
+
     switch (textures.count) {
         case 0:
         {
@@ -184,7 +185,8 @@ static struct {
     
     glViewport(0, 0, self.frameBufferObjectCurrent.size.width,self.frameBufferObjectCurrent.size.height);
    
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
+   // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
     glUseProgram(self.shader.program);
     glUniform1f(self.shader.uniformFadefactor, 0.5f);
@@ -216,9 +218,10 @@ static struct {
     
     glDisableVertexAttribArray(self.shader.attributePosition);
 
-    [[self openGLContext] flushBuffer];
     
     [self.frameBufferObjectCurrent unbind];
+    [[self openGLContext] flushBuffer];
+
 }
 
 - (NSInteger)make_resources{
@@ -286,11 +289,8 @@ static struct {
             if([qcPublicInputValues isKindOfClass:[NSDictionary class]]){
                 [qcRenderer setPublicInputsWithValues:qcPublicInputValues];
             }
-            
-            [qcRenderer renderAtTme:time];
-            
-            [textures addObject:[NSNumber numberWithInt:[qcRenderer texture]]];
-            //NSLog(@"path: %@", handover.filePath);
+                        
+            [textures addObject:[NSNumber numberWithInt:[qcRenderer renderAtTme:time]]];
         }
     }
     return textures;

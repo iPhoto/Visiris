@@ -57,36 +57,28 @@
 }
 
 - (GLuint)renderAtTme:(double)time{
+    
     time /= 1000;
-    //CGLLockContext([[self context] CGLContextObj]);
+    CGLLockContext([[self context] CGLContextObj]);
     
 	[[self context] makeCurrentContext];
     
-    
-    
-    
-  //  QCComposition
-    //id key = self.qcRenderer.attributes objectForKey:key
-    
+   // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    glViewport(0, 0, self.fbo.size.width,self.fbo.size.height);
     
     [self.fbo bind];
-    glViewport(0, 0, self.fbo.size.width,self.fbo.size.height);
 
-    glClearColor(0, 0, 0, 0);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-  //  glBindTexture(0, 0);
-
+   // glClearColor(0, 0, 0, 0);
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);    
+    
     [self.qcRenderer renderAtTime:time arguments:nil];
     
+
     [[self context] flushBuffer];
     [self.fbo unbind];
+    CGLUnlockContext([[self context] CGLContextObj]);
     
-    //CGLUnlockContext([[self context] CGLContextObj]);
-
     return self.fbo.texture;
-
-    [self.context update];
 }
 
 - (NSSize) size{
