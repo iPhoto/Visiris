@@ -38,8 +38,10 @@
 /** NO if no ranges are given, YES otherwise. */
 @property BOOL hasRange;
 
+/** Minimal valid value of the parameter */
 @property float rangeMinValue;
 
+/** Maximal valid value of the parameter */
 @property float rangeMaxValue;
 
 /** If true, the value of the paramter can be edited */
