@@ -37,6 +37,8 @@
 /** Area at the right side of the VSTimelineObject which starts the resizing of the object when clicked */
 @property NSRect rightResizingArea;
 
+@property NSRect frameAtMouseDown;
+
 @end
 
 @implementation VSTimelineObjectView
@@ -48,10 +50,11 @@ static int resizingAreaWidth = 10;
 @synthesize selected                = _selected;
 @synthesize moving                  = _dragged;
 @synthesize temporary               = _temporary;
-@synthesize intersectionRects        = _intersectionRects;
+@synthesize intersectionRects       = _intersectionRects;
 @synthesize lastMousePosition       = _lastMousePosition;
 @synthesize mouseDownMousePosition  = _mouseDownMousePosition;
 @synthesize mouseDownXOffset        = _mouseDownXOffset;
+@synthesize frameAtMouseDown        = _frameAtMouseDown;
 @synthesize leftResizingArea        = _leftResizingArea;
 @synthesize rightResizingArea       = _rightResizingArea;
 @synthesize resizing                = _resizing;
@@ -173,6 +176,7 @@ static int resizingAreaWidth = 10;
     self.lastMousePosition = [theEvent locationInWindow];
     self.mouseDownMousePosition = self.lastMousePosition;
     self.mouseDownXOffset = self.mouseDownMousePosition.x - self.frame.origin.x;
+    self.frameAtMouseDown = self.frame;
     
     
     if(!self.selected){
@@ -190,7 +194,6 @@ static int resizingAreaWidth = 10;
 -(void) mouseDragged:(NSEvent *)theEvent{
     
     NSPoint newMousePosition =[theEvent locationInWindow];
-    NSInteger mouseXDelta = newMousePosition.x- self.lastMousePosition.x;
     
     //if the the event was entered first time after a mouse down the kind of drgging operation has to be set
     if(!self.resizing && !self.moving){
@@ -199,7 +202,7 @@ static int resizingAreaWidth = 10;
     
     //dependening on the set drag mode resize or move is called
     if(self.resizing){
-        [self resize:mouseXDelta];
+        [self resize:newMousePosition];
     }
     else if(self.moving){
         [self move:newMousePosition];
@@ -216,6 +219,8 @@ static int resizingAreaWidth = 10;
 }
 
 -(void) mouseUp:(NSEvent *)theEvent{
+    
+    [self mouseDragged:theEvent];
     
     if(self.moving){
         //sets the moving-flag to NO and tells its delegate that the draggin has ended
@@ -293,16 +298,21 @@ static int resizingAreaWidth = 10;
  * Resizes the view according to given size change
  * @param deltaSize Change of the size since the last call
  */
--(void) resize:(NSInteger) deltaSize{
+-(void) resize:(NSPoint) currentMousePosition{
     NSRect resizedFrame = self.frame;
+    
+    
+    
+    float correctedMousePosition = currentMousePosition.x-self.mouseDownXOffset;
     
     //if the view is resized from the left, the x-origin and width have to be changed     
     if (self.resizingDirection == RESIZING_FROM_LEFT) {
-        resizedFrame.size.width -= deltaSize;
-        resizedFrame.origin.x += deltaSize;
+        resizedFrame.size.width -= correctedMousePosition-resizedFrame.origin.x ;
+        resizedFrame.origin.x = correctedMousePosition;
     }
     else if(self.resizingDirection == RESIZING_FROM_RIGHT){
-        resizedFrame.size.width += deltaSize;
+        
+        resizedFrame.size.width = self.frameAtMouseDown.size.width + (correctedMousePosition-resizedFrame.origin.x);
     }
     
     DDLogInfo(@"before: %@",NSStringFromRect(resizedFrame));

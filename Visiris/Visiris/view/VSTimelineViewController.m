@@ -709,7 +709,7 @@ static NSString* defaultNib = @"VSTimelineView";
 -(void) setPlayheadMarkerLocation{
     CGFloat newLocation = self.timeline.playHead.currentTimePosition / self.pixelTimeRatio;
     
-    [self.trackHolder setPlayHeadMarkerToLocation:newLocation];
+    [self.trackHolder movePlayHeadMarkerToLocation:newLocation];
 }
 
 /**

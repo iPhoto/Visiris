@@ -51,6 +51,8 @@
 /** The currently active TimeStamp */
 @property double currentTimestamp;
 
+@property BOOL frameWasRender;
+
 
 /**
  * Inits the VSPlaybackController with the given VSPrePRrocessor and the given timeline.

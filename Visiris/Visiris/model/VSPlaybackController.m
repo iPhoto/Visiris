@@ -33,6 +33,7 @@
 @synthesize queue               = _queue;
 @synthesize playing             = _playing;
 @synthesize playbackStartTime   = _playbackStartTime;
+@synthesize frameWasRender      = _frameWasRender;
 
 #pragma mark - Init
 
@@ -67,13 +68,13 @@
         
         if(scrubbing){
             
-            self.playing = false;
-            
+            self.playing = NO;
+            self.frameWasRender = NO;
             if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
                 [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
             }
         }
-        else {
+        if(self.frameWasRender) {
             if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
                 [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
             }
@@ -122,10 +123,11 @@
         self.playbackStartTime = currentTime;
     }
     else{
-        if(!self.timeline.playHead.scrubbing){
+        if(!self.timeline.playHead.scrubbing || !self.frameWasRender){
             if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
                 [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
             }
+            self.frameWasRender = YES;
         }
     }
     if (self.preProcessor) {

@@ -151,98 +151,116 @@
     if(ruler == self.enclosingScrollView.horizontalRulerView){
         NSPoint pointInView = [self.window.contentView convertPoint:[event locationInWindow] toView:self.enclosingScrollView.horizontalRulerView];
         
+        
+        
         CGFloat location = pointInView.x - self.playheadMarker.imageRectInRuler.size.width / 2 - self.playheadMarker.imageOrigin.x;
         
-        if([self delegateRespondsToSelector:@selector(willMovePlayHeadRulerMarker:inContainingView:toLocation:)]){
-            location = [self.playheadMarkerDelegate willMovePlayHeadRulerMarker:self.playheadMarker inContainingView:self toLocation:location];
-        }
-        
-        [self setPlayHeadMarkerToLocation:location];
-        
-    }
-}
-
-#pragma mark - Methods
-
--(void) setPlayHeadMarkerToLocation:(CGFloat)location{
-    NSRect formerImageRect = self.playheadMarker.imageRectInRuler;
-    [self.playheadMarker setMarkerLocation:location];
-    
-    [self updateGuideline];
-    
-    [self.enclosingScrollView.horizontalRulerView setNeedsDisplayInRect:self.playheadMarker.imageRectInRuler];
-    [self.enclosingScrollView.horizontalRulerView setNeedsDisplayInRect:formerImageRect];
-}
-
-
-
-#pragma mark - Private Methods
-
-/**
- * Checks if the delegate  is able to respond to the given Selector
- * @param selector Selector the delegate will be checked for if it is able respond to
- * @return YES if the delegate is able to respond to the selector, NO otherweis
- */
--(BOOL) delegateRespondsToSelector:(SEL) selector{
-    if(self.playheadMarkerDelegate){
-        if([self.playheadMarkerDelegate conformsToProtocol:@protocol(VSPlayHeadRulerMarkerDelegate)]){
-            if([self.playheadMarkerDelegate respondsToSelector:selector]){
-                return YES;
+        if([self delegateRespondsToSelector:@selector(shouldMovePlayHeadRulerMarker:inContainingView:)]){
+            if( [self.playheadMarkerDelegate shouldMovePlayHeadRulerMarker:self.playheadMarker inContainingView:self]){
+                
+                
+                if([self delegateRespondsToSelector:@selector(willMovePlayHeadRulerMarker:inContainingView:toLocation:)]){
+                    location = [self.playheadMarkerDelegate willMovePlayHeadRulerMarker:self.playheadMarker inContainingView:self toLocation:location];
+                }
+                
+                [self movePlayHeadMarkerToLocation:location];
+                if([self delegateRespondsToSelector:@selector(didMovePlayHeadRulerMarker:inContainingView:)]){
+                    [self.playheadMarkerDelegate didMovePlayHeadRulerMarker:self.playheadMarker inContainingView:self];
+                }
             }
         }
     }
-    return NO;
 }
-
-/**
- * Receiver of the NSViewBoundsDidChangeNotification. Updates the scrollOffset and tells the guideline to be updated
- * @param notification NSNotification of the NSViewBoundsDidChangeNotification
- */
--(void) boundsDidChange:(NSNotification*) notification{
+    
+#pragma mark - Methods
     
     
-    if(notification.object == self.enclosingScrollView.contentView){
+    
+#pragma mark - Private Methods
+    
+    
+    -(void) movePlayHeadMarkerToLocation:(CGFloat)location{
         
-        NSInteger xOffset = self.enclosingScrollView.contentView.bounds.origin.x - self.frame.origin.x;
-        NSInteger yOffset = self.enclosingScrollView.contentView.bounds.origin.y - self.frame.origin.y;
+        location += self.scrollOffset.x;
         
-        self.scrollOffset = NSMakePoint(xOffset, yOffset);
-        
-        
-        [self updateGuideline];
+        if(location != self.playheadMarker.markerLocation){
+            
+            NSRect formerImageRect = self.playheadMarker.imageRectInRuler;
+            [self.playheadMarker setMarkerLocation:location];
+            
+            [self updateGuideline];
+            
+            [self.enclosingScrollView.horizontalRulerView setNeedsDisplayInRect:self.playheadMarker.imageRectInRuler];
+            [self.enclosingScrollView.horizontalRulerView setNeedsDisplayInRect:formerImageRect];
+        }
     }
     
-}
-
-/**
- * Updates the playhead marker at its current location
- */
--(void) updateGuideline{
-    [self updateGuidelineAtMarkerLocation:self.playheadMarker.markerLocation];
-}
-
-/**
- * Updates the guideline for the given location
- * @param location Location the guidelin is updated for
- */
--(void) updateGuidelineAtMarkerLocation:(CGFloat) location{
-    NSRect newFrame = self.bounds; 
-    newFrame.size = self.enclosingScrollView.contentSize;
-    newFrame.origin.x += self.scrollOffset.x;
-    newFrame.origin.y += self.scrollOffset.y;
-    //  newFrame = [self convertRect:newFrame toView:self.guideLine];
     
-    [self.guideLine setFrame:newFrame];
+    /**
+     * Checks if the delegate  is able to respond to the given Selector
+     * @param selector Selector the delegate will be checked for if it is able respond to
+     * @return YES if the delegate is able to respond to the selector, NO otherweis
+     */
+    -(BOOL) delegateRespondsToSelector:(SEL) selector{
+        if(self.playheadMarkerDelegate){
+            if([self.playheadMarkerDelegate conformsToProtocol:@protocol(VSPlayHeadRulerMarkerDelegate)]){
+                if([self.playheadMarkerDelegate respondsToSelector:selector]){
+                    return YES;
+                }
+            }
+        }
+        return NO;
+    }
     
-    NSPoint startPoint = [self convertPoint:self.playheadMarker.imageRectInRuler.origin toView:self.guideLine];
-    startPoint.x = location - self.scrollOffset.x;
-    startPoint.y += self.scrollOffset.y;
+    /**
+     * Receiver of the NSViewBoundsDidChangeNotification. Updates the scrollOffset and tells the guideline to be updated
+     * @param notification NSNotification of the NSViewBoundsDidChangeNotification
+     */
+    -(void) boundsDidChange:(NSNotification*) notification{
+        
+        
+        if(notification.object == self.enclosingScrollView.contentView){
+            
+            NSInteger xOffset = self.enclosingScrollView.contentView.bounds.origin.x - self.frame.origin.x;
+            NSInteger yOffset = self.enclosingScrollView.contentView.bounds.origin.y - self.frame.origin.y;
+            
+            self.scrollOffset = NSMakePoint(xOffset, yOffset);
+            
+            
+            [self updateGuideline];
+        }
+        
+    }
     
-    self.guideLine.lineStartPoint = startPoint;
+    /**
+     * Updates the playhead marker at its current location
+     */
+    -(void) updateGuideline{
+        [self updateGuidelineAtMarkerLocation:self.playheadMarker.markerLocation];
+    }
     
-    [self.guideLine setNeedsDisplay:YES];
-}
-
-
-
-@end
+    /**
+     * Updates the guideline for the given location
+     * @param location Location the guidelin is updated for
+     */
+    -(void) updateGuidelineAtMarkerLocation:(CGFloat) location{
+        NSRect newFrame = self.bounds; 
+        newFrame.size = self.enclosingScrollView.contentSize;
+        newFrame.origin.x += self.scrollOffset.x;
+        newFrame.origin.y += self.scrollOffset.y;
+        //  newFrame = [self convertRect:newFrame toView:self.guideLine];
+        
+        [self.guideLine setFrame:newFrame];
+        
+        NSPoint startPoint = [self convertPoint:self.playheadMarker.imageRectInRuler.origin toView:self.guideLine];
+        startPoint.x = location - self.scrollOffset.x;
+        startPoint.y += self.scrollOffset.y;
+        
+        self.guideLine.lineStartPoint = startPoint;
+        
+        [self.guideLine setNeedsDisplay:YES];
+    }
+    
+    
+    
+    @end

@@ -194,10 +194,10 @@ static NSString* defaultNib = @"VSTrackView";
 #pragma mark Snapping
 
 -(BOOL) computeSnappingXValueForMoveableActiveTimelineObjectsMovedAccordingToDeltaX:(float)deltaX snappingDeltaX:(float *)snappingDeltaX{
-    return [self computeSnappingDeltaX:snappingDeltaX atSide:VSSnapBothSides forTimelineObjects:[self activeSelectedAndTemporaryTimelineObjectViewControllers] movedAccordingToDeltaX:deltaX];
+    return [self computeSnappingDeltaX:snappingDeltaX atSide:VSSnapBothSides forTimelineObjects:[self activeSelectedAndTemporaryTimelineObjectViewControllers] movedAccordingToDeltaX:deltaX widthChangedAccordingToDeltaWidth:0];
 }
 
--(BOOL) computeSnappingDeltaX:(float *)snappingDeltaX atSide:(VSSnapAtSide) snapAtSide forTimelineObjects:(NSArray*) timelineObjectViewControllers movedAccordingToDeltaX:(float) deltaX{
+-(BOOL) computeSnappingDeltaX:(float *)snappingDeltaX atSide:(VSSnapAtSide) snapAtSide forTimelineObjects:(NSArray*) timelineObjectViewControllers movedAccordingToDeltaX:(float) deltaX widthChangedAccordingToDeltaWidth:(float) deltaWidth{
     
     
     *snappingDeltaX = 0;
@@ -216,8 +216,8 @@ static NSString* defaultNib = @"VSTrackView";
             //iteractes through all VSTimelineObjectViewController in the given timelineObjectViewControllers-Array and puts the view frames together to on big unionRect
             for(VSTimelineObjectViewController *timelineObjectViewController in timelineObjectViewControllers){
                 NSRect frame = timelineObjectViewController.view.frame;
-                NSPoint newOrigin = NSMakePoint(frame.origin.x + deltaX, frame.origin.y);
-                frame.origin = newOrigin;
+                frame.origin.x += deltaX;
+                frame.size.width += deltaWidth;
                 
                 
                 if(i > 0){
@@ -560,7 +560,7 @@ static NSString* defaultNib = @"VSTrackView";
             float deltaX = newPosition.x - firstTimelineObjectViewController.view.frame.origin.x;
             float snappingDeltaX =0;
             
-            [self computeSnappingDeltaX:&snappingDeltaX atSide:VSSnapBothSides forTimelineObjects:self.temporaryTimelineObjectViewControllers movedAccordingToDeltaX:deltaX];
+            [self computeSnappingDeltaX:&snappingDeltaX atSide:VSSnapBothSides forTimelineObjects:self.temporaryTimelineObjectViewControllers movedAccordingToDeltaX:deltaX widthChangedAccordingToDeltaWidth:0];
             
             //if more than one VSTimelineObjectViewControllers is stored in self.temporaryTimelineObjectViewControllers their views are positioned next to each other
             for(VSTimelineObjectViewController *timelineObjectViewController in self.temporaryTimelineObjectViewControllers){
@@ -689,12 +689,32 @@ static NSString* defaultNib = @"VSTrackView";
 -(NSRect) timelineObjectWillResize:(VSTimelineObjectViewController *)timelineObjectViewController fromFrame:(NSRect)oldFrame toFrame:(NSRect)newFrame{
     
     float deltaXPosition = newFrame.origin.x - oldFrame.origin.x;
+    float deltaWidth = newFrame.size.width - oldFrame.size.width;
     float snappingDeltaX;
     
+    VSSnapAtSide snapAtSide;
     
-    if([self computeSnappingDeltaX:&snappingDeltaX atSide:VSSnapBothSides forTimelineObjects:[NSArray arrayWithObject:timelineObjectViewController] movedAccordingToDeltaX:deltaXPosition]){
-        newFrame.origin.x += snappingDeltaX;
+    if(newFrame.origin.x != oldFrame.origin.x){
+        snapAtSide = VSSnapLeftSideOnly;
     }
+    else {
+        snapAtSide = VSSnapRightSideOnly;
+    }
+    
+    if([self computeSnappingDeltaX:&snappingDeltaX atSide:VSSnapBothSides forTimelineObjects:[NSArray arrayWithObject:timelineObjectViewController] movedAccordingToDeltaX:deltaXPosition widthChangedAccordingToDeltaWidth:deltaWidth]){
+
+        
+        
+        if(snapAtSide == VSSnapLeftSideOnly){
+            newFrame.origin.x += snappingDeltaX;
+            newFrame.size.width -= snappingDeltaX;
+        }
+        else{
+            newFrame.size.width += snappingDeltaX;
+        }
+        
+    }
+        
     return newFrame;
 }
 
