@@ -23,6 +23,9 @@
 }
 
 - (NSDictionary *)getAtrributesForTimestamp:(double)aTimestamp{
+    
+    //adds the public input ports of the Quartz Composition the Supplier is responsible for to the attributes-dictionary
+    
     NSMutableDictionary *attributes = [NSMutableDictionary dictionaryWithDictionary:[super getAtrributesForTimestamp:aTimestamp]];
     
     NSMutableDictionary *qcAttributes = [[NSMutableDictionary alloc] init];

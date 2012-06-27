@@ -25,7 +25,7 @@
 		2761513B1577C97A005177C5 /* aaa.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2761513A1577C97A005177C5 /* aaa.jpg */; };
 		2795881715906D5000E24B57 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2795881615906D5000E24B57 /* CoreMedia.framework */; };
 		2795881A15906D7B00E24B57 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2795881915906D7B00E24B57 /* AVFoundation.framework */; };
-		2799F8E61599C8B800008489 /* VSQuartzCompositionReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 2799F8E51599C8B800008489 /* VSQuartzCompositionReader.m */; };
+		2799F8E61599C8B800008489 /* VSQuartzCompositionUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2799F8E51599C8B800008489 /* VSQuartzCompositionUtils.m */; };
 		2799F8E91599C96D00008489 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2799F8E81599C96D00008489 /* Quartz.framework */; };
 		5B0E366615876E9300F15026 /* VSTrackLabelsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366515876E9300F15026 /* VSTrackLabelsView.m */; };
 		5B0E366915876EA900F15026 /* VSTrackLabelsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366815876EA900F15026 /* VSTrackLabelsViewController.m */; };
@@ -154,8 +154,7 @@
 		2761513A1577C97A005177C5 /* aaa.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = aaa.jpg; sourceTree = "<group>"; };
 		2795881615906D5000E24B57 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		2795881915906D7B00E24B57 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		2799F8E41599C8B800008489 /* VSQuartzCompositionReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSQuartzCompositionReader.h; sourceTree = "<group>"; };
-		2799F8E51599C8B800008489 /* VSQuartzCompositionReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSQuartzCompositionReader.m; sourceTree = "<group>"; };
+		2799F8E51599C8B800008489 /* VSQuartzCompositionUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSQuartzCompositionUtils.m; sourceTree = "<group>"; };
 		2799F8E81599C96D00008489 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		5B0E366415876E9300F15026 /* VSTrackLabelsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTrackLabelsView.h; sourceTree = "<group>"; };
 		5B0E366515876E9300F15026 /* VSTrackLabelsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTrackLabelsView.m; sourceTree = "<group>"; };
@@ -365,6 +364,7 @@
 		5B35C0951577A912009911EC /* VSLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSLogFormatter.h; sourceTree = "<group>"; };
 		5B35C0961577A912009911EC /* VSLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLogFormatter.m; sourceTree = "<group>"; };
 		5B35C0A61577A926009911EC /* VSCoreServices.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSCoreServices.h; sourceTree = "<group>"; };
+		5B538B78159B12D20031363E /* VSQuartzCompositionUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSQuartzCompositionUtils.h; sourceTree = "<group>"; };
 		5B603FA7157F824A0045A1EA /* VSPlayHead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSPlayHead.h; sourceTree = "<group>"; };
 		5B603FA8157F824A0045A1EA /* VSPlayHead.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSPlayHead.m; sourceTree = "<group>"; };
 		5B7BFFC51592143C00CEA1E8 /* VSTimelineObjectViewIntersection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineObjectViewIntersection.h; sourceTree = "<group>"; };
@@ -650,6 +650,7 @@
 		5B35C07A1577A912009911EC /* utils */ = {
 			isa = PBXGroup;
 			children = (
+				5B538B78159B12D20031363E /* VSQuartzCompositionUtils.h */,
 				5B35C07B1577A912009911EC /* VSFileImageCreator.h */,
 				5B35C07C1577A912009911EC /* VSFileImageCreator.m */,
 				5B35C07D1577A912009911EC /* VSFormattingUtils.h */,
@@ -660,8 +661,7 @@
 				5B35C0821577A912009911EC /* VSProjectSettings.m */,
 				5B35C0831577A912009911EC /* VSSupportedFilesManager.h */,
 				5B35C0841577A912009911EC /* VSSupportedFilesManager.m */,
-				2799F8E41599C8B800008489 /* VSQuartzCompositionReader.h */,
-				2799F8E51599C8B800008489 /* VSQuartzCompositionReader.m */,
+				2799F8E51599C8B800008489 /* VSQuartzCompositionUtils.m */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -1212,7 +1212,7 @@
 				5B0EFF99158A226C0000445C /* VSTrackHolderView.m in Sources */,
 				5BF08B92158A2E7500D64144 /* VSTimelineGuideLine.m in Sources */,
 				5B7BFFC71592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m in Sources */,
-				2799F8E61599C8B800008489 /* VSQuartzCompositionReader.m in Sources */,
+				2799F8E61599C8B800008489 /* VSQuartzCompositionUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

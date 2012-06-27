@@ -37,6 +37,7 @@
 /** Area at the right side of the VSTimelineObject which starts the resizing of the object when clicked */
 @property NSRect rightResizingArea;
 
+/** frame of the view in the mouseDown event */
 @property NSRect frameAtMouseDown;
 
 @end
@@ -296,7 +297,7 @@ static int resizingAreaWidth = 10;
 
 /**
  * Resizes the view according to given size change
- * @param deltaSize Change of the size since the last call
+ * @param currentMousePosition Current Position of the mouse
  */
 -(void) resize:(NSPoint) currentMousePosition{
     NSRect resizedFrame = self.frame;

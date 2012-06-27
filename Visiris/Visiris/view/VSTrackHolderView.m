@@ -171,96 +171,94 @@
         }
     }
 }
-    
+
 #pragma mark - Methods
+
+
+-(void) movePlayHeadMarkerToLocation:(CGFloat)location{
     
+    location += self.scrollOffset.x;
     
-    
-#pragma mark - Private Methods
-    
-    
-    -(void) movePlayHeadMarkerToLocation:(CGFloat)location{
+    if(location != self.playheadMarker.markerLocation){
         
-        location += self.scrollOffset.x;
+        NSRect formerImageRect = self.playheadMarker.imageRectInRuler;
+        [self.playheadMarker setMarkerLocation:location];
         
-        if(location != self.playheadMarker.markerLocation){
-            
-            NSRect formerImageRect = self.playheadMarker.imageRectInRuler;
-            [self.playheadMarker setMarkerLocation:location];
-            
-            [self updateGuideline];
-            
-            [self.enclosingScrollView.horizontalRulerView setNeedsDisplayInRect:self.playheadMarker.imageRectInRuler];
-            [self.enclosingScrollView.horizontalRulerView setNeedsDisplayInRect:formerImageRect];
-        }
+        [self updateGuideline];
+        
+        [self.enclosingScrollView.horizontalRulerView setNeedsDisplayInRect:self.playheadMarker.imageRectInRuler];
+        [self.enclosingScrollView.horizontalRulerView setNeedsDisplayInRect:formerImageRect];
     }
-    
-    
-    /**
-     * Checks if the delegate  is able to respond to the given Selector
-     * @param selector Selector the delegate will be checked for if it is able respond to
-     * @return YES if the delegate is able to respond to the selector, NO otherweis
-     */
-    -(BOOL) delegateRespondsToSelector:(SEL) selector{
-        if(self.playheadMarkerDelegate){
-            if([self.playheadMarkerDelegate conformsToProtocol:@protocol(VSPlayHeadRulerMarkerDelegate)]){
-                if([self.playheadMarkerDelegate respondsToSelector:selector]){
-                    return YES;
-                }
+}
+
+#pragma mark - Private Methods
+
+
+/**
+ * Checks if the delegate  is able to respond to the given Selector
+ * @param selector Selector the delegate will be checked for if it is able respond to
+ * @return YES if the delegate is able to respond to the selector, NO otherweis
+ */
+-(BOOL) delegateRespondsToSelector:(SEL) selector{
+    if(self.playheadMarkerDelegate){
+        if([self.playheadMarkerDelegate conformsToProtocol:@protocol(VSPlayHeadRulerMarkerDelegate)]){
+            if([self.playheadMarkerDelegate respondsToSelector:selector]){
+                return YES;
             }
         }
-        return NO;
+    }
+    return NO;
+}
+
+/**
+ * Receiver of the NSViewBoundsDidChangeNotification. Updates the scrollOffset and tells the guideline to be updated
+ * @param notification NSNotification of the NSViewBoundsDidChangeNotification
+ */
+-(void) boundsDidChange:(NSNotification*) notification{
+    
+    
+    if(notification.object == self.enclosingScrollView.contentView){
+        
+        NSInteger xOffset = self.enclosingScrollView.contentView.bounds.origin.x - self.frame.origin.x;
+        NSInteger yOffset = self.enclosingScrollView.contentView.bounds.origin.y - self.frame.origin.y;
+        
+        self.scrollOffset = NSMakePoint(xOffset, yOffset);
+        
+        
+        [self updateGuideline];
     }
     
-    /**
-     * Receiver of the NSViewBoundsDidChangeNotification. Updates the scrollOffset and tells the guideline to be updated
-     * @param notification NSNotification of the NSViewBoundsDidChangeNotification
-     */
-    -(void) boundsDidChange:(NSNotification*) notification{
-        
-        
-        if(notification.object == self.enclosingScrollView.contentView){
-            
-            NSInteger xOffset = self.enclosingScrollView.contentView.bounds.origin.x - self.frame.origin.x;
-            NSInteger yOffset = self.enclosingScrollView.contentView.bounds.origin.y - self.frame.origin.y;
-            
-            self.scrollOffset = NSMakePoint(xOffset, yOffset);
-            
-            
-            [self updateGuideline];
-        }
-        
-    }
+}
+
+/**
+ * Updates the playhead marker at its current location
+ */
+-(void) updateGuideline{
+    [self updateGuidelineAtMarkerLocation:self.playheadMarker.markerLocation];
+}
+
+/**
+ * Updates the guideline for the given location
+ * @param location Location the guidelin is updated for
+ */
+-(void) updateGuidelineAtMarkerLocation:(CGFloat) location{
+    NSRect newFrame = self.bounds; 
+    newFrame.size = self.enclosingScrollView.contentSize;
+    newFrame.origin.x += self.scrollOffset.x;
+    newFrame.origin.y += self.scrollOffset.y;
+    //  newFrame = [self convertRect:newFrame toView:self.guideLine];
     
-    /**
-     * Updates the playhead marker at its current location
-     */
-    -(void) updateGuideline{
-        [self updateGuidelineAtMarkerLocation:self.playheadMarker.markerLocation];
-    }
+    [self.guideLine setFrame:newFrame];
     
-    /**
-     * Updates the guideline for the given location
-     * @param location Location the guidelin is updated for
-     */
-    -(void) updateGuidelineAtMarkerLocation:(CGFloat) location{
-        NSRect newFrame = self.bounds; 
-        newFrame.size = self.enclosingScrollView.contentSize;
-        newFrame.origin.x += self.scrollOffset.x;
-        newFrame.origin.y += self.scrollOffset.y;
-        //  newFrame = [self convertRect:newFrame toView:self.guideLine];
-        
-        [self.guideLine setFrame:newFrame];
-        
-        NSPoint startPoint = [self convertPoint:self.playheadMarker.imageRectInRuler.origin toView:self.guideLine];
-        startPoint.x = location - self.scrollOffset.x;
-        startPoint.y += self.scrollOffset.y;
-        
-        self.guideLine.lineStartPoint = startPoint;
-        
-        [self.guideLine setNeedsDisplay:YES];
-    }
+    NSPoint startPoint = [self convertPoint:self.playheadMarker.imageRectInRuler.origin toView:self.guideLine];
+    startPoint.x = location - self.scrollOffset.x;
+    startPoint.y += self.scrollOffset.y;
     
+    self.guideLine.lineStartPoint = startPoint;
     
-    
-    @end
+    [self.guideLine setNeedsDisplay:YES];
+}
+
+
+
+@end

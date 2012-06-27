@@ -109,6 +109,7 @@
  */
 @interface VSTimelineObjectViewController : NSViewController<VSTimelineObjectViewDelegate>
 
+/** Controllers view casted as VSTimelineObjectView */
 @property VSTimelineObjectView *timelineObjectView;
 
 /** Called according to VSTimelineObjectControllerDelegate protocoll */
@@ -156,6 +157,10 @@
  */
 -(void) removeIntersectionWith:(VSTimelineObjectViewController*) timelineObjectViewController;
 
+
+/**
+ * Removes all intersections
+ */
 -(void) removeAllIntersections;
 
 @end

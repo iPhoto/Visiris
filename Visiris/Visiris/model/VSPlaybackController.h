@@ -21,8 +21,16 @@
  */
 -(void) texture:(GLuint) theTexture isReadyForTimestamp:(double) theTimestamp;
 
+/**
+ * Called when the Playhead of the timeline the VSPlaybackController started to be scrubbed around the timeline
+ * @param theTimestamp Current position of the Playhead.
+ */
 -(void) didStartScrubbingAtTimestamp:(double) aTimestamp;
 
+/**
+ * Called when the Playhead of the timeline the VSPlaybackController stopped scrubbing
+ * @param theTimestamp Current position of the Playhead.
+ */
 -(void) didStopScrubbingAtTimestamp:(double) aTimestamp;
 
 @end
@@ -51,6 +59,7 @@
 /** The currently active TimeStamp */
 @property double currentTimestamp;
 
+/** Indicates if renderFramesForCurrentTimestamp was called after starting the DisplayLink or not. Neccessary to make sure a requested frame was rendered */
 @property BOOL frameWasRender;
 
 

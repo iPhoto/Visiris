@@ -136,4 +136,9 @@
     
 }
 
+-(void) changeName:(NSString *)newName andRegisterAt:(NSUndoManager *)undoManager{
+    [[undoManager prepareWithInvocationTarget:self] changeName:self.name andRegisterAt:undoManager];
+    self.name = newName;
+}
+
 @end

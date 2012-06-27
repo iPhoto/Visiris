@@ -333,6 +333,12 @@ static NSString* defaultNib = @"VSTimelineView";
 }
 
 
+
+
+
+
+
+
 #pragma Moving TimlineObjects
 
 -(NSPoint) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController WillBeDraggedOnTrack:(VSTrackViewController *)trackViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition withSnappingDeltaX:(float)snappingDeltaX{
@@ -376,55 +382,24 @@ static NSString* defaultNib = @"VSTimelineView";
 
 -(void) moveTimelineObjectTemporary:(VSTimelineObjectViewController *)timelineObject fromTrack:(VSTrackViewController *)fromTrack toTrackAtPosition:(NSPoint)position{
     
-    int fromTrackArrayIndex = [self.trackViewControllers indexOfObject:fromTrack];
-    int toTrackArrayIndex = fromTrackArrayIndex;
-    int newTrackOffset = self.trackOffset; 
+    //stores the new offset from the fromTrack to the track at the position of the given mouse position
+    int newTrackOffset = [self computeTrackOffsetForTrack:fromTrack forMousePosition:position];
     
-    NSPoint positionInView = [self.trackHolder convertPoint:position fromView:nil];
-    
-    int i = 0;
-    
-    for(VSTrackViewController *trackViewController in self.trackViewControllers){
-        if(NSPointInRect(positionInView, trackViewController.view.frame)){
-            toTrackArrayIndex = i;
-            newTrackOffset = toTrackArrayIndex - fromTrackArrayIndex;
-            break;
-        }
+    //if the trackOffset has changed, the temporary timelienObejcts of all tracks have to be removed
+    if(newTrackOffset != self.trackOffset){
         
-        i++;
-    }
-    
-    if(newTrackOffset != self.trackOffset){
-        if(newTrackOffset >0){
-            for(int i = self.trackViewControllers.count-1; i>=self.trackViewControllers.count-newTrackOffset; i--){
-                if([[self.trackViewControllers objectAtIndex:i] isKindOfClass:[VSTrackViewController class]]){
-                    if([((VSTrackViewController *)[self.trackViewControllers objectAtIndex:i]) selectedTimelineObjectViewControllers].count){
-                        newTrackOffset--;
-                    }
-                }
-            }
-        }
-        else if(newTrackOffset < 0){
-            for(int i =0; i<newTrackOffset*(-1); i++){
-                if([[self.trackViewControllers objectAtIndex:i] isKindOfClass:[VSTrackViewController class]]){
-                    if([((VSTrackViewController *)[self.trackViewControllers objectAtIndex:i]) selectedTimelineObjectViewControllers].count){
-                        newTrackOffset++;
-                    }
-                }
-            }
-        }
-    }
-    
-    if(newTrackOffset != self.trackOffset){
         for(VSTrackViewController *trackViewController in self.trackViewControllers){
             [trackViewController resetTemporaryTimelineObjects];
             [trackViewController resetIntersections];
-            if(fromTrackArrayIndex == toTrackArrayIndex)
+            
+            //If the mouse is over the current track, the selected TimelineObjects of the all tracsk are set active
+            if(newTrackOffset == 0)
                 [trackViewController activateSelectedTimelineObjects];
         }
         
-        if(fromTrackArrayIndex != toTrackArrayIndex){
-            
+        
+        //if the mouse isn't over the fromTrack the selected timelineObjects have to be moved temporarily according to the trackOffset 
+        if(newTrackOffset != 0){
             for(int i = 0; i<self.trackViewControllers.count; i++){
                 VSTrackViewController *fromTrackViewController = (VSTrackViewController*) [self.trackViewControllers objectAtIndex:i]; 
                 
@@ -433,12 +408,8 @@ static NSString* defaultNib = @"VSTimelineView";
                 if(newIndex >= 0  && newIndex < self.trackViewControllers.count){
                     VSTrackViewController *toTrackViewController = (VSTrackViewController*) [self.trackViewControllers objectAtIndex:newIndex];
                     
-                    [fromTrackViewController deactivateSelectedTimelineObjects];
                     
-                    for (VSTimelineObjectViewController *timelineObjectViewController in [fromTrackViewController selectedTimelineObjectViewControllers]) {
-                        
-                        [toTrackViewController addTemporaryTimelineObject:timelineObjectViewController.timelineObjectProxy withFrame:timelineObjectViewController.view.frame];
-                    }
+                    [self temporaryMoveSelectedTimelineObjectsFromTrack:fromTrackViewController toTrack:toTrackViewController];
                 }
             }
         }
@@ -497,52 +468,8 @@ static NSString* defaultNib = @"VSTimelineView";
     
     NSRect viewsFrame = timelineObjectViewController.view.frame;
     
-    //orders the splittingRects ascending by their x-Positions
-    splittingRects =  [splittingRects sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        
-        NSNumber *obj1X = [NSNumber numberWithInt:[obj1 rectValue].origin.x];
-        NSNumber *obj2X = [NSNumber numberWithInt:[obj2 rectValue].origin.x];
-        return [obj1X compare:obj2X];
-    } ];
     
-    
-    int i = 0;
-    
-    //Computes the frames of the parts the view of the given timelineObjectViewController will be splitted up to
-    NSMutableArray* newFrames = [[NSMutableArray alloc] init];
-    
-    for (NSValue *value in splittingRects){
-        NSRect splittingRect = [value rectValue];
-        
-        //the first part will go from the x-Position of the view's Frame to the x-Position of the splittingRect
-        if(i== 0){
-            NSRect leftFrame = viewsFrame;
-            leftFrame.size.width = splittingRect.origin.x - leftFrame.origin.x;
-            
-            [newFrames addObject:[NSValue valueWithRect:leftFrame]];
-        }
-        
-        //All other except the first one cutoff the part left of it
-        NSRect leftFrame = [[newFrames lastObject] rectValue];
-        leftFrame.size.width = splittingRect.origin.x - leftFrame.origin.x;
-        
-        [newFrames removeObjectAtIndex:newFrames.count-1];
-        
-        if(leftFrame.size.width > 0){
-            [newFrames addObject:[NSValue valueWithRect:leftFrame]];
-        }
-        
-        //The new part starts at the right end of the splitRect and goes until the end of the view
-        NSRect rightFrame = leftFrame;
-        rightFrame.origin.x = NSMaxX(splittingRect);
-        rightFrame.size.width = NSMaxX(viewsFrame) - rightFrame.origin.x;
-        
-        if(rightFrame.size.width > 0){
-            [newFrames addObject:[NSValue valueWithRect:rightFrame]];
-        }
-        
-        i++;
-    }
+    NSArray *newFrames = [self splitRect:viewsFrame by:splittingRects];
     
     
     //if no newFrames were computed, the view is removed instead of splitted
@@ -550,32 +477,10 @@ static NSString* defaultNib = @"VSTimelineView";
         [self.timeline removeTimelineObject:tmpTimelineObject fromTrack:trackViewController.track];
     }
     else{
-        int i = 0;
-        for(NSValue *value in newFrames){
-            
-            NSRect frameRect = [value rectValue];
-            double newStartTime = [self getTimestampForPoint:frameRect.origin];
-            double newDuration = [self getDurationForPixelWidth:frameRect.size.width];   
-            
-            //the timelineObject is change according to the first frame, for all other new frames copies of timelineObject are created
-            if(i == 0){
-                if(tmpTimelineObject.duration != newDuration){
-                    [tmpTimelineObject changeDuration:newDuration andRegisterAtUndoManager:self.view.undoManager];
-                }
-                
-                if(tmpTimelineObject.startTime != newStartTime){
-                    [tmpTimelineObject changeStartTime:newStartTime andRegisterAtUndoManager:self.view.undoManager];
-                }
-            }
-            else{
-                [self.timeline copyTimelineObject:tmpTimelineObject toTrack:trackViewController.track atPosition:newStartTime withDuration:newDuration andRegisterUndoOperation:self.trackLabelsViewController.view.undoManager];
-            }
-            i++;
-        }
-        return YES;
+        [self segmentTimelineObject:timelineObjectViewController onTrack:trackViewController intoSegments:newFrames];
     }
     
-    return NO;
+    return YES;
 }
 
 -(void) copyTimelineObject:(VSTimelineObjectViewController *)timelineObjectViewController toTrack:(VSTrackViewController *)trackViewController{
@@ -589,6 +494,11 @@ static NSString* defaultNib = @"VSTimelineView";
     
     
 }
+
+
+
+
+
 
 #pragma mark- VSTimelineViewDelegate implementation
 
@@ -616,6 +526,9 @@ static NSString* defaultNib = @"VSTimelineView";
     
 }
 
+
+
+
 #pragma mark - VSPlayHeadRulerMarkerDelegate Implementation
 
 -(BOOL) shouldMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView{
@@ -635,130 +548,13 @@ static NSString* defaultNib = @"VSTimelineView";
     return location;
 }
 
+
+
+
+
+
 #pragma mark - Private Methods
 
-//TODO: Better way to update VSTimelineRulerMeasurementUnit
-/**
- * Updates VSTimelineRulerMeasurementUnit according to the pixelTimeRatio
- */
--(void) updateTimelineRulerMeasurement{ 
-    [NSRulerView registerUnitWithName:VSTimelineRulerMeasurementUnit abbreviation:VSTimelineRulerMeasurementAbreviation unitToPointsConversionFactor:1/self.pixelTimeRatio stepUpCycle:[NSArray arrayWithObject:[NSNumber numberWithFloat:10.0]] stepDownCycle:[NSArray arrayWithObject:[NSNumber numberWithFloat:0.5]]];
-    
-    [self.rulerView setMeasurementUnits:VSTimelineRulerMeasurementUnit];
-}
-
-
-/**
- * Creates a new TimelineObjectProxy according based on the vigen VSProjectItemRepresentation and positions it at the given positon*
- * @param trackViewController VSTrackViewController the newly the returned VSTimelineObjectProxy is created for
- * @param item VSProjectItemRepresentation the proxy will be based on
- * @param position NSPoint the proxy is places on the timeline
- * @return The newly create VSTimelineObjectProxy if the creation was successfully, nil otherwise
- */
--(VSTimelineObjectProxy*) trackViewController:(VSTrackViewController *)trackViewController createTimelineObjectProxyBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *)item atPosition:(NSPoint)position{
-    
-    
-    
-    double timePosition = [self getTimestampForPoint:position];
-    
-    return [self.timeline createNewTimelineObjectProxyBasedOnProjectItemRepresentation:item positionedAtTime:timePosition withDuration: item.duration];
-}
-
-
-/**
- * Sets the given VSTimelineObjectProxy selected an unselects the currenlty selected objects if the new seleciton is exclusive
- * @param timelineObjectProxy VSTimelineObjectProxy to be selected
- * @param trackViewController VSTrackViewController representing the track holding the timelineObjectProxy
- * @param exclusiveSelection IF yes the currently selected objects are set as unselected
- * @return YES if the selection was done successfully, NO otherwise
- */
--(BOOL) selectTimelineObjectProxy:(VSTimelineObjectProxy*) timelineObjectProxy onTrack:(VSTrackViewController*) trackViewController exclusively:(BOOL) exclusiveSelection{
-    if([timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
-        [self.view.undoManager setActionName:NSLocalizedString(@"Change Selection", @"Undo Massage of unselecting TimelineObjects")];
-        [self.view.undoManager beginUndoGrouping];
-        
-        if(exclusiveSelection){
-            
-            NSArray *selectedTimelineObjects = [self.timeline selectedTimelineObjects];
-            
-            for(VSTimelineObject *timelineObject in selectedTimelineObjects){
-                [timelineObject setUnselectedAndRegisterUndo:self.view.undoManager];
-            }
-        }
-        
-        [self.timeline selectTimelineObject:((VSTimelineObject*) timelineObjectProxy) onTrack:trackViewController.track];
-        
-        if(timelineObjectProxy.selected){
-            [((VSTimelineObject*) timelineObjectProxy) setSelectedAndRegisterUndo:self.view.undoManager];
-            
-        }
-        
-        [self.view.undoManager endUndoGrouping];
-        
-        return YES;
-    }
-    else {
-        return NO;
-    }
-    
-}
-
-/**
- * Sets the plahead marker according to the playhead's currentposition on the timeline
- */
--(void) setPlayheadMarkerLocation{
-    CGFloat newLocation = self.timeline.playHead.currentTimePosition / self.pixelTimeRatio;
-    
-    [self.trackHolder movePlayHeadMarkerToLocation:newLocation];
-}
-
-/**
- * Creates a new VSTrackView according to the given track.
- * @param track VSTrack the VSTrackView will be created for
- */
--(void) createTrack:(VSTrack*) track{
-    
-    VSTrackViewController* newTrackViewController = [[VSTrackViewController alloc]initWithDefaultNibAccordingToTrack:track];
-    
-    // The VSTimelineViewControlller acts as the delegate of the VSTrackViewController
-    newTrackViewController.delegate = self;
-    newTrackViewController.pixelTimeRatio = self.pixelTimeRatio;
-    
-    [self.trackHolder addSubview:[newTrackViewController view]];
-    
-    //Size and position of the track
-    int width = [self visibleTrackViewHolderWidth];
-    int yPosition = (VSTrackViewHeight+VSTrackViewMargin) * ([self.trackViewControllers count]);
-    
-    NSRect newFrame = NSMakeRect(self.scrollView.visibleRect.origin.x,yPosition,width,VSTrackViewHeight);
-    
-    [[newTrackViewController view] setFrame:newFrame];
-    
-    //set the autoresizing masks
-    [[newTrackViewController view] setAutoresizingMask:NSViewWidthSizable];
-    [[newTrackViewController view] setAutoresizesSubviews:NO];
-    
-    [self.trackViewControllers addObject:newTrackViewController];
-    
-    
-    
-    //Rescales the document view of the trackholder ScrollView
-    int height = (VSTrackViewHeight+VSTrackViewMargin) * ([self.trackViewControllers  count]);
-    [self.trackHolder setFrame:NSMakeRect([self.trackHolder frame].size.width, 0, self.trackHolder.frame.size.width,  height)];
-    
-    [self addNewTrackLabelForTrack:newTrackViewController];
-}
-
-/**
- * Creates a new label for the given Track and sends it to the trackLabelsViewController to display the label
- * @param aTrack VSTrackViewController the label is added for
- */
--(void) addNewTrackLabelForTrack:(VSTrackViewController*) aTrack{
-    NSRect labelRect = NSMakeRect(0, aTrack.view.frame.origin.y, TRACK_LABEL_WIDTH, aTrack.view.frame.size.height);
-    
-    //NSLog(@"labelRect: %@",NSStringFromRect(labelRect));
-    [self.trackLabelsViewController addTrackLabel:[[VSTrackLabel alloc] initWithName:aTrack.track.name forTrack:aTrack.track.trackID forFrame:labelRect]];
-}
 
 /**
  * Updates the ratio between the length of trackholder's width and the duration of the timeline
@@ -821,9 +617,277 @@ static NSString* defaultNib = @"VSTimelineView";
     [self.timeline unselectAllTimelineObjects];
 }
 
+#pragma mark - Timeline Ruler
+
+//TODO: Better way to update VSTimelineRulerMeasurementUnit
+/**
+ * Updates VSTimelineRulerMeasurementUnit according to the pixelTimeRatio
+ */
+-(void) updateTimelineRulerMeasurement{ 
+    [NSRulerView registerUnitWithName:VSTimelineRulerMeasurementUnit abbreviation:VSTimelineRulerMeasurementAbreviation unitToPointsConversionFactor:1/self.pixelTimeRatio stepUpCycle:[NSArray arrayWithObject:[NSNumber numberWithFloat:10.0]] stepDownCycle:[NSArray arrayWithObject:[NSNumber numberWithFloat:0.5]]];
+    
+    [self.rulerView setMeasurementUnits:VSTimelineRulerMeasurementUnit];
+}
+
+#pragma mark - TimelineObjects
+
+#pragma mark Creating TimelineObjects
+
+/**
+ * Creates a new TimelineObjectProxy according based on the vigen VSProjectItemRepresentation and positions it at the given positon*
+ * @param trackViewController VSTrackViewController the newly the returned VSTimelineObjectProxy is created for
+ * @param item VSProjectItemRepresentation the proxy will be based on
+ * @param position NSPoint the proxy is places on the timeline
+ * @return The newly create VSTimelineObjectProxy if the creation was successfully, nil otherwise
+ */
+-(VSTimelineObjectProxy*) trackViewController:(VSTrackViewController *)trackViewController createTimelineObjectProxyBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *)item atPosition:(NSPoint)position{
+    
+    double timePosition = [self getTimestampForPoint:position];
+    
+    return [self.timeline createNewTimelineObjectProxyBasedOnProjectItemRepresentation:item positionedAtTime:timePosition withDuration: item.duration];
+}
+
+/**
+ * Creates a VSTimelineObjectProxy for the given baseProjectItem and inits it with the given startPosition and duration
+ * @param baseProjectItem VSProjectItemRepresentation the VSTimelineObjectProxy is created for
+ * @param startTime Starttime of the newly created VSProjectItemRepresentation
+ * @param duration Starttime of the newly created VSProjectItemRepresentation
+ * @return A VSTimelineObjectProxy based on the initialized with the given values if its creation was sucessfull, nil otherweis 
+ */
 -(VSTimelineObjectProxy*) createTimelineObjectProxyBasedOnProjectItemPresentation:(VSProjectItemRepresentation*) baseProjectItem atStarttime:(double) startTime withDuration:(double) duration{
     
     return [self.timeline createNewTimelineObjectProxyBasedOnProjectItemRepresentation:baseProjectItem positionedAtTime:startTime withDuration:duration];
+}
+
+
+
+#pragma mark Selecting TimelineObjects
+
+/**
+ * Sets the given VSTimelineObjectProxy selected an unselects the currenlty selected objects if the new seleciton is exclusive
+ * @param timelineObjectProxy VSTimelineObjectProxy to be selected
+ * @param trackViewController VSTrackViewController representing the track holding the timelineObjectProxy
+ * @param exclusiveSelection IF yes the currently selected objects are set as unselected
+ * @return YES if the selection was done successfully, NO otherwise
+ */
+-(BOOL) selectTimelineObjectProxy:(VSTimelineObjectProxy*) timelineObjectProxy onTrack:(VSTrackViewController*) trackViewController exclusively:(BOOL) exclusiveSelection{
+    if([timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
+        [self.view.undoManager setActionName:NSLocalizedString(@"Change Selection", @"Undo Massage of unselecting TimelineObjects")];
+        [self.view.undoManager beginUndoGrouping];
+        
+        if(exclusiveSelection){
+            
+            NSArray *selectedTimelineObjects = [self.timeline selectedTimelineObjects];
+            
+            for(VSTimelineObject *timelineObject in selectedTimelineObjects){
+                [timelineObject setUnselectedAndRegisterUndo:self.view.undoManager];
+            }
+        }
+        
+        [self.timeline selectTimelineObject:((VSTimelineObject*) timelineObjectProxy) onTrack:trackViewController.track];
+        
+        if(timelineObjectProxy.selected){
+            [((VSTimelineObject*) timelineObjectProxy) setSelectedAndRegisterUndo:self.view.undoManager];
+            
+        }
+        
+        [self.view.undoManager endUndoGrouping];
+        
+        return YES;
+    }
+    else {
+        return NO;
+    }
+    
+}
+
+#pragma mark Moving TimelineObjects
+
+#pragma mark Moving to different Track
+
+/**
+ * Copmutes the track offset for the fromTrack according to the mouse position.
+ *
+ * The track offset is the difference between indizes in the trackViewControllers-Array of the fromTrack and the track the mousePosition is over
+ * @param fromTrack VSTrackViewController the offset is computed for
+ * @param mousePosition Current position of the mouse.
+ * @return Returns the difference between indizes in the trackViewControllers-Array of the fromTrack and the track the mousePosition is over. 0: mouse is over the fromTrack or over none other track. 
+ */
+-(NSInteger) computeTrackOffsetForTrack:(VSTrackViewController*) fromTrack forMousePosition:(NSPoint) mousePosition{
+    
+    
+    NSPoint positionInView = [self.trackHolder convertPoint:mousePosition fromView:nil];
+    
+    //if the mouse is over the fromTrack the offset is 0
+    if(NSPointInRect(positionInView,  fromTrack.view.frame)){
+        return 0;
+    }
+    
+    int fromTrackArrayIndex = [self.trackViewControllers indexOfObject:fromTrack];
+    int newTrackOffset = self.trackOffset;
+    
+    
+    //iterates through all tracks and checks if the mouse is above it.
+    //If the mouse is above one Track the difference between its Array-Index in trackViewControllers-Array and the fromTrackArrayIndex is stored in newTrackOffset
+    for(int i = 0; i < self.trackViewControllers.count; i++){
+        //the given track has already been checked above
+        if(i != fromTrackArrayIndex){
+            VSTrackViewController *trackViewController = (VSTrackViewController*) [self.trackViewControllers objectAtIndex:i];
+            if(NSPointInRect(positionInView,  trackViewController.view.frame)){
+                newTrackOffset = i - fromTrackArrayIndex;
+                break;
+            } 
+        }
+    }
+    
+    //validates the newTrackOffset that none of the selectedTimelineObjects on the tracks is moved to far
+    newTrackOffset = [self validateTrackOffset:newTrackOffset];
+    
+    
+    return newTrackOffset;
+}
+
+/**
+ * Validates the the given trackOffset to make sure that none of the selectedTimelineObjects on the tracks is moved to nonexisting track, like track at Index -1 or at an index greater than timelineObjectViewControllers.count
+ * @param trackOffset Current trackOffset
+ * @return Validates the given trackOffset and returns it validated
+ */
+-(NSInteger) validateTrackOffset:(NSInteger) trackOffset{
+    
+    int offsetCorrection = 0;
+    
+    if(trackOffset >0){
+        
+        for(int i = self.trackViewControllers.count-1; i>=self.trackViewControllers.count-trackOffset; i--){
+            if([[self.trackViewControllers objectAtIndex:i] isKindOfClass:[VSTrackViewController class]]){
+                if([((VSTrackViewController *)[self.trackViewControllers objectAtIndex:i]) selectedTimelineObjectViewControllers].count){
+                    offsetCorrection--;
+                }
+            }
+        }
+    }
+    else if(trackOffset < 0){
+        for(int i =0; i<trackOffset*(-1); i++){
+            if([[self.trackViewControllers objectAtIndex:i] isKindOfClass:[VSTrackViewController class]]){
+                if([((VSTrackViewController *)[self.trackViewControllers objectAtIndex:i]) selectedTimelineObjectViewControllers].count){
+                    offsetCorrection++;
+                }
+            }
+        }
+    }
+    
+    
+    trackOffset += offsetCorrection;
+    
+    return trackOffset;
+}
+
+/**
+ * Moves the selectedTimelineObjects of the formTrack temporarily to toTrack.
+ *
+ * The TimlineObjects are not really moved. The selectedTimelineObjects of the fromTrack are set inactive thus they are invisible and added to temporaryTimelineObjects of the toTrack
+ * @param fromTrack VSTrackViewController the selectedTimelineObjects are moved from.
+ * @param toTrack VSTrackViewController the selectedTimelineObjects of the fromTrack are moved to.
+ */
+-(void) temporaryMoveSelectedTimelineObjectsFromTrack:(VSTrackViewController*) fromTrack toTrack:(VSTrackViewController*) toTrack{
+    
+    [fromTrack deactivateSelectedTimelineObjects];
+    
+    for (VSTimelineObjectViewController *timelineObjectViewController in [fromTrack selectedTimelineObjectViewControllers]) {
+        
+        [toTrack addTemporaryTimelineObject:timelineObjectViewController.timelineObjectProxy withFrame:timelineObjectViewController.view.frame];
+    }
+}
+
+/*
+ * Divides the VSTimelineObjectViewController in VSTimelineObjectViewController's according to the given segments
+ * @param timelineObjectViewController VSTimelineObjectViewController which will be segmented.
+ * @param trackViewController VSTrackViewController the given VSTimelineObjectViewController is on
+ * @param segments NSArray of rects the VSTimelineObjectViewController is divided into
+ */
+-(void) segmentTimelineObject:(VSTimelineObjectViewController*) timelineObjectViewController onTrack:(VSTrackViewController*) trackViewController intoSegments:(NSArray*) segments{
+    int i = 0;
+    
+    VSTimelineObject *tmpTimelineObject = ((VSTimelineObject*) timelineObjectViewController.timelineObjectProxy);
+    
+    for(NSValue *value in segments){
+        
+        NSRect frameRect = [value rectValue];
+        double newStartTime = [self getTimestampForPoint:frameRect.origin];
+        double newDuration = [self getDurationForPixelWidth:frameRect.size.width];   
+        
+        //the timelineObject is change according to the first frame, for all other new frames copies of timelineObject are created
+        if(i == 0){
+            if(tmpTimelineObject.duration != newDuration){
+                [tmpTimelineObject changeDuration:newDuration andRegisterAtUndoManager:self.view.undoManager];
+            }
+            
+            if(tmpTimelineObject.startTime != newStartTime){
+                [tmpTimelineObject changeStartTime:newStartTime andRegisterAtUndoManager:self.view.undoManager];
+            }
+        }
+        else{
+            [self.timeline copyTimelineObject:tmpTimelineObject toTrack:trackViewController.track atPosition:newStartTime withDuration:newDuration andRegisterUndoOperation:self.trackLabelsViewController.view.undoManager];
+        }
+        i++;
+    }
+}
+
+/**
+ * Computes the rects of the given rect after by splitted by the splittingRects
+ * @param aRect NSRect to be splitted
+ * @param splittingRects NSArray of NSRects aRect is splitted according to.
+ * @return NSArray of NSRects holding the segments of aRect after being splitted by splittenRects
+ */
+-(NSArray*) splitRect:(NSRect) aRect by:(NSArray*) splittingRects{
+    //orders the splittingRects ascending by their x-Positions
+    splittingRects =  [splittingRects sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        
+        NSNumber *obj1X = [NSNumber numberWithInt:[obj1 rectValue].origin.x];
+        NSNumber *obj2X = [NSNumber numberWithInt:[obj2 rectValue].origin.x];
+        return [obj1X compare:obj2X];
+    } ];
+    
+    
+    int i = 0;
+    
+    //Computes the frames of the parts the view of the given timelineObjectViewController will be splitted up to
+    NSMutableArray* newFrames = [[NSMutableArray alloc] init];
+    
+    for (NSValue *value in splittingRects){
+        NSRect splittingRect = [value rectValue];
+        
+        //the first part will go from the x-Position of the view's Frame to the x-Position of the splittingRect
+        if(i== 0){
+            NSRect leftFrame = aRect;
+            leftFrame.size.width = splittingRect.origin.x - leftFrame.origin.x;
+            
+            [newFrames addObject:[NSValue valueWithRect:leftFrame]];
+        }
+        
+        //All other except the first one cutoff the part left of it
+        NSRect leftFrame = [[newFrames lastObject] rectValue];
+        leftFrame.size.width = splittingRect.origin.x - leftFrame.origin.x;
+        
+        [newFrames removeObjectAtIndex:newFrames.count-1];
+        
+        if(leftFrame.size.width > 0){
+            [newFrames addObject:[NSValue valueWithRect:leftFrame]];
+        }
+        
+        //The new part starts at the right end of the splitRect and goes until the end of the view
+        NSRect rightFrame = leftFrame;
+        rightFrame.origin.x = NSMaxX(splittingRect);
+        rightFrame.size.width = NSMaxX(aRect) - rightFrame.origin.x;
+        
+        if(rightFrame.size.width > 0){
+            [newFrames addObject:[NSValue valueWithRect:rightFrame]];
+        }
+        
+        i++;
+    }
+    
+    return newFrames;
 }
 
 #pragma mark Removing TimelineObjects
@@ -852,5 +916,63 @@ static NSString* defaultNib = @"VSTimelineView";
 
 #pragma mark - Playhead
 
+/**
+ * Sets the plahead marker according to the playhead's currentposition on the timeline
+ */
+-(void) setPlayheadMarkerLocation{
+    CGFloat newLocation = self.timeline.playHead.currentTimePosition / self.pixelTimeRatio;
+    
+    [self.trackHolder movePlayHeadMarkerToLocation:newLocation];
+}
 
+
+#pragma mark - Tracks
+
+/**
+ * Creates a new VSTrackView according to the given track.
+ * @param track VSTrack the VSTrackView will be created for
+ */
+-(void) createTrack:(VSTrack*) track{
+    
+    VSTrackViewController* newTrackViewController = [[VSTrackViewController alloc]initWithDefaultNibAccordingToTrack:track];
+    
+    // The VSTimelineViewControlller acts as the delegate of the VSTrackViewController
+    newTrackViewController.delegate = self;
+    newTrackViewController.pixelTimeRatio = self.pixelTimeRatio;
+    
+    [self.trackHolder addSubview:[newTrackViewController view]];
+    
+    //Size and position of the track
+    int width = [self visibleTrackViewHolderWidth];
+    int yPosition = (VSTrackViewHeight+VSTrackViewMargin) * ([self.trackViewControllers count]);
+    
+    NSRect newFrame = NSMakeRect(self.scrollView.visibleRect.origin.x,yPosition,width,VSTrackViewHeight);
+    
+    [[newTrackViewController view] setFrame:newFrame];
+    
+    //set the autoresizing masks
+    [[newTrackViewController view] setAutoresizingMask:NSViewWidthSizable];
+    [[newTrackViewController view] setAutoresizesSubviews:NO];
+    
+    [self.trackViewControllers addObject:newTrackViewController];
+    
+    
+    
+    //Rescales the document view of the trackholder ScrollView
+    int height = (VSTrackViewHeight+VSTrackViewMargin) * ([self.trackViewControllers  count]);
+    [self.trackHolder setFrame:NSMakeRect([self.trackHolder frame].size.width, 0, self.trackHolder.frame.size.width,  height)];
+    
+    [self addNewTrackLabelForTrack:newTrackViewController];
+}
+
+/**
+ * Creates a new label for the given Track and sends it to the trackLabelsViewController to display the label
+ * @param aTrack VSTrackViewController the label is added for
+ */
+-(void) addNewTrackLabelForTrack:(VSTrackViewController*) aTrack{
+    NSRect labelRect = NSMakeRect(0, aTrack.view.frame.origin.y, TRACK_LABEL_WIDTH, aTrack.view.frame.size.height);
+    
+    //NSLog(@"labelRect: %@",NSStringFromRect(labelRect));
+    [self.trackLabelsViewController addTrackLabel:[[VSTrackLabel alloc] initWithName:aTrack.track.name forTrack:aTrack.track.trackID forFrame:labelRect]];
+}
 @end

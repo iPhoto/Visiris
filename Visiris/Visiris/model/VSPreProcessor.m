@@ -14,7 +14,7 @@
 #import "VSSourceSupplier.h"
 #import "VSProjectSettings.h"
 #import "VSFileType.h"
-#import "VSQuartzCompositionReader.h"
+#import "VSQuartzCompositionUtils.h"
 
 @interface VSPreProcessor()
 @end

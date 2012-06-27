@@ -862,7 +862,7 @@ static NSString* defaultNib = @"VSTrackView";
 
 /**
  * Returns an NSArray of all VSTimlineObjectViewControllers of th track which have selected set to NO
- * @param NSArray containg all VSTimelineObjectViewControllers currently not selected
+ * @return NSArray containg all VSTimelineObjectViewControllers currently not selected
  */
 -(NSArray*) unselectedTimelineObjectViewControllers{
     NSIndexSet *indexSetOfSelectedTimelineObjects = [self.timelineObjectViewControllers indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
@@ -877,6 +877,10 @@ static NSString* defaultNib = @"VSTrackView";
     return [self.timelineObjectViewControllers objectsAtIndexes:indexSetOfSelectedTimelineObjects];
 }
 
+/**
+ * Returns all currently selected TimlineObjects which are active
+ * @return NSArray of VSTimelineObjectViewController
+ */
 -(NSArray*) selectedAndActiveTimelineObjectViewControllers{
     NSIndexSet *indexSetOfSelectedTimelineObjects = [self.timelineObjectViewControllers indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
         if([obj isKindOfClass:[VSTimelineObjectViewController class]]){
@@ -890,7 +894,10 @@ static NSString* defaultNib = @"VSTrackView";
     return [self.timelineObjectViewControllers objectsAtIndexes:indexSetOfSelectedTimelineObjects];
 }
 
-
+/**
+ * Returns all currently selected TimlineObjects which are active and all temporary timelineObjects
+ * @return NSArray of VSTimelineObjectViewController
+ */
 -(NSArray*) activeSelectedAndTemporaryTimelineObjectViewControllers{
     NSMutableArray *activeSelectedAndTemporaryTimelineObjectViewControllers = [NSMutableArray arrayWithArray:[self selectedAndActiveTimelineObjectViewControllers]];
     
@@ -986,6 +993,10 @@ static NSString* defaultNib = @"VSTrackView";
     return nil;
 }
 
+/**
+ * Moveable TimelineObjects are all selected and all temporay TimlineObjects
+ * @return All currently moveable TimelineObjects
+ */
 -(NSArray*) movableTimelineObjectViewControllers{
     NSMutableArray *moveableTimelineObjects = [NSMutableArray arrayWithArray:[self selectedTimelineObjectViewControllers]];
     [moveableTimelineObjects addObjectsFromArray:self.temporaryTimelineObjectViewControllers];

@@ -23,25 +23,35 @@
 
 -(id) initWithProjectItem:(VSProjectItem *)aProjectItem andParameters:(NSDictionary *)parameters{
     if(self = [super initWithProjectItem:aProjectItem andParameters:parameters]){
-        [self addPublicInputsToParameters];
+        [self addPublicInputPortsToParameters];
     }
     
     return self;
 }
 
--(void) addPublicInputsToParameters{
-    NSDictionary* publicInputs = [VSQuartzCompositionReader publicInputsOfQuartzComposerPath:self.filePath];
+/**
+ * Adds the public input ports of the Quartz Composition the source is responsible for as a Dictionary of VSParamters to parameters at the key VSParameterQuartzComposerPublicInputs
+ */
+-(void) addPublicInputPortsToParameters{
+    
+    NSDictionary* publicInputs = [VSQuartzCompositionUtils publicInputPortsOfQuartzComposerPath:self.filePath];
+    
     NSMutableDictionary *qcPublicInputParameters = [[NSMutableDictionary alloc]init];
     
     int i = 0;
     
+    //iterates through the entries
     for(id key in publicInputs){
         
         NSDictionary* publicInputDictionary = [publicInputs objectForKey:key];
         
-        NSInteger parameterDataType = [VSQuartzCompositionReader visirisParameterDataTypeOfQCPortAttributeTypeKey:[publicInputDictionary valueForKey:@"QCPortAttributeTypeKey"]];
+        //reads out the VSParameterType corresponding to the QCPortAttributeTypeKey
+        NSInteger parameterDataType = [VSQuartzCompositionUtils visirisParameterDataTypeOfQCPortAttributeTypeKey:[publicInputDictionary valueForKey:@"QCPortAttributeTypeKey"]];
         
+        
+        //if parameterDataType is -1 the inputPort is not valid for visirs
         if(parameterDataType !=-1){
+            
             NSString *name = [NSString stringWithFormat:@"%@", [publicInputDictionary objectForKey:@"QCPortAttributeNameKey"]];;
             id defaultValue = [publicInputDictionary objectForKey:@"QCPortAttributeDefaultValueKey"];
             NSValue *maxValid = [publicInputDictionary objectForKey:@"QCPortAttributeMaximumValueKey"];
@@ -66,6 +76,7 @@
         
     }
     
+    //adds the VSParameters representing the Quartz Compositions's public Input Ports to the parameters Dictionary at the key VSParameterQuartzComposerPublicInputs
     if(qcPublicInputParameters.count){
         NSMutableDictionary *unionParameters = [NSMutableDictionary dictionaryWithDictionary:self.parameters];
         [unionParameters setObject:qcPublicInputParameters forKey:VSParameterQuartzComposerPublicInputs];
@@ -77,6 +88,9 @@
 -(NSArray *) visibleParameters{
     
     NSMutableArray *visibleParameters = [NSMutableArray arrayWithArray:[super visibleParameters]];
+    
+    
+    //Adds the VSParameters stored in as an NSDictionary in the parameters at the for the key VSParameterQuartzComposerPublicInputs to visibleParameters Array;
     
     id result = [self.parameters objectForKey:VSParameterQuartzComposerPublicInputs];
     
@@ -96,9 +110,11 @@
         NSString *notFoundMarker = @"not found";
         
         NSArray *tmpArray = [qcParameters objectsForKeys:[set allObjects] notFoundMarker:notFoundMarker];
-        tmpArray = [tmpArray sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"orderNumber" ascending:YES]]];
         
         [visibleParameters addObjectsFromArray:tmpArray];
+        
+        //sorts all paramter according to their order number
+        visibleParameters = [NSMutableArray arrayWithArray:[visibleParameters sortedArrayUsingDescriptors:[NSMutableArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"orderNumber" ascending:YES]]]];
         
     }
     
