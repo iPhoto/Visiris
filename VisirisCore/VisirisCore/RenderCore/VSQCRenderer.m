@@ -73,9 +73,9 @@
     glViewport(0, 0, self.fbo.size.width,self.fbo.size.height);
 
     glClearColor(0, 0, 0, 0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    
+    glClear(GL_COLOR_BUFFER_BIT);
+
+  //  glBindTexture(0, 0);
 
     [self.qcRenderer renderAtTime:time arguments:nil];
     
@@ -85,7 +85,7 @@
     //CGLUnlockContext([[self context] CGLContextObj]);
 
     return self.fbo.texture;
-    
+
     [self.context update];
 }
 
