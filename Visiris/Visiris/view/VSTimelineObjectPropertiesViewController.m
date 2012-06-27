@@ -148,9 +148,9 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     
     
     
-    [self.documentView setFrameSize:NSMakeSize(self.documentView.frame.size.width, [self.parameterViewControllers count] * parameterViewHeight)];
+    [self.documentView setFrameSize:NSMakeSize(self.documentView.frame.size.width, ([self.parameterViewControllers count] + 1) * parameterViewHeight)];
     
-    [self.parametersHolder setFrameSize:NSMakeSize(self.documentView.frame.size.width, [self.parameterViewControllers count] * parameterViewHeight)];
+    [self.parametersHolder setFrameSize:NSMakeSize(self.documentView.frame.size.width, ([self.parameterViewControllers count] + 1) * parameterViewHeight)];
 }
 
 /**

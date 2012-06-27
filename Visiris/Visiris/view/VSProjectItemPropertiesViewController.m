@@ -9,7 +9,6 @@
 #import "VSProjectItemPropertiesViewController.h"
 #import "VSProjectItemRepresentation.h"
 #import "VSFileType.h"
-#import "VSFileKind.h"
 
 #import "VSCoreServices.h"
 

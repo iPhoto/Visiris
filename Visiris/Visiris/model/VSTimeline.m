@@ -162,11 +162,11 @@
     return newTimelineObject;
 }
 
--(VSTimelineObjectProxy*) createNewTimelineObjectProxyBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *)item positionedAtTime:(double)timePosition{
+-(VSTimelineObjectProxy*) createNewTimelineObjectProxyBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *)item positionedAtTime:(double)timePosition withDuration:(double)duration{
     
     NSImage* icon = [VSFileImageCreator createIconForTimelineObject:item.filePath];
     
-    VSTimelineObjectProxy *newProxy = [[VSTimelineObjectProxy alloc] initWithName:item.name atTime:timePosition  duration:item.duration icon:icon];
+    VSTimelineObjectProxy *newProxy = [[VSTimelineObjectProxy alloc] initWithName:item.name atTime:timePosition  duration:duration icon:icon];
     
     return newProxy;
     
@@ -176,13 +176,21 @@
 
 -(VSTimelineObject*) copyTimelineObject:(VSTimelineObject *)baseTimelineObject toTrack:(VSTrack *)track atPosition:(double)position withDuration:(double)duration{
     
+    VSTimelineObject *copiedTimelineObject = [self.timelineObjectFactory createCopyOfTimelineObject:baseTimelineObject atStartTime:position withDuration:duration];
+    // Adds the new object to the given track */
+    [track addTimelineObject:copiedTimelineObject];
     
-   return [self addNewTimelineObjectBasedOnProjectItemRepresentation:(VSProjectItemRepresentation*) baseTimelineObject.sourceObject.projectItem toTrack:track positionedAtTime:position withDuration:duration];
+    return copiedTimelineObject;
 }
 
 -(VSTimelineObject*) copyTimelineObject:(VSTimelineObject *)baseTimelineObject toTrack:(VSTrack *)track atPosition:(double)position withDuration:(double)duration andRegisterUndoOperation:(NSUndoManager *)undoManager{
 
-    return [self addNewTimelineObjectBasedOnProjectItemRepresentation:(VSProjectItemRepresentation*) baseTimelineObject.sourceObject.projectItem toTrack:track positionedAtTime:position withDuration:duration andRegisterUndoOperation:undoManager];
+    VSTimelineObject *copiedTimelineObject = [self.timelineObjectFactory createCopyOfTimelineObject:baseTimelineObject atStartTime:position withDuration:duration];
+    
+    // Adds the new object to the given track */
+    [track addTimelineObject:copiedTimelineObject andRegisterAtUndoManager:undoManager];
+    
+    return copiedTimelineObject;
 }
 
 #pragma mark Remove TimelineObjects
@@ -312,5 +320,6 @@
 -(NSInteger) nextAvailableTrackID{
     return ++self.lastTrackID;
 }
+
 
 @end

@@ -21,7 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		270692CC1594CF42001A9329 /* VSFileKind.h in Headers */ = {isa = PBXBuildFile; fileRef = 270692CB1594CF42001A9329 /* VSFileKind.h */; };
+		270692CC1594CF42001A9329 /* VSFileKind.h in Headers */ = {isa = PBXBuildFile; fileRef = 270692CB1594CF42001A9329 /* VSFileKind.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		270692CF1594D406001A9329 /* VSQCManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 270692CD1594D405001A9329 /* VSQCManager.h */; };
 		270692D01594D406001A9329 /* VSQCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 270692CE1594D405001A9329 /* VSQCManager.m */; };
 		270692D31594F25F001A9329 /* VSQCRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 270692D11594F25D001A9329 /* VSQCRenderer.h */; };
@@ -58,6 +58,8 @@
 		5B6965BE15640F2900C6EABC /* VSCoreReceptionist.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B6965BC15640F2900C6EABC /* VSCoreReceptionist.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5B6965BF15640F2900C6EABC /* VSCoreReceptionist.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B6965BD15640F2900C6EABC /* VSCoreReceptionist.m */; };
 		5B7A6101156E2F82000FBEC3 /* AppledocSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B7A6100156E2F82000FBEC3 /* AppledocSettings.plist */; };
+		5BD5AEC3159A10320008CE80 /* VSParameterTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD5AEC1159A10320008CE80 /* VSParameterTypes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5BD5AEC4159A10320008CE80 /* VSParameterTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD5AEC2159A10320008CE80 /* VSParameterTypes.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +106,8 @@
 		5B6965BC15640F2900C6EABC /* VSCoreReceptionist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSCoreReceptionist.h; sourceTree = "<group>"; };
 		5B6965BD15640F2900C6EABC /* VSCoreReceptionist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSCoreReceptionist.m; sourceTree = "<group>"; };
 		5B7A6100156E2F82000FBEC3 /* AppledocSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AppledocSettings.plist; sourceTree = "<group>"; };
+		5BD5AEC1159A10320008CE80 /* VSParameterTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSParameterTypes.h; sourceTree = "<group>"; };
+		5BD5AEC2159A10320008CE80 /* VSParameterTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSParameterTypes.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +128,8 @@
 		274C70CA157E81BA0031F9B2 /* CoreServices */ = {
 			isa = PBXGroup;
 			children = (
+				5BD5AEC1159A10320008CE80 /* VSParameterTypes.h */,
+				5BD5AEC2159A10320008CE80 /* VSParameterTypes.m */,
 				270692CB1594CF42001A9329 /* VSFileKind.h */,
 				274C70CC157E81DD0031F9B2 /* VSImageContext.h */,
 				274C70CD157E81DD0031F9B2 /* VSImageContext.m */,
@@ -271,6 +277,7 @@
 				270692CC1594CF42001A9329 /* VSFileKind.h in Headers */,
 				270692CF1594D406001A9329 /* VSQCManager.h in Headers */,
 				270692D31594F25F001A9329 /* VSQCRenderer.h in Headers */,
+				5BD5AEC3159A10320008CE80 /* VSParameterTypes.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,6 +378,7 @@
 				27C5606A15877DAC00E14DCE /* VSImage.m in Sources */,
 				270692D01594D406001A9329 /* VSQCManager.m in Sources */,
 				270692D41594F25F001A9329 /* VSQCRenderer.m in Sources */,
+				5BD5AEC4159A10320008CE80 /* VSParameterTypes.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

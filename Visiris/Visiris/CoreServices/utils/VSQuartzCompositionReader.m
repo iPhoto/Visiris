@@ -9,29 +9,57 @@
 #import "VSQuartzCompositionReader.h"
 #import <Quartz/Quartz.h>
 
+#import "VSCoreServices.h"
+
 
 @interface VSQuartzCompositionReader()
-@property (strong) QCComposition    *qcComposition;
+
 
 @end
 
 @implementation VSQuartzCompositionReader
-@synthesize qcComposition = _qcComposition;
 
-- (id)initWithFilepath:(NSString *)path{
-    if (self = [super init]) {
-        self.qcComposition = [QCComposition compositionWithFile:path];
+static NSDictionary *visirisParameterDataTypeForQCPortAttributeTypeKey;
+
++(void) initialize{
+    visirisParameterDataTypeForQCPortAttributeTypeKey = 
+                        [[NSDictionary alloc] initWithObjectsAndKeys:
+                                        [NSNumber numberWithInt:VSParameterDataTypeBool],QCPortTypeBoolean,
+                                        [NSNumber numberWithInt:VSParameterDataTypeFloat],QCPortTypeNumber,
+                                        [NSNumber numberWithInt:VSParameterDataTypeString],QCPortTypeString, 
+                         nil];
+}
+
++(NSMutableDictionary*) publicInputsOfQuartzComposerPath:(NSString*) filePath{
+    
+    NSMutableDictionary *publicInputs = [[NSMutableDictionary alloc] init];
+    
+    if(filePath && [[NSFileManager defaultManager] fileExistsAtPath:filePath]){
+        QCComposition *qcComposition = [QCComposition compositionWithFile:filePath];
         
-        for (id iterator in self.qcComposition.inputKeys) {
-            NSLog(@"value: %@", iterator);
+        for(id key in qcComposition.inputKeys){
+            
+            id result = [qcComposition.attributes objectForKey:key];
+            
+            if(result){
+                [publicInputs setObject:result forKey:key];
+            }
         }
         
-        for (id key in self.qcComposition.attributes) {
-            NSLog(@"key: %@, value: %@", key, [self.qcComposition.attributes objectForKey:key]);        
-        }
+        
         
     }
-    return self;
+    
+    return publicInputs;
+    
+}
+
++(NSInteger) visirisParameterDataTypeOfQCPortAttributeTypeKey:(NSString*) attributeKey{
+    id result = [visirisParameterDataTypeForQCPortAttributeTypeKey objectForKey:attributeKey];
+    if (result) {
+        return [result intValue];
+    }
+    return -1;
 }
 
 @end

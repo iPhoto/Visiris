@@ -133,7 +133,6 @@
 		5B35C06F1577A63E009911EC /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35C06E1577A63E009911EC /* QTKit.framework */; };
 		5B35C0971577A912009911EC /* VSFileType.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0731577A912009911EC /* VSFileType.m */; };
 		5B35C0981577A912009911EC /* VSFileUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0751577A912009911EC /* VSFileUtils.m */; };
-		5B35C0991577A912009911EC /* VSParameterTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0781577A912009911EC /* VSParameterTypes.m */; };
 		5B35C09A1577A912009911EC /* VSFileImageCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C07C1577A912009911EC /* VSFileImageCreator.m */; };
 		5B35C09B1577A912009911EC /* VSFormattingUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C07E1577A912009911EC /* VSFormattingUtils.m */; };
 		5B35C09C1577A912009911EC /* VSParameterXMLUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0801577A912009911EC /* VSParameterXMLUtils.m */; };
@@ -336,14 +335,11 @@
 		5B35C06A1577A5EC009911EC /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		5B35C06C1577A62D009911EC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5B35C06E1577A63E009911EC /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
-		5B35C0711577A912009911EC /* VSFileKind.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFileKind.h; sourceTree = "<group>"; };
 		5B35C0721577A912009911EC /* VSFileType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFileType.h; sourceTree = "<group>"; };
 		5B35C0731577A912009911EC /* VSFileType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFileType.m; sourceTree = "<group>"; };
 		5B35C0741577A912009911EC /* VSFileUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFileUtils.h; sourceTree = "<group>"; };
 		5B35C0751577A912009911EC /* VSFileUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFileUtils.m; sourceTree = "<group>"; };
 		5B35C0761577A912009911EC /* VSParameterDataType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSParameterDataType.h; sourceTree = "<group>"; };
-		5B35C0771577A912009911EC /* VSParameterTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSParameterTypes.h; sourceTree = "<group>"; };
-		5B35C0781577A912009911EC /* VSParameterTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSParameterTypes.m; sourceTree = "<group>"; };
 		5B35C0791577A912009911EC /* VSTrackType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTrackType.h; sourceTree = "<group>"; };
 		5B35C07B1577A912009911EC /* VSFileImageCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFileImageCreator.h; sourceTree = "<group>"; };
 		5B35C07C1577A912009911EC /* VSFileImageCreator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFileImageCreator.m; sourceTree = "<group>"; };
@@ -641,14 +637,11 @@
 		5B35C0701577A912009911EC /* enums */ = {
 			isa = PBXGroup;
 			children = (
-				5B35C0711577A912009911EC /* VSFileKind.h */,
 				5B35C0721577A912009911EC /* VSFileType.h */,
 				5B35C0731577A912009911EC /* VSFileType.m */,
 				5B35C0741577A912009911EC /* VSFileUtils.h */,
 				5B35C0751577A912009911EC /* VSFileUtils.m */,
 				5B35C0761577A912009911EC /* VSParameterDataType.h */,
-				5B35C0771577A912009911EC /* VSParameterTypes.h */,
-				5B35C0781577A912009911EC /* VSParameterTypes.m */,
 				5B35C0791577A912009911EC /* VSTrackType.h */,
 			);
 			path = enums;
@@ -1200,7 +1193,6 @@
 				5B35C0601577A58D009911EC /* DispatchQueueLogFormatter.m in Sources */,
 				5B35C0971577A912009911EC /* VSFileType.m in Sources */,
 				5B35C0981577A912009911EC /* VSFileUtils.m in Sources */,
-				5B35C0991577A912009911EC /* VSParameterTypes.m in Sources */,
 				5B35C09A1577A912009911EC /* VSFileImageCreator.m in Sources */,
 				5B35C09B1577A912009911EC /* VSFormattingUtils.m in Sources */,
 				5B35C09C1577A912009911EC /* VSParameterXMLUtils.m in Sources */,

@@ -8,11 +8,12 @@
 
 #import "VSSourceSupplier.h"
 
-#import "VSParameterTypes.h"
 #import "VSParameter.h"
 #import "VSAnimation.h"
 #import "VSTimelineObject.h"
 #import "VSTimelineObjectSource.h"
+
+#import "VSCoreServices.h"
 
 
 
@@ -30,13 +31,16 @@
     return self;
 }
 
+
 //TODO: returns only the defaultValueForNow
 - (NSDictionary *)getAtrributesForTimestamp:(double)aTimestamp{
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
     
     if(self.timelineObject){
         for(VSParameter *parameter in [self.timelineObject.parameters allValues]){
-            [result setValue:parameter.animation.defaultValue forKey:parameter.type];
+            if([parameter isKindOfClass:[VSParameter class]]){
+                [result setValue:parameter.animation.defaultValue forKey:parameter.type];
+            }
         }
     }
     

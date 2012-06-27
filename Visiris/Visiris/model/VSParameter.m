@@ -16,62 +16,74 @@
 @synthesize type = _type;
 @synthesize dataType = _dataType;
 @synthesize name = _name;
-@synthesize configuredDefaultValue = _configuredDefaultValue;
-@synthesize orderNumber = _orderNumber;
-@synthesize valueRange = _valueRange;
+@synthesize configuredDefaultValue  = _configuredDefaultValue;
+@synthesize orderNumber             = _orderNumber;
 @synthesize hasRange = _hasRange;
 @synthesize editable = _editable;
 @synthesize hidden = _hidden;
+@synthesize rangeMaxValue = _rangeMaxValue;
+@synthesize rangeMinValue = _rangeMinValue;
 
 #pragma mark - Init
 
--(id) initWithName:(NSString *)theName asType:(NSString *)aType forDataType:(VSParameterDataType)aDataType withDefaultValue:(id)theDefaultValue orderNumber:(NSInteger)aOrderNumber editable:(BOOL)editable hidden:(BOOL)hidden{
+-(id) initWithName:(NSString *)theName asType:(NSString *)aType forDataType:(VSParameterDataType)aDataType withDefaultValue:(id)theDefaultValue orderNumber:(NSInteger)aOrderNumber editable:(BOOL)editable hidden:(BOOL)hidden rangeMinValue:(float)minRangeValue rangeMaxValue:(float)maxRangeValue{
     if(self = [super init]){
-        self.configuredDefaultValue = theDefaultValue;
         self.name = theName;
         self.type = aType;
         self.dataType = aDataType;
         self.hidden = hidden;
         self.editable = editable;
         self.orderNumber = aOrderNumber;
-        self.animation = [[VSAnimation alloc] initWithDefaultValue:self.configuredDefaultValue];
         
-        self.hasRange = NO;
+        
+        if(maxRangeValue > minRangeValue){
+            self.rangeMaxValue = maxRangeValue;
+            self.rangeMinValue = minRangeValue;
+            self.hasRange = YES;
+        }
+        
+        if(!theDefaultValue){
+            switch (self.dataType) {
+                case VSParameterDataTypeString:
+                    self.configuredDefaultValue = @"";
+                    break;
+                case VSParameterDataTypeFloat:
+                    if(self.hasRange){
+                        self.configuredDefaultValue = [NSNumber numberWithFloat:self.rangeMinValue];
+                    }
+                    else {
+                        self.configuredDefaultValue = [NSNumber numberWithFloat:0];
+                    }
+                    break;
+                case VSParameterDataTypeBool:
+                    self.configuredDefaultValue = [NSNumber numberWithBool:NO];
+            }
+        }
+        else {
+            self.configuredDefaultValue = theDefaultValue;
+            
+        }
+        self.animation = [[VSAnimation alloc] initWithDefaultValue:self.configuredDefaultValue];
     }
-    
     return self;
 }
 
--(id) initWithName:(NSString *)theName asType:(NSString *)aType forDataType:(VSParameterDataType)aDataType withDefaultValue:(id)theDefaultValue orderNumber:(NSInteger)aOrderNumber editable:(BOOL)editable hidden:(BOOL)hidden validRang:(NSRange)aRange{
-    if(self = [self initWithName:theName asType:aType forDataType:aDataType withDefaultValue:theDefaultValue orderNumber:aOrderNumber editable:editable hidden:hidden]){
-        self.valueRange = aRange;
-        self.hasRange = YES;
-        
-    }
-    
-    return self;
-}
 
 
 #pragma mark - VSCopying
 -(id) copyWithZone:(NSZone *)zone{
     
-    VSParameter *copy ;
+    VSParameter *copy = [[VSParameter allocWithZone:zone] initWithName:self.name asType:self.type forDataType:self.dataType withDefaultValue:self.configuredDefaultValue orderNumber:self.orderNumber editable:self.editable hidden:self.hidden rangeMinValue:self.rangeMinValue rangeMaxValue:self.rangeMaxValue];
     
-    if(self.hasRange){
-        copy = [[VSParameter allocWithZone:zone] initWithName:self.name asType:self.type forDataType:self.dataType withDefaultValue:self.configuredDefaultValue orderNumber:self.orderNumber editable:self.editable hidden:self.hidden validRang:self.valueRange];
-    }
-    else {
-        copy = [[VSParameter allocWithZone:zone] initWithName:self.name asType:self.type forDataType:self.dataType withDefaultValue:self.configuredDefaultValue orderNumber:self.orderNumber editable:self.editable hidden:self.hidden];
-    }
+    
+    copy.animation = [self.animation copy];
     
     return copy;
 }
 
 -(NSString*) description{
-    return [NSString stringWithFormat:@"OrderNumber: %d",self.orderNumber];
+    return [NSString stringWithFormat:@"Name: %@",self.name];
 }
-
 
 
 @end

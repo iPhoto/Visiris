@@ -15,7 +15,6 @@
  */
 @protocol VSTimelineObjectViewDelegate <NSObject>
 
-
 /**
  * Called by VSTimelineObjectView when i got Selected
  * @param timelineObjectview The View invoked the method.
@@ -97,16 +96,16 @@
 /** if YES, the VSTimelineObjectView is drawn as selected */
 @property BOOL selected;
 
-/** if YES the VSTimelineObjectView intersectionRect is drawn */
-@property BOOL intersected;
-
 /** Area of the VSTimelineObjectView that's intersected by another VSTimelineObjectView */
-@property NSRect intersectionRect;
+@property (strong) NSMutableDictionary* intersectionRects;
 
 /** If yes, the view is drawn differently */
 @property BOOL temporary;
 
 /** If YES the view is moved on mouseDragged-Event */ 
 @property BOOL moving;
+
+/**if YES the view is hidden */
+@property BOOL inactive;
 
 @end

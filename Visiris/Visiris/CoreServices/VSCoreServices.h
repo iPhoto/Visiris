@@ -15,6 +15,7 @@
 #import "VSSupportedFilesManager.h"
 #import "VSFormattingUtils.h"
 #import "VSParameterXMLUtils.h"
+#import "VSQuartzCompositionReader.h"
 
 /*Constants*/
 #import "VSImageConstants.h"
@@ -22,10 +23,10 @@
 #import "VSTimelineConstants.h"
 #import "VSNotificationConstants.h"
 #import "VSAssortedConstants.h"
-#import "VSParameterTypes.h"
+#import "VisirisCore/VSParameterTypes.h"
 
 /*Enums*/
-#import "VSFileKind.h" 
+#import "VisirisCore/VSFileKind.h" 
 #import "VSTrackType.h"
 #import "VSParameterDataType.h"
 

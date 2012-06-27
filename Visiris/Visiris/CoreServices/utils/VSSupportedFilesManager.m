@@ -41,7 +41,7 @@ static NSString* quartzComposerSupplierClassString;
 
 +(void) initialize{
     
-    [self setClassStrings];
+    [self setClassStrings]; 
     [self setSupplierClassStrings];
     
     supportedFiles = [[NSMutableDictionary alloc] initWithCapacity:0];
@@ -52,7 +52,7 @@ static NSString* quartzComposerSupplierClassString;
     [self addSupportedImage:@"public.png" name:@"PNG"];
     [self addSupportedImage:@"public.jpeg" name:@"JPEG"];
     [self addSupportedVideo:@"public.mpeg-4" name:@"MP4"];
-      [self addSupportedQuartzComposer:@"com.apple.quartz-composer-composition" name:@"QTZ"];
+    [self addSupportedQuartzComposer:@"com.apple.quartz-composer-composition" name:@"QTZ"];
 }
 
 #pragma mark- Functions

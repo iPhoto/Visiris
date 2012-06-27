@@ -17,4 +17,5 @@
 - (GLuint)renderAtTme:(double)time;
 - (NSSize) size;
 - (GLuint) texture;
+- (void) setPublicInputsWithValues:(NSDictionary*) inputValues;
 @end

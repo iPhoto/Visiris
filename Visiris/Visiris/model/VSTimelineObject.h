@@ -18,7 +18,7 @@
  * 
  * A VSTimelineObject stores the ProjectItem that it's representing. Also the position and the duration of the object on the timeline are stored in the object
  */
-@interface VSTimelineObject : VSTimelineObjectProxy
+@interface VSTimelineObject : VSTimelineObjectProxy<NSCopying>
 
 /** Object the TimelineObject is representing */ 
 @property (strong) VSTimelineObjectSource* sourceObject;
@@ -63,18 +63,6 @@
  */
 -(NSArray *) visibleParameters;
 
-/**
- * Sets the VSTimelineObject as selected and registers the state-change at the give undoManger
- * @param undoManager NSUndoManager the change of the selection is registrated at.
- */
--(void) setSelectedAndRegisterUndo:(NSUndoManager*) undoManager;
-
-
-/**
- * Sets the VSTimelineObject as unselected and registers the state-change at the give undoManger
- * @param undoManager NSUndoManager the change of the selection is registrated at.
- */
--(void) setUnselectedAndRegisterUndo:(NSUndoManager*) undoManager;
 
 
 /**
