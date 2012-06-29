@@ -34,9 +34,10 @@
 
 /**
  * Creates a copy of the given VSTimelineObject and inits it with the given values
+ * @param objectToCopy VSTimelineObject a copy will be created of
  * @param aStartTime Timeposition of the copy to be created on the timelien
  * @param aDuration Duration of the copy to be created on the timeline
- * @param Returns a copy of objectToCopy init with the given values if the copying was succesfully, nil otherwise
+ * @returns a copy of objectToCopy init with the given values if the copying was succesfully, nil otherwise
  */
 -(VSTimelineObject*) createCopyOfTimelineObject:(VSTimelineObject*) objectToCopy atStartTime:(double) aStartTime withDuration:(double) aDuration;
 

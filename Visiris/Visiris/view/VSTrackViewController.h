@@ -164,11 +164,15 @@
 
 
 
-
-
+/**
+ * Subclass of NSViewController, representing a VSTrack and its VSTimelineObjects.
+ *
+ * Pleas write more
+ */
+@interface VSTrackViewController : NSViewController<VSTrackViewDelegate, VSTimelineObjectControllerDelegate>
 
 /**
- * Types of Data the Parameters of VSTimelineObjectSources can have
+ * Defines on which side for snapping should be looked for
  */
 typedef enum{
     VSSnapLeftSideOnly,
@@ -177,22 +181,6 @@ typedef enum{
     
 } VSSnapAtSide;
 
-
-
-
-
-
-
-
-
-
-
-/**
- * Subclass of NSViewController, representing a VSTrack and its VSTimelineObjects.
- *
- * Pleas write more
- */
-@interface VSTrackViewController : NSViewController<VSTrackViewDelegate, VSTimelineObjectControllerDelegate>
 
 /** Track the view VSTrackViewController is responsible for */
 @property VSTrack* track;
@@ -264,14 +252,12 @@ typedef enum{
 /**
  * Adds a new VSTimelineObjectViewController to self.temporaryTimelineObjectViewControllers and inits it with the given trackView
  * @param aProxyObject VSTimelineObjectProxy the VSTimelineObjectViewController will be init with
- * @param aTrackView VSTrackView the view of VSTimelineObjectViewController is added to
  **/
 -(VSTimelineObjectViewController*) addTemporaryTimelineObject:(VSTimelineObjectProxy*) aProxyObject;
 
 /**
  * Adds a new VSTimelineObjectViewController to self.temporaryTimelineObjectViewControllers and inits it with the given trackView
  * @param aProxyObject VSTimelineObjectProxy the VSTimelineObjectViewController will be init with
- * @param aTrackView VSTrackView the view of VSTimelineObjectViewController is added to
  * @param aFrame NSRect set as frame of VSTimelineObjectView representing the temporary timlineObject;
  **/
 -(VSTimelineObjectViewController*) addTemporaryTimelineObject:(VSTimelineObjectProxy*) aProxyObject withFrame:(NSRect) aFrame;

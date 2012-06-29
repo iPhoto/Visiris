@@ -51,8 +51,5 @@
  */
 -(id) initWithDefaultNibAccordingForTimeline:(VSTimeline*)timeline;
 
-#pragma mark - Methods
-
-
 
 @end

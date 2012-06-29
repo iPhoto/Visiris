@@ -15,7 +15,7 @@
 #import "VSSupportedFilesManager.h"
 #import "VSFormattingUtils.h"
 #import "VSParameterXMLUtils.h"
-#import "VSQuartzCompositionReader.h"
+#import "VSQuartzCompositionUtils.h"
 
 /*Constants*/
 #import "VSImageConstants.h"

@@ -51,6 +51,6 @@
  * Moves the marker representing the playHead to the given location in the horizontal rulerView
  * @param location Loction in the horizontal rulverView the playhead marker should be moved to
  */
--(void) setPlayHeadMarkerToLocation:(CGFloat) location;
+-(void) movePlayHeadMarkerToLocation:(CGFloat) location;
 
 @end

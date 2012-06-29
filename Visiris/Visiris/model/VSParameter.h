@@ -38,8 +38,10 @@
 /** NO if no ranges are given, YES otherwise. */
 @property BOOL hasRange;
 
+/** Minimal valid value of the parameter */
 @property float rangeMinValue;
 
+/** Maximal valid value of the parameter */
 @property float rangeMaxValue;
 
 /** If true, the value of the paramter can be edited */
@@ -59,7 +61,8 @@
  * @param aDataType VSParameterDataType defining the paramters DataType
  * @param theDefaultValue Default value of the parameter. As soon as an parameter is initialized, a new Keyframe for the timestamp -1 with its default value is added.
  * @param aOrderNumber Defines where in the order of all parameters the parameter is shown.
- * @param aRange Range of values valid for this parameters
+ * @param minRangeValue Minimal Value of the parameter
+ * @param maxRangeValue Maximal Value of the parameter
  * @param editable Indicates wheter the user is allowed to edit the parameter or not.
  * @param hidden Indicates wheter the parameter is shown in the gui or not.
  * @return self;

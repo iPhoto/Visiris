@@ -151,32 +151,48 @@
     if(ruler == self.enclosingScrollView.horizontalRulerView){
         NSPoint pointInView = [self.window.contentView convertPoint:[event locationInWindow] toView:self.enclosingScrollView.horizontalRulerView];
         
+        
+        
         CGFloat location = pointInView.x - self.playheadMarker.imageRectInRuler.size.width / 2 - self.playheadMarker.imageOrigin.x;
         
-        if([self delegateRespondsToSelector:@selector(willMovePlayHeadRulerMarker:inContainingView:toLocation:)]){
-            location = [self.playheadMarkerDelegate willMovePlayHeadRulerMarker:self.playheadMarker inContainingView:self toLocation:location];
+        if([self delegateRespondsToSelector:@selector(shouldMovePlayHeadRulerMarker:inContainingView:)]){
+            if( [self.playheadMarkerDelegate shouldMovePlayHeadRulerMarker:self.playheadMarker inContainingView:self]){
+                
+                
+                if([self delegateRespondsToSelector:@selector(willMovePlayHeadRulerMarker:inContainingView:toLocation:)]){
+                    location = [self.playheadMarkerDelegate willMovePlayHeadRulerMarker:self.playheadMarker inContainingView:self toLocation:location];
+                }
+                
+                [self movePlayHeadMarkerToLocation:location];
+                if([self delegateRespondsToSelector:@selector(didMovePlayHeadRulerMarker:inContainingView:)]){
+                    [self.playheadMarkerDelegate didMovePlayHeadRulerMarker:self.playheadMarker inContainingView:self];
+                }
+            }
         }
-        
-        [self setPlayHeadMarkerToLocation:location];
-        
     }
 }
 
 #pragma mark - Methods
 
--(void) setPlayHeadMarkerToLocation:(CGFloat)location{
-    NSRect formerImageRect = self.playheadMarker.imageRectInRuler;
-    [self.playheadMarker setMarkerLocation:location];
+
+-(void) movePlayHeadMarkerToLocation:(CGFloat)location{
     
-    [self updateGuideline];
+    location += self.scrollOffset.x;
     
-    [self.enclosingScrollView.horizontalRulerView setNeedsDisplayInRect:self.playheadMarker.imageRectInRuler];
-    [self.enclosingScrollView.horizontalRulerView setNeedsDisplayInRect:formerImageRect];
+    if(location != self.playheadMarker.markerLocation){
+        
+        NSRect formerImageRect = self.playheadMarker.imageRectInRuler;
+        [self.playheadMarker setMarkerLocation:location];
+        
+        [self updateGuideline];
+        
+        [self.enclosingScrollView.horizontalRulerView setNeedsDisplayInRect:self.playheadMarker.imageRectInRuler];
+        [self.enclosingScrollView.horizontalRulerView setNeedsDisplayInRect:formerImageRect];
+    }
 }
 
-
-
 #pragma mark - Private Methods
+
 
 /**
  * Checks if the delegate  is able to respond to the given Selector

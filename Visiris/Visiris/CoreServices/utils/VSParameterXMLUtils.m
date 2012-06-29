@@ -51,8 +51,8 @@
     float maximumValue = 0;
     
     if([parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_RANGE_FROM] && [parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_RANGE_TO]){
-        float maximumValue = [[[parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_RANGE_TO] stringValue] floatValue];
-        float minimumValue = [[[parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_RANGE_FROM] stringValue] floatValue];
+        maximumValue = [[[parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_RANGE_TO] stringValue] floatValue];
+        minimumValue = [[[parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_RANGE_FROM] stringValue] floatValue];
     }
     
     BOOL hidden = NO;

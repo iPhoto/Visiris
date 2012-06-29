@@ -53,5 +53,10 @@
  */
 -(float) fileSize;
 
+/**
+ * Returns the parameters of the VSTimelineObject as stored in its source having hidden set to NO.
+ * @return The parameters of the VSTimelineObject as stored in its source having hidden set to NO. The type of the parameter is used as key
+ */
 -(NSArray *) visibleParameters;
+
 @end
