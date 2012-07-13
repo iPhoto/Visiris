@@ -316,12 +316,12 @@ static int resizingAreaWidth = 10;
         resizedFrame.size.width = self.frameAtMouseDown.size.width + (correctedMousePosition-resizedFrame.origin.x);
     }
     
-    DDLogInfo(@"before: %@",NSStringFromRect(resizedFrame));
+  //  DDLogInfo(@"before: %@",NSStringFromRect(resizedFrame));
     //informs the delegate about the resizing
     if([self delegateImplementsSelector:@selector(timelineObjectWillResize:fromFrame:toFrame:)]){
         resizedFrame = [self.delegate timelineObjectWillResize:self fromFrame:self.frame toFrame:resizedFrame];
     }
-    DDLogInfo(@"after: %@",NSStringFromRect(resizedFrame));
+ //   DDLogInfo(@"after: %@",NSStringFromRect(resizedFrame));
     [self setFrame:resizedFrame];
     
     

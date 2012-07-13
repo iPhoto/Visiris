@@ -29,6 +29,8 @@
 		270692D61594F94F001A9329 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 270692D51594F94F001A9329 /* Quartz.framework */; };
 		2726745B157F76A400EBE6B0 /* VSTextureManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 27267459157F76A400EBE6B0 /* VSTextureManager.h */; };
 		2726745C157F76A400EBE6B0 /* VSTextureManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2726745A157F76A400EBE6B0 /* VSTextureManager.m */; };
+		2745457415AEDC400064597D /* VSPBufferRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 2745457215AEDC400064597D /* VSPBufferRenderer.h */; };
+		2745457515AEDC400064597D /* VSPBufferRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2745457315AEDC400064597D /* VSPBufferRenderer.m */; };
 		274C70CE157E81DD0031F9B2 /* VSImageContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 274C70CC157E81DD0031F9B2 /* VSImageContext.h */; };
 		274C70CF157E81DD0031F9B2 /* VSImageContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 274C70CD157E81DD0031F9B2 /* VSImageContext.m */; };
 		274C70D1157E82EE0031F9B2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 274C70D0157E82EE0031F9B2 /* QuartzCore.framework */; };
@@ -71,6 +73,8 @@
 		270692D51594F94F001A9329 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		27267459157F76A400EBE6B0 /* VSTextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTextureManager.h; sourceTree = "<group>"; };
 		2726745A157F76A400EBE6B0 /* VSTextureManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTextureManager.m; sourceTree = "<group>"; };
+		2745457215AEDC400064597D /* VSPBufferRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSPBufferRenderer.h; sourceTree = "<group>"; };
+		2745457315AEDC400064597D /* VSPBufferRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSPBufferRenderer.m; sourceTree = "<group>"; };
 		274C70CC157E81DD0031F9B2 /* VSImageContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VSImageContext.h; path = CoreServices/VSImageContext.h; sourceTree = "<group>"; };
 		274C70CD157E81DD0031F9B2 /* VSImageContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VSImageContext.m; path = CoreServices/VSImageContext.m; sourceTree = "<group>"; };
 		274C70D0157E82EE0031F9B2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -152,6 +156,8 @@
 				270692CE1594D405001A9329 /* VSQCManager.m */,
 				270692D11594F25D001A9329 /* VSQCRenderer.h */,
 				270692D21594F25E001A9329 /* VSQCRenderer.m */,
+				2745457215AEDC400064597D /* VSPBufferRenderer.h */,
+				2745457315AEDC400064597D /* VSPBufferRenderer.m */,
 				276151491577F290005177C5 /* VSShader.h */,
 				2761514A1577F290005177C5 /* VSShader.m */,
 				27C5606715877DAC00E14DCE /* VSImage.h */,
@@ -278,6 +284,7 @@
 				270692CF1594D406001A9329 /* VSQCManager.h in Headers */,
 				270692D31594F25F001A9329 /* VSQCRenderer.h in Headers */,
 				5BD5AEC3159A10320008CE80 /* VSParameterTypes.h in Headers */,
+				2745457415AEDC400064597D /* VSPBufferRenderer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,6 +386,7 @@
 				270692D01594D406001A9329 /* VSQCManager.m in Sources */,
 				270692D41594F25F001A9329 /* VSQCRenderer.m in Sources */,
 				5BD5AEC4159A10320008CE80 /* VSParameterTypes.m in Sources */,
+				2745457515AEDC400064597D /* VSPBufferRenderer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

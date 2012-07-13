@@ -151,6 +151,7 @@ static struct {
         default:
         {            
             [self combineTheFirstTwoObjects:textures];
+          //  [[self openGLContext] flushBuffer];
 
             for (NSInteger i = 1; i < textures.count -1; i++) {
                 [self swapFBO];
