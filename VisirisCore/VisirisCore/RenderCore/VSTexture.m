@@ -57,7 +57,7 @@
 }
 
 -(void)unbind{
-    glBindTexture(GL_TEXTURE_2D, self.texture);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 -(void)deleteTexture{

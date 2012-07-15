@@ -69,10 +69,7 @@
 -(void) timelineObjects:(NSArray *)newTimelineObjects haveBeenAddedToTrack:(VSTrack *)aTrack{
     //DDLogInfo(@"%@",newTimelineObjects);
     
-    
-    
     for(VSTimelineObject *timelineObject in newTimelineObjects){
-        
         
         NSSize dimensions = [VSFileUtils dimensionsOfFile:timelineObject.sourceObject.filePath];
         VSFileType *type = [VSSupportedFilesManager typeOFile:timelineObject.sourceObject.filePath];

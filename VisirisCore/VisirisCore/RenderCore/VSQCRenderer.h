@@ -15,7 +15,7 @@
 - (id)initWithPath:(NSString *)path withSize:(NSSize)size withContext:(NSOpenGLContext *)context withPixelformat:(NSOpenGLPixelFormat *)format;
 
 - (GLuint)renderAtTme:(double)time;
-- (NSSize) size;
+//- (NSSize) size;
 - (GLuint) texture;
 - (void) setPublicInputsWithValues:(NSDictionary*) inputValues;
 @end
