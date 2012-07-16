@@ -67,16 +67,17 @@
         self.currentTimestamp = [[object valueForKey:@"currentTimePosition"] doubleValue];
         
         if(scrubbing){
-            
             self.playing = NO;
             self.frameWasRender = NO;
             if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
                 [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
             }
         }
-        if(self.frameWasRender) {
-            if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
-                [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
+        else{
+            if(self.frameWasRender) {
+                if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
+                    [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
+                }
             }
         }
     }
@@ -107,32 +108,36 @@
     }
 }
 
-- (void)renderFramesForCurrentTimestamp
-{
+- (void)renderFramesForCurrentTimestamp{
     if(self.playing){
-
-        double currentTime = [[NSDate date] timeIntervalSince1970]*1000;        
-        
-        self.currentTimestamp += currentTime - self.playbackStartTime;
-        
-        if(self.currentTimestamp > self.timeline.duration){
-            self.currentTimestamp = 0;
-        }
-        
-        self.timeline.playHead.currentTimePosition = self.currentTimestamp;
-        self.playbackStartTime = currentTime;
+        [self computeNewCurrentTimestamp];
     }
-    else{
-        if(!self.timeline.playHead.scrubbing || !self.frameWasRender){
+    
+    if (self.preProcessor) {
+        [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:[self frameSize] isPlaying:self.playing];
+    }
+    
+    if(!self.playing){
+        if(!self.timeline.playHead.scrubbing){
             if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
                 [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
             }
             self.frameWasRender = YES;
         }
     }
-    if (self.preProcessor) {
-        [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:[self frameSize] isPlaying:self.playing];
+}
+
+-(void) computeNewCurrentTimestamp{
+    double currentTime = [[NSDate date] timeIntervalSince1970]*1000;        
+    
+    self.currentTimestamp += currentTime - self.playbackStartTime;
+    
+    if(self.currentTimestamp > self.timeline.duration){
+        self.currentTimestamp = 0;
     }
+    
+    self.timeline.playHead.currentTimePosition = self.currentTimestamp;
+    self.playbackStartTime = currentTime;
 }
 
 #pragma mark - VSPreviewViewControllerDelegate implementation

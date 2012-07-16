@@ -50,6 +50,10 @@
     }
 }
 
+-(void) scrollWheel:(NSEvent *)theEvent{
+    DDLogInfo(@"scrollWheel: %@",theEvent);
+}
+
 #pragma mark- VSTrackViewDelegate implementation
 
 -(void) setFrame:(NSRect)frameRect{
