@@ -10,14 +10,10 @@
 
 @interface VSShader : NSObject
 
+@property (assign) GLuint       program;
 @property (assign) GLuint       vertexShader;
 @property (assign) GLuint       fragmentShader;
-@property (assign) GLuint       program;
-@property (assign) GLuint       uniformTexture1;
-@property (assign) GLuint       uniformTexture2;
-@property (assign) GLuint       attributePosition;
-@property (assign) GLuint       uniformFadefactor;
 
-
+-(id)initWithName:(NSString *)name;
 
 @end

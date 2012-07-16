@@ -45,8 +45,14 @@
 		2761514C1577F290005177C5 /* VSShader.m in Sources */ = {isa = PBXBuildFile; fileRef = 2761514A1577F290005177C5 /* VSShader.m */; };
 		276AAD581575044400A984E0 /* jolandabregenz.png in Resources */ = {isa = PBXBuildFile; fileRef = 276AAD571575044400A984E0 /* jolandabregenz.png */; };
 		276AAD5B1575046B00A984E0 /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 276AAD5A1575046B00A984E0 /* test.jpg */; };
-		27A135A7157608FD00883B96 /* hellogl.fs.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 27A135A5157608FD00883B96 /* hellogl.fs.glsl */; };
-		27A135A8157608FD00883B96 /* hellogl.vs.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 27A135A6157608FD00883B96 /* hellogl.vs.glsl */; };
+		27973E9115B41C3B0051C16F /* VSLayerShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 27973E8F15B41C3A0051C16F /* VSLayerShader.h */; };
+		27973E9215B41C3B0051C16F /* VSLayerShader.m in Sources */ = {isa = PBXBuildFile; fileRef = 27973E9015B41C3B0051C16F /* VSLayerShader.m */; };
+		27973E9615B43CA00051C16F /* transform.fs.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 27973E9415B43CA00051C16F /* transform.fs.glsl */; };
+		27973E9715B43CA00051C16F /* transform.vs.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 27973E9515B43CA00051C16F /* transform.vs.glsl */; };
+		27973E9A15B441D20051C16F /* VSTransformShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 27973E9815B441D20051C16F /* VSTransformShader.h */; };
+		27973E9B15B441D20051C16F /* VSTransformShader.m in Sources */ = {isa = PBXBuildFile; fileRef = 27973E9915B441D20051C16F /* VSTransformShader.m */; };
+		27A135A7157608FD00883B96 /* layering.fs.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 27A135A5157608FD00883B96 /* layering.fs.glsl */; };
+		27A135A8157608FD00883B96 /* layering.vs.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 27A135A6157608FD00883B96 /* layering.vs.glsl */; };
 		27C5606915877DAC00E14DCE /* VSImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 27C5606715877DAC00E14DCE /* VSImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		27C5606A15877DAC00E14DCE /* VSImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C5606815877DAC00E14DCE /* VSImage.m */; };
 		5B14E9A415641B0200AFF08C /* VSCoreHandover.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B14E9A015641B0200AFF08C /* VSCoreHandover.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -89,8 +95,14 @@
 		2761514A1577F290005177C5 /* VSShader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSShader.m; sourceTree = "<group>"; };
 		276AAD571575044400A984E0 /* jolandabregenz.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = jolandabregenz.png; sourceTree = "<group>"; };
 		276AAD5A1575046B00A984E0 /* test.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test.jpg; sourceTree = "<group>"; };
-		27A135A5157608FD00883B96 /* hellogl.fs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hellogl.fs.glsl; sourceTree = "<group>"; };
-		27A135A6157608FD00883B96 /* hellogl.vs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hellogl.vs.glsl; sourceTree = "<group>"; };
+		27973E8F15B41C3A0051C16F /* VSLayerShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSLayerShader.h; sourceTree = "<group>"; };
+		27973E9015B41C3B0051C16F /* VSLayerShader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLayerShader.m; sourceTree = "<group>"; };
+		27973E9415B43CA00051C16F /* transform.fs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = transform.fs.glsl; sourceTree = "<group>"; };
+		27973E9515B43CA00051C16F /* transform.vs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = transform.vs.glsl; sourceTree = "<group>"; };
+		27973E9815B441D20051C16F /* VSTransformShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTransformShader.h; sourceTree = "<group>"; };
+		27973E9915B441D20051C16F /* VSTransformShader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTransformShader.m; sourceTree = "<group>"; };
+		27A135A5157608FD00883B96 /* layering.fs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = layering.fs.glsl; sourceTree = "<group>"; };
+		27A135A6157608FD00883B96 /* layering.vs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = layering.vs.glsl; sourceTree = "<group>"; };
 		27C5606715877DAC00E14DCE /* VSImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSImage.h; sourceTree = "<group>"; };
 		27C5606815877DAC00E14DCE /* VSImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSImage.m; sourceTree = "<group>"; };
 		5B14E9A015641B0200AFF08C /* VSCoreHandover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSCoreHandover.h; sourceTree = "<group>"; };
@@ -160,6 +172,10 @@
 				2745457315AEDC400064597D /* VSPBufferRenderer.m */,
 				276151491577F290005177C5 /* VSShader.h */,
 				2761514A1577F290005177C5 /* VSShader.m */,
+				27973E8F15B41C3A0051C16F /* VSLayerShader.h */,
+				27973E9015B41C3B0051C16F /* VSLayerShader.m */,
+				27973E9815B441D20051C16F /* VSTransformShader.h */,
+				27973E9915B441D20051C16F /* VSTransformShader.m */,
 				27C5606715877DAC00E14DCE /* VSImage.h */,
 				27C5606815877DAC00E14DCE /* VSImage.m */,
 			);
@@ -169,8 +185,10 @@
 		27A135A4157608FD00883B96 /* Shader */ = {
 			isa = PBXGroup;
 			children = (
-				27A135A5157608FD00883B96 /* hellogl.fs.glsl */,
-				27A135A6157608FD00883B96 /* hellogl.vs.glsl */,
+				27A135A5157608FD00883B96 /* layering.fs.glsl */,
+				27A135A6157608FD00883B96 /* layering.vs.glsl */,
+				27973E9415B43CA00051C16F /* transform.fs.glsl */,
+				27973E9515B43CA00051C16F /* transform.vs.glsl */,
 			);
 			path = Shader;
 			sourceTree = "<group>";
@@ -285,6 +303,8 @@
 				270692D31594F25F001A9329 /* VSQCRenderer.h in Headers */,
 				5BD5AEC3159A10320008CE80 /* VSParameterTypes.h in Headers */,
 				2745457415AEDC400064597D /* VSPBufferRenderer.h in Headers */,
+				27973E9115B41C3B0051C16F /* VSLayerShader.h in Headers */,
+				27973E9A15B441D20051C16F /* VSTransformShader.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,8 +364,10 @@
 				5B7A6101156E2F82000FBEC3 /* AppledocSettings.plist in Resources */,
 				276AAD581575044400A984E0 /* jolandabregenz.png in Resources */,
 				276AAD5B1575046B00A984E0 /* test.jpg in Resources */,
-				27A135A7157608FD00883B96 /* hellogl.fs.glsl in Resources */,
-				27A135A8157608FD00883B96 /* hellogl.vs.glsl in Resources */,
+				27A135A7157608FD00883B96 /* layering.fs.glsl in Resources */,
+				27A135A8157608FD00883B96 /* layering.vs.glsl in Resources */,
+				27973E9615B43CA00051C16F /* transform.fs.glsl in Resources */,
+				27973E9715B43CA00051C16F /* transform.vs.glsl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,6 +409,8 @@
 				270692D41594F25F001A9329 /* VSQCRenderer.m in Sources */,
 				5BD5AEC4159A10320008CE80 /* VSParameterTypes.m in Sources */,
 				2745457515AEDC400064597D /* VSPBufferRenderer.m in Sources */,
+				27973E9215B41C3B0051C16F /* VSLayerShader.m in Sources */,
+				27973E9B15B441D20051C16F /* VSTransformShader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

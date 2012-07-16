@@ -9,8 +9,42 @@
 #import "VSShader.h"
 #import "OpenGL/glu.h"
 
-static GLuint make_shader(GLenum type,NSString* name)
-{
+@implementation VSShader
+
+@synthesize program = _program;
+@synthesize fragmentShader = _fragmentShader;
+@synthesize vertexShader = _vertexShader;
+
+-(id)initWithName:(NSString *)name {
+    if (self = [super init]) {
+        if ([self make_resources:name] == 0){
+            NSLog(@"Error: Making Resources Failed!!!!!");
+        }
+    }
+    return self;
+}
+
+- (NSInteger)make_resources:(NSString *)name{
+    //compile shader
+    self.vertexShader = [self compileShader:[NSString stringWithFormat:@"%@.vs",name]  withType:GL_VERTEX_SHADER];
+    
+    if (self.vertexShader == 0)
+        return 0;
+    
+    self.fragmentShader =[self make_shader:GL_FRAGMENT_SHADER withName:[NSString stringWithFormat:@"%@.fs",name]];
+    
+    if (self.fragmentShader == 0)
+        return 0;
+    
+    //create shaderprogram
+    self.program = [self make_program:self.vertexShader fragmentshader:(self.fragmentShader)];
+    if (self.program == 0)
+        return 0;
+        
+    return 1;
+}
+
+- (GLuint)make_shader:(GLenum) type withName:(NSString*) name{
     NSString* shaderPath = [[NSBundle bundleWithIdentifier:@"com.visiris.VisirisCore"] pathForResource:name ofType:@"glsl"];
     NSError* error;
     NSString* shaderString = [NSString stringWithContentsOfFile:shaderPath 
@@ -50,61 +84,6 @@ static GLuint make_shader(GLenum type,NSString* name)
     }
     
     return shader;
-}
-
-
-@implementation VSShader
-@synthesize fragmentShader = _fragmentShader;
-@synthesize program = _program;
-@synthesize vertexShader = _vertexShader;
-@synthesize uniformTexture1 = _uniformTexture1;
-@synthesize uniformTexture2 = _uniformTexture2;
-@synthesize attributePosition = _attributePosition;
-@synthesize uniformFadefactor = _uniformFadefactor;
-
--(id)init{
-    if (self = [super init]) {
-        if ([self make_resources] == 0){
-            NSLog(@"Error: Making Resources Failed!!!!!");
-        }
-    }
-    return self;
-}
-
--(GLuint)make_buffer:(GLenum)target data:(const void *)buffer_data size:(GLsizei) buffer_size{
-    GLuint buffer;
-    glGenBuffers(1, &buffer);
-    glBindBuffer(target, buffer);
-    glBufferData(target, buffer_size, buffer_data, GL_STATIC_DRAW);
-    return buffer;
-}
-
-- (NSInteger)make_resources
-{
-    //compile shader
-    self.vertexShader = [self compileShader:@"hellogl.vs" withType:GL_VERTEX_SHADER];
-    
-    if (self.vertexShader == 0)
-        return 0;
-    
-    
-    self.fragmentShader = make_shader(GL_FRAGMENT_SHADER, @"hellogl.fs");
-    
-    if (self.fragmentShader == 0)
-        return 0;
-    
-    //create shaderprogram
-    self.program = [self make_program:self.vertexShader fragmentshader:(self.fragmentShader)];
-    if (self.program == 0)
-        return 0;
-    
-    self.uniformFadefactor = glGetUniformLocation(self.program, "fade_factor");
-    self.uniformTexture1 = glGetUniformLocation(self.program, "textures[0]");
-    self.uniformTexture2 = glGetUniformLocation(self.program, "textures[1]");
-    
-    self.attributePosition = glGetAttribLocation(self.program, "position");
-    
-    return 1;
 }
 
 - (GLuint)compileShader:(NSString*)shaderName withType:(GLenum)shaderType {

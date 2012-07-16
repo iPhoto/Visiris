@@ -17,48 +17,33 @@
 #import "VSQCManager.h"
 #import "VSQCRenderer.h"
 #import <OpenGL/glu.h>
-
-//FixeMe: Warum sind die static Methoden außerhalb der Klasse definiert?
-
-static const GLfloat g_vertex_buffer_data[] = { 
-    -1.0f, -1.0f,
-    1.0f, -1.0f,
-    -1.0f,  1.0f,
-    1.0f,  1.0f
-};
-
-static const GLushort g_element_buffer_data[] = { 0, 1, 2, 3 };
-
-static GLuint make_buffer(GLenum target,const void *buffer_data,GLsizei buffer_size) {
-    GLuint buffer;
-    glGenBuffers(1, &buffer);
-    glBindBuffer(target, buffer);
-    glBufferData(target, buffer_size, buffer_data, GL_STATIC_DRAW);
-    return buffer;
-}
-
-static struct {
-    GLuint vertex_buffer, element_buffer;
-} g_resources;
-
+#import "VSLayerShader.h"
+#import "VSTransformShader.h"
 
 @interface VSRenderCore()
 
+@property (assign) GLuint                           vertex_buffer;
+@property (assign) GLuint                           element_buffer;
 @property (strong) NSOpenGLContext                  *openGLContext;
 @property (strong) NSOpenGLPixelFormat              *pixelFormat;        
 @property (strong) VSFrameBufferObject              *frameBufferObjectOne;
 @property (strong) VSFrameBufferObject              *frameBufferObjectTwo;
-@property (strong) VSFrameBufferObject              *frameBufferObjectCurrent;
-@property (strong) VSFrameBufferObject              *frameBufferObjectOld;
-@property (strong) VSShader                         *shader;
+@property (weak) VSFrameBufferObject                *frameBufferObjectCurrent;
+@property (weak) VSFrameBufferObject                *frameBufferObjectOld;
+@property (strong) VSLayerShader                    *layerShader;
+@property (strong) VSTransformShader                *transformShader;
 @property (strong) VSTextureManager                 *textureManager;
 @property (assign) GLuint                           outPutTexture;
 @property (strong) VSQCManager                      *qcpManager;
 
 @end
 
-    
+//////////////////////////////////////////////////////////////////////////////////////////////////////////    
+
+
 @implementation VSRenderCore
+@synthesize vertex_buffer               = _vertex_buffer;
+@synthesize element_buffer              = _element_buffer;
 @synthesize delegate                    = _delegate;
 @synthesize pixelFormat                 = _pixelFormat;
 @synthesize openGLContext               = _openGLContext;
@@ -66,7 +51,8 @@ static struct {
 @synthesize frameBufferObjectTwo        = _frameBufferObjectTwo;
 @synthesize frameBufferObjectCurrent    = _frameBufferObjectCurrent;
 @synthesize frameBufferObjectOld        = _frameBufferObjectOld;
-@synthesize shader                      = _shader;
+@synthesize layerShader                 = _layerShader;
+@synthesize transformShader             = _transformShader;
 @synthesize textureManager              = _textureManager;
 @synthesize outPutTexture               = _outPutTexture;
 @synthesize qcpManager                  = _qcpManager;
@@ -107,17 +93,17 @@ static struct {
         self.frameBufferObjectCurrent = self.frameBufferObjectOne;
         self.frameBufferObjectOld = self.frameBufferObjectTwo;
         
-        self.shader = [[VSShader alloc] init];
+        self.layerShader = [[VSLayerShader alloc] init];
+        self.transformShader = [[VSTransformShader alloc] init];
+
         self.textureManager = [[VSTextureManager alloc] init];        
         self.qcpManager = [[VSQCManager alloc] init];       
     }
     return self;
 }
 
-
 -(void)renderFrameOfCoreHandovers:(NSArray *) theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double)theTimestamp{
     NSMutableArray *mutableCoreHandovers = [NSMutableArray arrayWithArray:theCoreHandovers];
-    
     
 	[[self openGLContext] makeCurrentContext];
 
@@ -151,7 +137,6 @@ static struct {
         default:
         {            
             [self combineTheFirstTwoObjects:textures];
-          //  [[self openGLContext] flushBuffer];
 
             for (NSInteger i = 1; i < textures.count -1; i++) {
                 [self swapFBO];
@@ -173,6 +158,8 @@ static struct {
     }
 }
 
+
+
 - (void)combineTheFirstTwoObjects:(NSArray *) textures{
     NSNumber *texture0 = (NSNumber *)[textures objectAtIndex:0];
     NSNumber *texture1 = (NSNumber *)[textures objectAtIndex:1];
@@ -187,48 +174,63 @@ static struct {
     glViewport(0, 0, self.frameBufferObjectCurrent.size.width,self.frameBufferObjectCurrent.size.height);
    
     glClear(GL_COLOR_BUFFER_BIT);
-   // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-    glUseProgram(self.shader.program);
-    glUniform1f(self.shader.uniformFadefactor, 0.5f);
+    glUseProgram(self.layerShader.program);
+    glUniform1f(self.layerShader.uniformFadefactor, 0.5f);
     
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, bottomtexture);
-    glUniform1i(self.shader.uniformTexture1, 0);
+    glUniform1i(self.layerShader.uniformTexture1, 0);
     
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, upperTexture);
-    glUniform1i(self.shader.uniformTexture2, 1);
+    glUniform1i(self.layerShader.uniformTexture2, 1);
     
-    glBindBuffer(GL_ARRAY_BUFFER, g_resources.vertex_buffer);
-    glVertexAttribPointer(self.shader.attributePosition,  /* attribute */
+    glBindBuffer(GL_ARRAY_BUFFER, self.vertex_buffer);
+    glVertexAttribPointer(self.layerShader.attributePosition,  /* attribute */
                           2,                                /* size */
                           GL_FLOAT,                         /* type */
                           GL_FALSE,                         /* normalized? */
                           sizeof(GLfloat)*2,                /* stride */
                           (void*)0                          /* array buffer offset */
                           );
-    glEnableVertexAttribArray(self.shader.attributePosition);
+    glEnableVertexAttribArray(self.layerShader.attributePosition);
     
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g_resources.element_buffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.element_buffer);
     glDrawElements(GL_TRIANGLE_STRIP,  /* mode */
                    4,                  /* count */
                    GL_UNSIGNED_SHORT,  /* type */
                    (void*)0            /* element array buffer offset */
                    );
     
-    glDisableVertexAttribArray(self.shader.attributePosition);
-
+    glDisableVertexAttribArray(self.layerShader.attributePosition);
     
     [self.frameBufferObjectCurrent unbind];
     [[self openGLContext] flushBuffer];
-
 }
 
 - (NSInteger)make_resources{
-    g_resources.vertex_buffer = make_buffer(GL_ARRAY_BUFFER,g_vertex_buffer_data,sizeof(g_vertex_buffer_data));
-    g_resources.element_buffer = make_buffer(GL_ELEMENT_ARRAY_BUFFER,g_element_buffer_data,sizeof(g_element_buffer_data));
+    GLfloat g_vertex_buffer_data[] = { 
+        -1.0f, -1.0f,
+        1.0f, -1.0f,
+        -1.0f,  1.0f,
+        1.0f,  1.0f
+    };
+    
+    GLushort g_element_buffer_data[] = { 0, 1, 2, 3 };
+
+    self.vertex_buffer = [self make_buffer:GL_ARRAY_BUFFER withData:g_vertex_buffer_data withSize:sizeof(g_vertex_buffer_data)];
+    self.element_buffer = [self make_buffer:GL_ELEMENT_ARRAY_BUFFER withData:g_element_buffer_data withSize:sizeof(g_element_buffer_data)];
+
     return 1;
+}
+
+- (GLuint) make_buffer:(GLenum) target withData:(const void *)buffer_data withSize:(GLsizei)buffer_size{
+    GLuint buffer;
+    glGenBuffers(1, &buffer);
+    glBindBuffer(target, buffer);
+    glBufferData(target, buffer_size, buffer_data, GL_STATIC_DRAW);
+    return buffer;
 }
 
 - (GLuint)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*)colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path{
