@@ -557,21 +557,14 @@ static NSString* defaultNib = @"VSTimelineView";
 
 -(void) timelineScrollView:(VSTimelineScrollView *)scrollView wantsToBeZoomedAccordingToScrollWheel:(float) amount atPosition:(NSPoint)mousePosition{
     
-    if(amount == 0.0)
+    if(amount == 0.0 || self.trackHolder.frame.size.width < self.scrollView.documentVisibleRect.size.width)
         return;
     
     NSRect newTrackHolderFrame = self.trackHolder.frame;
     
     NSPoint clipLocalPoint = [self.trackHolder convertPoint:mousePosition fromView:nil];
     
-    float zoomFactor = 1.0;
-    
-    if(amount >0){
-        zoomFactor = 1.1;
-    }
-    else if(amount <0){
-        zoomFactor = 0.9;
-    }
+    float zoomFactor = 1.0 + amount;
     
     newTrackHolderFrame.size.width *= zoomFactor;
     
