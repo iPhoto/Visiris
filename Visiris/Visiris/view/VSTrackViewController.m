@@ -1012,7 +1012,7 @@ static NSString* defaultNib = @"VSTrackView";
  */
 -(void) addNewTimelineObject:(VSTimelineObject*) aTimelineObject{
     VSTimelineObjectViewController* newController = [[VSTimelineObjectViewController alloc] initWithDefaultNib];
-    
+
     [newController changePixelTimeRatio:self.pixelTimeRatio];
     
     newController.delegate = self;

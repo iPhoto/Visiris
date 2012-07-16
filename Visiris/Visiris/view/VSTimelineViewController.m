@@ -99,11 +99,13 @@ static NSString* defaultNib = @"VSTimelineView";
     
     [self initTrackLabelsView];
     
+    [self.trackHolder setFrame:NSMakeRect(0, 0, [self visibleTrackViewHolderWidth], self.scrollView.frame.size.height)];
+    
     [self initPlayhead];
     
-    [self updatePixelTimeRatio];
-    
     [self initTracks];
+    
+    [self updatePixelTimeRatio];
     
     [self initObservers];   
 }
@@ -121,7 +123,9 @@ static NSString* defaultNib = @"VSTimelineView";
  */
 -(void) initScrollView{
     
-    [self.trackHolder setFrame:NSMakeRect(0, 0, [self visibleTrackViewHolderWidth], self.scrollView.frame.size.height)];
+    self.scrollView.zoomingDelegate = self;
+    
+    
     
     [self.trackHolder setAutoresizingMask:NSViewNotSizable];
     
@@ -549,7 +553,38 @@ static NSString* defaultNib = @"VSTimelineView";
 }
 
 
+#pragma mark - VSTimelineScrollViewZoomingDelegate implementation
 
+-(void) timelineScrollView:(VSTimelineScrollView *)scrollView wantsToBeZoomedAccordingToScrollWheel:(float) amount atPosition:(NSPoint)mousePosition{
+    
+    if(amount == 0.0 || self.trackHolder.frame.size.width < self.scrollView.documentVisibleRect.size.width)
+        return;
+    
+    NSRect newTrackHolderFrame = self.trackHolder.frame;
+    
+    NSPoint clipLocalPoint = [self.trackHolder convertPoint:mousePosition fromView:nil];
+    
+    float zoomFactor = 1.0 + amount;
+    
+    newTrackHolderFrame.size.width *= zoomFactor;
+    
+    if(newTrackHolderFrame.size.width < self.scrollView.documentVisibleRect.size.width){
+        newTrackHolderFrame.size.width = self.scrollView.documentVisibleRect.size.width;
+    }
+        
+        float mouseTimePosition = [self getTimestampForPoint:clipLocalPoint];
+        float ratio = clipLocalPoint.x - clipLocalPoint.x*zoomFactor; //self.trackHolder.frame.size.width - newTrackHolderFrame.size.width;
+        
+        [self.trackHolder setFrame:newTrackHolderFrame];
+        [self updatePixelTimeRatio];
+        
+        float pixelPosition = mouseTimePosition/self.pixelTimeRatio;
+        ratio = clipLocalPoint.x - pixelPosition;
+        NSRect clipViewBounds = self.scrollView.contentView.bounds;
+        clipViewBounds.origin.x -= ratio;// clipLocalPoint.x - ( xFraction * newTrackHolderFrame.size.width );
+        
+        [self.scrollView.contentView setBounds:clipViewBounds];
+}
 
 
 

@@ -153,7 +153,7 @@
         
         
         
-        CGFloat location = pointInView.x - self.playheadMarker.imageRectInRuler.size.width / 2 - self.playheadMarker.imageOrigin.x;
+        CGFloat location = pointInView.x - self.playheadMarker.imageRectInRuler.size.width / 2 - self.playheadMarker.imageOrigin.x+self.scrollOffset.x;
         
         if([self delegateRespondsToSelector:@selector(shouldMovePlayHeadRulerMarker:inContainingView:)]){
             if( [self.playheadMarkerDelegate shouldMovePlayHeadRulerMarker:self.playheadMarker inContainingView:self]){
@@ -176,9 +176,6 @@
 
 
 -(void) movePlayHeadMarkerToLocation:(CGFloat)location{
-    
-    location += self.scrollOffset.x;
-    
     if(location != self.playheadMarker.markerLocation){
         
         NSRect formerImageRect = self.playheadMarker.imageRectInRuler;
@@ -219,10 +216,7 @@
     
     if(notification.object == self.enclosingScrollView.contentView){
         
-        NSInteger xOffset = self.enclosingScrollView.contentView.bounds.origin.x - self.frame.origin.x;
-        NSInteger yOffset = self.enclosingScrollView.contentView.bounds.origin.y - self.frame.origin.y;
-        
-        self.scrollOffset = NSMakePoint(xOffset, yOffset);
+        [self updateScrollOffset];
         
         
         [self updateGuideline];
@@ -259,6 +253,13 @@
     [self.guideLine setNeedsDisplay:YES];
 }
 
+
+-(void) updateScrollOffset{
+    NSInteger xOffset = self.enclosingScrollView.contentView.bounds.origin.x - self.frame.origin.x;
+    NSInteger yOffset = self.enclosingScrollView.contentView.bounds.origin.y - self.frame.origin.y;
+    
+    self.scrollOffset = NSMakePoint(xOffset, yOffset);
+}
 
 
 @end

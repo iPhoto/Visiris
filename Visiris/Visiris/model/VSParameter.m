@@ -12,17 +12,17 @@
 
 #import "VSCoreServices.h"
 @implementation VSParameter
-@synthesize animation = _animation;
-@synthesize type = _type;
-@synthesize dataType = _dataType;
-@synthesize name = _name;
+@synthesize animation               = _animation;
+@synthesize type                    = _type;
+@synthesize dataType                = _dataType;
+@synthesize name                    = _name;
 @synthesize configuredDefaultValue  = _configuredDefaultValue;
 @synthesize orderNumber             = _orderNumber;
-@synthesize hasRange = _hasRange;
-@synthesize editable = _editable;
-@synthesize hidden = _hidden;
-@synthesize rangeMaxValue = _rangeMaxValue;
-@synthesize rangeMinValue = _rangeMinValue;
+@synthesize hasRange                = _hasRange;
+@synthesize editable                = _editable;
+@synthesize hidden                  = _hidden;
+@synthesize rangeMaxValue           = _rangeMaxValue;
+@synthesize rangeMinValue           = _rangeMinValue;
 
 #pragma mark - Init
 
