@@ -1,16 +1,10 @@
 #version 110
 
-uniform sampler2D textures;
+uniform sampler2D texture;
 
 varying vec2 texcoord;
 
 void main()
 {
-
-//das ist bullshit
-    gl_FragColor = mix(
-        texture2D(textures, texcoord),
-        texture2D(textures, texcoord),
-        0.5f
-    );
+    gl_FragColor = texture2D(texture, texcoord);
 }

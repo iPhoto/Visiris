@@ -32,15 +32,15 @@
     /*
     for(VSQCRenderer *qcRenderer in [self.quartzRendererForId allValues]){
         
-        if ([qcRenderer size].width == size.width &&
-            [qcRenderer size].height == size.height &&
+        if (//[qcRenderer size].width == size.width &&
+            //[qcRenderer size].height == size.height &&
             qcRenderer.trackId == trackId) {
             
             return [qcRenderer texture];
         }
     }*/
     
-    VSQCRenderer *tempRenderer = [[VSQCRenderer alloc] initWithPath:path withSize:size withContext:context withPixelformat:format];
+    VSQCRenderer *tempRenderer = [[VSQCRenderer alloc] initWithPath:path withSize:size withContext:context withPixelformat:format withTrackID:trackId];
     [self.quartzRendererForId setObject:tempRenderer forKey:[NSNumber numberWithInt:[tempRenderer texture]]];
     
     return [tempRenderer texture];

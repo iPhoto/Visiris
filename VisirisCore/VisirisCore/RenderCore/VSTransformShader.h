@@ -12,5 +12,6 @@
 
 @property (assign) GLuint   uniformTexture;
 @property (assign) GLuint   attributePosition;
+@property (assign) GLuint   uniformScale;
 
 @end

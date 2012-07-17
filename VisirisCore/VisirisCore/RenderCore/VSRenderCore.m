@@ -18,7 +18,7 @@
 #import "VSQCRenderer.h"
 #import <OpenGL/glu.h>
 #import "VSLayerShader.h"
-#import "VSTransformShader.h"
+#import "VSTransformTextureManager.h"
 
 @interface VSRenderCore()
 
@@ -31,10 +31,10 @@
 @property (weak) VSFrameBufferObject                *frameBufferObjectCurrent;
 @property (weak) VSFrameBufferObject                *frameBufferObjectOld;
 @property (strong) VSLayerShader                    *layerShader;
-@property (strong) VSTransformShader                *transformShader;
 @property (strong) VSTextureManager                 *textureManager;
 @property (assign) GLuint                           outPutTexture;
 @property (strong) VSQCManager                      *qcpManager;
+@property (strong) VSTransformTextureManager        *transformTextureManager;
 
 @end
 
@@ -52,10 +52,10 @@
 @synthesize frameBufferObjectCurrent    = _frameBufferObjectCurrent;
 @synthesize frameBufferObjectOld        = _frameBufferObjectOld;
 @synthesize layerShader                 = _layerShader;
-@synthesize transformShader             = _transformShader;
 @synthesize textureManager              = _textureManager;
 @synthesize outPutTexture               = _outPutTexture;
 @synthesize qcpManager                  = _qcpManager;
+@synthesize transformTextureManager     = _transformTextureManager;
 
 -(id)init{
     self = [super init];
@@ -94,10 +94,11 @@
         self.frameBufferObjectOld = self.frameBufferObjectTwo;
         
         self.layerShader = [[VSLayerShader alloc] init];
-        self.transformShader = [[VSTransformShader alloc] init];
 
         self.textureManager = [[VSTextureManager alloc] init];        
         self.qcpManager = [[VSQCManager alloc] init];       
+        
+        self.transformTextureManager = [[VSTransformTextureManager alloc] initWithContext:self.openGLContext];
     }
     return self;
 }
@@ -240,12 +241,15 @@
     switch (type) {
         case VSFileKindImage:
             texture = [self.textureManager createTextureWithSize:textureSize trackId:trackID];
+            [self.transformTextureManager createFBOWithSize:size trackId:trackID];
             break;
         case VSFileKindVideo:
             texture = [self.textureManager createTextureWithSize:textureSize trackId:trackID];
+            [self.transformTextureManager createFBOWithSize:size trackId:trackID];
             break;
         case VSFileKindQuartzComposerPatch:
             texture = [self.qcpManager createQCRendererWithSize:size withTrackId:trackID withPath:path withContext:self.openGLContext withFormat:self.pixelFormat];
+            [self.transformTextureManager createFBOWithSize:size trackId:trackID];
             break;
         case VSFileKindAudio:
             NSLog(@"Audio not implemented yet");
@@ -254,7 +258,6 @@
         default:
             break;
     }
-    
     return texture;
 }
 
@@ -278,8 +281,9 @@
             
             VSFrameCoreHandover *handOver = (VSFrameCoreHandover *)coreHandover;
             VSTexture *handOverTexture = [self.textureManager getVSTextureForTexId:handOver.textureID];
+          //  NSLog(@"trackID: %ld", handOverTexture.trackId);
             [handOverTexture replaceContent:handOver.frame timeLineObjectId:handOver.timeLineObjectID];
-            [textures addObject:[NSNumber numberWithInt:handOverTexture.texture]];
+            [textures addObject:[NSNumber numberWithInt:[self.transformTextureManager transformTexture:handOverTexture.texture atTrack:handOverTexture.trackId withAttributes:coreHandover.attributes]]];
             
         }
         else if ([coreHandover isKindOfClass:[VSQuartzComposerHandover class]]) {
@@ -293,7 +297,9 @@
                 [qcRenderer setPublicInputsWithValues:qcPublicInputValues];
             }
                         
-            [textures addObject:[NSNumber numberWithInt:[qcRenderer renderAtTme:time]]];
+           // NSLog(@"trackID: %ld", qcRenderer.trackId);
+
+            [textures addObject:[NSNumber numberWithInt:[self.transformTextureManager transformTexture:[qcRenderer renderAtTme:time] atTrack:qcRenderer.trackId withAttributes:coreHandover.attributes]]];
         }
     }
     return textures;
