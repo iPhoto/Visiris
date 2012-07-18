@@ -99,7 +99,6 @@ static NSString* defaultNib = @"VSTimelineView";
     
     [self initTrackLabelsView];
     
-    
     [self.trackHolder setFrame:NSMakeRect(0, 0, [self visibleTrackViewHolderWidth], self.scrollView.frame.size.height)];
     
     [self initPlayhead];

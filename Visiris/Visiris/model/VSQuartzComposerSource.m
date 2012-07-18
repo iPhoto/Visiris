@@ -38,7 +38,7 @@
     
     NSMutableDictionary *qcPublicInputParameters = [[NSMutableDictionary alloc]init];
     
-    int i = 0;
+    int i = self.parameters.count;
     
     //iterates through the entries
     for(id key in publicInputs){
@@ -114,7 +114,7 @@
         [visibleParameters addObjectsFromArray:tmpArray];
         
         //sorts all paramter according to their order number
-        visibleParameters = [NSMutableArray arrayWithArray:[visibleParameters sortedArrayUsingDescriptors:[NSMutableArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"orderNumber" ascending:YES]]]];
+        visibleParameters = [NSMutableArray arrayWithArray:[visibleParameters sortedArrayUsingDescriptors:[NSMutableArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"orderNumber" ascending:NO]]]];
         
     }
     

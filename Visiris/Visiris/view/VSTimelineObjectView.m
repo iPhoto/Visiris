@@ -93,7 +93,7 @@ static int resizingAreaWidth = 10;
     DDLogInfo(@"initLayer: %@",self.layer);
     [self.layer setZPosition:0];
     self.layer.backgroundColor = [[NSColor darkGrayColor] CGColor];
-    self.layer.cornerRadius = 15.0;
+    self.layer.cornerRadius = 5.0;
 }
 
 /**
