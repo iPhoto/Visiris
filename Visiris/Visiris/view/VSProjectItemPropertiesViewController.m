@@ -104,7 +104,7 @@ static NSString* defaultNib = @"VSProjectItemPropertiesView";
         [self.previewHolder replaceSubview:[self.previewHolder.subviews objectAtIndex:0] with:self.moviePreviewView];
         
         NSRect frame = NSMakeRect(0, 0, self.previewHolder.frame.size.width, self.previewHolder.frame.size.height);
-        [self.moviePreviewView setFrame:frame];
+        [self.moviePreviewView setFrame:NSIntegralRect(frame)];
 
         [self.view setNeedsDisplay:YES];
     }

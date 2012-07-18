@@ -147,7 +147,6 @@
 		5B603FA9157F824A0045A1EA /* VSPlayHead.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B603FA8157F824A0045A1EA /* VSPlayHead.m */; };
 		5B7BFFC71592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BFFC61592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m */; };
 		5BAB35D515B4153D008B4793 /* VSTimelineScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAB35D415B4153D008B4793 /* VSTimelineScrollView.m */; };
-		5BF08B92158A2E7500D64144 /* VSTimelineGuideLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BF08B91158A2E7500D64144 /* VSTimelineGuideLine.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -372,8 +371,6 @@
 		5B7BFFC61592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineObjectViewIntersection.m; sourceTree = "<group>"; };
 		5BAB35D315B4153D008B4793 /* VSTimelineScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineScrollView.h; sourceTree = "<group>"; };
 		5BAB35D415B4153D008B4793 /* VSTimelineScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineScrollView.m; sourceTree = "<group>"; };
-		5BF08B90158A2E7500D64144 /* VSTimelineGuideLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineGuideLine.h; sourceTree = "<group>"; };
-		5BF08B91158A2E7500D64144 /* VSTimelineGuideLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineGuideLine.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -854,8 +851,6 @@
 				5B35BFCB1577A573009911EC /* VSTimelineViewController.m */,
 				5B0EFF97158A226C0000445C /* VSTrackHolderView.h */,
 				5B0EFF98158A226C0000445C /* VSTrackHolderView.m */,
-				5BF08B90158A2E7500D64144 /* VSTimelineGuideLine.h */,
-				5BF08B91158A2E7500D64144 /* VSTimelineGuideLine.m */,
 				5BAB35D315B4153D008B4793 /* VSTimelineScrollView.h */,
 				5BAB35D415B4153D008B4793 /* VSTimelineScrollView.m */,
 			);
@@ -1215,7 +1210,6 @@
 				5B0E366915876EA900F15026 /* VSTrackLabelsViewController.m in Sources */,
 				5B0E366C15876EEB00F15026 /* VSTrackLabel.m in Sources */,
 				5B0EFF99158A226C0000445C /* VSTrackHolderView.m in Sources */,
-				5BF08B92158A2E7500D64144 /* VSTimelineGuideLine.m in Sources */,
 				5B7BFFC71592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m in Sources */,
 				2799F8E61599C8B800008489 /* VSQuartzCompositionUtils.m in Sources */,
 				5BAB35D515B4153D008B4793 /* VSTimelineScrollView.m in Sources */,

@@ -118,7 +118,7 @@ static NSString* defaultNib = @"MainWindow";
     NSRect frame = [[splitView.subviews objectAtIndex:position] bounds];
     
     [splitView replaceSubview:[splitView.subviews objectAtIndex:position] with:view];
-    [view  setFrame:frame];
+    [view  setFrame:NSIntegralRect(frame)];
     
     [view setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
     [view setAutoresizesSubviews:YES];

@@ -8,7 +8,6 @@
 
 #import "VSTrackHolderView.h"
 
-#import "VSTimelineGuideLine.h"
 
 #import "VSCoreServices.h"
 
@@ -17,20 +16,21 @@
 /** NSRulerMarker represanting the Playhead in the horizontal rulerview */
 @property (strong) NSRulerMarker *playheadMarker;
 
-/** guideline always at the location of the playhead marker */
-@property (strong) VSTimelineGuideLine *guideLine;
 
 /** current offset of view's enclosing scrollView */
 @property NSPoint scrollOffset;
+
+@property (strong) CALayer *guideLine;
 
 @end
 
 @implementation VSTrackHolderView
 
 @synthesize playheadMarker          = _playheadMarker;
-@synthesize guideLine               = _guideLine;
 @synthesize scrollOffset            = _scrollOffset;
 @synthesize playheadMarkerDelegate  = _playheadMarkerDelegate;
+@synthesize guideLine               = _guideLayer;
+@synthesize playheadMarkerLocation  = _playheadMarkerLocation;
 
 #pragma mark - Init
 
@@ -43,9 +43,7 @@
     
     return self;
 }
--(id<CAAction>) actionForLayer:(CALayer *)layer forKey:(NSString *)event{
-    return nil;
-}
+
 -(void) awakeFromNib{
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(boundsDidChange:) name:NSViewBoundsDidChangeNotification object:nil];
@@ -54,7 +52,7 @@
     
     [self setWantsLayer:YES];
     
-    
+    self.layer.backgroundColor = [[NSColor greenColor] CGColor];
     [self initEnclosingScrollView];
     [self initPlayheadMarker];
     
@@ -65,13 +63,11 @@
  * Inits the guideline and sets its position
  */
 -(void) initGuideLine{
-    self.guideLine = [[VSTimelineGuideLine alloc] initWithFrame:self.frame];
+    self.guideLine = [[CALayer alloc] init];
+    self.guideLine.backgroundColor = [[NSColor blueColor] CGColor];
+    [self.guideLine setZPosition:400];
     
-    [self addSubview:self.guideLine];
-    [self.guideLine setWantsLayer:YES];
-    [self.guideLine.layer setZPosition:100];
-    
-    [self updateGuideline];
+    [self.layer addSublayer:self.guideLine];
 }
 
 /**
@@ -104,12 +100,6 @@
 
 
 #pragma mark - NSView
-
-- (void)drawRect:(NSRect)dirtyRect{
-    [self.guideLine setFrame:[self convertRect:dirtyRect toView:self.guideLine]];
-    [self updateGuideline];
-}
-
 
 -(BOOL) isFlipped{
     return YES;
@@ -239,29 +229,29 @@
  * @param location Location the guidelin is updated for
  */
 -(void) updateGuidelineAtMarkerLocation:(CGFloat) location{
-    NSRect newFrame = self.bounds; 
-    newFrame.size = self.enclosingScrollView.contentSize;
-    newFrame.origin.x += self.scrollOffset.x;
-    newFrame.origin.y += self.scrollOffset.y;
-    //  newFrame = [self convertRect:newFrame toView:self.guideLine];
     
-    [self.guideLine setFrame:newFrame];
+    NSRect layerRect = self.frame;
+    layerRect.size.width = 1;
+    layerRect.origin.x = self.playheadMarker.imageRectInRuler.origin.x - self.playheadMarker.imageOrigin.x+self.scrollOffset.x;
+    layerRect.origin.y = 0;
     
-    NSPoint startPoint = [self convertPoint:self.playheadMarker.imageRectInRuler.origin toView:self.guideLine];
-    startPoint.x = location - self.scrollOffset.x;
-    startPoint.y += self.scrollOffset.y;
+    [CATransaction begin];
+    [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+    [self.guideLine setFrame:NSIntegralRect(layerRect)];
+    [CATransaction commit];
     
-    self.guideLine.lineStartPoint = startPoint;
     
-    [self.guideLine setNeedsDisplay:YES];
 }
-
 
 -(void) updateScrollOffset{
     NSInteger xOffset = self.enclosingScrollView.contentView.bounds.origin.x - self.frame.origin.x;
     NSInteger yOffset = self.enclosingScrollView.contentView.bounds.origin.y - self.frame.origin.y;
     
     self.scrollOffset = NSMakePoint(xOffset, yOffset);
+}
+
+-(CGFloat) playheadMarkerLocation{
+    return self.playheadMarker.markerLocation;
 }
 
 

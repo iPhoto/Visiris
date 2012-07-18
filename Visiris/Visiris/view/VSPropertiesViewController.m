@@ -166,7 +166,7 @@ static NSString* defaultNib = @"VSPropertiesView";
             [self.contentView replaceSubview:[self.contentView.subviews objectAtIndex:0] with:subView];
     }
     
-    [subView setFrame:[self.contentView frame]];
+    [subView setFrame:NSIntegralRect([self.contentView frame])];
     
     [subView setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
     [subView setAutoresizesSubviews:YES];

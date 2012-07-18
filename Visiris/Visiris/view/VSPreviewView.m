@@ -7,6 +7,7 @@
 //
 
 #import "VSPreviewView.h"
+#import "VSCoreServices.h"
 
 @implementation VSPreviewView
 
@@ -14,7 +15,6 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code here.
     }
     
     return self;
@@ -23,6 +23,10 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
     // Drawing code here.
+}
+
+-(void) resizeSubviewsWithOldSize:(NSSize)oldSize{
+    DDLogInfo(@"resizeSubviewsWithOldSize");
 }
 
 @end

@@ -47,6 +47,8 @@
 /** Delegate VSTrackHolderView communicates like defined in VSPlayHeadRulerMarkerDelegate*/
 @property id<VSPlayHeadRulerMarkerDelegate> playheadMarkerDelegate;
 
+@property (readonly) CGFloat playheadMarkerLocation;
+
 /** 
  * Moves the marker representing the playHead to the given location in the horizontal rulerView
  * @param location Loction in the horizontal rulverView the playhead marker should be moved to

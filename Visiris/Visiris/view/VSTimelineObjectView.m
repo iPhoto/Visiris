@@ -290,7 +290,7 @@ static int resizingAreaWidth = 10;
         resizedFrame = [self.delegate timelineObjectWillResize:self fromFrame:self.frame toFrame:resizedFrame];
     }
     //   DDLogInfo(@"after: %@",NSStringFromRect(resizedFrame));
-    [self setFrame:resizedFrame];
+    [self setFrame:NSIntegralRect(resizedFrame)];
     
     
     //informs the delegate that view has been resized
