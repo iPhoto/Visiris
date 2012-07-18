@@ -90,7 +90,6 @@ static int resizingAreaWidth = 10;
  */
 -(void) initLayerStyle{
     [self setWantsLayer:YES];
-    DDLogInfo(@"initLayer: %@",self.layer);
     [self.layer setZPosition:0];
     self.layer.backgroundColor = [[NSColor darkGrayColor] CGColor];
     self.layer.cornerRadius = 5.0;
