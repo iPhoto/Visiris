@@ -58,8 +58,7 @@
 @synthesize	textureTarget       = _textureTarget;
 @synthesize	textureName         = _textureName;
 
-- (id) init
-{
+- (id) init{
 	return [self initWithCompositionPath:nil textureTarget:0 textureWidth:0 textureHeight:0 openGLContext:nil];
 }
 
@@ -158,7 +157,6 @@
 	//IMPORTANT: We use the macros provided by <OpenGL/CGLMacro.h> which provide better performances and allows us not to bother with making sure the current context is valid
 	CGLContextObj					cgl_ctx = [_pixelBufferContext CGLContextObj];
 	BOOL							success;
-	GLenum							error;
 	NSOpenGLPixelBuffer*			pBuffer;
 	
 	//Make sure the virtual screen for the pBuffer and its rendering context match the target one

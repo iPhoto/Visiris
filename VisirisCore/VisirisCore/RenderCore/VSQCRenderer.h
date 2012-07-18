@@ -12,7 +12,7 @@
 @property (readonly, assign) NSInteger  timeLineObjectId;
 @property (readonly, assign) NSInteger  trackId;
 
-- (id)initWithPath:(NSString *)path withSize:(NSSize)size withContext:(NSOpenGLContext *)context withPixelformat:(NSOpenGLPixelFormat *)format;
+- (id)initWithPath:(NSString *)path withSize:(NSSize)size withContext:(NSOpenGLContext *)context withPixelformat:(NSOpenGLPixelFormat *)format withTrackID:(NSInteger)trackid;
 
 - (GLuint)renderAtTme:(double)time;
 //- (NSSize) size;
