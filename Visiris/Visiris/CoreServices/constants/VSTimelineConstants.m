@@ -9,10 +9,18 @@
 #import "VSTimelineConstants.h"
 
 
-double VSTimelineDefaultDuration =  100000;
+double VSTimelineDefaultDuration =  300000;
+
 float VSTimelineDefaultPixelRatio =  2;
-double VSDefaultProjectItemDuration = 3000.0;
+
+double VSDefaultProjectItemDuration = 10000.0;
+
 NSString *VSTimelineRulerMeasurementUnit = @"VSTimelineRulerMeasurementUnit";
+
 NSString *VSTimelineRulerMeasurementAbreviation = @"fr";
+
 NSInteger VSTrackViewHeight = 40;
+
 NSInteger VSTrackViewMargin = 5;
+
+double VSMinimumPixelTimeRatio = 3.0/10.0;

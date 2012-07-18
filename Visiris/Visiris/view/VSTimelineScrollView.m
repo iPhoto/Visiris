@@ -18,16 +18,11 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code here.
     }
     
     return self;
 }
 
-- (void)drawRect:(NSRect)dirtyRect
-{
-    [super drawRect:dirtyRect];
-}
 
 #pragma mark - Mouse Events
 
@@ -49,6 +44,8 @@
     }
 }
 
+
+
 #pragma mark - Private Methods
 
 /**
@@ -67,5 +64,14 @@
     
     return NO;
 }
+
+-(id<CAAction>) actionForLayer:(CALayer *)layer forKey:(NSString *)event{
+    return nil;
+}
+
+//-(void) drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx{
+//    DDLogInfo(@"drawing l");
+//}
+
 
 @end

@@ -138,6 +138,7 @@
 
 #pragma mark - Methods
 
+
 /**
  * Updates the pixelTimeRatio-property and changes the frame of it's view according to new pixelTimeRatio based on its VSProjectItemProxy's startTime and duration.
  * @param newPixelTimeRatio New pixel-time-ratio

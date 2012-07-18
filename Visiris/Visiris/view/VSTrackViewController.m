@@ -128,7 +128,7 @@ static NSString* defaultNib = @"VSTrackView";
         }
         
         [self.temporaryTimelineObjectViewControllers removeAllObjects];
-        [self.view setNeedsDisplay:YES];
+        [self.view setNeedsDisplayInRect:self.view.visibleRect];
     }
     
     return NO;
@@ -176,7 +176,7 @@ static NSString* defaultNib = @"VSTrackView";
                 [timelineObjectViewController.view setFrameOrigin:newPosition];
             }
         }
-        [self.view setNeedsDisplay:YES];
+        [self.view setNeedsDisplayInRect:self.view.visibleRect];
     }
 }
 
@@ -304,8 +304,10 @@ static NSString* defaultNib = @"VSTrackView";
     newController.temporary = YES;
     
     [self.view addSubview:[newController view]];
-    [newController.view setNeedsDisplay:YES];
-    [self.view setNeedsDisplay:YES];
+
+    [self.view.layer addSublayer:newController.view.layer];
+    
+    [self.view setNeedsDisplayInRect:self.view.visibleRect];
     
     return newController;
 }
@@ -1025,7 +1027,11 @@ static NSString* defaultNib = @"VSTrackView";
     
     [self.timelineObjectViewControllers addObject:newController];
     
-    [self.view setNeedsDisplay:YES];
+    [self.view.layer addSublayer:newController.view.layer];
+
+    [self.view setNeedsDisplayInRect:self.view.visibleRect];
+    
+
 }
 
 /**
