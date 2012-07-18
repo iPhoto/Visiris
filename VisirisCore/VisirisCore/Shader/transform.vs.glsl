@@ -2,10 +2,23 @@
 
 attribute vec4 position;
 
-uniform float scale;
+uniform float objectWidth;
+uniform float objectHeight;
+uniform float windowWidth;
+uniform float windowHeight;
+uniform float scaleX;
+uniform float scaleY;
+uniform float rotateX;
+uniform float rotateY;
+uniform float rotateZ;
+uniform float translateX;
+uniform float translateY;
+uniform float translateZ;
+
 
 varying vec2 texcoord;
 
+float pi180 = 0.0174532925;
 
 
 mat4 view_frustum(
@@ -52,28 +65,57 @@ mat4 rotate_x(float theta)
     );
 }
 
+//first x, then y, then z
+mat4 rotate(float alpha, float beta, float gamma)
+{
+    return mat4(
+                vec4(cos(beta)*cos(gamma),      cos(gamma)*sin(alpha)*sin(beta) - cos(alpha)*sin(gamma),    cos(alpha)*cos(gamma)*sin(beta) + sin(alpha)*sin(gamma),    0.0),
+                vec4(cos(beta)*sin(gamma),      cos(alpha)*cos(gamma) + sin(alpha)*sin(beta)*sin(gamma),    -cos(gamma)*sin(alpha) + cos(alpha)*sin(beta)*sin(gamma),   0.0),
+                vec4(-sin(beta),                cos(beta)*sin(alpha),                                       cos(alpha)*cos(beta),                                       0.0),
+                vec4(0.0,                       0.0,                                                        0.0,                                                        1.0)
+                );
+}
+
+
+
 void main()
 {
+    
+    vec3 scaleFactor;
+    
+    if ((objectWidth/objectHeight) > (windowWidth/windowHeight)) {
+        scaleFactor = vec3(1.0,(windowWidth/windowHeight) * (objectHeight/objectWidth),1.0);
+    }
+    else {
+        scaleFactor = vec3((windowHeight/windowWidth) * (objectWidth/objectHeight),1.0,1.0);
+    }
+    
+    scaleFactor.x *= scaleX;
+    scaleFactor.y *= scaleY;
+    
+    gl_Position = view_frustum(radians(45.0), 1.0, 0.1, 10.0)
+    * translate(translateX, translateY, translateZ)
+    * rotate(rotateX*pi180,rotateY*pi180,rotateZ*pi180)
+    * scale(scaleFactor.x,scaleFactor.y,1.0)
+    * position;
 
-    float timer = 0.0;
-
-    gl_Position = view_frustum(radians(45.0), 4.0/3.0, 0.1, 10.0)
+    /*
+    if ((objectWidth/objectHeight) > (windowWidth/windowHeight)) {
+        gl_Position = view_frustum(radians(45.0), 1.0, 0.1, 10.0)
         * translate(0.0, 0.0, 1.0)
-        * rotate_x(timer)
-        * scale(4.0/3.0, scale , 1.0)
+        * rotate_x(0.0)
+        * scale(1.0,(windowWidth/windowHeight) * (objectHeight/objectWidth),1.0)
         * position;
-    
+    }
+    else{
+        gl_Position = view_frustum(radians(45.0), 1.0, 0.1, 10.0)
+        * translate(0.0, 0.0, 1.0)
+        * rotate_x(0.0)
+        * scale((windowHeight/windowWidth) * (objectWidth/objectHeight),1.0,1.0)
+        * position;
+    }
+*/
     texcoord = position.xy * vec2(0.5) + vec2(0.5);
-    
-   // gl_Position = projection * rotation * scale * position;
-    
-    
- //   texcoord = position.xy * vec2(0.5) + vec2(0.5);
-  //  fade_factor = sin(timer) * 0.5 + 0.5;
-    
-    
-  //  gl_Position = position;
-  //  texcoord = position.xy * vec2(0.5) + vec2(0.5);
 }
 
 

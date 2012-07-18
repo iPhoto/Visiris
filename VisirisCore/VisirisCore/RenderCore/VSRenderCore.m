@@ -104,12 +104,15 @@
 }
 
 -(void)renderFrameOfCoreHandovers:(NSArray *) theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double)theTimestamp{
+    
+   // NSLog(@"%@",NSStringFromSize(theFrameSize) );    
+
     NSMutableArray *mutableCoreHandovers = [NSMutableArray arrayWithArray:theCoreHandovers];
     
 	[[self openGLContext] makeCurrentContext];
 
     //Create a array with only glTextures in it
-    NSMutableArray *textures = [self createTextures:mutableCoreHandovers atTime:theTimestamp];
+    NSMutableArray *textures = [self createTextures:mutableCoreHandovers atTime:theTimestamp forOutputSize:theFrameSize];
     
     CGLLockContext([[self openGLContext] CGLContextObj]);
 
@@ -272,7 +275,7 @@
     }
 }
 
-- (NSMutableArray *)createTextures:(NSArray *)handovers atTime:(double)time{
+- (NSMutableArray *)createTextures:(NSArray *)handovers atTime:(double)time forOutputSize:(NSSize)outputSize{
     NSMutableArray *textures = [[NSMutableArray alloc] init];
     
     for(VSCoreHandover *coreHandover in handovers){
@@ -280,10 +283,14 @@
         if ([coreHandover isKindOfClass:[VSFrameCoreHandover class]]){         
             
             VSFrameCoreHandover *handOver = (VSFrameCoreHandover *)coreHandover;
-            VSTexture *handOverTexture = [self.textureManager getVSTextureForTexId:handOver.textureID];
-          //  NSLog(@"trackID: %ld", handOverTexture.trackId);
+            VSTexture *handOverTexture = [self.textureManager getVSTextureForTexId:handOver.textureID];            
+            
             [handOverTexture replaceContent:handOver.frame timeLineObjectId:handOver.timeLineObjectID];
-            [textures addObject:[NSNumber numberWithInt:[self.transformTextureManager transformTexture:handOverTexture.texture atTrack:handOverTexture.trackId withAttributes:coreHandover.attributes]]];
+            [textures addObject:[NSNumber numberWithInt:[self.transformTextureManager transformTexture:handOverTexture.texture 
+                                                                                               atTrack:handOverTexture.trackId 
+                                                                                        withAttributes:coreHandover.attributes 
+                                                                                       withTextureSize:handOverTexture.size
+                                                                                         forOutputSize:outputSize]]];
             
         }
         else if ([coreHandover isKindOfClass:[VSQuartzComposerHandover class]]) {
@@ -297,9 +304,11 @@
                 [qcRenderer setPublicInputsWithValues:qcPublicInputValues];
             }
                         
-           // NSLog(@"trackID: %ld", qcRenderer.trackId);
-
-            [textures addObject:[NSNumber numberWithInt:[self.transformTextureManager transformTexture:[qcRenderer renderAtTme:time] atTrack:qcRenderer.trackId withAttributes:coreHandover.attributes]]];
+            [textures addObject:[NSNumber numberWithInt:[self.transformTextureManager transformTexture:[qcRenderer renderAtTme:time]
+                                                                                               atTrack:qcRenderer.trackId 
+                                                                                        withAttributes:coreHandover.attributes 
+                                                                                       withTextureSize:qcRenderer.size 
+                                                                                         forOutputSize:outputSize]]];
         }
     }
     return textures;

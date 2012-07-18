@@ -11,7 +11,7 @@
 @interface VSTransformTextureManager : NSObject
 
 - (id)initWithContext:(NSOpenGLContext *)context;
-- (GLuint)transformTexture:(GLuint)texture atTrack:(NSInteger)trackId withAttributes:(NSDictionary *)attributes;
+- (GLuint)transformTexture:(GLuint)texture atTrack:(NSInteger)trackId withAttributes:(NSDictionary *)attributes withTextureSize:(NSSize)textureSize forOutputSize:(NSSize)outputSize;
 - (void)createFBOWithSize:(NSSize) size trackId:(NSInteger) trackId;
 
 @end

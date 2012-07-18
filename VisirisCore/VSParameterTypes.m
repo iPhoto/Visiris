@@ -19,7 +19,8 @@ NSString* VSParameterKeyRotationX                   = @"VSParameterKeyRotationX"
 NSString* VSParameterKeyRotationY                   = @"VSParameterKeyRotationY";
 NSString* VSParameterKeyRotationZ                   = @"VSParameterKeyRotationZ";
 NSString* VSParameterKeyScaleWidth                  = @"VSParameterKeyScaleWidth";
-NSString* VSParameterKeyScaleHeight                 = @"VSParameterKeyScaleWidth";
+NSString* VSParameterKeyScaleHeight                 = @"VSParameterKeyScaleHeight";
+NSString* VSParameterKeyVisibility                  = @"VSParameterKeyVisibility";
 NSString* VSParameterVideoVolume                    = @"VSParameterVideoVolume";
 NSString* VSParameterQuartzComposerPublicInputs     = @"VSParameterQuartzComposerPublicInputs";
 

@@ -11,17 +11,39 @@
 
 @implementation VSTransformShader
 
-@synthesize uniformTexture      = _uniformTexture;
-@synthesize attributePosition   = _attributePosition;
-@synthesize uniformScale        = _scale;
+@synthesize uniformTexture              = _uniformTexture;
+@synthesize attributePosition           = _attributePosition;
+@synthesize uniformObjectWidth          = _uniformObjectWidth;
+@synthesize uniformObjectHeight         = _uniformObjectHeight;
+@synthesize uniformWindowWidth          = _uniformWindowWidth;
+@synthesize uniformWindowHeight         = _uniformWindowHeight;
+@synthesize uniformScaleX               = _scaleX;
+@synthesize uniformScaleY               = _scaleY;
+@synthesize uniformRotateX              = _uniformRotateX;
+@synthesize uniformRotateY              = _uniformRotateY;
+@synthesize uniformRotateZ              = _uniformRotateZ;
+@synthesize uniformTranslateX           = _uniformTranslateX;
+@synthesize uniformTranslateY           = _uniformTranslateY;
+@synthesize uniformTranslateZ           = _uniformTranslateZ;
+
 
 - (id)init{
     if (self = [super initWithName:@"transform"]) {
-        self.uniformTexture = glGetUniformLocation(self.program, "texture");
-        self.uniformScale = glGetUniformLocation(self.program, "scale");
-        
-        self.attributePosition = glGetAttribLocation(self.program, "position");
+        self.attributePosition          = glGetAttribLocation(self.program, "position");
 
+        self.uniformTexture             = glGetUniformLocation(self.program, "texture");
+        self.uniformObjectWidth         = glGetUniformLocation(self.program, "objectWidth");
+        self.uniformObjectHeight        = glGetUniformLocation(self.program, "objectHeight");
+        self.uniformWindowWidth         = glGetUniformLocation(self.program, "windowWidth");
+        self.uniformWindowHeight        = glGetUniformLocation(self.program, "windowHeight");
+        self.uniformScaleX              = glGetUniformLocation(self.program, "scaleX");
+        self.uniformScaleY              = glGetUniformLocation(self.program, "scaleY");
+        self.uniformRotateX             = glGetUniformLocation(self.program, "rotateX");
+        self.uniformRotateY             = glGetUniformLocation(self.program, "rotateY");
+        self.uniformRotateZ             = glGetUniformLocation(self.program, "rotateZ");
+        self.uniformTranslateX          = glGetUniformLocation(self.program, "translateX");
+        self.uniformTranslateY          = glGetUniformLocation(self.program, "translateY");
+        self.uniformTranslateZ          = glGetUniformLocation(self.program, "translateZ");
     }
     return self;
 }
