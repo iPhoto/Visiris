@@ -29,3 +29,6 @@ extern NSInteger VSTrackViewHeight;
 
 /** Margin between the VSSTrackView on VSTimelineView */
 extern NSInteger VSTrackViewMargin;
+
+/** Minimum of one Millisecond in pixels on the timeline */
+extern double VSMinimumPixelTimeRatio;

@@ -10,6 +10,7 @@
 
 #import "VSProjectItemRepresentation.h"
 #import "VSTimelineObjectViewController.h"
+#import "NSColor+CGColorSupport.h"
 
 #import "VSCoreServices.h"
 
@@ -33,6 +34,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self registerForDraggedTypes:[NSArray arrayWithObjects:VSProjectItemPasteboardType, NSFilenamesPboardType, nil]];
+        [self setWantsLayer:YES];
+        self.layer.backgroundColor = [[NSColor lightGrayColor] CGColor];
     }
     
     return self;
@@ -42,11 +45,11 @@
     
 }
 
-- (void)drawRect:(NSRect)dirtyRect
-{
-    [[NSColor darkGrayColor] set];
-    NSRectFill(dirtyRect);
-}
+//- (void)drawRect:(NSRect)dirtyRect
+//{
+//    [[NSColor darkGrayColor] set];
+//    NSRectFill(dirtyRect);
+//}
 
 #pragma mark - Event Handling
 

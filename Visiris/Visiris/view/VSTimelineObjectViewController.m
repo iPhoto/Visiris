@@ -96,7 +96,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
                         
                     }
                     
-                    [self.view setNeedsDisplay:YES];
+                    [self.view setNeedsDisplayInRect:self.view.visibleRect];
                 }
             }
         }
@@ -203,7 +203,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
             intersection.intersectionRect = intersectionRect;
             if(self.timelineObjectView){
                 [self.timelineObjectView.intersectionRects setObject:[NSValue valueWithRect:intersection.intersectionRect] forKey:key];
-                [self.view setNeedsDisplay:YES];
+                [self.view setNeedsDisplayInRect:self.view.visibleRect];
             }
         }
     }
@@ -214,7 +214,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
         
         if(self.timelineObjectView){
             [self.timelineObjectView.intersectionRects setObject:[NSValue valueWithRect:intersection.intersectionRect] forKey:key];
-            [self.view setNeedsDisplay:YES];
+            [self.view setNeedsDisplayInRect:self.view.visibleRect];
         }
     }
 }
@@ -238,7 +238,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     
     if(self.timelineObjectView){
         [self.timelineObjectView.intersectionRects removeAllObjects];
-        [self.view setNeedsDisplay:YES];
+        [self.view setNeedsDisplayInRect:self.view.visibleRect];
     }
 }
 
@@ -257,7 +257,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
         frame.origin.y = 0;
         
         [self.view setFrame:frame];
-        [self.view setNeedsDisplay:YES];
+        [self.view setNeedsDisplayInRect:self.view.visibleRect];
     }
 }
 
@@ -288,7 +288,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     if(self.timelineObjectView){
         self.timelineObjectView.temporary = temporary;
         if(temporary != _temporary){
-            [self.view setNeedsDisplay:YES];
+            [self.view setNeedsDisplayInRect:self.view.visibleRect];
             
             if(temporary){
                 [self.view.layer setZPosition:VIEWS_HIGHLIGHTED_ZPOSITION];
@@ -315,7 +315,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
                 [self.view.layer setZPosition:VIEWS_DEFAULT_ZPOSITION];
             }
             
-            [self.view setNeedsDisplay:YES];
+            [self.view setNeedsDisplayInRect:self.view.visibleRect];
             
         }
     }
@@ -334,7 +334,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     if(self.timelineObjectView){
         self.timelineObjectView.inactive = inactive;
         if(inactive != _inactive)
-            [self.view setNeedsDisplay:YES];
+            [self.view setNeedsDisplayInRect:self.view.visibleRect];
     }
     
     _inactive = inactive;

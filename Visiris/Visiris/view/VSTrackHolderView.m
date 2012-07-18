@@ -43,7 +43,9 @@
     
     return self;
 }
-
+-(id<CAAction>) actionForLayer:(CALayer *)layer forKey:(NSString *)event{
+    return nil;
+}
 -(void) awakeFromNib{
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(boundsDidChange:) name:NSViewBoundsDidChangeNotification object:nil];
@@ -51,6 +53,7 @@
     self.scrollOffset = NSZeroPoint;
     
     [self setWantsLayer:YES];
+    
     
     [self initEnclosingScrollView];
     [self initPlayheadMarker];

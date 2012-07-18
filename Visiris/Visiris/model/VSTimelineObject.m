@@ -131,7 +131,7 @@
     double localTimestamp = aGlobalTimestamp - self.startTime;
     
     localTimestamp = localTimestamp <= self.sourceObject.projectItem.duration ? localTimestamp :  fmod(localTimestamp, self.sourceObject.projectItem.duration);
-   // DDLogInfo(@"localTS: %f",localTimestamp);
+    
     return localTimestamp;
     
 }

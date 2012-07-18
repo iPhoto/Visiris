@@ -49,7 +49,7 @@ static int resizingAreaWidth = 10;
 
 @synthesize delegate                = _delegate;
 @synthesize selected                = _selected;
-@synthesize moving                  = _dragged;
+@synthesize moving                  = _moving;
 @synthesize temporary               = _temporary;
 @synthesize intersectionRects       = _intersectionRects;
 @synthesize lastMousePosition       = _lastMousePosition;
@@ -66,7 +66,7 @@ static int resizingAreaWidth = 10;
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self initLayerStyle];
+        
         [self setResizingAreas];
         self.intersectionRects = [[NSMutableDictionary alloc] init];
     }
@@ -76,7 +76,7 @@ static int resizingAreaWidth = 10;
 
 -(void) awakeFromNib{
     [self  unregisterDraggedTypes];
-    
+    [self initLayerStyle];
     //Unregisters all Subviews from their draggTypes, thus they won't react on dragging
     for(NSView *subView in [self subviews]){
         [subView unregisterDraggedTypes];
@@ -84,16 +84,16 @@ static int resizingAreaWidth = 10;
 }
 
 
+
 /**
  * Inits the layer of the view
  */
 -(void) initLayerStyle{
     [self setWantsLayer:YES];
+    DDLogInfo(@"initLayer: %@",self.layer);
     [self.layer setZPosition:0];
-    
-    self.layer.cornerRadius = 4.0;
-    self.layer.backgroundColor = [[NSColor lightGrayColor] CGColor];
-    self.layer.borderColor =  [[NSColor yellowColor] CGColor];
+    self.layer.backgroundColor = [[NSColor darkGrayColor] CGColor];
+    self.layer.cornerRadius = 15.0;
 }
 
 /**
@@ -116,37 +116,6 @@ static int resizingAreaWidth = 10;
 
 #pragma mark drawing
 
-- (void)drawRect:(NSRect)dirtyRect{
-    
-    [super drawRect:dirtyRect];
-    
-    //if the view is set to inactive it's hidden (opacity set to 0)
-    if(!self.inactive){
-        
-        //displays the intersections on the timelineObjectView if there are any
-        [self drawIntersections];
-        
-        //draws a border around the view if it is selected
-        if(self.selected){
-            
-            self.layer.borderWidth = 3.0;
-        }
-        else{
-            self.layer.borderWidth = 0.0;
-        }
-        
-        if(self.moving || self.temporary || self.resizing){
-            self.layer.opacity = 0.7;
-            self.layer.borderWidth = 0.0;
-        }
-        else {
-            self.layer.opacity = 1.0;
-        }
-    }
-    else {
-        self.layer.opacity = 0.0;
-    }
-}
 
 /**
  * Iterates through all NSRects stored in the intersectionRects-Property and displays them
@@ -316,12 +285,12 @@ static int resizingAreaWidth = 10;
         resizedFrame.size.width = self.frameAtMouseDown.size.width + (correctedMousePosition-resizedFrame.origin.x);
     }
     
-  //  DDLogInfo(@"before: %@",NSStringFromRect(resizedFrame));
+    //  DDLogInfo(@"before: %@",NSStringFromRect(resizedFrame));
     //informs the delegate about the resizing
     if([self delegateImplementsSelector:@selector(timelineObjectWillResize:fromFrame:toFrame:)]){
         resizedFrame = [self.delegate timelineObjectWillResize:self fromFrame:self.frame toFrame:resizedFrame];
     }
- //   DDLogInfo(@"after: %@",NSStringFromRect(resizedFrame));
+    //   DDLogInfo(@"after: %@",NSStringFromRect(resizedFrame));
     [self setFrame:resizedFrame];
     
     
@@ -380,6 +349,56 @@ static int resizingAreaWidth = 10;
     }
     
     return NO;
+}
+
+
+
+#pragma mark - Properties
+
+-(void) setSelected:(BOOL)selected{
+    _selected = selected;
+    
+    if(_selected){
+        self.layer.borderColor =  [[NSColor yellowColor] CGColor];
+        self.layer.borderWidth = 3.0;
+    }
+    else {
+        self.layer.borderWidth = 0.0;
+    }
+}
+
+-(BOOL) selected{
+    return _selected;
+}
+
+-(void) setMoving:(BOOL)moving{
+    _moving = moving;
+    
+    if(_moving){
+        self.layer.opacity = 0.5;
+    }
+    else {
+        self.layer.opacity = 1.0;
+    }
+}
+
+-(BOOL) moving{
+    return _moving;
+}
+
+-(void) setInactive:(BOOL)inactive{
+    _inactive = inactive;
+    
+    if(_inactive){
+        self.layer.opacity = 0.0;
+    }
+    else {
+        self.layer.opacity = 1.0f;
+    }
+}
+
+-(BOOL) inactive{
+    return _inactive;
 }
 
 
