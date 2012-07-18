@@ -43,9 +43,11 @@
     return self;
 }
 
-- (GLuint)transformTexture:(GLuint)texture atTrack:(NSInteger)trackId withAttributes:(NSDictionary *)attributes{
+- (GLuint)transformTexture:(GLuint)texture atTrack:(NSInteger)trackId withAttributes:(NSDictionary *)attributes withTextureSize:(NSSize)textureSize forOutputSize:(NSSize)outputSize{
     
-   // NSLog(@"%@",attributes);    
+    //NSLog(@"texturesize: %@",NSStringFromSize(textureSize) );    
+    //NSLog(@"outputsize: %@",NSStringFromSize(outputSize) );    
+    //NSLog(@"%@",attributes );    
     
     VSFrameBufferObject *fbo = [self getFboForTrackId:trackId];
 
@@ -57,7 +59,21 @@
     
     glUseProgram(self.shader.program);
     
-    glUniform1f(self.shader.uniformScale, [[attributes valueForKey:VSParameterKeyScaleWidth] floatValue]);
+    
+    glUniform1f(self.shader.uniformObjectWidth, textureSize.width);
+    glUniform1f(self.shader.uniformObjectHeight, textureSize.height);
+    glUniform1f(self.shader.uniformWindowWidth, outputSize.width);
+    glUniform1f(self.shader.uniformWindowHeight, outputSize.height);
+    glUniform1f(self.shader.uniformScaleX, [[attributes valueForKey:VSParameterKeyScaleWidth] floatValue]);
+    glUniform1f(self.shader.uniformScaleY, [[attributes valueForKey:VSParameterKeyScaleHeight] floatValue]);
+    glUniform1f(self.shader.uniformRotateX, [[attributes valueForKey:VSParameterKeyRotationX] floatValue]);
+    glUniform1f(self.shader.uniformRotateY, [[attributes valueForKey:VSParameterKeyRotationY] floatValue]);
+    glUniform1f(self.shader.uniformRotateZ, [[attributes valueForKey:VSParameterKeyRotationZ] floatValue]);
+    glUniform1f(self.shader.uniformTranslateX, [[attributes valueForKey:VSParameterKeyPositionX] floatValue]);
+    glUniform1f(self.shader.uniformTranslateY, [[attributes valueForKey:VSParameterKeyPositionY] floatValue]);
+    glUniform1f(self.shader.uniformTranslateZ, [[attributes valueForKey:VSParameterKeyPositionZ] floatValue]);
+
+    
     
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);

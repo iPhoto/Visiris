@@ -15,7 +15,6 @@
 @property (strong) QCRenderer           *qcRenderer;
 @property (strong) NSOpenGLContext      *context;
 @property (strong) NSOpenGLPixelFormat  *pixelFormat;
-@property (strong) VSFrameBufferObject  *fbo;
 @property (strong) VSPBufferRenderer    *pBufferRenderer;
 
 @end
@@ -24,10 +23,10 @@
 @synthesize qcRenderer          = _qcRenderer;
 @synthesize context             = _context;
 @synthesize pixelFormat         = _pixelFormat;
-@synthesize fbo                 = _fbo;
 @synthesize timeLineObjectId    = _timeLineObjectId;
 @synthesize trackId             = _trackId;
 @synthesize pBufferRenderer     = _pBufferRenderer;
+@synthesize size                = _size;
 
 - (id)initWithPath:(NSString *)path withSize:(NSSize)size withContext:(NSOpenGLContext *)context withPixelformat:(NSOpenGLPixelFormat *)format withTrackID:(NSInteger)trackid{
     if (self = [super init]) {
@@ -35,6 +34,7 @@
         _trackId = trackid;
         self.context = context;
         self.pixelFormat = format;
+        self.size = size;
 
         self.pBufferRenderer = [[VSPBufferRenderer alloc] initWithCompositionPath:path textureTarget:GL_TEXTURE_2D textureWidth:size.width textureHeight:size.height openGLContext:self.context];
     }

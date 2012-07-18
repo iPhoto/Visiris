@@ -58,7 +58,7 @@
 #pragma mark - VSTimelineTimelineObjectsDelegate implementation
 
 -(void) timelineObjectsWillBeRemoved:(NSArray *)removedTimelineObjects{
-    DDLogInfo(@"%@",removedTimelineObjects);
+    //DDLogInfo(@"%@",removedTimelineObjects);
     
     for (VSTimelineObject *timelineObject in removedTimelineObjects){
         [self.renderCoreReceptionist removeTextureForID:timelineObject.textureID];

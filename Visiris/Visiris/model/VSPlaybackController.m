@@ -11,6 +11,7 @@
 #import "VSTimeline.h"
 #import "VSPreviewViewController.h"
 #import "VSPlayHead.h"
+#import "VSProjectSettings.h"
 
 @interface VSPlaybackController()
 
@@ -114,7 +115,7 @@
     }
     
     if (self.preProcessor) {
-        [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:[self frameSize] isPlaying:self.playing];
+        [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:[VSProjectSettings sharedProjectSettings].frameSize isPlaying:self.playing];
     }
     
     if(!self.playing){
@@ -156,14 +157,6 @@
 
 
 #pragma mark - Private Methods
-
-/**
- * Test function to return a valid frameSize
- */
-- (NSSize)frameSize
-{
-    return NSMakeSize(1280, 720);
-}
 
 //TODO who needs this?
 -(void) startTimer{

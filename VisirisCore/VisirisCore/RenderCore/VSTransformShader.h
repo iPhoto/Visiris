@@ -10,8 +10,19 @@
 
 @interface VSTransformShader : VSShader
 
-@property (assign) GLuint   uniformTexture;
 @property (assign) GLuint   attributePosition;
-@property (assign) GLuint   uniformScale;
+@property (assign) GLuint   uniformTexture;
+@property (assign) GLuint   uniformObjectWidth;
+@property (assign) GLuint   uniformObjectHeight;
+@property (assign) GLuint   uniformWindowWidth;
+@property (assign) GLuint   uniformWindowHeight;
+@property (assign) GLuint   uniformScaleX;
+@property (assign) GLuint   uniformScaleY;
+@property (assign) GLuint   uniformRotateX;
+@property (assign) GLuint   uniformRotateY;
+@property (assign) GLuint   uniformRotateZ;
+@property (assign) GLuint   uniformTranslateX;
+@property (assign) GLuint   uniformTranslateY;
+@property (assign) GLuint   uniformTranslateZ;
 
 @end

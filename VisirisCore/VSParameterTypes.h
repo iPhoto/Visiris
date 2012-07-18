@@ -35,6 +35,9 @@ extern NSString* VSParameterKeyScaleWidth;
 /** Parameter for heigth of a VSTimelineObject */
 extern NSString* VSParameterKeyScaleHeight;
 
+/** Parameter for visibility of a VSTimelineObject */
+extern NSString* VSParameterKeyVisibility;
+
 
 extern NSString* VSParameterQuartzComposerPublicInputs;
 
