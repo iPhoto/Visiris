@@ -10,4 +10,6 @@
 
 @protocol VSFrameResizingDelegate <NSObject>
 
+-(void) frameOfView:(NSView*) view wasSetTo:(NSRect) newRect;
+
 @end

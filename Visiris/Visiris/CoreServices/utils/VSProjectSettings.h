@@ -22,6 +22,9 @@
 /** Name of the project */
 @property NSString *projectName;
 
+/** Aspect Ratio of the frameSize (width / height) */
+@property (readonly) float aspectRatio;
+
 /**
  Returns the singleton Instance
  @return Reference on the Singleton Instance

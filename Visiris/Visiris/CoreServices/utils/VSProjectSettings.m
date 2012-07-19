@@ -28,5 +28,11 @@ static VSProjectSettings* sharedProjectSettings = nil;
     return sharedProjectSettings;
 }
 
+#pragma mark - Properties
+
+-(float) aspectRatio{
+    return self.frameSize.width / self.frameSize.height;
+}
+
 
 @end

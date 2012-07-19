@@ -11,6 +11,8 @@
 
 @implementation VSPreviewView
 
+@synthesize frameResizingDelegate   = _frameResizingDelegate;
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
@@ -20,19 +22,20 @@
     return self;
 }
 
-- (void)drawRect:(NSRect)dirtyRect
-{
-    // Drawing code here.
-}
-
--(void) resizeSubviewsWithOldSize:(NSSize)oldSize{
-    DDLogInfo(@"resizeSubviewsWithOldSize");
+-(void) awakeFromNib{
+    
 }
 
 -(void) setFrame:(NSRect)frameRect{
     [super setFrame:frameRect];
     
-    DDLogInfo(@"setting frame");
+    if(self.frameResizingDelegate){
+        if([self.frameResizingDelegate conformsToProtocol:@protocol(VSFrameResizingDelegate)]){
+            if([self.frameResizingDelegate respondsToSelector:@selector(frameOfView:wasSetTo:)]){
+                [self.frameResizingDelegate frameOfView:self wasSetTo:frameRect];
+            }
+        }
+    }
 }
 
 @end

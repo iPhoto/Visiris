@@ -21,6 +21,7 @@
 
 - (id) initWithFrame:(NSRect)frameRect;
 - (void)initOpenGLWithSharedContext:(NSOpenGLContext *)openGLContext;
+-(void) setFrameProportionally:(NSRect) frameRect;
 
 - (void) drawView;
 - (void) startDisplayLink;

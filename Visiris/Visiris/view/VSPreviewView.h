@@ -7,7 +7,10 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "VSFrameResizingDelegate.h"
 
 @interface VSPreviewView : NSView
+
+@property id<VSFrameResizingDelegate> frameResizingDelegate;
 
 @end

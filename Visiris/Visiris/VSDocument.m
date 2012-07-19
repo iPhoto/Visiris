@@ -65,7 +65,7 @@
  */
 -(void) initVisiris{
     
-    [[VSProjectSettings sharedProjectSettings] setFrameSize:NSMakeSize(800, 600)];
+    [[VSProjectSettings sharedProjectSettings] setFrameSize:NSMakeSize(1920, 1080)];
     
     //TODO: where to create the timeline?
     
