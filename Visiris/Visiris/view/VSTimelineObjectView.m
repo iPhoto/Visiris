@@ -186,6 +186,8 @@ static int resizingAreaWidth = 10;
     }
     
     self.lastMousePosition = newMousePosition;
+    
+    [self autoscroll:theEvent];
 }
 
 -(void) cursorUpdate:(NSEvent *)event{

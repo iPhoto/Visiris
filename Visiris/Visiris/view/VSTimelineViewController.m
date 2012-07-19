@@ -539,15 +539,31 @@ static NSString* defaultNib = @"VSTimelineView";
     
     NSPoint globalLocation = [ NSEvent mouseLocation ];
     NSPoint windowLocation = [ [ self.scrollView window ] convertScreenToBase: globalLocation ];
-    NSPoint viewLocation = [ self.scrollView convertPoint: windowLocation fromView: nil ];
-    if(!NSPointInRect( viewLocation, [ self.scrollView frame] ) ) {
+    NSPoint viewLocation = [ self.trackHolder convertPoint: windowLocation fromView: nil ];
+    
+    if(!NSPointInRect( viewLocation, [self.scrollView documentVisibleRect] ) ) {
+        float deltaX = viewLocation.x - NSMaxX(self.scrollView.documentVisibleRect);
 
-        float deltaX = viewLocation.x - NSMaxX(self.trackHolder.bounds);
-        DDLogInfo(@"you are outsied da fram: %f",deltaX);        
-
+        NSPoint currentScrollPosition=self.scrollView.contentView.bounds.origin;
+//        currentScrollPosition.x += deltaX;
+        DDLogInfo(@"%f",deltaX);
+        
+        
+        NSPoint newScrollOrigin;
+        
+        // assume that the scrollview is an existing variable
+        if ([[self.scrollView documentView] isFlipped]) {
+            newScrollOrigin=NSMakePoint(currentScrollPosition.x,0.0);
+        } else {
+            newScrollOrigin=NSMakePoint(currentScrollPosition.x,NSMaxY([[self.scrollView documentView] frame])
+                                        -NSHeight([[self.scrollView contentView] bounds]));
+        }
+    
+        
+        
+        //[self.scrollView.documentView scrollPoint:currentScrollPosition];
     }
     
-
 }
 
 
