@@ -80,7 +80,7 @@
 //TODO: read out all MetaDAta not only duration and size
 /**
  * Reads out the meta data of the given file and returns it as an NSDictionary
- * @param file The file the metaData will be read out of
+ * @param file The file the metaData will be read out /Volumes/Musik/I/Incubus/A Crow Left To The Murder/06 - Sick Sad Little World.mp3of
  * @return NSDictionary holding the metaData of the file
  */
 +(NSDictionary*) metaDataOfFile:(NSString*) file{
@@ -89,9 +89,15 @@
         return nil;
     
     MDItemRef fileMetaData = MDItemCreate(NULL, (__bridge CFStringRef) file);
+    
+    if(fileMetaData)
+    {
     NSDictionary *metadataDictionary = (__bridge NSDictionary*)MDItemCopyAttributes (fileMetaData, (__bridge CFArrayRef)[NSArray arrayWithObjects:(id)kMDItemDurationSeconds,(id)kMDItemPixelWidth,(id)kMDItemPixelHeight,(id)kCGImagePropertyExifColorSpace,nil]);
     
     return metadataDictionary;
+    }
+    
+    return nil;
 }
 
 @end

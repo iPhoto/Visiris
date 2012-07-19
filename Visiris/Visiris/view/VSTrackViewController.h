@@ -299,4 +299,10 @@ typedef enum{
  */
 -(void) removeInactiveSelectedTimelineObjectViewControllers;
 
+/**
+ * Moveable TimelineObjects are all selected and all temporay TimlineObjects
+ * @return All currently moveable TimelineObjects
+ */
+-(NSArray*) movableTimelineObjectViewControllers;
+
 @end

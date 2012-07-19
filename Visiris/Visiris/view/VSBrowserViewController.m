@@ -105,7 +105,7 @@ static NSString* defaultNib = @"VSBrowserView";
             [self.contentView addSubview:newView];
         }
         
-        [newView setFrame:[self.contentView bounds]];
+        [newView setFrame:NSIntegralRect([self.contentView bounds])];
         [newView setAutoresizesSubviews:YES];
         [newView setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
     }

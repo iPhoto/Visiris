@@ -7,22 +7,35 @@
 //
 
 #import "VSPreviewView.h"
+#import "VSCoreServices.h"
 
 @implementation VSPreviewView
+
+@synthesize frameResizingDelegate   = _frameResizingDelegate;
 
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code here.
     }
     
     return self;
 }
 
-- (void)drawRect:(NSRect)dirtyRect
-{
-    // Drawing code here.
+-(void) awakeFromNib{
+    
+}
+
+-(void) setFrame:(NSRect)frameRect{
+    [super setFrame:frameRect];
+    
+    if(self.frameResizingDelegate){
+        if([self.frameResizingDelegate conformsToProtocol:@protocol(VSFrameResizingDelegate)]){
+            if([self.frameResizingDelegate respondsToSelector:@selector(frameOfView:wasSetTo:)]){
+                [self.frameResizingDelegate frameOfView:self wasSetTo:frameRect];
+            }
+        }
+    }
 }
 
 @end

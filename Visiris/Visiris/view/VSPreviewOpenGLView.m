@@ -62,6 +62,13 @@
     [self setupDisplayLink];
 }
 
+-(void) setFrame:(NSRect)frameRect{
+    
+}
+
+-(void) setFrameProportionally:(NSRect) frameRect{
+    [super setFrame:frameRect];
+}
 
 - (void)lockFocus
 {

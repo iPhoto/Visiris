@@ -76,7 +76,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     [self.scrollView setDocumentView:self.documentView];
     [self.documentView setAutoresizesSubviews:YES];
     [self.parametersHolder setAutoresizingMask:NSViewWidthSizable];
-    [self.documentView setFrameSize:[self.scrollView contentSize]];
+    [self.documentView setFrameSize: [self.scrollView contentSize]];
 }
 
 
@@ -128,7 +128,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
         
         
         VSParameterViewController *parameteViewController = [[VSParameterViewController alloc] initWithDefaultNib];
-        [parameteViewController.view setFrame:viewFrame];
+        [parameteViewController.view setFrame:NSIntegralRect(viewFrame)];
         
         parameteViewController.parameter = parameter;
         
@@ -148,7 +148,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     
     
     
-    [self.documentView setFrameSize:NSMakeSize(self.documentView.frame.size.width, ([self.parameterViewControllers count] + 1) * parameterViewHeight)];
+    [self.documentView setFrameSize: NSMakeSize(self.documentView.frame.size.width, ([self.parameterViewControllers count] + 1) * parameterViewHeight)];
     
     [self.parametersHolder setFrameSize:NSMakeSize(self.documentView.frame.size.width, ([self.parameterViewControllers count] + 1) * parameterViewHeight)];
 }

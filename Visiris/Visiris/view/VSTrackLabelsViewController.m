@@ -25,7 +25,7 @@
 
 -(id) initWithFrame:(NSRect)frameRect{
     if(self = [self init]){
-        [self.trackLabelsView setFrame:frameRect];
+        [self.trackLabelsView setFrame:NSIntegralRect(frameRect)];
     }
     
     return self;
