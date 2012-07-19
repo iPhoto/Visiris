@@ -21,6 +21,7 @@
 @property (strong) NSOperationQueue *queue;
 @property BOOL playing;
 @property double playbackStartTime;
+@property BOOL jumping;
 
 @end
 
@@ -35,6 +36,7 @@
 @synthesize playing             = _playing;
 @synthesize playbackStartTime   = _playbackStartTime;
 @synthesize frameWasRender      = _frameWasRender;
+@synthesize jumping             = _jumping;
 
 #pragma mark - Init
 
@@ -65,7 +67,11 @@
     
     else if([keyPath isEqualToString:@"jumping"]){
         if([[object valueForKey:keyPath] boolValue]){
-            [self renderCurrentFrame];
+            self.jumping = YES;
+            
+            if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
+                [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
+            }
         }
     }
     
@@ -111,6 +117,13 @@
                 [self.delegate texture:theTexture isReadyForTimestamp:theTimestamp];
             }
         }
+    }
+    
+    if(self.jumping){
+        if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
+            [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
+        }
+    self.jumping = NO;
     }
 }
 
