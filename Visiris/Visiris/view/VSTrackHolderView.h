@@ -37,6 +37,16 @@
  */
 -(CGFloat) willMovePlayHeadRulerMarker:(NSRulerMarker*) playheadMarker inContainingView:(NSView*) aView toLocation:(CGFloat) location;
 
+/**
+ * Called before the playheadMakrer jumps to the given location moved
+ * @param playheadMarker The maker that will jump
+ * @param aView NSView the playhead marker is placed in
+ * @param location Location the playhead marker wants to jump to
+ * @return Location the playhead marker will be moved too
+ */
+-(CGFloat) playHeadRulerMarker:(NSRulerMarker*) playheadMarker willJumpInContainingView:(NSView*) aView toLocation:(CGFloat) location;
+
+
 @end
 
 /**

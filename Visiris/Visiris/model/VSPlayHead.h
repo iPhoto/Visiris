@@ -19,4 +19,7 @@
 /** Indicates wheter the playhead is moved ("scrubbed") by the user on the UI, or moved automatically during a playback. */
 @property BOOL scrubbing;
 
+/** Indicates wheter the playhead jumped not scrubbed or moved automatically during a playback. */
+@property BOOL jumping;
+
 @end

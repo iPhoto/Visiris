@@ -46,6 +46,7 @@
         
         [self.timeline.playHead addObserver:self forKeyPath:@"currentTimePosition" options:0 context:nil];
         [self.timeline.playHead addObserver:self forKeyPath:@"scrubbing" options:0 context:nil];
+        [self.timeline.playHead addObserver:self forKeyPath:@"jumping" options:0 context:nil];
     }
     
     return self;
@@ -54,7 +55,7 @@
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     
     if([keyPath isEqualToString:@"currentTimePosition"]){
-        if(!self.playing && !self.timeline.playHead.scrubbing){
+        if(!self.playing && !self.timeline.playHead.scrubbing && !self.timeline.playHead.jumping){
             self.currentTimestamp = [[object valueForKey:keyPath] doubleValue];
             if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
                 [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
@@ -62,23 +63,26 @@
         }
     }
     
-    if([keyPath isEqualToString:@"scrubbing"]){
+    else if([keyPath isEqualToString:@"jumping"]){
+        if([[object valueForKey:keyPath] boolValue]){
+            [self renderCurrentFrame];
+        }
+    }
+    
+    else if([keyPath isEqualToString:@"scrubbing"]){
         BOOL scrubbing = [[object valueForKey:keyPath] boolValue];
         
         self.currentTimestamp = [[object valueForKey:@"currentTimePosition"] doubleValue];
         
         if(scrubbing){
             self.playing = NO;
-            self.frameWasRender = NO;
             if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
                 [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
             }
         }
         else{
-            if(self.frameWasRender) {
-                if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
-                    [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
-                }
+            if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
+                [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
             }
         }
     }
@@ -114,17 +118,12 @@
         [self computeNewCurrentTimestamp];
     }
     
+    [self renderCurrentFrame];
+}
+
+-(void) renderCurrentFrame{
     if (self.preProcessor) {
         [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:[VSProjectSettings sharedProjectSettings].frameSize isPlaying:self.playing];
-    }
-    
-    if(!self.playing){
-        if(!self.timeline.playHead.scrubbing){
-            if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
-                [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
-            }
-            self.frameWasRender = YES;
-        }
     }
 }
 

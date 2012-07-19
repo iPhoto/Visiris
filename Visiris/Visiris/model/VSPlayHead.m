@@ -14,4 +14,6 @@
 
 @synthesize scrubbing           = _scrubbing;
 
+@synthesize jumping             = jumping;
+
 @end

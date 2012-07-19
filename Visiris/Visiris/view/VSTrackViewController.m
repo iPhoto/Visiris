@@ -376,6 +376,17 @@ static NSString* defaultNib = @"VSTrackView";
     }
 }
 
+/**
+ * Moveable TimelineObjects are all selected and all temporay TimlineObjects
+ * @return All currently moveable TimelineObjects
+ */
+-(NSArray*) movableTimelineObjectViewControllers{
+    NSMutableArray *moveableTimelineObjects = [NSMutableArray arrayWithArray:[self selectedTimelineObjectViewControllers]];
+    [moveableTimelineObjects addObjectsFromArray:self.temporaryTimelineObjectViewControllers];
+    
+    return moveableTimelineObjects;
+}
+
 #pragma mark Intersection
 
 -(void) applyIntersectionToTimelineObjects{
@@ -998,16 +1009,7 @@ static NSString* defaultNib = @"VSTrackView";
     return nil;
 }
 
-/**
- * Moveable TimelineObjects are all selected and all temporay TimlineObjects
- * @return All currently moveable TimelineObjects
- */
--(NSArray*) movableTimelineObjectViewControllers{
-    NSMutableArray *moveableTimelineObjects = [NSMutableArray arrayWithArray:[self selectedTimelineObjectViewControllers]];
-    [moveableTimelineObjects addObjectsFromArray:self.temporaryTimelineObjectViewControllers];
-    
-    return moveableTimelineObjects;
-}
+
 
 #pragma mark Timeline Objects
 
