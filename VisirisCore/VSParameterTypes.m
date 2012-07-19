@@ -22,6 +22,7 @@ NSString* VSParameterKeyScaleWidth                  = @"VSParameterKeyScaleWidth
 NSString* VSParameterKeyScaleHeight                 = @"VSParameterKeyScaleHeight";
 NSString* VSParameterKeyVisibility                  = @"VSParameterKeyVisibility";
 NSString* VSParameterVideoVolume                    = @"VSParameterVideoVolume";
+NSString* VSParameterAudioVolume                    = @"VSParameterAudioVolume";
 NSString* VSParameterQuartzComposerPublicInputs     = @"VSParameterQuartzComposerPublicInputs";
 
 

@@ -94,6 +94,7 @@
     [timerThread start];
 }
 
+//TODO WTF??? isnt called anymore
 -(void) stopPlayback{
     [self.queue cancelAllOperations];
     [self.playbackTimer invalidate];
@@ -124,6 +125,8 @@
                 [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
             }
             self.frameWasRender = YES;
+            
+            
         }
     }
 }
@@ -153,6 +156,7 @@
 -(void) stop{
     //    [self stopPlayback];
     self.playing = NO;
+    [self.preProcessor stopPlayback];
 }
 
 

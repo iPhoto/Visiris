@@ -7,16 +7,29 @@
 //
 
 #import "VSCoreReceptionist.h"
+#import "VSAudioCore.h"
+#import "VSCoreHandover.h"
+#import "VSFrameCoreHandover.h"
+#import "VSQuartzComposerHandover.h"
+#import "VSAudioCoreHandover.h"
 
-//@class ;
+@interface VSCoreReceptionist()
+
+@property (strong) VSAudioCore   *audioCore;
+
+@end
+
 
 @implementation VSCoreReceptionist
-@synthesize renderCore = _renderCore;
-@synthesize delegate=_delegate;
+
+@synthesize renderCore  = _renderCore;
+@synthesize delegate    = _delegate;
+@synthesize audioCore   = _audioCore;
 
 -(id) init{
     if(self = [super init]){
         self.renderCore = [[VSRenderCore alloc] init];
+        self.audioCore  = [[VSAudioCore alloc] init];
         self.renderCore.delegate = self;
     }
     return self;
@@ -33,7 +46,27 @@
         [self renderCore:self.renderCore didFinishRenderingTexture:0 forTimestamp:aTimestamp];
     }
     else {
-        [self.renderCore renderFrameOfCoreHandovers:theHandovers forFrameSize:theFrameSize forTimestamp:aTimestamp];
+        
+        NSMutableArray *frameArray = [[NSMutableArray alloc] init];
+        NSMutableArray *audioArray = [[NSMutableArray alloc] init];
+        
+        for(VSCoreHandover *coreHandover in theHandovers){
+            
+            if ([coreHandover isKindOfClass:[VSFrameCoreHandover class]] || [coreHandover isKindOfClass:[VSQuartzComposerHandover class]]){         
+                [frameArray addObject:coreHandover];
+            }else if ([coreHandover isKindOfClass:[VSAudioCoreHandover class]]) {
+                [audioArray addObject:coreHandover];
+            }
+        }
+        
+        if (frameArray.count > 0) {
+            [self.renderCore renderFrameOfCoreHandovers:frameArray forFrameSize:theFrameSize forTimestamp:aTimestamp];
+        }
+        
+        if (audioArray.count > 0) {
+            [self.audioCore playAudioOfHandovers:audioArray atTimeStamp:aTimestamp];
+        }
+        
     }
     
 }
@@ -42,8 +75,13 @@
     return [self.renderCore createNewTextureForSize:textureSize colorMode:colorMode forTrack:trackID withType:type withOutputSize:size withPath:path];
 }
 
--(void) removeTextureForID:(GLuint)anID{
-    
+- (void)createNewAudioPlayerWithProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID forTrack:(NSInteger)trackId andFilePath:(NSString *)filepath{
+
+    [self.audioCore createAudioPlayerForProjectItemID:projectItemID withObjectItemID:objectItemID atTrack:trackId andFilePath:filepath];
+}
+
+- (void)removeTextureForID:(GLuint)anID{
+    NSLog(@"TODOOOOO (removeTexture)");
 }
 
 #pragma mark - RenderCoreDelegate impl.
@@ -60,6 +98,10 @@
 
 - (NSOpenGLContext *) openGLContext{
     return _renderCore.openglContext;
+}
+
+- (void)stopPlaying{
+    [self.audioCore stopPlaying];
 }
 
 @end

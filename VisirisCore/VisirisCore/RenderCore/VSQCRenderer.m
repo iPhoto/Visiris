@@ -42,8 +42,8 @@
 }
 
 - (GLuint)renderAtTme:(double)time{
-    
-    time /= 1000;
+        
+    time /= 1000.0;
     [[self context] makeCurrentContext];
 
     glClearColor(0.25, 0.25, 0.25, 0.25);

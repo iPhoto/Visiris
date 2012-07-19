@@ -17,6 +17,8 @@
 #import "VisirisCore/VSFrameCoreHandover.h"
 #import "VisirisCore/VSQuartzComposerHandover.h"
 #import "VSSourceSupplier.h"
+#import "VSAudioSourceSupplier.h"
+#import "VisirisCore/VSAudioCoreHandover.h"
 
 @implementation VSTimelineObject
 
@@ -106,7 +108,12 @@
                                                                       forId:self.timelineObjectID
                                                                forTextureID:self.textureID];
     }
-    else{
+    else if ([self.supplier isKindOfClass:[VSAudioSourceSupplier class]]) {
+        coreHandover = [[VSAudioCoreHandover alloc] initWithAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp] 
+                                                          forTimestamp:localTimestamp
+                                                                 forId:self.timelineObjectID];
+    }
+    else {
         DDLogInfo(@"unsuported file/handover");
     }
     

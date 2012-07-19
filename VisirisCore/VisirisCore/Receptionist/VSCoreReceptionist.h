@@ -44,10 +44,14 @@
 - (void)renderFrameAtTimestamp:(double)aTimestamp withHandovers:(NSArray *)theHandovers forSize:(NSSize)theFrameSize;
 
 
--(GLuint) createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger) trackID withType:(VSFileKind )type withOutputSize:(NSSize)size withPath:(NSString *)path;
+- (GLuint)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*)colorMode forTrack:(NSInteger)trackID withType:(VSFileKind )type withOutputSize:(NSSize)size withPath:(NSString *)path;
 
--(void) removeTextureForID:(GLuint) anID;
+- (void)createNewAudioPlayerWithProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID forTrack:(NSInteger)trackId andFilePath:(NSString *)filepath;
+
+- (void)removeTextureForID:(GLuint) anID;
 
 - (NSOpenGLContext *) openGLContext;
+
+- (void)stopPlaying;
 
 @end

@@ -44,4 +44,10 @@
  */
 - (void)processFrameAtTimestamp:(double)aTimestamp withFrameSize:(NSSize)aFrameSize isPlaying:(BOOL)playing;
 
+/**
+ * Tells the core to stop 
+ */
+
+- (void)stopPlayback;
+
 @end
