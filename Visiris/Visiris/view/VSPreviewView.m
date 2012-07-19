@@ -29,4 +29,10 @@
     DDLogInfo(@"resizeSubviewsWithOldSize");
 }
 
+-(void) setFrame:(NSRect)frameRect{
+    [super setFrame:frameRect];
+    
+    DDLogInfo(@"setting frame");
+}
+
 @end

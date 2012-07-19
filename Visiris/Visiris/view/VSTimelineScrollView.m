@@ -69,9 +69,5 @@
     return nil;
 }
 
-//-(void) drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx{
-//    DDLogInfo(@"drawing l");
-//}
-
 
 @end

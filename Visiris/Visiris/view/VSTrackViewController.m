@@ -313,7 +313,9 @@ static NSString* defaultNib = @"VSTrackView";
 }
 
 -(VSTimelineObjectViewController*) addTemporaryTimelineObject:(VSTimelineObjectProxy *)aProxyObject withFrame:(NSRect)aFrame{
+    
     VSTimelineObjectViewController *newTimelineObjectViewController = [self addTemporaryTimelineObject:aProxyObject];
+    
     [newTimelineObjectViewController.view setFrame:NSIntegralRect(aFrame)];
     
     return newTimelineObjectViewController;
@@ -334,7 +336,8 @@ static NSString* defaultNib = @"VSTrackView";
 
 -(void) copyTemporaryTimelineObjectsToTrack{
     if([self delegateRespondsToSelector:@selector(copyTimelineObject:toTrack:)]){
-        for(VSTimelineObjectViewController *temporaryTimelineObjectViewController in self.temporaryTimelineObjectViewControllers){
+        for(VSTimelineObjectViewController *temporaryTimelineObjectViewController in self.temporaryTimelineObjectViewControllers)
+        {
             [self.delegate copyTimelineObject:temporaryTimelineObjectViewController toTrack:self];
         }
     }
@@ -388,7 +391,7 @@ static NSString* defaultNib = @"VSTrackView";
             NSMutableArray *intersectionRects = [[NSMutableArray alloc] init];
             
             for(VSTimelineObjectViewIntersection *intersection in intersections){
-                [intersectionRects addObject: [NSValue valueWithRect:intersection.intersectedTimelineObjectView.view.frame]];
+                [intersectionRects addObject: [NSValue valueWithRect:intersection.timelineObjectView.view.frame]];
             }
             
             if([self delegateRespondsToSelector:@selector(splitTimelineObject:ofTrack:byRects:)]){

@@ -126,8 +126,6 @@ static NSString* defaultNib = @"VSTimelineView";
     
     self.scrollView.zoomingDelegate = self;
     
-    self.scrollView.backgroundColor = [NSColor grayColor];
-    
     [self.trackHolder setAutoresizingMask:NSViewNotSizable];
     
     self.trackHolder.playheadMarkerDelegate = self;
@@ -848,12 +846,14 @@ static NSString* defaultNib = @"VSTimelineView";
  */
 -(void) temporaryMoveSelectedTimelineObjectsFromTrack:(VSTrackViewController*) fromTrack toTrack:(VSTrackViewController*) toTrack{
     
-    [fromTrack deactivateSelectedTimelineObjects];
-    
     for (VSTimelineObjectViewController *timelineObjectViewController in [fromTrack selectedTimelineObjectViewControllers]) {
         
-        [toTrack addTemporaryTimelineObject:timelineObjectViewController.timelineObjectProxy withFrame:timelineObjectViewController.view.frame];
+        VSTimelineObjectViewController *newTimelineObjectViewController = [toTrack addTemporaryTimelineObject:timelineObjectViewController.timelineObjectProxy withFrame:timelineObjectViewController.view.frame];
+        
+        newTimelineObjectViewController.timelineObjectProxy.selected = timelineObjectViewController.timelineObjectProxy.selected;
     }
+    
+    [fromTrack deactivateSelectedTimelineObjects];
 }
 
 /*

@@ -96,9 +96,6 @@
 /** if YES, the VSTimelineObjectView is drawn as selected */
 @property BOOL selected;
 
-/** Area of the VSTimelineObjectView that's intersected by another VSTimelineObjectView */
-@property (strong) NSMutableDictionary* intersectionRects;
-
 /** If yes, the view is drawn differently */
 @property BOOL temporary;
 
@@ -108,4 +105,7 @@
 /**if YES the view is hidden */
 @property BOOL inactive;
 
+-(CALayer*) addIntersectionLayerForRect:(NSRect) intersection;
+
+-(void) removeIntersectionLayer:(CALayer*) intersectionLayer;
 @end

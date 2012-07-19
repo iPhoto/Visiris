@@ -51,7 +51,6 @@ static int resizingAreaWidth = 10;
 @synthesize selected                = _selected;
 @synthesize moving                  = _moving;
 @synthesize temporary               = _temporary;
-@synthesize intersectionRects       = _intersectionRects;
 @synthesize lastMousePosition       = _lastMousePosition;
 @synthesize mouseDownMousePosition  = _mouseDownMousePosition;
 @synthesize mouseDownXOffset        = _mouseDownXOffset;
@@ -68,7 +67,6 @@ static int resizingAreaWidth = 10;
     if (self) {
         
         [self setResizingAreas];
-        self.intersectionRects = [[NSMutableDictionary alloc] init];
     }
     
     return self;
@@ -90,9 +88,35 @@ static int resizingAreaWidth = 10;
  */
 -(void) initLayerStyle{
     [self setWantsLayer:YES];
-    [self.layer setZPosition:0];
+    [self.layer setZPosition:0];   
+    
+    [self setDefaultLayerStyle];
+}
+
+-(void) setDefaultLayerStyle{
     self.layer.backgroundColor = [[NSColor darkGrayColor] CGColor];
     self.layer.cornerRadius = 5.0;
+    self.layer.opacity = 1.0;
+    self.layer.borderWidth = 0.0;
+}
+
+-(void) setLayerStyle{
+    if(!self.inactive){
+        
+        [self setDefaultLayerStyle];
+        
+        if(self.selected){
+            self.layer.borderColor =  [[NSColor yellowColor] CGColor];
+            self.layer.borderWidth = 3.0;
+        }
+        
+        if (self.moving || self.temporary || self.resizing) {
+            self.layer.opacity = 0.5;
+        }
+    }
+    else {
+        self.layer.opacity = 0.0;
+    }
 }
 
 /**
@@ -113,22 +137,6 @@ static int resizingAreaWidth = 10;
     [self setResizingAreas];
 }
 
-#pragma mark drawing
-
-
-/**
- * Iterates through all NSRects stored in the intersectionRects-Property and displays them
- */
--(void) drawIntersections{
-    if(self.intersectionRects.count){
-        for(NSValue *value in [self.intersectionRects allValues]){
-            NSRect intersectionRect = [value rectValue];
-            
-            [[NSColor greenColor] setFill];
-            NSRectFill(intersectionRect);
-        }
-    }
-}
 
 #pragma mark - Event Handling
 
@@ -209,6 +217,27 @@ static int resizingAreaWidth = 10;
         if ([self delegateImplementsSelector:@selector(timelineObjectDidStopResizing:)]) {
             [self.delegate timelineObjectDidStopResizing:self];
         }
+    }
+}
+
+#pragma mark - Methods
+
+-(CALayer*) addIntersectionLayerForRect:(NSRect)intersection{
+    CALayer *intersectionLayer = [[CALayer alloc] init];
+    
+    intersectionLayer.frame = intersection;
+    intersectionLayer.backgroundColor = [[NSColor greenColor] CGColor];
+    intersectionLayer.cornerRadius = self.layer.cornerRadius;
+    [intersectionLayer removeAllAnimations];
+    
+    [self.layer addSublayer:intersectionLayer];
+    
+    return intersectionLayer;
+}
+
+-(void) removeIntersectionLayer:(CALayer *)intersectionLayer{
+    if(intersectionLayer.superlayer == self.layer){
+        [intersectionLayer removeFromSuperlayer];
     }
 }
 
@@ -351,18 +380,12 @@ static int resizingAreaWidth = 10;
 }
 
 
-
 #pragma mark - Properties
 
 -(void) setSelected:(BOOL)selected{
-    _selected = selected;
-    
-    if(_selected){
-        self.layer.borderColor =  [[NSColor yellowColor] CGColor];
-        self.layer.borderWidth = 3.0;
-    }
-    else {
-        self.layer.borderWidth = 0.0;
+    if(_selected != selected){
+        _selected = selected;
+        [self setLayerStyle];
     }
 }
 
@@ -371,13 +394,9 @@ static int resizingAreaWidth = 10;
 }
 
 -(void) setMoving:(BOOL)moving{
-    _moving = moving;
-    
-    if(_moving){
-        self.layer.opacity = 0.5;
-    }
-    else {
-        self.layer.opacity = 1.0;
+    if(_moving != moving){
+        _moving = moving;
+        [self setLayerStyle];
     }
 }
 
@@ -386,18 +405,36 @@ static int resizingAreaWidth = 10;
 }
 
 -(void) setInactive:(BOOL)inactive{
-    _inactive = inactive;
-    
-    if(_inactive){
-        self.layer.opacity = 0.0;
-    }
-    else {
-        self.layer.opacity = 1.0f;
+    if(_inactive != inactive){
+        _inactive = inactive;
+        [self setLayerStyle];
     }
 }
 
 -(BOOL) inactive{
     return _inactive;
+}
+
+-(void) setTemporary:(BOOL)temporary{
+    if(temporary != _temporary){
+        _temporary = temporary;
+        [self setLayerStyle];
+    }
+}
+
+-(BOOL) temporary{
+    return _temporary;
+}
+
+-(void) setResizing:(BOOL)resizing{
+    if(resizing != _resizing){
+        _resizing = resizing;
+        [self setLayerStyle];
+    }
+}
+
+-(BOOL) resizing{
+    return _resizing;
 }
 
 

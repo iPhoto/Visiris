@@ -52,7 +52,7 @@
     
     [self setWantsLayer:YES];
     
-    self.layer.backgroundColor = [[NSColor greenColor] CGColor];
+    self.layer.backgroundColor = [[NSColor darkGrayColor] CGColor];
     [self initEnclosingScrollView];
     [self initPlayheadMarker];
     

@@ -199,47 +199,61 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     VSTimelineObjectViewIntersection *intersection = [self.intersectedTimelineObjectViews objectForKey:key];
     
     if(intersection){
-        if(!NSEqualRects(intersection.intersectionRect, intersectionRect)){
-            intersection.intersectionRect = intersectionRect;
-            if(self.timelineObjectView){
-                [self.timelineObjectView.intersectionRects setObject:[NSValue valueWithRect:intersection.intersectionRect] forKey:key];
-                [self.view setNeedsDisplayInRect:self.view.visibleRect];
-            }
+        if(!NSEqualRects(intersection.rect, intersectionRect)){
+            intersection.rect = intersectionRect;
         }
     }
     else {
-        intersection = [[VSTimelineObjectViewIntersection alloc] initWithIntersectedTimelineObejctView:timelineObjectViewController intersectedAt:intersectionRect];
         
-        [self.intersectedTimelineObjectViews setObject:intersection forKey:key];
+        CALayer *intersectionLayer = nil;
+        
         
         if(self.timelineObjectView){
-            [self.timelineObjectView.intersectionRects setObject:[NSValue valueWithRect:intersection.intersectionRect] forKey:key];
-            [self.view setNeedsDisplayInRect:self.view.visibleRect];
+            intersectionLayer = [self.timelineObjectView addIntersectionLayerForRect:intersectionRect];
         }
+        
+        intersection = [[VSTimelineObjectViewIntersection alloc] initWithIntersectedTimelineObejctView:timelineObjectViewController intersectedAt:intersectionRect andLayer:intersectionLayer];
+        
+        [self.intersectedTimelineObjectViews setObject:intersection forKey:key];
+    }
+    
+    if(intersection.layer){
+        [CATransaction begin];
+        [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+        intersection.layer.frame = intersection.rect;
+        [CATransaction commit];
     }
 }
 
 -(void) removeIntersectionWith:(VSTimelineObjectViewController *)timelineObjectViewController{
     NSNumber *key = [NSNumber numberWithInt: timelineObjectViewController.timelineObjectProxy.timelineObjectID];
     
-    if(self.intersectedTimelineObjectViews.count){
-        [self.intersectedTimelineObjectViews removeObjectForKey:key];
+    if(self.intersectedTimelineObjectViews && self.intersectedTimelineObjectViews.count){
+        VSTimelineObjectViewIntersection *intersection =  (VSTimelineObjectViewIntersection*) [self.intersectedTimelineObjectViews objectForKey:key];
         
-        if(self.timelineObjectView){
-            NSRect rectToRemove = [[self.timelineObjectView.intersectionRects objectForKey:key] rectValue];
-            [self.timelineObjectView.intersectionRects removeObjectForKey:key];
-            [self.view setNeedsDisplayInRect:rectToRemove];
+        if(intersection){
+            if(self.timelineObjectView){
+                if(intersection.layer){
+                    [self.timelineObjectView removeIntersectionLayer:intersection.layer];
+                }
+            }
+            [self.intersectedTimelineObjectViews removeObjectForKey:key];
         }
     }
 }
 
 -(void) removeAllIntersections{
-    [self.intersectedTimelineObjectViews removeAllObjects];
     
     if(self.timelineObjectView){
-        [self.timelineObjectView.intersectionRects removeAllObjects];
-        [self.view setNeedsDisplayInRect:self.view.visibleRect];
+        for(VSTimelineObjectViewIntersection *intersection in [self.intersectedTimelineObjectViews allValues]){
+            if(intersection){
+                [self.timelineObjectView removeIntersectionLayer:intersection.layer];
+            }
+        }
     }
+    
+    [self.intersectedTimelineObjectViews removeAllObjects];
+    
 }
 
 #pragma mark - Private Methods

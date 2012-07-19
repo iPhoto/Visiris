@@ -120,7 +120,4 @@ static NSString* defaultNib = @"VSPreviewView";
     return _playBackController;
 }
 
-
-
-
 @end

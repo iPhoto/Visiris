@@ -10,13 +10,15 @@
 
 @implementation VSTimelineObjectViewIntersection
 
-@synthesize intersectionRect                = _intersectionRect;
-@synthesize intersectedTimelineObjectView   = _intersectedTimelineObjectView;
+@synthesize rect                = _rect;
+@synthesize timelineObjectView  = _timelineObjectView;
+@synthesize layer               = _layer;
 
--(id) initWithIntersectedTimelineObejctView:(VSTimelineObjectViewController *)intersectedTimelineObjectView intersectedAt:(NSRect)intersectionRect{
+-(id) initWithIntersectedTimelineObejctView:(VSTimelineObjectViewController *)intersectedTimelineObjectView intersectedAt:(NSRect)intersectionRect andLayer:(CALayer*)layer{
     if(self = [super init]){
-        self.intersectionRect = intersectionRect;
-        self.intersectedTimelineObjectView = intersectedTimelineObjectView;
+        self.rect = intersectionRect;
+        self.timelineObjectView = intersectedTimelineObjectView;
+        self.layer = layer;
     }
     return self;
 }
