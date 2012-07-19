@@ -51,6 +51,7 @@
 		27973E9715B43CA00051C16F /* transform.vs.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 27973E9515B43CA00051C16F /* transform.vs.glsl */; };
 		27973E9A15B441D20051C16F /* VSTransformShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 27973E9815B441D20051C16F /* VSTransformShader.h */; };
 		27973E9B15B441D20051C16F /* VSTransformShader.m in Sources */ = {isa = PBXBuildFile; fileRef = 27973E9915B441D20051C16F /* VSTransformShader.m */; };
+		279820E015B85A4B00E8AA8E /* VSPlaybackMode.h in Headers */ = {isa = PBXBuildFile; fileRef = 279820DF15B85A4B00E8AA8E /* VSPlaybackMode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		27A135A7157608FD00883B96 /* layering.fs.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 27A135A5157608FD00883B96 /* layering.fs.glsl */; };
 		27A135A8157608FD00883B96 /* layering.vs.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 27A135A6157608FD00883B96 /* layering.vs.glsl */; };
 		27A6CA0515B73AD7004C6DFB /* VSAudioCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 27A6CA0315B73AD7004C6DFB /* VSAudioCore.h */; };
@@ -112,6 +113,7 @@
 		27973E9515B43CA00051C16F /* transform.vs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = transform.vs.glsl; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
 		27973E9815B441D20051C16F /* VSTransformShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTransformShader.h; sourceTree = "<group>"; };
 		27973E9915B441D20051C16F /* VSTransformShader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTransformShader.m; sourceTree = "<group>"; };
+		279820DF15B85A4B00E8AA8E /* VSPlaybackMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VSPlaybackMode.h; path = CoreServices/VSPlaybackMode.h; sourceTree = "<group>"; };
 		27A135A5157608FD00883B96 /* layering.fs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = layering.fs.glsl; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
 		27A135A6157608FD00883B96 /* layering.vs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = layering.vs.glsl; sourceTree = "<group>"; };
 		27A6CA0315B73AD7004C6DFB /* VSAudioCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAudioCore.h; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 				5BD5AEC1159A10320008CE80 /* VSParameterTypes.h */,
 				5BD5AEC2159A10320008CE80 /* VSParameterTypes.m */,
 				270692CB1594CF42001A9329 /* VSFileKind.h */,
+				279820DF15B85A4B00E8AA8E /* VSPlaybackMode.h */,
 				274C70CC157E81DD0031F9B2 /* VSImageContext.h */,
 				274C70CD157E81DD0031F9B2 /* VSImageContext.m */,
 			);
@@ -362,6 +365,7 @@
 				27A6CA1115B74FA0004C6DFB /* VSAudioPlayer.h in Headers */,
 				27A6CA1615B753DD004C6DFB /* NSMutableDictionary+VSAudioPlayerManger.h in Headers */,
 				276D436615B7FC8200389C86 /* VSAudioCoreHandover.h in Headers */,
+				279820E015B85A4B00E8AA8E /* VSPlaybackMode.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

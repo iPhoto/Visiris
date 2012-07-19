@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "VSSourceSupplier.h"
+#import "VisirisCore/VSPlaybackMode.h"
 
 @class VSImage;
 
@@ -25,6 +26,6 @@
  * @param playing Indicates function is called during a running playback or for one frame only e.g. during scrubbing over the timeline.
  * @returns Pointer to the created frame.
  */
--(VSImage*) getFrameForTimestamp:(double) aTimestamp isPlaying:(BOOL)playing;
+-(VSImage *) getFrameForTimestamp:(double)aTimestamp withPlayMode:(VSPlaybackMode)playMode;
 
 @end

@@ -3,6 +3,7 @@
 #import <Foundation/Foundation.h>
 #import "VSRenderCore.h"
 #import "VSFileKind.h"
+#import "VSPlaybackMode.h"
 
 @class VSCoreReceptionist;
 
@@ -41,7 +42,7 @@
  * @param theHandovers NSArray of all Handovers 
  * @param theFrameSize The size the frame will be created for.
  */
-- (void)renderFrameAtTimestamp:(double)aTimestamp withHandovers:(NSArray *)theHandovers forSize:(NSSize)theFrameSize;
+- (void)renderFrameAtTimestamp:(double)aTimestamp withHandovers:(NSArray *)theHandovers forSize:(NSSize)theFrameSize withPlayMode:(VSPlaybackMode)playMode;
 
 
 - (GLuint)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*)colorMode forTrack:(NSInteger)trackID withType:(VSFileKind )type withOutputSize:(NSSize)size withPath:(NSString *)path;

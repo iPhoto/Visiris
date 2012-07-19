@@ -35,7 +35,7 @@
     return self;
 }
 
-- (void)renderFrameAtTimestamp:(double)aTimestamp withHandovers:(NSArray *)theHandovers forSize:(NSSize)theFrameSize
+- (void)renderFrameAtTimestamp:(double)aTimestamp withHandovers:(NSArray *)theHandovers forSize:(NSSize)theFrameSize withPlayMode:(VSPlaybackMode)playMode
 {
     //return if Handovers is nil
     if (theHandovers == nil)
@@ -64,7 +64,15 @@
         }
         
         if (audioArray.count > 0) {
-            [self.audioCore playAudioOfHandovers:audioArray atTimeStamp:aTimestamp];
+            
+            if (playMode == VSPlaybackModePlaying ||
+                playMode == VSPlaybackModeScrubbing) {
+                [self.audioCore playAudioOfHandovers:audioArray atTimeStamp:aTimestamp];
+            }else
+                if (playMode == VSPlaybackModeJumping ||
+                playMode == VSPlaybackModeStanding) {
+                [self.audioCore stopPlaying];
+            }
         }
         
     }

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "VSTimelineObjectProxy.h"
+#import "VisirisCore/VSPlaybackMode.h"
 
 @class VSTimelineObjectSource;
 @class VSSourceSupplier;
@@ -49,7 +50,7 @@
  * @param aFrameSize FrameSize the VSCoreHandover is setup for.
  * @param playing Is currently in playmode.
  */
-- (VSCoreHandover *)handoverForTimestamp:(double)aTimestamp frameSize:(NSSize) aFrameSize isPlaying:(BOOL)playing;
+- (VSCoreHandover *)handoverForTimestamp:(double)aTimestamp frameSize:(NSSize)aFrameSize withPlayMode:(VSPlaybackMode)mode;
 
 /**
  * Returns the parameters of the VSTimelineObject as stored in its source.

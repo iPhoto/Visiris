@@ -40,20 +40,20 @@
 
 #pragma mark - Methods
 
-- (void)processFrameAtTimestamp:(double)aTimestamp withFrameSize:(NSSize)aFrameSize isPlaying:(BOOL)playing
+- (void)processFrameAtTimestamp:(double)aTimestamp withFrameSize:(NSSize)aFrameSize withPlayMode:(VSPlaybackMode)playMode
 {
     NSArray *currentTimeLineObjects = [self.timeline timelineObjectsForTimestamp:aTimestamp];
     
     NSMutableArray *handoverObjects = [[NSMutableArray alloc] init];
     
     for (VSTimelineObject *currentTimeLineObject in currentTimeLineObjects) {
-        VSCoreHandover *coreHandover = [currentTimeLineObject handoverForTimestamp:aTimestamp frameSize:aFrameSize isPlaying:playing];
+        VSCoreHandover *coreHandover = [currentTimeLineObject handoverForTimestamp:aTimestamp frameSize:aFrameSize withPlayMode:playMode];
         if (coreHandover) {
             [handoverObjects addObject:coreHandover];
         }
     }
     
-    [self.renderCoreReceptionist renderFrameAtTimestamp:aTimestamp withHandovers:handoverObjects forSize:aFrameSize];
+    [self.renderCoreReceptionist renderFrameAtTimestamp:aTimestamp withHandovers:handoverObjects forSize:aFrameSize withPlayMode:playMode];
 }
 
 #pragma mark - VSTimelineTimelineObjectsDelegate implementation

@@ -88,14 +88,14 @@
     return self.startTime + self.duration;
 }
 
-- (VSCoreHandover *)handoverForTimestamp:(double)aTimestamp frameSize:(NSSize)aFrameSize isPlaying:(BOOL)playing{
+- (VSCoreHandover *)handoverForTimestamp:(double)aTimestamp frameSize:(NSSize)aFrameSize withPlayMode:(VSPlaybackMode)mode{
     
     VSCoreHandover *coreHandover = nil;
     
     double localTimestamp = [self convertGlobalTimestampToLocalTimestamp:aTimestamp];
-    //TODO richtiges corehandover basteln
+
     if ([self.supplier isKindOfClass:[VSFrameSourceSupplier class]] ) {
-        coreHandover = [[VSFrameCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp isPlaying:playing]
+        coreHandover = [[VSFrameCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp withPlayMode:mode]
                                                     andAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp]
                                                      forTextureID:self.textureID
                                                      forTimestamp:localTimestamp

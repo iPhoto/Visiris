@@ -60,7 +60,7 @@
     glUseProgram(self.shader.program);
     
     
-    glUniform1f(self.shader.uniformObjectWidth, textureSize.width);
+    glUniform1f(self.shader.uniformObjectWidth, textureSize.width); 
     glUniform1f(self.shader.uniformObjectHeight, textureSize.height);
     glUniform1f(self.shader.uniformWindowWidth, outputSize.width);
     glUniform1f(self.shader.uniformWindowHeight, outputSize.height);
