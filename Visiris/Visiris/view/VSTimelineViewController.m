@@ -430,15 +430,21 @@ static NSString* defaultNib = @"VSTimelineView";
 
 -(void) timelineObject: timelineObjectViewController wasDraggedOnTrack:(VSTrackViewController *)trackViewController{
     
-    float maxFrameX = 0.0;
-    
     for(VSTrackViewController *tmpTrackViewController in self.trackViewControllers){
         if(tmpTrackViewController != trackViewController){
             [tmpTrackViewController setTimelineObjectViewsIntersectedByMoveableTimelineObjects];
         }
+    }
     
+    [self enlargeTimelineIfNeccessary];
+}
+
+
+-(void) enlargeTimelineIfNeccessary{
+    float maxFrameX = 0.0;
+    for(VSTrackViewController *tmpTrackViewController in self.trackViewControllers){
         NSArray *moveableObjects = [tmpTrackViewController movableTimelineObjectViewControllers];
-    
+        
         for(VSTimelineObjectViewController *timelineObjectViewController in moveableObjects){
             float maxX =  NSMaxX( timelineObjectViewController.view.frame);
             
@@ -446,18 +452,16 @@ static NSString* defaultNib = @"VSTimelineView";
                 maxFrameX = maxX;
             }
         }
+        
+        double newTimeMax = [self timestampForPixelPosition:maxFrameX];
+        
+        if(newTimeMax > self.timeline.duration){
+            [self resizeTracksAccordingToDuration:newTimeMax];
+        }
+        else{
+            [self resizeTracksAccordingToDuration:self.timeline.duration];
+        }
     }
-    
-    double newTimeMax = [self timestampForPixelPosition:maxFrameX];
-    
-    if(newTimeMax > self.timeline.duration){
-        [self resizeTracksAccordingToDuration:newTimeMax];
-    }
-    else{
-        [self resizeTracksAccordingToDuration:self.timeline.duration];
-    }
-    
-    [self scrollIfMouseOutsideContentView];
 }
 
 -(void) resizeTracksAccordingToDuration:(double) duration{
@@ -476,6 +480,13 @@ static NSString* defaultNib = @"VSTimelineView";
             [tmpTrackViewController resetIntersections];
         }
     }
+
+[self setTimelineDurationAccordingToTimelineWidth];
+}
+
+-(void) setTimelineDurationAccordingToTimelineWidth{
+    self.timeline.duration = [self timestampForPixelPosition:self.trackHolder.frame.size.width];
+    [self computePixelTimeRatio];
 }
 
 -(void) timelineObject: timelineObjectViewController willStartDraggingOnTrack:(VSTrackViewController *)trackViewController{
@@ -529,25 +540,6 @@ static NSString* defaultNib = @"VSTimelineView";
     }
     
     
-}
-
-
-
--(void) scrollIfMouseOutsideContentView{
-    
-    NSPoint currentScrollPoint = self.scrollView.contentView.bounds.origin;
-    
-    NSPoint globalLocation = [ NSEvent mouseLocation ];
-    NSPoint windowLocation = [ [ self.scrollView window ] convertScreenToBase: globalLocation ];
-    NSPoint viewLocation = [ self.scrollView convertPoint: windowLocation fromView: nil ];
-    if(!NSPointInRect( viewLocation, [ self.scrollView frame] ) ) {
-
-        float deltaX = viewLocation.x - NSMaxX(self.trackHolder.bounds);
-        DDLogInfo(@"you are outsied da fram: %f",deltaX);        
-
-    }
-    
-
 }
 
 
@@ -1107,4 +1099,39 @@ static NSString* defaultNib = @"VSTimelineView";
     //NSLog(@"labelRect: %@",NSStringFromRect(labelRect));
     [self.trackLabelsViewController addTrackLabel:[[VSTrackLabel alloc] initWithName:aTrack.track.name forTrack:aTrack.track.trackID forFrame:labelRect]];
 }
+
+
+-(void) scrollIfMouseOutsideContentView{
+    
+    NSPoint currentScrollPoint = self.scrollView.contentView.bounds.origin;
+    
+    NSPoint globalLocation = [ NSEvent mouseLocation ];
+    NSPoint windowLocation = [ [ self.scrollView window ] convertScreenToBase: globalLocation ];
+    NSPoint viewLocation = [ self.trackHolder convertPoint: windowLocation fromView: nil ];
+    
+    if(!NSPointInRect( viewLocation, [self.scrollView documentVisibleRect] ) ) {
+        float deltaX = viewLocation.x - NSMaxX(self.scrollView.documentVisibleRect);
+        
+        NSPoint currentScrollPosition=self.scrollView.contentView.bounds.origin;
+        //        currentScrollPosition.x += deltaX;
+        DDLogInfo(@"%f",deltaX);
+        
+        
+        NSPoint newScrollOrigin;
+        
+        // assume that the scrollview is an existing variable
+        if ([[self.scrollView documentView] isFlipped]) {
+            newScrollOrigin=NSMakePoint(currentScrollPosition.x,0.0);
+        } else {
+            newScrollOrigin=NSMakePoint(currentScrollPosition.x,NSMaxY([[self.scrollView documentView] frame])
+                                        -NSHeight([[self.scrollView contentView] bounds]));
+        }
+        
+        
+        
+        //[self.scrollView.documentView scrollPoint:currentScrollPosition];
+    }
+    
+}
+
 @end
