@@ -38,6 +38,9 @@ extern NSString* VSParameterKeyScaleHeight;
 /** Parameter for visibility of a VSTimelineObject */
 extern NSString* VSParameterKeyVisibility;
 
+/**Parameter for the volume of the AudioObject */
+extern NSString* VSParameterAudioVolume;
+
 
 extern NSString* VSParameterQuartzComposerPublicInputs;
 

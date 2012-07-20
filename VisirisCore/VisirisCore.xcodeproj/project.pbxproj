@@ -43,16 +43,26 @@
 		276151481577D66B005177C5 /* VSTexture.m in Sources */ = {isa = PBXBuildFile; fileRef = 276151461577D66B005177C5 /* VSTexture.m */; };
 		2761514B1577F290005177C5 /* VSShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 276151491577F290005177C5 /* VSShader.h */; };
 		2761514C1577F290005177C5 /* VSShader.m in Sources */ = {isa = PBXBuildFile; fileRef = 2761514A1577F290005177C5 /* VSShader.m */; };
-		276AAD581575044400A984E0 /* jolandabregenz.png in Resources */ = {isa = PBXBuildFile; fileRef = 276AAD571575044400A984E0 /* jolandabregenz.png */; };
-		276AAD5B1575046B00A984E0 /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 276AAD5A1575046B00A984E0 /* test.jpg */; };
+		276D436615B7FC8200389C86 /* VSAudioCoreHandover.h in Headers */ = {isa = PBXBuildFile; fileRef = 276D436415B7FC8200389C86 /* VSAudioCoreHandover.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		276D436715B7FC8200389C86 /* VSAudioCoreHandover.m in Sources */ = {isa = PBXBuildFile; fileRef = 276D436515B7FC8200389C86 /* VSAudioCoreHandover.m */; };
 		27973E9115B41C3B0051C16F /* VSLayerShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 27973E8F15B41C3A0051C16F /* VSLayerShader.h */; };
 		27973E9215B41C3B0051C16F /* VSLayerShader.m in Sources */ = {isa = PBXBuildFile; fileRef = 27973E9015B41C3B0051C16F /* VSLayerShader.m */; };
 		27973E9615B43CA00051C16F /* transform.fs.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 27973E9415B43CA00051C16F /* transform.fs.glsl */; };
 		27973E9715B43CA00051C16F /* transform.vs.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 27973E9515B43CA00051C16F /* transform.vs.glsl */; };
 		27973E9A15B441D20051C16F /* VSTransformShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 27973E9815B441D20051C16F /* VSTransformShader.h */; };
 		27973E9B15B441D20051C16F /* VSTransformShader.m in Sources */ = {isa = PBXBuildFile; fileRef = 27973E9915B441D20051C16F /* VSTransformShader.m */; };
+		279820E015B85A4B00E8AA8E /* VSPlaybackMode.h in Headers */ = {isa = PBXBuildFile; fileRef = 279820DF15B85A4B00E8AA8E /* VSPlaybackMode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		27A135A7157608FD00883B96 /* layering.fs.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 27A135A5157608FD00883B96 /* layering.fs.glsl */; };
 		27A135A8157608FD00883B96 /* layering.vs.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 27A135A6157608FD00883B96 /* layering.vs.glsl */; };
+		27A6CA0515B73AD7004C6DFB /* VSAudioCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 27A6CA0315B73AD7004C6DFB /* VSAudioCore.h */; };
+		27A6CA0615B73AD7004C6DFB /* VSAudioCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A6CA0415B73AD7004C6DFB /* VSAudioCore.m */; };
+		27A6CA0D15B746EB004C6DFB /* VSAudioPlayerManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 27A6CA0B15B746EB004C6DFB /* VSAudioPlayerManager.h */; };
+		27A6CA0E15B746EB004C6DFB /* VSAudioPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A6CA0C15B746EB004C6DFB /* VSAudioPlayerManager.m */; };
+		27A6CA1115B74FA0004C6DFB /* VSAudioPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 27A6CA0F15B74FA0004C6DFB /* VSAudioPlayer.h */; };
+		27A6CA1215B74FA0004C6DFB /* VSAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A6CA1015B74FA0004C6DFB /* VSAudioPlayer.m */; };
+		27A6CA1615B753DD004C6DFB /* NSMutableDictionary+VSAudioPlayerManger.h in Headers */ = {isa = PBXBuildFile; fileRef = 27A6CA1415B753DD004C6DFB /* NSMutableDictionary+VSAudioPlayerManger.h */; };
+		27A6CA1715B753DD004C6DFB /* NSMutableDictionary+VSAudioPlayerManger.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A6CA1515B753DD004C6DFB /* NSMutableDictionary+VSAudioPlayerManger.m */; };
+		27A6CA1915B75820004C6DFB /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27A6CA1815B7581F004C6DFB /* AVFoundation.framework */; };
 		27AF8FC815B56546007A0322 /* VSTransformTextureManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 27AF8FC615B56546007A0322 /* VSTransformTextureManager.h */; };
 		27AF8FC915B56546007A0322 /* VSTransformTextureManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 27AF8FC715B56546007A0322 /* VSTransformTextureManager.m */; };
 		27C5606915877DAC00E14DCE /* VSImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 27C5606715877DAC00E14DCE /* VSImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -95,16 +105,26 @@
 		276151461577D66B005177C5 /* VSTexture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTexture.m; sourceTree = "<group>"; };
 		276151491577F290005177C5 /* VSShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSShader.h; sourceTree = "<group>"; };
 		2761514A1577F290005177C5 /* VSShader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSShader.m; sourceTree = "<group>"; };
-		276AAD571575044400A984E0 /* jolandabregenz.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = jolandabregenz.png; sourceTree = "<group>"; };
-		276AAD5A1575046B00A984E0 /* test.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test.jpg; sourceTree = "<group>"; };
+		276D436415B7FC8200389C86 /* VSAudioCoreHandover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAudioCoreHandover.h; sourceTree = "<group>"; };
+		276D436515B7FC8200389C86 /* VSAudioCoreHandover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAudioCoreHandover.m; sourceTree = "<group>"; };
 		27973E8F15B41C3A0051C16F /* VSLayerShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSLayerShader.h; sourceTree = "<group>"; };
 		27973E9015B41C3B0051C16F /* VSLayerShader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLayerShader.m; sourceTree = "<group>"; };
 		27973E9415B43CA00051C16F /* transform.fs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = transform.fs.glsl; sourceTree = "<group>"; };
 		27973E9515B43CA00051C16F /* transform.vs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = transform.vs.glsl; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
 		27973E9815B441D20051C16F /* VSTransformShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTransformShader.h; sourceTree = "<group>"; };
 		27973E9915B441D20051C16F /* VSTransformShader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTransformShader.m; sourceTree = "<group>"; };
+		279820DF15B85A4B00E8AA8E /* VSPlaybackMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VSPlaybackMode.h; path = CoreServices/VSPlaybackMode.h; sourceTree = "<group>"; };
 		27A135A5157608FD00883B96 /* layering.fs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = layering.fs.glsl; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
 		27A135A6157608FD00883B96 /* layering.vs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = layering.vs.glsl; sourceTree = "<group>"; };
+		27A6CA0315B73AD7004C6DFB /* VSAudioCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAudioCore.h; sourceTree = "<group>"; };
+		27A6CA0415B73AD7004C6DFB /* VSAudioCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAudioCore.m; sourceTree = "<group>"; };
+		27A6CA0B15B746EB004C6DFB /* VSAudioPlayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAudioPlayerManager.h; sourceTree = "<group>"; };
+		27A6CA0C15B746EB004C6DFB /* VSAudioPlayerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAudioPlayerManager.m; sourceTree = "<group>"; };
+		27A6CA0F15B74FA0004C6DFB /* VSAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAudioPlayer.h; sourceTree = "<group>"; };
+		27A6CA1015B74FA0004C6DFB /* VSAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAudioPlayer.m; sourceTree = "<group>"; };
+		27A6CA1415B753DD004C6DFB /* NSMutableDictionary+VSAudioPlayerManger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSMutableDictionary+VSAudioPlayerManger.h"; path = "CoreServices/Categories/NSMutableDictionary+VSAudioPlayerManger.h"; sourceTree = "<group>"; };
+		27A6CA1515B753DD004C6DFB /* NSMutableDictionary+VSAudioPlayerManger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSMutableDictionary+VSAudioPlayerManger.m"; path = "CoreServices/Categories/NSMutableDictionary+VSAudioPlayerManger.m"; sourceTree = "<group>"; };
+		27A6CA1815B7581F004C6DFB /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		27AF8FC615B56546007A0322 /* VSTransformTextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTransformTextureManager.h; sourceTree = "<group>"; };
 		27AF8FC715B56546007A0322 /* VSTransformTextureManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTransformTextureManager.m; sourceTree = "<group>"; };
 		27C5606715877DAC00E14DCE /* VSImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSImage.h; sourceTree = "<group>"; };
@@ -135,6 +155,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27A6CA1915B75820004C6DFB /* AVFoundation.framework in Frameworks */,
 				270692D61594F94F001A9329 /* Quartz.framework in Frameworks */,
 				274C70D1157E82EE0031F9B2 /* QuartzCore.framework in Frameworks */,
 				275D8D0F156EB42B0081AB80 /* OpenGL.framework in Frameworks */,
@@ -148,9 +169,11 @@
 		274C70CA157E81BA0031F9B2 /* CoreServices */ = {
 			isa = PBXGroup;
 			children = (
+				27A6CA1315B7539B004C6DFB /* Categories */,
 				5BD5AEC1159A10320008CE80 /* VSParameterTypes.h */,
 				5BD5AEC2159A10320008CE80 /* VSParameterTypes.m */,
 				270692CB1594CF42001A9329 /* VSFileKind.h */,
+				279820DF15B85A4B00E8AA8E /* VSPlaybackMode.h */,
 				274C70CC157E81DD0031F9B2 /* VSImageContext.h */,
 				274C70CD157E81DD0031F9B2 /* VSImageContext.m */,
 			);
@@ -160,6 +183,7 @@
 		276151311577C7E4005177C5 /* RenderCore */ = {
 			isa = PBXGroup;
 			children = (
+				27A135A4157608FD00883B96 /* Shader */,
 				276151321577C7E4005177C5 /* VSRenderCore.h */,
 				276151331577C7E4005177C5 /* VSRenderCore.m */,
 				276151361577C814005177C5 /* VSFrameBufferObject.h */,
@@ -196,7 +220,30 @@
 				27973E9415B43CA00051C16F /* transform.fs.glsl */,
 				27973E9515B43CA00051C16F /* transform.vs.glsl */,
 			);
-			path = Shader;
+			name = Shader;
+			path = ../Shader;
+			sourceTree = "<group>";
+		};
+		27A6CA0215B73A6E004C6DFB /* AudioCore */ = {
+			isa = PBXGroup;
+			children = (
+				27A6CA0315B73AD7004C6DFB /* VSAudioCore.h */,
+				27A6CA0415B73AD7004C6DFB /* VSAudioCore.m */,
+				27A6CA0B15B746EB004C6DFB /* VSAudioPlayerManager.h */,
+				27A6CA0C15B746EB004C6DFB /* VSAudioPlayerManager.m */,
+				27A6CA0F15B74FA0004C6DFB /* VSAudioPlayer.h */,
+				27A6CA1015B74FA0004C6DFB /* VSAudioPlayer.m */,
+			);
+			path = AudioCore;
+			sourceTree = "<group>";
+		};
+		27A6CA1315B7539B004C6DFB /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				27A6CA1415B753DD004C6DFB /* NSMutableDictionary+VSAudioPlayerManger.h */,
+				27A6CA1515B753DD004C6DFB /* NSMutableDictionary+VSAudioPlayerManger.m */,
+			);
+			name = Categories;
 			sourceTree = "<group>";
 		};
 		5B14E99F15641B0200AFF08C /* handOvers */ = {
@@ -208,6 +255,8 @@
 				5B14E9A315641B0200AFF08C /* VSFrameCoreHandover.m */,
 				5B14E9A815641B5D00AFF08C /* VSQuartzComposerHandover.h */,
 				5B14E9A915641B5D00AFF08C /* VSQuartzComposerHandover.m */,
+				276D436415B7FC8200389C86 /* VSAudioCoreHandover.h */,
+				276D436515B7FC8200389C86 /* VSAudioCoreHandover.m */,
 			);
 			path = handOvers;
 			sourceTree = "<group>";
@@ -233,6 +282,7 @@
 		5B19BF67155D0E4E00807769 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				27A6CA1815B7581F004C6DFB /* AVFoundation.framework */,
 				270692D51594F94F001A9329 /* Quartz.framework */,
 				274C70D0157E82EE0031F9B2 /* QuartzCore.framework */,
 				5B19BF6B155D0E4E00807769 /* AppKit.framework */,
@@ -247,11 +297,11 @@
 		5B19BF6E155D0E4E00807769 /* VisirisCore */ = {
 			isa = PBXGroup;
 			children = (
-				27A135A4157608FD00883B96 /* Shader */,
 				5BFE39411566527D00DC19C9 /* protocolls */,
 				5B14E99F15641B0200AFF08C /* handOvers */,
 				5B6965BB15640F2900C6EABC /* Receptionist */,
 				276151311577C7E4005177C5 /* RenderCore */,
+				27A6CA0215B73A6E004C6DFB /* AudioCore */,
 				5B19BF6F155D0E4E00807769 /* Supporting Files */,
 			);
 			path = VisirisCore;
@@ -260,8 +310,6 @@
 		5B19BF6F155D0E4E00807769 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				276AAD5A1575046B00A984E0 /* test.jpg */,
-				276AAD571575044400A984E0 /* jolandabregenz.png */,
 				5B7A6100156E2F82000FBEC3 /* AppledocSettings.plist */,
 				5B19BF70155D0E4E00807769 /* VisirisCore-Info.plist */,
 				5B19BF71155D0E4E00807769 /* InfoPlist.strings */,
@@ -312,6 +360,12 @@
 				27973E9115B41C3B0051C16F /* VSLayerShader.h in Headers */,
 				27973E9A15B441D20051C16F /* VSTransformShader.h in Headers */,
 				27AF8FC815B56546007A0322 /* VSTransformTextureManager.h in Headers */,
+				27A6CA0515B73AD7004C6DFB /* VSAudioCore.h in Headers */,
+				27A6CA0D15B746EB004C6DFB /* VSAudioPlayerManager.h in Headers */,
+				27A6CA1115B74FA0004C6DFB /* VSAudioPlayer.h in Headers */,
+				27A6CA1615B753DD004C6DFB /* NSMutableDictionary+VSAudioPlayerManger.h in Headers */,
+				276D436615B7FC8200389C86 /* VSAudioCoreHandover.h in Headers */,
+				279820E015B85A4B00E8AA8E /* VSPlaybackMode.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,8 +423,6 @@
 			files = (
 				5B19BF73155D0E4E00807769 /* InfoPlist.strings in Resources */,
 				5B7A6101156E2F82000FBEC3 /* AppledocSettings.plist in Resources */,
-				276AAD581575044400A984E0 /* jolandabregenz.png in Resources */,
-				276AAD5B1575046B00A984E0 /* test.jpg in Resources */,
 				27A135A7157608FD00883B96 /* layering.fs.glsl in Resources */,
 				27A135A8157608FD00883B96 /* layering.vs.glsl in Resources */,
 				27973E9615B43CA00051C16F /* transform.fs.glsl in Resources */,
@@ -419,6 +471,11 @@
 				27973E9215B41C3B0051C16F /* VSLayerShader.m in Sources */,
 				27973E9B15B441D20051C16F /* VSTransformShader.m in Sources */,
 				27AF8FC915B56546007A0322 /* VSTransformTextureManager.m in Sources */,
+				27A6CA0615B73AD7004C6DFB /* VSAudioCore.m in Sources */,
+				27A6CA0E15B746EB004C6DFB /* VSAudioPlayerManager.m in Sources */,
+				27A6CA1215B74FA0004C6DFB /* VSAudioPlayer.m in Sources */,
+				27A6CA1715B753DD004C6DFB /* NSMutableDictionary+VSAudioPlayerManger.m in Sources */,
+				276D436715B7FC8200389C86 /* VSAudioCoreHandover.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

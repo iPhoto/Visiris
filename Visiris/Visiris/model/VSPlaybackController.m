@@ -22,6 +22,7 @@
 @property BOOL playing;
 @property double playbackStartTime;
 @property BOOL jumping;
+@property BOOL scrubbing;
 
 @end
 
@@ -37,6 +38,7 @@
 @synthesize playbackStartTime   = _playbackStartTime;
 @synthesize frameWasRender      = _frameWasRender;
 @synthesize jumping             = _jumping;
+@synthesize scrubbing           = _scrubbing;
 
 #pragma mark - Init
 
@@ -77,11 +79,11 @@
     }
     
     else if([keyPath isEqualToString:@"scrubbing"]){
-        BOOL scrubbing = [[object valueForKey:keyPath] boolValue];
+        self.scrubbing = [[object valueForKey:keyPath] boolValue];
         
         self.currentTimestamp = [[object valueForKey:@"currentTimePosition"] doubleValue];
         
-        if(scrubbing){
+        if(self.scrubbing){
             self.playing = NO;
             if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
                 [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
@@ -91,6 +93,7 @@
             if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
                 [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
             }
+            [self stop];
         }
     }
     
@@ -105,6 +108,7 @@
     [timerThread start];
 }
 
+//TODO WTF??? isnt called anymore
 -(void) stopPlayback{
     [self.queue cancelAllOperations];
     [self.playbackTimer invalidate];
@@ -137,7 +141,27 @@
 
 -(void) renderCurrentFrame{
     if (self.preProcessor) {
-        [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:[VSProjectSettings sharedProjectSettings].frameSize isPlaying:self.playing];
+        
+        VSPlaybackMode mode;
+        if (self.scrubbing) {
+            mode = VSPlaybackModeScrubbing;
+        } else if (self.playing) {
+            mode = VSPlaybackModePlaying;
+        } else {
+            mode = VSPlaybackModeStanding;
+        }
+        
+        [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:[VSProjectSettings sharedProjectSettings].frameSize withPlayMode:mode];
+    }
+    
+    if(!self.playing){
+        if(!self.timeline.playHead.scrubbing){
+            if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
+                [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
+            }
+            self.frameWasRender = YES;
+            
+        }
     }
 }
 
@@ -166,6 +190,7 @@
 -(void) stop{
     //    [self stopPlayback];
     self.playing = NO;
+    [self.preProcessor stopPlayback];
 }
 
 

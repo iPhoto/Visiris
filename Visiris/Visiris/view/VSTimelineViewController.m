@@ -649,7 +649,7 @@ static NSString* defaultNib = @"VSTimelineView";
 -(void) computePixelTimeRatio{
     double newRatio = self.timeline.duration / self.trackHolder.frame.size.width;
     
-    DDLogInfo(@"computePixelTimeRatio: %f - %f",newRatio,VSMinimumPixelTimeRatio);
+    //DDLogInfo(@"computePixelTimeRatio: %f - %f",newRatio,VSMinimumPixelTimeRatio);
     
     if(newRatio < VSMinimumPixelTimeRatio)
     {

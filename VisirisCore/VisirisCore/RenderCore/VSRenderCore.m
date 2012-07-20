@@ -103,7 +103,7 @@
     return self;
 }
 
--(void)renderFrameOfCoreHandovers:(NSArray *) theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double)theTimestamp{
+-(void)renderFrameOfCoreHandovers:(NSArray *)theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double)theTimestamp{
     
    // NSLog(@"%@",NSStringFromSize(theFrameSize) );    
 
@@ -304,7 +304,7 @@
                 [qcRenderer setPublicInputsWithValues:qcPublicInputValues];
             }
                         
-            [textures addObject:[NSNumber numberWithInt:[self.transformTextureManager transformTexture:[qcRenderer renderAtTme:time]
+            [textures addObject:[NSNumber numberWithInt:[self.transformTextureManager transformTexture:[qcRenderer renderAtTme:handover.timestamp]
                                                                                                atTrack:qcRenderer.trackId 
                                                                                         withAttributes:coreHandover.attributes 
                                                                                        withTextureSize:qcRenderer.size 

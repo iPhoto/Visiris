@@ -15,6 +15,7 @@
 #import "VSProjectSettings.h"
 #import "VSFileType.h"
 #import "VSQuartzCompositionUtils.h"
+#import "VSProjectItem.h"
 
 @interface VSPreProcessor()
 @end
@@ -39,20 +40,20 @@
 
 #pragma mark - Methods
 
-- (void)processFrameAtTimestamp:(double)aTimestamp withFrameSize:(NSSize)aFrameSize isPlaying:(BOOL)playing
+- (void)processFrameAtTimestamp:(double)aTimestamp withFrameSize:(NSSize)aFrameSize withPlayMode:(VSPlaybackMode)playMode
 {
     NSArray *currentTimeLineObjects = [self.timeline timelineObjectsForTimestamp:aTimestamp];
     
     NSMutableArray *handoverObjects = [[NSMutableArray alloc] init];
     
     for (VSTimelineObject *currentTimeLineObject in currentTimeLineObjects) {
-        VSCoreHandover *coreHandover = [currentTimeLineObject handoverForTimestamp:aTimestamp frameSize:aFrameSize isPlaying:playing];
+        VSCoreHandover *coreHandover = [currentTimeLineObject handoverForTimestamp:aTimestamp frameSize:aFrameSize withPlayMode:playMode];
         if (coreHandover) {
             [handoverObjects addObject:coreHandover];
         }
     }
     
-    [self.renderCoreReceptionist renderFrameAtTimestamp:aTimestamp withHandovers:handoverObjects forSize:aFrameSize];
+    [self.renderCoreReceptionist renderFrameAtTimestamp:aTimestamp withHandovers:handoverObjects forSize:aFrameSize withPlayMode:playMode];
 }
 
 #pragma mark - VSTimelineTimelineObjectsDelegate implementation
@@ -65,24 +66,64 @@
     }
 }
 
-//TODO: add colorspace
+//TODO: add colorspace...but i think we don't need it
 -(void) timelineObjects:(NSArray *)newTimelineObjects haveBeenAddedToTrack:(VSTrack *)aTrack{
     //DDLogInfo(@"%@",newTimelineObjects);
     
     for(VSTimelineObject *timelineObject in newTimelineObjects){
         
-        NSSize dimensions = [VSFileUtils dimensionsOfFile:timelineObject.sourceObject.filePath];
-        VSFileType *type = [VSSupportedFilesManager typeOFile:timelineObject.sourceObject.filePath];
-       
-        NSSize outputSize = [VSProjectSettings sharedProjectSettings].frameSize;
-                        
-        timelineObject.textureID = [self.renderCoreReceptionist createNewTextureForSize:dimensions 
-                                                                              colorMode:nil 
-                                                                               forTrack:aTrack.trackID 
-                                                                               withType:type.fileKind 
-                                                                         withOutputSize:outputSize
-                                                                               withPath:timelineObject.sourceObject.filePath];
+        switch (timelineObject.sourceObject.projectItem.fileType.fileKind) {
+            case VSFileKindAudio:
+            {
+                [self handleAudioTimelineObject:timelineObject atTrack:aTrack];
+            }
+            break;
+                
+            case VSFileKindImage:
+            case VSFileKindVideo:
+            case VSFileKindQuartzComposerPatch:
+            {
+                [self handleFrameTimelineObject:timelineObject atTrack:aTrack];
+            }
+            break;
+
+                default:
+                break;
+        }
     }
+}
+
+- (void)handleFrameTimelineObject:(VSTimelineObject *)timelineObject atTrack:(VSTrack *)track{
+    
+    NSSize dimensions = [VSFileUtils dimensionsOfFile:timelineObject.sourceObject.filePath];
+    VSFileType *type = [VSSupportedFilesManager typeOFile:timelineObject.sourceObject.filePath];
+    
+    NSSize outputSize = [VSProjectSettings sharedProjectSettings].frameSize;
+    
+    timelineObject.textureID = [self.renderCoreReceptionist createNewTextureForSize:dimensions 
+                                                                          colorMode:nil 
+                                                                           forTrack:track.trackID 
+                                                                           withType:type.fileKind 
+                                                                     withOutputSize:outputSize
+                                                                           withPath:timelineObject.sourceObject.filePath];
+
+}
+
+- (void)handleAudioTimelineObject:(VSTimelineObject *)timelineObject atTrack:(VSTrack *)track{
+
+    if (timelineObject && track) {
+        
+        NSInteger projectItemID = timelineObject.sourceObject.projectItem.itemID;
+        NSInteger trackID = track.trackID;
+        NSString *filePath = timelineObject.sourceObject.filePath;
+        NSInteger objectItemID = timelineObject.timelineObjectID;
+        
+        [self.renderCoreReceptionist createNewAudioPlayerWithProjectItemID:projectItemID withObjectItemID:objectItemID forTrack:trackID andFilePath:filePath];
+    }
+}
+
+- (void)stopPlayback{
+    [self.renderCoreReceptionist stopPlaying];
 }
 
 @end

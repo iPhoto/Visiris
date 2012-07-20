@@ -62,12 +62,12 @@
     return self;
 }
 
--(VSImage *) getFrameForTimestamp:(double)aTimestamp isPlaying:(BOOL)playing{    
+-(VSImage *) getFrameForTimestamp:(double)aTimestamp withPlayMode:(VSPlaybackMode)playMode{
 
     //TODO this is sparta - no its slow!
     aTimestamp /= 1000.0;
     
-    if (playing) {
+    if (playMode == VSPlaybackModePlaying) {
         if (self.isReadingVideo == NO) {
             self.isReadingVideo = YES;
             [self readMovie:self.url atTime:aTimestamp];

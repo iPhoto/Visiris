@@ -10,11 +10,12 @@
 #import "VSProjectSettings.h"
 #import "VisirisCore/VSImage.h"
 
+
 @implementation VSFrameSourceSupplier
 @synthesize vsImage = _vsImage;
 
 
--(VSImage *) getFrameForTimestamp:(double)aTimestamp isPlaying:(BOOL)playing{
+-(VSImage *) getFrameForTimestamp:(double)aTimestamp withPlayMode:(VSPlaybackMode)playMode{
     NSLog(@"getFrameForTimestamp in FrameSourceSupplier is called - dunno why...");
     return nil;
 }

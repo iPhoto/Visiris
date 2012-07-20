@@ -29,6 +29,7 @@
 #import "VisirisCore/VSFileKind.h" 
 #import "VSTrackType.h"
 #import "VSParameterDataType.h"
+#import "VisirisCore/VSPlaybackMode.h"
 
 /*Logging*/
 #import "VSLog.h"

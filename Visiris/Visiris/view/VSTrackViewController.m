@@ -974,7 +974,7 @@ static NSString* defaultNib = @"VSTrackView";
     frame.size.width = proxy.duration / self.pixelTimeRatio;
     frame.size.height = self.view.frame.size.height;
     frame.origin.y = 0;
-    DDLogInfo(@"here");
+   // DDLogInfo(@"here");
     
     return frame;
 }

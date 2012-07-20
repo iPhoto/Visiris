@@ -42,6 +42,12 @@
  * @param aFrameSize Frame size the frame will be processed for.
  * @param playing Tells if currently is playing or scrubbing.
  */
-- (void)processFrameAtTimestamp:(double)aTimestamp withFrameSize:(NSSize)aFrameSize isPlaying:(BOOL)playing;
+- (void)processFrameAtTimestamp:(double)aTimestamp withFrameSize:(NSSize)aFrameSize withPlayMode:(VSPlaybackMode)playMode;
+
+/**
+ * Tells the core to stop 
+ */
+
+- (void)stopPlayback;
 
 @end

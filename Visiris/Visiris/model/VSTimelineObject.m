@@ -17,6 +17,8 @@
 #import "VisirisCore/VSFrameCoreHandover.h"
 #import "VisirisCore/VSQuartzComposerHandover.h"
 #import "VSSourceSupplier.h"
+#import "VSAudioSourceSupplier.h"
+#import "VisirisCore/VSAudioCoreHandover.h"
 
 @implementation VSTimelineObject
 
@@ -86,14 +88,14 @@
     return self.startTime + self.duration;
 }
 
-- (VSCoreHandover *)handoverForTimestamp:(double)aTimestamp frameSize:(NSSize)aFrameSize isPlaying:(BOOL)playing{
+- (VSCoreHandover *)handoverForTimestamp:(double)aTimestamp frameSize:(NSSize)aFrameSize withPlayMode:(VSPlaybackMode)mode{
     
     VSCoreHandover *coreHandover = nil;
     
     double localTimestamp = [self convertGlobalTimestampToLocalTimestamp:aTimestamp];
-    //TODO richtiges corehandover basteln
+
     if ([self.supplier isKindOfClass:[VSFrameSourceSupplier class]] ) {
-        coreHandover = [[VSFrameCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp isPlaying:playing]
+        coreHandover = [[VSFrameCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp withPlayMode:mode]
                                                     andAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp]
                                                      forTextureID:self.textureID
                                                      forTimestamp:localTimestamp
@@ -106,7 +108,12 @@
                                                                       forId:self.timelineObjectID
                                                                forTextureID:self.textureID];
     }
-    else{
+    else if ([self.supplier isKindOfClass:[VSAudioSourceSupplier class]]) {
+        coreHandover = [[VSAudioCoreHandover alloc] initWithAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp] 
+                                                          forTimestamp:localTimestamp
+                                                                 forId:self.timelineObjectID];
+    }
+    else {
         DDLogInfo(@"unsuported file/handover");
     }
     
