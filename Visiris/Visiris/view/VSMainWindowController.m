@@ -43,6 +43,8 @@
 
 static NSString* defaultNib = @"MainWindow";
 
+#pragma mark - Init
+
 -(id) init{
     if(self = [self initWithWindowNibName:defaultNib]){
         
@@ -65,14 +67,20 @@ static NSString* defaultNib = @"MainWindow";
 {
     [super windowDidLoad];
     
+    [self.window setAcceptsMouseMovedEvents:YES];
+    
     //checks if the document is a visirs document
     if(self.document && [self.document isKindOfClass:[VSDocument class]]){
         [self initMainWindowAccordingToDocument];
-        
     }
     /** inits the spltiview with their subviews */
     [self initSplitViews];
 }
+
+#pragma mark - NSWindow
+
+
+#pragma mark - Methods
 
 /**
  * Inits the controllers of the subviews in the main window with the information stored in VSMainWindowController's VSDocument.

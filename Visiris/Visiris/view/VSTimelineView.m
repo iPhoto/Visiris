@@ -44,6 +44,7 @@
     return YES;
 }
 
+
 -(void) keyDown:(NSEvent *)theEvent{
     if([self delegateRespondsToSelector:@selector(didReceiveKeyDownEvent:)]){
         [self.delegate didReceiveKeyDownEvent:theEvent];
@@ -52,6 +53,10 @@
 
 -(void) scrollWheel:(NSEvent *)theEvent{
     DDLogInfo(@"scrollWheel: %@",theEvent);
+}
+
+-(void) mouseMoved:(NSEvent *)theEvent{
+    
 }
 
 #pragma mark- VSTrackViewDelegate implementation

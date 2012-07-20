@@ -372,6 +372,7 @@
 		5B7BFFC61592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineObjectViewIntersection.m; sourceTree = "<group>"; };
 		5BAB35D315B4153D008B4793 /* VSTimelineScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineScrollView.h; sourceTree = "<group>"; };
 		5BAB35D415B4153D008B4793 /* VSTimelineScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineScrollView.m; sourceTree = "<group>"; };
+		5BF875BE15B95E4200CEBBDD /* VSViewMouseEventsDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSViewMouseEventsDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1010,6 +1011,7 @@
 			isa = PBXGroup;
 			children = (
 				5B4D1E6515B7F67900158404 /* VSFrameResizingDelegate.h */,
+				5BF875BE15B95E4200CEBBDD /* VSViewMouseEventsDelegate.h */,
 			);
 			name = protocolls;
 			sourceTree = "<group>";

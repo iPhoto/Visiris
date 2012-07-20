@@ -316,7 +316,7 @@ static NSString* defaultNib = @"VSTrackView";
     
     VSTimelineObjectViewController *newTimelineObjectViewController = [self addTemporaryTimelineObject:aProxyObject];
     
-    [newTimelineObjectViewController.view setFrame:NSIntegralRect(aFrame)];
+    [newTimelineObjectViewController.view setFrame:aFrame];
     
     return newTimelineObjectViewController;
     
@@ -643,7 +643,7 @@ static NSString* defaultNib = @"VSTrackView";
         
         
         
-        [timelineObjectViewController.view setFrame:NSIntegralRect(newFrame)];
+        [timelineObjectViewController.view setFrame:newFrame];
         
         i++;
     }

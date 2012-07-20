@@ -45,11 +45,6 @@
     
 }
 
-//- (void)drawRect:(NSRect)dirtyRect
-//{
-//    [[NSColor darkGrayColor] set];
-//    NSRectFill(dirtyRect);
-//}
 
 #pragma mark - Event Handling
 
@@ -60,6 +55,10 @@
 
 
 #pragma mark - MouseEvents
+
+-(void) mouseMoved:(NSEvent *)theEvent{
+    [self.nextResponder mouseMoved:theEvent];   
+}
 
 -(void) mouseDown:(NSEvent *)theEvent{
     if([self controllerDelegateImplementsSelector:@selector(didClicktrackView:)]){

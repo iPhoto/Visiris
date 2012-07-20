@@ -243,6 +243,7 @@ static int resizingAreaWidth = 10;
     }
 }
 
+
 #pragma mark - Methods
 
 -(CALayer*) addIntersectionLayerForRect:(NSRect)intersection{

@@ -347,10 +347,10 @@ static NSString* defaultNib = @"VSTimelineView";
 }
 
 
-#pragma Moving TimlineObjects
+#pragma mark Moving TimlineObjects
 
 -(NSPoint) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController WillBeDraggedOnTrack:(VSTrackViewController *)trackViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition withSnappingDeltaX:(float)snappingDeltaX{
-    
+DDLogInfo(@"dragging");    
     float deltaX = newPosition.x - oldPosition.x;
     
     NSMutableArray *snappingDeltas = [[NSMutableArray alloc] init];
@@ -466,6 +466,7 @@ static NSString* defaultNib = @"VSTimelineView";
 
 -(void) resizeTracksAccordingToDuration:(double) duration{
     [self.trackHolder setFrameSize:NSMakeSize([self pixelForTimestamp:duration], self.trackHolder.frame.size.height)];
+    [self updateTimelineRulerMeasurement];
 }
 
 -(void) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController didStopDraggingOnTrack:(VSTrackViewController *)trackViewController{
@@ -1126,6 +1127,7 @@ static NSString* defaultNib = @"VSTimelineView";
             newScrollOrigin=NSMakePoint(currentScrollPosition.x,NSMaxY([[self.scrollView documentView] frame])
                                         -NSHeight([[self.scrollView contentView] bounds]));
         }
+        
         
         
         
