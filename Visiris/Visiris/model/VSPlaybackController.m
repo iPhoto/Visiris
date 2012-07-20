@@ -72,6 +72,8 @@
             self.playing = NO;
             self.jumping = YES;
             
+            self.currentTimestamp = [[object valueForKey:@"currentTimePosition"] doubleValue];
+            
             if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
                 [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
             }
@@ -154,15 +156,11 @@
         [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:[VSProjectSettings sharedProjectSettings].frameSize withPlayMode:mode];
     }
     
-    if(!self.playing){
-        if(!self.timeline.playHead.scrubbing){
+    if(!self.playing && !self.timeline.playHead.scrubbing){
             if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
                 [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
             }
-            self.frameWasRender = YES;
-            
         }
-    }
 }
 
 -(void) computeNewCurrentTimestamp{
@@ -183,7 +181,7 @@
 -(void) play{
     //    [self startPlaybackFromCurrentTimeStamp];
     self.playing = YES;
-    
+    self.jumping = self.scrubbing = NO;
     self.playbackStartTime = [[NSDate date] timeIntervalSince1970]*1000;
 }
 
