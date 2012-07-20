@@ -24,5 +24,6 @@
 @property (assign) GLuint   uniformTranslateX;
 @property (assign) GLuint   uniformTranslateY;
 @property (assign) GLuint   uniformTranslateZ;
+@property (assign) GLuint   uniformIsQCPatch;
 
 @end

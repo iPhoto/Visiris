@@ -83,6 +83,9 @@
         GLint swapInt = 1;
 		[ _openGLContext setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; 
 		
+        //glEnable(GL_BLEND);
+        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         
         if([self make_resources] == 0){
             NSLog(@"Error: Making Resources Failed!!!!!");
@@ -283,6 +286,7 @@
         if ([coreHandover isKindOfClass:[VSFrameCoreHandover class]]){         
             
             VSFrameCoreHandover *handOver = (VSFrameCoreHandover *)coreHandover;
+            
             VSTexture *handOverTexture = [self.textureManager getVSTextureForTexId:handOver.textureID];            
             
             [handOverTexture replaceContent:handOver.frame timeLineObjectId:handOver.timeLineObjectID];
@@ -290,7 +294,8 @@
                                                                                                atTrack:handOverTexture.trackId 
                                                                                         withAttributes:coreHandover.attributes 
                                                                                        withTextureSize:handOverTexture.size
-                                                                                         forOutputSize:outputSize]]];
+                                                                                         forOutputSize:outputSize
+                                                                                             isQCPatch:NO]]];
             
         }
         else if ([coreHandover isKindOfClass:[VSQuartzComposerHandover class]]) {
@@ -308,7 +313,8 @@
                                                                                                atTrack:qcRenderer.trackId 
                                                                                         withAttributes:coreHandover.attributes 
                                                                                        withTextureSize:qcRenderer.size 
-                                                                                         forOutputSize:outputSize]]];
+                                                                                         forOutputSize:outputSize
+                                                                                             isQCPatch:YES]]];
         }
     }
     return textures;

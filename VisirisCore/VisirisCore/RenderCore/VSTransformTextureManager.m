@@ -43,7 +43,7 @@
     return self;
 }
 
-- (GLuint)transformTexture:(GLuint)texture atTrack:(NSInteger)trackId withAttributes:(NSDictionary *)attributes withTextureSize:(NSSize)textureSize forOutputSize:(NSSize)outputSize{
+- (GLuint)transformTexture:(GLuint)texture atTrack:(NSInteger)trackId withAttributes:(NSDictionary *)attributes withTextureSize:(NSSize)textureSize forOutputSize:(NSSize)outputSize isQCPatch:(BOOL)qcPatch{
     
     //NSLog(@"texturesize: %@",NSStringFromSize(textureSize) );    
     //NSLog(@"outputsize: %@",NSStringFromSize(outputSize) );    
@@ -72,6 +72,7 @@
     glUniform1f(self.shader.uniformTranslateX, [[attributes valueForKey:VSParameterKeyPositionX] floatValue]);
     glUniform1f(self.shader.uniformTranslateY, [[attributes valueForKey:VSParameterKeyPositionY] floatValue]);
     glUniform1f(self.shader.uniformTranslateZ, [[attributes valueForKey:VSParameterKeyPositionZ] floatValue]);
+    glUniform1f(self.shader.uniformIsQCPatch, qcPatch);
 
     
     

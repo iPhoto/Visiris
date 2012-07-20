@@ -25,6 +25,7 @@
 @synthesize uniformTranslateX           = _uniformTranslateX;
 @synthesize uniformTranslateY           = _uniformTranslateY;
 @synthesize uniformTranslateZ           = _uniformTranslateZ;
+@synthesize uniformIsQCPatch            = _uniformIsQCPatch;
 
 
 - (id)init{
@@ -44,6 +45,7 @@
         self.uniformTranslateX          = glGetUniformLocation(self.program, "translateX");
         self.uniformTranslateY          = glGetUniformLocation(self.program, "translateY");
         self.uniformTranslateZ          = glGetUniformLocation(self.program, "translateZ");
+        self.uniformIsQCPatch            = glGetUniformLocation(self.program, "isQCPatch");
     }
     return self;
 }
