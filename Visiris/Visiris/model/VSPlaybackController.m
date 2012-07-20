@@ -67,6 +67,7 @@
     
     else if([keyPath isEqualToString:@"jumping"]){
         if([[object valueForKey:keyPath] boolValue]){
+            self.playing = NO;
             self.jumping = YES;
             
             if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){

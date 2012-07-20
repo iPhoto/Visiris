@@ -170,8 +170,29 @@ static int resizingAreaWidth = 10;
 
 -(void) mouseDragged:(NSEvent *)theEvent{
     
+//    float scrollingXDelta = 0.0;
+//    if(self.enclosingScrollView){
+//        NSPoint currentScrollPos = self.enclosingScrollView.contentView.bounds.origin;
+//        [self autoscroll:theEvent];
+//        NSPoint newScrollPos = self.enclosingScrollView.contentView.bounds.origin;
+//        
+//        DDLogInfo(@"scrolled about: %f", currentScrollPos.x - newScrollPos.x);
+//        
+//        scrollingXDelta=currentScrollPos.x - newScrollPos.x;
+//    }
+//    
+//    NSPoint currentScrollPos = self.enclosingScrollView.contentView.bounds.origin;
+//    [self autoscroll:theEvent];
+//    NSPoint newScrollPos = self.enclosingScrollView.contentView.bounds.origin;
+//    
+//    DDLogInfo(@"scrolled about: %f", currentScrollPos.x - newScrollPos.x);
+//    
+//    scrollingXDelta=currentScrollPos.x - newScrollPos.x;
+//
+//    
     NSPoint newMousePosition =[theEvent locationInWindow];
-    
+//    newMousePosition.x += scrollingXDelta;
+//    
     //if the the event was entered first time after a mouse down the kind of drgging operation has to be set
     if(!self.resizing && !self.moving){
         [self setDraggingModeDependingOnMousePosition:newMousePosition];
