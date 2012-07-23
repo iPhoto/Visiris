@@ -223,7 +223,7 @@
     
     NSRect layerRect = self.frame;
     layerRect.size.width = 1;
-    layerRect.origin.x = self.playheadMarker.imageRectInRuler.origin.x - self.playheadMarker.imageOrigin.x+self.scrollOffset.x;
+    layerRect.origin.x = round(self.playheadMarker.imageRectInRuler.origin.x - self.playheadMarker.imageOrigin.x+self.scrollOffset.x);
     layerRect.origin.y = 0;
     
     [CATransaction begin];

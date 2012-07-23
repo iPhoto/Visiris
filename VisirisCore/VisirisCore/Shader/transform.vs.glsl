@@ -14,7 +14,7 @@ uniform float rotateZ;
 uniform float translateX;
 uniform float translateY;
 uniform float translateZ;
-
+uniform bool isQCPatch;
 
 varying vec2 texcoord;
 
@@ -80,7 +80,6 @@ mat4 rotate(float alpha, float beta, float gamma)
 
 void main()
 {
-    
     vec3 scaleFactor;
     
     if ((objectWidth/objectHeight) > (windowWidth/windowHeight)) {
@@ -93,28 +92,21 @@ void main()
     scaleFactor.x *= scaleX;
     scaleFactor.y *= scaleY;
     
+    
+    float qcRotate = 0.0;
+    
+    
+    if (isQCPatch) {
+        qcRotate = 180.0;
+    }
+    
+    
     gl_Position = view_frustum(radians(45.0), 1.0, 0.1, 10.0)
     * translate(translateX, translateY, translateZ)
-    * rotate(rotateX*pi180,rotateY*pi180,rotateZ*pi180)
+    * rotate((rotateX + qcRotate)*pi180,rotateY*pi180,rotateZ*pi180)
     * scale(scaleFactor.x,scaleFactor.y,1.0)
     * position;
 
-    /*
-    if ((objectWidth/objectHeight) > (windowWidth/windowHeight)) {
-        gl_Position = view_frustum(radians(45.0), 1.0, 0.1, 10.0)
-        * translate(0.0, 0.0, 1.0)
-        * rotate_x(0.0)
-        * scale(1.0,(windowWidth/windowHeight) * (objectHeight/objectWidth),1.0)
-        * position;
-    }
-    else{
-        gl_Position = view_frustum(radians(45.0), 1.0, 0.1, 10.0)
-        * translate(0.0, 0.0, 1.0)
-        * rotate_x(0.0)
-        * scale((windowHeight/windowWidth) * (objectWidth/objectHeight),1.0,1.0)
-        * position;
-    }
-*/
     texcoord = position.xy * vec2(0.5) + vec2(0.5);
 }
 

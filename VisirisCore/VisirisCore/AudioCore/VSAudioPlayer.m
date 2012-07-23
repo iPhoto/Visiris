@@ -49,9 +49,9 @@
         [self.audioPlayer setCurrentTime:time];
     }
     
-    NSLog(@"TimeStamp: %f",time);
-    NSLog(@"PlayerTime: %f",[self.audioPlayer currentTime]);
-    NSLog(@"audiolength: %f",[self.audioPlayer duration]);
+//    NSLog(@"TimeStamp: %f",time);
+//    NSLog(@"PlayerTime: %f",[self.audioPlayer currentTime]);
+//    NSLog(@"audiolength: %f",[self.audioPlayer duration]);
 //    NSLog(@"difference: %f",time/1000.0 - [self.audioPlayer currentTime]);
 }
 

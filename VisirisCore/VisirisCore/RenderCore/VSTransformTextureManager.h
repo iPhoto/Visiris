@@ -7,11 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VSFileKind.h"
 
 @interface VSTransformTextureManager : NSObject
 
 - (id)initWithContext:(NSOpenGLContext *)context;
-- (GLuint)transformTexture:(GLuint)texture atTrack:(NSInteger)trackId withAttributes:(NSDictionary *)attributes withTextureSize:(NSSize)textureSize forOutputSize:(NSSize)outputSize;
+
+- (GLuint)transformTexture:(GLuint)texture atTrack:(NSInteger)trackId withAttributes:(NSDictionary *)attributes withTextureSize:(NSSize)textureSize forOutputSize:(NSSize)outputSize isQCPatch:(BOOL)qcPatch;
+
 - (void)createFBOWithSize:(NSSize) size trackId:(NSInteger) trackId;
 
 @end
