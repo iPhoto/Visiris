@@ -192,7 +192,7 @@ static NSString* defaultNib = @"VSTimelineView";
         //updates the frame of the scrollViews documentView
         NSRect newFrame = [self.trackHolder frame];
         newFrame.size.width = [[object valueForKey:keyPath] doubleValue] / self.pixelTimeRatio;
-        [self.trackHolder setFrame:NSIntegralRect(newFrame)];
+        [self.trackHolder setFrame:(newFrame)];
         
         //updates the pixelItemRatio
         [self computePixelTimeRatio];
@@ -268,19 +268,19 @@ static NSString* defaultNib = @"VSTimelineView";
         for(VSProjectItemRepresentation *projectItem in projectItemRepresentations){
             
             NSPoint position = [[positionArray objectAtIndex:i] pointValue];
-            NSInteger width = [[widthArray objectAtIndex:i]intValue];
+            double width = [[widthArray objectAtIndex:i]doubleValue];
             
             
             double timePosition = [self timestampForPoint:position];
-            NSInteger duration = [self durationForPixelWidth:width];
-            
+            double duration = [self durationForPixelWidth:width];
+            DDLogInfo(@"dura vgl: %f - %f",projectItem.duration,duration);
             //Sets the first object as the selected one wich's properites are shown
             if(i==0){
                 objectToBeSelected = [self.timeline 
                                       addNewTimelineObjectBasedOnProjectItemRepresentation:projectItem 
                                       toTrack:trackViewController.track 
                                       positionedAtTime:timePosition 
-                                      withDuration:duration 
+                                      withDuration:projectItem.duration 
                                       andRegisterUndoOperation:[self.view undoManager]
                                       ];
             }
@@ -554,7 +554,7 @@ DDLogInfo(@"dragging");
         
         //updates the width according to how the width of the view has been resized
         newDocumentFrame.size.width += newFrame.size.width - oldFrame.size.width;
-        [self.trackHolder setFrame:NSIntegralRect(newDocumentFrame)];
+        [self.trackHolder setFrame:(newDocumentFrame)];
         [self computePixelTimeRatio];
     }
 }
@@ -628,7 +628,7 @@ DDLogInfo(@"dragging");
     float mouseTimePosition = [self timestampForPoint:clipLocalPoint];
     float ratio = clipLocalPoint.x - clipLocalPoint.x*zoomFactor;
     
-    [self.trackHolder setFrame:NSIntegralRect(newTrackHolderFrame)];
+    [self.trackHolder setFrame:(newTrackHolderFrame)];
     [self computePixelTimeRatio];
     
     float pixelPosition = mouseTimePosition/self.pixelTimeRatio;
@@ -660,7 +660,7 @@ DDLogInfo(@"dragging");
         NSRect trackHolderFrame= self.trackHolder.frame;
         trackHolderFrame.size.width = self.timeline.duration /newRatio;
         
-        [self.trackHolder setFrame:NSIntegralRect(trackHolderFrame)];
+        [self.trackHolder setFrame:(trackHolderFrame)];
     }
     
     if(newRatio != self.pixelTimeRatio){
@@ -725,7 +725,7 @@ DDLogInfo(@"dragging");
  * @result Translated duration for the given width
  */
 -(double) durationForPixelWidth:(NSInteger) width{
-    return width * self.pixelTimeRatio;
+    return (double) width * self.pixelTimeRatio;
 }
 
 /**
@@ -1072,7 +1072,7 @@ DDLogInfo(@"dragging");
     
     NSRect newFrame = NSMakeRect(self.scrollView.visibleRect.origin.x,yPosition,width,VSTrackViewHeight);
     
-    [[newTrackViewController view] setFrame:NSIntegralRect(newFrame)];
+    [[newTrackViewController view] setFrame:(newFrame)];
     
     //set the autoresizing masks
     [[newTrackViewController view] setAutoresizingMask:NSViewWidthSizable];
@@ -1084,7 +1084,7 @@ DDLogInfo(@"dragging");
     
     //Rescales the document view of the trackholder ScrollView
     int height = (VSTrackViewHeight+VSTrackViewMargin) * ([self.trackViewControllers  count]);
-    [self.trackHolder setFrame:NSIntegralRect(NSMakeRect([self.trackHolder frame].size.width, 0, self.trackHolder.frame.size.width,  height))];
+    [self.trackHolder setFrame:(NSMakeRect([self.trackHolder frame].size.width, 0, self.trackHolder.frame.size.width,  height))];
     
     [self addNewTrackLabelForTrack:newTrackViewController];
     

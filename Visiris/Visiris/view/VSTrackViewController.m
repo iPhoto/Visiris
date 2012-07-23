@@ -529,7 +529,7 @@ static NSString* defaultNib = @"VSTrackView";
                 if([result isKindOfClass:[VSTimelineObjectViewController class]]){
                     VSTimelineObjectViewController *tmpController = (VSTimelineObjectViewController*) result;
                     
-                    [timelineObjectsWidth addObject: [NSNumber numberWithInt:tmpController.view.frame.size.width]];
+                    [timelineObjectsWidth addObject: [NSNumber numberWithDouble:tmpController.view.frame.size.width]];
                     [timelineObjectsPositions addObject: [NSValue valueWithPoint:tmpController.view.frame.origin]];
                     
                 }
@@ -974,7 +974,7 @@ static NSString* defaultNib = @"VSTrackView";
     frame.size.width = proxy.duration / self.pixelTimeRatio;
     frame.size.height = self.view.frame.size.height;
     frame.origin.y = 0;
-   // DDLogInfo(@"here");
+    DDLogInfo(@"here");
     
     return frame;
 }

@@ -35,8 +35,5 @@
 /** Delegate confirming to VSTimelineViewDelegate */
 @property id<VSTimelineViewDelegate> delegate;
 
-/** Delegate that is informed about MouseEvents on the view */
-@property id<VSTimelineViewDelegate> mouseDelegate;
-
 
 @end

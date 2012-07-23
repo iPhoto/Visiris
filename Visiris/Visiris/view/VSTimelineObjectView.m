@@ -60,6 +60,20 @@ static int resizingAreaWidth = 10;
 @synthesize resizing                = _resizing;
 @synthesize resizingDirection       = _resizingDirection;
 @synthesize inactive                = _inactive;
+@synthesize pixelWidth              = _pixelWidth;
+@synthesize pixelXPosition          = _pixelXPosition;
+
+-(void) setFrame:(NSRect)frameRect{
+   
+   
+}
+
+-(void) setFrameDouble:(NSRect)frameRect{
+    if(round(frameRect.size.width) == frameRect.size.width){
+        DDLogInfo(@"setFrame of VSTimelineObjectView width: %f",frameRect.size.width);
+    }
+    [super setFrame:frameRect];
+}
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -343,7 +357,7 @@ static int resizingAreaWidth = 10;
         resizedFrame = [self.delegate timelineObjectWillResize:self fromFrame:self.frame toFrame:resizedFrame];
     }
     //   DDLogInfo(@"after: %@",NSStringFromRect(resizedFrame));
-    [self setFrame:NSIntegralRect(resizedFrame)];
+    [self setFrame:resizedFrame];
     
     
     //informs the delegate that view has been resized

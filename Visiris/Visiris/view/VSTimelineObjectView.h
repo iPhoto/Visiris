@@ -105,7 +105,14 @@
 /**if YES the view is hidden */
 @property BOOL inactive;
 
+@property double pixelXPosition;
+
+@property double pixelWidth;
+
+
 -(CALayer*) addIntersectionLayerForRect:(NSRect) intersection;
+
+-(void) setFrameDouble:(NSRect)frameRect;
 
 -(void) removeIntersectionLayer:(CALayer*) intersectionLayer;
 @end

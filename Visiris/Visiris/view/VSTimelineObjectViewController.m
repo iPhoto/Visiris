@@ -270,7 +270,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
         frame.size.height = self.view.frame.size.height;
         frame.origin.y = 0;
         
-        [self.view setFrame:NSIntegralRect(frame)];
+        [self.view setFrame:frame];
         [self.view setNeedsDisplayInRect:self.view.visibleRect];
     }
 }
