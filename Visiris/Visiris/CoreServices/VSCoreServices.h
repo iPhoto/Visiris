@@ -9,6 +9,7 @@
 #ifndef Visiris_VSCoreServices_h
 #define Visiris_VSCoreServices_h
 
+
 /*Utility Classes*/
 #import "VSFileImageCreator.h"
 #import "VSFileUtils.h"
@@ -16,6 +17,9 @@
 #import "VSFormattingUtils.h"
 #import "VSParameterXMLUtils.h"
 #import "VSQuartzCompositionUtils.h"
+
+/* Structs */
+#import "VSDoubleFrame.h"
 
 /*Constants*/
 #import "VSImageConstants.h"

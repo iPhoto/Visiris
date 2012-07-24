@@ -9,7 +9,6 @@
 #import "VSProjectItemController.h"
 #import "VSProjectItem.h"
 #import "VSProjectItemRepresentation.h"
-#import "VSCoreServices.h"
 #import "VSFileType.h"
 
 @interface VSProjectItemController()

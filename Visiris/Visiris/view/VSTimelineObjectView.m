@@ -8,10 +8,10 @@
 
 #import "VSTimelineObjectView.h"
 
-#import "VSCoreServices.h"
-
 #define RESIZING_FROM_LEFT 0
 #define RESIZING_FROM_RIGHT 1
+
+
 
 @interface VSTimelineObjectView ()
 
@@ -60,20 +60,9 @@ static int resizingAreaWidth = 10;
 @synthesize resizing                = _resizing;
 @synthesize resizingDirection       = _resizingDirection;
 @synthesize inactive                = _inactive;
-@synthesize pixelWidth              = _pixelWidth;
-@synthesize pixelXPosition          = _pixelXPosition;
+@synthesize doubleFrame             = _doubleFrame;
 
--(void) setFrame:(NSRect)frameRect{
-   
-   
-}
 
--(void) setFrameDouble:(NSRect)frameRect{
-    if(round(frameRect.size.width) == frameRect.size.width){
-        DDLogInfo(@"setFrame of VSTimelineObjectView width: %f",frameRect.size.width);
-    }
-    [super setFrame:frameRect];
-}
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -151,6 +140,9 @@ static int resizingAreaWidth = 10;
     [self setResizingAreas];
 }
 
+-(void) setFrame:(NSRect)frameRect{
+    [super setFrame:NSRectFromVSDoubleFrame(self.doubleFrame)];
+}
 
 #pragma mark - Event Handling
 
@@ -184,29 +176,29 @@ static int resizingAreaWidth = 10;
 
 -(void) mouseDragged:(NSEvent *)theEvent{
     
-//    float scrollingXDelta = 0.0;
-//    if(self.enclosingScrollView){
-//        NSPoint currentScrollPos = self.enclosingScrollView.contentView.bounds.origin;
-//        [self autoscroll:theEvent];
-//        NSPoint newScrollPos = self.enclosingScrollView.contentView.bounds.origin;
-//        
-//        DDLogInfo(@"scrolled about: %f", currentScrollPos.x - newScrollPos.x);
-//        
-//        scrollingXDelta=currentScrollPos.x - newScrollPos.x;
-//    }
-//    
-//    NSPoint currentScrollPos = self.enclosingScrollView.contentView.bounds.origin;
-//    [self autoscroll:theEvent];
-//    NSPoint newScrollPos = self.enclosingScrollView.contentView.bounds.origin;
-//    
-//    DDLogInfo(@"scrolled about: %f", currentScrollPos.x - newScrollPos.x);
-//    
-//    scrollingXDelta=currentScrollPos.x - newScrollPos.x;
-//
-//    
+    //    float scrollingXDelta = 0.0;
+    //    if(self.enclosingScrollView){
+    //        NSPoint currentScrollPos = self.enclosingScrollView.contentView.bounds.origin;
+    //        [self autoscroll:theEvent];
+    //        NSPoint newScrollPos = self.enclosingScrollView.contentView.bounds.origin;
+    //        
+    //        DDLogInfo(@"scrolled about: %f", currentScrollPos.x - newScrollPos.x);
+    //        
+    //        scrollingXDelta=currentScrollPos.x - newScrollPos.x;
+    //    }
+    //    
+    //    NSPoint currentScrollPos = self.enclosingScrollView.contentView.bounds.origin;
+    //    [self autoscroll:theEvent];
+    //    NSPoint newScrollPos = self.enclosingScrollView.contentView.bounds.origin;
+    //    
+    //    DDLogInfo(@"scrolled about: %f", currentScrollPos.x - newScrollPos.x);
+    //    
+    //    scrollingXDelta=currentScrollPos.x - newScrollPos.x;
+    //
+    //    
     NSPoint newMousePosition =[theEvent locationInWindow];
-//    newMousePosition.x += scrollingXDelta;
-//    
+    //    newMousePosition.x += scrollingXDelta;
+    //    
     //if the the event was entered first time after a mouse down the kind of drgging operation has to be set
     if(!self.resizing && !self.moving){
         [self setDraggingModeDependingOnMousePosition:newMousePosition];
@@ -417,6 +409,9 @@ static int resizingAreaWidth = 10;
     return NO;
 }
 
+-(void) updateFrame{
+    [self setFrame:NSZeroRect];
+}
 
 #pragma mark - Properties
 
@@ -473,6 +468,18 @@ static int resizingAreaWidth = 10;
 
 -(BOOL) resizing{
     return _resizing;
+}
+
+-(void) setDoubleFrame:(VSDoubleFrame)doubleFrame{
+    if(!VSEqualDoubleFrame(_doubleFrame, doubleFrame)){
+        _doubleFrame = doubleFrame;
+        
+        [self updateFrame];
+    }
+}
+
+-(VSDoubleFrame) doubleFrame{
+    return _doubleFrame;
 }
 
 

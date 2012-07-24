@@ -164,16 +164,17 @@ static NSString* defaultNib = @"VSTrackView";
     }
 }
 
--(void) moveMoveableTimelineObjects:(float) deltaX{
+-(void) moveMoveableTimelineObjects:(double) deltaX{
     //moves all currently VSTimelineObjectViewController
     if(deltaX != 0){
         NSArray *moveableTimelineObjects = [self movableTimelineObjectViewControllers];
         
         if(moveableTimelineObjects.count){
             for(VSTimelineObjectViewController *timelineObjectViewController in moveableTimelineObjects){
-                NSPoint newPosition = timelineObjectViewController.view.frame.origin;
-                newPosition.x += deltaX;
-                [timelineObjectViewController.view setFrameOrigin:newPosition];
+                VSDoubleFrame doubleFrame = timelineObjectViewController.viewsDoubleFrame;
+                doubleFrame.x += deltaX;
+                
+                timelineObjectViewController.viewsDoubleFrame = doubleFrame;
             }
         }
         [self.view setNeedsDisplayInRect:self.view.visibleRect];
@@ -297,7 +298,7 @@ static NSString* defaultNib = @"VSTrackView";
     VSTimelineObjectViewController *newController = [[VSTimelineObjectViewController alloc] initWithDefaultNib];
     newController.timelineObjectProxy = aProxyObject;
     
-    [[newController view] setFrame:[self frameForTimelineObjectProxy:aProxyObject]];
+    [self setTimelineObjectViewControllersFrame: newController];
     
     [self.temporaryTimelineObjectViewControllers addObject:newController];
     
@@ -312,11 +313,11 @@ static NSString* defaultNib = @"VSTrackView";
     return newController;
 }
 
--(VSTimelineObjectViewController*) addTemporaryTimelineObject:(VSTimelineObjectProxy *)aProxyObject withFrame:(NSRect)aFrame{
+-(VSTimelineObjectViewController*) addTemporaryTimelineObject:(VSTimelineObjectProxy *)aProxyObject withDoubleFrame:(VSDoubleFrame)doubleFrame{
     
     VSTimelineObjectViewController *newTimelineObjectViewController = [self addTemporaryTimelineObject:aProxyObject];
     
-    [newTimelineObjectViewController.view setFrame:aFrame];
+    newTimelineObjectViewController.viewsDoubleFrame = doubleFrame;
     
     return newTimelineObjectViewController;
     
@@ -528,8 +529,8 @@ static NSString* defaultNib = @"VSTrackView";
                 
                 if([result isKindOfClass:[VSTimelineObjectViewController class]]){
                     VSTimelineObjectViewController *tmpController = (VSTimelineObjectViewController*) result;
-                    
-                    [timelineObjectsWidth addObject: [NSNumber numberWithDouble:tmpController.view.frame.size.width]];
+                    DDLogInfo(@"settingwidht: %@ %f",NSStringFromVSDoubleFrame(tmpController.timelineObjectView.doubleFrame), self.pixelTimeRatio);
+                    [timelineObjectsWidth addObject: [NSNumber numberWithDouble:tmpController.timelineObjectView.doubleFrame.width]];
                     [timelineObjectsPositions addObject: [NSValue valueWithPoint:tmpController.view.frame.origin]];
                     
                 }
@@ -581,13 +582,10 @@ static NSString* defaultNib = @"VSTrackView";
             //if more than one VSTimelineObjectViewControllers is stored in self.temporaryTimelineObjectViewControllers their views are positioned next to each other
             for(VSTimelineObjectViewController *timelineObjectViewController in self.temporaryTimelineObjectViewControllers){
                 
-                //sets the frame for timelineObjectViewController's view
-                NSRect newFrame =  timelineObjectViewController.view.frame;
-                newFrame.origin.x += deltaX + snappingDeltaX;
+                VSDoubleFrame newFrame = timelineObjectViewController.timelineObjectView.doubleFrame;
+                newFrame.x += deltaX + snappingDeltaX;
                 
-                
-                
-                [timelineObjectViewController.view setFrame:newFrame];
+                [timelineObjectViewController.timelineObjectView setDoubleFrame:newFrame];
             }
             
             //Checks if any of the existing timeline objects intersected by any of the views stored in temporaryTimelineObjectViewControllers
@@ -628,22 +626,18 @@ static NSString* defaultNib = @"VSTrackView";
     
     
     int i = 0;
-    int currentTotalWidth = 0;
+    double currentTotalWidth = 0;
     
     //for each VSProjectItemRepresentation found and stored in draggedProjectItems a new VSTimelineObjectProxy is created and added to self.temporaryTimelineObjectViewControllers 
     for(VSProjectItemRepresentation *item in draggedProjectItems){
         VSTimelineObjectViewController *timelineObjectViewController = [self addNewTemporaryTimelineObjectProxyBasedOn:item atPosition:position toTrack:trackView temporaryID:i];
         
+                
+        VSDoubleFrame newDoubleFrame = VSMakeFrame(position.x+currentTotalWidth, timelineObjectViewController.view.frame.origin.y, [self pixelForTimestamp:timelineObjectViewController.timelineObjectProxy.duration], timelineObjectViewController.view.frame.size.height);
         
-        //sets the frame for timelineObjectViewController's view
-        NSRect newFrame =  timelineObjectViewController.view.frame;
-        newFrame.origin.x = position.x + currentTotalWidth;
-        newFrame.size.width = timelineObjectViewController.timelineObjectProxy.duration / self.pixelTimeRatio;
-        currentTotalWidth += newFrame.size.width;
+        [timelineObjectViewController.timelineObjectView setDoubleFrame:newDoubleFrame];
         
-        
-        
-        [timelineObjectViewController.view setFrame:newFrame];
+        currentTotalWidth += newDoubleFrame.width;
         
         i++;
     }
@@ -963,22 +957,33 @@ static NSString* defaultNib = @"VSTrackView";
 
 
 
-/**
- * Creates the frame for a given VSTimelineObjectProxy or VSTimelineObject according to the current pixelTimeRatio
- * @param proxy VSTimelineObjectProxy the frame will be created for.
- * @return The frame for a given VSTimelineObjectProxy or VSTimelineObject according to the current pixelTimeRatio
- */
--(NSRect) frameForTimelineObjectProxy:(VSTimelineObjectProxy*) proxy{
-    NSRect frame;
-    frame.origin.x = proxy.startTime / self.pixelTimeRatio;
-    frame.size.width = proxy.duration / self.pixelTimeRatio;
-    frame.size.height = self.view.frame.size.height;
-    frame.origin.y = 0;
-    DDLogInfo(@"here");
+-(void) setTimelineObjectViewControllersFrame:(VSTimelineObjectViewController*) timelineObjectViewController{
+    VSDoubleFrame newFrame;
+    newFrame.x =  [self pixelForTimestamp:timelineObjectViewController.timelineObjectProxy.startTime];
+    newFrame.y = 0;
+    newFrame.width = [self pixelForTimestamp:timelineObjectViewController.timelineObjectProxy.duration];
+    newFrame.height = self.view.frame.size.height;
     
-    return frame;
+    [timelineObjectViewController setViewsDoubleFrame:newFrame];
 }
 
+/**
+ * Translates the given pixel value to a timestamp according to the pixelTimeRation
+ * @param pixelPosition Value in pixels the timestamp is computed for
+ * @return Timestamp for the given pixel position
+ */
+-(double) timestampForPixelPosition:(float) pixelPosition{
+    return pixelPosition * self.pixelTimeRatio;
+}
+
+/**
+ * Transletes the given timestamp to a pixel value according to the pixelTimeRation
+ * @param timestamp Timestamp the pixel position is computed for
+ * @return Pixelposition for the given Timestamp
+ */
+-(double) pixelForTimestamp:(double) timestamp{
+    return timestamp / self.pixelTimeRatio;
+}
 
 #pragma mark  Temporary Timeline Objects
 
@@ -1028,7 +1033,7 @@ static NSString* defaultNib = @"VSTrackView";
     
     [self.view addSubview:[newController view]];
     
-    [[newController view] setFrame:[self frameForTimelineObjectProxy:aTimelineObject]];
+    [self setTimelineObjectViewControllersFrame:newController];
     
     [self.timelineObjectViewControllers addObject:newController];
     

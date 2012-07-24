@@ -212,7 +212,7 @@ typedef enum{
  * Moves all moveable timelineObjects (selected and temporary timelineObjects) on the track according to the given deltaX
  * @param deltaX Distance the selected timelineObjects are moved
  */
--(void) moveMoveableTimelineObjects:(float) deltaX;
+-(void) moveMoveableTimelineObjects:(double) deltaX;
 
 /**
  * Checks if any of the currently moveable timelineObjects (selected and temporary timelineObjects) of the track are in snapping distance to another object when the timelineObejct was moved according to deltaX. If a timlineObject is in snapping distance the additional distance the object has to be moved to be snaped are stored in snappingDeltaX
@@ -260,7 +260,7 @@ typedef enum{
  * @param aProxyObject VSTimelineObjectProxy the VSTimelineObjectViewController will be init with
  * @param aFrame NSRect set as frame of VSTimelineObjectView representing the temporary timlineObject;
  **/
--(VSTimelineObjectViewController*) addTemporaryTimelineObject:(VSTimelineObjectProxy*) aProxyObject withFrame:(NSRect) aFrame;
+-(VSTimelineObjectViewController*) addTemporaryTimelineObject:(VSTimelineObjectProxy*) aProxyObject withDoubleFrame:(VSDoubleFrame) doubleFrame;
 
 /**
  * Returns all currently selected TimelineObjects on the track

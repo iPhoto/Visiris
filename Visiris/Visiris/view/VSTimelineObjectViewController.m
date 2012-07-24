@@ -31,6 +31,7 @@
 @synthesize inactive                        = _inactive;
 @synthesize intersectedTimelineObjectViews  = _intersectedTimelineObjectViews;
 @synthesize timelineObjectView              = _timelineObjectView;
+@synthesize viewsDoubleFrame                = _viewsDoubleFrame;
 
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
@@ -264,13 +265,14 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 -(void) setViewsFrameAccordingToTimelineObject{
     
     if(self.view && self.pixelTimeRatio > 0){
-        NSRect frame = self.view.frame;
-        frame.origin.x = self.timelineObjectProxy.startTime / self.pixelTimeRatio;
-        frame.size.width = self.timelineObjectProxy.duration / self.pixelTimeRatio;
-        frame.size.height = self.view.frame.size.height;
-        frame.origin.y = 0;
+        VSDoubleFrame newFrame;
+        newFrame.x = self.timelineObjectProxy.startTime / self.pixelTimeRatio;
+        newFrame.width = self.timelineObjectProxy.duration / self.pixelTimeRatio;
+        newFrame.height = self.view.frame.size.height;
+        newFrame.y = 0;
         
-        [self.view setFrame:frame];
+        [self setViewsDoubleFrame:newFrame];
+        
         [self.view setNeedsDisplayInRect:self.view.visibleRect];
     }
 }
@@ -378,5 +380,19 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 -(VSTimelineObjectProxy*) timelineObjectProxy{
     return _timelineObjectProxy;
 }
+
+-(void) setViewsDoubleFrame:(VSDoubleFrame)viewsDoubleFrame{
+    if(!VSEqualDoubleFrame(_viewsDoubleFrame, viewsDoubleFrame)){
+        _viewsDoubleFrame = viewsDoubleFrame;
+        
+        self.timelineObjectView.doubleFrame = self.viewsDoubleFrame;
+    }
+}
+
+-(VSDoubleFrame) viewsDoubleFrame{
+    return _viewsDoubleFrame;
+}
+
+
 
 @end

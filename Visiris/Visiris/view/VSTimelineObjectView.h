@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "VSCoreServices.h"
+
 @class VSTimelineObjectView;
 
 /**
@@ -105,14 +107,9 @@
 /**if YES the view is hidden */
 @property BOOL inactive;
 
-@property double pixelXPosition;
-
-@property double pixelWidth;
-
+@property VSDoubleFrame doubleFrame;
 
 -(CALayer*) addIntersectionLayerForRect:(NSRect) intersection;
-
--(void) setFrameDouble:(NSRect)frameRect;
 
 -(void) removeIntersectionLayer:(CALayer*) intersectionLayer;
 @end

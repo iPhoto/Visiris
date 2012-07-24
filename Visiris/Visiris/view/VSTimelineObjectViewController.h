@@ -128,6 +128,8 @@
 /** if YES the timelineObejct is hidden */
 @property BOOL inactive;
 
+@property VSDoubleFrame viewsDoubleFrame;
+
 /** Stores the VSTimelineObjectViewController which's views intersecting the view of the VSTimelineObjectViewController as VSTimelineObjectIntersection */
 @property (strong,readonly) NSMutableDictionary *intersectedTimelineObjectViews;
 
@@ -157,7 +159,6 @@
  * @param timelineObjectViewController VSTimelineObjectViewController which intersections are removed.
  */
 -(void) removeIntersectionWith:(VSTimelineObjectViewController*) timelineObjectViewController;
-
 
 /**
  * Removes all intersections

@@ -706,7 +706,7 @@ DDLogInfo(@"dragging");
  * @param pixelPosition Value in pixels the timestamp is computed for
  * @return Timestamp for the given pixel position
  */
--(double) timestampForPixelPosition:(float) pixelPosition{
+-(double) timestampForPixelPosition:(double) pixelPosition{
     return pixelPosition * self.pixelTimeRatio;
 }
 
@@ -724,7 +724,7 @@ DDLogInfo(@"dragging");
  * @param width Width the duration will translated for
  * @result Translated duration for the given width
  */
--(double) durationForPixelWidth:(NSInteger) width{
+-(double) durationForPixelWidth:(double) width{
     return (double) width * self.pixelTimeRatio;
 }
 
@@ -912,7 +912,7 @@ DDLogInfo(@"dragging");
     
     for (VSTimelineObjectViewController *timelineObjectViewController in [fromTrack selectedTimelineObjectViewControllers]) {
         
-        VSTimelineObjectViewController *newTimelineObjectViewController = [toTrack addTemporaryTimelineObject:timelineObjectViewController.timelineObjectProxy withFrame:timelineObjectViewController.view.frame];
+        VSTimelineObjectViewController *newTimelineObjectViewController = [toTrack addTemporaryTimelineObject:timelineObjectViewController.timelineObjectProxy withDoubleFrame:timelineObjectViewController.viewsDoubleFrame];
         
         newTimelineObjectViewController.timelineObjectProxy.selected = timelineObjectViewController.timelineObjectProxy.selected;
     }
