@@ -98,7 +98,7 @@
  * @param toFrame Frame the VSTimelineObjectViewController view will be set to
  * @param NSRect the frame of the VSTimelineObjectViewController's view will be set to
  */
--(NSRect) timelineObjectWillResize:(VSTimelineObjectViewController *)timelineObjectViewController fromFrame:(NSRect)oldFrame toFrame:(NSRect)newFrame;
+-(VSDoubleFrame) timelineObjectWillResize:(VSTimelineObjectViewController *)timelineObjectViewController fromFrame:(VSDoubleFrame)oldFrame toFrame:(VSDoubleFrame)newFrame;
 
 
 

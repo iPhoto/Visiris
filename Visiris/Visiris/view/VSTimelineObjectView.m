@@ -256,6 +256,7 @@ static int resizingAreaWidth = 10;
     CALayer *intersectionLayer = [[CALayer alloc] init];
     
     intersectionLayer.frame = intersection;
+    intersectionLayer.opacity = 0.5;
     intersectionLayer.backgroundColor = [[NSColor greenColor] CGColor];
     intersectionLayer.cornerRadius = self.layer.cornerRadius;
     [intersectionLayer removeAllAnimations];
@@ -327,29 +328,29 @@ static int resizingAreaWidth = 10;
  * @param currentMousePosition Current Position of the mouse
  */
 -(void) resize:(NSPoint) currentMousePosition{
-    NSRect resizedFrame = self.frame;
-    
+
+    VSDoubleFrame resizedFrame = self.doubleFrame;
     
     
     float correctedMousePosition = currentMousePosition.x-self.mouseDownXOffset;
     
     //if the view is resized from the left, the x-origin and width have to be changed     
     if (self.resizingDirection == RESIZING_FROM_LEFT) {
-        resizedFrame.size.width -= correctedMousePosition-resizedFrame.origin.x ;
-        resizedFrame.origin.x = correctedMousePosition;
+        resizedFrame.width -= correctedMousePosition-resizedFrame.x ;
+        resizedFrame.x = correctedMousePosition;
     }
     else if(self.resizingDirection == RESIZING_FROM_RIGHT){
         
-        resizedFrame.size.width = self.frameAtMouseDown.size.width + (correctedMousePosition-resizedFrame.origin.x);
+        resizedFrame.width = self.frameAtMouseDown.size.width + (correctedMousePosition-resizedFrame.x);
     }
     
     //  DDLogInfo(@"before: %@",NSStringFromRect(resizedFrame));
     //informs the delegate about the resizing
     if([self delegateImplementsSelector:@selector(timelineObjectWillResize:fromFrame:toFrame:)]){
-        resizedFrame = [self.delegate timelineObjectWillResize:self fromFrame:self.frame toFrame:resizedFrame];
+        resizedFrame = [self.delegate timelineObjectWillResize:self fromFrame:self.doubleFrame toFrame:resizedFrame];
     }
     //   DDLogInfo(@"after: %@",NSStringFromRect(resizedFrame));
-    [self setFrame:resizedFrame];
+    [self setDoubleFrame:resizedFrame];
     
     
     //informs the delegate that view has been resized
@@ -454,6 +455,7 @@ static int resizingAreaWidth = 10;
         [self setLayerStyle];
     }
 }
+  
 
 -(BOOL) temporary{
     return _temporary;

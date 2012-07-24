@@ -148,14 +148,14 @@ static NSString* defaultNib = @"VSTrackView";
     
     for(VSTimelineObjectViewController *timelineObjectViewController in self.timelineObjectViewControllers){
         
-        double startTime = [self timeValueForPixelValue:timelineObjectViewController.view.frame.origin.x];
+        double startTime = [self timeValueForPixelValue:timelineObjectViewController.timelineObjectView.doubleFrame.x];
         
         //if the view has been moved, the start time of VSTimelineObjectProxy is updated
         if(startTime != timelineObjectViewController.timelineObjectProxy.startTime){
             [timelineObjectViewController.timelineObjectProxy changeStartTime:startTime andRegisterAtUndoManager:self.view.undoManager];
         }
         
-        double duration = [self timeValueForPixelValue:timelineObjectViewController.view.frame.size.width];
+        double duration = [self timeValueForPixelValue:timelineObjectViewController.timelineObjectView.doubleFrame.width];
         
         //if the view has been moved, the start time of VSTimelineObjectProxy is updated
         if(duration != timelineObjectViewController.timelineObjectProxy.duration){
@@ -297,6 +297,8 @@ static NSString* defaultNib = @"VSTrackView";
     
     VSTimelineObjectViewController *newController = [[VSTimelineObjectViewController alloc] initWithDefaultNib];
     newController.timelineObjectProxy = aProxyObject;
+    
+    newController.timelineObjectView.temporary = YES;
     
     [self setTimelineObjectViewControllersFrame: newController];
     
@@ -696,15 +698,16 @@ static NSString* defaultNib = @"VSTrackView";
     return YES;
 }
 
--(NSRect) timelineObjectWillResize:(VSTimelineObjectViewController *)timelineObjectViewController fromFrame:(NSRect)oldFrame toFrame:(NSRect)newFrame{
+-(VSDoubleFrame) timelineObjectWillResize:(VSTimelineObjectViewController *)timelineObjectViewController fromFrame:(VSDoubleFrame)oldFrame toFrame:(VSDoubleFrame)newFrame{
     
-    float deltaXPosition = newFrame.origin.x - oldFrame.origin.x;
-    float deltaWidth = newFrame.size.width - oldFrame.size.width;
+    double deltaXPosition = newFrame.x - oldFrame.x;
+    double deltaWidth = newFrame.width - oldFrame.width;
+
     float snappingDeltaX;
     
     VSSnapAtSide snapAtSide;
     
-    if(newFrame.origin.x != oldFrame.origin.x){
+    if(newFrame.x != oldFrame.x){
         snapAtSide = VSSnapLeftSideOnly;
     }
     else {
@@ -716,11 +719,11 @@ static NSString* defaultNib = @"VSTrackView";
         
         
         if(snapAtSide == VSSnapLeftSideOnly){
-            newFrame.origin.x += snappingDeltaX;
-            newFrame.size.width -= snappingDeltaX;
+            newFrame.x += snappingDeltaX;
+            newFrame.width -= snappingDeltaX;
         }
         else{
-            newFrame.size.width += snappingDeltaX;
+            newFrame.width += snappingDeltaX;
         }
         
     }
@@ -921,7 +924,7 @@ static NSString* defaultNib = @"VSTrackView";
  * @param pixelValue Pixel value to be converted to a time value
  * @return The correpsonding time value in milliseconds corresponding to the current pixelTimeRatio
  */
--(double) timeValueForPixelValue:(NSInteger) pixelValue{
+-(double) timeValueForPixelValue:(double) pixelValue{
     return pixelValue * self.pixelTimeRatio;
 }
 

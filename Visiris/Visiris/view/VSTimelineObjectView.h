@@ -71,7 +71,7 @@
  * @param toFrame Frame the VSTimelineObjectView wants to be resized to.
  * @return NSRecte the VSTimelineObjectView's frame will be set to
  */
--(NSRect) timelineObjectWillResize:(VSTimelineObjectView*) timelineObjectView fromFrame:(NSRect) oldFrame toFrame:(NSRect) newFrame;
+-(VSDoubleFrame) timelineObjectWillResize:(VSTimelineObjectView*) timelineObjectView fromFrame:(VSDoubleFrame) oldFrame toFrame:(VSDoubleFrame) newFrame;
 
 /**
  * Called everytime the position of the VSTimelineObjectView has been changed during a dragging-operation
