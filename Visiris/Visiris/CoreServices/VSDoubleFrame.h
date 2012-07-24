@@ -30,7 +30,7 @@ NS_INLINE VSDoubleFrame VSMakeFrame(double x, double y, double width, double hei
 }
 
 NS_INLINE NSRect NSRectFromVSDoubleFrame(VSDoubleFrame doubleFrame){
-    return NSIntegralRect( NSMakeRect(doubleFrame.x, doubleFrame.y, doubleFrame.width, doubleFrame.height));
+    return NSMakeRect(doubleFrame.x, doubleFrame.y, doubleFrame.width, doubleFrame.height);
 }
 
 NS_INLINE bool VSEqualDoubleFrame(VSDoubleFrame frameOne, VSDoubleFrame frameTwo){

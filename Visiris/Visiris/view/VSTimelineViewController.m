@@ -350,7 +350,7 @@ static NSString* defaultNib = @"VSTimelineView";
 #pragma mark Moving TimlineObjects
 
 -(NSPoint) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController WillBeDraggedOnTrack:(VSTrackViewController *)trackViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition withSnappingDeltaX:(float)snappingDeltaX{
-DDLogInfo(@"dragging");    
+ 
     float deltaX = newPosition.x - oldPosition.x;
     
     NSMutableArray *snappingDeltas = [[NSMutableArray alloc] init];
@@ -533,8 +533,8 @@ DDLogInfo(@"dragging");
 
 -(void) copyTimelineObject:(VSTimelineObjectViewController *)timelineObjectViewController toTrack:(VSTrackViewController *)trackViewController{
     
-    double startTime = [self timestampForPoint:timelineObjectViewController.view.frame.origin];
-    double duration = [self durationForPixelWidth:timelineObjectViewController.view.frame.size.width]; 
+    double startTime = [self timestampForPixelPosition:timelineObjectViewController.timelineObjectView.doubleFrame.x];
+    double duration = [self durationForPixelWidth:timelineObjectViewController.timelineObjectView.doubleFrame.width]; 
     
     if([timelineObjectViewController.timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
         [self.timeline copyTimelineObject:(VSTimelineObject*) timelineObjectViewController.timelineObjectProxy toTrack:trackViewController.track atPosition:startTime withDuration:duration];
