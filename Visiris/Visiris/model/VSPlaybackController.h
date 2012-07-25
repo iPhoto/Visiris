@@ -37,7 +37,7 @@
 
 
 
-
+#import "VSCoreServices.h"
 
 
 @class VSPreProcessor;
@@ -62,6 +62,9 @@
 
 /** Indicates if renderFramesForCurrentTimestamp was called after starting the DisplayLink or not. Neccessary to make sure a requested frame was rendered */
 @property BOOL frameWasRender;
+
+/** Current playbackMode as definend in VSPlaybackMode */
+@property VSPlaybackMode playbackMode;
 
 
 /**

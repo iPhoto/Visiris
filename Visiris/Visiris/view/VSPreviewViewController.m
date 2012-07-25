@@ -77,6 +77,8 @@ static NSString* defaultNib = @"VSPreviewView";
         
         [self initOpenGLView];
         
+        [self initObservers];
+        
         [self storeOpenGLViewsMargins];
         
         [self setOpenGLViewFameAccordingToAspectRatioInSuperview:self.view.frame];
@@ -86,6 +88,11 @@ static NSString* defaultNib = @"VSPreviewView";
         }
     }
 }
+
+-(void) initObservers{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playKeyWasPressed:) name:VSPlayKeyWasPressed object:nil];
+}
+
 
 /**
  * Stores the margin of the openGLView as set in the InterfaceBuilder. Necessary for resizing the view proportionally afterwards
@@ -109,17 +116,11 @@ static NSString* defaultNib = @"VSPreviewView";
 #pragma mark - IBAction
 
 - (IBAction)play:(NSButton *)sender {
-    if(self.playbackController){
-        [self.openGLView startDisplayLink];
-        [self.playbackController play];
-    }
+    [self startPlayback];
 }
 
 - (IBAction)stop:(NSButton *)sender {
-    if(self.playbackController){
-        [self.openGLView stopDisplayLink];
-        [self.playbackController stop];
-    }
+    [self stopPlayback];
 }
 
 #pragma mark - VSPlaybackControllerDelegate implementation
@@ -143,7 +144,6 @@ static NSString* defaultNib = @"VSPreviewView";
 }
 
 #pragma mark - Private Methods
-
 
 /**
  * Computes a NSRect openGLView according to the aspectRatio stored in VSProjectSettings. Ensures that the openGLView is resized proportionally and positoned according to its margin-values in its superview
@@ -178,6 +178,40 @@ static NSString* defaultNib = @"VSPreviewView";
     
     [self.openGLView setNeedsLayout:YES];
     [self.openGLView setNeedsDisplay:YES];
+}
+
+/**
+ * Tells the playbackController to start the playback and turns on the display link
+ */
+- (void)startPlayback {
+    if(self.playbackController){
+        [self.openGLView startDisplayLink];
+        [self.playbackController play];
+    }
+}
+
+/**
+ * Tells the playbackController to stop the playback and turns off the display link
+ */
+- (void)stopPlayback {
+    if(self.playbackController){
+        [self.openGLView stopDisplayLink];
+        [self.playbackController stop];
+    }
+}
+
+/**
+ * Called when the VSPlayKeyWasPressed notification was received.
+ *
+ * Stops the the playback if the playMode of the playbackController is VSPlaybackModePlaying and starts it otherwise
+ */
+-(void) playKeyWasPressed:(NSNotification*) theNotification{
+    if(self.playbackController.playbackMode == VSPlaybackModePlaying){
+        [self stopPlayback];
+    }
+    else {
+        [self startPlayback];
+    }
 }
 
 #pragma mark - Properties

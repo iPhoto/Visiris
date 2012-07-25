@@ -19,3 +19,5 @@ NSString *VSMainSplitViewDidResizeSubviews = @"VSMainSplitViewDidResizeSubviews"
 NSString *VSTopSplitViewDidResizeSubviews = @"VSTopSplitViewDidResizeSubviews";
 
 NSString *VSTimelineObjectPropertiesDidTurnInactive = @"VSTimelineObjectPropertiesDidTurnInactive";
+
+NSString *VSPlayKeyWasPressed = @"VSPlayShortCutWasPressed";

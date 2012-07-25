@@ -556,8 +556,17 @@ static NSString* defaultNib = @"VSTimelineView";
 -(void) didReceiveKeyDownEvent:(NSEvent *)theEvent{
     if(theEvent){
         unichar keyCode = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];
-        if (keyCode == NSDeleteCharacter || keyCode == NSBackspaceCharacter){
-            [self removeSelectedTimelineObjects];
+        
+        switch (keyCode) {
+            case NSDeleteCharacter:
+            case NSBackspaceCharacter:
+                [self removeSelectedTimelineObjects];
+                break;
+            case 32:
+                [[NSNotificationCenter defaultCenter] postNotificationName:VSPlayKeyWasPressed object:nil];
+                break;
+            default:
+                break;
         }
     }
     
@@ -641,7 +650,7 @@ static NSString* defaultNib = @"VSTimelineView";
 
 -(void) mouseDragged:(NSEvent *)theEvent onView:(NSView *)view{
     if(self.autoscrolling){
-      //  [self scrollIfMouseOutsideContentView];
+        //  [self scrollIfMouseOutsideContentView];
     }
 }
 
@@ -1200,7 +1209,7 @@ static NSString* defaultNib = @"VSTimelineView";
 
 -(void) autoscrollScrollView{
     self.autoscrollMouseLocation = NSMakePoint(self.autoscrollMouseLocation.x+50, [NSEvent mouseLocation].y);
-
+    
     NSEvent *event = [NSEvent mouseEventWithType:NSMouseMoved location:self.autoscrollMouseLocation modifierFlags:0 timestamp:0 windowNumber:self.view.window.windowNumber context:nil eventNumber:0 clickCount:0 pressure:0];
     [self.scrollView.contentView autoscroll:event];
 }

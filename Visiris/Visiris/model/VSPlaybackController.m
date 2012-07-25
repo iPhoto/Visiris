@@ -21,10 +21,9 @@
 /** Timestamp when the playback was started */
 @property double playbackStartTime;
 
-/** Current playbackMode as definend in VSPlaybackMode */
-@property VSPlaybackMode playbackMode;
-
+/** Reference of VSPreProcessor which is called if a new frame has to be rendered */
 @property VSPreProcessor* preProcessor;
+
 
 @property VSTimeline* timeline;
 @end
@@ -38,7 +37,6 @@
 @synthesize delegate            = _delegate;
 @synthesize playbackStartTime   = _playbackStartTime;
 @synthesize frameWasRender      = _frameWasRender;
-
 @synthesize playbackMode        = _playbackMode;
 
 #pragma mark - Init

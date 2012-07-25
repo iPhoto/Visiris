@@ -26,3 +26,6 @@ extern NSString *VSTopSplitViewDidResizeSubviews;
 
 /** Name of the Notification sent when the VSTimelineObjectPropertiesView was hidden */
 extern NSString *VSTimelineObjectPropertiesDidTurnInactive;
+
+/** Name of the Notification sent when the key combination for starting the playback pressed */
+extern NSString *VSPlayKeyWasPressed;
