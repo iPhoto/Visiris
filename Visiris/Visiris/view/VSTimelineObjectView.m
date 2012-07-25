@@ -155,9 +155,11 @@ static int resizingAreaWidth = 10;
     //dependening on the set drag mode resize or move is called
     if(self.resizing){
         [self resize:newMousePosition];
+        [self autoscroll:theEvent];
     }
     else if(self.moving){
         [self move:newMousePosition];
+        [self autoscroll:theEvent];
     }
     
     self.lastMousePosition = newMousePosition;

@@ -7,7 +7,11 @@
 //
 
 #import <Cocoa/Cocoa.h>
+
 #import "VSTrackView.h"
+#import "VSTimelineObjectViewController.h"
+
+#import "VSCoreServices.h"
 
 @class VSTrack;
 @class VSTimelineObjectViewController;
@@ -16,7 +20,7 @@
 @class VSTimelineObjectProxy;
 @class VSTimelineObject;
 
-#import "VSTimelineObjectViewController.h"
+
 /**
  * Delegate Protocoll for TrackViewControllers
  */
@@ -123,6 +127,8 @@
  */
 -(void) copyTimelineObject:(VSTimelineObjectViewController*) timelineObjectViewController toTrack:(VSTrackViewController*) trackViewController;
 
+
+
 @optional
 
 /**
@@ -159,6 +165,15 @@
  * @param trackViewController VSTrackViewController holding the VSTimelineObjectViewController's view 
  */
 -(void) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController didStopDraggingOnTrack:(VSTrackViewController*) trackViewController;
+
+
+-(BOOL) timelineObject:(VSTimelineObjectViewController*) timelineObjectViewController willStartResizingOnTrack:(VSTrackViewController*) trackViewController;
+
+-(void) timelineObject:(VSTimelineObjectViewController*) timelineObjectViewController didStopResizingOnTrack:(VSTrackViewController*) trackViewController;
+
+-(VSDoubleFrame) timelineObject:(VSTimelineObjectViewController*) timelineObjectViewController willBeResizedFrom:(VSDoubleFrame) oldDoubleFrame to:(VSDoubleFrame) newDoubleFrame onTrack:(VSTrackViewController*) trackViewController;
+
+-(void) timelineObject:(VSTimelineObjectViewController*) timelineObjectViewController wasResizedOnTrack:(VSTrackViewController*) trackViewController;
 
 @end
 

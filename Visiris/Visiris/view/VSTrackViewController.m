@@ -709,10 +709,20 @@ static NSString* defaultNib = @"VSTrackView";
 #pragma mark Resizing
 
 -(BOOL) timelineObjectWillStartResizing:(VSTimelineObjectViewController *)timelineObjectViewController{
-    return YES;
+    BOOL result = YES;
+    
+    if([self delegateRespondsToSelector:@selector(timelineObject:willStartResizingOnTrack:) ]){
+        result = [self.delegate timelineObject:timelineObjectViewController willStartResizingOnTrack:self];
+    }
+    
+    return result;
 }
 
 -(VSDoubleFrame) timelineObjectWillResize:(VSTimelineObjectViewController *)timelineObjectViewController fromFrame:(VSDoubleFrame)oldFrame toFrame:(VSDoubleFrame)newFrame{
+    
+    if([self delegateRespondsToSelector:@selector(timelineObject:willBeResizedFrom:to:onTrack:)]){
+        newFrame = [self.delegate timelineObject:timelineObjectViewController willBeResizedFrom:oldFrame to:newFrame onTrack:self];
+    }
     
     double deltaXPosition = newFrame.x - oldFrame.x;
     double deltaWidth = newFrame.width - oldFrame.width;
@@ -729,8 +739,6 @@ static NSString* defaultNib = @"VSTrackView";
     }
     
     if([self computeSnappingDeltaX:&snappingDeltaX atSide:VSSnapBothSides forTimelineObjects:[NSArray arrayWithObject:timelineObjectViewController] movedAccordingToDeltaX:deltaXPosition widthChangedAccordingToDeltaWidth:deltaWidth]){
-
-        
         
         if(snapAtSide == VSSnapLeftSideOnly){
             newFrame.x += snappingDeltaX;
@@ -751,6 +759,10 @@ static NSString* defaultNib = @"VSTrackView";
     [otherTimelineObjectViewControllers removeObject:timelineObjectViewController];
     
     [self setTimelineObjectViews:otherTimelineObjectViewControllers IntersectedByTimelineObjectViews:[NSArray arrayWithObject:timelineObjectViewController]];
+    
+    if([self delegateRespondsToSelector:@selector(timelineObject:wasResizedOnTrack:)]){
+        [self.delegate timelineObject:timelineObjectViewController wasResizedOnTrack:self];
+    }
 }
 
 -(void) timelineObjectDidStopResizing:(VSTimelineObjectViewController *)timelineObjectViewController{
@@ -764,6 +776,9 @@ static NSString* defaultNib = @"VSTrackView";
     
     [self.view.undoManager beginUndoGrouping];
     
+    if([self delegateRespondsToSelector:@selector(timelineObject:didStopResizingOnTrack:)]){
+        [self.delegate timelineObject:timelineObjectViewController didStopResizingOnTrack:self];
+    }
     
     double newStartTime = [self timeValueForPixelValue:timelineObjectViewController.view.frame.origin.x];
     double newDuration = [self timeValueForPixelValue:timelineObjectViewController.view.frame.size.width];
@@ -778,6 +793,8 @@ static NSString* defaultNib = @"VSTrackView";
     }
     
     [self applyIntersectionToTimelineObjects];
+    
+    
     
     [self.view.undoManager setActionName:NSLocalizedString(@"Resizing Object", @"Undo Action for resizine an object on the timeline")];
     [self.view.undoManager endUndoGrouping];

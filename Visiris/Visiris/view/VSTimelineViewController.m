@@ -52,6 +52,9 @@
 // Default width of the track labels
 #define TRACK_LABEL_WIDTH 30
 
+//minimum size a timeline object has to have when resizing
+#define MINIMUM_TIMELINE_OBJECT_PIXEL_WIDTH 10
+
 @implementation VSTimelineViewController
 
 
@@ -350,8 +353,24 @@ static NSString* defaultNib = @"VSTimelineView";
 
 
 
+#pragma mark Resizing
 
-#pragma mark Moving TimlineObjects
+-(VSDoubleFrame) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController willBeResizedFrom:(VSDoubleFrame)oldDoubleFrame to:(VSDoubleFrame)newDoubleFrame onTrack:(VSTrackViewController *)trackViewController{
+    
+    if(newDoubleFrame.width < MINIMUM_TIMELINE_OBJECT_PIXEL_WIDTH){
+        newDoubleFrame.width = MINIMUM_TIMELINE_OBJECT_PIXEL_WIDTH;
+    }
+    
+    double newDuration = [self timestampForPixelValue:newDoubleFrame.x + newDoubleFrame.width ];
+    
+    [self changeWidhtOfTimeline:newDuration];
+    
+    return newDoubleFrame;
+}
+
+
+
+#pragma mark Moving
 
 -(NSPoint) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController WillBeDraggedOnTrack:(VSTrackViewController *)trackViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition withSnappingDeltaX:(float)snappingDeltaX{
     
@@ -622,12 +641,14 @@ static NSString* defaultNib = @"VSTimelineView";
 
 -(void) mouseDragged:(NSEvent *)theEvent onView:(NSView *)view{
     if(self.autoscrolling){
-        [self scrollIfMouseOutsideContentView];
+      //  [self scrollIfMouseOutsideContentView];
     }
 }
 
-
+#pragma mark -
 #pragma mark - Private Methods
+#pragma mark -
+#pragma mark -
 
 #pragma mark Pixel Time Ratio
 
@@ -721,6 +742,19 @@ static NSString* defaultNib = @"VSTimelineView";
  */
 -(void) timelineObjectPropertIesDidTurnInactive:(NSNotification*) notification{
     [self.timeline unselectAllTimelineObjects];
+}
+
+/**
+ * Enlarges the width of the timeline, but doesn't change the timeline's duration
+ */
+-(void) changeWidhtOfTimeline:(double) newDuration{
+    //if the computed Maximum is greater than the current duration of the timeline it is enlarged
+    if(newDuration > self.timeline.duration){
+        [self resizeTracksAccordingToDuration:newDuration];
+    }
+    else{
+        [self resizeTracksAccordingToDuration:self.timeline.duration];
+    }
 }
 
 #pragma mark - Timeline Ruler
@@ -921,16 +955,11 @@ static NSString* defaultNib = @"VSTimelineView";
         
         double newTimeMax = [self timestampForPixelValue:maxFrameX];
         
+        [self changeWidhtOfTimeline:newTimeMax];
         
-        //if the computed Maximum is greater than the current duration of the timeline it is enlarged
-        if(newTimeMax > self.timeline.duration){
-            [self resizeTracksAccordingToDuration:newTimeMax];
-        }
-        else{
-            [self resizeTracksAccordingToDuration:self.timeline.duration];
-        }
     }
 }
+
 
 
 #pragma mark Moving to different Track

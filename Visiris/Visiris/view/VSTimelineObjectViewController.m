@@ -387,7 +387,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 
 -(void) setViewsDoubleFrame:(VSDoubleFrame)viewsDoubleFrame{
     if(!VSEqualDoubleFrame(self.timelineObjectView.doubleFrame, viewsDoubleFrame)){
-        self.timelineObjectView.doubleFrame = self.viewsDoubleFrame;
+        self.timelineObjectView.doubleFrame = viewsDoubleFrame;
     }
 }
 

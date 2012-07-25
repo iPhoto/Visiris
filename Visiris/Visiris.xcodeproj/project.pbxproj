@@ -849,15 +849,7 @@
 			children = (
 				5B0E366215876E6A00F15026 /* trackLabel */,
 				5B35C0A91577AEB4009911EC /* ruler */,
-				5B35BFC71577A573009911EC /* VSTimelineView.h */,
-				5B35BFC81577A573009911EC /* VSTimelineView.m */,
-				5B35BFC91577A573009911EC /* VSTimelineView.xib */,
-				5B35BFCA1577A573009911EC /* VSTimelineViewController.h */,
-				5B35BFCB1577A573009911EC /* VSTimelineViewController.m */,
-				5B0EFF97158A226C0000445C /* VSTrackHolderView.h */,
-				5B0EFF98158A226C0000445C /* VSTrackHolderView.m */,
-				5BAB35D315B4153D008B4793 /* VSTimelineScrollView.h */,
-				5BAB35D415B4153D008B4793 /* VSTimelineScrollView.m */,
+				5B9AD00F15C01ACA00A1D1C0 /* timeline */,
 			);
 			name = timeline;
 			sourceTree = "<group>";
@@ -1016,6 +1008,22 @@
 				5BF875BE15B95E4200CEBBDD /* VSViewMouseEventsDelegate.h */,
 			);
 			name = protocolls;
+			sourceTree = "<group>";
+		};
+		5B9AD00F15C01ACA00A1D1C0 /* timeline */ = {
+			isa = PBXGroup;
+			children = (
+				5B35BFC71577A573009911EC /* VSTimelineView.h */,
+				5B35BFC81577A573009911EC /* VSTimelineView.m */,
+				5B35BFC91577A573009911EC /* VSTimelineView.xib */,
+				5B35BFCA1577A573009911EC /* VSTimelineViewController.h */,
+				5B35BFCB1577A573009911EC /* VSTimelineViewController.m */,
+				5B0EFF97158A226C0000445C /* VSTrackHolderView.h */,
+				5B0EFF98158A226C0000445C /* VSTrackHolderView.m */,
+				5BAB35D315B4153D008B4793 /* VSTimelineScrollView.h */,
+				5BAB35D415B4153D008B4793 /* VSTimelineScrollView.m */,
+			);
+			name = timeline;
 			sourceTree = "<group>";
 		};
 		5BBFF52215BD33780050CB58 /* structs */ = {
