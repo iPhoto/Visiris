@@ -8,13 +8,11 @@
 
 #import "VSTimelineObjectView.h"
 
-#define RESIZING_FROM_LEFT 0
-#define RESIZING_FROM_RIGHT 1
-
-
 
 @interface VSTimelineObjectView ()
 
+#define RESIZING_FROM_LEFT 0
+#define RESIZING_FROM_RIGHT 1
 
 /** If YES the view is resized on mouseDragged-Event */
 @property BOOL resizing;
@@ -63,6 +61,7 @@ static int resizingAreaWidth = 10;
 @synthesize doubleFrame             = _doubleFrame;
 
 
+#pragma mark - Init
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -77,13 +76,14 @@ static int resizingAreaWidth = 10;
 
 -(void) awakeFromNib{
     [self  unregisterDraggedTypes];
+    
     [self initLayerStyle];
+    
     //Unregisters all Subviews from their draggTypes, thus they won't react on dragging
     for(NSView *subView in [self subviews]){
         [subView unregisterDraggedTypes];
     }
 }
-
 
 
 /**
@@ -92,34 +92,7 @@ static int resizingAreaWidth = 10;
 -(void) initLayerStyle{
     [self setWantsLayer:YES];
     [self.layer setZPosition:0];   
-    
     [self setDefaultLayerStyle];
-}
-
--(void) setDefaultLayerStyle{
-    self.layer.backgroundColor = [[NSColor darkGrayColor] CGColor];
-    self.layer.cornerRadius = 5.0;
-    self.layer.opacity = 1.0;
-    self.layer.borderWidth = 0.0;
-}
-
--(void) setLayerStyle{
-    if(!self.inactive){
-        
-        [self setDefaultLayerStyle];
-        
-        if(self.selected){
-            self.layer.borderColor =  [[NSColor yellowColor] CGColor];
-            self.layer.borderWidth = 3.0;
-        }
-        
-        if (self.moving || self.temporary || self.resizing) {
-            self.layer.opacity = 0.5;
-        }
-    }
-    else {
-        self.layer.opacity = 0.0;
-    }
 }
 
 /**
@@ -143,8 +116,6 @@ static int resizingAreaWidth = 10;
 -(void) setFrame:(NSRect)frameRect{
     [super setFrame:NSRectFromVSDoubleFrame(self.doubleFrame)];
 }
-
-#pragma mark - Event Handling
 
 -(BOOL) acceptsFirstResponder{
     return YES;
@@ -173,32 +144,9 @@ static int resizingAreaWidth = 10;
     }
 }
 
-
--(void) mouseDragged:(NSEvent *)theEvent{
-    
-    //    float scrollingXDelta = 0.0;
-    //    if(self.enclosingScrollView){
-    //        NSPoint currentScrollPos = self.enclosingScrollView.contentView.bounds.origin;
-    //        [self autoscroll:theEvent];
-    //        NSPoint newScrollPos = self.enclosingScrollView.contentView.bounds.origin;
-    //        
-    //        DDLogInfo(@"scrolled about: %f", currentScrollPos.x - newScrollPos.x);
-    //        
-    //        scrollingXDelta=currentScrollPos.x - newScrollPos.x;
-    //    }
-    //    
-    //    NSPoint currentScrollPos = self.enclosingScrollView.contentView.bounds.origin;
-    //    [self autoscroll:theEvent];
-    //    NSPoint newScrollPos = self.enclosingScrollView.contentView.bounds.origin;
-    //    
-    //    DDLogInfo(@"scrolled about: %f", currentScrollPos.x - newScrollPos.x);
-    //    
-    //    scrollingXDelta=currentScrollPos.x - newScrollPos.x;
-    //
-    //    
+-(void) mouseDragged:(NSEvent *)theEvent{   
     NSPoint newMousePosition =[theEvent locationInWindow];
-    //    newMousePosition.x += scrollingXDelta;
-    //    
+    
     //if the the event was entered first time after a mouse down the kind of drgging operation has to be set
     if(!self.resizing && !self.moving){
         [self setDraggingModeDependingOnMousePosition:newMousePosition];
@@ -214,7 +162,9 @@ static int resizingAreaWidth = 10;
     
     self.lastMousePosition = newMousePosition;
     
-    [self autoscroll:theEvent];
+//    [self autoscroll:theEvent];
+    
+    [self.nextResponder mouseDragged:theEvent];
 }
 
 -(void) cursorUpdate:(NSEvent *)event{
@@ -247,6 +197,11 @@ static int resizingAreaWidth = 10;
             [self.delegate timelineObjectDidStopResizing:self];
         }
     }
+}
+
+-(void) mouseMoved:(NSEvent *)theEvent{
+    [self.nextResponder mouseMoved:theEvent];
+    DDLogInfo(@"mouse move in tmov");
 }
 
 
@@ -410,8 +365,44 @@ static int resizingAreaWidth = 10;
     return NO;
 }
 
+/**
+ * Tells view to update its frame according to its doubleFrame.
+ *
+ * For this purpose it calls setFrame with an NSZeroRect
+ */
 -(void) updateFrame{
     [self setFrame:NSZeroRect];
+}
+
+/**
+ * Sets the default style of the views layer
+ */
+-(void) setDefaultLayerStyle{
+    self.layer.backgroundColor = [[NSColor darkGrayColor] CGColor];
+    self.layer.cornerRadius = 5.0;
+    self.layer.opacity = 1.0;
+    self.layer.borderWidth = 0.0;
+}
+
+/**
+ * Sets the style of the views layer according to its currentState
+ */
+-(void) setLayerStyle{
+    if(!self.inactive){
+        [self setDefaultLayerStyle];
+        
+        if(self.selected){
+            self.layer.borderColor =  [[NSColor yellowColor] CGColor];
+            self.layer.borderWidth = 3.0;
+        }
+        
+        if (self.moving || self.temporary || self.resizing) {
+            self.layer.opacity = 0.5;
+        }
+    }
+    else {
+        self.layer.opacity = 0.0;
+    }
 }
 
 #pragma mark - Properties
@@ -455,7 +446,6 @@ static int resizingAreaWidth = 10;
         [self setLayerStyle];
     }
 }
-  
 
 -(BOOL) temporary{
     return _temporary;

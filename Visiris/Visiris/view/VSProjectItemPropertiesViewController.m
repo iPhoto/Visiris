@@ -127,7 +127,6 @@ static NSString* defaultNib = @"VSProjectItemPropertiesView";
 
 #pragma mark - Properties
 
-
 -(void) setProjectItemRepresentation:(VSProjectItemRepresentation *)projectItemRepresentation{
     if(projectItemRepresentation != self.projectItemRepresentation){
         _projectItemRepresentation = projectItemRepresentation;

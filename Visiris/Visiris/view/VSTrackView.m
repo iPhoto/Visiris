@@ -57,13 +57,21 @@
 #pragma mark - MouseEvents
 
 -(void) mouseMoved:(NSEvent *)theEvent{
-    [self.nextResponder mouseMoved:theEvent];   
+    [self.nextResponder mouseMoved:theEvent];
+    
+    [self.nextResponder mouseMoved:theEvent];
 }
 
 -(void) mouseDown:(NSEvent *)theEvent{
     if([self controllerDelegateImplementsSelector:@selector(didClicktrackView:)]){
         [self.controllerDelegate didClicktrackView:self];
     }
+    
+    [self.nextResponder mouseDown:theEvent];
+}
+
+-(void) mouseDragged:(NSEvent *)theEvent{
+    [self.nextResponder mouseDragged:theEvent];
 }
 
 #pragma mark - VSDraggingDestination implementation

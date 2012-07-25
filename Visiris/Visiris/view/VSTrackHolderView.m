@@ -45,28 +45,38 @@
 }
 
 -(void) awakeFromNib{
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(boundsDidChange:) name:NSViewBoundsDidChangeNotification object:nil];
-    
     self.scrollOffset = NSZeroPoint;
     
-    [self setWantsLayer:YES];
-    
-    self.layer.backgroundColor = [[NSColor darkGrayColor] CGColor];
+    [self initLayer];
     [self initEnclosingScrollView];
     [self initPlayheadMarker];
-    
     [self initGuideLine];
+    [self initObservers];
+}
+
+/**
+ * Inits the observers of the view
+ */
+- (void)initObservers {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(boundsDidChange:) name:NSViewBoundsDidChangeNotification object:nil];
+}
+
+/**
+ * Inits the views layer
+ */
+- (void)initLayer {
+    [self setWantsLayer:YES];
+    self.layer.backgroundColor = [[NSColor darkGrayColor] CGColor];
 }
 
 /**
  * Inits the guideline and sets its position
  */
 -(void) initGuideLine{
+    
     self.guideLine = [[CALayer alloc] init];
     self.guideLine.backgroundColor = [[NSColor blueColor] CGColor];
-    [self.guideLine setZPosition:400];
-    
+    [self.guideLine setZPosition:30];
     [self.layer addSublayer:self.guideLine];
 }
 
@@ -156,8 +166,8 @@
     }
 }
 
-#pragma mark - Methods
 
+#pragma mark - Methods
 
 -(void) movePlayHeadMarkerToLocation:(CGFloat)location{
     if(location != self.playheadMarker.markerLocation){
@@ -172,8 +182,8 @@
     }
 }
 
-#pragma mark - Private Methods
 
+#pragma mark - Private Methods
 
 /**
  * Checks if the delegate  is able to respond to the given Selector
@@ -196,13 +206,8 @@
  * @param notification NSNotification of the NSViewBoundsDidChangeNotification
  */
 -(void) boundsDidChange:(NSNotification*) notification{
-    
-    
     if(notification.object == self.enclosingScrollView.contentView){
-        
         [self updateScrollOffset];
-        
-        
         [self updateGuideline];
     }
     
@@ -220,8 +225,8 @@
  * @param location Location the guidelin is updated for
  */
 -(void) updateGuidelineAtMarkerLocation:(CGFloat) location{
-    
     NSRect layerRect = self.frame;
+    
     layerRect.size.width = 1;
     layerRect.origin.x = round(self.playheadMarker.imageRectInRuler.origin.x - self.playheadMarker.imageOrigin.x+self.scrollOffset.x);
     layerRect.origin.y = 0;
@@ -234,12 +239,17 @@
     
 }
 
+/**
+ * Stores the current scrollOffset in the scrollOffset-Property
+ */
 -(void) updateScrollOffset{
     NSInteger xOffset = self.enclosingScrollView.contentView.bounds.origin.x - self.frame.origin.x;
     NSInteger yOffset = self.enclosingScrollView.contentView.bounds.origin.y - self.frame.origin.y;
     
     self.scrollOffset = NSMakePoint(xOffset, yOffset);
 }
+
+#pragma mark - Properties
 
 -(CGFloat) playheadMarkerLocation{
     return self.playheadMarker.markerLocation;

@@ -11,7 +11,7 @@
 
 @implementation VSDevice
 
-@synthesize parameters = _parameters;
-@synthesize active = _active;
+@synthesize parameters  = _parameters;
+@synthesize active      = _active;
 
 @end

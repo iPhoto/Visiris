@@ -57,6 +57,7 @@
 /** Delegate VSTrackHolderView communicates like defined in VSPlayHeadRulerMarkerDelegate*/
 @property id<VSPlayHeadRulerMarkerDelegate> playheadMarkerDelegate;
 
+/** Current position of the playhead marker */
 @property (readonly) CGFloat playheadMarkerLocation;
 
 /** 

@@ -258,7 +258,7 @@ typedef enum{
 /**
  * Adds a new VSTimelineObjectViewController to self.temporaryTimelineObjectViewControllers and inits it with the given trackView
  * @param aProxyObject VSTimelineObjectProxy the VSTimelineObjectViewController will be init with
- * @param aFrame NSRect set as frame of VSTimelineObjectView representing the temporary timlineObject;
+ * @param doubleFrame VSDoubleFrame set as doubleFrame of VSTimelineObjectView representing the temporary timlineObject;
  **/
 -(VSTimelineObjectViewController*) addTemporaryTimelineObject:(VSTimelineObjectProxy*) aProxyObject withDoubleFrame:(VSDoubleFrame) doubleFrame;
 

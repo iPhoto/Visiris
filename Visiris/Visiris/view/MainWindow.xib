@@ -45,7 +45,7 @@
 				<nil key="NSViewClass"/>
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<object class="NSView" key="NSWindowView" id="1006">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<array class="NSMutableArray" key="NSSubviews">
 						<object class="NSSplitView" id="473203185">
@@ -65,7 +65,6 @@
 													<int key="NSvFlags">256</int>
 													<string key="NSFrameSize">{380, 281}</string>
 													<reference key="NSSuperview" ref="470989547"/>
-													<reference key="NSWindow"/>
 													<reference key="NSNextKeyView" ref="506347261"/>
 													<string key="NSReuseIdentifierKey">_NS:11</string>
 													<string key="NSClassName">NSView</string>
@@ -75,7 +74,6 @@
 													<int key="NSvFlags">256</int>
 													<string key="NSFrame">{{381, 0}, {359, 281}}</string>
 													<reference key="NSSuperview" ref="470989547"/>
-													<reference key="NSWindow"/>
 													<reference key="NSNextKeyView" ref="643180104"/>
 													<string key="NSReuseIdentifierKey">_NS:13</string>
 													<string key="NSClassName">NSView</string>
@@ -85,14 +83,12 @@
 													<int key="NSvFlags">256</int>
 													<string key="NSFrame">{{741, 0}, {358, 281}}</string>
 													<reference key="NSSuperview" ref="470989547"/>
-													<reference key="NSWindow"/>
 													<string key="NSReuseIdentifierKey">_NS:13</string>
 													<string key="NSClassName">NSView</string>
 												</object>
 											</array>
 											<string key="NSFrameSize">{1099, 281}</string>
 											<reference key="NSSuperview" ref="566837450"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="774734853"/>
 											<string key="NSReuseIdentifierKey">_NS:9</string>
 											<bool key="NSIsVertical">YES</bool>
@@ -101,7 +97,6 @@
 									</array>
 									<string key="NSFrameSize">{1099, 281}</string>
 									<reference key="NSSuperview" ref="473203185"/>
-									<reference key="NSWindow"/>
 									<reference key="NSNextKeyView" ref="470989547"/>
 									<string key="NSReuseIdentifierKey">_NS:11</string>
 									<string key="NSClassName">NSView</string>
@@ -111,22 +106,18 @@
 									<int key="NSvFlags">256</int>
 									<string key="NSFrame">{{0, 282}, {1099, 195}}</string>
 									<reference key="NSSuperview" ref="473203185"/>
-									<reference key="NSWindow"/>
 									<string key="NSReuseIdentifierKey">_NS:13</string>
 									<string key="NSClassName">NSView</string>
 								</object>
 							</array>
 							<string key="NSFrameSize">{1099, 477}</string>
 							<reference key="NSSuperview" ref="1006"/>
-							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="566837450"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<int key="NSDividerStyle">2</int>
 						</object>
 					</array>
 					<string key="NSFrameSize">{1099, 477}</string>
-					<reference key="NSSuperview"/>
-					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView" ref="473203185"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>

@@ -93,6 +93,8 @@
     }
 }
 
+#pragma mark - Private Methods
+
 - (void)handleFrameTimelineObject:(VSTimelineObject *)timelineObject atTrack:(VSTrack *)track{
     
     NSSize dimensions = [VSFileUtils dimensionsOfFile:timelineObject.sourceObject.filePath];

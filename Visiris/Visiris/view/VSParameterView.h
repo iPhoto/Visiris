@@ -8,8 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class VSParameter;
 
+/**
+ * Subclass of NSView displaying a VSParameter
+ */
 @interface VSParameterView : NSView
 
 @end

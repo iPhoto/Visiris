@@ -33,7 +33,10 @@
 @interface VSTimelineView : NSView
 
 /** Delegate confirming to VSTimelineViewDelegate */
-@property id<VSTimelineViewDelegate> delegate;
+@property id<VSTimelineViewDelegate> timelineViewDelegate;
+
+/** Delegate VSTimelineView informs about mouseEvents as definined in VSViewMouseEventsDelegate-Protocoll */
+@property id<VSViewMouseEventsDelegate> mouseMoveDelegate;
 
 
 @end

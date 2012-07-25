@@ -192,6 +192,8 @@ static NSString* defaultNib = @"VSTrackView";
     }
 }
 
+
+
 #pragma mark Snapping
 
 -(BOOL) computeSnappingXValueForMoveableActiveTimelineObjectsMovedAccordingToDeltaX:(float)deltaX snappingDeltaX:(float *)snappingDeltaX{
@@ -292,7 +294,6 @@ static NSString* defaultNib = @"VSTrackView";
     return NO;
 }
 
-
 -(VSTimelineObjectViewController*) addTemporaryTimelineObject:(VSTimelineObjectProxy*) aProxyObject{
     
     VSTimelineObjectViewController *newController = [[VSTimelineObjectViewController alloc] initWithDefaultNib];
@@ -347,6 +348,8 @@ static NSString* defaultNib = @"VSTrackView";
     
 }
 
+
+
 #pragma mark Selection
 
 -(NSArray*) selectedTimelineObjectViewControllers{
@@ -379,16 +382,14 @@ static NSString* defaultNib = @"VSTrackView";
     }
 }
 
-/**
- * Moveable TimelineObjects are all selected and all temporay TimlineObjects
- * @return All currently moveable TimelineObjects
- */
 -(NSArray*) movableTimelineObjectViewControllers{
     NSMutableArray *moveableTimelineObjects = [NSMutableArray arrayWithArray:[self selectedTimelineObjectViewControllers]];
     [moveableTimelineObjects addObjectsFromArray:self.temporaryTimelineObjectViewControllers];
     
     return moveableTimelineObjects;
 }
+
+
 
 #pragma mark Intersection
 
@@ -418,7 +419,6 @@ static NSString* defaultNib = @"VSTrackView";
     [self resetIntersections];
 }
 
-
 -(void) setTimelineObjectViewsIntersectedByMoveableTimelineObjects{    
     [self setTimelineObjectViews:[self unselectedTimelineObjectViewControllers] IntersectedByTimelineObjectViews:[self activeSelectedAndTemporaryTimelineObjectViewControllers]];
 }
@@ -430,6 +430,11 @@ static NSString* defaultNib = @"VSTrackView";
         [intersectedTimelineObjectViewController removeAllIntersections];   
     }
 }
+
+
+
+
+
 
 #pragma mark - NSViewController
 
@@ -473,6 +478,9 @@ static NSString* defaultNib = @"VSTrackView";
         }
     }
 }
+
+
+
 
 
 #pragma mark - VSTrackViewDelegate Implmentation
@@ -652,7 +660,6 @@ static NSString* defaultNib = @"VSTrackView";
         return NSDragOperationNone;
 }
 
-
 -(BOOL) trackView:(VSTrackView *)trackView objectHaveExited:(id<NSDraggingInfo>)draggingInfo{
     
     if(!trackView)
@@ -669,7 +676,12 @@ static NSString* defaultNib = @"VSTrackView";
     }
 }
 
+
+
+
 #pragma mark- VSTimelineObjectViewControllerDelegate implementation
+
+
 
 #pragma mark Selecting
 
@@ -691,6 +703,8 @@ static NSString* defaultNib = @"VSTrackView";
         [self.delegate timelineObjectProxy:timelineObjectProxy wasUnselectedOnTrackViewController:self];
     }
 }
+
+
 
 #pragma mark Resizing
 
@@ -769,6 +783,8 @@ static NSString* defaultNib = @"VSTrackView";
     [self.view.undoManager endUndoGrouping];
 }
 
+
+
 #pragma mark Dragging (Moving)
 
 -(NSPoint) timelineObjectWillBeDragged:(VSTimelineObjectViewController *)timelineObjectViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition forMousePosition:(NSPoint)mousePosition{    
@@ -827,7 +843,6 @@ static NSString* defaultNib = @"VSTrackView";
     
 }
 
-
 -(void) timelineObjectWasDragged:(VSTimelineObjectViewController *)timelineObjectViewController{
     if([self delegateRespondsToSelector:@selector(timelineObject:wasDraggedOnTrack:)]){
         [self.delegate timelineObject:timelineObjectViewController wasDraggedOnTrack:self];
@@ -836,7 +851,6 @@ static NSString* defaultNib = @"VSTrackView";
         [self setTimelineObjectViewsIntersectedByMoveableTimelineObjects];
     }
 }
-
 
 -(BOOL) timelineObjectWillStartDragging:(VSTimelineObjectViewController *)timelineObjectViewController{
     
@@ -849,12 +863,28 @@ static NSString* defaultNib = @"VSTrackView";
     return YES;
 }
 
-#pragma mark - pleas move me to mehtods
 
 
 
 
 #pragma mark- Private Methods
+
+
+/**
+ * Checks if the delegate of VSTrackViewController is able to respond to the given Selector
+ * @param selector Selector the delegate will be checked for if it is able respond to
+ * @return YES if the delegate is able to respond to the selector, NO otherweis
+ */
+-(BOOL) delegateRespondsToSelector:(SEL) selector{
+    if(self.delegate){
+        if([self.delegate conformsToProtocol:@protocol(VSTrackViewControllerDelegate)]){
+            if([self.delegate respondsToSelector:selector]){
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
 
 /**
  * Returns an array of all VSTimlineViewControllers which have objects in their intersectedTimelineObjectViews-Property
@@ -928,6 +958,8 @@ static NSString* defaultNib = @"VSTrackView";
     return pixelValue * self.pixelTimeRatio;
 }
 
+
+
 #pragma mark VSTimelineObject Intersection
 
 /**
@@ -959,7 +991,11 @@ static NSString* defaultNib = @"VSTrackView";
 }
 
 
-
+/**
+ * Sets the frame of the view of timelineObjectViewController according to the startPosition and duration of its timelineObjectProxy
+ *
+ * @param timelineObjectViewController VSTimelineObjectViewController which's view's frame is set
+ */
 -(void) setTimelineObjectViewControllersFrame:(VSTimelineObjectViewController*) timelineObjectViewController{
     VSDoubleFrame newFrame;
     newFrame.x =  [self pixelForTimestamp:timelineObjectViewController.timelineObjectProxy.startTime];
@@ -988,34 +1024,6 @@ static NSString* defaultNib = @"VSTrackView";
     return timestamp / self.pixelTimeRatio;
 }
 
-#pragma mark  Temporary Timeline Objects
-
-/**
- * Adds a new TimelineObject for the given VSProjectItemRepresentation to the given VSTrackView at the given position.
- * @param aProjectItem VSProjectItemRepresentation the VSTimelineObjectProxy will be based on
- * @param aPosition NSPoint where the VSTimelineObjectView is positioned
- * @param aTrackView VSTrackView the new TimelineObject will be added to
- * @param temporaryID Temporarily set ID for the temporary timeline object
- * @return YES if it was created successfully, NO otherwise
- */
--(VSTimelineObjectViewController*) addNewTemporaryTimelineObjectProxyBasedOn:(VSProjectItemRepresentation*) aProjectItem atPosition:(NSPoint) aPosition toTrack:(VSTrackView*)aTrackView temporaryID:(NSInteger) temporaryID{
-    
-    if([self delegateRespondsToSelector:@selector(trackViewController:createTimelineObjectProxyBasedOnProjectItemRepresentation:atPosition:)]){
-        
-        VSTimelineObjectProxy *newProxy = [self.delegate trackViewController:self createTimelineObjectProxyBasedOnProjectItemRepresentation:aProjectItem atPosition:aPosition];
-        
-        if (!newProxy) {
-            return nil;
-        }
-        
-        newProxy.timelineObjectID = temporaryID;
-        
-        return [self addTemporaryTimelineObject:newProxy];
-        
-    }
-    
-    return nil;
-}
 
 
 
@@ -1061,20 +1069,37 @@ static NSString* defaultNib = @"VSTrackView";
     }
 }
 
+
+
+
+#pragma mark  Temporary Timeline Objects
+
 /**
- * Checks if the delegate of VSTrackViewController is able to respond to the given Selector
- * @param selector Selector the delegate will be checked for if it is able respond to
- * @return YES if the delegate is able to respond to the selector, NO otherweis
+ * Adds a new TimelineObject for the given VSProjectItemRepresentation to the given VSTrackView at the given position.
+ * @param aProjectItem VSProjectItemRepresentation the VSTimelineObjectProxy will be based on
+ * @param aPosition NSPoint where the VSTimelineObjectView is positioned
+ * @param aTrackView VSTrackView the new TimelineObject will be added to
+ * @param temporaryID Temporarily set ID for the temporary timeline object
+ * @return YES if it was created successfully, NO otherwise
  */
--(BOOL) delegateRespondsToSelector:(SEL) selector{
-    if(self.delegate){
-        if([self.delegate conformsToProtocol:@protocol(VSTrackViewControllerDelegate)]){
-            if([self.delegate respondsToSelector:selector]){
-                return YES;
-            }
+-(VSTimelineObjectViewController*) addNewTemporaryTimelineObjectProxyBasedOn:(VSProjectItemRepresentation*) aProjectItem atPosition:(NSPoint) aPosition toTrack:(VSTrackView*)aTrackView temporaryID:(NSInteger) temporaryID{
+    
+    if([self delegateRespondsToSelector:@selector(trackViewController:createTimelineObjectProxyBasedOnProjectItemRepresentation:atPosition:)]){
+        
+        VSTimelineObjectProxy *newProxy = [self.delegate trackViewController:self createTimelineObjectProxyBasedOnProjectItemRepresentation:aProjectItem atPosition:aPosition];
+        
+        if (!newProxy) {
+            return nil;
         }
+        
+        newProxy.timelineObjectID = temporaryID;
+        
+        return [self addTemporaryTimelineObject:newProxy];
+        
     }
-    return NO;
+    
+    return nil;
 }
+
 
 @end

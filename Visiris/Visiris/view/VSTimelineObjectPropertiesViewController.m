@@ -95,8 +95,6 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 
 #pragma mark - Private Methods
 
-
-
 /**
  * Removes all Parameter views
  */

@@ -84,6 +84,12 @@
 
 @end
 
+
+
+
+
+
+
 @class VSTimelineObject;
 
 /**
@@ -104,12 +110,23 @@
 /** If YES the view is moved on mouseDragged-Event */ 
 @property BOOL moving;
 
-/**if YES the view is hidden */
+/** if YES the view is hidden */
 @property BOOL inactive;
 
+/** Frame of VSTimelineObjectView as VSDoubleFrame */
 @property VSDoubleFrame doubleFrame;
 
+/**
+ * Crates a new Layer for an intersection with the view.
+ *
+ * @param intersection Size and origin of the newly created intersection-layer
+ */
 -(CALayer*) addIntersectionLayerForRect:(NSRect) intersection;
 
+/**
+ * Removes the given layer from the view
+ *
+ * @param intersectionLayer Layer displaying an intersection to be removed from the view
+ */
 -(void) removeIntersectionLayer:(CALayer*) intersectionLayer;
 @end

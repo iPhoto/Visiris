@@ -12,8 +12,6 @@
 
 @implementation VSParameterView
 
-
-
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
@@ -23,12 +21,5 @@
     
     return self;
 }
-
-- (void)drawRect:(NSRect)dirtyRect
-{
-    [[NSColor redColor] set];
-    NSRectFill(dirtyRect);
-}
-
 
 @end

@@ -18,12 +18,15 @@
 /** Times the playback */
 @property NSTimer *playbackTimer;
 
-@property (strong) NSOperationQueue *queue;
-@property BOOL playing;
+/** Timestamp when the playback was started */
 @property double playbackStartTime;
-@property BOOL jumping;
-@property BOOL scrubbing;
 
+/** Current playbackMode as definend in VSPlaybackMode */
+@property VSPlaybackMode playbackMode;
+
+@property VSPreProcessor* preProcessor;
+
+@property VSTimeline* timeline;
 @end
 
 @implementation VSPlaybackController
@@ -33,46 +36,40 @@
 @synthesize currentTimestamp    = _currentTimestamp;
 @synthesize playbackTimer       = _playbackTimer;
 @synthesize delegate            = _delegate;
-@synthesize queue               = _queue;
-@synthesize playing             = _playing;
 @synthesize playbackStartTime   = _playbackStartTime;
 @synthesize frameWasRender      = _frameWasRender;
-@synthesize jumping             = _jumping;
-@synthesize scrubbing           = _scrubbing;
+
+@synthesize playbackMode        = _playbackMode;
 
 #pragma mark - Init
 
+
 -(id) initWithPreProcessor:(VSPreProcessor *)preProcessor timeline:(VSTimeline *)timeline{
     if(self = [super init]){
-        _preProcessor = preProcessor;
-        _timeline = timeline;
-        self.queue = [[NSOperationQueue alloc] init];
+        self.preProcessor = preProcessor;
+        self.timeline = timeline;
+
+        self.playbackMode = VSPlaybackModeStanding;
         
-        [self.timeline.playHead addObserver:self forKeyPath:@"currentTimePosition" options:0 context:nil];
-        [self.timeline.playHead addObserver:self forKeyPath:@"scrubbing" options:0 context:nil];
-        [self.timeline.playHead addObserver:self forKeyPath:@"jumping" options:0 context:nil];
+        [self initObservers];
     }
     
     return self;
 }
 
+- (void)initObservers {
+    [self.timeline.playHead addObserver:self forKeyPath:@"scrubbing" options:0 context:nil];
+    [self.timeline.playHead addObserver:self forKeyPath:@"jumping" options:0 context:nil];
+}
+
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-    
-    if([keyPath isEqualToString:@"currentTimePosition"]){
-        if(!self.playing && !self.timeline.playHead.scrubbing && !self.timeline.playHead.jumping){
-            self.currentTimestamp = [[object valueForKey:keyPath] doubleValue];
-            if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
-                [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
-            }
-        }
-    }
-    
-    else if([keyPath isEqualToString:@"jumping"]){
+    if([keyPath isEqualToString:@"jumping"]){
         if([[object valueForKey:keyPath] boolValue]){
-            self.playing = NO;
-            self.jumping = YES;
+            
+            self.playbackMode = VSPlaybackModeJumping;
             
             self.currentTimestamp = [[object valueForKey:@"currentTimePosition"] doubleValue];
+            
             
             if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
                 [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
@@ -81,17 +78,18 @@
     }
     
     else if([keyPath isEqualToString:@"scrubbing"]){
-        self.scrubbing = [[object valueForKey:keyPath] boolValue];
+        BOOL scrubbing = [[object valueForKey:keyPath] boolValue];
         
         self.currentTimestamp = [[object valueForKey:@"currentTimePosition"] doubleValue];
         
-        if(self.scrubbing){
-            self.playing = NO;
+        if(scrubbing){
+            self.playbackMode = VSPlaybackModeScrubbing;
             if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
                 [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
             }
         }
         else{
+            self.playbackMode = VSPlaybackModeStanding;
             if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
                 [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
             }
@@ -105,18 +103,12 @@
 
 - (void)startPlaybackFromCurrentTimeStamp
 {
-    //    [self startTimer];
     NSThread* timerThread = [[NSThread alloc] initWithTarget:self selector:@selector(startTimer) object:nil]; //Create a new thread
     [timerThread start];
 }
 
-//TODO WTF??? isnt called anymore
--(void) stopPlayback{
-    [self.queue cancelAllOperations];
-    [self.playbackTimer invalidate];
-}
-
 -(void) didFinisheRenderingTexture:(GLuint)theTexture forTimestamp:(double)theTimestamp{
+    
     if(self.delegate){
         if([self.delegate conformsToProtocol:@protocol(VSPlaybackControllerDelegate) ]){
             if([self.delegate respondsToSelector:@selector(texture:isReadyForTimestamp:)]){
@@ -125,44 +117,57 @@
         }
     }
     
-    if(self.jumping){
+    if(self.playbackMode == VSPlaybackModeJumping){
         if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
             [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
         }
-    self.jumping = NO;
+        self.playbackMode = VSPlaybackModeStanding;
     }
 }
 
 - (void)renderFramesForCurrentTimestamp{
-    if(self.playing){
+    if(self.playbackMode == VSPlaybackModePlaying){
         [self computeNewCurrentTimestamp];
     }
     
     [self renderCurrentFrame];
 }
 
+-(void) play{
+    self.playbackMode = VSPlaybackModePlaying;
+    self.playbackStartTime = [[NSDate date] timeIntervalSince1970]*1000;
+}
+
+-(void) stop{
+    self.playbackMode = VSPlaybackModeStanding;
+    [self.preProcessor stopPlayback];
+}
+
+
+#pragma mark - Private Methods
+
+/**
+ * Sets the current VSPlaybackMode and tells the preprocessor to the render the current frame
+ */
 -(void) renderCurrentFrame{
     if (self.preProcessor) {
         
-        VSPlaybackMode mode;
-        if (self.scrubbing) {
-            mode = VSPlaybackModeScrubbing;
-        } else if (self.playing) {
-            mode = VSPlaybackModePlaying;
-        } else {
-            mode = VSPlaybackModeStanding;
-        }
         
-        [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:[VSProjectSettings sharedProjectSettings].frameSize withPlayMode:mode];
+        [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:[VSProjectSettings sharedProjectSettings].frameSize withPlayMode:self.playbackMode];
     }
     
-    if(!self.playing && !self.timeline.playHead.scrubbing){
-            if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
-                [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
-            }
+    //if the render of the was started because the playhead was moved by clicking somewhere on the timeline, the rendering is turned off after the frame was rendered
+    if(self.playbackMode == VSPlaybackModeJumping){
+        if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
+            [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
         }
+        self.playbackMode = VSPlaybackModeStanding;
+    }
 }
 
+/**
+ * Computs the current timestamp while playing
+ */
 -(void) computeNewCurrentTimestamp{
     double currentTime = [[NSDate date] timeIntervalSince1970]*1000;        
     
@@ -176,33 +181,6 @@
     self.playbackStartTime = currentTime;
 }
 
-#pragma mark - VSPreviewViewControllerDelegate implementation
-
--(void) play{
-    //    [self startPlaybackFromCurrentTimeStamp];
-    self.playing = YES;
-    self.jumping = self.scrubbing = NO;
-    self.playbackStartTime = [[NSDate date] timeIntervalSince1970]*1000;
-}
-
--(void) stop{
-    //    [self stopPlayback];
-    self.playing = NO;
-    [self.preProcessor stopPlayback];
-}
-
-
-#pragma mark - Private Methods
-
-//TODO who needs this?
--(void) startTimer{
-    @autoreleasepool {
-        NSRunLoop* runLoop = [NSRunLoop currentRunLoop];
-        //Fire timer every second to updated countdown and date/time
-        self.playbackTimer = [NSTimer scheduledTimerWithTimeInterval:1/30 target:self selector:@selector(renderFramesForCurrentTimestamp) userInfo:nil repeats:YES] ;
-        [runLoop run];
-    }
-}
 
 /**
  * Checks if the delegate of VSPlaybackControllerDelegate is able to respond to the given Selector

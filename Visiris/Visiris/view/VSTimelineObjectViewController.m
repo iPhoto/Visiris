@@ -144,8 +144,6 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     }
 }
 
-
-
 -(BOOL) timelineObjectViewWillStartDragging:(VSTimelineObjectView *)timelineObjectView{
     if([self delegateRespondsToSelector:@selector(timelineObjectWillStartDragging:)]){
         return [self.delegate timelineObjectWillStartDragging:self];
@@ -198,7 +196,6 @@ static NSString* defaultNib = @"VSTimelinObjectView";
         [self setViewsFrameAccordingToTimelineObject];
     }
 }
-
 
 -(void) intersectedByTimelineObjectView:(VSTimelineObjectViewController *)timelineObjectViewController atRect:(NSRect)intersectionRect{
     
@@ -389,15 +386,13 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 }
 
 -(void) setViewsDoubleFrame:(VSDoubleFrame)viewsDoubleFrame{
-    if(!VSEqualDoubleFrame(_viewsDoubleFrame, viewsDoubleFrame)){
-        _viewsDoubleFrame = viewsDoubleFrame;
-        
+    if(!VSEqualDoubleFrame(self.timelineObjectView.doubleFrame, viewsDoubleFrame)){
         self.timelineObjectView.doubleFrame = self.viewsDoubleFrame;
     }
 }
 
 -(VSDoubleFrame) viewsDoubleFrame{
-    return _viewsDoubleFrame;
+    return self.timelineObjectView.doubleFrame;
 }
 
 

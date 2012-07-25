@@ -48,7 +48,7 @@
  * Tells the supplier to provide data for the given timestamp, so the VSTimelineObject can return the VSCorHandover for given timestamp and framesize.
  * @param aTimestamp Timstamp the VSCoreHandover is created for.
  * @param aFrameSize FrameSize the VSCoreHandover is setup for.
- * @param playing Is currently in playmode.
+ * @param mode Current play mode as definend in VSPlaybackMode
  */
 - (VSCoreHandover *)handoverForTimestamp:(double)aTimestamp frameSize:(NSSize)aFrameSize withPlayMode:(VSPlaybackMode)mode;
 

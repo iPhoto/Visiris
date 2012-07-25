@@ -20,22 +20,22 @@
 @interface VSProjectItem : NSObject
 
 /** Name of the ProjectItem, by default the file name without extension */
-@property               NSString* name;
+@property NSString* name;
 
 /** File path of the file the ProjectItem represents. */
-@property               NSString* filePath;
+@property NSString* filePath;
 
 /** Duration of the file the ProjectItem represents. For non-time-based files the duration stored in VSDefaultProjectItemDuration is used. */
-@property               double duration;
+@property double duration;
 
 /** size of the represented file in bytes */
-@property               double fileSize;
+@property double fileSize;
 
 /** Unique id of the item created by the controller*/
-@property               NSInteger itemID;
+@property NSInteger itemID;
 
 /** Type of the represented file as VSFileType */
-@property               VSFileType* fileType;
+@property VSFileType* fileType;
 
 /**
  * Inits the VSProjectItem with the given values

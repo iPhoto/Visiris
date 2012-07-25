@@ -99,10 +99,12 @@
  * @param NSRect the frame of the VSTimelineObjectViewController's view will be set to
  */
 -(VSDoubleFrame) timelineObjectWillResize:(VSTimelineObjectViewController *)timelineObjectViewController fromFrame:(VSDoubleFrame)oldFrame toFrame:(VSDoubleFrame)newFrame;
-
-
-
 @end
+
+
+
+
+
 
 /**
  * VSTimelineObjectViewController is responsible for displaying a VSTimelineObjectProxy representing a VSTimelineObject.
@@ -128,6 +130,7 @@
 /** if YES the timelineObejct is hidden */
 @property BOOL inactive;
 
+/** Stores the VSDoubleFrame of VSTimelineObjectViewController's VSTimelineObjectView */
 @property VSDoubleFrame viewsDoubleFrame;
 
 /** Stores the VSTimelineObjectViewController which's views intersecting the view of the VSTimelineObjectViewController as VSTimelineObjectIntersection */

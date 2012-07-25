@@ -18,9 +18,16 @@
 
 @interface VSPreviewViewController ()
 
+/** Top Margin of the openGLView to its superview */
 @property NSInteger openGLViewMarginTop;
+
+/** Bottom Margin of the openGLView to its superview */
 @property NSInteger openGLViewMarginBottom;
+
+/** Left Margin of the openGLView to its superview */
 @property NSInteger openGLViewMarginLeft;
+
+/** Rigth Margin of the openGLView to its superview */
 @property NSInteger openGLViewMarginRight;
 
 @end
@@ -29,13 +36,12 @@
 
 @synthesize openGLViewHolder        = _openGLViewHolder;
 @synthesize openGLView              = _openGLView;
-@synthesize delegate                = _delegate;
 @synthesize openGLContext           = _openGLContext;
-@synthesize playBackController      = _playBackController;
 @synthesize openGLViewMarginTop     = _openGLViewMarginTop;
 @synthesize openGLViewMarginBottom  = _openGLViewMarginBottom;
 @synthesize openGLViewMarginLeft    = _openGLViewMarginLeft;
 @synthesize openGLViewMarginRight   = _openGLViewMarginRight;
+@synthesize playbackController      = _playbackController;
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
 static NSString* defaultNib = @"VSPreviewView";
@@ -69,14 +75,9 @@ static NSString* defaultNib = @"VSPreviewView";
 -(void) awakeFromNib{ 
     if(self.view){
         
-        [self.openGLView initOpenGLWithSharedContext:self.openGLContext];
-        [self.openGLView setAutoresizingMask:NSViewNotSizable];
-        [self.openGLView removeConstraints:self.openGLView.constraints];
+        [self initOpenGLView];
         
-        self.openGLViewMarginLeft = self.openGLView.frame.origin.x;
-        self.openGLViewMarginRight = self.view.frame.size.width - NSMaxX(self.openGLView.frame);
-        self.openGLViewMarginBottom = self.openGLView.frame.origin.y;
-        self.openGLViewMarginTop = self.view.frame.size.height - NSMaxY(self.openGLView.frame);
+        [self storeOpenGLViewsMargins];
         
         [self setOpenGLViewFameAccordingToAspectRatioInSuperview:self.view.frame];
         
@@ -86,13 +87,79 @@ static NSString* defaultNib = @"VSPreviewView";
     }
 }
 
+/**
+ * Stores the margin of the openGLView as set in the InterfaceBuilder. Necessary for resizing the view proportionally afterwards
+ */
+- (void)storeOpenGLViewsMargins {
+    self.openGLViewMarginLeft = self.openGLView.frame.origin.x;
+    self.openGLViewMarginRight = self.view.frame.size.width - NSMaxX(self.openGLView.frame);
+    self.openGLViewMarginBottom = self.openGLView.frame.origin.y;
+    self.openGLViewMarginTop = self.view.frame.size.height - NSMaxY(self.openGLView.frame);
+}
+
+/**
+ * Inits the openGLView and sets its autoresizing behaviour
+ */
+-(void) initOpenGLView{
+    [self.openGLView initOpenGLWithSharedContext:self.openGLContext];
+    [self.openGLView setAutoresizingMask:NSViewNotSizable];
+    [self.openGLView removeConstraints:self.openGLView.constraints];
+}
+
+#pragma mark - IBAction
+
+- (IBAction)play:(NSButton *)sender {
+    if(self.playbackController){
+        [self.openGLView startDisplayLink];
+        [self.playbackController play];
+    }
+}
+
+- (IBAction)stop:(NSButton *)sender {
+    if(self.playbackController){
+        [self.openGLView stopDisplayLink];
+        [self.playbackController stop];
+    }
+}
+
+#pragma mark - VSPlaybackControllerDelegate implementation
+
+-(void) texture:(GLuint)theTexture isReadyForTimestamp:(double)theTimestamp{
+    self.openGLView.texture = theTexture;
+}
+
+-(void) didStartScrubbingAtTimestamp:(double)aTimestamp{
+    [self.openGLView startDisplayLink];
+}
+
+-(void) didStopScrubbingAtTimestamp:(double)aTimestamp{
+    [self.openGLView stopDisplayLink];
+}
+
+#pragma mark - VSFrameResizingDelegate implementation
+
+-(void) frameOfView:(NSView *)view wasSetTo:(NSRect)newRect{
+    [self setOpenGLViewFameAccordingToAspectRatioInSuperview:newRect];
+}
+
+#pragma mark - Private Methods
+
+
+/**
+ * Computes a NSRect openGLView according to the aspectRatio stored in VSProjectSettings. Ensures that the openGLView is resized proportionally and positoned according to its margin-values in its superview
+ *
+ * @param superViewsRect Frame of the openGLView's super view
+ */
 -(void) setOpenGLViewFameAccordingToAspectRatioInSuperview:(NSRect) superViewsRect{
     
     NSRect openGLViewRect;
-
+    
+    //creates a nsrect according to the set margins
     openGLViewRect.size.width = superViewsRect.size.width - self.openGLViewMarginLeft - self.openGLViewMarginRight;
     openGLViewRect.size.height = superViewsRect.size.height - self.openGLViewMarginTop - self.openGLViewMarginBottom;
     
+    
+    //resizes the NSRect according to the aspectRatio stored in VSProjectSettings
     float aspectRatio = [VSProjectSettings sharedProjectSettings].aspectRatio;
     
     float proportionalHeight = openGLViewRect.size.width / aspectRatio;
@@ -113,66 +180,17 @@ static NSString* defaultNib = @"VSPreviewView";
     [self.openGLView setNeedsDisplay:YES];
 }
 
-#pragma mark - IBAction
+#pragma mark - Properties
 
-- (IBAction)play:(NSButton *)sender {
-    if([self delegateRespondsToSelector:@selector(play) ]){
-        [self.openGLView startDisplayLink];
-        [self.delegate play];
-    }
-}
-
-- (IBAction)stop:(NSButton *)sender {
-    if([self delegateRespondsToSelector:@selector(stop) ]){
-        [self.openGLView stopDisplayLink];
-        [self.delegate stop];
-    }
-}
-
-#pragma mark - VSPlaybackControllerDelegate implementation
-
--(void) texture:(GLuint)theTexture isReadyForTimestamp:(double)theTimestamp{
-    self.openGLView.texture = theTexture;
-}
-
--(void) didStartScrubbingAtTimestamp:(double)aTimestamp{
-    [self.openGLView startDisplayLink];
-}
-
--(void) didStopScrubbingAtTimestamp:(double)aTimestamp{
-    [self.openGLView stopDisplayLink];
-}
-
-#pragma mark - Private Methods
-
--(BOOL) delegateRespondsToSelector:(SEL) selector{
-    if(self.delegate){
-        if([self.delegate conformsToProtocol:@protocol(VSPreviewViewControllerDelegate) ]){
-            if([self.delegate respondsToSelector:selector]){
-                return YES;
-            }
-        }
-    }
+-(void) setPlaybackController:(VSPlaybackController *)playBackController{
     
-    return NO;
-}
-
-
--(void) setPlayBackController:(VSPlaybackController *)playBackController{
-
     self.openGLView.playBackcontroller = playBackController;
     
-    _playBackController = playBackController;
+    _playbackController = playBackController;
 }
 
--(VSPlaybackController*) playBackController{
-    return _playBackController;
-}
-
-#pragma mark - VSFrameResizingDelegate implementation
-
--(void) frameOfView:(NSView *)view wasSetTo:(NSRect)newRect{
-    [self setOpenGLViewFameAccordingToAspectRatioInSuperview:newRect];
+-(VSPlaybackController*) playbackController{
+    return _playbackController;
 }
 
 @end

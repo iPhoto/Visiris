@@ -12,6 +12,7 @@
 #import "VStimelineView.h"
 #import "VSTrackHolderView.h"
 #import "VSTimelineScrollView.h"
+#import "VSViewMouseEventsDelegate.h"
 
 @class VSTimeline;
 @class VSTimelineRulerView;
@@ -24,7 +25,7 @@
  * VSTimelineViewController holds a various number of VSTrackViewController representing the VSTracks of the VSTimeline and acts as delegate for the VSTrackViewControllers. 
  * !!!!!!Please add more here
  */
-@interface VSTimelineViewController : NSViewController<VSTrackViewControllerDelegate, VSTimelineViewDelegate, VSPlayHeadRulerMarkerDelegate,VSTimelineScrollViewZoomingDelegate>
+@interface VSTimelineViewController : NSViewController<VSTrackViewControllerDelegate, VSTimelineViewDelegate, VSPlayHeadRulerMarkerDelegate,VSTimelineScrollViewZoomingDelegate, VSViewMouseEventsDelegate>
 
 /** VSTimelineScrollView holding the VSTrackViews representing the single tracks */
 @property (weak) IBOutlet VSTimelineScrollView *scrollView;
@@ -37,7 +38,6 @@
 
 /** Ratio between the duration of the timeline and the pixel length of tracksHolderdocumentView */
 @property double pixelTimeRatio;
-
 
 #pragma mark - Init
 

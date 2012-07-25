@@ -31,6 +31,8 @@
  * Subclass of NSScrollView. Used for scrollView in the timelineView to handle the interaction with the scrool wheel differently
  */
 @interface VSTimelineScrollView : NSScrollView
+
 /** Delegate the class communicates with as defined in VSTimelineScrollViewZoomingDelegate */
 @property id<VSTimelineScrollViewZoomingDelegate> zoomingDelegate;
+
 @end

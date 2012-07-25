@@ -23,7 +23,7 @@
 /**
  * Renders a frame for the content the timlineObject represents for the given timestamp in the given size.
  * @param aTimestamp Defines the frame that will be rendered. The timestamp has to be in local time of the timelineObject.
- * @param playing Indicates function is called during a running playback or for one frame only e.g. during scrubbing over the timeline.
+ * @param playMode Current playbackMode as defined in VSPlaybackMode
  * @returns Pointer to the created frame.
  */
 -(VSImage *) getFrameForTimestamp:(double)aTimestamp withPlayMode:(VSPlaybackMode)playMode;

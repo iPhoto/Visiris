@@ -28,6 +28,7 @@
  * Inits the intersection for the given values
  * @param intersectedTimelineObjectView VSTimelineObjectViewController which intersects another VSTimelineObjectViewController
  * @param intersectionRect NSRect storing where the intersection happend
+ * @param layer CALayer displaying the intersectionRect
  * @return self
  */
 -(id) initWithIntersectedTimelineObejctView:(VSTimelineObjectViewController*) intersectedTimelineObjectView intersectedAt:(NSRect) intersectionRect andLayer:(CALayer*)layer;

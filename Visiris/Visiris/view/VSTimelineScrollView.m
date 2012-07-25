@@ -14,6 +14,8 @@
 
 @synthesize zoomingDelegate = _zoomingDelegate;
 
+#pragma mark - Init
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
@@ -64,10 +66,5 @@
     
     return NO;
 }
-
--(id<CAAction>) actionForLayer:(CALayer *)layer forKey:(NSString *)event{
-    return nil;
-}
-
 
 @end

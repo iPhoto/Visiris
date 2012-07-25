@@ -22,11 +22,12 @@
 @property (readonly) NSMutableArray  *projectItemRepresentations;
 
 #pragma mark- Functions
-/*!
- Returns the singleton Instance
- @return Reference on the Singleton Instance
+/**
+ * Returns the singleton Instance
+ * @return Reference on the Singleton Instance
  */
 +(VSProjectItemRepresentationController*)sharedManager;
+
 
 #pragma mark- Methods
 

@@ -29,6 +29,7 @@
 -(void) setFrame:(NSRect)frameRect{
     [super setFrame:frameRect];
     
+    //tells its delegate that the view's frame was resized
     if(self.frameResizingDelegate){
         if([self.frameResizingDelegate conformsToProtocol:@protocol(VSFrameResizingDelegate)]){
             if([self.frameResizingDelegate respondsToSelector:@selector(frameOfView:wasSetTo:)]){

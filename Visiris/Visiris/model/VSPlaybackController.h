@@ -35,17 +35,18 @@
 
 @end
 
+
+
+
+
+
 @class VSPreProcessor;
 @class VSTimeline;
-@class VSPreviewViewController;
-
-
-#import "VSPreviewViewController.h"
 
 /**
  * VSPlaybackController start and controls playing of the Visiris Project. It tells the VSPreProcessor to process data for an specific-frame
  */
-@interface VSPlaybackController : NSObject<VSPreviewViewControllerDelegate>
+@interface VSPlaybackController : NSObject
 
 /** Delegate VSPlaybackController communicates like defined in VSPlaybackControllerDelegate Protocoll */
 @property id<VSPlaybackControllerDelegate> delegate;
@@ -54,7 +55,7 @@
 @property (readonly) VSPreProcessor *preProcessor;
 
 /** The VSTimline is called when the current timestamp has changed. */
-@property  VSTimeline *timeline;
+@property (readonly) VSTimeline *timeline;
 
 /** The currently active TimeStamp */
 @property double currentTimestamp;
@@ -77,10 +78,14 @@
 -(void) startPlaybackFromCurrentTimeStamp;
 
 /**
+ * Starts the playback
+ */
+-(void) play;
+
+/**
  * Stops the playback
  */
--(void) stopPlayback;
-
+-(void) stop;
 
 /**
  * Called when the texture for the given timestamp was rendered handsover the information to its delegate.
