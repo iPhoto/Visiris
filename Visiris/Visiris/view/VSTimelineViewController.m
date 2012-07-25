@@ -525,6 +525,9 @@ static NSString* defaultNib = @"VSTimelineView";
     self.autoscrolling = NO;
     [self.autoScrollingTimer invalidate];
     
+    [self.view.undoManager beginUndoGrouping];
+    [self.view.undoManager setActionName:NSLocalizedString(@"Moved Objects on Timeline", @"Undo Action Name for moving objects on Timeline")];
+    
     for(VSTrackViewController *tmpTrackViewController in self.trackViewControllers){
         if(tmpTrackViewController != trackViewController){
             [tmpTrackViewController updateActiveMoveableTimelineObjectsAccordingToViewsFrame];
@@ -536,6 +539,8 @@ static NSString* defaultNib = @"VSTimelineView";
             [tmpTrackViewController resetIntersections];
         }
     }
+    
+    [self.view.undoManager endUndoGrouping];
     
     [self setTimelineDurationAccordingToTimelineWidth];
 }
@@ -573,7 +578,7 @@ static NSString* defaultNib = @"VSTimelineView";
     
     //if no newFrames were computed, the view is removed instead of splitted
     if(!newFrames.count){
-        [self.timeline removeTimelineObject:tmpTimelineObject fromTrack:trackViewController.track];
+        [self.timeline removeTimelineObject:tmpTimelineObject fromTrack:trackViewController.track andRegisterAtUndoManager:self.view.undoManager];
     }
     else{
         [self segmentTimelineObject:timelineObjectViewController onTrack:trackViewController intoSegments:newFrames];
@@ -588,7 +593,7 @@ static NSString* defaultNib = @"VSTimelineView";
     double duration = [self timestampForPixelValue:timelineObjectViewController.timelineObjectView.doubleFrame.width]; 
     
     if([timelineObjectViewController.timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
-        [self.timeline copyTimelineObject:(VSTimelineObject*) timelineObjectViewController.timelineObjectProxy toTrack:trackViewController.track atPosition:startTime withDuration:duration];
+        [self.timeline copyTimelineObject:(VSTimelineObject*) timelineObjectViewController.timelineObjectProxy toTrack:trackViewController.track atPosition:startTime withDuration:duration andRegisterUndoOperation:self.view.undoManager];
     }
     
     
@@ -1108,7 +1113,7 @@ static NSString* defaultNib = @"VSTimelineView";
  */
 -(void) removeTimlineObject:(VSTimelineObject*) timelineObject fromTrack:(VSTrack*) track{
     [self.view.undoManager beginUndoGrouping];
-    [self.timeline removeTimelineObject:timelineObject fromTrack:track];
+    [self.timeline removeTimelineObject:timelineObject fromTrack:track andRegisterAtUndoManager:self.view.undoManager];
     [self.view.undoManager setActionName:NSLocalizedString(@"Remove Objects", @"Undo Action for removing TimelineObjects from the timeline")];
     [self.view.undoManager endUndoGrouping]; 
 }
