@@ -96,6 +96,33 @@ static NSString* defaultNib = @"VSTrackView";
 
 #pragma mark - Methods
 
+-(float) distanceToNearestCutFromPosition:(float)position forward:(BOOL)forward{
+    
+    if(!self.timelineObjectViewControllers.count){
+        return 0;
+    }
+    
+    float minDistance = 0;
+    
+    for(VSTimelineObjectViewController *timelineObjectViewController in self.timelineObjectViewControllers){
+        
+        float distance = [self computeNearestDistanceFrom:timelineObjectViewController toPosition:position forward:forward];
+        
+        if(abs(distance) > 0.01){
+            
+            if(minDistance == 0)
+                minDistance = distance;
+            
+            else if(abs(distance) < abs(minDistance)){
+                minDistance = distance;
+            }
+        }
+    }
+    
+    return minDistance;
+}
+
+
 -(void) pixelTimeRatioDidChange:(double)newRatio{
     
     //only proceeds if the ratio has changed
@@ -308,7 +335,7 @@ static NSString* defaultNib = @"VSTrackView";
     newController.temporary = YES;
     
     [self.view addSubview:[newController view]];
-
+    
     [self.view.layer addSublayer:newController.view.layer];
     
     [self.view setNeedsDisplayInRect:self.view.visibleRect];
@@ -642,7 +669,7 @@ static NSString* defaultNib = @"VSTrackView";
     for(VSProjectItemRepresentation *item in draggedProjectItems){
         VSTimelineObjectViewController *timelineObjectViewController = [self addNewTemporaryTimelineObjectProxyBasedOn:item atPosition:position toTrack:trackView temporaryID:i];
         
-                
+        
         VSDoubleFrame newDoubleFrame = VSMakeFrame(position.x+currentTotalWidth, timelineObjectViewController.view.frame.origin.y, [self pixelForTimestamp:timelineObjectViewController.timelineObjectProxy.duration], timelineObjectViewController.view.frame.size.height);
         
         [timelineObjectViewController.timelineObjectView setDoubleFrame:newDoubleFrame];
@@ -726,7 +753,7 @@ static NSString* defaultNib = @"VSTrackView";
     
     double deltaXPosition = newFrame.x - oldFrame.x;
     double deltaWidth = newFrame.width - oldFrame.width;
-
+    
     float snappingDeltaX;
     
     VSSnapAtSide snapAtSide;
@@ -749,7 +776,7 @@ static NSString* defaultNib = @"VSTrackView";
         }
         
     }
-        
+    
     return newFrame;
 }
 
@@ -904,6 +931,50 @@ static NSString* defaultNib = @"VSTrackView";
 }
 
 /**
+ * Computes the nearest distance from the given position to the left or right end of the view of the given VSTimelineObjectViewController
+ *
+ * Forward indicates if for the nearest distance is looked for right or left from the given position.
+ *
+ * @param timelineObjectViewController The nearest distance is found out for the view of the given VSTimelineObjectViewController
+ * @param position Position the distance is computed to
+ * @param forward If YES for the nearest distance is looked for right from the given position.
+ * @return The nearest distance if it's bigger than 0.01
+ */
+-(float) computeNearestDistanceFrom:(VSTimelineObjectViewController*) timelineObjectViewController toPosition:(float) position forward:(BOOL) forward{
+    
+    float distance = 0;
+    
+    if(forward){
+        if(position < timelineObjectViewController.view.frame.origin.x){
+            distance = timelineObjectViewController.view.frame.origin.x - position;
+        }
+        if(abs(distance) < 0.01){
+            if(position < NSMaxX(timelineObjectViewController.view.frame)){
+                distance = NSMaxX(timelineObjectViewController.view.frame) - position;
+            }
+        }
+    }
+    
+    else {
+        if(position > NSMaxX(timelineObjectViewController.view.frame)){
+            distance = NSMaxX(timelineObjectViewController.view.frame) - position;
+        }
+        if(abs(distance) < 0.01){
+            if(position > timelineObjectViewController.view.frame.origin.x){
+                distance = timelineObjectViewController.view.frame.origin.x - position;
+            }
+        }
+        
+    }
+    
+    if(abs(distance) < 0.01){
+        distance = 0;
+    }
+    
+    return distance;
+}
+
+/**
  * Returns an array of all VSTimlineViewControllers which have objects in their intersectedTimelineObjectViews-Property
  * @return NSArray currently intersected
  */
@@ -1052,7 +1123,7 @@ static NSString* defaultNib = @"VSTrackView";
  */
 -(void) addNewTimelineObject:(VSTimelineObject*) aTimelineObject{
     VSTimelineObjectViewController* newController = [[VSTimelineObjectViewController alloc] initWithDefaultNib];
-
+    
     [newController changePixelTimeRatio:self.pixelTimeRatio];
     
     newController.delegate = self;
@@ -1066,10 +1137,10 @@ static NSString* defaultNib = @"VSTrackView";
     [self.timelineObjectViewControllers addObject:newController];
     
     [self.view.layer addSublayer:newController.view.layer];
-
+    
     [self.view setNeedsDisplayInRect:self.view.visibleRect];
     
-
+    
 }
 
 /**

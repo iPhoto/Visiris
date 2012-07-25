@@ -204,6 +204,8 @@ static NSString* defaultNib = @"VSPreviewView";
  * Called when the VSPlayKeyWasPressed notification was received.
  *
  * Stops the the playback if the playMode of the playbackController is VSPlaybackModePlaying and starts it otherwise
+ *
+ * @param theNotification NSNotification send from the notification
  */
 -(void) playKeyWasPressed:(NSNotification*) theNotification{
     if(self.playbackController.playbackMode == VSPlaybackModePlaying){

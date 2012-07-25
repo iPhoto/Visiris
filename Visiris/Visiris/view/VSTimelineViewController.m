@@ -24,7 +24,7 @@
 
 @interface VSTimelineViewController ()
 
-#define VS_PLAYHEAD_MINIMAL_PIXEL_DIFFERENCE 1
+#define VS_PLAYHEAD_MINIMAL_PIXEL_DIFFERENCE 10
 
 /** NSArray holding the views representing the timeline's tracks */
 @property (strong) NSMutableArray *trackViewControllers;
@@ -216,12 +216,72 @@ static NSString* defaultNib = @"VSTimelineView";
             float newPlayHeadPosition = [self pixelForTimestamp:self.timeline.playHead.currentTimePosition];
             
             //The playHead Marker position is changed only if the difference of the new to the current playHead Marker position is bigger than VS_PLAYHEAD_MINIMAL_PIXEL_DIFFERENCE
-            DDLogInfo(@"%f, %f",[self currentPlayheadMarkerLocation],newPlayHeadPosition);
             if(abs([self currentPlayheadMarkerLocation] - newPlayHeadPosition) >= VS_PLAYHEAD_MINIMAL_PIXEL_DIFFERENCE){
                 [self setPlayheadMarkerLocation];
             }
         }
     }
+}
+
+#pragma mark - NSResponder
+
+-(void) moveRight:(id)sender{
+    [self letPlayheadJumpOverTheDefaultDistance:YES];
+}
+
+-(void)moveLeft:(id)sender{
+    [self letPlayheadJumpOverTheDefaultDistance:NO];
+}
+
+-(void) moveWordRight:(id) sender{
+    [self moveToNextCutAndSearchForward:YES];
+}
+
+-(void) moveWordLeft:(id)sender{
+    [self moveToNextCutAndSearchForward:NO];
+}
+
+-(void) deleteForward:(id)sender{
+    [self removeSelectedTimelineObjects];
+}
+
+-(void)deleteBackward:(id)sender{
+    [self removeSelectedTimelineObjects];
+}
+
+-(void) deleteToBeginningOfLine:(id)sender{
+    [self removeSelectedTimelineObjects];
+}
+
+#pragma mark- VSTimelineViewDelegate implementation
+
+-(void) viewDidResizeFromFrame:(NSRect)oldFrame toFrame:(NSRect)newFrame{
+    
+    if(oldFrame.size.width != newFrame.size.width){
+        
+        NSRect newDocumentFrame = self.trackHolder.frame;
+        
+        //updates the width according to how the width of the view has been resized
+        newDocumentFrame.size.width += newFrame.size.width - oldFrame.size.width;
+        [self.trackHolder setFrame:(newDocumentFrame)];
+        [self computePixelTimeRatio];
+    }
+}
+
+-(void) didReceiveKeyDownEvent:(NSEvent *)theEvent{
+    if(theEvent){
+        unichar keyCode = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];
+        [self interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
+        switch (keyCode) {
+            case 32:
+                [[NSNotificationCenter defaultCenter] postNotificationName:VSPlayKeyWasPressed object:nil];
+                break;
+            default:
+                break;
+        }
+    }
+    
+    
 }
 
 
@@ -286,7 +346,6 @@ static NSString* defaultNib = @"VSTimelineView";
     
     [self.view.window makeFirstResponder:self.view];
 }
-
 
 
 #pragma mark Selecting
@@ -538,44 +597,6 @@ static NSString* defaultNib = @"VSTimelineView";
 
 
 
-#pragma mark- VSTimelineViewDelegate implementation
-
--(void) viewDidResizeFromFrame:(NSRect)oldFrame toFrame:(NSRect)newFrame{
-    
-    if(oldFrame.size.width != newFrame.size.width){
-        
-        NSRect newDocumentFrame = self.trackHolder.frame;
-        
-        //updates the width according to how the width of the view has been resized
-        newDocumentFrame.size.width += newFrame.size.width - oldFrame.size.width;
-        [self.trackHolder setFrame:(newDocumentFrame)];
-        [self computePixelTimeRatio];
-    }
-}
-
--(void) didReceiveKeyDownEvent:(NSEvent *)theEvent{
-    if(theEvent){
-        unichar keyCode = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];
-        
-        switch (keyCode) {
-            case NSDeleteCharacter:
-            case NSBackspaceCharacter:
-                [self removeSelectedTimelineObjects];
-                break;
-            case 32:
-                [[NSNotificationCenter defaultCenter] postNotificationName:VSPlayKeyWasPressed object:nil];
-                break;
-            default:
-                break;
-        }
-    }
-    
-    
-}
-
-
-
-
 #pragma mark - VSPlayHeadRulerMarkerDelegate Implementation
 
 -(BOOL) shouldMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView{
@@ -596,11 +617,8 @@ static NSString* defaultNib = @"VSTimelineView";
 }
 
 -(CGFloat) playHeadRulerMarker:(NSRulerMarker *)playheadMarker willJumpInContainingView:(NSView *)aView toLocation:(CGFloat)location{
-    double newTimePosition = location * self.pixelTimeRatio;
-    self.timeline.playHead.currentTimePosition = newTimePosition;
     
-    self.timeline.playHead.jumping = YES;
-    self.timeline.playHead.jumping = NO;
+    [self letPlayheadJumpOverDistance:location - [self currentPlayheadMarkerLocation]];
     
     return location;
 }
@@ -755,6 +773,7 @@ static NSString* defaultNib = @"VSTimelineView";
 
 /**
  * Enlarges the width of the timeline, but doesn't change the timeline's duration
+ * @param newDuration Duration of the timeline the width of the timeline is enlarged according to
  */
 -(void) changeWidhtOfTimeline:(double) newDuration{
     //if the computed Maximum is greater than the current duration of the timeline it is enlarged
@@ -1100,7 +1119,9 @@ static NSString* defaultNib = @"VSTimelineView";
  * Sets the plahead marker according to the playhead's currentposition on the timeline
  */
 -(void) setPlayheadMarkerLocation{
-    CGFloat newLocation = self.timeline.playHead.currentTimePosition / self.pixelTimeRatio;
+    CGFloat newLocation = [self pixelForTimestamp:self.timeline.playHead.currentTimePosition];
+    
+  //  [self scrollIfNewLocationOfPlayheadIsOutsideOfVisibleRect:newLocation];
     
     [self.trackHolder movePlayHeadMarkerToLocation:newLocation];
 }
@@ -1111,6 +1132,79 @@ static NSString* defaultNib = @"VSTimelineView";
  */
 -(float) currentPlayheadMarkerLocation{
     return self.trackHolder.playheadMarkerLocation;
+}
+
+/**
+ * Computes the new currentTimePosition of the timeline's playhead after the playhead-marker would have been moved the default distance, updates the currentTimePosition and sets the playhead's jumping-flag to YES
+ * @param forward Indicates wheter the playhead is moved left or right
+ */
+-(void) letPlayheadJumpOverTheDefaultDistance:(BOOL) forward{
+    float deltaMove = 10;
+    
+    if(!forward)
+        deltaMove *= -1;
+    
+    [self letPlayheadJumpOverDistance:deltaMove];
+}
+
+/**
+ * Computes the nearest left or right end of all VSTimelineObjectViews on the timeline and jumps to the nearest one
+ *
+ * @param forward Indicates wheter the nearest VSTimelineObjectView is looke for left or right from the current position of the playhead
+ */
+-(void) moveToNextCutAndSearchForward:(BOOL) forward{
+    float distanceToNextCut = 0;
+    
+    for(VSTrackViewController *trackViewController in self.trackViewControllers){
+        float distance = [trackViewController distanceToNearestCutFromPosition:[self currentPlayheadMarkerLocation] forward:forward];
+        
+        if(abs(distance) > 0.01){
+            
+            if(distanceToNextCut == 0){
+                distanceToNextCut = distance;
+            }
+            else if(abs(distance) < abs(distanceToNextCut)){
+                distanceToNextCut = distance;
+            }
+        }
+    }
+    
+    [self letPlayheadJumpOverDistance:distanceToNextCut];
+}
+
+/**
+ * Computes the new currentTimePosition of the timeline's playhead after the playhead-marker would have been moved the given distance, updates the currentTimePosition and sets the playhead's jumping-flag to YES
+ * @param distance Distance the Playhead will be moved
+ */
+-(void) letPlayheadJumpOverDistance:(float) distance{
+    
+    if(distance == 0){
+        return;
+    }
+    
+    double newPixelPosition = [self currentPlayheadMarkerLocation] + distance;
+    double newTimePosition = [self timestampForPixelValue:newPixelPosition];
+    
+    [self scrollIfNewLocationOfPlayheadIsOutsideOfVisibleRect:newPixelPosition];
+    
+    self.timeline.playHead.currentTimePosition = newTimePosition;
+    
+    self.timeline.playHead.jumping = YES;
+    self.timeline.playHead.jumping = NO;
+    
+}
+
+-(void) scrollIfNewLocationOfPlayheadIsOutsideOfVisibleRect:(float) newLocation{
+    NSPoint tmpPoint = NSMakePoint(newLocation, self.scrollView.documentVisibleRect.origin.y);
+    
+    //if the new position of the playhead marker is outside of the visible area of the timeline, the timeline is scrolled to the new position of the playhead marker
+    if(! NSPointInRect(tmpPoint, self.scrollView.documentVisibleRect)){
+        
+        NSPoint currentBoundsOrigin = self.scrollView.contentView.bounds.origin;
+        currentBoundsOrigin.x = newLocation;
+        
+        [self.scrollView.contentView setBoundsOrigin:currentBoundsOrigin];
+    }
 }
 
 #pragma mark - Tracks

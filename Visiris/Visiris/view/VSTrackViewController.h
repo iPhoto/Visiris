@@ -320,4 +320,14 @@ typedef enum{
  */
 -(NSArray*) movableTimelineObjectViewControllers;
 
+/**
+ * Computes the nearest distance from the given position to the left or right end of all VSTimelineObjectViews on the track
+ *
+ * Forward indicates if for the nearest distance is looked for right or left from the given position.
+ * @param position Position the distance is computed to
+ * @param forward If YES for the nearest distance is looked for right from the given position.
+ * @return The nearest distance if it's bigger than 0.01, zero otherweise
+ */
+-(float) distanceToNearestCutFromPosition:(float) position forward:(BOOL) forward;
+
 @end

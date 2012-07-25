@@ -21,9 +21,7 @@
 /** Timestamp when the playback was started */
 @property double playbackStartTime;
 
-/** Reference of VSPreProcessor which is called if a new frame has to be rendered */
 @property VSPreProcessor* preProcessor;
-
 
 @property VSTimeline* timeline;
 @end
