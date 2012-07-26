@@ -472,7 +472,7 @@ static NSString* defaultNib = @"VSTimelineView";
 -(void) moveTimelineObjectTemporary:(VSTimelineObjectViewController *)timelineObject fromTrack:(VSTrackViewController *)fromTrack toTrackAtPosition:(NSPoint)position{
     
     //stores the new offset from the fromTrack to the track at the position of the given mouse position
-    int newTrackOffset = [self computeTrackOffsetForTrack:fromTrack forMousePosition:position];
+    NSInteger newTrackOffset = [self computeTrackOffsetForTrack:fromTrack forMousePosition:position];
     
     //if the trackOffset has changed, the temporary timelienObejcts of all tracks have to be removed
     if(newTrackOffset != self.trackOffset){
@@ -492,7 +492,7 @@ static NSString* defaultNib = @"VSTimelineView";
             for(int i = 0; i<self.trackViewControllers.count; i++){
                 VSTrackViewController *fromTrackViewController = (VSTrackViewController*) [self.trackViewControllers objectAtIndex:i]; 
                 
-                int newIndex = i + newTrackOffset;
+                NSInteger newIndex = i + newTrackOffset;
                 
                 if(newIndex >= 0  && newIndex < self.trackViewControllers.count){
                     VSTrackViewController *toTrackViewController = (VSTrackViewController*) [self.trackViewControllers objectAtIndex:newIndex];
@@ -595,8 +595,6 @@ static NSString* defaultNib = @"VSTimelineView";
     if([timelineObjectViewController.timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
         [self.timeline copyTimelineObject:(VSTimelineObject*) timelineObjectViewController.timelineObjectProxy toTrack:trackViewController.track atPosition:startTime withDuration:duration andRegisterUndoOperation:self.view.undoManager];
     }
-    
-    
 }
 
 
@@ -1015,8 +1013,8 @@ static NSString* defaultNib = @"VSTimelineView";
         return 0;
     }
     
-    int fromTrackArrayIndex = [self.trackViewControllers indexOfObject:fromTrack];
-    int newTrackOffset = self.trackOffset;
+    NSInteger fromTrackArrayIndex = [self.trackViewControllers indexOfObject:fromTrack];
+    NSInteger newTrackOffset = self.trackOffset;
     
     
     //iterates through all tracks and checks if the mouse is above it.
@@ -1050,7 +1048,7 @@ static NSString* defaultNib = @"VSTimelineView";
     
     if(trackOffset >0){
         
-        for(int i = self.trackViewControllers.count-1; i>=self.trackViewControllers.count-trackOffset; i--){
+        for(NSInteger i = self.trackViewControllers.count-1; i>=self.trackViewControllers.count-trackOffset; i--){
             if([[self.trackViewControllers objectAtIndex:i] isKindOfClass:[VSTrackViewController class]]){
                 if([((VSTrackViewController *)[self.trackViewControllers objectAtIndex:i]) selectedTimelineObjectViewControllers].count){
                     offsetCorrection--;
@@ -1233,7 +1231,7 @@ static NSString* defaultNib = @"VSTimelineView";
     
     //Size and position of the track
     int width = [self visibleTrackViewHolderWidth];
-    int yPosition = (VSTrackViewHeight+VSTrackViewMargin) * ([self.trackViewControllers count]);
+    NSInteger yPosition = (VSTrackViewHeight+VSTrackViewMargin) * ([self.trackViewControllers count]);
     
     NSRect newFrame = NSMakeRect(self.scrollView.visibleRect.origin.x,yPosition,width,VSTrackViewHeight);
     
@@ -1248,7 +1246,7 @@ static NSString* defaultNib = @"VSTimelineView";
     
     
     //Rescales the document view of the trackholder ScrollView
-    int height = (VSTrackViewHeight+VSTrackViewMargin) * ([self.trackViewControllers  count]);
+    NSInteger height = (VSTrackViewHeight+VSTrackViewMargin) * ([self.trackViewControllers  count]);
     [self.trackHolder setFrame:(NSMakeRect([self.trackHolder frame].size.width, 0, self.trackHolder.frame.size.width,  height))];
     
     [self addNewTrackLabelForTrack:newTrackViewController];

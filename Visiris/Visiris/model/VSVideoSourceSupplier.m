@@ -171,10 +171,9 @@
      }];
 }
 
-- (void) updateInfo: (id*)message{
-    NSString* info = [NSString stringWithFormat:@"%@", message];
-    NSLog(@"%@",info);
-}
+//- (void) updateInfo: (id)message{
+//    NSLog(@"%@",message);
+//}
 
 
 

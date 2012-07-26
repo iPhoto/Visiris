@@ -38,7 +38,7 @@
     
     NSMutableDictionary *qcPublicInputParameters = [[NSMutableDictionary alloc]init];
     
-    int i = self.parameters.count;
+    NSInteger i = self.parameters.count;
     
     //iterates through the entries
     for(id key in publicInputs){
@@ -46,7 +46,7 @@
         NSDictionary* publicInputDictionary = [publicInputs objectForKey:key];
         
         //reads out the VSParameterType corresponding to the QCPortAttributeTypeKey
-        NSInteger parameterDataType = [VSQuartzCompositionUtils visirisParameterDataTypeOfQCPortAttributeTypeKey:[publicInputDictionary valueForKey:@"QCPortAttributeTypeKey"]];
+        int parameterDataType = [VSQuartzCompositionUtils visirisParameterDataTypeOfQCPortAttributeTypeKey:[publicInputDictionary valueForKey:@"QCPortAttributeTypeKey"]];
         
         
         //if parameterDataType is -1 the inputPort is not valid for visirs

@@ -61,7 +61,7 @@
     shader = glCreateShader(type);    
     
     const char * shaderStringUTF8 = [shaderString UTF8String];    
-    length = [shaderString length];
+    length = (GLuint)[shaderString length];
     glShaderSource(shader, 1, &shaderStringUTF8, &length);
     
     glCompileShader(shader);
@@ -101,7 +101,7 @@
     GLuint shaderHandle = glCreateShader(shaderType);    
     
     const char * shaderStringUTF8 = [shaderString UTF8String];    
-    int shaderStringLength = [shaderString length];
+    GLint shaderStringLength = (GLint) [shaderString length];
     glShaderSource(shaderHandle, 1, &shaderStringUTF8, &shaderStringLength);
     
     glCompileShader(shaderHandle);

@@ -1062,7 +1062,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = VS;
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0440;
 			};
 			buildConfigurationList = 5B35BF0B1577A49C009911EC /* Build configuration list for PBXProject "Visiris" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1334,11 +1334,13 @@
 		5B35BF331577A49C009911EC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Visiris/Visiris-Prefix.pch";
 				INFOPLIST_FILE = "Visiris/Visiris-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1346,11 +1348,13 @@
 		5B35BF341577A49C009911EC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Visiris/Visiris-Prefix.pch";
 				INFOPLIST_FILE = "Visiris/Visiris-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1358,6 +1362,7 @@
 		5BBC2F14157A0CFA0093313A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -1365,6 +1370,7 @@
 		5BBC2F15157A0CFA0093313A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

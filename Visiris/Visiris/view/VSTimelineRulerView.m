@@ -8,8 +8,9 @@
 
 #import "VSTimelineRulerView.h"
 
-@implementation VSTimelineRulerView
+#import "VSCoreServices.h"
 
+@implementation VSTimelineRulerView
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
@@ -20,20 +21,24 @@
     return self;
 }
 
-- (void)drawRect:(NSRect)dirtyRect
-{
-    
-    [[NSColor blackColor] set];
-    NSRectFill(dirtyRect);
-    [[NSColor whiteColor] set];
-    
-    for(int i = 0; i < dirtyRect.size.width; i += 20){
-        NSPoint startPoint = NSMakePoint(i, 0);
-        NSPoint endPoint = NSMakePoint(i, dirtyRect.size.height);
-        
-        [NSBezierPath strokeLineFromPoint:startPoint toPoint:endPoint];
-    }
-    
+-(void) drawHashMarksAndLabelsInRect:(NSRect)rect{
+    DDLogInfo(@"drawHashMarksAndLabelsInRect");
+}
+
+-(void) drawRect:(NSRect)dirtyRect{
+    DDLogInfo(@"drawrect");
+}
+
+-(void) drawMarkersInRect:(NSRect)rect{
+    DDLogInfo(@"drawMarkersInREct");
+}
+
+-(void) invalidateHashMarks{
+    DDLogInfo(@"invali");
+}
+
+-(void) setMeasurementUnits:(NSString *)unitName{
+    DDLogInfo(@"setMeasurementUnits");
 }
 
 @end

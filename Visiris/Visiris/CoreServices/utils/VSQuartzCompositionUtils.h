@@ -25,6 +25,6 @@
  * @param attributeKey QCPortAttributeTypeKey of an Input Port Dictionary.
  * @return The corresponding VSParamterType to the given attributeKey if it was found, -1 otherwis
  */
-+(NSInteger) visirisParameterDataTypeOfQCPortAttributeTypeKey:(NSString*) attributeKey;
++(int) visirisParameterDataTypeOfQCPortAttributeTypeKey:(NSString*) attributeKey;
 
 @end

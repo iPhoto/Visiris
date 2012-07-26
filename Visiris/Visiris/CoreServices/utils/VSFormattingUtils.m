@@ -20,9 +20,9 @@
     seconds = round(seconds - minutes * 60);
     minutes = round(minutes - hours*60);
     
-    NSString* secondsString = [NSString stringWithFormat:@"%@%ld",seconds < 10 ? @"0" : @"",seconds];
-    NSString* minutesString = [NSString stringWithFormat:@"%@%ld",minutes < 10 ? @"0" : @"",minutes];
-    NSString* hoursString = [NSString stringWithFormat:@"%@%ld",hours < 10 ? @"0" : @"",hours];
+    NSString* secondsString = [NSString stringWithFormat:@"%@%d",seconds < 10 ? @"0" : @"",seconds];
+    NSString* minutesString = [NSString stringWithFormat:@"%@%d",minutes < 10 ? @"0" : @"",minutes];
+    NSString* hoursString = [NSString stringWithFormat:@"%@%d",hours < 10 ? @"0" : @"",hours];
     
     NSString* formatedTimeString = [NSString stringWithFormat:@"%@:%@:%@",hoursString,minutesString,secondsString];
     

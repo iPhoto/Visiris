@@ -8,6 +8,7 @@
 
 #import "VSTrackHolderView.h"
 
+#import "VSTimelineRulerView.h"
 
 #import "VSCoreServices.h"
 
@@ -85,9 +86,13 @@
  */
 -(void) initEnclosingScrollView{
     
+    [self.enclosingScrollView setVerticalRulerView:[[VSTimelineRulerView alloc] init]];
+    
     [self.enclosingScrollView setHasHorizontalRuler:YES];
     [self.enclosingScrollView setHasVerticalRuler:YES];
     [self.enclosingScrollView setRulersVisible:YES];
+    
+    
     
     [self.enclosingScrollView.horizontalRulerView setClientView:self];
     [self.enclosingScrollView.verticalRulerView setClientView:self];

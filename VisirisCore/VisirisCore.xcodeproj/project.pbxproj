@@ -396,7 +396,7 @@
 		5B19BF5B155D0E4E00807769 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0440;
 			};
 			buildConfigurationList = 5B19BF5E155D0E4E00807769 /* Build configuration list for PBXProject "VisirisCore" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -543,6 +543,7 @@
 		5B19BF7B155D0E4E00807769 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
@@ -557,6 +558,7 @@
 		5B19BF7C155D0E4E00807769 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
@@ -571,6 +573,7 @@
 		5B7A60FB156E2EF1000FBEC3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -578,6 +581,7 @@
 		5B7A60FC156E2EF1000FBEC3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

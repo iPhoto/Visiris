@@ -129,16 +129,16 @@
 
 - (void)createFBOWithSize:(NSSize) size trackId:(NSInteger) trackId{
     
-    if ([self.fboForTrack objectForKey:[NSNumber numberWithInt:trackId]]) {
+    if ([self.fboForTrack objectForKey:[NSNumber numberWithInteger:trackId]]) {
         return;
     }
     
     VSFrameBufferObject *fbo = [[VSFrameBufferObject alloc] initWithSize:size];
-    [self.fboForTrack setObject:fbo forKey:[NSNumber numberWithInt:trackId]];
+    [self.fboForTrack setObject:fbo forKey:[NSNumber numberWithInteger:trackId]];
 }
 
 - (VSFrameBufferObject *)getFboForTrackId:(NSInteger) track{
-    return [self.fboForTrack objectForKey:[NSNumber numberWithInt:track]];
+    return [self.fboForTrack objectForKey:[NSNumber numberWithInteger:track]];
 }
 
 @end

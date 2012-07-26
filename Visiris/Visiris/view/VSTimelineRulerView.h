@@ -13,5 +13,5 @@
  * !!!! Please add mor here !!!
  */
 @interface VSTimelineRulerView : NSRulerView
-
+@property int hi;
 @end

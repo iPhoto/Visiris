@@ -38,7 +38,7 @@
 /*Logging*/
 #import "VSLog.h"
 
-/* Categories */
+/*Categories*/
 #import "NSColor+CGColorSupport.h"
 
 #endif

@@ -199,7 +199,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 
 -(void) intersectedByTimelineObjectView:(VSTimelineObjectViewController *)timelineObjectViewController atRect:(NSRect)intersectionRect{
     
-    NSNumber *key = [NSNumber numberWithInt: timelineObjectViewController.timelineObjectProxy.timelineObjectID];
+    NSNumber *key = [NSNumber numberWithInteger: timelineObjectViewController.timelineObjectProxy.timelineObjectID];
     
     VSTimelineObjectViewIntersection *intersection = [self.intersectedTimelineObjectViews objectForKey:key];
     
@@ -231,7 +231,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 }
 
 -(void) removeIntersectionWith:(VSTimelineObjectViewController *)timelineObjectViewController{
-    NSNumber *key = [NSNumber numberWithInt: timelineObjectViewController.timelineObjectProxy.timelineObjectID];
+    NSNumber *key = [NSNumber numberWithInteger: timelineObjectViewController.timelineObjectProxy.timelineObjectID];
     
     if(self.intersectedTimelineObjectViews && self.intersectedTimelineObjectViews.count){
         VSTimelineObjectViewIntersection *intersection =  (VSTimelineObjectViewIntersection*) [self.intersectedTimelineObjectViews objectForKey:key];

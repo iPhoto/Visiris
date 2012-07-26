@@ -58,7 +58,7 @@ static NSDictionary *visirisParameterDataTypeForQCPortAttributeTypeKey;
     
 }
 
-+(NSInteger) visirisParameterDataTypeOfQCPortAttributeTypeKey:(NSString*) attributeKey{
++(int) visirisParameterDataTypeOfQCPortAttributeTypeKey:(NSString*) attributeKey{
     id result = [visirisParameterDataTypeForQCPortAttributeTypeKey objectForKey:attributeKey];
     if (result) {
         return [result intValue];

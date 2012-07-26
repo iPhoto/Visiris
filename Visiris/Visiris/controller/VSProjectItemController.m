@@ -18,7 +18,7 @@
 
 @implementation VSProjectItemController
 
-@synthesize projectItems    =_projectItems;
+@synthesize projectItems    = _projectItems;
 
 
 /** Instance of the Singleton */
@@ -31,7 +31,7 @@ static VSProjectItemController* sharedProjectItemController = nil;
 -(id) init{
     if(self = [super init]){
         _projectItems = [[NSMutableArray alloc] initWithCapacity:0];
-        [self setTestData];
+       // [self setTestData];
     }
     
     return self;
@@ -133,12 +133,16 @@ static VSProjectItemController* sharedProjectItemController = nil;
     
     NSString *relativeTestDataPath = @"~/Desktop/visiris-testfiles/";
     
-   NSString *fullPath = [relativeTestDataPath stringByExpandingTildeInPath];
+    NSString *fullPath = [relativeTestDataPath stringByExpandingTildeInPath];
     
     NSArray* files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:fullPath error:nil];
     
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    
     for(NSString* s  in files){
-        [self addNewProjectItemFromFile:[NSString stringWithFormat:@"%@/%@",fullPath,s]];
+        [queue addOperationWithBlock:^{
+            [self addNewProjectItemFromFile:[NSString stringWithFormat:@"%@/%@",fullPath,s]];
+        }];
     }
 }
 

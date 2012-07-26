@@ -95,7 +95,7 @@ static NSString* defaultNib = @"VSBrowserView";
  */
 -(void) showSubViewByIndex:(NSInteger) subViewID{
     //gets the view of the controller stored in the dictionary with subViewID as key 
-    NSView* newView = [self.subViewControllers objectForKey:[NSNumber numberWithInt:subViewID]];
+    NSView* newView = [self.subViewControllers objectForKey:[NSNumber numberWithInteger:subViewID]];
     
     if(newView){
         if([self.contentView.subviews count] > 0){

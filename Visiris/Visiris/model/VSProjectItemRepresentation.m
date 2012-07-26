@@ -40,7 +40,7 @@
     [aCoder encodeObject:self.filePath forKey:@"piFilePath"];
     [aCoder encodeFloat:self.duration forKey:@"piLength"];
     [aCoder encodeFloat:self.fileSize forKey:@"piFileSize"];
-    [aCoder encodeInt:self.itemID forKey:@"piItemID"];
+    [aCoder encodeInteger:self.itemID forKey:@"piItemID"];
 }
 
 #pragma mark - Methods
