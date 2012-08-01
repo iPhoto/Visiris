@@ -50,7 +50,7 @@
 }
 
 -(NSString*) durationString{
-    return [VSFormattingUtils formatedTimeStringFromMilliseconds:self.duration];
+    return [VSFormattingUtils formatedTimeStringFromMilliseconds:self.duration formatString:@"HH:mm:ss"];
 }
 
 

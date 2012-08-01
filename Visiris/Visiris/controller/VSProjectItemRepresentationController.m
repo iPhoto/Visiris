@@ -84,7 +84,7 @@ static VSProjectItemRepresentationController* sharedProjectItemController = nil;
         return nil;
     }
     
-    NSImage *icon = [VSFileImageCreator createIconForProjectItem:projectItem.filePath]; 
+    NSImage *icon = [VSFileImageCreator createIconForProjectItem:projectItem.filePath];
     
     return [[VSProjectItemRepresentation alloc] initWithFile:projectItem.filePath ofType:projectItem.fileType name:projectItem.name fileSize:projectItem.fileSize duration:projectItem.duration itemID:projectItem.itemID fileIcon:icon];
 }
@@ -100,7 +100,7 @@ static VSProjectItemRepresentationController* sharedProjectItemController = nil;
         return NO;
     }
 }
-        
+
 
 #pragma mark- Private Methods
 

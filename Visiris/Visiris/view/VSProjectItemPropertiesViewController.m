@@ -110,7 +110,7 @@ static NSString* defaultNib = @"VSProjectItemPropertiesView";
     }
     else{
         
-        self.previewImage = [VSFileImageCreator createIamgeForFile:self.projectItemRepresentation.filePath withWidht:640 withHeight:480];
+        self.previewImage = [VSFileImageCreator createImageForFile:self.projectItemRepresentation.filePath withWidht:640 withHeight:480];
         if([[self.previewHolder subviews] objectAtIndex:0] != self.imagePreviewView ){
             [self.previewHolder replaceSubview:[self.previewHolder.subviews objectAtIndex:0] with:self.imagePreviewView];
         }

@@ -18,12 +18,6 @@ extern NSString *VSTimelineObjectsGotSelected;
 /** Name of the Notification sent when a VSTimelineObject got unselected in VSTimelineView */
 extern NSString *VSTimelineObjectsGotUnselected;
 
-/** Name of the Notification sent when the mainSplitView in the main Window resized its subviews */
-extern NSString *VSMainSplitViewDidResizeSubviews;
-
-/** Name of the Notification sent when the topSplitView in the main Window resized its subviews */
-extern NSString *VSTopSplitViewDidResizeSubviews;
-
 /** Name of the Notification sent when the VSTimelineObjectPropertiesView was hidden */
 extern NSString *VSTimelineObjectPropertiesDidTurnInactive;
 

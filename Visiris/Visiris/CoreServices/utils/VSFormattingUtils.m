@@ -8,23 +8,29 @@
 
 #import "VSFormattingUtils.h"
 
+
 @implementation VSFormattingUtils
 
 #pragma mark - Functions
 
-+(NSString*) formatedTimeStringFromMilliseconds:(double)milliseconds{
-    int seconds = floor(milliseconds/1000);
++(NSString*) formatedTimeStringFromMilliseconds:(double)milliseconds formatString:(NSString*) formatString{
+    int tenth = floor(milliseconds/10);
+    int seconds = floor(tenth/100);
     int minutes = floor(seconds / 60);
     int hours = floor(minutes/60);
     
+    tenth = (round(tenth - seconds*100));
     seconds = round(seconds - minutes * 60);
     minutes = round(minutes - hours*60);
     
-    NSString* secondsString = [NSString stringWithFormat:@"%@%d",seconds < 10 ? @"0" : @"",seconds];
-    NSString* minutesString = [NSString stringWithFormat:@"%@%d",minutes < 10 ? @"0" : @"",minutes];
-    NSString* hoursString = [NSString stringWithFormat:@"%@%d",hours < 10 ? @"0" : @"",hours];
+    NSString *componentFormat = @"%02d";
     
-    NSString* formatedTimeString = [NSString stringWithFormat:@"%@:%@:%@",hoursString,minutesString,secondsString];
+    NSString *formatedTimeString = [formatString stringByReplacingOccurrencesOfString:@"HH" withString:[NSString stringWithFormat:componentFormat,hours]];
+    formatedTimeString = [formatedTimeString stringByReplacingOccurrencesOfString:@"mm" withString:[NSString stringWithFormat:componentFormat,minutes]];
+    formatedTimeString = [formatedTimeString stringByReplacingOccurrencesOfString:@"ss" withString:[NSString stringWithFormat:componentFormat,seconds]];
+    formatedTimeString = [formatedTimeString stringByReplacingOccurrencesOfString:@"tt" withString:[NSString stringWithFormat:componentFormat,tenth]];
+    
+//    [NSString stringWithFormat:@"%02d:%02d:%02d:%02d",hours,minutes,seconds,tenth];
     
     return formatedTimeString;
 }

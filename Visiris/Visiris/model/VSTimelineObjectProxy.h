@@ -33,6 +33,9 @@
 /** unique ID of the timelineObject */
 @property NSUInteger timelineObjectID;
 
+
+@property (readonly) NSString *startTimeString;
+
 #pragma mark- Init
 
 /**

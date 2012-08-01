@@ -38,5 +38,5 @@
  * @param height Height of the image
  * @return Preview image of the given file according to the dimensions set in VSImageConstants, returns nil if no preview image was created.
  */
-+(NSImage*) createIamgeForFile:(NSString*) file withWidht:(NSInteger) width withHeight:(NSInteger) height;
++(NSImage*) createImageForFile:(NSString*) file withWidht:(NSInteger) width withHeight:(NSInteger) height;
 @end

@@ -16,15 +16,15 @@
 #pragma mark- Functions
 
 +(NSImage *)createIconForProjectItem:(NSString *)file{
-    return [self createIamgeForFile:file withWidht:VSProjectItemIconWidth withHeight:VSProjectItemIconHeight];
+    return [self createImageForFile:file withWidht:VSProjectItemIconWidth withHeight:VSProjectItemIconHeight];
 }
 
 +(NSImage *)createIconForTimelineObject:(NSString *)file{
-    return [self createIamgeForFile:file withWidht:VSTimelineObejctIconWidth withHeight:VSTimelineObjectIconHeight];
+    return [self createImageForFile:file withWidht:VSTimelineObejctIconWidth withHeight:VSTimelineObjectIconHeight];
 }
 
 
-+(NSImage*) createIamgeForFile:(NSString *)file withWidht:(NSInteger)width withHeight:(NSInteger)height{
++(NSImage*) createImageForFile:(NSString *)file withWidht:(NSInteger)width withHeight:(NSInteger)height{
     NSURL *url = [[NSURL alloc] initFileURLWithPath:file];
     
     NSDictionary *options = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:0] forKey: (NSString*)kQLThumbnailOptionIconModeKey];

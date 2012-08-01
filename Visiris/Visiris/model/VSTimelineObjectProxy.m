@@ -8,6 +8,8 @@
 
 #import "VSTimelineObjectProxy.h"
 
+#import "VSCoreServices.h"
+
 @implementation VSTimelineObjectProxy
 @synthesize startTime           = _startTime;
 @synthesize duration            = _duration;
@@ -42,7 +44,7 @@
 //}
 //
 //-(id) initWithCoder:(NSCoder *)aDecoder{
-//    
+//
 //}
 
 #pragma mark - NSCopying Implementation
@@ -73,7 +75,7 @@
 
 -(void) changeDuration:(double)duration andRegisterAtUndoManager:(NSUndoManager *)undoManager{
     [[undoManager prepareWithInvocationTarget:self] changeDuration:self.duration andRegisterAtUndoManager:undoManager];
-
+    
     self.duration = duration;
 }
 
@@ -87,6 +89,12 @@
 -(void) setUnselectedAndRegisterUndo:(NSUndoManager *)undoManager{
     [[undoManager prepareWithInvocationTarget:self] setSelectedAndRegisterUndo:undoManager];
     self.selected = NO;
+}
+
+#pragma mark - Properties
+
+-(NSString*) startTimeString{
+    return    [VSFormattingUtils formatedTimeStringFromMilliseconds:self.startTime formatString:@"HH:mm:ss:tt"];
 }
 
 

@@ -18,5 +18,7 @@
 /** NSarray of VSTrackLable objects holding the text and the positions of the tracklabels*/
 @property (strong) NSMutableArray *trackLabels;
 
+-(void) addTrackLabel:(VSTrackLabel *)aTrackLabel;
+
 
 @end

@@ -9,19 +9,22 @@
 #import "VSTrackHolderView.h"
 
 #import "VSTimelineRulerView.h"
+#import "VSPlayheadMarker.h"
 
 #import "VSCoreServices.h"
 
 @interface VSTrackHolderView()
 
-/** NSRulerMarker represanting the Playhead in the horizontal rulerview */
-@property (strong) NSRulerMarker *playheadMarker;
+/** VSPlayheadMarker represanting the Playhead in the horizontal rulerview */
+@property (strong) VSPlayheadMarker *playheadMarker;
 
 
 /** current offset of view's enclosing scrollView */
 @property NSPoint scrollOffset;
 
 @property (strong) CALayer *guideLine;
+
+@property (strong) VSTimelineRulerView *timelineRulerView;
 
 @end
 
@@ -32,6 +35,8 @@
 @synthesize playheadMarkerDelegate  = _playheadMarkerDelegate;
 @synthesize guideLine               = _guideLayer;
 @synthesize playheadMarkerLocation  = _playheadMarkerLocation;
+@synthesize timelineRulerView       = _timelineRulerView;
+@synthesize pixelTimeRatio          = _pixelTimeRatio;
 
 #pragma mark - Init
 
@@ -86,11 +91,18 @@
  */
 -(void) initEnclosingScrollView{
     
-    [self.enclosingScrollView setVerticalRulerView:[[VSTimelineRulerView alloc] init]];
-    
     [self.enclosingScrollView setHasHorizontalRuler:YES];
     [self.enclosingScrollView setHasVerticalRuler:YES];
     [self.enclosingScrollView setRulersVisible:YES];
+    
+    
+    self.timelineRulerView = [[VSTimelineRulerView alloc] initWithScrollView:self.enclosingScrollView orientation:NSHorizontalRuler];
+    
+    self.timelineRulerView.originOffset = 80;// NSMaxX(self.enclosingScrollView.verticalRulerView.frame);
+    
+    [self.enclosingScrollView setHorizontalRulerView:self.timelineRulerView];
+    
+    
     
     
     
@@ -106,7 +118,7 @@
         
         NSImage *markerImage = [[NSImage alloc] initByReferencingFile:[[NSBundle mainBundle] pathForResource:@"playhead" ofType:@"png"]]; 
         
-        self.playheadMarker = [[NSRulerMarker alloc] initWithRulerView:self.enclosingScrollView.horizontalRulerView markerLocation:0 image:markerImage imageOrigin:NSMakePoint(markerImage.size.width / 2, 0)];
+        self.playheadMarker = [[VSPlayheadMarker alloc] initWithRulerView:self.enclosingScrollView.horizontalRulerView markerLocation:0 image:markerImage imageOrigin:NSMakePoint(markerImage.size.width / 2,0)];
         
         [self.enclosingScrollView.horizontalRulerView addMarker:self.playheadMarker];
         
@@ -161,13 +173,14 @@
         
         
         
-        CGFloat location = pointInView.x - self.playheadMarker.imageRectInRuler.size.width / 2 - self.playheadMarker.imageOrigin.x+self.scrollOffset.x;
+        CGFloat location = pointInView.x-self.playheadMarker.imageOrigin.x; //pointInView.x - self.playheadMarker.imageRectInRuler.size.width / 2 - self.playheadMarker.imageOrigin.x+self.scrollOffset.x;
         
         if([self delegateRespondsToSelector:@selector(playHeadRulerMarker:willJumpInContainingView:toLocation:)]){
             location = [self.playheadMarkerDelegate playHeadRulerMarker:self.playheadMarker willJumpInContainingView:self toLocation:location];
         }
         
     [self movePlayHeadMarkerToLocation:location];
+        [self.enclosingScrollView.horizontalRulerView setNeedsDisplay:YES];
     }
 }
 
@@ -175,15 +188,18 @@
 #pragma mark - Methods
 
 -(void) movePlayHeadMarkerToLocation:(CGFloat)location{
+    CGFloat oldLocation = self.playheadMarker.markerLocation;
     if(location != self.playheadMarker.markerLocation){
         
         NSRect formerImageRect = self.playheadMarker.imageRectInRuler;
         [self.playheadMarker setMarkerLocation:location];
         
-        [self updateGuideline];
+//        [self updateGuideline];
         
         [self.enclosingScrollView.horizontalRulerView setNeedsDisplayInRect:self.playheadMarker.imageRectInRuler];
         [self.enclosingScrollView.horizontalRulerView setNeedsDisplayInRect:formerImageRect];
+        
+        [self.timelineRulerView moveRulerlineFromLocation:oldLocation toLocation:location];
     }
 }
 
@@ -233,7 +249,7 @@
     NSRect layerRect = self.frame;
     
     layerRect.size.width = 1;
-    layerRect.origin.x = round(self.playheadMarker.imageRectInRuler.origin.x - self.playheadMarker.imageOrigin.x+self.scrollOffset.x);
+    layerRect.origin.x = round(self.playheadMarker.imageRectInRuler.origin.x+self.scrollOffset.x);
     layerRect.origin.y = 0;
     
     [CATransaction begin];
@@ -260,5 +276,15 @@
     return self.playheadMarker.markerLocation;
 }
 
+-(void) setPixelTimeRatio:(double)pixelTimeRatio{
+    if (_pixelTimeRatio != pixelTimeRatio) {
+        self.timelineRulerView.pixelTimeRatio = pixelTimeRatio;
+    }
+    _pixelTimeRatio = pixelTimeRatio;
+}
+
+-(double) pixelTimeRatio{
+    return _pixelTimeRatio;
+}
 
 @end

@@ -203,7 +203,6 @@ static int resizingAreaWidth = 10;
 
 -(void) mouseMoved:(NSEvent *)theEvent{
     [self.nextResponder mouseMoved:theEvent];
-    DDLogInfo(@"mouse move in tmov");
 }
 
 

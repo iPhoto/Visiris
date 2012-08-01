@@ -18,7 +18,7 @@
  *  @param milliseconds Value that will be formatted
  *  @result formated string (00:00:00) of the given milliseconds param
 */
-+(NSString*) formatedTimeStringFromMilliseconds:(double) milliseconds;
++(NSString*) formatedTimeStringFromMilliseconds:(double)milliseconds formatString:(NSString*) formatString;
 
 /**
  *  Creates a formated string (#,# KB, #,# MB) of the given bytes param

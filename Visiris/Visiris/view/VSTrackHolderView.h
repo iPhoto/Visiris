@@ -49,6 +49,8 @@
 
 @end
 
+@class VSPlayheadMarker;
+
 /**
  * Subclass of NSView holding views representing the tracks of the timeline. Besides responsible for the playhead marker and the horizontal rulerview
  */
@@ -59,6 +61,8 @@
 
 /** Current position of the playhead marker */
 @property (readonly) CGFloat playheadMarkerLocation;
+
+@property double pixelTimeRatio;
 
 /** 
  * Moves the marker representing the playHead to the given location in the horizontal rulerView

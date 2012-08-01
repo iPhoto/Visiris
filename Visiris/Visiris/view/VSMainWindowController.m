@@ -69,12 +69,15 @@ static NSString* defaultNib = @"MainWindow";
     
     [self.window setAcceptsMouseMovedEvents:YES];
     
+    /** inits the spltiview with their subviews */
+    [self initSplitViews];
+    
     //checks if the document is a visirs document
     if(self.document && [self.document isKindOfClass:[VSDocument class]]){
         [self initMainWindowAccordingToDocument];
     }
-    /** inits the spltiview with their subviews */
-    [self initSplitViews];
+    
+    
 }
 
 #pragma mark - NSWindow
@@ -92,11 +95,11 @@ static NSString* defaultNib = @"MainWindow";
     [self loadView:timelineViewController.view intoSplitView:self.mainSplitView replacingViewAtPosition:1];
     
     
-    self.previewViewController = [[VSPreviewViewController alloc] initWithDefaultNibForOpenGLContext:((VSDocument*) self.document).preProcessor.renderCoreReceptionist.openGLContext];                                                
+    self.previewViewController = [[VSPreviewViewController alloc] initWithDefaultNibForOpenGLContext:((VSDocument*) self.document).preProcessor.renderCoreReceptionist.openGLContext];
     
     [self loadView:self.previewViewController.view intoSplitView:self.topSplitView replacingViewAtPosition:2];
     
-     self.previewViewController.playbackController = ((VSDocument*) self.document).playbackController;
+    self.previewViewController.playbackController = ((VSDocument*) self.document).playbackController;
     
     ((VSDocument*) self.document).playbackController.delegate = self.previewViewController;
 }
@@ -119,7 +122,7 @@ static NSString* defaultNib = @"MainWindow";
 
 
 /**
- * Replaces given splitView'S subview at the given position with the given view. 
+ * Replaces given splitView'S subview at the given position with the given view.
  * @param view View to replace the subview at "position"
  * @param splitView NSSplitView the new View will be loaded into.
  * @param position Index of splitView's subview which will be replaced by given view
@@ -134,16 +137,21 @@ static NSString* defaultNib = @"MainWindow";
     [view setAutoresizesSubviews:YES];
 }
 
-
-
-#pragma mark - NSSplitViewDelegate implementation
-
--(void) splitViewDidResizeSubviews:(NSNotification *)notification{
-    if (notification.object == self.topSplitView) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:VSTopSplitViewDidResizeSubviews object:notification.object];
-    }
-    else if (notification.object == self.mainSplitView) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:VSMainSplitViewDidResizeSubviews object:notification.object];
+-(void) splitViewWillResizeSubviews:(NSNotification *)notification{
+    
+    NSSplitView *splitView = (NSSplitView*)[notification object];
+    
+    for(NSView* subview in splitView.subviews)
+    {
+        if(subview) {
+            if(subview.frame.size.width < 50) {
+                CGRect correctedFrame = subview.frame;
+                correctedFrame.size.width = 50;
+                subview.frame = correctedFrame;
+            } else {
+                subview.hidden = NO;
+            }
+        }
     }
 }
 

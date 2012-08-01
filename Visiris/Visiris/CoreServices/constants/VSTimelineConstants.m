@@ -9,7 +9,7 @@
 #import "VSTimelineConstants.h"
 
 
-double VSTimelineDefaultDuration =  300000;
+double VSTimelineDefaultDuration =  600000;
 
 float VSTimelineDefaultPixelRatio =  2;
 

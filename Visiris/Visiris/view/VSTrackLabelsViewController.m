@@ -17,6 +17,7 @@
 
 @property (strong) VSTrackLabelsView *trackLabelsView;
 
+
 @end
 
 
@@ -25,7 +26,7 @@
 
 -(id) initWithFrame:(NSRect)frameRect{
     if(self = [self init]){
-        [self.trackLabelsView setFrame:NSIntegralRect(frameRect)];
+
     }
     
     return self;
@@ -44,7 +45,6 @@
 
 -(void) addTrackLabel:(VSTrackLabel *)aTrackLabel{
     [[self.trackLabelsView trackLabels] addObject:aTrackLabel];
-    
     [self.trackLabelsView setNeedsDisplay:YES];
 }
 

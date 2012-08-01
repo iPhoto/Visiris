@@ -135,7 +135,7 @@
 
 - (double)convertGlobalTimestampToLocalTimestamp:(double)aGlobalTimestamp{
     
-    DDLogInfo(@"fileDuration: %f objectDuration: %f",self.sourceObject.projectItem.duration, self.duration);
+//    DDLogInfo(@"fileDuration: %f objectDuration: %f",self.sourceObject.projectItem.duration, self.duration);
     
     double localTimestamp = aGlobalTimestamp - self.startTime;
     

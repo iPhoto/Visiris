@@ -32,6 +32,8 @@
 		5B0E366C15876EEB00F15026 /* VSTrackLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366B15876EEB00F15026 /* VSTrackLabel.m */; };
 		5B0EFF96158A1F410000445C /* playhead.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B0EFF95158A1F410000445C /* playhead.png */; };
 		5B0EFF99158A226C0000445C /* VSTrackHolderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0EFF98158A226C0000445C /* VSTrackHolderView.m */; };
+		5B12792A15C13A500026AAFD /* NSImage+QuickLook.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B12792815C13A500026AAFD /* NSImage+QuickLook.m */; };
+		5B12792C15C13CAD0026AAFD /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B12792B15C13CAD0026AAFD /* QuickLook.framework */; };
 		5B2A59D31578AF4E003938AB /* VSDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2A59D21578AF4E003938AB /* VSDocumentController.m */; };
 		5B35BF161577A49C009911EC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35BF151577A49C009911EC /* Cocoa.framework */; };
 		5B35BF201577A49C009911EC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5B35BF1E1577A49C009911EC /* InfoPlist.strings */; };
@@ -127,7 +129,6 @@
 		5B35C0631577A58D009911EC /* ImageSourceParameterDefinition.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5B35C0491577A58D009911EC /* ImageSourceParameterDefinition.xml */; };
 		5B35C0641577A58D009911EC /* QuartzComposerSourceParameterDefinition.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5B35C04A1577A58D009911EC /* QuartzComposerSourceParameterDefinition.xml */; };
 		5B35C0651577A58D009911EC /* VideoSourceParameterDefinition.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5B35C04B1577A58D009911EC /* VideoSourceParameterDefinition.xml */; };
-		5B35C0691577A5D3009911EC /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35C0681577A5D3009911EC /* QuickLook.framework */; };
 		5B35C06B1577A5EC009911EC /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35C06A1577A5EC009911EC /* OpenGL.framework */; };
 		5B35C06D1577A62D009911EC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35C06C1577A62D009911EC /* QuartzCore.framework */; };
 		5B35C06F1577A63E009911EC /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35C06E1577A63E009911EC /* QTKit.framework */; };
@@ -145,6 +146,7 @@
 		5B35C0A31577A912009911EC /* VSTimelineConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C08F1577A912009911EC /* VSTimelineConstants.m */; };
 		5B35C0A51577A912009911EC /* VSLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0961577A912009911EC /* VSLogFormatter.m */; };
 		5B603FA9157F824A0045A1EA /* VSPlayHead.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B603FA8157F824A0045A1EA /* VSPlayHead.m */; };
+		5B70F71B15C2E650002B54ED /* VSPlayheadMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B70F71A15C2E650002B54ED /* VSPlayheadMarker.m */; };
 		5B7BFFC71592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BFFC61592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m */; };
 		5BAB35D515B4153D008B4793 /* VSTimelineScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAB35D415B4153D008B4793 /* VSTimelineScrollView.m */; };
 /* End PBXBuildFile section */
@@ -165,6 +167,9 @@
 		5B0EFF95158A1F410000445C /* playhead.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playhead.png; sourceTree = "<group>"; };
 		5B0EFF97158A226C0000445C /* VSTrackHolderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTrackHolderView.h; sourceTree = "<group>"; };
 		5B0EFF98158A226C0000445C /* VSTrackHolderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTrackHolderView.m; sourceTree = "<group>"; };
+		5B12792815C13A500026AAFD /* NSImage+QuickLook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+QuickLook.m"; sourceTree = "<group>"; };
+		5B12792915C13A500026AAFD /* NSImage+QuickLook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+QuickLook.h"; sourceTree = "<group>"; };
+		5B12792B15C13CAD0026AAFD /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		5B2A59D11578AF4E003938AB /* VSDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDocumentController.h; sourceTree = "<group>"; };
 		5B2A59D21578AF4E003938AB /* VSDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDocumentController.m; sourceTree = "<group>"; };
 		5B35BF111577A49C009911EC /* Visiris.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Visiris.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -330,7 +335,6 @@
 		5B35C0491577A58D009911EC /* ImageSourceParameterDefinition.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ImageSourceParameterDefinition.xml; sourceTree = "<group>"; };
 		5B35C04A1577A58D009911EC /* QuartzComposerSourceParameterDefinition.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = QuartzComposerSourceParameterDefinition.xml; sourceTree = "<group>"; };
 		5B35C04B1577A58D009911EC /* VideoSourceParameterDefinition.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = VideoSourceParameterDefinition.xml; sourceTree = "<group>"; };
-		5B35C0681577A5D3009911EC /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		5B35C06A1577A5EC009911EC /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		5B35C06C1577A62D009911EC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5B35C06E1577A63E009911EC /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
@@ -368,6 +372,8 @@
 		5B538B78159B12D20031363E /* VSQuartzCompositionUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSQuartzCompositionUtils.h; sourceTree = "<group>"; };
 		5B603FA7157F824A0045A1EA /* VSPlayHead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSPlayHead.h; sourceTree = "<group>"; };
 		5B603FA8157F824A0045A1EA /* VSPlayHead.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSPlayHead.m; sourceTree = "<group>"; };
+		5B70F71915C2E650002B54ED /* VSPlayheadMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSPlayheadMarker.h; sourceTree = "<group>"; };
+		5B70F71A15C2E650002B54ED /* VSPlayheadMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSPlayheadMarker.m; sourceTree = "<group>"; };
 		5B7BFFC51592143C00CEA1E8 /* VSTimelineObjectViewIntersection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineObjectViewIntersection.h; sourceTree = "<group>"; };
 		5B7BFFC61592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineObjectViewIntersection.m; sourceTree = "<group>"; };
 		5BAB35D315B4153D008B4793 /* VSTimelineScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineScrollView.h; sourceTree = "<group>"; };
@@ -381,6 +387,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B12792C15C13CAD0026AAFD /* QuickLook.framework in Frameworks */,
 				2799F8E91599C96D00008489 /* Quartz.framework in Frameworks */,
 				2795881A15906D7B00E24B57 /* AVFoundation.framework in Frameworks */,
 				2795881715906D5000E24B57 /* CoreMedia.framework in Frameworks */,
@@ -388,7 +395,6 @@
 				5B35C06F1577A63E009911EC /* QTKit.framework in Frameworks */,
 				5B35C06D1577A62D009911EC /* QuartzCore.framework in Frameworks */,
 				5B35C06B1577A5EC009911EC /* OpenGL.framework in Frameworks */,
-				5B35C0691577A5D3009911EC /* QuickLook.framework in Frameworks */,
 				5B35BF161577A49C009911EC /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -421,6 +427,7 @@
 		5B35BF061577A49C009911EC = {
 			isa = PBXGroup;
 			children = (
+				5B12792B15C13CAD0026AAFD /* QuickLook.framework */,
 				5B35C0201577A58D009911EC /* External */,
 				5B35C0471577A58D009911EC /* Resources */,
 				5B35BF1B1577A49C009911EC /* Visiris */,
@@ -450,7 +457,6 @@
 				5B35C06E1577A63E009911EC /* QTKit.framework */,
 				5B35C06C1577A62D009911EC /* QuartzCore.framework */,
 				5B35C06A1577A5EC009911EC /* OpenGL.framework */,
-				5B35C0681577A5D3009911EC /* QuickLook.framework */,
 				5B35BF151577A49C009911EC /* Cocoa.framework */,
 			);
 			name = Frameworks;
@@ -557,6 +563,8 @@
 		5B35C0201577A58D009911EC /* External */ = {
 			isa = PBXGroup;
 			children = (
+				5B12792815C13A500026AAFD /* NSImage+QuickLook.m */,
+				5B12792915C13A500026AAFD /* NSImage+QuickLook.h */,
 				5B35C0211577A58D009911EC /* Benchmarking */,
 				5B35C0341577A58D009911EC /* ImageAndTextCell.h */,
 				5B35C0351577A58D009911EC /* ImageAndTextCell.m */,
@@ -727,6 +735,8 @@
 			children = (
 				5B35BFC51577A573009911EC /* VSTimelineRulerView.h */,
 				5B35BFC61577A573009911EC /* VSTimelineRulerView.m */,
+				5B70F71915C2E650002B54ED /* VSPlayheadMarker.h */,
+				5B70F71A15C2E650002B54ED /* VSPlayheadMarker.m */,
 			);
 			name = ruler;
 			sourceTree = "<group>";
@@ -1243,6 +1253,8 @@
 				5B7BFFC71592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m in Sources */,
 				2799F8E61599C8B800008489 /* VSQuartzCompositionUtils.m in Sources */,
 				5BAB35D515B4153D008B4793 /* VSTimelineScrollView.m in Sources */,
+				5B12792A15C13A500026AAFD /* NSImage+QuickLook.m in Sources */,
+				5B70F71B15C2E650002B54ED /* VSPlayheadMarker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

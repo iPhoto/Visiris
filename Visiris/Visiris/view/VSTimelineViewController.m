@@ -15,7 +15,7 @@
 #import "VSTimelineObjectProxy.h"
 #import "VSTimelineRulerView.h"
 #import "VSTimelineObject.h"
-#import "VSTrackLabelsViewController.h"
+#import "VSTrackLabelsView.h"
 #import "VSTrackLabel.h"
 #import "VSTrackHolderView.h"
 #import "VSProjectItemRepresentation.h"
@@ -24,16 +24,10 @@
 
 @interface VSTimelineViewController ()
 
-#define VS_PLAYHEAD_MINIMAL_PIXEL_DIFFERENCE 10
+#define VS_PLAYHEAD_MINIMAL_PIXEL_DIFFERENCE 1
 
 /** NSArray holding the views representing the timeline's tracks */
 @property (strong) NSMutableArray *trackViewControllers;
-
-/** Displaying the timecode above the tracks */
-@property (strong) NSRulerView *rulerView;
-
-/** NSViewcController responsible for displaying the track labels in next to the timeline */
-@property (strong) VSTrackLabelsViewController *trackLabelsViewController;
 
 /** If an timelineObject is dragged to a different track the difference between the source track and the moveto-track is stored in trackOffset */
 @property int trackOffset;
@@ -46,6 +40,8 @@
 
 /** Virtual mousePosition which is changed while autoscrolling is active */
 @property NSPoint autoscrollMouseLocation;
+
+@property VSTrackLabelsView *trackLabelRulerView;
 
 @end
 
@@ -60,11 +56,9 @@
 
 @synthesize scrollView                  = _scvTrackHolder;
 @synthesize trackHolder                 = _scrollViewHolder;
-@synthesize rulerView                   = _rulerView;
 @synthesize trackViewControllers        = _trackViewControllers;
 @synthesize timeline                    = _timeline;
 @synthesize pixelTimeRatio              = _pixelTimeRatio;
-@synthesize trackLabelsViewController   = _trackLabelsViewController;
 @synthesize trackOffset                 = _offsetTrack;
 @synthesize autoscrolling               = _autoscrolling;
 @synthesize autoScrollingTimer          = _autoScrollingTimer;
@@ -169,24 +163,17 @@ static NSString* defaultNib = @"VSTimelineView";
 -(void) initTimelineRuler{
     
     [self updateTimelineRulerMeasurement];
-    
-    self.rulerView = [self.scrollView horizontalRulerView];
-    
-    //sets the custom measurement unit VSTimelineRulerMeasurementUnit as measuerement unit of the timeline ruler
-    [self.rulerView setMeasurementUnits:VSTimelineRulerMeasurementUnit];
 }
 
 /**
  * Inits the verticalRulerView displaying the labels for the tracks
  */
 -(void) initTrackLabelsView{
-    self.trackLabelsViewController = [[VSTrackLabelsViewController alloc] init];
-    
-    if ([self.trackLabelsViewController.view isKindOfClass:[NSRulerView class]]) {
-        [self.scrollView setVerticalRulerView:(NSRulerView*) self.trackLabelsViewController.view];
-        [((NSRulerView*) self.trackLabelsViewController.view) setOrientation:NSVerticalRuler];
-        [self.scrollView setHasVerticalRuler:YES];
-    }
+    self.trackLabelRulerView = [[VSTrackLabelsView alloc] initWithScrollView:self.scrollView orientation:NSVerticalRuler];
+    self.trackLabelRulerView.clientView = self.trackHolder;
+    self.scrollView.verticalRulerView = self.trackLabelRulerView;
+    self.scrollView.hasVerticalRuler = YES;
+    self.scrollView.rulersVisible = YES;
 }
 
 
@@ -633,7 +620,7 @@ static NSString* defaultNib = @"VSTimelineView";
 
 -(void) timelineScrollView:(VSTimelineScrollView *)scrollView wantsToBeZoomedAccordingToScrollWheel:(float) amount atPosition:(NSPoint)mousePosition{
     
-    if(amount == 0.0 || self.trackHolder.frame.size.width < self.scrollView.documentVisibleRect.size.width)
+    if(amount == 0.0)// || self.trackHolder.frame.size.width < self.scrollView.documentVisibleRect.size.width)
         return;
     
     NSRect newTrackHolderFrame = self.trackHolder.frame;
@@ -733,6 +720,8 @@ static NSString* defaultNib = @"VSTimelineView";
     
     [self setPlayheadMarkerLocation];
     
+    self.trackHolder.pixelTimeRatio = self.pixelTimeRatio;
+    
     //tells all VSTrackViewControlls in the timeline, that the pixelItemRation has been changed
     for(VSTrackViewController *controller in self.trackViewControllers){
         [controller pixelTimeRatioDidChange:self.pixelTimeRatio];
@@ -795,9 +784,9 @@ static NSString* defaultNib = @"VSTimelineView";
  * Updates VSTimelineRulerMeasurementUnit according to the pixelTimeRatio
  */
 -(void) updateTimelineRulerMeasurement{ 
-    [NSRulerView registerUnitWithName:VSTimelineRulerMeasurementUnit abbreviation:VSTimelineRulerMeasurementAbreviation unitToPointsConversionFactor:1/self.pixelTimeRatio stepUpCycle:[NSArray arrayWithObject:[NSNumber numberWithFloat:10.0]] stepDownCycle:[NSArray arrayWithObject:[NSNumber numberWithFloat:0.5]]];
-    
-    [self.rulerView setMeasurementUnits:VSTimelineRulerMeasurementUnit];
+//    [NSRulerView registerUnitWithName:VSTimelineRulerMeasurementUnit abbreviation:VSTimelineRulerMeasurementAbreviation unitToPointsConversionFactor:1/self.pixelTimeRatio stepUpCycle:[NSArray arrayWithObject:[NSNumber numberWithFloat:10.0]] stepDownCycle:[NSArray arrayWithObject:[NSNumber numberWithFloat:0.5]]];
+//    
+//    [self.scrollView.horizontalRulerView setMeasurementUnits:VSTimelineRulerMeasurementUnit];
 }
 
 #pragma mark - TimelineObjects
@@ -902,7 +891,7 @@ static NSString* defaultNib = @"VSTimelineView";
             }
         }
         else{
-            [self.timeline copyTimelineObject:tmpTimelineObject toTrack:trackViewController.track atPosition:newStartTime withDuration:newDuration andRegisterUndoOperation:self.trackLabelsViewController.view.undoManager];
+            [self.timeline copyTimelineObject:tmpTimelineObject toTrack:trackViewController.track atPosition:newStartTime withDuration:newDuration andRegisterUndoOperation:self.view.undoManager];
         }
         i++;
     }
@@ -1261,7 +1250,7 @@ static NSString* defaultNib = @"VSTimelineView";
     NSRect labelRect = NSMakeRect(0, aTrack.view.frame.origin.y, TRACK_LABEL_WIDTH, aTrack.view.frame.size.height);
     
     //NSLog(@"labelRect: %@",NSStringFromRect(labelRect));
-    [self.trackLabelsViewController addTrackLabel:[[VSTrackLabel alloc] initWithName:aTrack.track.name forTrack:aTrack.track.trackID forFrame:labelRect]];
+    [self.trackLabelRulerView addTrackLabel:[[VSTrackLabel alloc] initWithName:aTrack.track.name forTrack:aTrack.track.trackID forFrame:labelRect]];
 }
 
 

@@ -31,7 +31,7 @@ static VSProjectItemController* sharedProjectItemController = nil;
 -(id) init{
     if(self = [super init]){
         _projectItems = [[NSMutableArray alloc] initWithCapacity:0];
-       // [self setTestData];
+        [self setTestData];
     }
     
     return self;
@@ -137,12 +137,9 @@ static VSProjectItemController* sharedProjectItemController = nil;
     
     NSArray* files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:fullPath error:nil];
     
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     
     for(NSString* s  in files){
-        [queue addOperationWithBlock:^{
             [self addNewProjectItemFromFile:[NSString stringWithFormat:@"%@/%@",fullPath,s]];
-        }];
     }
 }
 
