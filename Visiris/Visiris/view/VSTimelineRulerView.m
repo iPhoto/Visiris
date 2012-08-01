@@ -11,10 +11,14 @@
 #import "VSCoreServices.h"
 
 @interface VSTimelineRulerView ()
-@property int amount;
-@property int maxDistance;
-@property float currentUnit;
-@property int lineHeight;
+
+#define RASTER_LINES_PER_PARTITION 10
+
+@property double currentRulerPartitionWidth;
+@property double maximalRulerPartitionWidth;
+@property double currentMillisecondsPerPartition;
+@property double spaceBetweenRasterLines;
+@property int timeCodeLineHeight;
 @property NSMutableParagraphStyle *paragrapheStyle;
 @property NSMutableDictionary *textAttributes;
 @property NSString *timeFormat;
@@ -43,11 +47,11 @@
 
 -(id) initWithScrollView:(NSScrollView *)scrollView orientation:(NSRulerOrientation)orientation{
     if(self = [super initWithScrollView:scrollView orientation:orientation]){
-        self.amount = self.maxDistance = 150;
-        self.lineHeight = 10;
+        self.currentRulerPartitionWidth = self.maximalRulerPartitionWidth = 150;
+        self.timeCodeLineHeight = 10;
         self.paragrapheStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         self.paragrapheStyle.alignment =NSCenterTextAlignment;
-        self.paragrapheStyle.lineSpacing = self.lineHeight;
+        self.paragrapheStyle.lineSpacing = self.timeCodeLineHeight;
         
         self.textAttributes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                                [NSColor blueColor], NSForegroundColorAttributeName,
@@ -59,7 +63,7 @@
         self.reservedThicknessForMarkers = 50;
         [self setRuleThickness:1];
         
-        self.timecodeRect = NSMakeRect(0, 0, self.lineHeight, self.amount);
+        self.timecodeRect = NSMakeRect(0, 0, self.timeCodeLineHeight, self.currentRulerPartitionWidth);
         
         self.unitPaths = [[NSBezierPath alloc] init];
         self.unitPaths.lineWidth = 0.5;
@@ -75,65 +79,57 @@
 
 
 -(void) drawHashMarksAndLabelsInRect:(NSRect)rect{
-    float offset = 0;
+    
     if(self.scrollView.hasVerticalRuler){
-        offset = self.scrollView.verticalRulerView.ruleThickness/2*-1;
+        self.originOffset =  self.scrollView.verticalRulerView.ruleThickness;
     }
     
-    DDLogInfo(@"offset: %f",offset);
     
     NSRect visibleRect = self.clientView.visibleRect;
-    visibleRect.origin.x += offset;
     
+    double width = visibleRect.origin.x + rect.origin.x - self.originOffset;
+    double start =  rect.origin.x  - fmod(width , self.currentRulerPartitionWidth);
+    double timeCodeOffset = visibleRect.origin.x - self.originOffset;
     
-    int start =  (u_int)(rect.origin.x  - ((int) (visibleRect.origin.x + rect.origin.x+offset) % self.amount));
-    
-    rect.size.width = ceil((rect.size.width + (rect.origin.x - start)) / self.amount) * self.amount;
-    rect.origin.x = start;
-    
-    float timeCodeOffset = visibleRect.origin.x+offset;
-    
-    [self drawRulerInRect:rect timeCodeOffset:timeCodeOffset];
-}
+    int numberOfPartitions =  ceil((rect.size.width + (rect.origin.x - start)) / self.currentRulerPartitionWidth);
 
-
--(void) drawRulerInRect:(NSRect) rect timeCodeOffset:(float) timeCodeOffset
-{
     [self.unitPaths removeAllPoints];
     
     [[NSColor blackColor] setStroke];
+    
+    
+    [self.unitPaths moveToPoint:NSMakePoint(start, self.unitStrokeCenter)];
+    [self.unitPaths lineToPoint:NSMakePoint(start+numberOfPartitions*self.currentRulerPartitionWidth, self.unitStrokeCenter)];
 
-    float strokeSpace = self.amount / 10.0;
     
-    [self.unitPaths moveToPoint:NSMakePoint(rect.origin.x, self.unitStrokeCenter)];
-    [self.unitPaths lineToPoint:NSMakePoint(NSMaxX(rect), self.unitStrokeCenter)];
-    
-    int count = NSMaxX(rect) / self.amount;
-    
-    for(int i = 0; i <= count; i++){
+    for(int i = 0; i <= numberOfPartitions; i++){
         
-        float currentPosition = rect.origin.x+i * self.amount;
-        [self addLongUnitStrokeToPathAtLocation:currentPosition];
+        double currentPosition = start+i * self.currentRulerPartitionWidth;
         
-        for(int j= 1; j <= 10; j++){
-            if(j!=5)
-                [self addShortUnitStrokeToPathAtLocation:currentPosition+j*strokeSpace];
-            else
-                [self addLongUnitStrokeToPathAtLocation:currentPosition+j*strokeSpace];
-            
-        }
+        [self drawPartitionsRasterAtPosition:currentPosition];
         
         _timecodeRect.origin.x = currentPosition- self.timecodeRect.size.width / 2;
-        
-        
         NSString* timecode = [VSFormattingUtils formatedTimeStringFromMilliseconds:(currentPosition+timeCodeOffset)*self.pixelTimeRatio formatString:self.timeFormat];
         [timecode drawInRect:self.timecodeRect withAttributes:self.textAttributes];
         
-               
+        
     }
     
     [self.unitPaths stroke];
 }
+
+-(void) drawPartitionsRasterAtPosition:(float) position{
+    [self addLongUnitStrokeToPathAtLocation:position];
+    
+    for(int i= 1; i <= 10; i++){
+        if(i!=5)
+            [self addShortUnitStrokeToPathAtLocation:position+i*self.spaceBetweenRasterLines];
+        else
+            [self addLongUnitStrokeToPathAtLocation:position+i*self.spaceBetweenRasterLines];
+        
+    }
+}
+
 
 -(void) addShortUnitStrokeToPathAtLocation:(float) location{
     [self.unitPaths moveToPoint:NSMakePoint(location,  self.unitStrokeCenter - self.shortUnitStrokeLength/2)];
@@ -150,62 +146,31 @@
 -(void) setPixelTimeRatio:(double)pixelTimeRatio{
     if (_pixelTimeRatio != pixelTimeRatio) {
         _pixelTimeRatio = pixelTimeRatio;
-
-        double tmp = self.maxDistance * pixelTimeRatio;
         
-        if(tmp <100){
-            self.currentUnit = 100;
+        int tmp = ceil(self.maximalRulerPartitionWidth * pixelTimeRatio);
+        
+        if(tmp<1000){
+            self.currentMillisecondsPerPartition = ceil(tmp/100.0) * 100;
         }
-        else if(tmp <250){
-            self.currentUnit = 250;
-        }
-        else if(tmp <500){
-            self.currentUnit = 500;
-        }
-        else if(tmp <1000){
-            self.currentUnit = 1000;
-        }
-        else if(tmp <5000){
-            self.currentUnit = 5000;
-        }
-        else if(tmp <10000){
-            self.currentUnit = 10000;
-        }
-        else if(tmp <30000){
-            self.currentUnit = 30000;
-        }
-        else if(tmp <30000){
-            self.currentUnit = 30000;
-        }
-        else if(tmp <60000){
-            self.currentUnit = 60000;
-        }
-        else if(tmp <90000){
-            self.currentUnit = 90000;
-        }
-        else if(tmp <120000){
-            self.currentUnit = 120000;
-        }
-        else if(tmp <150000){
-            self.currentUnit = 150000;
-        }
-        else if(tmp <180000){
-            self.currentUnit = 180000;
+        else if(tmp < 10000){
+            self.currentMillisecondsPerPartition = ceil(tmp/5000.0) * 5000;
         }
         else{
-            self.currentUnit = 210000;
+            self.currentMillisecondsPerPartition = ceil(tmp/30000.0) * 30000;
         }
         
-        if(self.currentUnit >= 1000){
+        
+        if(self.currentMillisecondsPerPartition >= 1000){
             self.timeFormat = @"HH:mm:ss";
         }
         else{
             self.timeFormat = @"HH:mm:ss:tt";
         }
         
-        self.amount = self.currentUnit / pixelTimeRatio;
-        _timecodeRect.size.width = self.amount;
+        self.currentRulerPartitionWidth = self.currentMillisecondsPerPartition / pixelTimeRatio;
         
+        _timecodeRect.size.width = self.currentRulerPartitionWidth;
+        self.spaceBetweenRasterLines = self.currentRulerPartitionWidth / RASTER_LINES_PER_PARTITION;
         [self invalidateHashMarks];
     }
 }
