@@ -1201,13 +1201,7 @@ static NSString* defaultNib = @"VSTimelineView";
     [[newTrackViewController view] setAutoresizesSubviews:NO];
     
     [self.trackViewControllers addObject:newTrackViewController];
-    
-    
-    
-    //Rescales the document view of the trackholder ScrollView
-    NSInteger height = (VSTrackViewHeight+VSTrackViewMargin) * ([self.trackViewControllers  count]);
-    [self.scrollView.trackHolderView setFrame:(NSMakeRect([self.scrollView.trackHolderView frame].size.width, 0, self.scrollView.trackHolderView.frame.size.width,  height))];
-    
+
     [self addNewTrackLabelForTrack:newTrackViewController];
     
 }
