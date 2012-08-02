@@ -15,7 +15,6 @@
 #import "VSTimelineObjectProxy.h"
 #import "VSTimelineRulerView.h"
 #import "VSTimelineObject.h"
-#import "VSTrackLabelsView.h"
 #import "VSTrackLabel.h"
 #import "VSTrackHolderView.h"
 #import "VSProjectItemRepresentation.h"
@@ -41,8 +40,6 @@
 /** Virtual mousePosition which is changed while autoscrolling is active */
 @property NSPoint autoscrollMouseLocation;
 
-@property VSTrackLabelsView *trackLabelRulerView;
-
 @end
 
 // Default width of the track labels
@@ -52,10 +49,7 @@
 #define MINIMUM_TIMELINE_OBJECT_PIXEL_WIDTH 10
 
 @implementation VSTimelineViewController
-
-
 @synthesize scrollView                  = _scvTrackHolder;
-@synthesize trackHolder                 = _scrollViewHolder;
 @synthesize trackViewControllers        = _trackViewControllers;
 @synthesize timeline                    = _timeline;
 @synthesize pixelTimeRatio              = _pixelTimeRatio;
@@ -108,9 +102,7 @@ static NSString* defaultNib = @"VSTimelineView";
     
     [self initTimelineRuler];
     
-    [self initTrackLabelsView];
-    
-    [self.trackHolder setFrame:NSMakeRect(0, 0, [self visibleTrackViewHolderWidth], self.scrollView.frame.size.height)];
+    [self.scrollView.trackHolderView setFrame:NSMakeRect(0, 0, [self visibleTrackViewHolderWidth], self.scrollView.frame.size.height)];
     
     [self initTracks];
     
@@ -133,16 +125,8 @@ static NSString* defaultNib = @"VSTimelineView";
  * Sets the frame of the trackHolder and the AutoresizingMasks
  */
 -(void) initScrollView{
-    
     self.scrollView.zoomingDelegate = self;
-    self.trackHolder.playheadMarkerDelegate = self;
-    
-    [self.trackHolder setAutoresizingMask:NSViewNotSizable];
-    
-    [self.scrollView.contentView setWantsLayer:YES];
-    [self.trackHolder setWantsLayer:YES];
-    [self.scrollView.contentView.layer addSublayer:self.trackHolder.layer];
-    
+    self.scrollView.playheadMarkerDelegate = self;
 }
 
 
@@ -165,18 +149,6 @@ static NSString* defaultNib = @"VSTimelineView";
     [self updateTimelineRulerMeasurement];
 }
 
-/**
- * Inits the verticalRulerView displaying the labels for the tracks
- */
--(void) initTrackLabelsView{
-    self.trackLabelRulerView = [[VSTrackLabelsView alloc] initWithScrollView:self.scrollView orientation:NSVerticalRuler];
-    self.trackLabelRulerView.clientView = self.trackHolder;
-    self.scrollView.verticalRulerView = self.trackLabelRulerView;
-    self.scrollView.hasVerticalRuler = YES;
-    self.scrollView.rulersVisible = YES;
-}
-
-
 #pragma mark - NSViewController
 
 
@@ -185,10 +157,10 @@ static NSString* defaultNib = @"VSTimelineView";
     //updates the length of the tracks and their timeline objects when the duration of the timeline has been changed
     if([keyPath isEqualToString:@"duration"]){
         
-        //updates the frame of the scrollViews documentView
-        NSRect newFrame = [self.trackHolder frame];
+        //updates the frame of the scrollViews trackHolderView
+        NSRect newFrame = [self.scrollView.trackHolderView frame];
         newFrame.size.width = [[object valueForKey:keyPath] doubleValue] / self.pixelTimeRatio;
-        [self.trackHolder setFrame:(newFrame)];
+        [self.scrollView.trackHolderView setFrame:(newFrame)];
         
         //updates the pixelItemRatio
         [self computePixelTimeRatio];
@@ -246,11 +218,11 @@ static NSString* defaultNib = @"VSTimelineView";
     
     if(oldFrame.size.width != newFrame.size.width){
         
-        NSRect newDocumentFrame = self.trackHolder.frame;
+        NSRect newDocumentFrame = [self.scrollView.trackHolderView frame];
         
         //updates the width according to how the width of the view has been resized
         newDocumentFrame.size.width += newFrame.size.width - oldFrame.size.width;
-        [self.trackHolder setFrame:(newDocumentFrame)];
+        [self.scrollView.trackHolderView setFrame:(newDocumentFrame)];
         [self computePixelTimeRatio];
     }
 }
@@ -623,9 +595,9 @@ static NSString* defaultNib = @"VSTimelineView";
     if(amount == 0.0)// || self.trackHolder.frame.size.width < self.scrollView.documentVisibleRect.size.width)
         return;
     
-    NSRect newTrackHolderFrame = self.trackHolder.frame;
+    NSRect newTrackHolderFrame = [self.scrollView.trackHolderView frame];
     
-    NSPoint clipLocalPoint = [self.trackHolder convertPoint:mousePosition fromView:nil];
+    NSPoint clipLocalPoint = [self.scrollView.trackHolderView convertPoint:mousePosition fromView:nil];
     
     float zoomFactor = 1.0 + amount;
     
@@ -641,7 +613,7 @@ static NSString* defaultNib = @"VSTimelineView";
     float mouseTimePosition = [self timestampForPixelValue:clipLocalPoint.x];
     float ratio = clipLocalPoint.x - clipLocalPoint.x*zoomFactor;
     
-    [self.trackHolder setFrame:(newTrackHolderFrame)];
+    [self.scrollView.trackHolderView setFrame:(newTrackHolderFrame)];
     [self computePixelTimeRatio];
     
     float pixelPosition = mouseTimePosition/self.pixelTimeRatio;
@@ -673,7 +645,7 @@ static NSString* defaultNib = @"VSTimelineView";
  * Updates the ratio between the length of trackholder's width and the duration of the timeline
  */
 -(void) computePixelTimeRatio{
-    double newRatio = self.timeline.duration / self.trackHolder.frame.size.width;
+    double newRatio = self.timeline.duration / [self.scrollView.trackHolderView frame].size.width;
     
     //DDLogInfo(@"computePixelTimeRatio: %f - %f",newRatio,VSMinimumPixelTimeRatio);
     
@@ -682,10 +654,10 @@ static NSString* defaultNib = @"VSTimelineView";
         
         newRatio = VSMinimumPixelTimeRatio;
         
-        NSRect trackHolderFrame= self.trackHolder.frame;
+        NSRect trackHolderFrame= [self.scrollView.trackHolderView frame];
         trackHolderFrame.size.width = self.timeline.duration /newRatio;
         
-        [self.trackHolder setFrame:(trackHolderFrame)];
+        [self.scrollView.trackHolderView setFrame:(trackHolderFrame)];
     }
     
     if(newRatio != self.pixelTimeRatio){
@@ -720,7 +692,7 @@ static NSString* defaultNib = @"VSTimelineView";
     
     [self setPlayheadMarkerLocation];
     
-    self.trackHolder.pixelTimeRatio = self.pixelTimeRatio;
+    self.scrollView.pixelTimeRatio = self.pixelTimeRatio;
     
     //tells all VSTrackViewControlls in the timeline, that the pixelItemRation has been changed
     for(VSTrackViewController *controller in self.trackViewControllers){
@@ -743,7 +715,7 @@ static NSString* defaultNib = @"VSTimelineView";
  * @param duration Duration the tracks are resized according to.
  */
 -(void) resizeTracksAccordingToDuration:(double) duration{
-    [self.trackHolder setFrameSize:NSMakeSize([self pixelForTimestamp:duration], self.trackHolder.frame.size.height)];
+    [self.scrollView.trackHolderView setFrameSize:NSMakeSize([self pixelForTimestamp:duration], self.scrollView.trackHolderView.frame.size.height)];
     [self updateTimelineRulerMeasurement];
 }
 
@@ -751,7 +723,7 @@ static NSString* defaultNib = @"VSTimelineView";
  * Updates the duration of the timeline according to the current pixel-width of the timeline
  */
 -(void) setTimelineDurationAccordingToTimelineWidth{
-    self.timeline.duration = [self timestampForPixelValue:self.trackHolder.frame.size.width];
+    self.timeline.duration = [self timestampForPixelValue:self.scrollView.trackHolderView.frame.size.width];
     [self computePixelTimeRatio];
 }
 
@@ -995,7 +967,7 @@ static NSString* defaultNib = @"VSTimelineView";
 -(NSInteger) computeTrackOffsetForTrack:(VSTrackViewController*) fromTrack forMousePosition:(NSPoint) mousePosition{
     
     
-    NSPoint positionInView = [self.trackHolder convertPoint:mousePosition fromView:nil];
+    NSPoint positionInView = [self.scrollView.documentView convertPoint:mousePosition fromView:nil];
     
     //if the mouse is over the fromTrack the offset is 0
     if(NSPointInRect(positionInView,  fromTrack.view.frame)){
@@ -1115,7 +1087,7 @@ static NSString* defaultNib = @"VSTimelineView";
     
   //  [self scrollIfNewLocationOfPlayheadIsOutsideOfVisibleRect:newLocation];
     
-    [self.trackHolder movePlayHeadMarkerToLocation:newLocation];
+    [self.scrollView movePlayHeadMarkerToLocation:newLocation];
 }
 
 /**
@@ -1123,7 +1095,7 @@ static NSString* defaultNib = @"VSTimelineView";
  * @return current location of the PlayheadMarker
  */
 -(float) currentPlayheadMarkerLocation{
-    return self.trackHolder.playheadMarkerLocation;
+    return self.scrollView.playheadMarkerLocation;
 }
 
 /**
@@ -1209,9 +1181,7 @@ static NSString* defaultNib = @"VSTimelineView";
     
     VSTrackViewController* newTrackViewController = [[VSTrackViewController alloc]initWithDefaultNibAccordingToTrack:track];
     
-    [self.trackHolder setWantsLayer:YES];
-    [self.trackHolder addSubview:[newTrackViewController view]];
-    [self.trackHolder.layer addSublayer:newTrackViewController.view.layer];
+    [self.scrollView addTrackView:newTrackViewController.view];
     
     // The VSTimelineViewControlller acts as the delegate of the VSTrackViewController
     newTrackViewController.delegate = self;
@@ -1236,7 +1206,7 @@ static NSString* defaultNib = @"VSTimelineView";
     
     //Rescales the document view of the trackholder ScrollView
     NSInteger height = (VSTrackViewHeight+VSTrackViewMargin) * ([self.trackViewControllers  count]);
-    [self.trackHolder setFrame:(NSMakeRect([self.trackHolder frame].size.width, 0, self.trackHolder.frame.size.width,  height))];
+    [self.scrollView.trackHolderView setFrame:(NSMakeRect([self.scrollView.trackHolderView frame].size.width, 0, self.scrollView.trackHolderView.frame.size.width,  height))];
     
     [self addNewTrackLabelForTrack:newTrackViewController];
     
@@ -1250,7 +1220,7 @@ static NSString* defaultNib = @"VSTimelineView";
     NSRect labelRect = NSMakeRect(0, aTrack.view.frame.origin.y, TRACK_LABEL_WIDTH, aTrack.view.frame.size.height);
     
     //NSLog(@"labelRect: %@",NSStringFromRect(labelRect));
-    [self.trackLabelRulerView addTrackLabel:[[VSTrackLabel alloc] initWithName:aTrack.track.name forTrack:aTrack.track.trackID forFrame:labelRect]];
+    [self.scrollView addTrackLabel:[[VSTrackLabel alloc] initWithName:aTrack.track.name forTrack:aTrack.track.trackID forFrame:labelRect]];
 }
 
 
@@ -1261,7 +1231,7 @@ static NSString* defaultNib = @"VSTimelineView";
     
     NSPoint globalLocation = [ NSEvent mouseLocation ];
     NSPoint windowLocation = [ [ self.scrollView window ] convertScreenToBase: globalLocation ];
-    NSPoint viewLocation = [ self.trackHolder convertPoint: windowLocation fromView: nil ];
+    NSPoint viewLocation = [ self.scrollView.trackHolderView convertPoint: windowLocation fromView: nil ];
     
     NSRect leftAutoScrollingArea = [self.scrollView documentVisibleRect];
     leftAutoScrollingArea.size.width *= 0.1;

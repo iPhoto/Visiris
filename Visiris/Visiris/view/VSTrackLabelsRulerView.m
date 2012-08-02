@@ -6,18 +6,18 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "VSTrackLabelsView.h"
+#import "VSTrackLabelsRulerView.h"
 
 #import "VSTrackLabel.h"
 
 #import "VSCoreServices.h"
 
-@interface VSTrackLabelsView()
+@interface VSTrackLabelsRulerView()
 @property NSMutableParagraphStyle *paragrapheStyle;
 @property NSMutableDictionary *textAttributes;
 @end
 
-@implementation VSTrackLabelsView
+@implementation VSTrackLabelsRulerView
 
 @synthesize trackLabels = _trackLabels;
 

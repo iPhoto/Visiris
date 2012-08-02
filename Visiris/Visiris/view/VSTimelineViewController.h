@@ -30,9 +30,6 @@
 /** VSTimelineScrollView holding the VSTrackViews representing the single tracks */
 @property (weak) IBOutlet VSTimelineScrollView *scrollView;
 
-/** DocumentView of the NSSCrollView */
-@property (weak) IBOutlet VSTrackHolderView *trackHolder;
-
 /** VSTimeline the controller represents */
 @property VSTimeline* timeline;
 
@@ -52,6 +49,8 @@
  * @return self
  */
 -(id) initWithDefaultNibAccordingForTimeline:(VSTimeline*)timeline;
+
+
 
 
 @end

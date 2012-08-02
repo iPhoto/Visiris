@@ -27,8 +27,7 @@
 		2795881A15906D7B00E24B57 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2795881915906D7B00E24B57 /* AVFoundation.framework */; };
 		2799F8E61599C8B800008489 /* VSQuartzCompositionUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2799F8E51599C8B800008489 /* VSQuartzCompositionUtils.m */; };
 		2799F8E91599C96D00008489 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2799F8E81599C96D00008489 /* Quartz.framework */; };
-		5B0E366615876E9300F15026 /* VSTrackLabelsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366515876E9300F15026 /* VSTrackLabelsView.m */; };
-		5B0E366915876EA900F15026 /* VSTrackLabelsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366815876EA900F15026 /* VSTrackLabelsViewController.m */; };
+		5B0E366615876E9300F15026 /* VSTrackLabelsRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366515876E9300F15026 /* VSTrackLabelsRulerView.m */; };
 		5B0E366C15876EEB00F15026 /* VSTrackLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366B15876EEB00F15026 /* VSTrackLabel.m */; };
 		5B0EFF96158A1F410000445C /* playhead.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B0EFF95158A1F410000445C /* playhead.png */; };
 		5B0EFF99158A226C0000445C /* VSTrackHolderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0EFF98158A226C0000445C /* VSTrackHolderView.m */; };
@@ -158,10 +157,8 @@
 		2795881915906D7B00E24B57 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		2799F8E51599C8B800008489 /* VSQuartzCompositionUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSQuartzCompositionUtils.m; sourceTree = "<group>"; };
 		2799F8E81599C96D00008489 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
-		5B0E366415876E9300F15026 /* VSTrackLabelsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTrackLabelsView.h; sourceTree = "<group>"; };
-		5B0E366515876E9300F15026 /* VSTrackLabelsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTrackLabelsView.m; sourceTree = "<group>"; };
-		5B0E366715876EA900F15026 /* VSTrackLabelsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTrackLabelsViewController.h; sourceTree = "<group>"; };
-		5B0E366815876EA900F15026 /* VSTrackLabelsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTrackLabelsViewController.m; sourceTree = "<group>"; };
+		5B0E366415876E9300F15026 /* VSTrackLabelsRulerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTrackLabelsRulerView.h; sourceTree = "<group>"; };
+		5B0E366515876E9300F15026 /* VSTrackLabelsRulerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTrackLabelsRulerView.m; sourceTree = "<group>"; };
 		5B0E366A15876EEB00F15026 /* VSTrackLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTrackLabel.h; sourceTree = "<group>"; };
 		5B0E366B15876EEB00F15026 /* VSTrackLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTrackLabel.m; sourceTree = "<group>"; };
 		5B0EFF95158A1F410000445C /* playhead.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playhead.png; sourceTree = "<group>"; };
@@ -405,10 +402,8 @@
 		5B0E366215876E6A00F15026 /* trackLabel */ = {
 			isa = PBXGroup;
 			children = (
-				5B0E366415876E9300F15026 /* VSTrackLabelsView.h */,
-				5B0E366515876E9300F15026 /* VSTrackLabelsView.m */,
-				5B0E366715876EA900F15026 /* VSTrackLabelsViewController.h */,
-				5B0E366815876EA900F15026 /* VSTrackLabelsViewController.m */,
+				5B0E366415876E9300F15026 /* VSTrackLabelsRulerView.h */,
+				5B0E366515876E9300F15026 /* VSTrackLabelsRulerView.m */,
 				5B0E366A15876EEB00F15026 /* VSTrackLabel.h */,
 				5B0E366B15876EEB00F15026 /* VSTrackLabel.m */,
 			);
@@ -1246,8 +1241,7 @@
 				5B35C0A51577A912009911EC /* VSLogFormatter.m in Sources */,
 				5B2A59D31578AF4E003938AB /* VSDocumentController.m in Sources */,
 				5B603FA9157F824A0045A1EA /* VSPlayHead.m in Sources */,
-				5B0E366615876E9300F15026 /* VSTrackLabelsView.m in Sources */,
-				5B0E366915876EA900F15026 /* VSTrackLabelsViewController.m in Sources */,
+				5B0E366615876E9300F15026 /* VSTrackLabelsRulerView.m in Sources */,
 				5B0E366C15876EEB00F15026 /* VSTrackLabel.m in Sources */,
 				5B0EFF99158A226C0000445C /* VSTrackHolderView.m in Sources */,
 				5B7BFFC71592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m in Sources */,
