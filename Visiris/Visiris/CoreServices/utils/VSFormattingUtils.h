@@ -16,6 +16,7 @@
 /**
  *  Creates a formated string (00:00:00) of the given milliseconds param
  *  @param milliseconds Value that will be formatted
+ *  @param formatString Defines how the string is formatted. HH: hours, MM: minutes, SS: Seconds, TT: Tenths
  *  @result formated string (00:00:00) of the given milliseconds param
 */
 +(NSString*) formatedTimeStringFromMilliseconds:(double)milliseconds formatString:(NSString*) formatString;

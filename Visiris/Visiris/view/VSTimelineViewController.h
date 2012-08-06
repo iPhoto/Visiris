@@ -50,7 +50,4 @@
  */
 -(id) initWithDefaultNibAccordingForTimeline:(VSTimeline*)timeline;
 
-
-
-
 @end

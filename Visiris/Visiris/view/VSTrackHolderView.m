@@ -15,16 +15,15 @@
 
 @interface VSTrackHolderView()
 
-
 /** current offset of view's enclosing scrollView */
 @property NSPoint scrollOffset;
 
+/** CALayer to draw a guideline for the current position of the playheadmarker above the view */
 @property (strong) CALayer *guideLine;
 
 @end
 
 @implementation VSTrackHolderView
-
 @synthesize scrollOffset            = _scrollOffset;
 @synthesize trackHolderViewDelegate = _playheadMarkerDelegate;
 @synthesize guideLine               = _guideLayer;
@@ -108,6 +107,7 @@
         location = [self.trackHolderViewDelegate willMoveRulerMarker:marker inTrackHolderView:self toLocation:location];
     }
     
+    [self moveGuidelineToPosition:location-self.scrollOffset.x];
     
     return location;
 }

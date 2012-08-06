@@ -15,19 +15,20 @@
 
 #import "VSCoreServices.h"
 
-
-
-
-
-
 @interface VSTimelineScrollView()
+
+/** Subclass of NSRulerView, displaying the timecode above the timeline */
 @property VSTimelineRulerView *timelineRulerView;
+
+/** Subclass of NSRulerMarker Displaying the current Position of the playhead in the timelineRulerView */
 @property VSPlayheadMarker *playheadMarker;
+
+/** Subclass of NSRulerView, displaying information about the tracks at the left side of the timeline */
 @property VSTrackLabelsRulerView *trackLabelRulerView;
+
 @end
 
 @implementation VSTimelineScrollView
-
 @synthesize zoomingDelegate = _zoomingDelegate;
 @synthesize pixelTimeRatio = _pixelTimeRatio;
 
@@ -42,11 +43,12 @@
     return self;
 }
 
-
 -(void) awakeFromNib{
     [self initDocumentView];
     [self initRulers];
     [self initPlayheadMarker];
+    
+    [self.trackHolderView setFrame:NSMakeRect(0, 0, self.visibleTrackViewsHolderWidth, self.frame.size.height)];
 }
 
 -(void) initDocumentView{
@@ -58,6 +60,9 @@
     [self.trackHolderView setWantsLayer:YES];
     [self.contentView.layer addSublayer:self.trackHolderView.layer];
     [self.contentView setWantsLayer:YES];
+    
+    
+    
 }
 
 /**
@@ -78,7 +83,7 @@
     self.verticalRulerView = self.trackLabelRulerView;
     self.hasVerticalRuler = YES;
     self.rulersVisible = YES;
-
+    
     
     
     [self.horizontalRulerView setClientView:self.trackHolderView];
@@ -103,17 +108,12 @@
         [super scrollWheel:theEvent];
     }
     else {
-        if([self zoomingDelegateImplementsSelector:@selector(timelineScrollView:wantsToBeZoomedAccordingToScrollWheel:atPosition:)]){
-            [self.zoomingDelegate timelineScrollView:self wantsToBeZoomedAccordingToScrollWheel:[theEvent deltaY] atPosition:[theEvent locationInWindow]];
-        }
+        [self zoom:[theEvent deltaY]  atPosition: [self.trackHolderView convertPoint:[theEvent locationInWindow] fromView:nil]];
     }
 }
 
 -(void) magnifyWithEvent:(NSEvent *)event{
-    
-    if([self zoomingDelegateImplementsSelector:@selector(timelineScrollView:wantsToBeZoomedAccordingToScrollWheel:atPosition:)]){
-        [self.zoomingDelegate timelineScrollView:self wantsToBeZoomedAccordingToScrollWheel:[event magnification] atPosition:[event locationInWindow]];
-    }
+    [self zoom:[event magnification]  atPosition:[self.trackHolderView convertPoint:[event locationInWindow] fromView:nil]];
 }
 
 #pragma mark - VSTrackHolderViewDelegate Implementaion
@@ -142,9 +142,6 @@
         }
     }
     
-    float newGuidelinPosition = location +self.playheadMarker.imageOrigin.x - self.timelineRulerView.originOffset;
-    [self.trackHolderView moveGuidelineToPosition:newGuidelinPosition];
-    
     return location;
 }
 
@@ -152,10 +149,6 @@
     if([self delegateRespondsToSelector:@selector(playHeadRulerMarker:willJumpInContainingView:toLocation:)]){
         location = [self.playheadMarkerDelegate playHeadRulerMarker:self.playheadMarker willJumpInContainingView:self.trackHolderView toLocation:location];
     }
-    
-    float newGuidelinPosition = self.playheadMarker.imageRectInRuler.origin.x +self.playheadMarker.imageOrigin.x - self.timelineRulerView.originOffset;
-    
-    [self.trackHolderView moveGuidelineToPosition:newGuidelinPosition];
     
     return location;
 }
@@ -185,10 +178,11 @@
     [self.trackHolderView.layer addSublayer:aTrackView.layer];
     
     NSRect tmp = NSUnionRect(self.trackHolderView.frame, aTrackView.frame);
-    
-    NSLog(@"%@",NSStringFromSize(self.contentSize));
     [self.trackHolderView setFrameSize:NSMakeSize(self.trackHolderView.frame.size.width, tmp.size.width)];
 }
+
+
+
 
 #pragma mark - Private Methods
 
@@ -225,6 +219,43 @@
     return NO;
 }
 
+/**
+ * Translates the given pixel value to a timestamp according to the pixelTimeRation
+ * @param pixelPosition Value in pixels the timestamp is computed for
+ * @return Timestamp for the given pixel position
+ */
+-(double) timestampForPixelValue:(double) pixelPosition{
+    return pixelPosition * self.pixelTimeRatio;
+}
+
+/**
+ * Transletes the given timestamp to a pixel value according to the pixelTimeRation
+ * @param timestamp Timestamp the pixel position is computed for
+ * @return Pixelposition for the given Timestamp
+ */
+-(double) pixelForTimestamp:(double) timestamp{
+    return timestamp / self.pixelTimeRatio;
+}
+
+/**
+ * Calls the zoomingDelgate and informs it about the zooming-operation
+ * @param zoomValue Amount of zooming
+ * @param position NSPoint where the zoom-Operatino is happening onto the view
+ */
+-(void) zoom:(float) zoomValue atPosition:(NSPoint) position{
+    if([self zoomingDelegateImplementsSelector:@selector(timelineScrollView:wantsToBeZoomedAccordingToScrollWheel:atPosition:forCurrentFrame:)]){
+        
+        [self.trackHolderView setFrame:[self.zoomingDelegate timelineScrollView:self wantsToBeZoomedAccordingToScrollWheel:zoomValue atPosition:position forCurrentFrame:self.trackHolderView.frame]];
+        
+        if([self zoomingDelegateImplementsSelector:@selector(timelineScrollView:wasZoomedAtPosition:)]){
+            [self.zoomingDelegate timelineScrollView:self wasZoomedAtPosition:position];
+        }
+    }
+}
+
+
+#pragma mark - Properties
+
 -(void) setPixelTimeRatio:(double)pixelTimeRatio{
     if (_pixelTimeRatio != pixelTimeRatio) {
         self.timelineRulerView.pixelTimeRatio = pixelTimeRatio;
@@ -238,6 +269,18 @@
 
 -(float) playheadMarkerLocation{
     return self.playheadMarker.markerLocation;
+}
+
+-(float) visibleTrackViewsHolderWidth{
+    return self.documentVisibleRect.size.width - self.verticalScroller.frame.size.width;
+}
+
+-(float) trackHolderWidth{
+    return self.trackHolderView.frame.size.width;
+}
+
+-(void) setTrackHolderWidth:(float)trackHolderWidth{
+    [self.trackHolderView setFrameSize:NSMakeSize(trackHolderWidth, self.trackHolderView.frame.size.height)];
 }
 
 @end

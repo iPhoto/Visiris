@@ -15,9 +15,12 @@
  */
 @interface VSTrackLabelsRulerView : NSRulerView
 
-/** NSarray of VSTrackLable objects holding the text and the positions of the tracklabels*/
+/** NSArray of VSTrackLable objects holding the text and the positions of the tracklabels*/
 @property (strong) NSMutableArray *trackLabels;
 
+/** Adds a new label to the view 
+ * @param aTrackLabel VSTrackLabel storing the informaiton to be displayed in the label
+ */
 -(void) addTrackLabel:(VSTrackLabel *)aTrackLabel;
 
 

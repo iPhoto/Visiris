@@ -23,6 +23,7 @@
 
 /**
  * Called when the playhead marker started to be dragged around
+ *
  * @param playheadMarker The maker which should be moved aroud
  * @param aView NSView the playhead marker is placed in
  * @return If YES the playhead marker starts moving, otherwise not
@@ -31,6 +32,7 @@
 
 /**
  * Called after the playheadMakrer was moved
+ *
  * @param playheadMarker The maker that was moved
  * @param aView NSView the playhead marker is placed in
  */
@@ -38,6 +40,7 @@
 
 /**
  * Called before the playheadMakrer is moved
+ *
  * @param playheadMarker The maker that will be movd
  * @param aView NSView the playhead marker is placed in
  * @param location Location the playhead marker wants be moved to
@@ -47,6 +50,7 @@
 
 /**
  * Called before the playheadMakrer jumps to the given location moved
+ *
  * @param playheadMarker The maker that will jump
  * @param aView NSView the playhead marker is placed in
  * @param location Location the playhead marker wants to jump to
@@ -60,9 +64,6 @@
 
 
 
-
-
-
 /**
  * Protocoll defining how the VSTimelineScrollView communicates with its zoomingDelegate.
  */
@@ -70,11 +71,20 @@
 
 /**
  * Called when scroll wheel is moved and the option-key is pressed or when pinch-zoom on the trackpad is performed. Informs the delegate of VSTimelineScrollView about the zooming operation.
+ *
  * @param scrollView VSTimelineScrollView wanting the zoom operation
  * @param amount Amount to zoom
  * @param mousePosition Current position of the mouse
  */
--(void) timelineScrollView:(VSTimelineScrollView*) scrollView wantsToBeZoomedAccordingToScrollWheel:(float) amount atPosition:(NSPoint) mousePosition;
+-(NSRect) timelineScrollView:(VSTimelineScrollView*) scrollView wantsToBeZoomedAccordingToScrollWheel:(float) amount atPosition:(NSPoint) mousePosition forCurrentFrame:(NSRect) currentFrame;
+
+/**
+ * Called when the timeline was zoomed.
+ *
+ * @param scrollView VSTimelienScrollView that was zoomed
+ * @param position NSPoint in the scrollViews coordinates where the zoom-operation did happen
+ */
+-(void) timelineScrollView:(VSTimelineScrollView*) scrollView wasZoomedAtPosition:(NSPoint) position;
 
 @end
 
@@ -87,11 +97,20 @@
  */
 @interface VSTimelineScrollView : NSScrollView<VSTrackHolderViewDelegate>
 
+/** DocumentView of the scrollView */
 @property VSTrackHolderView *trackHolderView;
 
+/** Ratio between the width of the timelineView and the duration of the VSTimeline it's reperesenting */
 @property double pixelTimeRatio;
 
+/** Returns the current markerLocation of the playheadMarker */
 @property (readonly)float playheadMarkerLocation;
+
+/**
+ * The visible widht of the track holder is neccessary to calculation the pixelItemRation
+ * @return The visble width of scvTrackHolder
+ */
+@property (readonly) float visibleTrackViewsHolderWidth;
 
 /** Delegate the class communicates with as defined in VSTimelineScrollViewZoomingDelegate */
 @property id<VSTimelineScrollViewZoomingDelegate> zoomingDelegate;
@@ -99,14 +118,26 @@
 /** Delegate VSTrackHolderView communicates like defined in VSPlayHeadRulerMarkerDelegate*/
 @property id<VSPlayHeadRulerMarkerDelegate> playheadMarkerDelegate;
 
+@property float trackHolderWidth;
+
 /**
  * Moves the marker representing the playHead to the given location in the horizontal rulerView
  * @param location Loction in the horizontal rulverView the playhead marker should be moved to
  */
 -(void) movePlayHeadMarkerToLocation:(CGFloat) location;
 
+/**
+ * Adds a new TrackLabel to the VSTrackLabelsRulerView used as vertical ruler
+ *
+ * @param aTrackLabel VSTrackLabel holding the information about the label to add
+ */
 -(void) addTrackLabel:(VSTrackLabel *)aTrackLabel;
 
+/**
+ * Adds the given view as subView and inits it as track
+ * @param aTrackView NSView to add as new Track
+ */
 -(void) addTrackView:(NSView*) aTrackView;
+
 
 @end
