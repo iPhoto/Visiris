@@ -13,19 +13,43 @@
 @interface VSTimelineRulerView ()
 
 #define RASTER_LINES_PER_PARTITION 10
-
+/** Distance between one timecode label to the other, neccessary to compute how many timecode-partitions have to be updated after the rulerview was scrolled */
 @property double currentRulerPartitionWidth;
+
+/** If currentRulerPartitionWidth is bigger than maximalRulerPartitionWidth the unit is changed */
 @property double maximalRulerPartitionWidth;
+
+/** Widht of one partition in milliseconds */
 @property double currentMillisecondsPerPartition;
+
+/** Space between the lines of the raster. E.g.: currentRulerPartitionWidth / 10 */
 @property double spaceBetweenRasterLines;
+
+/** Line-height of the timecodeLabel*/
 @property int timeCodeLineHeight;
+ 
+/** Paragraph style of the timecode label */
 @property NSMutableParagraphStyle *paragrapheStyle;
+
+/** text attributes of the timecode label */
 @property NSMutableDictionary *textAttributes;
+
+/** Format string for the timecode like definend VSFormattingUtils*/
 @property NSString *timeFormat;
+
+/** Rect of the timecode label */
 @property NSRect timecodeRect;
+
+/** Lenght of the longer Unit stokes in the raster used for neuralgic points like 0, 5, 10 */
 @property float longUnitStrokeLength;
+
+/** lenght of the shorter unit strokes in the raster */
 @property float shortUnitStrokeLength;
+
+/** Vertical-center of the strokes in the raster */
 @property float unitStrokeCenter;
+
+/** storing all paths before drawing */
 @property NSBezierPath *unitPaths;
 @end
 
@@ -34,7 +58,7 @@
 @synthesize pixelTimeRatio = _pixelTimeRatio;
 @synthesize timecodeRect = _timecodeRect;
 
-#pragam mark - Init
+#pragma mark - Init
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -51,8 +75,6 @@
     if(self = [super initWithScrollView:scrollView orientation:orientation]){
         
         [self initTextStyle];
-        
-        [self initRulerStyle];
         
         [self initAppearance];
     }
@@ -199,7 +221,7 @@
     _timecodeRect.size.width = self.currentRulerPartitionWidth;
     self.spaceBetweenRasterLines = self.currentRulerPartitionWidth / RASTER_LINES_PER_PARTITION;
     [self invalidateHashMarks];
-
+    
 }
 
 #pragma mark - Properties

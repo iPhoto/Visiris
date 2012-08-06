@@ -177,11 +177,13 @@
     [self.trackHolderView addSubview:aTrackView];
     [self.trackHolderView.layer addSublayer:aTrackView.layer];
     
-    NSRect tmp = NSUnionRect(self.trackHolderView.frame, aTrackView.frame);
-    [self.trackHolderView setFrameSize:NSMakeSize(self.trackHolderView.frame.size.width, tmp.size.width)];
+    NSRect tmp = [[[self.trackHolderView subviews] objectAtIndex:0] frame];
+    
+    for(NSView *subView in self.trackHolderView.subviews){
+        tmp = NSUnionRect(tmp, subView.frame);
+    }
+    [self.trackHolderView setFrameSize:NSMakeSize(self.trackHolderView.frame.size.width, tmp.size.height)];
 }
-
-
 
 
 #pragma mark - Private Methods
