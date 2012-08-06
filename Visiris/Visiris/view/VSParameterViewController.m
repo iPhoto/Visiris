@@ -138,6 +138,8 @@ static NSString* defaultNib = @"VSParameterView";
  * Shows paramters of the type VSParameterDataTypeString.
  */
 -(void) showStringParameter{
+    
+    
     [self.textValueField setHidden:NO];
     [self.boolValueField setHidden:YES];
     [self.valueSlider setHidden:YES];

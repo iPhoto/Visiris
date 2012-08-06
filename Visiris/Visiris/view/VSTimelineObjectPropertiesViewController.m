@@ -12,6 +12,7 @@
 #import "VSParameterViewController.h"
 #import "VSParameterView.h"
 #import "VSTimelineObjectSource.h"
+#import "VSParameter.h"
 
 #import "VSCoreServices.h"
 
@@ -41,6 +42,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 
 -(id) initWithDefaultNib{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
+        
     }
     
     return self;
@@ -72,11 +74,16 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
  * Inits the scrollView and its documentView
  */
 -(void) initScrollView{
+    [self.parametersHolder setAutoresizesSubviews:NSViewHeightSizable];
+    
     [self.documentView setAutoresizingMask:NSViewWidthSizable];
     [self.scrollView setDocumentView:self.documentView];
     [self.documentView setAutoresizesSubviews:YES];
     [self.parametersHolder setAutoresizingMask:NSViewWidthSizable];
     [self.documentView setFrameSize: [self.scrollView contentSize]];
+    
+    
+    
 }
 
 
@@ -119,7 +126,9 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 /**
  * Inits and displays a ParameterView for every parameter stored in the timelineObject property
  */
--(void) showParameters{    
+-(void) showParameters{
+    
+    self.parameterViewControllers = [[NSMutableArray alloc]init];
     for(VSParameter *parameter in [self.timelineObject visibleParameters]){
         
         NSRect viewFrame = NSMakeRect(0, self.parameterViewControllers.count * parameterViewHeight, self.documentView.frame.size.width, parameterViewHeight);
@@ -142,13 +151,12 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
         }
         
         [self.parameterViewControllers addObject:parameteViewController];
+        
+        DDLogInfo(@"parameter: %@ frame: %@",parameter.name, NSStringFromRect(parameteViewController.view.frame));
     }
-    
-    
-    
     [self.documentView setFrameSize: NSMakeSize(self.documentView.frame.size.width, ([self.parameterViewControllers count] + 1) * parameterViewHeight)];
     
-    [self.parametersHolder setFrameSize:NSMakeSize(self.documentView.frame.size.width, ([self.parameterViewControllers count] + 1) * parameterViewHeight)];
+    
 }
 
 /**
