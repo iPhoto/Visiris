@@ -13,24 +13,25 @@
 #import "VSParameterView.h"
 #import "VSTimelineObjectSource.h"
 #import "VSParameter.h"
+#import "VSTestView.h"
 
 #import "VSCoreServices.h"
 
 @interface VSTimelineObjectPropertiesViewController ()
+
+@property NSView *documentView;
 
 @end
 
 @implementation VSTimelineObjectPropertiesViewController
 
 /** Height of the parameter views */
+@synthesize splitView = _splitView;
+@synthesize parametersHolder = _parametersHolder;
 static int parameterViewHeight = 40;
-
-
-@synthesize documentView = _documentView;
 @synthesize scrollView = _scrollView;
 @synthesize timelineObject = _timelineObject;
 @synthesize parameterViewControllers = _parameterViewControllers;
-@synthesize parametersHolder = _parametersHolder;
 @synthesize nameLabel = _nameLabel;
 @synthesize nameTextField = _nameTextField;
 
@@ -42,7 +43,10 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 
 -(id) initWithDefaultNib{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
-        
+        self.parameterViewControllers = [[NSMutableArray alloc] init];
+        [self initScrollView];
+        //
+        [self.view setAutoresizesSubviews:NO];
     }
     
     return self;
@@ -64,26 +68,29 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 #pragma mark - VSViewController
 
 - (void) awakeFromNib{
-    self.parameterViewControllers = [[NSMutableArray alloc] init];
     [self initScrollView];
-    
-    [self.nameLabel setStringValue:NSLocalizedString(@"Name", @"Label for the name of a VSTimelineObject in its properties view")];
 }
 
 /**
  * Inits the scrollView and its documentView
  */
 -(void) initScrollView{
-    [self.parametersHolder setAutoresizesSubviews:NSViewHeightSizable];
+    self.documentView = (NSView*) self.scrollView.documentView;
+    [self.view setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
+    [self.view setAutoresizesSubviews:YES];
     
-    [self.documentView setAutoresizingMask:NSViewWidthSizable];
-    [self.scrollView setDocumentView:self.documentView];
+    [self.scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
+    [self.scrollView setAutoresizesSubviews:YES];
+    
+    [self.splitView setAutoresizesSubviews:YES];
+    [self.splitView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+    
+    [self.documentView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
     [self.documentView setAutoresizesSubviews:YES];
+    
+    [self.parametersHolder setAutoresizesSubviews:YES];
     [self.parametersHolder setAutoresizingMask:NSViewWidthSizable];
-    [self.documentView setFrameSize: [self.scrollView contentSize]];
-    
-    
-    
+    [self.parametersHolder setFrameSize:NSMakeSize(500, 0)];
 }
 
 
@@ -129,18 +136,21 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 -(void) showParameters{
     
     self.parameterViewControllers = [[NSMutableArray alloc]init];
+    
     for(VSParameter *parameter in [self.timelineObject visibleParameters]){
         
-        NSRect viewFrame = NSMakeRect(0, self.parameterViewControllers.count * parameterViewHeight, self.documentView.frame.size.width, parameterViewHeight);
+        NSRect viewFrame = NSMakeRect(0, self.parameterViewControllers.count * parameterViewHeight, self.parametersHolder.frame.size.width, parameterViewHeight);
         
         
         VSParameterViewController *parameteViewController = [[VSParameterViewController alloc] initWithDefaultNib];
-        [parameteViewController.view setFrame:NSIntegralRect(viewFrame)];
+        [parameteViewController.view setFrame:viewFrame];
         
         parameteViewController.parameter = parameter;
         
         [parameteViewController.view setAutoresizingMask:NSViewWidthSizable];
         [parameteViewController.view setAutoresizesSubviews:YES];
+        
+        
         
         [self.parametersHolder addSubview:parameteViewController.view];
         
@@ -152,11 +162,18 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
         
         [self.parameterViewControllers addObject:parameteViewController];
         
-        DDLogInfo(@"parameter: %@ frame: %@",parameter.name, NSStringFromRect(parameteViewController.view.frame));
     }
-    [self.documentView setFrameSize: NSMakeSize(self.documentView.frame.size.width, ([self.parameterViewControllers count] + 1) * parameterViewHeight)];
+    [self.splitView setFrameSize:NSMakeSize(self.parametersHolder.frame.size.width, ([self.parameterViewControllers count]) * parameterViewHeight)];
+    [self.documentView setFrameSize:self.splitView.frame.size];
     
+    NSMutableArray *constraints = [[NSMutableArray alloc] init];
     
+    for(VSParameterViewController *ctrl in self.parameterViewControllers){
+        [constraints addObjectsFromArray:ctrl.view.constraints];
+    }
+    
+    [self.view.window visualizeConstraints:constraints];
+
 }
 
 /**

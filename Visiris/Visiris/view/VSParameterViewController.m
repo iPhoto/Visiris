@@ -30,7 +30,8 @@ static NSString* defaultNib = @"VSParameterView";
 #pragma mark - Init
 
 -(id) initWithDefaultNib{
-    if(self = [self initWithNibName:defaultNib bundle:nil]){
+    if(self = [self init]){//[self initWithNibName:defaultNib bundle:nil]){
+        [self.view setFrame:NSMakeRect(0, 0, 310, 20)];
     }
     
     return self;

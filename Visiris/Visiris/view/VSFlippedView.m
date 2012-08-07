@@ -22,7 +22,6 @@
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    // Drawing code here.
 }
 
 -(BOOL) isFlipped{

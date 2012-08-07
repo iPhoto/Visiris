@@ -172,7 +172,8 @@ static NSString* defaultNib = @"VSPreviewView";
     }
     
     openGLViewRect.origin.x = (superViewsRect.size.width - openGLViewRect.size.width) / 2.0f;
-    openGLViewRect.origin.y = superViewsRect.size.height - openGLViewRect.size.height - self.openGLViewMarginTop;
+    openGLViewRect.origin.y = (NSMaxY(superViewsRect) - NSMaxY(openGLViewRect)) / 2.0f;
+    
     
     [self.openGLView setFrameProportionally:NSIntegralRect(openGLViewRect)];
     

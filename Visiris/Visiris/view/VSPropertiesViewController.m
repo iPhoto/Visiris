@@ -55,10 +55,14 @@ static NSString* defaultNib = @"VSPropertiesView";
 #pragma mark - NSViewController
 
 -(void) awakeFromNib{
+
+    [self.view setAutoresizingMask:NSViewHeightSizable | NSViewWidthSizable];
+    [self.view setAutoresizesSubviews:YES];
     
     //inits the two properties subviews
     self.projectItemPropertiesViewController = [[VSProjectItemPropertiesViewController alloc] initWithDefaultNib];
     self.timelineObjectPropertiesViewController = [[VSTimelineObjectPropertiesViewController alloc] initWithDefaultNib];
+
     
     [self initObservers];
 }

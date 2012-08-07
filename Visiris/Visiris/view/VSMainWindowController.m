@@ -135,6 +135,8 @@ static NSString* defaultNib = @"MainWindow";
     
     [view setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
     [view setAutoresizesSubviews:YES];
+    
+    
 }
 
 -(void) splitViewWillResizeSubviews:(NSNotification *)notification{

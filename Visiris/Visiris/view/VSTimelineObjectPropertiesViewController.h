@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 @class VSTimelineObject;
+@class VSTestView;
 
 /**
  * Subclass of NSViewController displaying the properties of a VSTimelineObject
@@ -22,7 +23,8 @@
 
 #pragma mark - Init
 /** ScrollView's documentView */
-@property (weak) IBOutlet NSView *documentView;
+
+@property (weak) IBOutlet NSSplitView *splitView;
 
 /** Main scrollView */
 @property (weak) IBOutlet NSScrollView *scrollView;
@@ -31,10 +33,10 @@
 @property (weak) IBOutlet NSView *parametersHolder;
 
 /** label for the name of VSTimelineObject */
-@property (weak) IBOutlet NSTextField *nameLabel;
+@property (strong) NSTextField *nameLabel;
 
 /** Textfield for the name of VSTimelineObject */
-@property (weak) IBOutlet NSTextField *nameTextField;
+@property (strong) NSTextField *nameTextField;
 
 /** Every parameter of VSTimelineObject is displayed in its own view, which's controller is stored in parameterViewControllers*/
 @property (strong) NSMutableArray *parameterViewControllers;
