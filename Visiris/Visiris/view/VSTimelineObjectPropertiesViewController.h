@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "VSTimelineObjectPropertiesView.h"
 
 @class VSTimelineObject;
 @class VSTestView;
@@ -16,7 +17,7 @@
  *
  * Creates a VSParameterViewController for everey parameter of its VSTimelineObject
  */
-@interface VSTimelineObjectPropertiesViewController : NSViewController
+@interface VSTimelineObjectPropertiesViewController : NSViewController<NSSplitViewDelegate, VSFrameResizingDelegate>
 
 /** VSTimelineObject which properties VSTimelineObjectPropertiesViewController is representing */
 @property VSTimelineObject *timelineObject;
@@ -31,6 +32,7 @@
 
 /** Wrapper for the VSParameterViews*/
 @property (weak) IBOutlet NSView *parametersHolder;
+@property (weak) IBOutlet NSView *animationTimelineHolder;
 
 /** label for the name of VSTimelineObject */
 @property (strong) NSTextField *nameLabel;

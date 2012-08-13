@@ -52,7 +52,6 @@ static NSString* defaultNib = @"VSPreviewView";
 -(id) initWithDefaultNibForOpenGLContext:(NSOpenGLContext *)theOpenGLContext{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
         self.openGLContext = theOpenGLContext;
-    
     }
     
     return self;
@@ -110,7 +109,6 @@ static NSString* defaultNib = @"VSPreviewView";
 -(void) initOpenGLView{
     [self.openGLView initOpenGLWithSharedContext:self.openGLContext];
     [self.openGLView setAutoresizingMask:NSViewNotSizable];
-    [self.openGLView removeConstraints:self.openGLView.constraints];
 }
 
 #pragma mark - IBAction

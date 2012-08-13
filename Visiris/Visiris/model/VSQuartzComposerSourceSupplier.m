@@ -39,7 +39,7 @@
             id value = [qcDictionary valueForKey:key];
             
             if([value isKindOfClass:[VSParameter class]]){
-                [qcAttributes setValue:((VSParameter*) value).animation.defaultValue forKey:key];
+                [qcAttributes setValue:((VSParameter*) value).defaultValue forKey:key];
             }
         }
         

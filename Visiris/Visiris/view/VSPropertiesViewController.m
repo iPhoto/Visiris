@@ -59,6 +59,10 @@ static NSString* defaultNib = @"VSPropertiesView";
     [self.view setAutoresizingMask:NSViewHeightSizable | NSViewWidthSizable];
     [self.view setAutoresizesSubviews:YES];
     
+    [self.contentView setAutoresizingMask:NSViewHeightSizable | NSViewWidthSizable];
+    [self.contentView setAutoresizesSubviews:YES];
+    
+    
     //inits the two properties subviews
     self.projectItemPropertiesViewController = [[VSProjectItemPropertiesViewController alloc] initWithDefaultNib];
     self.timelineObjectPropertiesViewController = [[VSTimelineObjectPropertiesViewController alloc] initWithDefaultNib];
@@ -170,7 +174,9 @@ static NSString* defaultNib = @"VSPropertiesView";
             [self.contentView replaceSubview:[self.contentView.subviews objectAtIndex:0] with:subView];
     }
     
-    [subView setFrame:NSIntegralRect([self.contentView frame])];
+    NSRect frame = self.contentView.frame;
+
+    [subView setFrame:frame];
     
     [subView setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
     [subView setAutoresizesSubviews:YES];
