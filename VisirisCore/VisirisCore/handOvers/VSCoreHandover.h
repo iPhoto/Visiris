@@ -33,5 +33,5 @@
  * @param theId ID of the Timelineobject
  */
 -(id) initWithAttributes:(NSDictionary *) theAttributes forTimestamp:(double) theTimestamp forId:(NSInteger) theId;
-
+ 
 @end

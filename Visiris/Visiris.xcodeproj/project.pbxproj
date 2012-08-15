@@ -422,7 +422,6 @@
 		5B35BF061577A49C009911EC = {
 			isa = PBXGroup;
 			children = (
-				5B12792B15C13CAD0026AAFD /* QuickLook.framework */,
 				5B35C0201577A58D009911EC /* External */,
 				5B35C0471577A58D009911EC /* Resources */,
 				5B35BF1B1577A49C009911EC /* Visiris */,
@@ -442,6 +441,7 @@
 		5B35BF141577A49C009911EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5B12792B15C13CAD0026AAFD /* QuickLook.framework */,
 				2799F8E81599C96D00008489 /* Quartz.framework */,
 				2795881915906D7B00E24B57 /* AVFoundation.framework */,
 				2795881615906D5000E24B57 /* CoreMedia.framework */,
