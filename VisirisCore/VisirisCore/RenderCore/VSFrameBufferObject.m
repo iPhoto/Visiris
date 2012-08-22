@@ -10,14 +10,19 @@
 #import <OpenGL/glu.h>
 
 @interface VSFrameBufferObject()
+
+/** The actual Framebuffer Object */
 @property (assign) GLuint   buffer;
 
 @end
+
 
 @implementation VSFrameBufferObject
 @synthesize buffer = _buffer;
 @synthesize size = _size;
 @synthesize texture = _texture;
+
+#pragma mark - Init
 
 -(id)init{    
     return [self initWithSize:NSMakeSize(640, 480)];
@@ -50,6 +55,8 @@
     }
     return self;
 }
+
+#pragma mark - Methods
 
 -(void) bind{
     glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, self.buffer);

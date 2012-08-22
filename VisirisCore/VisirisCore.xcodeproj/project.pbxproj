@@ -109,13 +109,13 @@
 		276D436515B7FC8200389C86 /* VSAudioCoreHandover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAudioCoreHandover.m; sourceTree = "<group>"; };
 		27973E8F15B41C3A0051C16F /* VSLayerShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSLayerShader.h; sourceTree = "<group>"; };
 		27973E9015B41C3B0051C16F /* VSLayerShader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLayerShader.m; sourceTree = "<group>"; };
-		27973E9415B43CA00051C16F /* transform.fs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = transform.fs.glsl; sourceTree = "<group>"; };
-		27973E9515B43CA00051C16F /* transform.vs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = transform.vs.glsl; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
+		27973E9415B43CA00051C16F /* transform.fs.glsl */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; fileEncoding = 4; path = transform.fs.glsl; sourceTree = "<group>"; };
+		27973E9515B43CA00051C16F /* transform.vs.glsl */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; fileEncoding = 4; path = transform.vs.glsl; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
 		27973E9815B441D20051C16F /* VSTransformShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTransformShader.h; sourceTree = "<group>"; };
 		27973E9915B441D20051C16F /* VSTransformShader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTransformShader.m; sourceTree = "<group>"; };
 		279820DF15B85A4B00E8AA8E /* VSPlaybackMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VSPlaybackMode.h; path = CoreServices/VSPlaybackMode.h; sourceTree = "<group>"; };
-		27A135A5157608FD00883B96 /* layering.fs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = layering.fs.glsl; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
-		27A135A6157608FD00883B96 /* layering.vs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = layering.vs.glsl; sourceTree = "<group>"; };
+		27A135A5157608FD00883B96 /* layering.fs.glsl */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; fileEncoding = 4; path = layering.fs.glsl; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
+		27A135A6157608FD00883B96 /* layering.vs.glsl */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; fileEncoding = 4; path = layering.vs.glsl; sourceTree = "<group>"; };
 		27A6CA0315B73AD7004C6DFB /* VSAudioCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAudioCore.h; sourceTree = "<group>"; };
 		27A6CA0415B73AD7004C6DFB /* VSAudioCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAudioCore.m; sourceTree = "<group>"; };
 		27A6CA0B15B746EB004C6DFB /* VSAudioPlayerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAudioPlayerManager.h; sourceTree = "<group>"; };

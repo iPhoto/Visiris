@@ -12,12 +12,21 @@
 #import "VSPBufferRenderer.h"
 
 @interface VSQCRenderer()
+
+/** The class given from the Quartzframework for rendering patches */
 @property (strong) QCRenderer           *qcRenderer;
+
+/** OpenGLcontext */
 @property (strong) NSOpenGLContext      *context;
+
+/** Pixelformat for the OpenglContext */
 @property (strong) NSOpenGLPixelFormat  *pixelFormat;
+
+/** Needed for offscreen rendering */
 @property (strong) VSPBufferRenderer    *pBufferRenderer;
 
 @end
+
 
 @implementation VSQCRenderer
 @synthesize qcRenderer          = _qcRenderer;
@@ -27,6 +36,8 @@
 @synthesize trackId             = _trackId;
 @synthesize pBufferRenderer     = _pBufferRenderer;
 @synthesize size                = _size;
+
+#pragma Mark - Init
 
 - (id)initWithPath:(NSString *)path withSize:(NSSize)size withContext:(NSOpenGLContext *)context withPixelformat:(NSOpenGLPixelFormat *)format withTrackID:(NSInteger)trackid{
     if (self = [super init]) {
@@ -41,14 +52,16 @@
     return self;
 }
 
+#pragma mark - Methods
+
 - (GLuint)renderAtTme:(double)time{
-        
+    
     time /= 1000.0;
     [[self context] makeCurrentContext];
-
+    
     glClearColor(0.25, 0.25, 0.25, 0.25);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    
     if(self.pBufferRenderer) {
 		[self.pBufferRenderer updateTextureForTime:time];
 	}
@@ -59,12 +72,11 @@
     }
     
     [self.context flushBuffer];
-
+    
     return [self.pBufferRenderer textureName];
 }
 
 - (GLuint) texture{
-    //return self.fbo.texture;
     return [_pBufferRenderer textureName];
 }
 

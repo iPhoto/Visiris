@@ -22,23 +22,43 @@
 
 @interface VSRenderCore()
 
+/** Defines the coordinate for the plane */
 @property (assign) GLuint                           vertex_buffer;
+
+/** Defines the ordering of the vertices of the vertex buffer */
 @property (assign) GLuint                           element_buffer;
+
+/** The main OpenGLConext */
 @property (strong) NSOpenGLContext                  *openGLContext;
-@property (strong) NSOpenGLPixelFormat              *pixelFormat;        
+
+/** The Pixelformat is needed for the GLContext */
+@property (strong) NSOpenGLPixelFormat              *pixelFormat;
+
+/** Is needed for PingPong rendering  */
 @property (strong) VSFrameBufferObject              *frameBufferObjectOne;
+
+/** Is needed for PingPong rendering  */
 @property (strong) VSFrameBufferObject              *frameBufferObjectTwo;
+
+/** References the current FBO */
 @property (weak) VSFrameBufferObject                *frameBufferObjectCurrent;
+
+/** References the old FBO */
 @property (weak) VSFrameBufferObject                *frameBufferObjectOld;
+
+/** The LayerShader is needed when 2 or more objects have to be mixed to one texture */
 @property (strong) VSLayerShader                    *layerShader;
+
+/** Texture Manager stores the VSTextures for Images and Videos */
 @property (strong) VSTextureManager                 *textureManager;
-@property (assign) GLuint                           outPutTexture;
+
+/** Stores the QuartzRenderer */
 @property (strong) VSQCManager                      *qcpManager;
+
+/** Transform every Texture */
 @property (strong) VSTransformTextureManager        *transformTextureManager;
 
 @end
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////    
 
 
 @implementation VSRenderCore
@@ -53,9 +73,10 @@
 @synthesize frameBufferObjectOld        = _frameBufferObjectOld;
 @synthesize layerShader                 = _layerShader;
 @synthesize textureManager              = _textureManager;
-@synthesize outPutTexture               = _outPutTexture;
 @synthesize qcpManager                  = _qcpManager;
 @synthesize transformTextureManager     = _transformTextureManager;
+
+#pragma mark- Init
 
 -(id)init{
     self = [super init];
@@ -83,9 +104,6 @@
         GLint swapInt = 1;
 		[ _openGLContext setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; 
 		
-        //glEnable(GL_BLEND);
-        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
         
         if([self make_resources] == 0){
             NSLog(@"Error: Making Resources Failed!!!!!");
@@ -106,10 +124,34 @@
     return self;
 }
 
+- (NSInteger)make_resources{
+    GLfloat g_vertex_buffer_data[] = {
+        -1.0f, -1.0f,
+        1.0f, -1.0f,
+        -1.0f,  1.0f,
+        1.0f,  1.0f
+    };
+    
+    GLushort g_element_buffer_data[] = { 0, 1, 2, 3 };
+    
+    self.vertex_buffer = [self make_buffer:GL_ARRAY_BUFFER withData:g_vertex_buffer_data withSize:sizeof(g_vertex_buffer_data)];
+    self.element_buffer = [self make_buffer:GL_ELEMENT_ARRAY_BUFFER withData:g_element_buffer_data withSize:sizeof(g_element_buffer_data)];
+    
+    return 1;
+}
+
+- (GLuint) make_buffer:(GLenum) target withData:(const void *)buffer_data withSize:(GLsizei)buffer_size{
+    GLuint buffer;
+    glGenBuffers(1, &buffer);
+    glBindBuffer(target, buffer);
+    glBufferData(target, buffer_size, buffer_data, GL_STATIC_DRAW);
+    return buffer;
+}
+
+#pragma mark- Methods
+
 -(void)renderFrameOfCoreHandovers:(NSArray *)theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double)theTimestamp{
     
-   // NSLog(@"%@",NSStringFromSize(theFrameSize) );    
-
     NSMutableArray *mutableCoreHandovers = [NSMutableArray arrayWithArray:theCoreHandovers];
     
 	[[self openGLContext] makeCurrentContext];
@@ -118,26 +160,27 @@
     NSMutableArray *textures = [self createTextures:mutableCoreHandovers atTime:theTimestamp forOutputSize:theFrameSize];
     
     CGLLockContext([[self openGLContext] CGLContextObj]);
-
+    
+    GLuint outPutTexture;
+    
     switch (textures.count) {
         case 0:
         {
-            //TODO
-            //NSLog(@"ERROR: you shouldn't be here - because there is no object to render");
-            self.outPutTexture = 0;
+            NSLog(@"ERROR: you shouldn't be here - because there is no object to render");
+            outPutTexture = 0;
             break;
         }
         case 1:
         {
             NSNumber *texture = (NSNumber *)[textures objectAtIndex:0];
-            self.outPutTexture = texture.intValue;
+            outPutTexture = texture.intValue;
             [[self openGLContext] flushBuffer];
             break;
         }
         case 2:
         {
             [self combineTheFirstTwoObjects:textures];
-            self.outPutTexture = self.frameBufferObjectCurrent.texture;
+            outPutTexture = self.frameBufferObjectCurrent.texture;
             [[self openGLContext] flushBuffer];
             break;
         }
@@ -151,22 +194,57 @@
                 [self combineTexture:self.frameBufferObjectOld.texture with:texture.intValue];
             }
              
-            self.outPutTexture = self.frameBufferObjectCurrent.texture;
+            outPutTexture = self.frameBufferObjectCurrent.texture;
             break;
         }
     }
     
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
-
+    
     if (self.delegate) {
         if ([self.delegate respondsToSelector:@selector(renderCore:didFinishRenderingTexture:forTimestamp:)]) {
-            [self.delegate renderCore:self didFinishRenderingTexture:self.outPutTexture forTimestamp:theTimestamp];
+            [self.delegate renderCore:self didFinishRenderingTexture:outPutTexture forTimestamp:theTimestamp];
         }
     }
 }
 
+- (GLuint)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*)colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path{
+    
+    GLuint texture;
+    
+    switch (type) {
+        case VSFileKindImage:
+            texture = [self.textureManager createTextureWithSize:textureSize trackId:trackID];
+            [self.transformTextureManager createFBOWithSize:size trackId:trackID];
+            break;
+        case VSFileKindVideo:
+            texture = [self.textureManager createTextureWithSize:textureSize trackId:trackID];
+            [self.transformTextureManager createFBOWithSize:size trackId:trackID];
+            break;
+        case VSFileKindQuartzComposerPatch:
+            texture = [self.qcpManager createQCRendererWithSize:size withTrackId:trackID withPath:path withContext:self.openGLContext withFormat:self.pixelFormat];
+            [self.transformTextureManager createFBOWithSize:size trackId:trackID];
+            break;
+        case VSFileKindAudio:
+            NSLog(@"Audio not implemented yet");
+            break;
+            
+        default:
+            break;
+    }
+    return texture;
+}
 
+- (NSOpenGLContext *)openglContext{
+    return self.openGLContext;
+}
 
+#pragma mark - Private Methods
+
+/**
+ * Reads the first two textures of an Array and calls the combineTexture Method.
+ * @param textures NSArray with the stored textures
+ */
 - (void)combineTheFirstTwoObjects:(NSArray *) textures{
     NSNumber *texture0 = (NSNumber *)[textures objectAtIndex:0];
     NSNumber *texture1 = (NSNumber *)[textures objectAtIndex:1];
@@ -174,13 +252,18 @@
     [self combineTexture:texture0.intValue with:texture1.intValue];
 }
 
-
+/**
+ * Combines two textures using the Layeringshader. The created texture gets offlinerendered using the current active FBO.
+ * @param bottomtexture BaseTexture
+ * @param upperTexture BlendTexture
+ */
 - (void)combineTexture:(GLuint)bottomtexture with:(GLuint)upperTexture{	
     [self.frameBufferObjectCurrent bind];
     
     glViewport(0, 0, self.frameBufferObjectCurrent.size.width,self.frameBufferObjectCurrent.size.height);
    
     glClear(GL_COLOR_BUFFER_BIT);
+    glColor3f(0.0f, 0.0f, 0.0f);
         
     glUseProgram(self.layerShader.program);
     glUniform1f(self.layerShader.uniformFadefactor, 0.5f);
@@ -216,57 +299,9 @@
     [[self openGLContext] flushBuffer];
 }
 
-- (NSInteger)make_resources{
-    GLfloat g_vertex_buffer_data[] = { 
-        -1.0f, -1.0f,
-        1.0f, -1.0f,
-        -1.0f,  1.0f,
-        1.0f,  1.0f
-    };
-    
-    GLushort g_element_buffer_data[] = { 0, 1, 2, 3 };
-
-    self.vertex_buffer = [self make_buffer:GL_ARRAY_BUFFER withData:g_vertex_buffer_data withSize:sizeof(g_vertex_buffer_data)];
-    self.element_buffer = [self make_buffer:GL_ELEMENT_ARRAY_BUFFER withData:g_element_buffer_data withSize:sizeof(g_element_buffer_data)];
-
-    return 1;
-}
-
-- (GLuint) make_buffer:(GLenum) target withData:(const void *)buffer_data withSize:(GLsizei)buffer_size{
-    GLuint buffer;
-    glGenBuffers(1, &buffer);
-    glBindBuffer(target, buffer);
-    glBufferData(target, buffer_size, buffer_data, GL_STATIC_DRAW);
-    return buffer;
-}
-
-- (GLuint)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*)colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path{
-    
-    GLuint texture;
-    
-    switch (type) {
-        case VSFileKindImage:
-            texture = [self.textureManager createTextureWithSize:textureSize trackId:trackID];
-            [self.transformTextureManager createFBOWithSize:size trackId:trackID];
-            break;
-        case VSFileKindVideo:
-            texture = [self.textureManager createTextureWithSize:textureSize trackId:trackID];
-            [self.transformTextureManager createFBOWithSize:size trackId:trackID];
-            break;
-        case VSFileKindQuartzComposerPatch:
-            texture = [self.qcpManager createQCRendererWithSize:size withTrackId:trackID withPath:path withContext:self.openGLContext withFormat:self.pixelFormat];
-            [self.transformTextureManager createFBOWithSize:size trackId:trackID];
-            break;
-        case VSFileKindAudio:
-            NSLog(@"Audio not implemented yet");
-            break;
-            
-        default:
-            break;
-    }
-    return texture;
-}
-
+/**
+ * This Method simply change the current FBO to old and vice versa. Is needed for Ping Pong Rendering.
+ */
 - (void)swapFBO{
     if (self.frameBufferObjectCurrent == self.frameBufferObjectOne) {
         self.frameBufferObjectCurrent = self.frameBufferObjectTwo;
@@ -278,11 +313,21 @@
     }
 }
 
+/**
+ * Takes the Handoverarry and creates another Array with only updated OpenGLTextures. 
+ * @param handovers Array containing the information
+ * @param time Current Timestamp - is needed for Quartzcomposer.
+ * @param outputSize NSSize of the current Resolution of the final OutputImage
+ * @return NSMutableArraz with only GLuint Textures in it.
+ */
 - (NSMutableArray *)createTextures:(NSArray *)handovers atTime:(double)time forOutputSize:(NSSize)outputSize{
+    
     NSMutableArray *textures = [[NSMutableArray alloc] init];
     
+    //cycles through handovers
     for(VSCoreHandover *coreHandover in handovers){
         
+        //Case for Frames (Images and Videos)
         if ([coreHandover isKindOfClass:[VSFrameCoreHandover class]]){         
             
             VSFrameCoreHandover *handOver = (VSFrameCoreHandover *)coreHandover;
@@ -298,6 +343,7 @@
                                                                                              isQCPatch:NO]]];
             
         }
+        //Case for Quartzstuff
         else if ([coreHandover isKindOfClass:[VSQuartzComposerHandover class]]) {
             
             VSQuartzComposerHandover *handover = (VSQuartzComposerHandover *)coreHandover;
@@ -315,13 +361,11 @@
                                                                                        withTextureSize:qcRenderer.size 
                                                                                          forOutputSize:outputSize
                                                                                              isQCPatch:YES]]];
+            
         }
+        else (NSLog(@"WTF happend?!?"));
     }
     return textures;
-}
-
-- (NSOpenGLContext *)openglContext{
-    return self.openGLContext;
 }
 
 @end

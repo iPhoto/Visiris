@@ -33,13 +33,15 @@
 
 @end
 
+
 /**
  * Creates the final Texture
- * 
+ *
  * In the Rendercore Textures are created with the Info of the Handovers. These Textures are merged correctly together to one final Texture which is returned at the and of the renderprocess.
  */
 @interface VSRenderCore : NSObject
 
+/** Delegate for Communicating with the Receptionist */
 @property (weak) id<VSRenderCoreDelegate>           delegate;
 
 /**

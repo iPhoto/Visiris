@@ -68,7 +68,18 @@
     
     glGetShaderiv(shader, GL_COMPILE_STATUS, &shader_ok);
     if (!shader_ok) {
-        NSLog(@"something went wront");
+        NSLog(@"Shader Compilation Failed");
+        
+        GLint logLength;
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLength);
+        if (logLength > 0)
+        {
+            GLchar *log = (GLchar *)malloc(logLength);
+            glGetShaderInfoLog(shader, logLength, &logLength, log);
+            NSLog(@"Shader compile log:\n%s", log);
+            free(log);
+        }
+        
         glDeleteShader(shader);
         return 0;
     }

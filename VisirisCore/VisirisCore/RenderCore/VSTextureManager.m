@@ -11,6 +11,8 @@
 #import <OpenGL/glu.h>
 
 @interface VSTextureManager()
+    
+/** The Dictionary contains all the information */
 @property (strong) NSMutableDictionary   *texturesForId;
 
 @end
@@ -18,12 +20,16 @@
 @implementation VSTextureManager
 @synthesize texturesForId = _textureArray;
 
+#pragma Mark - Init
+
 -(id)init{
     if (self = [super init]) {
         self.texturesForId = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
+
+#pragma mark - Methods
 
 - (GLuint)createTextureWithSize:(NSSize) size trackId:(NSInteger) trackId{
     for(VSTexture *vstexture in [_textureArray allValues])
