@@ -11,6 +11,7 @@
 
 @interface VSAudioPlayer()
 
+/** The AudioPlayer is provided by the AVFoundation framework and is for playing audio */
 @property (strong) AVAudioPlayer *audioPlayer;
 
 @end
@@ -21,6 +22,9 @@
 @synthesize filePath    = _filePath;
 @synthesize audioPlayer = _audioPlayer;
 
+
+#pragma Mark - Init
+
 - (id)initWithFilePath:(NSString *)path{
     if (self = [super init]) {
 
@@ -30,29 +34,24 @@
             NSLog(@"ERROR im Audioerstellen");
             [NSApp presentError:error];
         }
-        else {
+        else 
             [self.audioPlayer prepareToPlay];
-           // [self.audioPlayer play];
-           // [self.audioPlayer pause];
-        }
-        
     }
     return self;
 }
+
+
+#pragma mark - Methods
 
 - (void)playAtTime:(double)time{
     if ([self.audioPlayer isPlaying] == NO) {
         [self.audioPlayer play];
     }
     
+    //TODO 0.05 is kind of magic
     if (abs((time - [self.audioPlayer currentTime])) > 0.05) {
         [self.audioPlayer setCurrentTime:time];
     }
-    
-//    NSLog(@"TimeStamp: %f",time);
-//    NSLog(@"PlayerTime: %f",[self.audioPlayer currentTime]);
-//    NSLog(@"audiolength: %f",[self.audioPlayer duration]);
-//    NSLog(@"difference: %f",time/1000.0 - [self.audioPlayer currentTime]);
 }
 
 - (void)stopPlaying{
@@ -64,6 +63,5 @@
         [self.audioPlayer setVolume:volume];
     }
 }
-
 
 @end

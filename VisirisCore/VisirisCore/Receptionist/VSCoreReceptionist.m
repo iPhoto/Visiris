@@ -104,7 +104,7 @@
     }
 }
 
-- (NSOpenGLContext *) openGLContext{
+- (NSOpenGLContext *)openGLContext{
     return _renderCore.openglContext;
 }
 

@@ -14,6 +14,7 @@
 
 @interface VSAudioCore()
 
+/** The  */
 @property (strong) VSAudioPlayerManager     *audioPlayerManager;
 
 @end
@@ -22,12 +23,18 @@
 @implementation VSAudioCore
 @synthesize audioPlayerManager = _audioPlayerManager;
 
+
+#pragma Mark - Init
+
 - (id)init{
     if (self = [super init]) {
         self.audioPlayerManager = [[VSAudioPlayerManager alloc] init];
     }
     return self;
 }
+
+
+#pragma mark - Methods
 
 - (void)createAudioPlayerForProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID atTrack:(NSInteger)trackID andFilePath:(NSString *)path{
     [self.audioPlayerManager createAudioPlayerForProjectItemID:projectItemID withObjectItemID:objectItemID atTrack:trackID andFilePath:path];

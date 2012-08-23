@@ -8,13 +8,37 @@
 
 #import <Foundation/Foundation.h>
 
+
+/**
+ * Basic Class for handling Audiofiles
+ */
 @interface VSAudioPlayer : NSObject
 
+/** Absolute filepath on the harddrive of the file */
 @property (readonly, strong) NSString       *filePath;
 
+
+/**
+ * Basic Initialization using a Filepath
+ * @param path Absolute filepath on the harddrive of the file
+ */
 - (id)initWithFilePath:(NSString *)path;
+
+/**
+ * Plays the Audiofile at a specific time
+ * @param time Actual Timestamp
+ */
 - (void)playAtTime:(double)time;
+
+/**
+ * Stops the Playback
+ */
 - (void)stopPlaying;
+
+/**
+ * Sets the volume of the Audio
+ * @param volume Range from 0 - 1
+ */
 - (void)setVolume:(float)volume;
 
 @end

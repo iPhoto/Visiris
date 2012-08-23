@@ -16,6 +16,9 @@
 @synthesize attributePosition = _attributePosition;
 @synthesize uniformFadefactor = _uniformFadefactor;
 
+
+#pragma Mark - Init
+
 - (id)init{
     if (self = [super initWithName:@"layering"]) {
         self.uniformFadefactor = glGetUniformLocation(self.program, "fade_factor");
@@ -23,7 +26,6 @@
         self.uniformTexture2 = glGetUniformLocation(self.program, "textures[1]");
         
         self.attributePosition = glGetAttribLocation(self.program, "position");
-
     }
     return self;
 }

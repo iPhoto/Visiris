@@ -124,30 +124,6 @@
     return self;
 }
 
-- (NSInteger)make_resources{
-    GLfloat g_vertex_buffer_data[] = {
-        -1.0f, -1.0f,
-        1.0f, -1.0f,
-        -1.0f,  1.0f,
-        1.0f,  1.0f
-    };
-    
-    GLushort g_element_buffer_data[] = { 0, 1, 2, 3 };
-    
-    self.vertex_buffer = [self make_buffer:GL_ARRAY_BUFFER withData:g_vertex_buffer_data withSize:sizeof(g_vertex_buffer_data)];
-    self.element_buffer = [self make_buffer:GL_ELEMENT_ARRAY_BUFFER withData:g_element_buffer_data withSize:sizeof(g_element_buffer_data)];
-    
-    return 1;
-}
-
-- (GLuint) make_buffer:(GLenum) target withData:(const void *)buffer_data withSize:(GLsizei)buffer_size{
-    GLuint buffer;
-    glGenBuffers(1, &buffer);
-    glBindBuffer(target, buffer);
-    glBufferData(target, buffer_size, buffer_data, GL_STATIC_DRAW);
-    return buffer;
-}
-
 #pragma mark- Methods
 
 -(void)renderFrameOfCoreHandovers:(NSArray *)theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double)theTimestamp{
@@ -366,6 +342,42 @@
         else (NSLog(@"WTF happend?!?"));
     }
     return textures;
+}
+
+
+/**
+ * Basic Buffercreation for the plane
+ * @return 1 if everything succeded
+ */
+- (NSInteger)make_resources{
+    GLfloat g_vertex_buffer_data[] = {
+        -1.0f, -1.0f,
+        1.0f, -1.0f,
+        -1.0f,  1.0f,
+        1.0f,  1.0f
+    };
+    
+    GLushort g_element_buffer_data[] = { 0, 1, 2, 3 };
+    
+    self.vertex_buffer = [self make_buffer:GL_ARRAY_BUFFER withData:g_vertex_buffer_data withSize:sizeof(g_vertex_buffer_data)];
+    self.element_buffer = [self make_buffer:GL_ELEMENT_ARRAY_BUFFER withData:g_element_buffer_data withSize:sizeof(g_element_buffer_data)];
+    
+    return 1;
+}
+
+/**
+ * Helper Method for creating a buffer
+ * @param target Type of Buffer
+ * @param buffer_data The Plain Buffer Data
+ * @param buffer_size Size of the Buffer. Can be found out using sizeof()
+ * @return ID of the Buffer in the current active Context
+ */
+- (GLuint) make_buffer:(GLenum)target withData:(const void *)buffer_data withSize:(GLsizei)buffer_size{
+    GLuint buffer;
+    glGenBuffers(1, &buffer);
+    glBindBuffer(target, buffer);
+    glBufferData(target, buffer_size, buffer_data, GL_STATIC_DRAW);
+    return buffer;
 }
 
 @end

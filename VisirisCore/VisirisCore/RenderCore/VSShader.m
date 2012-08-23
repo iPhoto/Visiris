@@ -15,6 +15,9 @@
 @synthesize fragmentShader = _fragmentShader;
 @synthesize vertexShader = _vertexShader;
 
+
+#pragma Mark - Init
+
 -(id)initWithName:(NSString *)name {
     if (self = [super init]) {
         if ([self make_resources:name] == 0){
@@ -23,6 +26,9 @@
     }
     return self;
 }
+
+
+#pragma mark - Private Methods
 
 - (NSInteger)make_resources:(NSString *)name{
     //compile shader

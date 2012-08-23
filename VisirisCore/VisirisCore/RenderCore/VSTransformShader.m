@@ -28,6 +28,8 @@
 @synthesize uniformIsQCPatch            = _uniformIsQCPatch;
 
 
+#pragma Mark - Init
+
 - (id)init{
     if (self = [super initWithName:@"transform"]) {
         self.attributePosition          = glGetAttribLocation(self.program, "position");

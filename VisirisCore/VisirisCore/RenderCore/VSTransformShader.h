@@ -8,10 +8,18 @@
 
 #import "VSShader.h"
 
+/**
+ * Specific Shader. Uses the transform and the transform Shader. 
+ */
 @interface VSTransformShader : VSShader
 
+
+/** Position of the Vertices */
 @property (assign) GLuint   attributePosition;
+
+/** The InputTexture */
 @property (assign) GLuint   uniformTexture;
+
 @property (assign) GLuint   uniformObjectWidth;
 @property (assign) GLuint   uniformObjectHeight;
 @property (assign) GLuint   uniformWindowWidth;
