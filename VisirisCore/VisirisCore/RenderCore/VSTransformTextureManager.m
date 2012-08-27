@@ -162,4 +162,8 @@
     return buffer;
 }
 
+- (VSFrameBufferObject *)getFboForTrackId:(NSInteger) track{
+    return [self.fboForTrack objectForKey:[NSNumber numberWithInteger:track]];
+}
+
 @end
