@@ -193,7 +193,7 @@ vec4 BlendLuminosity(vec4 base, vec4 blend)
 	vec3 baseHSL = RGBToHSL(base.rgb);
 	vec3 temp = HSLToRGB(vec3(baseHSL.r, baseHSL.g, RGBToHSL(blend.rgb).b));
     return vec4(temp.r,temp.g,temp.b,(base.a+blend.a)/2.0);
-}
+} 
 
 ////////////////////////////
 
