@@ -162,7 +162,7 @@ vec3 ContrastSaturationBrightness(vec3 color, float brt, float sat, float con)
 #define BlendGlow(base, blend)          BlendReflect(blend, base)
 #define BlendPhoenix(base, blend) 		(min(base, blend) - max(base, blend) + vec4(1.0))
 #define BlendOpacity(base, blend, F, O)	(F(base, blend) * O + blend * (1.0 - O))
-
+ 
 
 vec4 BlendHue(vec4 base, vec4 blend)
 {
