@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class VSTrackHolderView;
+@class VSTimelineContentView;
 
 /**
  * Protocoll defining how the VSTrackHolderView talks to its deleage about the NSRulerMarker representing the playhead.
@@ -21,14 +21,14 @@
  * @param aView NSView the playhead marker is placed in
  * @return If YES the playhead marker starts moving, otherwise not
  */
--(BOOL) shouldMoveMarker:(NSRulerMarker*) marker inTrackHolderView:(VSTrackHolderView*) trackHolderView;
+-(BOOL) shouldMoveMarker:(NSRulerMarker*) marker inTrackHolderView:(VSTimelineContentView*) trackHolderView;
 
 /**
  * Called after the playheadMakrer was moved
  * @param playheadMarker The maker that was moved
  * @param aView NSView the playhead marker is placed in
  */
--(void) didMoveRulerMarker:(NSRulerMarker*) marker inTrackHolderView:(VSTrackHolderView*) trackHolderView;
+-(void) didMoveRulerMarker:(NSRulerMarker*) marker inTrackHolderView:(VSTimelineContentView*) trackHolderView;
 
 /**
  * Called before the playheadMakrer is moved
@@ -37,7 +37,7 @@
  * @param location Location the playhead marker wants be moved to
  * @return Location the playhead marker will be moved too
  */
--(CGFloat) willMoveRulerMarker:(NSRulerMarker*) marker inTrackHolderView:(VSTrackHolderView*) trackHolderView toLocation:(CGFloat) location;
+-(CGFloat) willMoveRulerMarker:(NSRulerMarker*) marker inTrackHolderView:(VSTimelineContentView*) trackHolderView toLocation:(CGFloat) location;
 
 /**
  * Called before the playheadMakrer jumps to the given location moved
@@ -57,7 +57,7 @@
 /**
  * Subclass of NSView holding views representing the tracks of the timeline. Besides responsible for the playhead marker and the horizontal rulerview
  */
-@interface VSTrackHolderView : NSView
+@interface VSTimelineContentView : NSView
 
 /** Delegate VSTrackHolderView communicates like defined in VSPlayHeadRulerMarkerDelegate*/
 @property id<VSTrackHolderViewDelegate> trackHolderViewDelegate;

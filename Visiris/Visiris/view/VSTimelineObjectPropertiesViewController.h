@@ -40,13 +40,11 @@
 /** Textfield for the name of VSTimelineObject */
 @property (strong) NSTextField *nameTextField;
 
-/** Every parameter of VSTimelineObject is displayed in its own view, which's controller is stored in parameterViewControllers*/
-@property (strong) NSMutableArray *parameterViewControllers;
-
 /**
  * Inits the controller with the .nib-File stored in defaultNib (VSBrowserView)
  */
 -(id) initWithDefaultNib;
+
 - (IBAction)nameTextFieldHasChanged:(NSTextField *)sender;
 
 @end

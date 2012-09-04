@@ -238,5 +238,8 @@
     return _pixelTimeRatio;
 }
 
+-(CGFloat) ruleThickness{
+    return [super ruleThickness] + self.reservedThicknessForMarkers;
+}
 
 @end

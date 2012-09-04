@@ -9,7 +9,7 @@
 #import "VSMainWindowController.h"
 
 #import "VSBrowserViewController.h"
-#import "VSTimelineViewController.h"
+#import "VSMainTimelineViewController.h"
 #import "VSTimeline.h"
 #import "VSPreProcessor.h"
 #import "VSPostProcessor.h"
@@ -26,7 +26,7 @@
 @property (strong) VSBrowserViewController *browserViewController;
 
 /** Responsible for the timelineView which is shown at the bottom of the window. */
-@property (strong) VSTimelineViewController *timelineViewController;
+@property (strong) VSMainTimelineViewController *timelineViewController;
 
 /** Responsible for the browser view which is shown at the top center of the window. */
 @property (strong) VSPropertiesViewController *propertiesViewController;
@@ -94,7 +94,7 @@ static NSString* defaultNib = @"MainWindow";
  */
 -(void) initMainWindowAccordingToDocument{
     
-    self.timelineViewController = [[VSTimelineViewController alloc] initWithDefaultNibAccordingForTimeline:((VSDocument*) self.document).timeline];
+    self.timelineViewController = [[VSMainTimelineViewController alloc] initWithDefaultNibAccordingForTimeline:((VSDocument*) self.document).timeline];
     
     [self loadView:timelineViewController.view intoSplitView:self.mainSplitView replacingViewAtPosition:1];
     

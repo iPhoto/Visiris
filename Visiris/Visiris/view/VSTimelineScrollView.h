@@ -10,16 +10,17 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "VSTrackHolderView.h"
+#import "VSTimelineContentView.h"
 
 @class VSTimelineScrollView;
-
 
 
 /**
  * Protocoll defining how the VSTrackHolderView talks to its deleage about the NSRulerMarker representing the playhead.
  */
 @protocol VSPlayHeadRulerMarkerDelegate <NSObject>
+
+@optional
 
 /**
  * Called when the playhead marker started to be dragged around
@@ -89,16 +90,13 @@
 @end
 
 
-@class VSTrackLabel;
-
-
 /**
  * Subclass of NSScrollView. Used for scrollView in the timelineView to handle the interaction with the scrool wheel differently
  */
 @interface VSTimelineScrollView : NSScrollView<VSTrackHolderViewDelegate>
 
 /** DocumentView of the scrollView */
-@property VSTrackHolderView *trackHolderView;
+@property VSTimelineContentView *trackHolderView;
 
 /** Ratio between the width of the timelineView and the duration of the VSTimeline it's reperesenting */
 @property double pixelTimeRatio;
@@ -120,24 +118,19 @@
 
 @property float trackHolderWidth;
 
+@property (readonly) CGFloat timelecodeRulerThickness;
+
 /**
  * Moves the marker representing the playHead to the given location in the horizontal rulerView
  * @param location Loction in the horizontal rulverView the playhead marker should be moved to
  */
 -(void) movePlayHeadMarkerToLocation:(CGFloat) location;
 
-/**
- * Adds a new TrackLabel to the VSTrackLabelsRulerView used as vertical ruler
- *
- * @param aTrackLabel VSTrackLabel holding the information about the label to add
- */
--(void) addTrackLabel:(VSTrackLabel *)aTrackLabel;
 
 /**
  * Adds the given view as subView and inits it as track
  * @param aTrackView NSView to add as new Track
  */
 -(void) addTrackView:(NSView*) aTrackView;
-
 
 @end
