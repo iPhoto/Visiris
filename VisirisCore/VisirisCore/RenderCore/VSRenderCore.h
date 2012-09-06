@@ -60,13 +60,19 @@
  * @param type The Type is Image, Video, Quartzcomposer or Audio
  * @param size The size of the Output (not preview)
  * @param path Needed for Quartzcomposer patches
- * @return Returns the texture id of the openglcontext 
  */
--(GLuint) createNewTextureForSize:(NSSize)textureSize colorMode:(NSString*)colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path;
+-(void)createNewTextureForSize:(NSSize)textureSize colorMode:(NSString*)colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path withObjectItemID:(NSInteger)objectItemID;
 
 /**
  * @return the OpenglContext
  */
 - (NSOpenGLContext *)openglContext;
+
+
+/**
+ * Deletes a Texture referencing of a TimelineobjectID
+ * @param theID Individual ID of an Timelineobject
+ */
+- (void)deleteTextureFortimelineobjectID:(NSInteger)theID;
 
 @end

@@ -12,10 +12,10 @@
 
 @interface VSAudioPlayerManager()
 
-/** TODO */
+/** This Dictionary matches TrackID's to other Dictionaries which contains the VSAudioplayeritmes */
 @property (strong) NSMutableDictionary      *playerCollectionToTrackID;
 
-/** TODO */
+/** Matches an ObjectID to a VSAudioplayer */
 @property (strong) NSMutableDictionary      *playerToObjectID;
 
 @end

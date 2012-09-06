@@ -12,20 +12,20 @@
 
 @interface VSQCManager()
 
-/** The Dictionary contains the Quartzrenderer and are associated with a TextureID */
-@property (strong) NSMutableDictionary   *quartzRendererForId;
+/** The Dictionary contains the Quartzrenderer and are associated with a TimelineobjectID */
+@property (strong) NSMutableDictionary   *quartzRendererForObjectId;
 
 @end
 
 @implementation VSQCManager
-@synthesize quartzRendererForId = _quartzRendererForId;
+@synthesize quartzRendererForObjectId = _quartzRendererForObjectId;
 
 
 #pragma Mark - Init
 
 - (id)init{
     if (self = [super init]) {
-        self.quartzRendererForId = [[NSMutableDictionary alloc] init];
+        self.quartzRendererForObjectId = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -33,28 +33,15 @@
 
 #pragma mark - Methods
 
-- (GLuint)createQCRendererWithSize:(NSSize) size withTrackId:(NSInteger) trackId withPath:(NSString *)path withContext:(NSOpenGLContext *)context withFormat:(NSOpenGLPixelFormat *)format{
+- (void)createQCRendererWithSize:(NSSize) size withTrackId:(NSInteger) trackId withPath:(NSString *)path withContext:(NSOpenGLContext *)context withFormat:(NSOpenGLPixelFormat *)format withObjectItemID:(NSInteger)objectItemID{
     
-    //TODO woooot?
-    /*
-    for(VSQCRenderer *qcRenderer in [self.quartzRendererForId allValues]){
-        
-        if (//[qcRenderer size].width == size.width &&
-            //[qcRenderer size].height == size.height &&
-            qcRenderer.trackId == trackId) {
-            
-            return [qcRenderer texture];
-        }
-    }*/
     
     VSQCRenderer *tempRenderer = [[VSQCRenderer alloc] initWithPath:path withSize:size withContext:context withPixelformat:format withTrackID:trackId];
-    [self.quartzRendererForId setObject:tempRenderer forKey:[NSNumber numberWithInt:[tempRenderer texture]]];
-    
-    return [tempRenderer texture];
+    [self.quartzRendererForObjectId setObject:tempRenderer forKey:[NSNumber numberWithInteger:objectItemID]];
 }
 
-- (VSQCRenderer *)getQCRendererForId:(GLuint) texId{
-    return [self.quartzRendererForId objectForKey:[NSNumber numberWithInt:texId]];
+- (VSQCRenderer *)getQCRendererForObjectId:(NSInteger)objectID{
+    return [self.quartzRendererForObjectId objectForKey:[NSNumber numberWithInteger:objectID]];
 }
 
 @end

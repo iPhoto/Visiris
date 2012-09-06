@@ -19,15 +19,20 @@
  * Creates a Texture with a specific size and for a specific track. Gets called as soon as there is a new TimelineObject.
  * @param size The size of the new Texture
  * @param trackId The Track on which the Timelineobject is
- * @return TextureID of the OpenGLContext
  */
-- (GLuint)createTextureWithSize:(NSSize)size trackId:(NSInteger)trackId;
+- (void)createTextureWithSize:(NSSize)size trackId:(NSInteger)trackId withObjectItemID:(NSInteger)objectItemID;
 
 /**
  * The Manager is organised in Dictionary - TextureID to VSTexture
- * @param texId The TextureId
+ * @param timelineobjectID The ID of the TimelineObject
  * @return Returns the corresponding VSTexture
  */
-- (VSTexture *)getVSTextureForTexId:(GLuint)texId;
+- (VSTexture *)getVSTextureForTimelineobjectID:(NSInteger)timelineobjectID;
+
+/**
+ * Is for deleting an Texture to an correspondending Timelineobject (intern it mostly decreases the referencecounting)
+ * @param theID The ID of the TimelineObject
+ */
+- (void)deleteTextureForTimelineobjectID:(NSInteger)theID;
 
 @end

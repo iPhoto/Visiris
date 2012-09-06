@@ -46,13 +46,13 @@
 - (void)renderFrameAtTimestamp:(double)aTimestamp withHandovers:(NSArray *)theHandovers forSize:(NSSize)theFrameSize withPlayMode:(VSPlaybackMode)playMode;
 
 
-- (GLuint)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*)colorMode forTrack:(NSInteger)trackID withType:(VSFileKind )type withOutputSize:(NSSize)size withPath:(NSString *)path;
+- (void)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*)colorMode forTrack:(NSInteger)trackID withType:(VSFileKind )type withOutputSize:(NSSize)size withPath:(NSString *)path withObjectItemID:(NSInteger)objectItemID;
 
 - (void)createNewAudioPlayerWithProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID forTrack:(NSInteger)trackId andFilePath:(NSString *)filepath;
 
-- (void)removeTextureForID:(GLuint) anID;
+- (void)removeTextureForTimelineobjectID:(NSInteger)anID;
 
-- (NSOpenGLContext *) openGLContext;
+- (NSOpenGLContext *)openGLContext;
 
 - (void)stopPlaying;
 

@@ -56,6 +56,8 @@
 
 - (GLuint)renderAtTme:(double)time{
     
+    //NSLog(@"time: %f",time);
+
     time /= 1000.0;
     [[self context] makeCurrentContext];
     
@@ -68,7 +70,6 @@
 	else
     {
         glColor4f(1.0, 1.0, 1.0, 1.0);
-        NSLog(@"blablabla");
     }
     
     [self.context flushBuffer];

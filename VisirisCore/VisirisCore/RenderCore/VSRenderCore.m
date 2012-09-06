@@ -184,31 +184,34 @@
     }
 }
 
-- (GLuint)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*)colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path{
+- (void)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*)colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path withObjectItemID:(NSInteger)objectItemID{
     
-    GLuint texture;
     
     switch (type) {
         case VSFileKindImage:
-            texture = [self.textureManager createTextureWithSize:textureSize trackId:trackID];
+            [self.textureManager createTextureWithSize:textureSize trackId:trackID withObjectItemID:objectItemID];
             [self.transformTextureManager createFBOWithSize:size trackId:trackID];
             break;
         case VSFileKindVideo:
-            texture = [self.textureManager createTextureWithSize:textureSize trackId:trackID];
+            //TODO the same as above - plz optimise this shit
+            [self.textureManager createTextureWithSize:textureSize trackId:trackID withObjectItemID:objectItemID];
             [self.transformTextureManager createFBOWithSize:size trackId:trackID];
             break;
         case VSFileKindQuartzComposerPatch:
-            texture = [self.qcpManager createQCRendererWithSize:size withTrackId:trackID withPath:path withContext:self.openGLContext withFormat:self.pixelFormat];
+            [self.qcpManager createQCRendererWithSize:size withTrackId:trackID withPath:path withContext:self.openGLContext withFormat:self.pixelFormat withObjectItemID:objectItemID];
             [self.transformTextureManager createFBOWithSize:size trackId:trackID];
             break;
         case VSFileKindAudio:
-            NSLog(@"Audio not implemented yet");
+            NSLog(@"There is something fucked up, this path should have never been entered");
             break;
             
         default:
             break;
     }
-    return texture;
+}
+
+- (void)deleteTextureFortimelineobjectID:(NSInteger)theID{
+    [self.textureManager deleteTextureForTimelineobjectID:theID];
 }
 
 - (NSOpenGLContext *)openglContext{
@@ -308,7 +311,7 @@
             
             VSFrameCoreHandover *handOver = (VSFrameCoreHandover *)coreHandover;
             
-            VSTexture *handOverTexture = [self.textureManager getVSTextureForTexId:handOver.textureID];            
+            VSTexture *handOverTexture = [self.textureManager getVSTextureForTimelineobjectID:handOver.timeLineObjectID];
             
             [handOverTexture replaceContent:handOver.frame timeLineObjectId:handOver.timeLineObjectID];
             [textures addObject:[NSNumber numberWithInt:[self.transformTextureManager transformTexture:handOverTexture.texture 
@@ -323,7 +326,7 @@
         else if ([coreHandover isKindOfClass:[VSQuartzComposerHandover class]]) {
             
             VSQuartzComposerHandover *handover = (VSQuartzComposerHandover *)coreHandover;
-            VSQCRenderer *qcRenderer = [self.qcpManager getQCRendererForId:handover.textureID];
+            VSQCRenderer *qcRenderer = [self.qcpManager getQCRendererForObjectId:handover.timeLineObjectID];
             
             id qcPublicInputValues = [handover.attributes objectForKey:VSParameterQuartzComposerPublicInputs];
             
@@ -337,6 +340,7 @@
                                                                                        withTextureSize:qcRenderer.size 
                                                                                          forOutputSize:outputSize
                                                                                              isQCPatch:YES]]];
+             
             
         }
         else (NSLog(@"WTF happend?!?"));

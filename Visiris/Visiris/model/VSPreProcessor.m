@@ -62,7 +62,7 @@
     //DDLogInfo(@"%@",removedTimelineObjects);
     
     for (VSTimelineObject *timelineObject in removedTimelineObjects){
-        [self.renderCoreReceptionist removeTextureForID:timelineObject.textureID];
+        [self.renderCoreReceptionist removeTextureForTimelineobjectID:timelineObject.timelineObjectID];
     }
 }
 
@@ -99,15 +99,16 @@
     
     NSSize dimensions = [VSFileUtils dimensionsOfFile:timelineObject.sourceObject.filePath];
     VSFileType *type = [VSSupportedFilesManager typeOFile:timelineObject.sourceObject.filePath];
-    
     NSSize outputSize = [VSProjectSettings sharedProjectSettings].frameSize;
+    NSInteger objectItemID = timelineObject.timelineObjectID;
     
-    timelineObject.textureID = [self.renderCoreReceptionist createNewTextureForSize:dimensions 
-                                                                          colorMode:nil 
-                                                                           forTrack:track.trackID 
-                                                                           withType:type.fileKind 
-                                                                     withOutputSize:outputSize
-                                                                           withPath:timelineObject.sourceObject.filePath];
+   [self.renderCoreReceptionist createNewTextureForSize:dimensions
+                                              colorMode:nil
+                                               forTrack:track.trackID
+                                               withType:type.fileKind
+                                         withOutputSize:outputSize
+                                               withPath:timelineObject.sourceObject.filePath
+                                       withObjectItemID:objectItemID];
 
 }
 

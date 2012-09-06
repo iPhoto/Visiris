@@ -79,8 +79,9 @@
     
 }
 
--(GLuint) createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path{
-    return [self.renderCore createNewTextureForSize:textureSize colorMode:colorMode forTrack:trackID withType:type withOutputSize:size withPath:path];
+- (void)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path withObjectItemID:(NSInteger)objectItemID{
+    
+    [self.renderCore createNewTextureForSize:textureSize colorMode:colorMode forTrack:trackID withType:type withOutputSize:size withPath:path withObjectItemID:(NSInteger)objectItemID];
 }
 
 - (void)createNewAudioPlayerWithProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID forTrack:(NSInteger)trackId andFilePath:(NSString *)filepath{
@@ -88,8 +89,9 @@
     [self.audioCore createAudioPlayerForProjectItemID:projectItemID withObjectItemID:objectItemID atTrack:trackId andFilePath:filepath];
 }
 
-- (void)removeTextureForID:(GLuint)anID{
-    NSLog(@"TODOOOOO (removeTexture)");
+- (void)removeTextureForTimelineobjectID:(NSInteger)anID{
+   // NSLog(@"TODOOOOO (removeTexture)");
+    [self.renderCore deleteTextureFortimelineobjectID:anID];
 }
 
 #pragma mark - RenderCoreDelegate impl.

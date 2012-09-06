@@ -14,7 +14,7 @@
 
 @interface VSAudioCore()
 
-/** The  */
+/** Manages two dictionaries containing the audio information */
 @property (strong) VSAudioPlayerManager     *audioPlayerManager;
 
 @end

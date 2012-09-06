@@ -28,7 +28,6 @@
 @synthesize name                = _name;
 @synthesize icon                = _icon;
 @synthesize supplier            = _supplier;
-@synthesize textureID           = _textureID;
 
 
 #pragma mark - Init
@@ -76,7 +75,6 @@
         copy.icon = superCopy.icon;
         copy.selected = superCopy.selected;
         copy.timelineObjectID = superCopy.timelineObjectID;
-        copy.textureID = self.textureID;
     }
     
     return copy;
@@ -97,7 +95,6 @@
     if ([self.supplier isKindOfClass:[VSFrameSourceSupplier class]] ) {
         coreHandover = [[VSFrameCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp withPlayMode:mode]
                                                     andAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp]
-                                                     forTextureID:self.textureID
                                                      forTimestamp:localTimestamp
                                                             forId:self.timelineObjectID];
     }
@@ -105,8 +102,7 @@
         coreHandover = [[VSQuartzComposerHandover alloc] initWithAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp]
                                                                forTimestamp:localTimestamp
                                                                 andFilePath:[(VSQuartzComposerSourceSupplier *)self.supplier getQuartzComposerPatchFilePath] 
-                                                                      forId:self.timelineObjectID
-                                                               forTextureID:self.textureID];
+                                                                      forId:self.timelineObjectID];
     }
     else if ([self.supplier isKindOfClass:[VSAudioSourceSupplier class]]) {
         coreHandover = [[VSAudioCoreHandover alloc] initWithAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp] 
