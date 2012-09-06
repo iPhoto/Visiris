@@ -42,7 +42,7 @@
 
 @implementation VSTimelineObjectView
 
-// Widht of the two resizing areas 
+// Widht of the two resizing areas
 static int resizingAreaWidth = 10;
 
 @synthesize delegate                = _delegate;
@@ -91,7 +91,7 @@ static int resizingAreaWidth = 10;
  */
 -(void) initLayerStyle{
     [self setWantsLayer:YES];
-    [self.layer setZPosition:0];   
+    [self.layer setZPosition:0];
     [self setDefaultLayerStyle];
 }
 
@@ -144,29 +144,31 @@ static int resizingAreaWidth = 10;
     }
 }
 
--(void) mouseDragged:(NSEvent *)theEvent{   
+-(void) mouseDragged:(NSEvent *)theEvent{
     NSPoint newMousePosition =[theEvent locationInWindow];
     
-    //if the the event was entered first time after a mouse down the kind of drgging operation has to be set
-    if(!self.resizing && !self.moving){
-        [self setDraggingModeDependingOnMousePosition:newMousePosition];
+    if(self.selected){
+        //if the the event was entered first time after a mouse down the kind of drgging operation has to be set
+        if(!self.resizing && !self.moving){
+            [self setDraggingModeDependingOnMousePosition:newMousePosition];
+        }
+        
+        //dependening on the set drag mode resize or move is called
+        if(self.resizing){
+            [self resize:newMousePosition];
+            [self autoscroll:theEvent];
+        }
+        else if(self.moving){
+            [self move:newMousePosition];
+            [self autoscroll:theEvent];
+        }
+        
+        self.lastMousePosition = newMousePosition;
+        
+        //    [self autoscroll:theEvent];
+        
+        [self.nextResponder mouseDragged:theEvent];
     }
-    
-    //dependening on the set drag mode resize or move is called
-    if(self.resizing){
-        [self resize:newMousePosition];
-        [self autoscroll:theEvent];
-    }
-    else if(self.moving){
-        [self move:newMousePosition];
-        [self autoscroll:theEvent];
-    }
-    
-    self.lastMousePosition = newMousePosition;
-    
-//    [self autoscroll:theEvent];
-    
-    [self.nextResponder mouseDragged:theEvent];
 }
 
 -(void) cursorUpdate:(NSEvent *)event{
@@ -256,7 +258,7 @@ static int resizingAreaWidth = 10;
         else if([self delegateImplementsSelector:@selector(timelineObjectViewWillStartDragging:)]){
             
             self.moving = [self.delegate timelineObjectViewWillStartDragging:self];
-        }   
+        }
     }
     
     if(self.resizing && self.moving){
@@ -284,13 +286,13 @@ static int resizingAreaWidth = 10;
  * @param currentMousePosition Current Position of the mouse
  */
 -(void) resize:(NSPoint) currentMousePosition{
-
+    
     VSDoubleFrame resizedFrame = self.doubleFrame;
     
     
     float correctedMousePosition = currentMousePosition.x-self.mouseDownXOffset;
     
-    //if the view is resized from the left, the x-origin and width have to be changed     
+    //if the view is resized from the left, the x-origin and width have to be changed
     if (self.resizingDirection == RESIZING_FROM_LEFT) {
         resizedFrame.width -= correctedMousePosition-resizedFrame.x ;
         resizedFrame.x = correctedMousePosition;
@@ -325,12 +327,12 @@ static int resizingAreaWidth = 10;
     
     NSPoint newFramesOrigin = NSMakePoint(currentMousePosition.x-self.mouseDownXOffset, self.frame.origin.y);
     
-    //informs the delegate about the change 
+    //informs the delegate about the change
     if([self delegateImplementsSelector:@selector(timelineObjectViewWillBeDragged:fromPosition:toPosition:forMousePosition:)]){
         newFramesOrigin = [self.delegate timelineObjectViewWillBeDragged:self fromPosition:self.frame.origin toPosition:newFramesOrigin forMousePosition:  currentMousePosition];
     }
     
-    [self setFrameOrigin:newFramesOrigin];  
+    [self setFrameOrigin:newFramesOrigin];
     
     //informs the delegate that the view was moved
     if([self delegateImplementsSelector:@selector(timelineObjectViewWasDragged:)]){
@@ -345,7 +347,7 @@ static int resizingAreaWidth = 10;
  */
 -(void) updateResizingRects{
     self.leftResizingArea= NSMakeRect(0, 0, resizingAreaWidth, self.frame.size.height);
-    self.rightResizingArea = NSMakeRect(self.frame.size.width - resizingAreaWidth, 
+    self.rightResizingArea = NSMakeRect(self.frame.size.width - resizingAreaWidth,
                                         0, resizingAreaWidth, self.frame.size.height);
 }
 

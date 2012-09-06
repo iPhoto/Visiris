@@ -2,52 +2,52 @@
 //  VSTimelineViewController.h
 //  Visiris
 //
-//  Created by Martin Tiefengrabner on 09.05.12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Martin Tiefengrabner on 14.08.12.
+//
 //
 
 #import <Cocoa/Cocoa.h>
 
-#import "VSTrackViewController.h"
-#import "VStimelineView.h"
-#import "VSTrackHolderView.h"
 #import "VSTimelineScrollView.h"
+#import "VSTimelineContentView.h"
+#import "VSTimelineView.h"
 #import "VSViewMouseEventsDelegate.h"
 
-@class VSTimeline;
-@class VSTimelineRulerView;
-@class VSTrackHolderView;
-@class VSTimelineScrollView;
+@interface VSTimelineViewController : NSViewController<VSTimelineViewDelegate, VSPlayHeadRulerMarkerDelegate,VSTimelineScrollViewZoomingDelegate, VSViewMouseEventsDelegate>
 
-/**
- * Subclass of NSViewController responsible for displaying a VSTimeline.
- *
- * VSTimelineViewController holds a various number of VSTrackViewController representing the VSTracks of the VSTimeline and acts as delegate for the VSTrackViewControllers. 
- * !!!!!!Please add more here
- */
-@interface VSTimelineViewController : NSViewController<VSTrackViewControllerDelegate, VSTimelineViewDelegate, VSPlayHeadRulerMarkerDelegate,VSTimelineScrollViewZoomingDelegate, VSViewMouseEventsDelegate>
-
-/** VSTimelineScrollView holding the VSTrackViews representing the single tracks */
-@property (weak) IBOutlet VSTimelineScrollView *scrollView;
-
-/** VSTimeline the controller represents */
-@property VSTimeline* timeline;
-
-/** Ratio between the duration of the timeline and the pixel length of tracksHolderdocumentView */
 @property double pixelTimeRatio;
-
-#pragma mark - Init
-
-/**
- * Inits the controller with the .nib-File stored in defaultNib (VSTimelineView)
- */
--(id) initWithDefaultNib;
+@property (readonly) double duration;
+@property (readonly) float pixelLength;
+@property (readonly) VSTimelineScrollView *timelineScrollView;
+@property (readonly) double playheadTimePosition;
 
 /**
- * Inits the controller with the .nib-File stored in defaultNib (VSTimelineView) for the given timeline.
- * @param timeline The VSTimeline the VSTimelineViewController represents
- * @return self
+ * Translates the given pixel value to a timestamp according to the pixelTimeRation
+ * @param pixelPosition Value in pixels the timestamp is computed for
+ * @return Timestamp for the given pixel position
  */
--(id) initWithDefaultNibAccordingForTimeline:(VSTimeline*)timeline;
+-(double) timestampForPixelValue:(double) pixelPosition;
+
+/**
+ * Transletes the given timestamp to a pixel value according to the pixelTimeRation
+ * @param timestamp Timestamp the pixel position is computed for
+ * @return Pixelposition for the given Timestamp
+ */
+-(double) pixelForTimestamp:(double) timestamp;
+
+/**
+ * Updates the ratio between the length of trackholder's width and the duration of the timeline
+ */
+-(void) computePixelTimeRatio;
+
+/**
+ * Called when ratio between the length of trackholder's width and the duration of the timeline.
+ */
+-(void) pixelTimeRatioDidChange;
+
+/**
+ * Sets the plahead marker according to the playhead's currentposition on the timeline
+ */
+-(void) setPlayheadMarkerLocation;
 
 @end

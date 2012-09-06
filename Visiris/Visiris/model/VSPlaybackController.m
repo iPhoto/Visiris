@@ -147,8 +147,6 @@
  */
 -(void) renderCurrentFrame{
     if (self.preProcessor) {
-        
-        
         [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:[VSProjectSettings sharedProjectSettings].frameSize withPlayMode:self.playbackMode];
     }
     
@@ -172,6 +170,8 @@
     if(self.currentTimestamp > self.timeline.duration){
         self.currentTimestamp = 0;
     }
+    
+    
     
     self.timeline.playHead.currentTimePosition = self.currentTimestamp;
     self.playbackStartTime = currentTime;

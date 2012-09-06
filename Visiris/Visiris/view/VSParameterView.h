@@ -7,11 +7,14 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "VSViewDelegate.h"
 
 
 /**
  * Subclass of NSView displaying a VSParameter
  */
 @interface VSParameterView : NSView
+
+@property id<VSViewDelegate> viewDelegate;
 
 @end

@@ -31,7 +31,7 @@ static NSString* defaultNib = @"VSBrowserView";
 
 -(id) initWithDefaultNib{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
-        [self initSubViewControllers];
+        
     }
     
     return self;
@@ -48,10 +48,13 @@ static NSString* defaultNib = @"VSBrowserView";
 }
 
 -(void) awakeFromNib{
-    [self showSubViewByIndex:[self.sgmCtrlSelectSubview selectedSegment]];
     [self.sgmCtrlSelectSubview setAutoresizingMask:NSViewWidthSizable];
-    
+    [self initSubViewControllers];
+    [self.sgmCtrlSelectSubview setAutoresizingMask:NSViewWidthSizable];
     [self setSegmentControllsSegmentsNames];
+    
+    [self.sgmCtrlSelectSubview setSelectedSegment:0];
+    [self showSubViewByIndex:0];
 }
 
 /**

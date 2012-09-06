@@ -9,7 +9,7 @@
 #import "VSMainWindowController.h"
 
 #import "VSBrowserViewController.h"
-#import "VSTimelineViewController.h"
+#import "VSMainTimelineViewController.h"
 #import "VSTimeline.h"
 #import "VSPreProcessor.h"
 #import "VSPostProcessor.h"
@@ -26,7 +26,7 @@
 @property (strong) VSBrowserViewController *browserViewController;
 
 /** Responsible for the timelineView which is shown at the bottom of the window. */
-@property (strong) VSTimelineViewController *timelineViewController;
+@property (strong) VSMainTimelineViewController *timelineViewController;
 
 /** Responsible for the browser view which is shown at the top center of the window. */
 @property (strong) VSPropertiesViewController *propertiesViewController;
@@ -64,19 +64,21 @@ static NSString* defaultNib = @"MainWindow";
 }
 
 - (void)windowDidLoad
-{
+{   
     [super windowDidLoad];
     
     [self.window setAcceptsMouseMovedEvents:YES];
     
-    /** inits the spltiview with their subviews */
-    [self initSplitViews];
-    
     //checks if the document is a visirs document
     if(self.document && [self.document isKindOfClass:[VSDocument class]]){
+        /** inits the spltiview with their subviews */
+        [self initSplitViews];
+        
         [self initMainWindowAccordingToDocument];
     }
     
+    [self.mainSplitView adjustSubviews];
+    [self.topSplitView  adjustSubviews];
     
 }
 
@@ -91,7 +93,9 @@ static NSString* defaultNib = @"MainWindow";
  * Sets the timeleline and connects the different parts of the playback and connection with the core
  */
 -(void) initMainWindowAccordingToDocument{
-    self.timelineViewController = [[VSTimelineViewController alloc] initWithDefaultNibAccordingForTimeline:((VSDocument*) self.document).timeline];
+    
+    self.timelineViewController = [[VSMainTimelineViewController alloc] initWithDefaultNibAccordingForTimeline:((VSDocument*) self.document).timeline];
+    
     [self loadView:timelineViewController.view intoSplitView:self.mainSplitView replacingViewAtPosition:1];
     
     
@@ -115,7 +119,6 @@ static NSString* defaultNib = @"MainWindow";
     //Adding the VSPropertiesView to the top center
     self.propertiesViewController = [[VSPropertiesViewController alloc] initWithDefaultNib];
     [self loadView:self.propertiesViewController.view intoSplitView:self.topSplitView replacingViewAtPosition:1];
-    
 }
 
 #pragma mark- Private Methods
@@ -128,31 +131,76 @@ static NSString* defaultNib = @"MainWindow";
  * @param position Index of splitView's subview which will be replaced by given view
  */
 -(void) loadView:(NSView*) view intoSplitView:(NSSplitView*) splitView replacingViewAtPosition:(NSInteger) position{
-    NSRect frame = [[splitView.subviews objectAtIndex:position] bounds];
+    
+    NSRect frame = [[splitView.subviews objectAtIndex:position] frame];
     
     [splitView replaceSubview:[splitView.subviews objectAtIndex:position] with:view];
-    [view  setFrame:NSIntegralRect(frame)];
+    [view  setFrame:frame];
     
     [view setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
     [view setAutoresizesSubviews:YES];
+    
+    NSLog(@"loading view: %@ with frame: %@",view, NSStringFromRect(frame));
 }
+
+#pragma mark - NSSplitViewDelegate Implementation
 
 -(void) splitViewWillResizeSubviews:(NSNotification *)notification{
     
     NSSplitView *splitView = (NSSplitView*)[notification object];
-    
-    for(NSView* subview in splitView.subviews)
-    {
-        if(subview) {
-            if(subview.frame.size.width < 50) {
-                CGRect correctedFrame = subview.frame;
-                correctedFrame.size.width = 50;
-                subview.frame = correctedFrame;
-            } else {
-                subview.hidden = NO;
-            }
+    if(splitView == self.mainSplitView){
+        for(NSView* subview in splitView.subviews)
+        {
+            
+//            if(subview == self.timelineViewController.view){
+//                if(subview.frame.size.height > 100){
+//                    [subview setFrameSize:NSMakeSize(subview.frame.size.width, 100)];
+//                }
+//            }
         }
     }
+//    else if(splitView == self.topSplitView){
+//        for(NSView *subView in splitView.subviews){
+//            if(subView.frame.size.width < 50){
+//                DDLogInfo(@"%@ is Collpased: %d", subView,               [splitView isSubviewCollapsed:subView]);
+//                NSRect frame = subView.frame;
+//                frame.size.width = 50;
+//                [subView setFrame:frame];
+//            }
+//        }
+//    }
+}
+
+-(CGFloat) splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex{
+//    DDLogInfo(@"proposedMinimumPosition: %f for dividerIndex : %ld",proposedMinimumPosition,dividerIndex);
+    if(splitView == self.topSplitView){
+        switch (dividerIndex) {
+            case 0:
+                return proposedMinimumPosition + 100;
+                break;
+            case 1:
+                return proposedMinimumPosition + 200;
+                break;
+        }
+    }
+    
+    return proposedMinimumPosition;
+}
+
+-(CGFloat) splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMaximumPosition ofSubviewAt:(NSInteger)dividerIndex{
+//    DDLogInfo(@"proposedMaximumPosition: %f for dividerIndex : %ld",proposedMaximumPosition,dividerIndex);
+    if(splitView == self.topSplitView){
+        switch (dividerIndex) {
+            case 0:
+                return proposedMaximumPosition - 300;
+                break;
+            case 1:
+                return proposedMaximumPosition - 400;
+                break;
+        }
+    }
+    
+    return proposedMaximumPosition;
 }
 
 @end

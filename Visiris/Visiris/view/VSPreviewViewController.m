@@ -52,7 +52,6 @@ static NSString* defaultNib = @"VSPreviewView";
 -(id) initWithDefaultNibForOpenGLContext:(NSOpenGLContext *)theOpenGLContext{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
         self.openGLContext = theOpenGLContext;
-    
     }
     
     return self;
@@ -110,7 +109,6 @@ static NSString* defaultNib = @"VSPreviewView";
 -(void) initOpenGLView{
     [self.openGLView initOpenGLWithSharedContext:self.openGLContext];
     [self.openGLView setAutoresizingMask:NSViewNotSizable];
-    [self.openGLView removeConstraints:self.openGLView.constraints];
 }
 
 #pragma mark - IBAction
@@ -172,7 +170,8 @@ static NSString* defaultNib = @"VSPreviewView";
     }
     
     openGLViewRect.origin.x = (superViewsRect.size.width - openGLViewRect.size.width) / 2.0f;
-    openGLViewRect.origin.y = superViewsRect.size.height - openGLViewRect.size.height - self.openGLViewMarginTop;
+    openGLViewRect.origin.y = (NSMaxY(superViewsRect) - NSMaxY(openGLViewRect)) / 2.0f;
+    
     
     [self.openGLView setFrameProportionally:NSIntegralRect(openGLViewRect)];
     

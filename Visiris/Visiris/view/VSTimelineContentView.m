@@ -6,14 +6,14 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "VSTrackHolderView.h"
+#import "VSTimelineContentView.h"
 
 #import "VSTimelineRulerView.h"
 #import "VSPlayheadMarker.h"
 
 #import "VSCoreServices.h"
 
-@interface VSTrackHolderView()
+@interface VSTimelineContentView()
 
 /** current offset of view's enclosing scrollView */
 @property NSPoint scrollOffset;
@@ -21,9 +21,12 @@
 /** CALayer to draw a guideline for the current position of the playheadmarker above the view */
 @property (strong) CALayer *guideLine;
 
+
+
 @end
 
-@implementation VSTrackHolderView
+@implementation VSTimelineContentView
+
 @synthesize scrollOffset            = _scrollOffset;
 @synthesize trackHolderViewDelegate = _playheadMarkerDelegate;
 @synthesize guideLine               = _guideLayer;
@@ -45,11 +48,7 @@
 }
 
 -(void) awakeFromNib{
-    self.scrollOffset = NSZeroPoint;
     
-    [self initLayer];
-    [self initGuideLine];
-    [self initObservers];
 }
 
 /**
@@ -64,6 +63,7 @@
  */
 - (void)initLayer {
     [self setWantsLayer:YES];
+    [self.layer setZPosition:250];
     self.layer.backgroundColor = [[NSColor darkGrayColor] CGColor];
 }
 
@@ -74,10 +74,15 @@
     
     self.guideLine = [[CALayer alloc] init];
     self.guideLine.backgroundColor = [[NSColor blueColor] CGColor];
-    [self.guideLine setZPosition:30];
+    [self.guideLine setZPosition:100];
+    
     [self.layer addSublayer:self.guideLine];
 }
 
+-(void) drawRect:(NSRect)dirtyRect{
+    [[NSColor redColor] setFill];
+    NSRectFill(dirtyRect);
+}
 
 #pragma mark - NSView
 
@@ -98,6 +103,7 @@
     if([self delegateRespondsToSelector:@selector(shouldMoveMarker:inTrackHolderView:)]){
         return [self.trackHolderViewDelegate shouldMoveMarker:marker inTrackHolderView:self];
     }
+    
     return NO;
 }
 
@@ -109,13 +115,14 @@
     
     [self moveGuidelineToPosition:location-self.scrollOffset.x];
     
+    
     return location;
 }
 
 -(void) rulerView:(NSRulerView *)ruler handleMouseDown:(NSEvent *)event{
     if(ruler == self.enclosingScrollView.horizontalRulerView){
         NSPoint pointInView = [self.window.contentView convertPoint:[event locationInWindow] toView:ruler];
-
+        
         CGFloat location = pointInView.x-ruler.originOffset +self.scrollOffset.x;
         
         if([self delegateRespondsToSelector:@selector(mouseDownOnRulerView:atLocation:)]){
@@ -128,9 +135,7 @@
 
 -(void) moveGuidelineToPosition:(CGFloat) location{
     NSRect layerRect = self.frame;
-    
     layerRect.size.width = 1;
-
     layerRect.origin.x = round(location+self.scrollOffset.x);
     layerRect.origin.y = 0;
     
@@ -160,10 +165,6 @@
     return NO;
 }
 
-/**
- * Receiver of the NSViewBoundsDidChangeNotification. Updates the scrollOffset and tells the guideline to be updated
- * @param notification NSNotification of the NSViewBoundsDidChangeNotification
- */
 -(void) boundsDidChange:(NSNotification*) notification{
     if(notification.object == self.enclosingScrollView.contentView){
         [self updateScrollOffset];
@@ -180,5 +181,7 @@
     
     self.scrollOffset = NSMakePoint(xOffset, yOffset);
 }
+
+#pragma mark - Properties
 
 @end

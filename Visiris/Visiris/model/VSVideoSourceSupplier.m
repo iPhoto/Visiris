@@ -7,11 +7,13 @@
 //
 
 #import "VSVideoSourceSupplier.h"
+
 #import "AVFoundation/AVFoundation.h"
 #import "VisirisCore/VSImage.h"
 #import "VSTimelineObject.h"
 #import "VSTimelineObjectSource.h"
-//#import "VSProjectItem.h"
+
+#import "VSCoreServices.h"
 
 @interface VSSourceSupplier()
 
@@ -222,6 +224,14 @@
     double remain = seconds - intSeconds;
     frames += self.frameRate*remain;
     return frames;
+}
+
+-(double) convertGlobalTimestampToLocalTimestamp:(double)aGlobalTimestamp{
+    double localTimestamp = [super convertGlobalTimestampToLocalTimestamp:aGlobalTimestamp];
+    
+    localTimestamp = localTimestamp <= self.timelineObject.sourceDuration ? localTimestamp :  fmod(localTimestamp, self.timelineObject.sourceDuration);
+    
+    return localTimestamp;
 }
 
 @end

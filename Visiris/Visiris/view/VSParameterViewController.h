@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "VSViewDelegate.h"
 
 @class VSParameter;
 
@@ -15,25 +16,15 @@
  *
  * Displays controls to edit the parameter's default value depending on the type of the VSParameter the VSParameterViewController represents. 
  */
-@interface VSParameterViewController : NSViewController
+@interface VSParameterViewController : NSViewController<VSViewDelegate,NSTextFieldDelegate>
 
 /** Displays the name of paramter the View represents */
 @property (weak) IBOutlet NSTextField *nameLabel;
 
-/** The textField displays the value of parameters of the type VSParameterDataTypeString or VSParameterDataTypeFloat where hasRange is NO. */
-@property (weak) IBOutlet NSTextField *textValueField;
 
-/** The checkBox displays the value of parameters of the type VSParameterDataTypeBool. */
-@property (weak) IBOutlet NSButton *boolValueField;
 
-/** The textField displays the value of parameters of the type SParameterDataTypeFloat where hasRange is YES. */
-@property (weak) IBOutlet NSSlider *valueSlider;
+@property (weak) IBOutlet NSView *parameterHolder;
 
-/** The slider displays the value of parameters of the type SParameterDataTypeFloat where hasRange is YES. Min and Max of slider are set according to the valueRange property of the parameter.*/
-@property (weak) IBOutlet NSTextField *valueSliderText;
-
-/** VSParemter the view displayes. */
-@property VSParameter *parameter;
 
 /** 
  * Called when the value of the textField has changed.
@@ -68,6 +59,17 @@
  */
 - (IBAction)sliderValueHasChanged:(NSSlider *)sender;
 
+/** The textField displays the value of parameters of the type VSParameterDataTypeString or VSParameterDataTypeFloat where hasRange is NO. */
+@property (strong) NSTextField *textValueField;
+
+/** The checkBox displays the value of parameters of the type VSParameterDataTypeBool. */
+@property (strong) NSButton *boolValueField;
+
+/** The textField displays the value of parameters of the type SParameterDataTypeFloat where hasRange is YES. */
+@property (strong) NSSlider *valueSlider;
+
+/** The slider displays the value of parameters of the type SParameterDataTypeFloat where hasRange is YES. Min and Max of slider are set according to the valueRange property of the parameter.*/
+@property (strong) NSTextField *valueSliderText;
 
 
 #pragma mark - init
@@ -83,5 +85,7 @@
  * Saves the current values of the parameter and removes the observer on parameter.animation.defaultValue
  */
 -(void) saveParameterAndRemoveObserver;
+
+-(void) showParameter:(VSParameter*) parameter inFrame:(NSRect) frame;
 
 @end
