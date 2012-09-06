@@ -8,7 +8,7 @@
 
 #import "VSTimelineScrollView.h"
 
-#import "VSTrackHolderView.h"
+#import "VSMainTimelineContentView.h"
 #import "VSTimelineRulerView.h"
 #import "VSPlayheadMarker.h"
 #import "VSTrackLabelsRulerView.h"
@@ -22,9 +22,6 @@
 
 /** Subclass of NSRulerMarker Displaying the current Position of the playhead in the timelineRulerView */
 @property VSPlayheadMarker *playheadMarker;
-
-/** Subclass of NSRulerView, displaying information about the tracks at the left side of the timeline */
-@property VSTrackLabelsRulerView *trackLabelRulerView;
 
 @end
 
@@ -45,49 +42,36 @@
 
 -(void) awakeFromNib{
     [self initDocumentView];
-    [self initRulers];
+    [self initTimelineRuler];
     [self initPlayheadMarker];
     
     [self.trackHolderView setFrame:NSMakeRect(0, 0, self.visibleTrackViewsHolderWidth, self.frame.size.height)];
 }
 
 -(void) initDocumentView{
-    self.trackHolderView = [[VSTrackHolderView alloc] init];
     self.documentView = self.trackHolderView;
     self.trackHolderView.trackHolderViewDelegate = self;
     
-    [self.trackHolderView setAutoresizingMask:NSViewNotSizable];
-    [self.trackHolderView setWantsLayer:YES];
-    [self.contentView.layer addSublayer:self.trackHolderView.layer];
     [self.contentView setWantsLayer:YES];
-    
-    
-    
+    [self.contentView.layer addSublayer:self.trackHolderView.layer];
+       
 }
 
 /**
  * Inits the views enclosing scrollView and its rulers
  */
--(void) initRulers{
+-(void) initTimelineRuler{
     
-    [self setHasHorizontalRuler:YES];
+    [self setHasHorizontalRuler:NO];
     [self setHasVerticalRuler:YES];
     [self setRulersVisible:YES];
     
     self.timelineRulerView = [[VSTimelineRulerView alloc] initWithScrollView:self orientation:NSHorizontalRuler];
     [self setHorizontalRulerView:self.timelineRulerView];
-    
-    
-    self.trackLabelRulerView = [[VSTrackLabelsRulerView alloc] initWithScrollView:self orientation:NSVerticalRuler];
-    self.trackLabelRulerView.clientView = self.trackHolderView;
-    self.verticalRulerView = self.trackLabelRulerView;
-    self.hasVerticalRuler = YES;
-    self.rulersVisible = YES;
-    
-    
+
     
     [self.horizontalRulerView setClientView:self.trackHolderView];
-    [self.verticalRulerView setClientView:self.trackHolderView];
+    
 }
 
 /**
@@ -118,7 +102,7 @@
 
 #pragma mark - VSTrackHolderViewDelegate Implementaion
 
--(BOOL) shouldMoveMarker:(NSRulerMarker *)marker inTrackHolderView:(VSTrackHolderView *)trackHolderView{
+-(BOOL) shouldMoveMarker:(NSRulerMarker *)marker inTrackHolderView:(VSMainTimelineContentView *)trackHolderView{
     if(marker == self.playheadMarker){
         if([self delegateRespondsToSelector:@selector(shouldMovePlayHeadRulerMarker:inContainingView:)]){
             return [self.playheadMarkerDelegate shouldMovePlayHeadRulerMarker:self.playheadMarker inContainingView:trackHolderView];
@@ -127,7 +111,7 @@
     
     return NO;
 }
--(void) didMoveRulerMarker:(NSRulerMarker *)marker inTrackHolderView:(VSTrackHolderView *)trackHolderView{
+-(void) didMoveRulerMarker:(NSRulerMarker *)marker inTrackHolderView:(VSMainTimelineContentView *)trackHolderView{
     if(marker == self.playheadMarker){
         if([self delegateRespondsToSelector:@selector(didMovePlayHeadRulerMarker:inContainingView:)]){
             [self.playheadMarkerDelegate didMovePlayHeadRulerMarker:self.playheadMarker inContainingView:trackHolderView];
@@ -135,7 +119,7 @@
     }
 }
 
--(CGFloat) willMoveRulerMarker:(NSRulerMarker *)marker inTrackHolderView:(VSTrackHolderView *)trackHolderView toLocation:(CGFloat)location{
+-(CGFloat) willMoveRulerMarker:(NSRulerMarker *)marker inTrackHolderView:(VSMainTimelineContentView *)trackHolderView toLocation:(CGFloat)location{
     if(marker == self.playheadMarker){
         if([self delegateRespondsToSelector:@selector(willMovePlayHeadRulerMarker:inContainingView:toLocation:)]){
             location = [self.playheadMarkerDelegate willMovePlayHeadRulerMarker:marker inContainingView:trackHolderView toLocation:location];
@@ -149,6 +133,8 @@
     if([self delegateRespondsToSelector:@selector(playHeadRulerMarker:willJumpInContainingView:toLocation:)]){
         location = [self.playheadMarkerDelegate playHeadRulerMarker:self.playheadMarker willJumpInContainingView:self.trackHolderView toLocation:location];
     }
+    
+    [self.playheadMarker setMarkerLocation:location];
     
     return location;
 }
@@ -168,23 +154,6 @@
         [self.timelineRulerView setNeedsDisplayInRect:formerImageRect];
     }
 }
-
--(void) addTrackLabel:(VSTrackLabel *)aTrackLabel{
-    [self.trackLabelRulerView addTrackLabel:aTrackLabel];
-}
-
--(void) addTrackView:(NSView *)aTrackView{
-    [self.trackHolderView addSubview:aTrackView];
-    [self.trackHolderView.layer addSublayer:aTrackView.layer];
-    
-    NSRect tmp = [[[self.trackHolderView subviews] objectAtIndex:0] frame];
-    
-    for(NSView *subView in self.trackHolderView.subviews){
-        tmp = NSUnionRect(tmp, subView.frame);
-    }
-    [self.trackHolderView setFrameSize:NSMakeSize(self.trackHolderView.frame.size.width, tmp.size.height)];
-}
-
 
 #pragma mark - Private Methods
 
@@ -256,6 +225,19 @@
 }
 
 
+-(void) addTrackView:(NSView *)aTrackView{
+    [self.trackHolderView addSubview:aTrackView];
+    [self.trackHolderView.layer addSublayer:aTrackView.layer];
+    
+    NSRect tmp = [[[self.trackHolderView subviews] objectAtIndex:0] frame];
+    
+    for(NSView *subView in self.trackHolderView.subviews){
+        tmp = NSUnionRect(tmp, subView.frame);
+    }
+    
+    [self.trackHolderView setFrameSize:NSMakeSize(self.documentVisibleRect.size.width, tmp.size.height)];
+}
+
 #pragma mark - Properties
 
 -(void) setPixelTimeRatio:(double)pixelTimeRatio{
@@ -274,15 +256,22 @@
 }
 
 -(float) visibleTrackViewsHolderWidth{
-    return self.documentVisibleRect.size.width - self.verticalScroller.frame.size.width;
+    return self.documentVisibleRect.size.width - self.verticalScroller.frame.size.width + self.verticalRulerView.frame.size.width;
 }
 
 -(float) trackHolderWidth{
     return self.trackHolderView.frame.size.width;
 }
 
+
 -(void) setTrackHolderWidth:(float)trackHolderWidth{
     [self.trackHolderView setFrameSize:NSMakeSize(trackHolderWidth, self.trackHolderView.frame.size.height)];
 }
+
+-(CGFloat) timelecodeRulerThickness{
+    return self.timelineRulerView.ruleThickness;
+}
+
+
 
 @end
