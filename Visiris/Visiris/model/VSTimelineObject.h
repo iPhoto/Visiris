@@ -27,6 +27,9 @@
 /** Supplier responsible for the this timelineObject */
 @property (strong) VSSourceSupplier *supplier;
 
+/** Duaration of the projectItem the timelineObject represents, the "real" length of file */
+@property (readonly) double sourceDuration;
+
 /**
  * Inits a the object with the given sourceObject
  * @param sourceObject SourceObject the timelineObject represents on the timeline
