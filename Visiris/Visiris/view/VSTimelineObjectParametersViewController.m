@@ -54,8 +54,38 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
  * Inits and displays a ParameterView for every parameter stored in the timelineObject property
  */
 -(void) showParameters:(NSArray *)parameters{
+    self.parameters = parameters;
     
+    if(parameters && parameters.count){
+        
+        for(VSParameter *parameter in self.parameters){
+            
+            NSRect viewFrame = NSMakeRect(0, self.parameterViewControllers.count * self.parameterViewHeight, self.view.frame.size.width, self.parameterViewHeight);
+            
+            VSParameterViewController *parameteViewController = [[VSParameterViewController alloc] initWithDefaultNib];
+            if(self.parameterViewControllers.count){
+                VSParameterViewController *lastParameterController = [self.parameterViewControllers lastObject];
+                
+                [lastParameterController.view setNextKeyView:parameteViewController.view];
+            }
+            else{
+                [self.view.window makeFirstResponder:parameteViewController.view];
+            }
+            
+            
+            [self.view addSubview:parameteViewController.view];
+            [parameteViewController showParameter:parameter inFrame:viewFrame];
+            [parameteViewController.view setAutoresizingMask:NSViewWidthSizable];
+            [parameteViewController.view setAutoresizesSubviews:YES];
+            
+            
+            
+            [self.parameterViewControllers addObject:parameteViewController];
+        }
+        
+        [self.view setFrameSize:NSMakeSize(self.view.frame.size.width, self.parameterViewControllers.count * self.parameterViewHeight)];
     }
+}
 
 /**
  * Removes all Parameter views
