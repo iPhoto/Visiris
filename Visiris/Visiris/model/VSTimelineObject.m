@@ -92,8 +92,8 @@
     
     VSCoreHandover *coreHandover = nil;
     
-    double localTimestamp = [self convertGlobalTimestampToLocalTimestamp:aTimestamp];
-
+    double localTimestamp = [self.supplier convertGlobalTimestampToLocalTimestamp:aTimestamp];
+    
     if ([self.supplier isKindOfClass:[VSFrameSourceSupplier class]] ) {
         coreHandover = [[VSFrameCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp withPlayMode:mode]
                                                     andAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp]
@@ -132,22 +132,15 @@
 }
 
 
-
-- (double)convertGlobalTimestampToLocalTimestamp:(double)aGlobalTimestamp{
-    
-//    DDLogInfo(@"fileDuration: %f objectDuration: %f",self.sourceObject.projectItem.duration, self.duration);
-    
-    double localTimestamp = aGlobalTimestamp - self.startTime;
-    
-    localTimestamp = localTimestamp <= self.sourceObject.projectItem.duration ? localTimestamp :  fmod(localTimestamp, self.sourceObject.projectItem.duration);
-    
-    return localTimestamp;
-    
-}
-
 -(void) changeName:(NSString *)newName andRegisterAt:(NSUndoManager *)undoManager{
     [[undoManager prepareWithInvocationTarget:self] changeName:self.name andRegisterAt:undoManager];
     self.name = newName;
+}
+
+#pragma mark - Properties
+
+-(double) sourceDuration{
+    return self.sourceObject.projectItem.duration;
 }
 
 @end

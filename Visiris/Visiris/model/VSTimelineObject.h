@@ -30,6 +30,9 @@
 /** ID of the texture stored in VSCore */
 @property GLuint textureID;
 
+/** Duration of the sourceObject of the timeline. The "real" duration of the file. */
+@property (readonly) double sourceDuration;
+
 /**
  * Inits a the object with the given sourceObject
  * @param sourceObject SourceObject the timelineObject represents on the timeline
@@ -73,11 +76,5 @@
  */
 -(void) changeName:(NSString*)newName andRegisterAt:(NSUndoManager*) undoManager;
 
-/**
- * Converts the given globalTimestamp to one relative to the VSTimelineObject
- * @param aGlobalTimestamp Global timeStamp to be converted in relative one.
- * @return Returns the converted relative timestamp
- */
-- (double)convertGlobalTimestampToLocalTimestamp:(double)aGlobalTimestamp;
 
 @end

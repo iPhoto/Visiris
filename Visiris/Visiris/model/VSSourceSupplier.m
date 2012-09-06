@@ -48,5 +48,9 @@
     
 }
 
+- (double)convertGlobalTimestampToLocalTimestamp:(double)aGlobalTimestamp{
+    return aGlobalTimestamp - self.timelineObject.startTime;
+}
+
 
 @end
