@@ -12,18 +12,22 @@
 
 @interface VSAudioPlayerManager()
 
+/** TODO */
 @property (strong) NSMutableDictionary      *playerCollectionToTrackID;
+
+/** TODO */
 @property (strong) NSMutableDictionary      *playerToObjectID;
 
 @end
 
 
-////////////////////////////////////////
-
 @implementation VSAudioPlayerManager
 
 @synthesize playerCollectionToTrackID       = _playerCollectionToTrackID;
 @synthesize playerToObjectID                = _playerToObjectID;
+
+
+#pragma Mark - Init
 
 - (id)init{
     if (self = [super init]) {
@@ -32,6 +36,8 @@
     }
     return self;
 }
+
+#pragma mark - Methods
 
 - (void)createAudioPlayerForProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID atTrack:(NSInteger)trackID andFilePath:(NSString *)path{
     
@@ -80,8 +86,5 @@
         [player stopPlaying];
     }
 }
-
-
-
 
 @end

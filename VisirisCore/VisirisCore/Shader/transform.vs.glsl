@@ -1,3 +1,5 @@
+//This Shader operates basic transformation.
+
 #version 110
 
 attribute vec4 position;

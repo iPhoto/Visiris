@@ -1,3 +1,5 @@
+//Basic Fragment Shader - It doesn't alter the color, just shows it.
+
 #version 110
 
 uniform sampler2D texture;

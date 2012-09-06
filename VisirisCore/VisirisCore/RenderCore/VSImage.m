@@ -13,6 +13,9 @@
 @synthesize size = _size;
 @synthesize needsUpdate = _needsUpdate;
 
+
+#pragma Mark - Init
+
 -(id)init{
     if (self = [super init]) {
         _needsUpdate = YES;

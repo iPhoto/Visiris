@@ -58,9 +58,15 @@
 @synthesize	textureTarget       = _textureTarget;
 @synthesize	textureName         = _textureName;
 
+
+#pragma Mark - Init
+
 - (id) init{
 	return [self initWithCompositionPath:nil textureTarget:0 textureWidth:0 textureHeight:0 openGLContext:nil];
 }
+
+
+#pragma mark - Methods
 
 - (id) initWithCompositionPath:(NSString*)path textureTarget:(GLenum)target textureWidth:(unsigned)width textureHeight:(unsigned)height openGLContext:(NSOpenGLContext*)context
 {
@@ -152,7 +158,7 @@
 	glBindTexture(_textureTarget, saveTextureName);
 }
 
-- (BOOL) updateTextureForTime:(NSTimeInterval)time
+- (BOOL)updateTextureForTime:(NSTimeInterval)time
 {
 	//IMPORTANT: We use the macros provided by <OpenGL/CGLMacro.h> which provide better performances and allows us not to bother with making sure the current context is valid
 	CGLContextObj					cgl_ctx = [_pixelBufferContext CGLContextObj];
@@ -186,17 +192,7 @@
 	
 	return success;
 }
-
-/*- (GLenum) textureTarget
-{
-	return _textureTarget;
-}
-
-- (GLuint) textureName
-{
-	return _textureName;
-}*/
-
+/*
 - (unsigned) textureWidth
 {
 	return [_pixelBuffer pixelsWide];
@@ -226,6 +222,10 @@
 {
 	return (_textureTarget == GL_TEXTURE_RECTANGLE_EXT ? (float)[_pixelBuffer pixelsHigh] : 1.0);
 }
+*/
+
+
+#pragma mark - Private Methods
 
 - (void) dealloc 
 {
@@ -240,10 +240,6 @@
 	
 	//Destroy the OpenGL context
 	[_pixelBufferContext clearDrawable];
-	
-	//Destroy the OpenGL pixel buffer
-	
-	//Release target OpenGL context
 }
 
 @end

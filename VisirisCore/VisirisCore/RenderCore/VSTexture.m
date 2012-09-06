@@ -17,6 +17,8 @@
 @synthesize timeLineObjectId = _timeLineObjectId;
 @synthesize trackId = _trackId;
 
+#pragma Mark - Init
+
 -(id)initEmptyTextureWithSize:(NSSize) size trackId:(NSInteger) trackId{
     if(self = [super init]){
         _timeLineObjectId = -1;
@@ -41,6 +43,8 @@
     }
     return  self;
 }
+
+#pragma mark - Methods
 
 - (void)replaceContent:(VSImage *)theImage timeLineObjectId:(NSInteger) timeLineObjectId{
     if (self.timeLineObjectId != timeLineObjectId ||

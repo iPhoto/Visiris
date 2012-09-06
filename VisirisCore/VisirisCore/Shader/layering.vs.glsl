@@ -1,3 +1,5 @@
+//Basic positioning shader
+
 #version 110
 
 attribute vec2 position;

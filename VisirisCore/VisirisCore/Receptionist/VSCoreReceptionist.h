@@ -41,6 +41,7 @@
  * @param aTimestamp The current timestamp of the Visiris Project. Is used as an ID
  * @param theHandovers NSArray of all Handovers 
  * @param theFrameSize The size the frame will be created for.
+ * @param playMode The Mode of the Playhead
  */
 - (void)renderFrameAtTimestamp:(double)aTimestamp withHandovers:(NSArray *)theHandovers forSize:(NSSize)theFrameSize withPlayMode:(VSPlaybackMode)playMode;
 

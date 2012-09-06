@@ -15,6 +15,9 @@
 @synthesize fragmentShader = _fragmentShader;
 @synthesize vertexShader = _vertexShader;
 
+
+#pragma Mark - Init
+
 -(id)initWithName:(NSString *)name {
     if (self = [super init]) {
         if ([self make_resources:name] == 0){
@@ -23,6 +26,9 @@
     }
     return self;
 }
+
+
+#pragma mark - Private Methods
 
 - (NSInteger)make_resources:(NSString *)name{
     //compile shader
@@ -68,7 +74,18 @@
     
     glGetShaderiv(shader, GL_COMPILE_STATUS, &shader_ok);
     if (!shader_ok) {
-        NSLog(@"something went wront");
+        NSLog(@"Shader Compilation Failed");
+        
+        GLint logLength;
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLength);
+        if (logLength > 0)
+        {
+            GLchar *log = (GLchar *)malloc(logLength);
+            glGetShaderInfoLog(shader, logLength, &logLength, log);
+            NSLog(@"Shader compile log:\n%s", log);
+            free(log);
+        }
+        
         glDeleteShader(shader);
         return 0;
     }

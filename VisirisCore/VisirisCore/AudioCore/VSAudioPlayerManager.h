@@ -8,10 +8,33 @@
 
 #import <Foundation/Foundation.h>
 
+
+/**
+ * Manages the individual AudioPlayer
+ */
 @interface VSAudioPlayerManager : NSObject
 
+/**
+ * This is the same as in the AudioCore. Just chaining it through. Is for creating a Audioplayer as soon a Timelineobject with Audio gets dropped on a track. 
+ * @param projectItemID Each Timelineobject is referencing one projectItemID. Timelineobject : projectItem = n:1
+ * @param objectItemID TimelineObjectID
+ * @param trackID Number/Line of the Track
+ * @param path The absolute Path on the harddrive
+ */
+
 - (void)createAudioPlayerForProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID atTrack:(NSInteger)trackID andFilePath:(NSString *)path;
+
+/**
+ * Plays the audio of the Timelineobject.
+ * @param objectID TimelineObjectID
+ * @param time Actual Timestamp
+ * @param volume AudioVolume from 0 to 1
+ */
 - (void)playAudioOfObjectID:(NSInteger)objectID atTime:(double)time atVolume:(float)volume;
+
+/**
+ * Global Audioplaybackstop
+ */
 - (void)stopPlaying;
 
 @end

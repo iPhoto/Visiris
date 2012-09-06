@@ -49,23 +49,64 @@
 #import <Quartz/Quartz.h>
 #import <OpenGL/gl.h>
 
+
+/**
+ * PBuffer for offlinerendering of the QuartzcomposerPatches
+ */
 @interface VSPBufferRenderer : NSObject
 
+/** Actual Buffer */
 @property (strong) NSOpenGLPixelBuffer*     pixelBuffer;
+
+/** The Context is similar to the OpenGLContext and needed for the creation of the Buffer */
 @property (strong) NSOpenGLContext*			pixelBufferContext;
+
+/** Basic QuartzComposerPatch Renderer */
 @property (strong) QCRenderer*				renderer;
+
+/** OpenGLContext */
 @property (strong) NSOpenGLContext*			textureContext;
+
+/** TODO COMMENT */
 @property (assign) GLenum					textureTarget;
+
+/** Final Texture */
 @property (assign) GLuint					textureName;
 
+
+/**
+ * Basic Initialization for the PBuffer and the QCPatch
+ * @param path Absolute Path of the QuartzComposerPatch
+ * @param target TODO COMMENT
+ * @param width Width of the texture
+ * @param height Height of the texture
+ * @param context OpenGLContext
+ */
 - (id) initWithCompositionPath:(NSString*)path textureTarget:(GLenum)target textureWidth:(unsigned)width textureHeight:(unsigned)height openGLContext:(NSOpenGLContext*)context;
+
+/**
+ * Update QCPatch and renders it to texture
+ * @param time Actual time
+ * @return YES if succeded
+ */
 - (BOOL) updateTextureForTime:(NSTimeInterval)time;
+
+/**
+ * TODO COMMENT
+ */
 - (GLenum) textureTarget;
+
+/**
+ * TODO COMMENT
+ */
 - (GLuint) textureName;
+
+/*
 - (unsigned) textureWidth;
 - (unsigned) textureHeight;
 - (float) textureCoordSMin;
 - (float) textureCoordSMax;
 - (float) textureCoordTMin;
 - (float) textureCoordTMax;
+ */
 @end
