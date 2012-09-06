@@ -37,17 +37,18 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.scrollOffset = NSZeroPoint;
+        
+        [self initLayer];
+        [self initGuideLine];
+        [self initObservers];
     }
     
     return self;
 }
 
 -(void) awakeFromNib{
-    self.scrollOffset = NSZeroPoint;
     
-    [self initLayer];
-    [self initGuideLine];
-    [self initObservers];
 }
 
 /**
@@ -134,11 +135,9 @@
 
 -(void) moveGuidelineToPosition:(CGFloat) location{
     NSRect layerRect = self.frame;
-    
-//    layerRect.size.width = 1;
-    
-//    layerRect.origin.x = round(location+self.scrollOffset.x);
-//    layerRect.origin.y = 0;
+    layerRect.size.width = 1;
+    layerRect.origin.x = round(location+self.scrollOffset.x);
+    layerRect.origin.y = 0;
     
     [CATransaction begin];
     [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];

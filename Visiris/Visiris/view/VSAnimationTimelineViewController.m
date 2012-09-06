@@ -72,35 +72,35 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 
 -(void) showTimelineForTimelineObject:(VSTimelineObject*) timelineObject{
     
-//    [self.scrollView setFrameOrigin:NSZeroPoint];
-//    
-//    [self.scrollView.trackHolderView setFrame:self.scrollView.documentVisibleRect];
-//    
-//    if(self.timelineObject != timelineObject){
-//        [self resetTimeline];
-//    }
-//    
-//    self.timelineObject = timelineObject;
-//    
-//    [self computePixelTimeRatio];
-//    
-//    if(self.timelineObject){
-//        
-//        for(VSParameter *parameter in [self.timelineObject visibleParameters]){
-//            
-//            NSRect trackRect = NSMakeRect(0, self.animationTrackViewControllers.count*self.trackHeight, [self pixelForTimestamp:self.timelineObject.duration], self.trackHeight);
-//            
-//            NSColor *trackColor = self.animationTrackViewControllers.count % 2 == 0 ? self.evenTrackColor : self.oddTrackColor;
-//            
-//            VSAnimationTrackViewController *animationTrackViewController = [[VSAnimationTrackViewController alloc]initWithFrame:trackRect andColor:trackColor];
-//            
-//            [self.animationTrackViewControllers addObject:animationTrackViewController];
-//            
-//            [animationTrackViewController.view setFrame:trackRect];
-//            
-//            [self.scrollView addTrackView:animationTrackViewController.view];
-//        }
-//    }
+    [self.scrollView setFrameOrigin:NSZeroPoint];
+    
+    [self.scrollView.trackHolderView setFrame:self.scrollView.documentVisibleRect];
+    
+    if(self.timelineObject != timelineObject){
+        [self resetTimeline];
+    }
+    
+    self.timelineObject = timelineObject;
+    
+    [self computePixelTimeRatio];
+    
+    if(self.timelineObject){
+        
+        for(VSParameter *parameter in [self.timelineObject visibleParameters]){
+            
+            NSRect trackRect = NSMakeRect(0, self.animationTrackViewControllers.count*self.trackHeight, [self pixelForTimestamp:self.timelineObject.duration], self.trackHeight);
+            
+            NSColor *trackColor = self.animationTrackViewControllers.count % 2 == 0 ? self.evenTrackColor : self.oddTrackColor;
+            
+            VSAnimationTrackViewController *animationTrackViewController = [[VSAnimationTrackViewController alloc]initWithFrame:trackRect andColor:trackColor];
+            
+            [self.animationTrackViewControllers addObject:animationTrackViewController];
+            
+            [animationTrackViewController.view setFrame:trackRect];
+            
+            [self.scrollView addTrackView:animationTrackViewController.view];
+        }
+    }
 }
 
 -(void) resetTimeline{

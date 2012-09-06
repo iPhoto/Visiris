@@ -1103,13 +1103,12 @@ static NSString* defaultNib = @"VSMainTimelineView";
     
     [self.scrollView addTrackView:newTrackViewController.view];
     
-    
-    
     //Size and position of the track
     int width = self.scrollView.visibleTrackViewsHolderWidth;
+
     NSInteger yPosition = (VSTrackViewHeight+VSTrackViewMargin) * ([self.trackViewControllers count]);
     
-    NSRect newFrame = NSMakeRect(self.scrollView.visibleRect.origin.x,yPosition,width,VSTrackViewHeight);
+    NSRect newFrame = NSMakeRect(0,yPosition,width,VSTrackViewHeight);
     
     [[newTrackViewController view] setFrame:(newFrame)];
     
