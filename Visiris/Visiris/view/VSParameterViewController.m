@@ -26,14 +26,13 @@
 
 @implementation VSParameterViewController
 
-#define PARAMETER_HOLDER_PADDING_LEFT_RIGHT 10
-#define PARAMETER_TEXT_FIELD_HEIGHT 18
+#define PARAMETER_WITH_RANGE_TEXT_FIELD_WIDTH 50
+#define VALUE_SLIDER_MINIMUM_WIDTH 50
 
 @synthesize nameLabel = _nameLabel;
-@synthesize textValueField = _valueField;
-@synthesize boolValueField = _boolValueField;
-@synthesize valueSlider = _valueSlider;
-@synthesize valueSliderText = _valueSliderText;
+@synthesize textField = _valueField;
+@synthesize checkBox = _boolValueField;
+@synthesize horizontalSlider = _valueSlider;
 @synthesize parameterHolder = _parameterHolder;
 @synthesize parameter = _parameter;
 
@@ -67,11 +66,7 @@ static NSString* defaultNib = @"VSParameterView";
     if([self.view isKindOfClass:[VSParameterView class]]){
         ((VSParameterView*) self.view).viewDelegate = self;
     }
-    
-    [self.parameterHolder setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.parameterHolder setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-    [self.parameterHolder setAutoresizesSubviews:YES];
-    
+    [self.view setAutoresizingMask:NSViewWidthSizable];
     [_parameter addObserver:self forKeyPath:@"defaultValue" options:0 context:nil];
 }
 
@@ -87,12 +82,10 @@ static NSString* defaultNib = @"VSParameterView";
 }
 
 -(void) showParameter:(VSParameter *)parameter inFrame:(NSRect)frame{
-    [self.view setFrame:frame];
-    [self.parameterHolder setFrameSize:frame.size];
-    self.parameter = parameter;
     
-   [self.parameter addObserver:self forKeyPath:@"defaultValue" options:0 context:nil];
-     
+    self.parameter = parameter;
+    [self.parameter addObserver:self forKeyPath:@"defaultValue" options:0 context:nil];
+    
     [self showParameter];
 }
 
@@ -102,23 +95,18 @@ static NSString* defaultNib = @"VSParameterView";
     [self.parameter removeObserver:self forKeyPath:@"defaultValue"];
     switch (self.parameter.dataType) {
         case VSParameterDataTypeBool:
-            [self setParametersDefaultBoolValue:[self boolValueForButtonState:self.boolValueField.state]];
+            [self setParametersDefaultBoolValue:[self boolValueForButtonState:self.checkBox.state]];
             break;
         case VSParameterDataTypeFloat:
         {
-            if (!self.parameter.hasRange) {
-                [self setParametersDefaultFloatValue:[self.textValueField floatValue]];
-            }
-            else {
-                [self setParametersDefaultFloatValue:[self.valueSliderText floatValue ]];
-            }
+            [self setParametersDefaultFloatValue:[self.textField floatValue]];
             break;
         }
         case VSParameterDataTypeString:
-            [self setParametersDefaultStringValue:[self.textValueField stringValue]];
+            [self setParametersDefaultStringValue:[self.textField stringValue]];
             break;
         default:
-            [self setParametersDefaultStringValue:[self.textValueField stringValue]];
+            [self setParametersDefaultStringValue:[self.textField stringValue]];
             break;
     }
 }
@@ -126,17 +114,17 @@ static NSString* defaultNib = @"VSParameterView";
 #pragma mark - VSViewDelegate Implentation
 
 -(NSView*) nextKeyViewOfView:(NSView *)view willBeSet:(NSView *)nextKeyView{
-    [self.textValueField setNextKeyView:nextKeyView];
-    [self.textValueField becomeFirstResponder];
+    [self.textField setNextKeyView:nextKeyView];
+    [self.textField becomeFirstResponder];
     return nextKeyView;
 }
 
 #pragma mark - NSTextViewDelegate Implementation
 
 -(BOOL) control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor{
-    if(control == self.textValueField){
-        if([self respondsToSelector:self.textValueField.action]){
-            [self performSelector:self.textValueField.action withObject:self.textValueField];
+    if(control == self.textField){
+        if([self respondsToSelector:self.textField.action]){
+            [self performSelector:self.textField.action withObject:self.textField];
         }
     }
     
@@ -156,12 +144,12 @@ static NSString* defaultNib = @"VSParameterView";
 
 - (IBAction)valueSliderTextHasChanged:(NSTextField *)sender {
     [self setParameterValueWithText:[sender stringValue]];
-    [self.valueSlider setFloatValue:[self.parameter defaultFloatValue]];
+    [self.horizontalSlider setFloatValue:[self.parameter defaultFloatValue]];
 }
 
 - (IBAction)sliderValueHasChanged:(NSSlider *)sender {
     [self setParameterValueWithText:[sender stringValue]];
-    [self.textValueField setFloatValue:[self.parameter defaultFloatValue]];
+    [self.textField setFloatValue:[self.parameter defaultFloatValue]];
     
 }
 
@@ -179,24 +167,24 @@ static NSString* defaultNib = @"VSParameterView";
     
     switch (self.parameter.dataType) {
         case VSParameterDataTypeBool:
-            [self.boolValueField setState:[self buttonStateOfBooleanValue:[self.parameter defaultBoolValue]]];
+            [self.checkBox setState:[self buttonStateOfBooleanValue:[self.parameter defaultBoolValue]]];
             break;
         case VSParameterDataTypeFloat:
-            [self.valueSlider setFloatValue:[self.parameter defaultFloatValue]];
-            [self.textValueField setFloatValue:[self.parameter defaultFloatValue]];
+            [self.horizontalSlider setFloatValue:[self.parameter defaultFloatValue]];
+            [self.textField setFloatValue:[self.parameter defaultFloatValue]];
             break;
         case VSParameterDataTypeString:
-            [self.textValueField setStringValue:[self.parameter defaultStringValue]];
+            [self.textField setStringValue:[self.parameter defaultStringValue]];
             break;
         default:
-            [self.textValueField setStringValue:[self.parameter defaultStringValue]];
+            [self.textField setStringValue:[self.parameter defaultStringValue]];
             break;
     }
 }
 
 -(void) showParameter{
     [self.nameLabel setStringValue: NSLocalizedString(self.parameter.name, @"")];
-    
+
     switch (self.parameter.dataType) {
         case VSParameterDataTypeBool:
             [self showBoolParameter];
@@ -219,27 +207,27 @@ static NSString* defaultNib = @"VSParameterView";
 -(void) showStringParameter{
     [self.parameterHolder removeConstraints:self.parameterHolder.constraints];
     
-    self.textValueField = [[NSTextField alloc]init];
-    [self.parameterHolder addSubview:self.textValueField];
+    self.textField = [[NSTextField alloc]init];
+    [self.parameterHolder addSubview:self.textField];
+    [self.textField setTranslatesAutoresizingMaskIntoConstraints:NO];
     
-    [self.textValueField setFrame:NSMakeRect(PARAMETER_HOLDER_PADDING_LEFT_RIGHT, 0, 0, PARAMETER_TEXT_FIELD_HEIGHT)];
+    [self.textField setFrameSize:self.textField.intrinsicContentSize];
     
-    NSDictionary *viewsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:self.textValueField,@"textValueField", nil];
+    NSDictionary *viewsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:self.textField,@"textValueField", nil];
     
-    NSString *constraintString = [NSString stringWithFormat:@"|-%d-[textValueField]-%d-|",PARAMETER_TEXT_FIELD_HEIGHT, PARAMETER_TEXT_FIELD_HEIGHT];
+    NSString *constraintString = [NSString stringWithFormat:@"|[textValueField]|"];
     
-    NSArray *constraints =  [NSLayoutConstraint constraintsWithVisualFormat:constraintString options:0 metrics:nil views:viewsDictionary];
+    NSArray *constraints =  [NSLayoutConstraint constraintsWithVisualFormat:constraintString options:NSLayoutFormatAlignAllCenterY metrics:nil views:viewsDictionary];
     
-    [self.textValueField setAutoresizingMask:NSViewWidthSizable];
-    [self.textValueField setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.parameterHolder removeConstraints:self.parameterHolder.constraints];
+    
     [self.parameterHolder addConstraints:constraints];
     
-    [self.textValueField setStringValue:self.parameter.defaultStringValue];
+    [self.textField setStringValue:self.parameter.defaultStringValue];
+    [self.textField setTarget:self];
+    [self.textField setAction:@selector(textValueHasChanged:)];
     
-    [self.textValueField setTarget:self];
-    [self.textValueField setAction:@selector(textValueHasChanged:)];
-    
-    [self.textValueField setDelegate:self];
+    [self.textField setDelegate:self];
     
     
 }
@@ -249,26 +237,24 @@ static NSString* defaultNib = @"VSParameterView";
  */
 -(void) showBoolParameter{
     
-    self.boolValueField= [[NSButton alloc]init];
-    [self.boolValueField setTitle:self.parameter.name];
-    [self.boolValueField setButtonType:NSSwitchButton];
-    [self.boolValueField setState:[self buttonStateOfBooleanValue:self.parameter.defaultBoolValue]];
-    [self.parameterHolder addSubview:self.boolValueField];
-    
-    [self.boolValueField setFrame:NSMakeRect(PARAMETER_HOLDER_PADDING_LEFT_RIGHT, 0, 0, PARAMETER_TEXT_FIELD_HEIGHT)];
-    NSDictionary *viewsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:self.boolValueField,@"boolValueField", nil];
+    self.checkBox= [[NSButton alloc]init];
+    [self.checkBox setTitle:self.parameter.name];
+    [self.checkBox setButtonType:NSSwitchButton];
+    [self.checkBox setState:[self buttonStateOfBooleanValue:self.parameter.defaultBoolValue]];
+    [self.parameterHolder addSubview:self.checkBox];
     
     
-    NSString *constraintString = [NSString stringWithFormat:@"|-%d-[boolValueField]-%d-|",PARAMETER_TEXT_FIELD_HEIGHT, PARAMETER_TEXT_FIELD_HEIGHT];
+    NSDictionary *viewsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:self.checkBox,@"boolValueField", nil];
+    NSString *constraintString = [NSString stringWithFormat:@"|-[boolValueField]-|"];
     
     NSArray *constraints =  [NSLayoutConstraint constraintsWithVisualFormat:constraintString options:0 metrics:nil views:viewsDictionary];
     
-    [self.boolValueField setAutoresizingMask:NSViewWidthSizable];
-    [self.boolValueField setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.checkBox setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
     [self.parameterHolder addConstraints:constraints];
     
-    [self.boolValueField setTarget:self];
-    [self.boolValueField setAction:@selector(boolValueHasChanged:)];
+    [self.checkBox setTarget:self];
+    [self.checkBox setAction:@selector(boolValueHasChanged:)];
     
 }
 
@@ -280,53 +266,51 @@ static NSString* defaultNib = @"VSParameterView";
 -(void) showFloatParameter{
     [self showStringParameter];
     
+    [self.textField setFloatValue:self.parameter.defaultFloatValue];
+    [self.textField setTarget:self];
+    [self.textField setAction:@selector(valueSliderTextHasChanged:)];
+    
     if(self.parameter.hasRange){
-                
-        self.valueSlider = [[NSSlider alloc] init];
-        [self.parameterHolder addSubview:self.valueSlider];
+        self.horizontalSlider = [[NSSlider alloc] init];
+        self.horizontalSlider.identifier = @"valueSlider";
         
-        float valueFieldWidth = 50;
-        float sliderWidth = self.parameterHolder.frame.size.width - valueFieldWidth - 3*PARAMETER_HOLDER_PADDING_LEFT_RIGHT;
-        [self.valueSlider setFrame:NSMakeRect(PARAMETER_HOLDER_PADDING_LEFT_RIGHT, 0, self.valueSlider.knobThickness+1,self.valueSlider.knobThickness)];
-        [self.textValueField setFrame:NSMakeRect(0, 0, 0,PARAMETER_TEXT_FIELD_HEIGHT)];
-
+        [self.parameterHolder addSubview:self.horizontalSlider];
         
-        NSDictionary *viewsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:self.textValueField,@"textValueField",
-                                                                                    self.valueSlider,@"valueSlider",
-                                                                                    nil];
-
-        NSString *constraintString = [NSString stringWithFormat:@"|-%d-[valueSlider(>=%f)]-%d-[textValueField(==%f)]-%d-|",PARAMETER_HOLDER_PADDING_LEFT_RIGHT, self.valueSlider.knobThickness+1,PARAMETER_HOLDER_PADDING_LEFT_RIGHT,valueFieldWidth,PARAMETER_HOLDER_PADDING_LEFT_RIGHT];
+        [self.horizontalSlider setFrameSize:self.horizontalSlider.intrinsicContentSize];
         
+        [self initValueSlider];
         
-        NSMutableArray* constraints = [NSMutableArray arrayWithArray: [NSLayoutConstraint constraintsWithVisualFormat:constraintString options:0 metrics:nil views:viewsDictionary]];
-        
-        constraintString = [NSString stringWithFormat:@"V:[valueSlider(==%f)]",self.valueSlider.knobThickness];
-        
-        [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:constraintString options:0 metrics:nil views:viewsDictionary]];
-        
-        
-        [self.textValueField setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [self.valueSlider setTranslatesAutoresizingMaskIntoConstraints:NO];
-        
-        [self.textValueField setAutoresizingMask:NSViewNotSizable];
-        [self.valueSlider setAutoresizingMask:NSViewNotSizable];
-
-        [self.parameterHolder removeConstraints:self.parameterHolder.constraints];
-        [self.parameterHolder addConstraints:constraints];
-        
-        [self.valueSlider setMinValue:self.parameter.rangeMinValue];
-        [self.valueSlider setMaxValue:self.parameter.rangeMaxValue];
-        [self.valueSlider setFloatValue:self.parameter.defaultFloatValue];
-        
-        [self.valueSlider setTarget:self];
-        [self.valueSlider setAction:@selector(sliderValueHasChanged:)];
-        
-        [self.textValueField setFloatValue:self.parameter.defaultFloatValue];
-        [self.textValueField setTarget:self];
-        [self.textValueField setAction:@selector(valueSliderTextHasChanged:)];
-        
+        [self setConstraintsForParameterWithRange];
     }
     
+}
+
+-(void) setConstraintsForParameterWithRange{
+    [self.horizontalSlider setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    
+    NSMutableArray* constraints = [[NSMutableArray alloc] init];
+    
+    NSDictionary *viewsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     self.textField,@"textValueField",
+                                     self.horizontalSlider,@"valueSlider",
+                                     nil];
+    
+    NSString *constraintString = [NSString stringWithFormat: @"|-[valueSlider(>=%d)]-[textValueField(==%d)]-|", VALUE_SLIDER_MINIMUM_WIDTH, PARAMETER_WITH_RANGE_TEXT_FIELD_WIDTH];
+    
+    [constraints addObjectsFromArray: [NSLayoutConstraint constraintsWithVisualFormat:constraintString options:  NSLayoutFormatAlignAllCenterY metrics:nil views:viewsDictionary]];
+    
+    [self.parameterHolder removeConstraints:self.parameterHolder.constraints];
+    [self.parameterHolder addConstraints:constraints];
+}
+
+-(void) initValueSlider{
+    [self.horizontalSlider setMinValue:self.parameter.rangeMinValue];
+    [self.horizontalSlider setMaxValue:self.parameter.rangeMaxValue];
+    [self.horizontalSlider setFloatValue:self.parameter.defaultFloatValue];
+    
+    [self.horizontalSlider setTarget:self];
+    [self.horizontalSlider setAction:@selector(sliderValueHasChanged:)];
 }
 
 /**

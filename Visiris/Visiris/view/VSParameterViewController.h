@@ -60,16 +60,13 @@
 - (IBAction)sliderValueHasChanged:(NSSlider *)sender;
 
 /** The textField displays the value of parameters of the type VSParameterDataTypeString or VSParameterDataTypeFloat where hasRange is NO. */
-@property (strong) NSTextField *textValueField;
+@property (strong) NSTextField *textField;
 
 /** The checkBox displays the value of parameters of the type VSParameterDataTypeBool. */
-@property (strong) NSButton *boolValueField;
+@property (strong) NSButton *checkBox;
 
 /** The textField displays the value of parameters of the type SParameterDataTypeFloat where hasRange is YES. */
-@property (strong) NSSlider *valueSlider;
-
-/** The slider displays the value of parameters of the type SParameterDataTypeFloat where hasRange is YES. Min and Max of slider are set according to the valueRange property of the parameter.*/
-@property (strong) NSTextField *valueSliderText;
+@property (strong) NSSlider *horizontalSlider;
 
 
 #pragma mark - init

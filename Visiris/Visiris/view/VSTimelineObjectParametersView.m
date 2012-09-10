@@ -8,6 +8,8 @@
 
 #import "VSTimelineObjectParametersView.h"
 
+#import "VSCoreServices.h"
+
 @implementation VSTimelineObjectParametersView
 
 - (id)initWithFrame:(NSRect)frame
@@ -22,11 +24,17 @@
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    // Drawing code here.
+    [[NSColor greenColor] setFill];
+    NSRectFill(dirtyRect);
+    
 }
 
 -(BOOL) isFlipped{
     return YES;
+}
+
+-(void) setFrame:(NSRect)frameRect{
+    [super setFrame:frameRect];
 }
 
 @end

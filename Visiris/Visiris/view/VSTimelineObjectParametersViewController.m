@@ -31,6 +31,7 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
     if(self = [self initWithNibName:defaultNib bundle:nil]){
         self.parameterViewControllers = [[NSMutableArray alloc]init];
         self.parameterViewHeight = parameterViewHeight;
+        self.view.identifier = @"VSTimelineObjectParametersView";
     }
     
     return self;
@@ -48,6 +49,11 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
     return self;
 }
 
+-(void) awakeFromNib{
+    [self.view setAutoresizingMask:NSViewWidthSizable];
+    [self.view setAutoresizesSubviews:YES];
+}
+
 #pragma mark - Methods
 
 /**
@@ -57,12 +63,10 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
     self.parameters = parameters;
     
     if(parameters && parameters.count){
-        
         for(VSParameter *parameter in self.parameters){
             
-            NSRect viewFrame = NSMakeRect(0, self.parameterViewControllers.count * self.parameterViewHeight, self.view.frame.size.width, self.parameterViewHeight);
-            
             VSParameterViewController *parameteViewController = [[VSParameterViewController alloc] initWithDefaultNib];
+            
             if(self.parameterViewControllers.count){
                 VSParameterViewController *lastParameterController = [self.parameterViewControllers lastObject];
                 
@@ -74,11 +78,57 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
             
             
             [self.view addSubview:parameteViewController.view];
-            [parameteViewController showParameter:parameter inFrame:viewFrame];
+            
             [parameteViewController.view setAutoresizingMask:NSViewWidthSizable];
-            [parameteViewController.view setAutoresizesSubviews:YES];
+            [parameteViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
+            
+            NSMutableArray *constraints = [[NSMutableArray alloc] init];
             
             
+            NSDictionary *viewsDictionary = [NSDictionary dictionaryWithObject:parameteViewController.view forKey:@"parameterView"];
+            
+            [constraints addObject: [NSLayoutConstraint constraintWithItem:parameteViewController.view
+                                                                 attribute:NSLayoutAttributeWidth
+                                                                 relatedBy:NSLayoutRelationEqual
+                                                                    toItem:self.view
+                                                                 attribute:NSLayoutAttributeWidth
+                                                                multiplier:1.0
+                                                                  constant:0.0]];
+            
+            if(!self.parameterViewControllers.count){
+                //                [constraints addObjectsFromArray: [NSLayoutConstraint constraintsWithVisualFormat:constraintString
+                //                                                                                          options:0
+                //                                                                                          metrics:nil
+                //                                                                                            views:viewsDictionary]];
+                
+                [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[parameterView(==%f)]",self.parameterViewHeight]
+                                                                                         options:0
+                                                                                         metrics:nil
+                                                                                           views:viewsDictionary]];
+                //
+            }
+            else{
+                [constraints addObject: [NSLayoutConstraint constraintWithItem:parameteViewController.view
+                                                                     attribute:NSLayoutAttributeTop
+                                                                     relatedBy:NSLayoutRelationEqual
+                                                                        toItem:((VSParameterViewController*) [self.parameterViewControllers lastObject]).view
+                                                                     attribute:NSLayoutAttributeBottom
+                                                                    multiplier:1.0
+                                                                      constant:0.0]];
+                
+                [constraints addObject: [NSLayoutConstraint constraintWithItem:parameteViewController.view
+                                                                     attribute:NSLayoutAttributeHeight
+                                                                     relatedBy:NSLayoutRelationEqual
+                                                                        toItem:((VSParameterViewController*) [self.parameterViewControllers lastObject]).view
+                                                                     attribute:NSLayoutAttributeHeight
+                                                                    multiplier:1.0
+                                                                      constant:0.0]];
+            }
+            
+            
+            [self.view addConstraints:constraints];
+            
+            [parameteViewController showParameter:parameter inFrame:NSZeroRect];
             
             [self.parameterViewControllers addObject:parameteViewController];
         }

@@ -848,8 +848,8 @@
 			isa = PBXGroup;
 			children = (
 				5B35BFAA1577A573009911EC /* VSParameterViewController.h */,
-				5B35BFAB1577A573009911EC /* VSParameterViewController.m */,
 				5B35BFA71577A573009911EC /* VSParameterView.h */,
+				5B35BFAB1577A573009911EC /* VSParameterViewController.m */,
 				5B35BFA81577A573009911EC /* VSParameterView.m */,
 				5B35BFA91577A573009911EC /* VSParameterView.xib */,
 			);

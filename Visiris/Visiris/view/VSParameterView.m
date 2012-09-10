@@ -24,6 +24,11 @@
 
 #pragma mark - NSView
 
+-(void) setFrame:(NSRect)frameRect{
+    [super setFrame:frameRect];
+}
+
+
 -(BOOL) acceptsFirstResponder{
     return NO;
 }
