@@ -29,12 +29,12 @@
 #define PARAMETER_WITH_RANGE_TEXT_FIELD_WIDTH 50
 #define VALUE_SLIDER_MINIMUM_WIDTH 50
 
-@synthesize nameLabel = _nameLabel;
-@synthesize textField = _valueField;
-@synthesize checkBox = _boolValueField;
-@synthesize horizontalSlider = _valueSlider;
-@synthesize parameterHolder = _parameterHolder;
-@synthesize parameter = _parameter;
+@synthesize nameLabel           = _nameLabel;
+@synthesize textField           = _valueField;
+@synthesize checkBox            = _boolValueField;
+@synthesize horizontalSlider    = _valueSlider;
+@synthesize parameterHolder     = _parameterHolder;
+@synthesize parameter           = _parameter;
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
 static NSString* defaultNib = @"VSParameterView";
@@ -123,8 +123,10 @@ static NSString* defaultNib = @"VSParameterView";
 
 -(BOOL) control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor{
     if(control == self.textField){
-        if([self respondsToSelector:self.textField.action]){
-            [self performSelector:self.textField.action withObject:self.textField];
+        if(self.textField.action){
+            if([self respondsToSelector:control.action]){
+                [self performSelector:control.action withObject:control];
+            }
         }
     }
     
@@ -184,7 +186,7 @@ static NSString* defaultNib = @"VSParameterView";
 
 -(void) showParameter{
     [self.nameLabel setStringValue: NSLocalizedString(self.parameter.name, @"")];
-
+    
     switch (self.parameter.dataType) {
         case VSParameterDataTypeBool:
             [self showBoolParameter];
