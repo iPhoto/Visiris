@@ -59,13 +59,9 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 -(void) awakeFromNib{
     [super awakeFromNib];
     
-    
-    
     [self.view setAutoresizesSubviews:NO];
     [self.view setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-    [self.scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-    
-    [self.scrollView setFrame:self.view.frame];
+    [self.view setAutoresizesSubviews:YES];
 }
 
 #pragma mark - Methods

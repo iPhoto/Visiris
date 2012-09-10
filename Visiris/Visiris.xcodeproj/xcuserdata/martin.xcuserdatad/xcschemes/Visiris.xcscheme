@@ -57,6 +57,12 @@
             ReferencedContainer = "container:Visiris.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = " -NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints 1"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

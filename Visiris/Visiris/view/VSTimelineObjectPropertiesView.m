@@ -8,7 +8,10 @@
 
 #import "VSTimelineObjectPropertiesView.h"
 
+#import "VSCoreServices.h"
+
 @implementation VSTimelineObjectPropertiesView
+
 
 -(void) setFrame:(NSRect)frameRect{
     [super setFrame:frameRect];

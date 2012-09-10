@@ -53,6 +53,7 @@ static NSString* quartzComposerSupplierClassString;
     [self addSupportedImage:@"public.jpeg" name:@"JPEG"];
     [self addSupportedVideo:@"public.mpeg-4" name:@"MP4"];
     [self addSupportedQuartzComposer:@"com.apple.quartz-composer-composition" name:@"QTZ"];
+    [self addSupportedAudio:@"com.microsoft.waveform-audio" name:@"WAVE"];
 }
 
 #pragma mark- Functions

@@ -35,7 +35,7 @@
 @implementation VSTimelineObjectPropertiesViewController
 
 /** Height of the parameter views */
-#define PARAMETER_VIEW_HEIGHT 50
+#define PARAMETER_VIEW_HEIGHT 80
 #define PARAMETER_VIEW_MINIMUM_WIDTH 150
 #define PARAMETER_VIEW_MAXIMUM_WIDTH 200
 
@@ -56,30 +56,10 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 -(id) initWithDefaultNib{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
         
-        [self initScrollView];
         
-        [self fillSplitView];
-        [self.view setAutoresizesSubviews:NO];
     }
     
     return self;
-}
-
--(void) fillSplitView{
-    self.timelineObjectsParameterViewController = [[VSTimelineObjectParametersViewController alloc] initWithDefaultNibAndParameterViewHeight:PARAMETER_VIEW_HEIGHT];
-    
-    [self.parametersHolder addSubview:self.timelineObjectsParameterViewController.view];
-    
-    [self.timelineObjectsParameterViewController.view setAutoresizesSubviews:YES];
-    [self.timelineObjectsParameterViewController.view setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-    
-    [self.animationTimelineViewController.view setAutoresizesSubviews:YES];
-    [self.animationTimelineViewController.view setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-    
-    self.animationTimelineViewController = [[VSAnimationTimelineViewController alloc]initWithDefaultNibAndTrackHeight:PARAMETER_VIEW_HEIGHT];
-    [self.animationTimelineHolder addSubview:self.animationTimelineViewController.view];
-    
-    
 }
 
 
@@ -93,15 +73,20 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     return self;
 }
 
-#pragma mark - VSViewController
-
 - (void) awakeFromNib{
-    [self initScrollView];
     if([self.view isKindOfClass:[VSTimelineObjectPropertiesView class] ]){
         ((VSTimelineObjectPropertiesView*) self.view).resizingDelegate = self;
     }
     
-    [self.splitView setPosition:PARAMETER_VIEW_MINIMUM_WIDTH ofDividerAtIndex:0];
+    [self initScrollView];
+    
+    [self initAnimationTimeline];
+    
+    [self initParameterView];
+    
+    [self animationTimelineHolder];
+    
+   // [self.splitView setPosition:PARAMETER_VIEW_MINIMUM_WIDTH ofDividerAtIndex:0];
 }
 
 /**
@@ -110,26 +95,48 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 -(void) initScrollView{
     [self.view setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
     [self.view setAutoresizesSubviews:YES];
-    
-    [self.documentView removeConstraints:self.view.constraints];
-    
+
     [self.scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
     [self.scrollView setAutoresizesSubviews:YES];
+
+    [self.splitView setAutoresizesSubviews:YES];
+    [self.splitView setAutoresizingMask:NSViewWidthSizable];
     
     self.documentView = (NSView*) self.scrollView.documentView;
     [self.documentView setAutoresizingMask:NSViewWidthSizable];
     [self.documentView setAutoresizesSubviews:YES];
-    
-    [self.splitView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.splitView setAutoresizesSubviews:YES];
-    [self.splitView setAutoresizingMask:NSViewWidthSizable];
-    [self.splitView setPosition:PARAMETER_VIEW_MINIMUM_WIDTH ofDividerAtIndex:0];
-    
+}
+
+-(void) initAnimationTimeline{
     [self.animationTimelineHolder setAutoresizesSubviews:YES];
     [self.animationTimelineHolder setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
     
+    [self.animationTimelineViewController.view setAutoresizesSubviews:YES];
+    [self.animationTimelineViewController.view setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+    
+    self.animationTimelineViewController = [[VSAnimationTimelineViewController alloc]initWithDefaultNibAndTrackHeight:PARAMETER_VIEW_HEIGHT];
+    [self.animationTimelineHolder addSubview:self.animationTimelineViewController.view];
+}
+
+-(void) initParameterView{
     [self.parametersHolder setAutoresizesSubviews:YES];
     [self.parametersHolder setAutoresizingMask: NSViewWidthSizable];
+    [self.parametersHolder setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    self.timelineObjectsParameterViewController = [[VSTimelineObjectParametersViewController alloc] initWithDefaultNibAndParameterViewHeight:PARAMETER_VIEW_HEIGHT];
+    
+    [self.parametersHolder addSubview:self.timelineObjectsParameterViewController.view];
+    
+    [self.timelineObjectsParameterViewController.view setFrameOrigin:NSMakePoint(0, self.animationTimelineViewController.scrollView.timelecodeRulerThickness)];
+
+    [self.timelineObjectsParameterViewController.view setFrameSize:self.parametersHolder.frame.size];
+    
+    [self.timelineObjectsParameterViewController.view setAutoresizingMask:NSViewWidthSizable];
+    [self.timelineObjectsParameterViewController.view setAutoresizesSubviews:YES];
+    [self.timelineObjectsParameterViewController.view setTranslatesAutoresizingMaskIntoConstraints:YES];
+    
+    [self.view setNeedsLayout:YES];
+    [self.view setNeedsUpdateConstraints:YES];
 }
 
 
@@ -143,48 +150,48 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 
 #pragma mark - NSSplitViewDelegate Implementation
 
--(CGFloat) splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex{
-    NSView* subView = [splitView.subviews objectAtIndex:0];
-    return  subView.frame.origin.x + PARAMETER_VIEW_MINIMUM_WIDTH;
-}
-
--(CGFloat) splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMaximumPosition ofSubviewAt:(NSInteger)dividerIndex{
-    return PARAMETER_VIEW_MAXIMUM_WIDTH;
-}
-
--(void) splitViewDidResizeSubviews:(NSNotification *)notification{
-    BOOL sizeDoesFit = YES;
-    float deltaWidth;
-    
-    if(self.parametersHolder.frame.size.width < PARAMETER_VIEW_MINIMUM_WIDTH){
-        
-        deltaWidth = self.parametersHolder.frame.size.width - PARAMETER_VIEW_MINIMUM_WIDTH;
-        
-        [self.parametersHolder setFrameSize:NSMakeSize(PARAMETER_VIEW_MINIMUM_WIDTH, self.parametersHolder.frame.size.height)];
-        
-        sizeDoesFit = NO;
-        
-    }
-    else if(self.parametersHolder.frame.size.width > PARAMETER_VIEW_MAXIMUM_WIDTH){
-        
-        deltaWidth = self.parametersHolder.frame.size.width - PARAMETER_VIEW_MAXIMUM_WIDTH;
-        
-        [self.parametersHolder setFrameSize:NSMakeSize(PARAMETER_VIEW_MAXIMUM_WIDTH, self.parametersHolder.frame.size.height)];
-        
-        sizeDoesFit = NO;
-    }
-    
-    if(!sizeDoesFit){
-        NSView *secondView = [self.splitView.subviews objectAtIndex:1];
-        
-        NSRect resizedRect = secondView.frame;
-        
-        resizedRect.size.width +=deltaWidth;
-        resizedRect.origin.x += deltaWidth;
-        
-        [secondView setFrame:resizedRect];
-    }
-}
+//-(CGFloat) splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex{
+//    NSView* subView = [splitView.subviews objectAtIndex:0];
+//    return  subView.frame.origin.x + PARAMETER_VIEW_MINIMUM_WIDTH;
+//}
+//
+//-(CGFloat) splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMaximumPosition ofSubviewAt:(NSInteger)dividerIndex{
+//    return PARAMETER_VIEW_MAXIMUM_WIDTH;
+//}
+//
+//-(void) splitViewDidResizeSubviews:(NSNotification *)notification{
+//    BOOL sizeDoesFit = YES;
+//    float deltaWidth;
+//    
+//    if(self.parametersHolder.frame.size.width < PARAMETER_VIEW_MINIMUM_WIDTH){
+//        
+//        deltaWidth = self.parametersHolder.frame.size.width - PARAMETER_VIEW_MINIMUM_WIDTH;
+//        
+//        [self.parametersHolder setFrameSize:NSMakeSize(PARAMETER_VIEW_MINIMUM_WIDTH, self.parametersHolder.frame.size.height)];
+//        
+//        sizeDoesFit = NO;
+//        
+//    }
+//    else if(self.parametersHolder.frame.size.width > PARAMETER_VIEW_MAXIMUM_WIDTH){
+//        
+//        deltaWidth = self.parametersHolder.frame.size.width - PARAMETER_VIEW_MAXIMUM_WIDTH;
+//        
+//        [self.parametersHolder setFrameSize:NSMakeSize(PARAMETER_VIEW_MAXIMUM_WIDTH, self.parametersHolder.frame.size.height)];
+//        
+//        sizeDoesFit = NO;
+//    }
+//    
+//    if(!sizeDoesFit){
+//        NSView *secondView = [self.splitView.subviews objectAtIndex:1];
+//        
+//        NSRect resizedRect = secondView.frame;
+//        
+//        resizedRect.size.width +=deltaWidth;
+//        resizedRect.origin.x += deltaWidth;
+//        
+//        [secondView setFrame:resizedRect];
+//    }
+//}
 
 #pragma mark IBAction
 - (IBAction)nameTextFieldHasChanged:(NSTextField *)sender {
@@ -200,8 +207,6 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     else{
         [self.documentView setFrameSize:NSMakeSize(self.documentView.frame.size.width, self.numberOfParameters * PARAMETER_VIEW_HEIGHT)];
     }
-    
-    
 }
 
 #pragma mark - Private Methods
@@ -227,17 +232,11 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 }
 
 -(void) showParameters{
-    [self.timelineObjectsParameterViewController.view setFrameSize:self.parametersHolder.frame.size];
-    [self.timelineObjectsParameterViewController.view setFrameOrigin:NSMakePoint(0, self.animationTimelineViewController.scrollView.timelecodeRulerThickness)];
-    
     [self.timelineObjectsParameterViewController showParameters:[self.timelineObject visibleParameters]];
-    
 }
 
 -(void) showAnimationTimeline{
     [self.animationTimelineViewController showTimelineForTimelineObject:self.timelineObject];
-    
-    DDLogInfo(@"parameterHolder frame: %@",NSStringFromRect(self.animationTimelineViewController.scrollView.trackHolderView.frame));
 }
 
 #pragma mark - Properties
@@ -256,14 +255,13 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
         
         [self.timelineObject addObserver:self forKeyPath:@"name" options:0 context:nil];
         
-        
         [self showAnimationTimeline];
         
         [self showParameters];
         
         [self resetScrollingPosition];
         
-        [self.documentView setFrameSize:NSMakeSize(self.documentView.frame.size.width,self.timelineObjectsParameterViewController.view.frame.size.height)];
+        [self.view setNeedsDisplay:YES];
         
     }
 }

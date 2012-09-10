@@ -2,7 +2,7 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1080</int>
-		<string key="IBDocument.SystemVersion">12A269</string>
+		<string key="IBDocument.SystemVersion">12B19</string>
 		<string key="IBDocument.InterfaceBuilderVersion">2549</string>
 		<string key="IBDocument.AppKitVersion">1187</string>
 		<string key="IBDocument.HIToolboxVersion">624.00</string>
@@ -61,24 +61,28 @@
 														<reference key="NSNextResponder" ref="981300445"/>
 														<int key="NSvFlags">256</int>
 														<array class="NSMutableArray" key="NSSubviews"/>
-														<string key="NSFrameSize">{150, 323}</string>
+														<string key="NSFrameSize">{227, 323}</string>
 														<reference key="NSSuperview" ref="981300445"/>
+														<reference key="NSWindow"/>
 														<reference key="NSNextKeyView" ref="70263976"/>
 														<string key="NSReuseIdentifierKey">_NS:11</string>
-														<string key="NSClassName">VSFlippedView</string>
+														<string key="NSClassName">VSTestFlippedView</string>
 													</object>
 													<object class="NSCustomView" id="70263976">
 														<reference key="NSNextResponder" ref="981300445"/>
 														<int key="NSvFlags">256</int>
-														<string key="NSFrame">{{160, 0}, {285, 323}}</string>
+														<array class="NSMutableArray" key="NSSubviews"/>
+														<string key="NSFrame">{{237, 0}, {208, 323}}</string>
 														<reference key="NSSuperview" ref="981300445"/>
+														<reference key="NSWindow"/>
 														<reference key="NSNextKeyView" ref="391260075"/>
 														<string key="NSReuseIdentifierKey">_NS:13</string>
-														<string key="NSClassName">VSFlippedView</string>
+														<string key="NSClassName">VSTestFlippedView</string>
 													</object>
 												</array>
 												<string key="NSFrameSize">{445, 323}</string>
 												<reference key="NSSuperview" ref="797641322"/>
+												<reference key="NSWindow"/>
 												<reference key="NSNextKeyView" ref="912598720"/>
 												<string key="NSReuseIdentifierKey">_NS:9</string>
 												<bool key="NSIsVertical">YES</bool>
@@ -87,12 +91,14 @@
 										</array>
 										<string key="NSFrameSize">{445, 323}</string>
 										<reference key="NSSuperview" ref="304928022"/>
+										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="981300445"/>
 										<string key="NSReuseIdentifierKey">_NS:13</string>
 									</object>
 								</array>
 								<string key="NSFrame">{{1, 1}, {445, 323}}</string>
 								<reference key="NSSuperview" ref="684174825"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="797641322"/>
 								<string key="NSReuseIdentifierKey">_NS:11</string>
 								<reference key="NSDocView" ref="797641322"/>
@@ -112,6 +118,7 @@
 								<int key="NSvFlags">256</int>
 								<string key="NSFrame">{{446, 1}, {15, 323}}</string>
 								<reference key="NSSuperview" ref="684174825"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="1049735685"/>
 								<string key="NSReuseIdentifierKey">_NS:15</string>
 								<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
@@ -125,7 +132,7 @@
 								<int key="NSvFlags">256</int>
 								<string key="NSFrame">{{1, 324}, {445, 15}}</string>
 								<reference key="NSSuperview" ref="684174825"/>
-								<reference key="NSNextKeyView"/>
+								<reference key="NSWindow"/>
 								<string key="NSReuseIdentifierKey">_NS:26</string>
 								<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 								<int key="NSsFlags">1</int>
@@ -136,6 +143,7 @@
 						</array>
 						<string key="NSFrameSize">{462, 340}</string>
 						<reference key="NSSuperview" ref="1005"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="304928022"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<int key="NSsFlags">133170</int>
@@ -149,6 +157,7 @@
 				</array>
 				<string key="NSFrameSize">{462, 340}</string>
 				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="684174825"/>
 				<string key="NSClassName">VSTimelineObjectPropertiesView</string>
 			</object>
@@ -427,18 +436,8 @@
 						<reference key="parent" ref="797641322"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">471</int>
-						<reference key="object" ref="253463009"/>
-						<reference key="parent" ref="797641322"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">470</int>
 						<reference key="object" ref="949990436"/>
-						<reference key="parent" ref="797641322"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">467</int>
-						<reference key="object" ref="274052874"/>
 						<reference key="parent" ref="797641322"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -449,7 +448,13 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">452</int>
 						<reference key="object" ref="70263976"/>
+						<array class="NSMutableArray" key="children"/>
 						<reference key="parent" ref="981300445"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">389</int>
+						<reference key="object" ref="1050653391"/>
+						<reference key="parent" ref="1005"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">451</int>
@@ -458,9 +463,14 @@
 						<reference key="parent" ref="981300445"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">389</int>
-						<reference key="object" ref="1050653391"/>
-						<reference key="parent" ref="1005"/>
+						<int key="objectID">471</int>
+						<reference key="object" ref="253463009"/>
+						<reference key="parent" ref="797641322"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">467</int>
+						<reference key="object" ref="274052874"/>
+						<reference key="parent" ref="797641322"/>
 					</object>
 				</array>
 			</object>
@@ -494,6 +504,7 @@
 				<boolean value="NO" key="450.IBNSViewMetadataTranslatesAutoresizingMaskIntoConstraints"/>
 				<string key="450.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="451.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="451.userInterfaceItemIdentifier">parametersHolder</string>
 				<string key="452.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="466.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="467.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -505,9 +516,87 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">500</int>
+			<int key="maxID">509</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes"/>
+		<object class="IBClassDescriber" key="IBDocument.Classes">
+			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
+				<object class="IBPartialClassDescription">
+					<string key="className">NSLayoutConstraint</string>
+					<string key="superclassName">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/NSLayoutConstraint.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">VSFlippedView</string>
+					<string key="superclassName">NSView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/VSFlippedView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">VSTestFlippedView</string>
+					<string key="superclassName">NSView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/VSTestFlippedView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">VSTimelineObjectPropertiesView</string>
+					<string key="superclassName">NSView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/VSTimelineObjectPropertiesView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">VSTimelineObjectPropertiesViewController</string>
+					<string key="superclassName">NSViewController</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">nameTextFieldHasChanged:</string>
+						<string key="NS.object.0">NSTextField</string>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">nameTextFieldHasChanged:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">nameTextFieldHasChanged:</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+					</object>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="animationTimelineHolder">NSView</string>
+						<string key="parametersHolder">NSView</string>
+						<string key="scrollView">NSScrollView</string>
+						<string key="splitView">NSSplitView</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="animationTimelineHolder">
+							<string key="name">animationTimelineHolder</string>
+							<string key="candidateClassName">NSView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="parametersHolder">
+							<string key="name">parametersHolder</string>
+							<string key="candidateClassName">NSView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="scrollView">
+							<string key="name">scrollView</string>
+							<string key="candidateClassName">NSScrollView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="splitView">
+							<string key="name">splitView</string>
+							<string key="candidateClassName">NSSplitView</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/VSTimelineObjectPropertiesViewController.h</string>
+					</object>
+				</object>
+			</array>
+		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
