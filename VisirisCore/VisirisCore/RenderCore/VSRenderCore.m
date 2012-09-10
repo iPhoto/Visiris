@@ -175,6 +175,8 @@
         }
     }
     
+    //NSLog(@"outputtexture: %d",outPutTexture);
+    
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
     
     if (self.delegate) {

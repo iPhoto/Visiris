@@ -49,6 +49,10 @@
         self.fboForTrack = [[NSMutableDictionary alloc] init];
         
         [self make_resources];
+     //   [self createFBOWithSize:NSMakeSize(800.0f, 600.0f) trackId:1];
+   //     VSFrameBufferObject *fbo = [[VSFrameBufferObject alloc] initWithSize:NSMakeSize(800.0f, 600.0f)];
+    //    [self.fboForTrack setObject:fbo forKey:[NSNumber numberWithInteger:1]];
+
     }
     return self;
 }
@@ -125,6 +129,7 @@
     
     VSFrameBufferObject *fbo = [[VSFrameBufferObject alloc] initWithSize:size];
     [self.fboForTrack setObject:fbo forKey:[NSNumber numberWithInteger:trackId]];
+     
 }
 
 

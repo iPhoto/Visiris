@@ -98,7 +98,7 @@
 }
 
 - (void)deleteTextureForTimelineobjectID:(NSInteger)theID{
-    NSLog(@"delete for id: %ld",theID);
+  //  NSLog(@"delete for id: %ld",theID);
     VSTexture *texture = [self getVSTextureForTimelineobjectID:theID];
     
     if (texture) {

@@ -18,6 +18,9 @@
 /** Matches an ObjectID to a VSAudioplayer */
 @property (strong) NSMutableDictionary      *playerToObjectID;
 
+/** Is for knowing how many Timelineobjects are referencing one AudioPlayer.*/
+@property (strong) NSMutableDictionary      *referenceCountingToProjectItemID;
+
 @end
 
 
@@ -33,6 +36,7 @@
     if (self = [super init]) {
         self.playerCollectionToTrackID = [[NSMutableDictionary alloc] init];
         self.playerToObjectID = [[NSMutableDictionary alloc] init];
+        self.referenceCountingToProjectItemID = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -54,6 +58,8 @@
             [trackPlayer setObject:audioPlayer forKey:[NSNumber numberWithInteger:projectItemID]];
 
             [self.playerToObjectID setObject:audioPlayer forKey:[NSNumber numberWithInteger:objectItemID]];
+            
+            [self incrementReferenceCounting:projectItemID];
         }
         else {
             
@@ -64,9 +70,12 @@
                 [trackPlayer setObject:audioPlayer forKey:[NSNumber numberWithInteger:projectItemID]];
 
                 [self.playerToObjectID setObject:audioPlayer forKey:[NSNumber numberWithInteger:objectItemID]];
+                [self incrementReferenceCounting:projectItemID];
             }
         }
     }
+    
+    [self printReferenceTable];
 }
 
 - (void)playAudioOfObjectID:(NSInteger)objectID atTime:(double)time atVolume:(float)volume{
@@ -86,5 +95,43 @@
         [player stopPlaying];
     }
 }
+
+- (void)deleteTimelineobjectID:(NSInteger)objectID{
+    NSLog(@"description: %@",((VSAudioPlayer *)[self.playerToObjectID objectForKey:[NSNumber numberWithInteger:objectID]]).description);
+    
+}
+
+
+#pragma mark - Private Methods
+
+/**
+ * Incrementing one specific Referencecounter
+ * @param projectItemID The ID of the ProjectItem
+ */
+- (void)incrementReferenceCounting:(NSInteger)projectItemID{
+    
+    NSNumber *current = (NSNumber *)[self.referenceCountingToProjectItemID objectForKey:[NSNumber numberWithInteger:projectItemID]];
+    int currentInt;
+    
+    if (current == nil)
+        currentInt = 0;
+    else
+        currentInt = [current intValue];
+    
+    currentInt++;
+    [self.referenceCountingToProjectItemID setObject:[NSNumber numberWithInt:currentInt]  forKey:[NSNumber numberWithInteger:projectItemID]];
+}
+
+/**
+ * A simple Printing Method for Debugging.
+ */
+- (void)printReferenceTable{
+    NSLog(@"PrintingReferenceTable----------------------------------------------");
+    for (id key in self.referenceCountingToProjectItemID) {
+        NSLog(@"projectItemID: %@, value: %@", key, [self.referenceCountingToProjectItemID objectForKey:key]);
+    }
+    NSLog(@"--------------------------------------------------------------------");
+}
+
 
 @end

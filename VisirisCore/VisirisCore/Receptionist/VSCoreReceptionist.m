@@ -12,6 +12,7 @@
 #import "VSFrameCoreHandover.h"
 #import "VSQuartzComposerHandover.h"
 #import "VSAudioCoreHandover.h"
+#import "VSFileKind.h"
 
 @interface VSCoreReceptionist()
 
@@ -74,9 +75,7 @@
                 [self.audioCore stopPlaying];
             }
         }
-        
     }
-    
 }
 
 - (void)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path withObjectItemID:(NSInteger)objectItemID{
@@ -89,9 +88,22 @@
     [self.audioCore createAudioPlayerForProjectItemID:projectItemID withObjectItemID:objectItemID atTrack:trackId andFilePath:filepath];
 }
 
-- (void)removeTextureForTimelineobjectID:(NSInteger)anID{
-   // NSLog(@"TODOOOOO (removeTexture)");
-    [self.renderCore deleteTextureFortimelineobjectID:anID];
+- (void)removeTimelineobjectWithID:(NSInteger)anID andType:(VSFileKind)type{
+    
+    switch (type) {
+        case VSFileKindAudio:
+            [self.audioCore deleteTimelineobjectID:anID];
+            break;
+        case VSFileKindImage:
+        case VSFileKindVideo:
+            [self.renderCore deleteTextureFortimelineobjectID:anID];
+            break;
+        case VSFileKindQuartzComposerPatch:
+            NSLog(@"delete quartz patch TODO");
+            break;
+        default:
+            break;
+    }
 }
 
 #pragma mark - RenderCoreDelegate impl.

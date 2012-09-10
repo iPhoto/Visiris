@@ -61,8 +61,11 @@
 -(void) timelineObjectsWillBeRemoved:(NSArray *)removedTimelineObjects{
     //DDLogInfo(@"%@",removedTimelineObjects);
     
+    
+    
     for (VSTimelineObject *timelineObject in removedTimelineObjects){
-        [self.renderCoreReceptionist removeTextureForTimelineobjectID:timelineObject.timelineObjectID];
+        [self.renderCoreReceptionist removeTimelineobjectWithID:timelineObject.timelineObjectID andType:timelineObject.sourceObject.projectItem.fileType.fileKind];
+        
     }
 }
 

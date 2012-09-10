@@ -37,4 +37,10 @@
  */
 - (void)stopPlaying;
 
+/**
+ * Gets called when a TimelineobjectID is removed in the gui
+ * @param objectID The ID of the timelineobject
+ */
+- (void)deleteTimelineobjectID:(NSInteger)objectID;
+
 @end
