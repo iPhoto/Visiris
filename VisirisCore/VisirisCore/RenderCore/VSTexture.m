@@ -65,7 +65,7 @@
 }
 
 -(void)deleteTexture{
-    NSLog(@"deleteTexture: %d", _texture);
+    //NSLog(@"deleteTexture: %d", _texture);
     glDeleteTextures(1, &_texture);
 }
 

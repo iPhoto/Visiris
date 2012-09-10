@@ -67,8 +67,6 @@
 
         if (tempTexture == nil) {
             
-            // TODO
-            // this three lines are exactly the same as above
             tempTexture = [[VSTexture alloc] initEmptyTextureWithSize:size trackId:trackId];
             [trackTextures setObject:tempTexture forKey:[NSNumber numberWithInteger:(int)(size.width*size.height)]];
         }
@@ -77,11 +75,8 @@
         [self incrementTextureReferenceCounting:tempTexture];
 
     }
-    
-//    for (id key in self.textureToObjectID) {
-//        NSLog(@"objectID: %@, value: %@", key, [self.textureToObjectID objectForKey:key]);
-//    }
 
+    //[self printReferenceTable];
 }
 
 - (VSTexture *)getVSTextureForTimelineobjectID:(NSInteger)timelineobjectID{
@@ -98,13 +93,12 @@
 }
 
 - (void)deleteTextureForTimelineobjectID:(NSInteger)theID{
-  //  NSLog(@"delete for id: %ld",theID);
     VSTexture *texture = [self getVSTextureForTimelineobjectID:theID];
     
     if (texture) {
         [self decrementTextureReferenceCounting:texture];
     }
-//    [self printReferenceTable];
+  //  [self printReferenceTable];
 }
 
 
@@ -149,7 +143,7 @@
         [self.referenceCountingToGLTextureID removeObjectForKey:[NSNumber numberWithInt:texture.texture]];
         
         //delete all inside the trackcollection 
-        for (id track in self.textureCollectionToTrackID) {            
+        for (id track in self.textureCollectionToTrackID) {
             NSMutableDictionary *trackDictionary = (NSMutableDictionary *)[self.textureCollectionToTrackID objectForKey:track];
             [trackDictionary removeObjectForKey:[NSNumber numberWithInteger:(int)(texture.size.width*texture.size.height)]];
         }
