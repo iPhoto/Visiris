@@ -24,7 +24,7 @@ NSString* VSParameterKeyVisibility                  = @"VSParameterKeyVisibility
 NSString* VSParameterVideoVolume                    = @"VSParameterVideoVolume";
 NSString* VSParameterAudioVolume                    = @"VSParameterAudioVolume";
 NSString* VSParameterQuartzComposerPublicInputs     = @"VSParameterQuartzComposerPublicInputs";
-
+NSString* VSParameterKeyBlendMode                   = @"VSParameterKeyBlendMode";
 
 
 #endif

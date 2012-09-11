@@ -54,7 +54,7 @@
 						<string key="NSFrame">{{17, 86}, {300, 17}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="181787034"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:1505</string>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="612430058">
@@ -373,7 +373,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">509</int>
+			<int key="maxID">521</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -398,6 +398,7 @@
 					<string key="superclassName">NSViewController</string>
 					<dictionary class="NSMutableDictionary" key="actions">
 						<string key="boolValueHasChanged:">NSButton</string>
+						<string key="comboBoxSelectionHasChanged:">NSComboBox</string>
 						<string key="sliderValueHasChanged:">NSSlider</string>
 						<string key="textValueHasChanged:">id</string>
 						<string key="valueSliderTextHasChanged:">NSTextField</string>
@@ -406,6 +407,10 @@
 						<object class="IBActionInfo" key="boolValueHasChanged:">
 							<string key="name">boolValueHasChanged:</string>
 							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBActionInfo" key="comboBoxSelectionHasChanged:">
+							<string key="name">comboBoxSelectionHasChanged:</string>
+							<string key="candidateClassName">NSComboBox</string>
 						</object>
 						<object class="IBActionInfo" key="sliderValueHasChanged:">
 							<string key="name">sliderValueHasChanged:</string>

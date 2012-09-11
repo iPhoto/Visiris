@@ -163,6 +163,7 @@
 		5BD35BE315D95F48001A74E0 /* VSTimelineObjectParametersView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BE215D95F48001A74E0 /* VSTimelineObjectParametersView.m */; };
 		5BD35BE715D96891001A74E0 /* VSAnimationTrackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BE515D96890001A74E0 /* VSAnimationTrackViewController.m */; };
 		5BD35BED15D96ADB001A74E0 /* VSAnimationTrackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BEC15D96ADB001A74E0 /* VSAnimationTrackView.m */; };
+		5BEF5AFB15FE1F5E00F0FE8A /* VSOptionParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BEF5AFA15FE1F5E00F0FE8A /* VSOptionParameter.m */; };
 		5BFB871115DA2F8C00D405AF /* VSTimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BFB871015DA2F8C00D405AF /* VSTimelineViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -421,6 +422,8 @@
 		5BD35BE515D96890001A74E0 /* VSAnimationTrackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAnimationTrackViewController.m; sourceTree = "<group>"; };
 		5BD35BEB15D96ADB001A74E0 /* VSAnimationTrackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAnimationTrackView.h; sourceTree = "<group>"; };
 		5BD35BEC15D96ADB001A74E0 /* VSAnimationTrackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAnimationTrackView.m; sourceTree = "<group>"; };
+		5BEF5AF915FE1F5E00F0FE8A /* VSOptionParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSOptionParameter.h; sourceTree = "<group>"; };
+		5BEF5AFA15FE1F5E00F0FE8A /* VSOptionParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSOptionParameter.m; sourceTree = "<group>"; };
 		5BF875BE15B95E4200CEBBDD /* VSViewMouseEventsDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSViewMouseEventsDelegate.h; sourceTree = "<group>"; };
 		5BFB870F15DA2F8C00D405AF /* VSTimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineViewController.h; sourceTree = "<group>"; };
 		5BFB871015DA2F8C00D405AF /* VSTimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineViewController.m; sourceTree = "<group>"; };
@@ -992,6 +995,8 @@
 				5B35BF6E1577A573009911EC /* VSDeviceParameterMapper.m */,
 				5B35BF771577A573009911EC /* VSParameter.h */,
 				5B35BF781577A573009911EC /* VSParameter.m */,
+				5BEF5AF915FE1F5E00F0FE8A /* VSOptionParameter.h */,
+				5BEF5AFA15FE1F5E00F0FE8A /* VSOptionParameter.m */,
 			);
 			name = parameter;
 			sourceTree = "<group>";
@@ -1391,6 +1396,7 @@
 				5BD35BE715D96891001A74E0 /* VSAnimationTrackViewController.m in Sources */,
 				5BD35BED15D96ADB001A74E0 /* VSAnimationTrackView.m in Sources */,
 				5BFB871115DA2F8C00D405AF /* VSTimelineViewController.m in Sources */,
+				5BEF5AFB15FE1F5E00F0FE8A /* VSOptionParameter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

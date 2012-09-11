@@ -10,6 +10,7 @@
 
 #import "VSProjectItem.h"
 #import "VSParameter.h"
+#import "VSOptionParameter.h"
 
 #import "VSCoreServices.h"
 
@@ -72,7 +73,7 @@
     NSString *notFoundMarker = @"not found";
     
     NSArray *tmpArray = [self.parameters objectsForKeys:[set allObjects] notFoundMarker:notFoundMarker];
-    tmpArray = [tmpArray sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"orderNumber" ascending:NO]]];
+    tmpArray = [tmpArray sortedArrayUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"orderNumber" ascending:YES]]];
     
     return tmpArray;
 }

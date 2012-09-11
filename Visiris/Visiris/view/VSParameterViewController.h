@@ -16,11 +16,10 @@
  *
  * Displays controls to edit the parameter's default value depending on the type of the VSParameter the VSParameterViewController represents. 
  */
-@interface VSParameterViewController : NSViewController<VSViewDelegate,NSTextFieldDelegate>
+@interface VSParameterViewController : NSViewController<VSViewDelegate,NSTextFieldDelegate, NSComboBoxDelegate>
 
 /** Displays the name of paramter the View represents */
 @property (weak) IBOutlet NSTextField *nameLabel;
-
 
 
 @property (weak) IBOutlet NSView *parameterHolder;
@@ -59,6 +58,8 @@
  */
 - (IBAction)sliderValueHasChanged:(NSSlider *)sender;
 
+
+
 /** The textField displays the value of parameters of the type VSParameterDataTypeString or VSParameterDataTypeFloat where hasRange is NO. */
 @property (strong) NSTextField *textField;
 
@@ -68,6 +69,9 @@
 /** The textField displays the value of parameters of the type SParameterDataTypeFloat where hasRange is YES. */
 @property (strong) NSSlider *horizontalSlider;
 
+@property (strong) NSComboBox * comboBox;
+
+- (IBAction)comboBoxSelectionHasChanged:(NSComboBox *)sender;
 
 #pragma mark - init
 
@@ -83,6 +87,6 @@
  */
 -(void) saveParameterAndRemoveObserver;
 
--(void) showParameter:(VSParameter*) parameter inFrame:(NSRect) frame;
+-(void) showParameter:(VSParameter*) parameter;
 
 @end

@@ -45,7 +45,7 @@ static VSTimelineObjectFactory* sharedInstance;
         self.timelineObjectSourceClasses = [NSMutableDictionary dictionaryWithCapacity:0];
         self.sourceSupplierClasses = [NSMutableDictionary dictionaryWithCapacity:0];
         
-        // Registers a timeLineObjectSourceClass for every classtring stored in all supportFiles VSSupportedFilesManager is responsible for 
+        // Registers a timeLineObjectSourceClass for every classtring stored in all supportFiles VSSupportedFilesManager is responsible for
         for(VSFileType *fileType in [[VSSupportedFilesManager supportedFiles] allValues]){
             [self registerNewClass:fileType.timelineObjectSourceClassString];
             [self registerNewSupplierClass:fileType.supplierClassString];
@@ -78,7 +78,9 @@ static VSTimelineObjectFactory* sharedInstance;
     
     
     if(sourceBaseObject){
-        
+        for(VSParameter *p in [sourceBaseObject.parameters allValues]){
+            NSLog(@"createing param: %@ %@",p.name, NSStringFromClass([p class]));
+        }
         VSTimelineObjectSource *sourceObject = [[NSClassFromString(projectItem.fileType.timelineObjectSourceClassString) alloc] initWithProjectItem:projectItem andParameters:sourceBaseObject.parameters];
         
         NSImage* icon = [VSFileImageCreator createIconForTimelineObject:projectItem.filePath];
@@ -94,6 +96,10 @@ static VSTimelineObjectFactory* sharedInstance;
         VSSourceSupplier *sourceSupplier = [[sourceSupplierClass alloc] initWithTimelineObject:newTimelineObject];
         
         newTimelineObject.supplier = sourceSupplier;
+        
+        for(VSParameter *p in [newTimelineObject.parameters allValues]){
+            NSLog(@"createing param: %@ %@",p.name, NSStringFromClass([p class]));
+        }
         
         return newTimelineObject;
     }
@@ -123,7 +129,7 @@ static VSTimelineObjectFactory* sharedInstance;
     
     Class classToRegister = NSClassFromString(classString);
     
-    // If the class is not a subclass of VSTimelineObjectSource the class is not valid for the factory and NO is returned. 
+    // If the class is not a subclass of VSTimelineObjectSource the class is not valid for the factory and NO is returned.
     if(![classToRegister isSubclassOfClass:[VSTimelineObjectSource class]])
         return NO;
     

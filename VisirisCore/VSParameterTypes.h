@@ -44,4 +44,6 @@ extern NSString* VSParameterAudioVolume;
 
 extern NSString* VSParameterQuartzComposerPublicInputs;
 
+extern NSString* VSParameterKeyBlendMode;
+
 #endif

@@ -10,6 +10,7 @@
 
 #import "VSParameterView.h"
 #import "VSParameterViewController.h"
+#import "VSParameter.h"
 
 #import "VSCoreServices.h"
 
@@ -69,21 +70,18 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
             
             if(self.parameterViewControllers.count){
                 VSParameterViewController *lastParameterController = [self.parameterViewControllers lastObject];
-                
                 [lastParameterController.view setNextKeyView:parameteViewController.view];
             }
             else{
                 [self.view.window makeFirstResponder:parameteViewController.view];
             }
             
+            [parameteViewController showParameter:parameter];
             
             [self.view addSubview:parameteViewController.view];
             
-            [parameteViewController.view setAutoresizingMask:NSViewWidthSizable];
-            [parameteViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
             
             NSMutableArray *constraints = [[NSMutableArray alloc] init];
-            
             
             NSDictionary *viewsDictionary = [NSDictionary dictionaryWithObject:parameteViewController.view forKey:@"parameterView"];
             
@@ -96,16 +94,10 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
                                                                   constant:0.0]];
             
             if(!self.parameterViewControllers.count){
-                //                [constraints addObjectsFromArray: [NSLayoutConstraint constraintsWithVisualFormat:constraintString
-                //                                                                                          options:0
-                //                                                                                          metrics:nil
-                //                                                                                            views:viewsDictionary]];
-                
                 [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[parameterView(==%f)]",self.parameterViewHeight]
                                                                                          options:0
                                                                                          metrics:nil
                                                                                            views:viewsDictionary]];
-                //
             }
             else{
                 [constraints addObject: [NSLayoutConstraint constraintWithItem:parameteViewController.view
@@ -126,14 +118,17 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
             }
             
             
+            [parameteViewController.view setAutoresizingMask:NSViewWidthSizable];
+            [parameteViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
             [self.view addConstraints:constraints];
-            
-            [parameteViewController showParameter:parameter inFrame:NSZeroRect];
-            
             [self.parameterViewControllers addObject:parameteViewController];
+            
+            DDLogInfo(@"name: %@",parameter.name);
         }
         
         [self.view setFrameSize:NSMakeSize(self.view.frame.size.width, self.parameterViewControllers.count * self.parameterViewHeight)];
+        
+
     }
 }
 
