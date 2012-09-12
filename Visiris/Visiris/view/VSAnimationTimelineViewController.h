@@ -24,4 +24,8 @@
 
 @property (weak) IBOutlet VSAnimationTimelineScrollView *scrollView;
 
+@property NSColor *oddTrackColor;
+
+@property NSColor *evenTrackColor;
+
 @end

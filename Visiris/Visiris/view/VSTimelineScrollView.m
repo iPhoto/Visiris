@@ -41,6 +41,8 @@
 }
 
 -(void) awakeFromNib{
+    [super awakeFromNib];
+    
     [self initDocumentView];
     [self initTimelineRuler];
     [self initPlayheadMarker];

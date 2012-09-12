@@ -21,7 +21,7 @@
 /** VSParemter the view displayes. */
 @property VSParameter *parameter;
 
-
+@property NSColor *color;
 
 @end
 
@@ -46,8 +46,13 @@ static NSString* defaultNib = @"VSParameterView";
 
 #pragma mark - Init
 
--(id) initWithDefaultNib{
+-(id) initWithDefaultNibAndBackgroundColor:(NSColor*) color{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
+        self.color = color;
+        
+        if([self.view isKindOfClass:[VSParameterView class]]){
+            ((VSParameterView*) self.view).fillColor = self.color;
+        }
     }
     
     return self;
@@ -234,11 +239,7 @@ static NSString* defaultNib = @"VSParameterView";
     for(id key in ((VSOptionParameter*) self.parameter).options){
         [self.comboBox addItemWithObjectValue:key];
         
-        
-        
         id value = [((VSOptionParameter*) self.parameter).options objectForKey:key];
-        
-        DDLogInfo(@"key: %@ value: %@ dValue: %@",key,value,self.parameter.defaultValue);
         
         if([self.parameter.defaultValue isEqual:value]){
             [self.comboBox selectItemWithObjectValue:key];
@@ -255,7 +256,7 @@ static NSString* defaultNib = @"VSParameterView";
     [self.parameterHolder addConstraints:constraints];
 }
 
-/**
+/** 
  * Shows paramters of the type VSParameterDataTypeString.
  */
 -(void) showStringParameter{
