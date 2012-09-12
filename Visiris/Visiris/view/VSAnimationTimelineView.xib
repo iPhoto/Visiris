@@ -2,7 +2,7 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1070</int>
-		<string key="IBDocument.SystemVersion">12A269</string>
+		<string key="IBDocument.SystemVersion">12B19</string>
 		<string key="IBDocument.InterfaceBuilderVersion">2549</string>
 		<string key="IBDocument.AppKitVersion">1187</string>
 		<string key="IBDocument.HIToolboxVersion">624.00</string>
@@ -50,14 +50,14 @@
 									<object class="NSView" id="191457487">
 										<reference key="NSNextResponder" ref="611193273"/>
 										<int key="NSvFlags">274</int>
-										<string key="NSFrameSize">{173, 158}</string>
+										<string key="NSFrameSize">{158, 158}</string>
 										<reference key="NSSuperview" ref="611193273"/>
 										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="743704311"/>
 										<string key="NSReuseIdentifierKey">_NS:13</string>
 									</object>
 								</array>
-								<string key="NSFrame">{{1, 1}, {173, 158}}</string>
+								<string key="NSFrame">{{1, 1}, {158, 158}}</string>
 								<reference key="NSSuperview" ref="473804628"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="191457487"/>
@@ -76,8 +76,8 @@
 							</object>
 							<object class="NSScroller" id="743704311">
 								<reference key="NSNextResponder" ref="473804628"/>
-								<int key="NSvFlags">-2147483392</int>
-								<string key="NSFrame">{{-100, -100}, {15, 255}}</string>
+								<int key="NSvFlags">256</int>
+								<string key="NSFrame">{{159, 1}, {15, 158}}</string>
 								<reference key="NSSuperview" ref="473804628"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="611193273"/>
@@ -91,7 +91,7 @@
 							<object class="NSScroller" id="961099101">
 								<reference key="NSNextResponder" ref="473804628"/>
 								<int key="NSvFlags">256</int>
-								<string key="NSFrame">{{1, 159}, {173, 15}}</string>
+								<string key="NSFrame">{{1, 159}, {158, 15}}</string>
 								<reference key="NSSuperview" ref="473804628"/>
 								<reference key="NSWindow"/>
 								<string key="NSReuseIdentifierKey">_NS:26</string>
@@ -107,7 +107,7 @@
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="611193273"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
-						<int key="NSsFlags">133154</int>
+						<int key="NSsFlags">133170</int>
 						<reference key="NSVScroller" ref="743704311"/>
 						<reference key="NSHScroller" ref="961099101"/>
 						<reference key="NSContentView" ref="611193273"/>

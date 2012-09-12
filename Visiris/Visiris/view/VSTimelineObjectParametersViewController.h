@@ -8,14 +8,21 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class VSScrollView;
 
 @interface VSTimelineObjectParametersViewController : NSViewController
-
--(id) initWithDefaultNibAndParameterViewHeight:(float) parameterViewHeight;
 
 @property NSArray *parameters;
 
 @property float parameterViewHeight;
+
+@property (weak) IBOutlet VSScrollView *scrollView;
+
+@property NSColor *oddColor;
+
+@property NSColor *evenColor;
+
+-(id) initWithDefaultNibAndParameterViewHeight:(float) parameterViewHeight;
 
 -(void) showParameters:(NSArray*) parameters;
 

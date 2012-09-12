@@ -12,6 +12,8 @@
 
 @implementation VSTimelineObjectParametersView
 
+#pragma mark - Init
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
@@ -21,6 +23,9 @@
     
     return self;
 }
+
+
+#pragma mark - NSView
 
 - (void)drawRect:(NSRect)dirtyRect
 {
@@ -35,6 +40,7 @@
 
 -(void) setFrame:(NSRect)frameRect{
     [super setFrame:frameRect];
+    DDLogInfo(@"frame of parametersView: %@",NSStringFromRect(self.frame));
 }
 
 @end

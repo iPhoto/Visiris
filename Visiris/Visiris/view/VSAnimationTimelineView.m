@@ -20,10 +20,4 @@
     return self;
 }
 
-- (void)drawRect:(NSRect)dirtyRect
-{
-    [[NSColor blueColor] setFill];
-    NSRectFill(dirtyRect);
-}
-
 @end

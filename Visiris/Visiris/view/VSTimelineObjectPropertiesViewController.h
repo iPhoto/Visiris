@@ -7,7 +7,9 @@
 //
 
 #import <Cocoa/Cocoa.h>
+
 #import "VSTimelineObjectPropertiesView.h"
+#import "VSScrollView.h"
 
 @class VSTimelineObject;
 @class VSTestView;
@@ -17,7 +19,7 @@
  *
  * Creates a VSParameterViewController for everey parameter of its VSTimelineObject
  */
-@interface VSTimelineObjectPropertiesViewController : NSViewController<NSSplitViewDelegate, VSFrameResizingDelegate>
+@interface VSTimelineObjectPropertiesViewController : NSViewController<NSSplitViewDelegate, VSFrameResizingDelegate, VSScrollViewScrollingDelegate>
 
 /** VSTimelineObject which properties VSTimelineObjectPropertiesViewController is representing */
 @property VSTimelineObject *timelineObject;
@@ -27,11 +29,9 @@
 
 @property (weak) IBOutlet NSSplitView *splitView;
 
-/** Main scrollView */
-@property (weak) IBOutlet NSScrollView *scrollView;
-
 /** Wrapper for the VSParameterViews*/
 @property (weak) IBOutlet NSView *parametersHolder;
+
 @property (weak) IBOutlet NSView *animationTimelineHolder;
 
 /** label for the name of VSTimelineObject */

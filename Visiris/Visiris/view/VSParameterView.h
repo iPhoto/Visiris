@@ -15,6 +15,8 @@
  */
 @interface VSParameterView : NSView
 
+@property NSColor *fillColor;
+
 @property id<VSViewDelegate> viewDelegate;
 
 @end

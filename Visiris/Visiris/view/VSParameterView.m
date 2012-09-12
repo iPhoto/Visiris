@@ -12,6 +12,8 @@
 
 @implementation VSParameterView
 
+@synthesize fillColor   = _fillColor;
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
@@ -23,6 +25,13 @@
 }
 
 #pragma mark - NSView
+
+-(void) drawRect:(NSRect)dirtyRect{
+    [super drawRect:dirtyRect];
+    
+    [self.fillColor setFill];
+    NSRectFill(dirtyRect);
+}
 
 -(void) setFrame:(NSRect)frameRect{
     [super setFrame:frameRect];
@@ -62,6 +71,17 @@
     }
     
     return NO;
+}
+
+#pragma mark - Properties
+
+-(void) setFillColor:(NSColor *)fillColor{
+    _fillColor = fillColor;
+    [self.fillColor setFill];
+}
+
+-(NSColor*) fillColor{
+    return _fillColor;
 }
 
 @end

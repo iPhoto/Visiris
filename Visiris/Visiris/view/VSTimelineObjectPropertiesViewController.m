@@ -35,14 +35,13 @@
 @implementation VSTimelineObjectPropertiesViewController
 
 /** Height of the parameter views */
-#define PARAMETER_VIEW_HEIGHT 80
+#define PARAMETER_VIEW_HEIGHT 70
 #define PARAMETER_VIEW_MINIMUM_WIDTH 150
 #define PARAMETER_VIEW_MAXIMUM_WIDTH 200
 
 @synthesize splitView                   = _splitView;
 @synthesize parametersHolder            = _parametersHolder;
 @synthesize animationTimelineHolder     = _animationTimelineHolder;
-@synthesize scrollView                  = _scrollView;
 @synthesize timelineObject              = _timelineObject;
 @synthesize nameLabel                   = _nameLabel;
 @synthesize nameTextField               = _nameTextField;
@@ -78,8 +77,6 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
         ((VSTimelineObjectPropertiesView*) self.view).resizingDelegate = self;
     }
     
-    [self initScrollView];
-    
     [self initAnimationTimeline];
     
     [self initParameterView];
@@ -87,31 +84,27 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     [self animationTimelineHolder];
 }
 
-/**
- * Inits the scrollView and its documentView
- */
--(void) initScrollView{
-//    [self.view setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
-//    [self.view setAutoresizesSubviews:YES];
-//
-//    [self.scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
-//    [self.scrollView setAutoresizesSubviews:YES];
-//
-//    [self.splitView setAutoresizesSubviews:YES];
-//    [self.splitView setAutoresizingMask:NSViewWidthSizable];
-    
-    self.documentView = (NSView*) self.scrollView.documentView;
-}
 
 -(void) initAnimationTimeline{
     [self.animationTimelineHolder setAutoresizesSubviews:YES];
     [self.animationTimelineHolder setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
+    [self.parametersHolder setTranslatesAutoresizingMaskIntoConstraints:YES];
+    
+    self.animationTimelineViewController = [[VSAnimationTimelineViewController alloc]initWithDefaultNibAndTrackHeight:PARAMETER_VIEW_HEIGHT];
+    
+    [self.animationTimelineHolder addSubview:self.animationTimelineViewController.view];
+    
+    
+    self.animationTimelineViewController.scrollView.scrollingDelegate = self;
+    
+    [self.animationTimelineViewController.view setFrameSize:self.animationTimelineHolder.frame.size];
     
     [self.animationTimelineViewController.view setAutoresizesSubviews:YES];
     [self.animationTimelineViewController.view setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
     
-    self.animationTimelineViewController = [[VSAnimationTimelineViewController alloc]initWithDefaultNibAndTrackHeight:PARAMETER_VIEW_HEIGHT];
-    [self.animationTimelineHolder addSubview:self.animationTimelineViewController.view];
+    self.animationTimelineViewController.oddTrackColor = [NSColor lightGrayColor];
+    self.animationTimelineViewController.evenTrackColor = [NSColor darkGrayColor];
+    
 }
 
 -(void) initParameterView{
@@ -121,15 +114,44 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     
     self.timelineObjectsParameterViewController = [[VSTimelineObjectParametersViewController alloc] initWithDefaultNibAndParameterViewHeight:PARAMETER_VIEW_HEIGHT];
     
+    self.timelineObjectsParameterViewController.oddColor = [NSColor lightGrayColor];
+    self.timelineObjectsParameterViewController.evenColor = [NSColor darkGrayColor];
+    
     [self.parametersHolder addSubview:self.timelineObjectsParameterViewController.view];
     
-    [self.timelineObjectsParameterViewController.view setFrameOrigin:NSMakePoint(0, self.animationTimelineViewController.scrollView.timelecodeRulerThickness)];
-
-    [self.timelineObjectsParameterViewController.view setFrameSize:self.parametersHolder.frame.size];
-    
-    [self.timelineObjectsParameterViewController.view setAutoresizingMask:NSViewWidthSizable];
+    [self.timelineObjectsParameterViewController.view setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
     [self.timelineObjectsParameterViewController.view setAutoresizesSubviews:YES];
-    [self.timelineObjectsParameterViewController.view setTranslatesAutoresizingMaskIntoConstraints:YES];
+    
+    float yOffset =self.animationTimelineViewController.scrollView.horizontalRulerView.frame.size.height;
+    NSRect parametersViewFrame = self.parametersHolder.frame;
+    
+    parametersViewFrame.size.height -= yOffset;
+    parametersViewFrame.origin.x = 0;
+    parametersViewFrame.origin.y = yOffset;
+    
+    [self.timelineObjectsParameterViewController.view setFrame:parametersViewFrame];
+    
+    
+    
+    NSString *constraintString = [NSString stringWithFormat:@"V:|-%f-[parameterView]|", yOffset];
+    
+    //  [self.parametersHolder removeConstraints:self.parametersHolder.constraints];
+    
+    [self.parametersHolder addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:constraintString
+                                                                                  options:0
+                                                                                  metrics:nil
+                                                                                    views:[NSDictionary dictionaryWithObject:self.timelineObjectsParameterViewController.view forKey:@"parameterView"]]];
+    
+    [self.parametersHolder addConstraint:[NSLayoutConstraint constraintWithItem:self.timelineObjectsParameterViewController.view
+                                                                      attribute:NSLayoutAttributeHeight
+                                                                      relatedBy:NSLayoutRelationEqual
+                                                                         toItem:self.parametersHolder
+                                                                      attribute:NSLayoutAttributeHeight
+                                                                     multiplier:1.0 constant:yOffset*(-1)]];
+    
+    
+    self.timelineObjectsParameterViewController.scrollView.scrollingDelegate = self;
+    
 }
 
 
@@ -155,33 +177,33 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 //-(void) splitViewDidResizeSubviews:(NSNotification *)notification{
 //    BOOL sizeDoesFit = YES;
 //    float deltaWidth;
-//    
+//
 //    if(self.parametersHolder.frame.size.width < PARAMETER_VIEW_MINIMUM_WIDTH){
-//        
+//
 //        deltaWidth = self.parametersHolder.frame.size.width - PARAMETER_VIEW_MINIMUM_WIDTH;
-//        
+//
 //        [self.parametersHolder setFrameSize:NSMakeSize(PARAMETER_VIEW_MINIMUM_WIDTH, self.parametersHolder.frame.size.height)];
-//        
+//
 //        sizeDoesFit = NO;
-//        
+//
 //    }
 //    else if(self.parametersHolder.frame.size.width > PARAMETER_VIEW_MAXIMUM_WIDTH){
-//        
+//
 //        deltaWidth = self.parametersHolder.frame.size.width - PARAMETER_VIEW_MAXIMUM_WIDTH;
-//        
+//
 //        [self.parametersHolder setFrameSize:NSMakeSize(PARAMETER_VIEW_MAXIMUM_WIDTH, self.parametersHolder.frame.size.height)];
-//        
+//
 //        sizeDoesFit = NO;
 //    }
-//    
+//
 //    if(!sizeDoesFit){
 //        NSView *secondView = [self.splitView.subviews objectAtIndex:1];
-//        
+//
 //        NSRect resizedRect = secondView.frame;
-//        
+//
 //        resizedRect.size.width +=deltaWidth;
 //        resizedRect.origin.x += deltaWidth;
-//        
+//
 //        [secondView setFrame:resizedRect];
 //    }
 //}
@@ -194,25 +216,41 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 #pragma mark - VSFrameResizingDelegate Implementation
 
 -(void) frameOfView:(NSView *)view wasSetTo:(NSRect)newRect{
-    if(self.scrollView.contentView.frame.size.height > (self.numberOfParameters * PARAMETER_VIEW_HEIGHT)){
-        [self.documentView setFrameSize:NSMakeSize(self.documentView.frame.size.width, self.scrollView.contentView.frame.size.height)];
+    //    if(self.timelineObjectsParameterViewController. > (self.numberOfParameters * PARAMETER_VIEW_HEIGHT)){
+    //        [self.documentView setFrameSize:NSMakeSize(self.documentView.frame.size.width, self.scrollView.contentView.frame.size.height)];
+    //    }
+    //    else{
+    //        [self.documentView setFrameSize:NSMakeSize(self.documentView.frame.size.width, [self parameterViewHeight])];
+    //    }
+}
+
+#pragma mark - VSFrameResizingDelegate
+
+-(void) scrollView:(NSScrollView *)scrollView changedBoundsFrom:(NSRect)fromBounds to:(NSRect)toBounds{
+    
+    DDLogInfo(@"timeline whil bounding: %@",NSStringFromRect([self.animationTimelineViewController.scrollView.documentView frame]));
+    
+    DDLogInfo(@"param whil bounding: %@",NSStringFromRect([self.timelineObjectsParameterViewController.scrollView.documentView frame]));
+    
+    VSScrollView *scrollViewToScroll = nil;
+    
+    if([scrollView isEqual:self.animationTimelineViewController.scrollView]){
+        scrollViewToScroll = self.timelineObjectsParameterViewController.scrollView;
     }
-    else{
-        [self.documentView setFrameSize:NSMakeSize(self.documentView.frame.size.width, [self parameterViewHeight])];
+    else if([scrollView isEqual:self.timelineObjectsParameterViewController.scrollView]){
+        scrollViewToScroll = self.animationTimelineViewController.scrollView;
+    }
+    
+    if(scrollViewToScroll){
+        float deltaY = fromBounds.origin.y - toBounds.origin.y;
+        
+        NSPoint newBoundsOrigin = NSMakePoint(scrollViewToScroll.contentView.bounds.origin.x, scrollViewToScroll.contentView.bounds.origin.y - deltaY);
+        
+        [scrollViewToScroll setBoundsOriginWithouthNotifiying:newBoundsOrigin];
     }
 }
 
 #pragma mark - Private Methods
-
-/**
- * Resets the position of scrollView's scrollBars
- */
--(void) resetScrollingPosition{
-    
-    NSPoint newScrollOrigin=NSMakePoint(0.0,0.0);
-    [[self.scrollView documentView] scrollPoint:newScrollOrigin];
-}
-
 
 /**
  * Changes the paramters name
@@ -226,6 +264,11 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 
 -(void) showParameters{
     [self.timelineObjectsParameterViewController showParameters:[self.timelineObject visibleParameters]];
+    NSSize newSize = [self.timelineObjectsParameterViewController.scrollView.documentView frame].size;
+    
+    newSize.height += self.animationTimelineViewController.scrollView.horizontalScroller.frame.size.height;
+    
+    [self.timelineObjectsParameterViewController.scrollView.documentView setFrameSize:newSize];
 }
 
 -(void) showAnimationTimeline{
@@ -251,15 +294,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
         [self showAnimationTimeline];
         
         [self showParameters];
-        
-        [self resetScrollingPosition];
-        
-        [self.documentView setFrameSize:NSMakeSize(self.documentView.frame.size.width, [self parameterViewHeight])];
     }
-}
-
--(float) parameterViewHeight{
-    return self.numberOfParameters * PARAMETER_VIEW_HEIGHT + self.animationTimelineViewController.scrollView.timelecodeRulerThickness;
 }
 
 -(VSTimelineObject*) timelineObject{

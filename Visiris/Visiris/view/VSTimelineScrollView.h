@@ -10,6 +10,7 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "VSScrollView.h"
 #import "VSTimelineContentView.h"
 
 @class VSTimelineScrollView;
@@ -93,7 +94,7 @@
 /**
  * Subclass of NSScrollView. Used for scrollView in the timelineView to handle the interaction with the scrool wheel differently
  */
-@interface VSTimelineScrollView : NSScrollView<VSTrackHolderViewDelegate>
+@interface VSTimelineScrollView : VSScrollView<VSTrackHolderViewDelegate>
 
 /** DocumentView of the scrollView */
 @property VSTimelineContentView *trackHolderView;

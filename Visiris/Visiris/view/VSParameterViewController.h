@@ -78,7 +78,7 @@
 /**
  * Inits the controller with the .nib-File stored in defaultNib (VSBrowserView)
  */
--(id) initWithDefaultNib;
+-(id) initWithDefaultNibAndBackgroundColor:(NSColor*) color;
 
 #pragma mark - Methods
 

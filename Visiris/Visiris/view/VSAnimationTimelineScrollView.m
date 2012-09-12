@@ -10,7 +10,7 @@
 
 #import "VSAnimationTimelineContentView.h"
 
-#import "VSCoreServices.h"                      
+#import "VSCoreServices.h"
 
 @implementation VSAnimationTimelineScrollView
 
@@ -30,34 +30,29 @@
     }
     else{
         self.trackHolderView = [[VSAnimationTimelineContentView alloc] init];
-    }   
+    }
     [super awakeFromNib];
-    
-    [self.trackHolderView setAutoresizingMask:NSViewWidthSizable];
     
     self.hasVerticalRuler = NO;
     self.hasHorizontalRuler = YES;
     
+    [self setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
+    [self setAutoresizesSubviews:YES];
+    
+    [((NSView*)self.documentView) setAutoresizingMask: NSViewWidthSizable];
 }
 
-- (void)drawRect:(NSRect)dirtyRect
-{
-    // Drawing code here.
-}
-
--(void) scrollWheel:(NSEvent *)theEvent{
-    [[self nextResponder] scrollWheel:theEvent];
-    
-    if(theEvent.deltaY == 0.0){
-        [super scrollWheel:theEvent];
-    }
-    
-}
 
 -(void) addTrackView:(NSView *)aTrackView{
     [super addTrackView:aTrackView];
     
-    [self.trackHolderView setFrameSize:NSMakeSize(self.documentVisibleRect.size.width, self.trackHolderView.frame.size.height)];
+    float firstSubViewsYPos = [[self.trackHolderView.subviews
+                                objectAtIndex:0] frame].origin.y;
+    float lastSubViewsMaxY = NSMaxY([[self.trackHolderView.subviews lastObject] frame]);
+    
+    float totalHeight = lastSubViewsMaxY - firstSubViewsYPos;
+    
+    [self.trackHolderView setFrameSize:NSMakeSize(self.trackHolderView.frame.size.width, totalHeight)];
 }
 
 #pragma mark - Properties
