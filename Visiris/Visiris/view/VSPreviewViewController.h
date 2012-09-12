@@ -14,12 +14,12 @@
 @class VSPlaybackController;
 
 #import "VSPlaybackController.h"
-#import "VSFrameResizingDelegate.h"
+#import "VSViewResizingDelegate.h"
 
 /**
  * Subclass of NSViewController responsible for the Previw at the top-right of the window
  */
-@interface VSPreviewViewController : NSViewController<VSPlaybackControllerDelegate, VSFrameResizingDelegate>
+@interface VSPreviewViewController : NSViewController<VSPlaybackControllerDelegate, VSViewResizingDelegate>
 
 @property (strong) NSOpenGLContext *openGLContext;
 

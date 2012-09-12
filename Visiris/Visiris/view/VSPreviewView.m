@@ -27,13 +27,15 @@
 }
 
 -(void) setFrame:(NSRect)frameRect{
+    NSRect oldFrame = self.frame;
+    
     [super setFrame:frameRect];
     
     //tells its delegate that the view's frame was resized
     if(self.frameResizingDelegate){
-        if([self.frameResizingDelegate conformsToProtocol:@protocol(VSFrameResizingDelegate)]){
-            if([self.frameResizingDelegate respondsToSelector:@selector(frameOfView:wasSetTo:)]){
-                [self.frameResizingDelegate frameOfView:self wasSetTo:frameRect];
+        if([self.frameResizingDelegate conformsToProtocol:@protocol(VSViewResizingDelegate)]){
+            if([self.frameResizingDelegate respondsToSelector:@selector(frameOfView:wasSetFrom:to:)]){
+                [self.frameResizingDelegate frameOfView:self wasSetFrom:oldFrame to:self.frame];
             }
         }
     }

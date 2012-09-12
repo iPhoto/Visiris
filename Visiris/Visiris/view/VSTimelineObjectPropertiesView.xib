@@ -35,7 +35,7 @@
 				<string key="NSClassName">NSApplication</string>
 			</object>
 			<object class="NSCustomView" id="1005">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="NSSplitView" id="981300445">
@@ -48,7 +48,6 @@
 								<array class="NSMutableArray" key="NSSubviews"/>
 								<string key="NSFrameSize">{158, 339}</string>
 								<reference key="NSSuperview" ref="981300445"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="70263976"/>
 								<string key="NSReuseIdentifierKey">_NS:11</string>
 								<string key="NSClassName">VSTestFlippedView</string>
@@ -59,14 +58,12 @@
 								<array class="NSMutableArray" key="NSSubviews"/>
 								<string key="NSFrame">{{159, 0}, {302, 339}}</string>
 								<reference key="NSSuperview" ref="981300445"/>
-								<reference key="NSWindow"/>
 								<string key="NSReuseIdentifierKey">_NS:13</string>
 								<string key="NSClassName">VSFlippedView</string>
 							</object>
 						</array>
 						<string key="NSFrame">{{1, 0}, {461, 339}}</string>
 						<reference key="NSSuperview" ref="1005"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="912598720"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="NSIsVertical">YES</bool>
@@ -74,8 +71,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{462, 340}</string>
-				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="981300445"/>
 				<string key="NSClassName">VSTimelineObjectPropertiesView</string>
 			</object>

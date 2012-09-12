@@ -36,7 +36,7 @@
 				<string key="NSClassName">NSApplication</string>
 			</object>
 			<object class="NSCustomView" id="1005">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="NSCustomView" id="181787034">
@@ -44,7 +44,6 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrameSize">{300, 78}</string>
 						<reference key="NSSuperview" ref="1005"/>
-						<reference key="NSWindow"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<string key="NSClassName">NSView</string>
 					</object>
@@ -53,7 +52,6 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{17, 86}, {300, 17}}</string>
 						<reference key="NSSuperview" ref="1005"/>
-						<reference key="NSWindow"/>
 						<string key="NSReuseIdentifierKey">_NS:1505</string>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="612430058">
@@ -90,8 +88,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{300, 123}</string>
-				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="264380951"/>
 				<string key="NSClassName">VSParameterView</string>
 			</object>

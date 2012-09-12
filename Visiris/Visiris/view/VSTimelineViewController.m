@@ -33,20 +33,45 @@
     return self;
 }
 
-#pragma mark- VSTimelineViewDelegate implementation
-
--(void) viewDidResizeFromFrame:(NSRect)oldFrame toFrame:(NSRect)newFrame{
+-(void) awakeFromNib{
     
-    if(oldFrame.size.width != newFrame.size.width){
-        
-        NSRect newDocumentFrame = [self.timelineScrollView.trackHolderView frame];
-        
-        //updates the width according to how the width of the view has been resized
-        newDocumentFrame.size.width += newFrame.size.width - oldFrame.size.width;
-        [self.timelineScrollView.trackHolderView setFrame:(newDocumentFrame)];
-        [self computePixelTimeRatio];
+    [self initScrollView];
+    
+    if([self.view isKindOfClass:[VSTimelineView class]]){
+        ((VSTimelineView*) self.view).resizingDelegate = self;
+        ((VSTimelineView*) self.view).mouseMoveDelegate = self;
+        ((VSTimelineView*) self.view).keyDownDelegate = self;
     }
 }
+
+/**
+ * Sets the frame of the trackHolder and the AutoresizingMasks
+ */
+-(void) initScrollView{
+    self.timelineScrollView.zoomingDelegate = self;
+    self.timelineScrollView.playheadMarkerDelegate = self;
+}
+
+#pragma mark- VSViewResizingDelegate implementation
+
+-(void) frameOfView:(NSView *)view wasSetFrom:(NSRect)oldRect to:(NSRect)newRect{
+    
+    if(newRect.size.width != 0){
+        
+        if(oldRect.size.width != newRect.size.width){
+            
+            NSRect newDocumentFrame = [self.timelineScrollView.trackHolderView frame];
+            
+            //updates the width according to how the width of the view has been resized
+            newDocumentFrame.size.width += newRect.size.width - oldRect.size.width;
+            [self.timelineScrollView.trackHolderView setFrame:(newDocumentFrame)];
+            [self computePixelTimeRatio];
+        }
+    }
+}
+
+
+#pragma mark - VSViewKeyDownDelegate
 
 -(void) didReceiveKeyDownEvent:(NSEvent *)theEvent{
     if(theEvent){
@@ -84,6 +109,9 @@
 }
 
 -(void) computePixelTimeRatio{
+    
+    DDLogInfo(@"%f - %f",self.duration,self.pixelLength);
+    
     double newRatio = self.duration / self.pixelLength;
     
     if(newRatio < VSMinimumPixelTimeRatio)

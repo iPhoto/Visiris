@@ -39,10 +39,6 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     if(self = [super initWithNibName:defaultNib bundle:nil]){
         self.animationTrackViewControllers = [[NSMutableArray alloc]init];
         self.trackHeight = trackHeight;
-        
-        if([self.view isKindOfClass:[VSAnimationTimelineView class]]){
-            ((VSAnimationTimelineView*) self.view).timelineViewDelegate = self;
-        }
     }
     
     return self;
@@ -50,10 +46,32 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 
 
 -(void) awakeFromNib{
-    [super awakeFromNib];
-    
     [self.view setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
     [self.view setAutoresizesSubviews:YES];
+    
+    [super awakeFromNib];
+    
+//    ((VSAnimationTimelineView*)self.view).resizingDelegate = nil;
+}
+
+#pragma mark - VSPlayHeadRulerMarkerDelegate Implementation
+
+-(BOOL) shouldMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView{
+    return YES;
+}
+
+-(void) didMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView{
+
+}
+
+-(CGFloat) willMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView toLocation:(CGFloat)location{
+
+    return location;
+}
+
+-(CGFloat) playHeadRulerMarker:(NSRulerMarker *)playheadMarker willJumpInContainingView:(NSView *)aView toLocation:(CGFloat)location{
+    
+    return location;
 }
 
 #pragma mark - Methods
@@ -69,13 +87,19 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     self.timelineObject = timelineObject;
     
     [self computePixelTimeRatio];
-    
+    DDLogInfo(@"pixelTimeRati: %f",self.pixelTimeRatio);
     [self.view setFrameSize:self.view.superview.frame.size];
     
     if(self.timelineObject){
+        
+        [self.scrollView setTrackHolderWidth:self.scrollView.documentVisibleRect.size.width];
+        
         for(VSParameter *parameter in [self.timelineObject visibleParameters]){
             
-            NSRect trackRect = NSMakeRect(0, self.animationTrackViewControllers.count*self.trackHeight, [self pixelForTimestamp:self.timelineObject.duration], self.trackHeight);
+            
+            float width = self.scrollView.visibleTrackViewsHolderWidth;
+            
+            NSRect trackRect = NSMakeRect(0, self.animationTrackViewControllers.count*self.trackHeight , width, self.trackHeight);
             
             NSColor *trackColor = self.animationTrackViewControllers.count % 2 == 0 ? self.evenTrackColor : self.oddTrackColor;
             
@@ -87,9 +111,19 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
             
             [animationTrackViewController.view setAutoresizingMask:NSViewWidthSizable];
             
+            [animationTrackViewController.view setFrame:trackRect];
+            
             [self.scrollView addTrackView:animationTrackViewController.view];
         }
     }
+    
+    NSSize newSize = self.scrollView.trackHolderView.frame.size;
+    newSize.width = self.scrollView.documentVisibleRect.size.width;
+    
+    [self.scrollView.trackHolderView setFrameSize:newSize];
+    [self computePixelTimeRatio];
+    
+   // ((VSAnimationTimelineView*)self.view).resizingDelegate = self;
 }
 
 -(void) resetTimeline{

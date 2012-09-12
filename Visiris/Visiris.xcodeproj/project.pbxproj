@@ -175,6 +175,7 @@
 		2795881915906D7B00E24B57 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		2799F8E51599C8B800008489 /* VSQuartzCompositionUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSQuartzCompositionUtils.m; sourceTree = "<group>"; };
 		2799F8E81599C96D00008489 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
+		5B05472216009868002FF9A9 /* VSViewKeyDownDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSViewKeyDownDelegate.h; sourceTree = "<group>"; };
 		5B0E366415876E9300F15026 /* VSTrackLabelsRulerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTrackLabelsRulerView.h; sourceTree = "<group>"; };
 		5B0E366515876E9300F15026 /* VSTrackLabelsRulerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTrackLabelsRulerView.m; sourceTree = "<group>"; };
 		5B0E366A15876EEB00F15026 /* VSTrackLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTrackLabel.h; sourceTree = "<group>"; };
@@ -383,7 +384,7 @@
 		5B35C0951577A912009911EC /* VSLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSLogFormatter.h; sourceTree = "<group>"; };
 		5B35C0961577A912009911EC /* VSLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLogFormatter.m; sourceTree = "<group>"; };
 		5B35C0A61577A926009911EC /* VSCoreServices.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSCoreServices.h; sourceTree = "<group>"; };
-		5B4D1E6515B7F67900158404 /* VSFrameResizingDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSFrameResizingDelegate.h; sourceTree = "<group>"; };
+		5B4D1E6515B7F67900158404 /* VSViewResizingDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSViewResizingDelegate.h; sourceTree = "<group>"; };
 		5B538B78159B12D20031363E /* VSQuartzCompositionUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSQuartzCompositionUtils.h; sourceTree = "<group>"; };
 		5B603FA7157F824A0045A1EA /* VSPlayHead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSPlayHead.h; sourceTree = "<group>"; };
 		5B603FA8157F824A0045A1EA /* VSPlayHead.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSPlayHead.m; sourceTree = "<group>"; };
@@ -1069,9 +1070,10 @@
 		5B4D1E6415B7F57D00158404 /* protocolls */ = {
 			isa = PBXGroup;
 			children = (
-				5B4D1E6515B7F67900158404 /* VSFrameResizingDelegate.h */,
+				5B4D1E6515B7F67900158404 /* VSViewResizingDelegate.h */,
 				5BF875BE15B95E4200CEBBDD /* VSViewMouseEventsDelegate.h */,
 				5BD35BBF15D927D5001A74E0 /* VSViewDelegate.h */,
+				5B05472216009868002FF9A9 /* VSViewKeyDownDelegate.h */,
 			);
 			name = protocolls;
 			sourceTree = "<group>";

@@ -14,11 +14,15 @@
 
 
 -(void) setFrame:(NSRect)frameRect{
+    NSRect oldFrame = self.frame;
     [super setFrame:frameRect];
+    
     if(self.resizingDelegate){
-        if([self.resizingDelegate conformsToProtocol:@protocol(VSFrameResizingDelegate) ]){
-            if([self.resizingDelegate respondsToSelector:@selector(frameOfView:wasSetTo:)]){
-                [self.resizingDelegate frameOfView:self wasSetTo:frameRect];
+        if([self.resizingDelegate conformsToProtocol:@protocol(VSViewResizingDelegate) ]){
+            if([self.resizingDelegate respondsToSelector:@selector(frameOfView:wasSetFrom:to:)]){
+                [self.resizingDelegate frameOfView:self
+                                        wasSetFrom:oldFrame
+                                                to:self.frame];
             }
         }
     }

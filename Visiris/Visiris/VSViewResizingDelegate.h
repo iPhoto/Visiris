@@ -11,7 +11,7 @@
 /**
  * Defines how a NSView informs its delegate about changes on its frame
  */
-@protocol VSFrameResizingDelegate <NSObject>
+@protocol VSViewResizingDelegate <NSObject>
 
 /**
  * Called when the frame of the view was changes.
@@ -19,6 +19,6 @@
  *@param view NSView which's frame was changed
  *@param newRect NSRect the frame of the view was changed to.
  */
--(void) frameOfView:(NSView*) view wasSetTo:(NSRect) newRect;
+-(void) frameOfView:(NSView*) view wasSetFrom:(NSRect) oldRect to:(NSRect) newRect;
 
 @end

@@ -232,7 +232,11 @@ static NSString* defaultNib = @"VSParameterView";
 -(void) showOptionParameter{
     self.comboBox = [[NSComboBox alloc] init];
     [self.parameterHolder addSubview:self.comboBox];
-    [self.comboBox setFrameSize:self.comboBox.intrinsicContentSize];
+    
+    NSSize size = self.comboBox.intrinsicContentSize;
+    size.width = 0;
+    
+    [self.comboBox setFrameSize:size];
     [self.comboBox setEditable:NO];
     [self.comboBox setDelegate:self];
     
@@ -270,7 +274,7 @@ static NSString* defaultNib = @"VSParameterView";
     
     NSDictionary *viewsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:self.textField,@"textValueField", nil];
     
-    NSString *constraintString = [NSString stringWithFormat:@"|[textValueField]|"];
+    NSString *constraintString = [NSString stringWithFormat:@"|-[textValueField]-|"];
     
     NSArray *constraints =  [NSLayoutConstraint constraintsWithVisualFormat:constraintString options:NSLayoutFormatAlignAllCenterY metrics:nil views:viewsDictionary];
     

@@ -27,20 +27,8 @@
 
 #pragma mark - NSView
 
-- (void)drawRect:(NSRect)dirtyRect
-{
-    [[NSColor greenColor] setFill];
-    NSRectFill(dirtyRect);
-    
-}
-
 -(BOOL) isFlipped{
     return YES;
-}
-
--(void) setFrame:(NSRect)frameRect{
-    [super setFrame:frameRect];
-    DDLogInfo(@"frame of parametersView: %@",NSStringFromRect(self.frame));
 }
 
 @end

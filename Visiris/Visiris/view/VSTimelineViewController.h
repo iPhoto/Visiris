@@ -12,8 +12,11 @@
 #import "VSTimelineContentView.h"
 #import "VSTimelineView.h"
 #import "VSViewMouseEventsDelegate.h"
+#import "VSViewResizingDelegate.h"
 
-@interface VSTimelineViewController : NSViewController<VSTimelineViewDelegate, VSPlayHeadRulerMarkerDelegate,VSTimelineScrollViewZoomingDelegate, VSViewMouseEventsDelegate>
+
+
+@interface VSTimelineViewController : NSViewController<VSViewResizingDelegate, VSViewMouseEventsDelegate, VSViewKeyDownDelegate, VSPlayHeadRulerMarkerDelegate,VSTimelineScrollViewZoomingDelegate>
 
 @property double pixelTimeRatio;
 @property (readonly) double duration;
