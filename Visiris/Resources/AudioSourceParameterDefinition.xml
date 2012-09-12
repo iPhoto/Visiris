@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <parameters>
-    <parameter name="Volume" type="VSParameterAudioVolume" dataType="float" fromValue="0" toValue="1"  editable="true" hidden="falsen">1</parameter>
+    <parameter name="Volume" type="VSParameterAudioVolume" dataType="float" fromValue="0" toValue="1" defaultValue="1" editable="true" hidden="falsen"></parameter>
 </parameters>

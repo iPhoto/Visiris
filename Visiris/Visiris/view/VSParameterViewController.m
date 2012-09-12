@@ -10,6 +10,7 @@
 
 #import "VSParameterView.h"
 #import "VSParameter.h"
+#import "VSOptionParameter.h"
 #import "VSAnimation.h"
 
 #import "VSCoreServices.h"
@@ -29,12 +30,13 @@
 #define PARAMETER_WITH_RANGE_TEXT_FIELD_WIDTH 50
 #define VALUE_SLIDER_MINIMUM_WIDTH 50
 
-@synthesize nameLabel = _nameLabel;
-@synthesize textField = _valueField;
-@synthesize checkBox = _boolValueField;
-@synthesize horizontalSlider = _valueSlider;
-@synthesize parameterHolder = _parameterHolder;
-@synthesize parameter = _parameter;
+
+@synthesize nameLabel           = _nameLabel;
+@synthesize textField           = _valueField;
+@synthesize checkBox            = _boolValueField;
+@synthesize horizontalSlider    = _valueSlider;
+@synthesize parameterHolder     = _parameterHolder;
+@synthesize parameter           = _parameter;
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
 static NSString* defaultNib = @"VSParameterView";
@@ -81,33 +83,46 @@ static NSString* defaultNib = @"VSParameterView";
     }
 }
 
--(void) showParameter:(VSParameter *)parameter inFrame:(NSRect)frame{
+-(void) showParameter:(VSParameter *)parameter{
     
     self.parameter = parameter;
     [self.parameter addObserver:self forKeyPath:@"defaultValue" options:0 context:nil];
     
-    [self showParameter];
+    [self.nameLabel setStringValue: NSLocalizedString(self.parameter.name, @"")];
+    
+    if([self.parameter isKindOfClass:[VSOptionParameter class]]){
+        [self showOptionParameter];
+    }
+    else{
+        [self showParameter];
+    }
 }
 
 #pragma mark - Methods
 
 -(void) saveParameterAndRemoveObserver{
     [self.parameter removeObserver:self forKeyPath:@"defaultValue"];
-    switch (self.parameter.dataType) {
-        case VSParameterDataTypeBool:
-            [self setParametersDefaultBoolValue:[self boolValueForButtonState:self.checkBox.state]];
-            break;
-        case VSParameterDataTypeFloat:
-        {
-            [self setParametersDefaultFloatValue:[self.textField floatValue]];
-            break;
+    
+    if([self.parameter isKindOfClass:[VSOptionParameter class]]){
+        [self setOptionsParameterDefaultValue:[self.comboBox objectValueOfSelectedItem]];
+    }
+    else{
+        switch (self.parameter.dataType) {
+            case VSParameterDataTypeBool:
+                [self setParametersDefaultBoolValue:[self boolValueForButtonState:self.checkBox.state]];
+                break;
+            case VSParameterDataTypeFloat:
+            {
+                [self setParametersDefaultFloatValue:[self.textField floatValue]];
+                break;
+            }
+            case VSParameterDataTypeString:
+                [self setParametersDefaultStringValue:[self.textField stringValue]];
+                break;
+            default:
+                [self setParametersDefaultStringValue:[self.textField stringValue]];
+                break;
         }
-        case VSParameterDataTypeString:
-            [self setParametersDefaultStringValue:[self.textField stringValue]];
-            break;
-        default:
-            [self setParametersDefaultStringValue:[self.textField stringValue]];
-            break;
     }
 }
 
@@ -123,12 +138,20 @@ static NSString* defaultNib = @"VSParameterView";
 
 -(BOOL) control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor{
     if(control == self.textField){
-        if([self respondsToSelector:self.textField.action]){
-            [self performSelector:self.textField.action withObject:self.textField];
+        if(self.textField.action){
+            if([self respondsToSelector:control.action]){
+                [self performSelector:control.action withObject:control];
+            }
         }
     }
     
     return YES;
+}
+
+#pragma mark - NSComboBoxDelegate Implementation
+
+-(void) comboBoxSelectionDidChange:(NSNotification *)notification{
+    [self setOptionsParameterDefaultValue:[((NSComboBox*) notification.object) objectValueOfSelectedItem]];
 }
 
 #pragma mark - IBActions
@@ -150,10 +173,7 @@ static NSString* defaultNib = @"VSParameterView";
 - (IBAction)sliderValueHasChanged:(NSSlider *)sender {
     [self setParameterValueWithText:[sender stringValue]];
     [self.textField setFloatValue:[self.parameter defaultFloatValue]];
-    
 }
-
-
 
 #pragma mark - Private Methods
 
@@ -165,26 +185,29 @@ static NSString* defaultNib = @"VSParameterView";
 -(void) updateParameterValue{
     [self.nameLabel setStringValue: NSLocalizedString(self.parameter.name, @"")];
     
-    switch (self.parameter.dataType) {
-        case VSParameterDataTypeBool:
-            [self.checkBox setState:[self buttonStateOfBooleanValue:[self.parameter defaultBoolValue]]];
-            break;
-        case VSParameterDataTypeFloat:
-            [self.horizontalSlider setFloatValue:[self.parameter defaultFloatValue]];
-            [self.textField setFloatValue:[self.parameter defaultFloatValue]];
-            break;
-        case VSParameterDataTypeString:
-            [self.textField setStringValue:[self.parameter defaultStringValue]];
-            break;
-        default:
-            [self.textField setStringValue:[self.parameter defaultStringValue]];
-            break;
+    if([self.parameter isKindOfClass:[VSOptionParameter class]]){
+        [self.comboBox selectItemWithObjectValue:((VSOptionParameter*)self.parameter).selectedKey];
+    }
+    else{
+        switch (self.parameter.dataType) {
+            case VSParameterDataTypeBool:
+                [self.checkBox setState:[self buttonStateOfBooleanValue:[self.parameter defaultBoolValue]]];
+                break;
+            case VSParameterDataTypeFloat:
+                [self.horizontalSlider setFloatValue:[self.parameter defaultFloatValue]];
+                [self.textField setFloatValue:[self.parameter defaultFloatValue]];
+                break;
+            case VSParameterDataTypeString:
+                [self.textField setStringValue:[self.parameter defaultStringValue]];
+                break;
+            default:
+                [self.textField setStringValue:[self.parameter defaultStringValue]];
+                break;
+        }
     }
 }
 
 -(void) showParameter{
-    [self.nameLabel setStringValue: NSLocalizedString(self.parameter.name, @"")];
-
     switch (self.parameter.dataType) {
         case VSParameterDataTypeBool:
             [self showBoolParameter];
@@ -199,6 +222,37 @@ static NSString* defaultNib = @"VSParameterView";
             [self showStringParameter];
             break;
     }
+}
+
+-(void) showOptionParameter{
+    self.comboBox = [[NSComboBox alloc] init];
+    [self.parameterHolder addSubview:self.comboBox];
+    [self.comboBox setFrameSize:self.comboBox.intrinsicContentSize];
+    [self.comboBox setEditable:NO];
+    [self.comboBox setDelegate:self];
+    
+    for(id key in ((VSOptionParameter*) self.parameter).options){
+        [self.comboBox addItemWithObjectValue:key];
+        
+        
+        
+        id value = [((VSOptionParameter*) self.parameter).options objectForKey:key];
+        
+        DDLogInfo(@"key: %@ value: %@ dValue: %@",key,value,self.parameter.defaultValue);
+        
+        if([self.parameter.defaultValue isEqual:value]){
+            [self.comboBox selectItemWithObjectValue:key];
+        }
+    }
+    
+    NSDictionary *viewsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:self.comboBox,@"comboBox", nil];
+    NSString *constraintString = [NSString stringWithFormat:@"|-[comboBox]-|"];
+    
+    NSArray *constraints =  [NSLayoutConstraint constraintsWithVisualFormat:constraintString options:0 metrics:nil views:viewsDictionary];
+    
+    [self.comboBox setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    [self.parameterHolder addConstraints:constraints];
 }
 
 /**
@@ -241,8 +295,8 @@ static NSString* defaultNib = @"VSParameterView";
     [self.checkBox setTitle:self.parameter.name];
     [self.checkBox setButtonType:NSSwitchButton];
     [self.checkBox setState:[self buttonStateOfBooleanValue:self.parameter.defaultBoolValue]];
-    [self.parameterHolder addSubview:self.checkBox];
     
+    [self.parameterHolder addSubview:self.checkBox];
     
     NSDictionary *viewsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:self.checkBox,@"boolValueField", nil];
     NSString *constraintString = [NSString stringWithFormat:@"|-[boolValueField]-|"];
@@ -407,6 +461,11 @@ static NSString* defaultNib = @"VSParameterView";
         
         [self.parameter setDefaultBoolValue:aBoolValue];
     }
+}
+
+
+-(void) setOptionsParameterDefaultValue:(id) key{
+    ((VSOptionParameter*)self.parameter).selectedKey = key;
 }
 
 @end

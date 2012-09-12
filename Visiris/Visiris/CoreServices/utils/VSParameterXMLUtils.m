@@ -9,16 +9,21 @@
 #import "VSParameterXMLUtils.h"
 
 #import "VSParameter.h"
+#import "VSOptionParameter.h"
 
 #import "VSCoreServices.h"
 
 #define PARAMETER_XML_ATTRIBUTE_NAME @"name"
 #define PARAMETER_XML_ATTRIBUTE_DATA_TYPE @"dataType"
+#define PARAMETER_XML_ATTRIBUTE_DEFAULT_VALUE @"defaultValue"
 #define PARAMETER_XML_ATTRIBUTE_TYPE @"type"
 #define PARAMETER_XML_ATTRIBUTE_RANGE_FROM @"fromValue"
 #define PARAMETER_XML_ATTRIBUTE_RANGE_TO @"toValue"
 #define PARAMETER_XML_ATTRIBUTE_EDITABLE @"editable"
 #define PARAMETER_XML_ATTRIBUTE_HIDDEN @"hidden"
+#define PARAMETER_XML_OPTIONS_NODE @"options"
+#define PARAMETER_XML_OPTION_NODE @"option"
+#define PARAMETER_XML_ATTRIBUTE_OPTION_NAME @"name"
 
 @implementation VSParameterXMLUtils
 
@@ -58,36 +63,80 @@
     BOOL hidden = NO;
     BOOL editable = YES;
     
-    if(!(tmpValue = [parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_EDITABLE])){
+    if((tmpValue = [parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_EDITABLE])){
         editable = [[tmpValue objectValue] boolValue];
     }
     
-    if(!(tmpValue = [parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_HIDDEN])){
+    if((tmpValue = [parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_HIDDEN])){
         hidden = [[tmpValue objectValue] boolValue];
     }
-
+    
     id defaultValue = nil;
     
-    switch (dataType) {
-        case VSParameterDataTypeBool:
-            defaultValue = [NSNumber numberWithBool:[[parameterElement objectValue] boolValue]];
-            break;
-        case VSParameterDataTypeString:
-            defaultValue = [[parameterElement objectValue] stringValue];
-            break;   
-        case VSParameterDataTypeFloat:
-            defaultValue = [NSNumber numberWithFloat:[[parameterElement objectValue] floatValue]];
-            break; 
-        default:
-            break;
+    if((tmpValue = [parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_DEFAULT_VALUE])){
+        switch (dataType) {
+            case VSParameterDataTypeBool:
+                defaultValue = [NSNumber numberWithBool:[[tmpValue objectValue] boolValue]];
+                break;
+            case VSParameterDataTypeString:
+                defaultValue = [tmpValue stringValue];
+                break;
+            case VSParameterDataTypeFloat:
+                defaultValue = [NSNumber numberWithBool:[[tmpValue objectValue] floatValue]];
+                break;
+            default:
+                break;
+        }
     }
-
-
-    newParameter = [[VSParameter alloc] initWithName:name asType:type forDataType:dataType withDefaultValue:defaultValue orderNumber:orderNumber editable:editable hidden:hidden rangeMinValue:minimumValue rangeMaxValue:maximumValue];
-
     
     
-    return newParameter;
+    if([[parameterElement elementsForName:PARAMETER_XML_OPTION_NODE] count]){
+        VSOptionParameter *newOptionParameter = [[VSOptionParameter alloc] initWithName:name
+                                                                                 asType:type
+                                                                            forDataType:dataType
+                                                                       withDefaultValue:defaultValue
+                                                                            orderNumber:orderNumber
+                                                                               editable:editable
+                                                                                 hidden:hidden
+                                                                          rangeMinValue:minimumValue
+                                                                          rangeMaxValue:maximumValue];
+        
+        
+        for(NSXMLElement *element in [parameterElement elementsForName:PARAMETER_XML_OPTION_NODE]){
+
+            NSString *key;
+            id value;
+            
+            value = [element objectValue];
+            
+            if((tmpValue = [element attributeForName:PARAMETER_XML_ATTRIBUTE_OPTION_NAME])){
+                key = [tmpValue stringValue];
+            }
+            
+            if(key && value){
+                [newOptionParameter addOptionWithKey:key forValue:value];
+            }
+        }
+        
+        return newOptionParameter;
+    }
+    else{
+        newParameter = [[VSParameter alloc] initWithName:name
+                                                  asType:type
+                                             forDataType:dataType
+                                        withDefaultValue:defaultValue
+                                             orderNumber:orderNumber
+                                                editable:editable
+                                                  hidden:hidden
+                                           rangeMinValue:minimumValue
+                                           rangeMaxValue:maximumValue];
+        
+        return newParameter;
+    }
+    
+    
+    
+    
 }
 
 #pragma mark - Private Functions
@@ -98,19 +147,19 @@
  * @return VSParameterDataType found for the given string, -1 if no VSParameterDataType was found
  */
 +(VSParameterDataType) paramaterTypeOfString:(NSString*) string{
-if([[string lowercaseString] isEqualToString:@"float"]){
-    return VSParameterDataTypeFloat;
-}
-
-if([[string lowercaseString] isEqualToString:@"bool"]){
-    return VSParameterDataTypeBool;
-}
-
-if([[string lowercaseString] isEqualToString:@"string"]){
-    return VSParameterDataTypeString;
-}
-
-return -1;
+    if([[string lowercaseString] isEqualToString:@"float"]){
+        return VSParameterDataTypeFloat;
+    }
+    
+    if([[string lowercaseString] isEqualToString:@"bool"]){
+        return VSParameterDataTypeBool;
+    }
+    
+    if([[string lowercaseString] isEqualToString:@"string"]){
+        return VSParameterDataTypeString;
+    }
+    
+    return -1;
 }
 
 @end

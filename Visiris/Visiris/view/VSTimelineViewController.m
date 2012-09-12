@@ -62,6 +62,16 @@
     }
 }
 
+#pragma mark - VSTimelineScrollViewZoomingDelegate
+
+-(void) timelineScrollView:(VSTimelineScrollView *)scrollView wasZoomedAtPosition:(NSPoint)position{
+    
+}
+
+-(NSRect) timelineScrollView:(VSTimelineScrollView *)scrollView wantsToBeZoomedAccordingToScrollWheel:(float)amount atPosition:(NSPoint)mousePosition forCurrentFrame:(NSRect)currentFrame{
+    return currentFrame;
+}
+
 
 #pragma mark - Methods
 

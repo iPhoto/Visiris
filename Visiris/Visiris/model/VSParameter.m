@@ -14,8 +14,6 @@
 
 @interface VSParameter()
 
-/** Every parameter has its own animation. As soon as an parameter is initialized, a new Keyframe for the timestamp -1 with its default value is added */
-@property (strong) VSAnimation *animation;
 
 @end
 
@@ -86,7 +84,15 @@
 #pragma mark - VSCopying
 -(id) copyWithZone:(NSZone *)zone{
     
-    VSParameter *copy = [[VSParameter allocWithZone:zone] initWithName:self.name asType:self.type forDataType:self.dataType withDefaultValue:self.configuredDefaultValue orderNumber:self.orderNumber editable:self.editable hidden:self.hidden rangeMinValue:self.rangeMinValue rangeMaxValue:self.rangeMaxValue];
+    VSParameter *copy = [[VSParameter allocWithZone:zone] initWithName:self.name
+                                                                asType:self.type
+                                                           forDataType:self.dataType
+                                                      withDefaultValue:self.configuredDefaultValue
+                                                           orderNumber:self.orderNumber
+                                                              editable:self.editable
+                                                                hidden:self.hidden
+                                                         rangeMinValue:self.rangeMinValue
+                                                         rangeMaxValue:self.rangeMaxValue];
     
     
     copy.animation = [self.animation copy];

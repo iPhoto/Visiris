@@ -48,6 +48,9 @@
 /** If YES the paramter is visible for the user */
 @property BOOL hidden;
 
+/** Every parameter has its own animation. As soon as an parameter is initialized, a new Keyframe for the timestamp -1 with its default value is added */
+@property (strong) VSAnimation *animation;
+
 @property id defaultValue;
 
 #pragma mark - Init
