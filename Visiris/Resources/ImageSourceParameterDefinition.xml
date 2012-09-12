@@ -9,4 +9,36 @@
     <parameter name="Width" type="VSParameterKeyScaleWidth" dataType="float" defaultValue="1" fromValue="0" toValue="10"  editable="true"  hidden="false"></parameter>
     <parameter name="Height" type="VSParameterKeyScaleHeight" dataType="float" defaultValue="1" fromValue="0" toValue="10" editable="true"></parameter>
     <parameter name="Visible" type="VSParameterKeyVisibility" dataType="bool" defaultValue="true" editable="true"  hidden="false"></parameter>
+    <parameter name="Blend Mode" type="VSParameterKeyBlendMode" dataType="string" editable="true" hidden="false">
+        <option name="Normal">VSBlendModeNormal</option>
+        <option name="Lighten">VSBlendModeLighten</option>
+        <option name="Darken">VSBlendModeDarken</option>
+        <option name="Multiply">VSBlendModeMultiply</option>
+        <option name="Average">VSBlendModeAverage</option>
+        <option name="Add">VSBlendModeAdd</option>
+        <option name="Substract">VSBlendModeSubstract</option>
+        <option name="Difference">VSBlendModeDifference</option>
+        <option name="Negation">VSBlendModeNegation</option>
+        <option name="Exclusion">VSBlendModeExclusion</option>
+        <option name="Screen">VSBlendModeScreen</option>
+        <option name="Overlay">VSBlendModeOverlay</option>
+        <option name="SoftLight">VSBlendModeSoftLight</option>
+        <option name="HardLight">VSBlendModeHardLight</option>
+        <option name="ColorDodge">VSBlendModeColorDodge</option>
+        <option name="ColorBurn">VSBlendModeColorBurn</option>
+        <option name="LinearDodge">VSBlendModeLinearDodge</option>
+        <option name="LinearBurn">VSBlendModeLinearBurn</option>
+        <option name="LinearLight">VSBlendModeLinearLight</option>
+        <option name="VividLight">VSBlendModeVividLight</option>
+        <option name="PinLight">VSBlendModePinLight</option>
+        <option name="HardMix">VSBlendModeHardMix</option>
+        <option name="Reflect">VSBlendModeReflect</option>
+        <option name="Glow">VSBlendModeGlow</option>
+        <option name="Phoenix">VSBlendModePhoenix</option>
+        <option name="Opacity">VSBlendModeOpacity</option>
+        <option name="Hue">VSBlendModeHue</option>
+        <option name="Saturation">VSBlendModeSaturation</option>
+        <option name="Color">VSBlendModeColor</option>
+        <option name="Luminosity">VSBlendModeLuminosity</option>
+    </parameter>
 </parameters>

@@ -19,6 +19,7 @@
 #import <OpenGL/glu.h>
 #import "VSLayerShader.h"
 #import "VSTransformTextureManager.h"
+#import "VSLayermode.h"
 
 @interface VSRenderCore()
 
@@ -133,15 +134,9 @@
 #pragma mark- Methods
 
 -(void)renderFrameOfCoreHandovers:(NSArray *)theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double)theTimestamp{
-    
-   // [self debugOpenGLTextures];
-    
-    //NSLog(@"framesize: %@", NSStringFromSize(theFrameSize));
-    
+                
     NSMutableArray *mutableCoreHandovers = [NSMutableArray arrayWithArray:theCoreHandovers];
-    
-    //NSLog(@"count: %ld", mutableCoreHandovers.count);
-    
+        
 	[[self openGLContext] makeCurrentContext];
     CGLLockContext([[self openGLContext] CGLContextObj]);
 
@@ -169,18 +164,7 @@
         }
         case 2:
         {
-         
-            VSCoreHandover *temp = (VSCoreHandover *)[mutableCoreHandovers objectAtIndex:1];
-         //   NSString *tempString = (NSString *)[temp.attributes objectForKey:@"VSParameterKeyBlendMode"];
-    //        NSLog(@"Attribute: %@",tempString);
-            
-            
-            for (id key in temp.attributes) {
-                NSLog(@"key: %@, value: %@", key, [temp.attributes objectForKey:key]);
-            }
-
-            
-            [self combineTheFirstTwoObjects:textures withLayermode:0];
+            [self combineTheFirstTwoObjects:textures withLayermode:[self layerMode:[mutableCoreHandovers objectAtIndex:0]]];
             outPutTexture = self.frameBufferObjectCurrent.texture;
             [[self openGLContext] flushBuffer];
             break;
@@ -252,7 +236,7 @@
  * @param textures NSArray with the stored textures
  * @layermode The Layermode (multiply, add, ...) is an int because of the uniform
  */
-- (void)combineTheFirstTwoObjects:(NSArray *) textures withLayermode:(int)layermode{
+- (void)combineTheFirstTwoObjects:(NSArray *) textures withLayermode:(float)layermode{
     NSNumber *texture0 = (NSNumber *)[textures objectAtIndex:0];
     NSNumber *texture1 = (NSNumber *)[textures objectAtIndex:1];
     
@@ -263,9 +247,9 @@
  * Combines two textures using the Layeringshader. The created texture gets offlinerendered using the current active FBO.
  * @param bottomtexture BaseTexture
  * @param upperTexture BlendTexture
- * @layermode The Layermode (multiply, add, ...) is an int because of the uniform
+ * @layermode The Layermode (multiply, add, ...) is an float (should be int) because of the uniform
  */
-- (void)combineTexture:(GLuint)bottomtexture with:(GLuint)upperTexture andLayermode:(int)layermode{
+- (void)combineTexture:(GLuint)bottomtexture with:(GLuint)upperTexture andLayermode:(float)layermode{
     [self.frameBufferObjectCurrent bind];
     
     glViewport(0, 0, self.frameBufferObjectCurrent.size.width,self.frameBufferObjectCurrent.size.height);
@@ -276,7 +260,7 @@
     glUseProgram(self.layerShader.program);
     glUniform1f(self.layerShader.uniformLayermode, layermode);
     
-  //  NSLog(@"Layermode:");
+   // NSLog(@"Layermode: %d",layermode);
     
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, bottomtexture);
@@ -447,6 +431,18 @@
         }
     }
     NSLog(@"There are %d valid Textures on the GPU",counter);
+}
+
+/**
+ * todo
+ */
+- (float)layerMode:(VSCoreHandover *)handover{
+    NSString *tempString = (NSString *)[handover.attributes objectForKey:@"VSParameterKeyBlendMode"];
+   // NSLog(@"Attribute: %@",tempString);
+   // NSLog(@"int: %d",[VSLayermode intFromString:tempString]);
+
+  //  NSLog(@"nummer %d",[VSLayermode intFromString:tempString]);
+    return [VSLayermode floatFromString:tempString];
 }
 
 @end

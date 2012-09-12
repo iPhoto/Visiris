@@ -1,8 +1,8 @@
 // This Shader takes two textures and blend them together.
 
-#version 110
+#version 120
 
-uniform int layermode;
+uniform float layermode;
 uniform sampler2D textures[2];
 
 varying vec2 texcoord;
@@ -196,10 +196,174 @@ vec4 BlendLuminosity(vec4 base, vec4 blend)
 
 ////////////////////////////
 
+
 void main()
 {
     vec4 blend = texture2D(textures[0], texcoord);
     vec4 base = texture2D(textures[1], texcoord);
     
-    gl_FragColor = BlendNormal(base, blend);
+  //  gl_FragColor = BlendNormal(base, blend);
+    
+
+    if (layermode == 1.0) {
+        gl_FragColor = BlendNormal(base, blend);
+    }
+    else
+    {
+        if (layermode < 16.0)
+        {
+            if (layermode < 9.0)
+            {
+                if (layermode < 6.0)
+                {
+                    if (layermode < 4.0)
+                    {
+                        if (layermode < 3.0)  gl_FragColor = BlendLighten(base, blend);
+                        else                gl_FragColor = BlendDarken(base, blend);
+                    }
+                    else
+                    {
+                        if (layermode < 5.0)  gl_FragColor = BlendMultiply(base, blend);
+                        else                gl_FragColor = BlendAverage(base, blend);
+                    }
+                }
+                else
+                    if (layermode < 8.0)
+                    {
+                        if (layermode < 7.0)  gl_FragColor = BlendAdd(base, blend);
+                        else                gl_FragColor = BlendSubstract(base, blend);
+                    }
+                    else                    gl_FragColor = BlendDifference(base, blend);
+            }
+            else
+            {
+                if (layermode < 13.0)
+                {
+                    if (layermode < 11.0)
+                    {
+                        if (layermode < 10.0)     gl_FragColor = BlendNegation(base, blend);
+                        else                    gl_FragColor = BlendExclusion(base, blend);
+                    }
+                    else
+                    {
+                        if (layermode < 12.0)     gl_FragColor = BlendScreen(base, blend);
+                        else                    gl_FragColor = BlendOverlay(base, blend);
+                    }
+                }
+                else
+                    if (layermode < 15.0)
+                    {
+                        if (layermode < 14.0)     gl_FragColor = BlendSoftLight(base, blend);
+                        else                    gl_FragColor = BlendHardLight(base, blend);
+                    }
+                    else                        gl_FragColor = BlendColorDodge(base, blend);
+            }
+        }
+        else
+        {
+            if (layermode < 24.0)
+            {
+                if (layermode < 20.0)
+                {
+                    if (layermode < 18.0)
+                    {
+                        if (layermode < 17.0)     gl_FragColor = BlendColorBurn(base, blend);
+                        else                    gl_FragColor = BlendLinearDodge(base, blend);
+                    }
+                    else
+                    {
+                        if (layermode < 19.0)     gl_FragColor = BlendLinearBurn(base, blend);
+                        else                    gl_FragColor = BlendLinearLight(base, blend);
+                    }
+                }
+                else
+                {
+                    if (layermode < 22.0)
+                    {
+                        if (layermode < 21.0)     gl_FragColor = BlendVividLight(base, blend);
+                        else                    gl_FragColor = BlendPinLight(base, blend);
+                    }
+                    else
+                    {
+                        if (layermode < 23.0)     gl_FragColor = BlendHardMix(base, blend);
+                        else                    gl_FragColor = BlendReflect(base, blend);
+                    }
+                }
+            }
+            else
+            {
+                if (layermode < 28.0)
+                {
+                    if (layermode < 26.0)
+                    {
+                        if (layermode < 25.0)     gl_FragColor = BlendGlow(base, blend);
+                        else                    gl_FragColor = BlendPhoenix(base, blend);
+                    }
+                    else
+                    {
+                        if (layermode < 27.0)     gl_FragColor = BlendNormal(base, blend);
+                        else                    gl_FragColor = BlendHue(base, blend);
+                    }
+                }
+                else
+                    if (layermode < 30.0)
+                    {
+                        if (layermode < 29.0)     gl_FragColor = BlendSaturation(base, blend);
+                        else                    gl_FragColor = BlendColor(base, blend);
+                    }
+                    else                        gl_FragColor = BlendLuminosity(base, blend);
+            }
+        }
+    }
+    
+    
+    /*
+    switch (layermode) {
+        case 1:  gl_FragColor = BlendNormal(base, blend);       break;
+        case 2:  gl_FragColor = BlendLighten(base, blend);      break;
+        case 3:  gl_FragColor = BlendDarken(base, blend);       break;
+        case 4:  gl_FragColor = BlendMultiply(base, blend);     break;
+        case 5:  gl_FragColor = BlendAverage(base, blend);      break;
+        case 6:  gl_FragColor = BlendAdd(base, blend);          break;
+        case 7:  gl_FragColor = BlendSubstract(base, blend);    break;
+        case 8:  gl_FragColor = BlendDifference(base, blend);   break;
+     
+        case 9:  gl_FragColor = BlendNegation(base, blend);     break;
+        case 10: gl_FragColor = BlendExclusion(base, blend);    break;
+        case 11: gl_FragColor = BlendScreen(base, blend);       break;
+        case 12: gl_FragColor = BlendOverlay(base, blend);      break;
+        case 13: gl_FragColor = BlendSoftLight(base, blend);    break;
+        case 14: gl_FragColor = BlendHardLight(base, blend);    break;
+        case 15: gl_FragColor = BlendColorDodge(base, blend);   break;
+     
+        case 16: gl_FragColor = BlendColorBurn(base, blend);    break;
+        case 17: gl_FragColor = BlendLinearDodge(base, blend);  break;
+        case 18: gl_FragColor = BlendLinearBurn(base, blend);   break;
+        case 19: gl_FragColor = BlendLinearLight(base, blend);  break;
+     
+     
+     
+        case 20: gl_FragColor = BlendVividLight(base, blend);   break;
+        case 21: gl_FragColor = BlendPinLight(base, blend);     break;
+     
+     
+     
+        case 22: gl_FragColor = BlendHardMix(base, blend);      break;
+        case 23: gl_FragColor = BlendReflect(base, blend);      break;
+     
+     
+     
+        case 24: gl_FragColor = BlendGlow(base, blend);         break;
+        case 25: gl_FragColor = BlendPhoenix(base, blend);      break;
+     
+        case 26: gl_FragColor = BlendOpacity(base, blend);      break;
+        case 27: gl_FragColor = BlendHue(base, blend);          break;
+     
+        case 28: gl_FragColor = BlendSaturation(base, blend);   break;
+        case 29: gl_FragColor = BlendColor(base, blend);        break;
+        case 30: gl_FragColor = BlendLuminosity(base, blend);   break;
+        default:
+            gl_FragColor = BlendNormal(base, blend);
+            break;
+     */
 }

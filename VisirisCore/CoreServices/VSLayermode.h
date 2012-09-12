@@ -10,4 +10,7 @@
 
 @interface VSLayermode : NSObject
 
+//TODO Comment
++ (float)floatFromString:(NSString *)string;
+
 @end
