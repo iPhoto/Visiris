@@ -41,7 +41,8 @@ extern NSString* VSParameterKeyVisibility;
 /**Parameter for the volume of the AudioObject */
 extern NSString* VSParameterAudioVolume;
 
-
 extern NSString* VSParameterQuartzComposerPublicInputs;
+
+extern NSString* VSParameterKeyBlendMode;
 
 #endif

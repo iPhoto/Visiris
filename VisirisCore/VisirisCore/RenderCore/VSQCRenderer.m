@@ -25,6 +25,9 @@
 /** Needed for offscreen rendering */
 @property (strong) VSPBufferRenderer    *pBufferRenderer;
 
+/** The Path of the Renderer on the Disk */
+@property (strong) NSString             *path;
+
 @end
 
 
@@ -36,6 +39,7 @@
 @synthesize trackId             = _trackId;
 @synthesize pBufferRenderer     = _pBufferRenderer;
 @synthesize size                = _size;
+@synthesize path                = _path;
 
 #pragma Mark - Init
 
@@ -46,8 +50,9 @@
         self.context = context;
         self.pixelFormat = format;
         self.size = size;
+        self.path = path;
 
-        self.pBufferRenderer = [[VSPBufferRenderer alloc] initWithCompositionPath:path textureTarget:GL_TEXTURE_2D textureWidth:size.width textureHeight:size.height openGLContext:self.context];
+        self.pBufferRenderer = [self createPBufferRenderer];
     }
     return self;
 }
@@ -61,7 +66,7 @@
     time /= 1000.0;
     [[self context] makeCurrentContext];
     
-    glClearColor(0.25, 0.25, 0.25, 0.25);
+    glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     if(self.pBufferRenderer) {
@@ -81,7 +86,7 @@
     return [_pBufferRenderer textureName];
 }
 
--(void) setPublicInputsWithValues:(NSDictionary *)inputValues{
+- (void)setPublicInputsWithValues:(NSDictionary *)inputValues{
     for(id key in inputValues){
         if (key) {
             id value = [inputValues objectForKey:key];
@@ -92,6 +97,24 @@
             }
         }
     }
+}
+
+- (void)deleteRenderer{
+    [self.pBufferRenderer delete];
+}
+
+- (void)resize:(NSSize)size{
+    self.size = size;
+    [self.pBufferRenderer delete];
+    self.pBufferRenderer = [self createPBufferRenderer];
+}
+
+
+#pragma mark - Private Methods
+
+- (VSPBufferRenderer *)createPBufferRenderer{
+    return [[VSPBufferRenderer alloc] initWithCompositionPath:self.path textureTarget:GL_TEXTURE_2D textureWidth:self.size.width textureHeight:self.size.height openGLContext:self.context];
+
 }
 
 @end

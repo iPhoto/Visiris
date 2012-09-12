@@ -33,4 +33,17 @@
  */
 - (VSQCRenderer *)getQCRendererForObjectId:(NSInteger)objectID;
 
+
+/**
+ * Deletes the QCRenderer associated with a timelineobject
+ * @param timelineObjectID The ID of the timelineObject
+ */
+- (void)deleteQCRenderer:(NSInteger)timelineObjectID;
+
+/**
+ * Resizes the outputTexture
+ * @param size The new Size of the output
+ */
+- (void)resize:(NSSize)size;
+
 @end

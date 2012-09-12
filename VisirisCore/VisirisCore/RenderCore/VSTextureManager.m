@@ -48,7 +48,7 @@
     
     NSMutableDictionary *trackTextures = [self.textureCollectionToTrackID objectForKey:[NSNumber numberWithInteger:trackId]];
 
-//    NSLog(@"create for id: %ld",objectItemID);
+   // NSLog(@"create for id: %ld",objectItemID);
 
     if (!trackTextures) {
         

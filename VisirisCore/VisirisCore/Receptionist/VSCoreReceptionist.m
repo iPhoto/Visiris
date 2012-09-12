@@ -27,9 +27,9 @@
 @synthesize delegate    = _delegate;
 @synthesize audioCore   = _audioCore;
 
--(id) init{
+- (id)initWithSize:(NSSize)size{
     if(self = [super init]){
-        self.renderCore = [[VSRenderCore alloc] init];
+        self.renderCore = [[VSRenderCore alloc] initWithSize:size];
         self.audioCore  = [[VSAudioCore alloc] init];
         self.renderCore.delegate = self;
     }
@@ -99,7 +99,7 @@
             [self.renderCore deleteTextureFortimelineobjectID:anID];
             break;
         case VSFileKindQuartzComposerPatch:
-            NSLog(@"delete quartz patch TODO");
+            [self.renderCore deleteQCPatchForTimelineObjectID:anID];
             break;
         default:
             break;

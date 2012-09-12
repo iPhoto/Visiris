@@ -41,6 +41,13 @@
  */
 @interface VSRenderCore : NSObject
 
+
+/**
+ * Initialization if the Rendercore
+ * @param size The size is needed for creating FBO Textures ec.
+ */
+-(id)initWithSize:(NSSize)size;
+
 /** Delegate for Communicating with the Receptionist */
 @property (weak) id<VSRenderCoreDelegate>           delegate;
 
@@ -68,11 +75,16 @@
  */
 - (NSOpenGLContext *)openglContext;
 
-
 /**
  * Deletes a Texture referencing of a TimelineobjectID
  * @param theID Individual ID of an Timelineobject
  */
 - (void)deleteTextureFortimelineobjectID:(NSInteger)theID;
+
+/**
+ * Deletes a QCRenderer referencing of a TimelineobjectID
+ * @param theID Individual ID of an Timelineobject
+ */
+- (void)deleteQCPatchForTimelineObjectID:(NSInteger)theID;
 
 @end

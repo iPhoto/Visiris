@@ -121,7 +121,7 @@
     return fbo.texture;
 }
 
-- (void)createFBOWithSize:(NSSize) size trackId:(NSInteger) trackId{
+- (void)createFBOWithSize:(NSSize)size trackId:(NSInteger) trackId{
     
     if ([self.fboForTrack objectForKey:[NSNumber numberWithInteger:trackId]]) {
         return;
@@ -132,6 +132,19 @@
      
 }
 
+- (void)resizeOutputSize:(NSSize)size{
+    for (id track in self.fboForTrack) {
+        VSFrameBufferObject *tempFBO = [self.fboForTrack objectForKey:track];
+        [tempFBO resize:size];
+    }
+}
+
+- (void)deleteFBOforTrackID:(NSInteger)trackID{
+    
+    VSFrameBufferObject *temp = [self.fboForTrack objectForKey:[NSNumber numberWithInteger:trackID]];
+    [temp delete];
+    [self.fboForTrack removeObjectForKey:[NSNumber numberWithInteger:trackID]];
+}
 
 #pragma mark - Private Methods
 
@@ -167,6 +180,11 @@
     return buffer;
 }
 
+/**
+ * Each Track is associated with one FBO
+ * @param track The ID of the Track
+ * @return The FBO which corresponds to the trackID
+ */
 - (VSFrameBufferObject *)getFboForTrackId:(NSInteger) track{
     return [self.fboForTrack objectForKey:[NSNumber numberWithInteger:track]];
 }

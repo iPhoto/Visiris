@@ -61,13 +61,6 @@
 
 #pragma Mark - Init
 
-- (id) init{
-	return [self initWithCompositionPath:nil textureTarget:0 textureWidth:0 textureHeight:0 openGLContext:nil];
-}
-
-
-#pragma mark - Methods
-
 - (id) initWithCompositionPath:(NSString*)path textureTarget:(GLenum)target textureWidth:(unsigned)width textureHeight:(unsigned)height openGLContext:(NSOpenGLContext*)context
 {
 	//IMPORTANT: We use the macros provided by <OpenGL/CGLMacro.h> which provide better performances and allows us not to bother with making sure the current context is valid
@@ -140,6 +133,8 @@
 	
 	return self;
 }
+
+#pragma mark - Methods
 
 - (void) _updateTextureOnTargetContext
 {
@@ -224,20 +219,14 @@
 }
 */
 
-
-#pragma mark - Private Methods
-
-- (void) dealloc 
-{
+- (void)delete{
 	//IMPORTANT: We use the macros provided by <OpenGL/CGLMacro.h> which provide better performances and allows us not to bother with making sure the current context is valid
-	CGLContextObj					cgl_ctx = [_textureContext CGLContextObj];
+	CGLContextObj cgl_ctx = [_textureContext CGLContextObj];
 	
 	//Destroy the texture on the target OpenGL context
 	if(_textureName)
 	glDeleteTextures(1, &_textureName);
-	
-	//Destroy the renderer
-	
+		
 	//Destroy the OpenGL context
 	[_pixelBufferContext clearDrawable];
 }

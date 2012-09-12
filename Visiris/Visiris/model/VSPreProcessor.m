@@ -32,7 +32,7 @@
 -(id)initWithTimeline:(VSTimeline *)timeline{
     if(self = [super init]){
         self.timeline = timeline;
-        self.renderCoreReceptionist = [[VSCoreReceptionist alloc] init];
+        self.renderCoreReceptionist = [[VSCoreReceptionist alloc] initWithSize:[VSProjectSettings sharedProjectSettings].frameSize];
     }
     return self;
 }

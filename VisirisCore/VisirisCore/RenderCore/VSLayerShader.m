@@ -11,17 +11,17 @@
 
 @implementation VSLayerShader
 
-@synthesize uniformTexture1 = _uniformTexture1;
-@synthesize uniformTexture2 = _uniformTexture2;
-@synthesize attributePosition = _attributePosition;
-@synthesize uniformFadefactor = _uniformFadefactor;
+@synthesize uniformTexture1     = _uniformTexture1;
+@synthesize uniformTexture2     = _uniformTexture2;
+@synthesize attributePosition   = _attributePosition;
+@synthesize uniformLayermode    = _uniformLayermode;
 
 
 #pragma Mark - Init
 
 - (id)init{
     if (self = [super initWithName:@"layering"]) {
-        self.uniformFadefactor = glGetUniformLocation(self.program, "fade_factor");
+        self.uniformLayermode = glGetUniformLocation(self.program, "layermode");
         self.uniformTexture1 = glGetUniformLocation(self.program, "textures[0]");
         self.uniformTexture2 = glGetUniformLocation(self.program, "textures[1]");
         

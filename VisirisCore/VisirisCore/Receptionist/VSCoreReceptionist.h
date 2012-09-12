@@ -30,6 +30,12 @@
  */
 @interface VSCoreReceptionist : NSObject <VSRenderCoreDelegate>
 
+/**
+ * Initialization
+ * @param size Size is needed for the initialization of the Rendercore
+ */
+- (id)initWithSize:(NSSize)size;
+
 /** Delegate which is informed when a the rendering was finished */
 @property (weak) id<VSCoreReceptionistDelegate>             delegate;
 

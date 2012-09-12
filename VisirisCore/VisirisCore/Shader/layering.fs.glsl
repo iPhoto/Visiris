@@ -2,8 +2,7 @@
 
 #version 110
 
-// obsolete
-uniform float fade_factor;
+uniform int layermode;
 uniform sampler2D textures[2];
 
 varying vec2 texcoord;

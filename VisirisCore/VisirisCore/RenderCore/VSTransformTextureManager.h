@@ -41,4 +41,16 @@
  */
 - (void)createFBOWithSize:(NSSize)size trackId:(NSInteger)trackId;
 
+/**
+ * Have to be called when the outputsize changes
+ * @param size The size of the new FBOTexture
+ */
+- (void)resizeOutputSize:(NSSize)size;
+
+/**
+ * Deletes the FBO of a track
+ * @param trackID The ID of the track
+ */
+- (void)deleteFBOforTrackID:(NSInteger)trackID;
+
 @end

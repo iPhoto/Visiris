@@ -47,7 +47,7 @@
         self.uniformTranslateX          = glGetUniformLocation(self.program, "translateX");
         self.uniformTranslateY          = glGetUniformLocation(self.program, "translateY");
         self.uniformTranslateZ          = glGetUniformLocation(self.program, "translateZ");
-        self.uniformIsQCPatch            = glGetUniformLocation(self.program, "isQCPatch");
+        self.uniformIsQCPatch           = glGetUniformLocation(self.program, "isQCPatch");
     }
     return self;
 }

@@ -19,7 +19,7 @@
 
 #pragma Mark - Init
 
--(id)initEmptyTextureWithSize:(NSSize) size trackId:(NSInteger) trackId{
+-(id)initEmptyTextureWithSize:(NSSize)size trackId:(NSInteger) trackId{
     if(self = [super init]){
         _timeLineObjectId = -1;
         _size = size;
