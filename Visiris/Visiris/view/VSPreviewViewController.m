@@ -157,23 +157,27 @@ static NSString* defaultNib = @"VSPreviewView";
     openGLViewRect.size.height = superViewsRect.size.height - self.openGLViewMarginTop - self.openGLViewMarginBottom;
     
     
-    //resizes the NSRect according to the aspectRatio stored in VSProjectSettings
-    float aspectRatio = [VSProjectSettings sharedProjectSettings].aspectRatio;
-    
-    float proportionalHeight = openGLViewRect.size.width / aspectRatio;
-    
-    if(proportionalHeight<openGLViewRect.size.height){
-        openGLViewRect.size.height = proportionalHeight;
-    }
-    else{
-        openGLViewRect.size.width = openGLViewRect.size.height * aspectRatio;
-    }
-    
+//    //resizes the NSRect according to the aspectRatio stored in VSProjectSettings
+//    float aspectRatio = [VSProjectSettings sharedProjectSettings].aspectRatio;
+//    
+//    float proportionalHeight = openGLViewRect.size.width / aspectRatio;
+//    
+//    if(proportionalHeight<openGLViewRect.size.height){
+//        openGLViewRect.size.height = proportionalHeight;
+//    }
+//    else{
+//        openGLViewRect.size.width = openGLViewRect.size.height * aspectRatio;
+//    }
+//    
     openGLViewRect.origin.x = (superViewsRect.size.width - openGLViewRect.size.width) / 2.0f;
     openGLViewRect.origin.y = (NSMaxY(superViewsRect) - NSMaxY(openGLViewRect)) / 2.0f;
-    
-    
+
+
     [self.openGLView setFrameProportionally:NSIntegralRect(openGLViewRect)];
+    
+//    [self.openGLView setFrame:openGLViewRect];
+    
+    [VSProjectSettings sharedProjectSettings].frameSize = self.openGLView.frame.size;
     
     [self.openGLView setNeedsLayout:YES];
     [self.openGLView setNeedsDisplay:YES];

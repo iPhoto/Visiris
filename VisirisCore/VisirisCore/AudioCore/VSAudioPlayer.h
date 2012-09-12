@@ -41,4 +41,10 @@
  */
 - (void)setVolume:(float)volume;
 
+/**
+ * Real Stop, not just pause like stopPlaying
+ */
+- (void)completeStop;
+
+
 @end

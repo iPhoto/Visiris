@@ -31,8 +31,7 @@
  * @param timeline VSTimeline the VSPreProcessor asks for the currently active VSTimelineObjects to send their VSCoreHandovers to VSCoreReceptionist
  * @return self
  */
--(id) initWithTimeline:(VSTimeline*) timeline;
-
+-(id)initWithTimeline:(VSTimeline *)timeline;
 
 #pragma mark - Methods
 

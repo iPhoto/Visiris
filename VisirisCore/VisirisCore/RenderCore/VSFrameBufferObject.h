@@ -20,7 +20,7 @@
 @property (readonly, assign) NSSize     size;
 
 /**
- * Basic Init Method. Calls initWithSize with 640, 480
+ * Basic Init Method
  */
 - (id)init;
 
@@ -45,5 +45,10 @@
  * @param size The new Size
  */
 - (void)resize:(NSSize)size;
+
+/**
+ * Deletes the FBO and the Texture
+ */
+- (void)delete;
 
 @end

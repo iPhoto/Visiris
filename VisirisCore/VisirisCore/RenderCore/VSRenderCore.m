@@ -19,6 +19,7 @@
 #import <OpenGL/glu.h>
 #import "VSLayerShader.h"
 #import "VSTransformTextureManager.h"
+#import "VSLayermode.h"
 
 @interface VSRenderCore()
 
@@ -58,6 +59,9 @@
 /** Transform every Texture */
 @property (strong) VSTransformTextureManager        *transformTextureManager;
 
+/** Keeps track of the old outputsize */
+@property (assign) NSSize                           oldSize;
+
 @end
 
 
@@ -75,10 +79,11 @@
 @synthesize textureManager              = _textureManager;
 @synthesize qcpManager                  = _qcpManager;
 @synthesize transformTextureManager     = _transformTextureManager;
+@synthesize oldSize                     = _oldSize;
 
 #pragma mark- Init
 
--(id)init{
+-(id)initWithSize:(NSSize)size{
     self = [super init];
     if (self) {
         
@@ -109,8 +114,8 @@
             NSLog(@"Error: Making Resources Failed!!!!!");
         }
         
-        self.frameBufferObjectOne = [[VSFrameBufferObject alloc] init];
-        self.frameBufferObjectTwo = [[VSFrameBufferObject alloc] init];
+        self.frameBufferObjectOne = [[VSFrameBufferObject alloc] initWithSize:size];
+        self.frameBufferObjectTwo = [[VSFrameBufferObject alloc] initWithSize:size];
         self.frameBufferObjectCurrent = self.frameBufferObjectOne;
         self.frameBufferObjectOld = self.frameBufferObjectTwo;
         
@@ -120,6 +125,8 @@
         self.qcpManager = [[VSQCManager alloc] init];       
         
         self.transformTextureManager = [[VSTransformTextureManager alloc] initWithContext:self.openGLContext];
+        
+        self.oldSize = size;
     }
     return self;
 }
@@ -127,15 +134,17 @@
 #pragma mark- Methods
 
 -(void)renderFrameOfCoreHandovers:(NSArray *)theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double)theTimestamp{
-    
+                
     NSMutableArray *mutableCoreHandovers = [NSMutableArray arrayWithArray:theCoreHandovers];
-    
+        
 	[[self openGLContext] makeCurrentContext];
+    CGLLockContext([[self openGLContext] CGLContextObj]);
+
+    [self compareOldSize:self.oldSize withCurrentSize:theFrameSize];
 
     //Create a array with only glTextures in it
     NSMutableArray *textures = [self createTextures:mutableCoreHandovers atTime:theTimestamp forOutputSize:theFrameSize];
     
-    CGLLockContext([[self openGLContext] CGLContextObj]);
     
     GLuint outPutTexture;
     
@@ -155,25 +164,27 @@
         }
         case 2:
         {
-            [self combineTheFirstTwoObjects:textures];
+            [self combineTheFirstTwoObjects:textures withLayermode:[self layerMode:[mutableCoreHandovers objectAtIndex:0]]];
             outPutTexture = self.frameBufferObjectCurrent.texture;
             [[self openGLContext] flushBuffer];
             break;
         }
         default:
         {            
-            [self combineTheFirstTwoObjects:textures];
+            [self combineTheFirstTwoObjects:textures withLayermode:0];
 
             for (NSInteger i = 1; i < textures.count -1; i++) {
                 [self swapFBO];
                 NSNumber *texture = (NSNumber *)[textures objectAtIndex:(i+1)];
-                [self combineTexture:self.frameBufferObjectOld.texture with:texture.intValue];
+                [self combineTexture:self.frameBufferObjectOld.texture with:texture.intValue andLayermode:1];
             }
              
             outPutTexture = self.frameBufferObjectCurrent.texture;
             break;
         }
     }
+    
+    //NSLog(@"outputtexture: %d",outPutTexture);
     
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
     
@@ -185,15 +196,10 @@
 }
 
 - (void)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*)colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path withObjectItemID:(NSInteger)objectItemID{
-    
-    
+
     switch (type) {
         case VSFileKindImage:
-            [self.textureManager createTextureWithSize:textureSize trackId:trackID withObjectItemID:objectItemID];
-            [self.transformTextureManager createFBOWithSize:size trackId:trackID];
-            break;
         case VSFileKindVideo:
-            //TODO the same as above - plz optimise this shit
             [self.textureManager createTextureWithSize:textureSize trackId:trackID withObjectItemID:objectItemID];
             [self.transformTextureManager createFBOWithSize:size trackId:trackID];
             break;
@@ -214,29 +220,36 @@
     [self.textureManager deleteTextureForTimelineobjectID:theID];
 }
 
+- (void)deleteQCPatchForTimelineObjectID:(NSInteger)theID{
+    [self.qcpManager deleteQCRenderer:theID];
+}
+
 - (NSOpenGLContext *)openglContext{
     return self.openGLContext;
 }
+
 
 #pragma mark - Private Methods
 
 /**
  * Reads the first two textures of an Array and calls the combineTexture Method.
  * @param textures NSArray with the stored textures
+ * @layermode The Layermode (multiply, add, ...) is an int because of the uniform
  */
-- (void)combineTheFirstTwoObjects:(NSArray *) textures{
+- (void)combineTheFirstTwoObjects:(NSArray *) textures withLayermode:(float)layermode{
     NSNumber *texture0 = (NSNumber *)[textures objectAtIndex:0];
     NSNumber *texture1 = (NSNumber *)[textures objectAtIndex:1];
     
-    [self combineTexture:texture0.intValue with:texture1.intValue];
+    [self combineTexture:texture0.intValue with:texture1.intValue andLayermode:layermode];
 }
 
 /**
  * Combines two textures using the Layeringshader. The created texture gets offlinerendered using the current active FBO.
  * @param bottomtexture BaseTexture
  * @param upperTexture BlendTexture
+ * @layermode The Layermode (multiply, add, ...) is an float (should be int) because of the uniform
  */
-- (void)combineTexture:(GLuint)bottomtexture with:(GLuint)upperTexture{	
+- (void)combineTexture:(GLuint)bottomtexture with:(GLuint)upperTexture andLayermode:(float)layermode{
     [self.frameBufferObjectCurrent bind];
     
     glViewport(0, 0, self.frameBufferObjectCurrent.size.width,self.frameBufferObjectCurrent.size.height);
@@ -245,7 +258,9 @@
     glColor3f(0.0f, 0.0f, 0.0f);
         
     glUseProgram(self.layerShader.program);
-    glUniform1f(self.layerShader.uniformFadefactor, 0.5f);
+    glUniform1f(self.layerShader.uniformLayermode, layermode);
+    
+   // NSLog(@"Layermode: %d",layermode);
     
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, bottomtexture);
@@ -382,6 +397,52 @@
     glBindBuffer(target, buffer);
     glBufferData(target, buffer_size, buffer_data, GL_STATIC_DRAW);
     return buffer;
+}
+
+/**
+ * Compares the old und current size of the output and if neccesary it resizes all the stuff
+ * @param oldSize size of the oldFrame
+ * @param buffer_data The Plain Buffer Data
+ */
+- (void)compareOldSize:(NSSize)oldsize withCurrentSize:(NSSize)currentSize{
+    if (oldsize.width != currentSize.width || oldsize.height !=currentSize.height) {
+        
+        [self.frameBufferObjectOne resize:currentSize];
+        [self.frameBufferObjectTwo resize:currentSize];
+
+        [self.transformTextureManager resizeOutputSize:currentSize];
+        [self.qcpManager resize:currentSize];
+        
+        self.oldSize = currentSize;
+    }
+}
+
+/**
+ * For Debugging the OpenglTextures. prints out how many textures are allocated.
+ */
+- (void)debugOpenGLTextures{
+    // glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxSize);
+    int counter = 0;
+    
+    for (int i = 0; i < 10; i++) {
+        if(glIsTexture(i)){
+            NSLog(@"Texture %d is valid",i);
+            counter++;
+        }
+    }
+    NSLog(@"There are %d valid Textures on the GPU",counter);
+}
+
+/**
+ * todo
+ */
+- (float)layerMode:(VSCoreHandover *)handover{
+    NSString *tempString = (NSString *)[handover.attributes objectForKey:@"VSParameterKeyBlendMode"];
+   // NSLog(@"Attribute: %@",tempString);
+   // NSLog(@"int: %d",[VSLayermode intFromString:tempString]);
+
+  //  NSLog(@"nummer %d",[VSLayermode intFromString:tempString]);
+    return [VSLayermode floatFromString:tempString];
 }
 
 @end

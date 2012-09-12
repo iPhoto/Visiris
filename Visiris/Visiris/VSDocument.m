@@ -65,7 +65,7 @@
  */
 -(void) initVisiris{
     
-    [[VSProjectSettings sharedProjectSettings] setFrameSize:NSMakeSize(1920, 1080)];
+    [[VSProjectSettings sharedProjectSettings] setFrameSize:NSMakeSize(640, 480)];
     
     //TODO: where to create the timeline?
     
@@ -93,9 +93,7 @@
     
     self.preProcessor.renderCoreReceptionist.delegate = self.postProcessor;
     
-    
     self.timeline.timelineObjectsDelegate = self.preProcessor;
-    
 }
 
 

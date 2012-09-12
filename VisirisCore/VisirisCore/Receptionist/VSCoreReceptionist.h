@@ -30,6 +30,12 @@
  */
 @interface VSCoreReceptionist : NSObject <VSRenderCoreDelegate>
 
+/**
+ * Initialization
+ * @param size Size is needed for the initialization of the Rendercore
+ */
+- (id)initWithSize:(NSSize)size;
+
 /** Delegate which is informed when a the rendering was finished */
 @property (weak) id<VSCoreReceptionistDelegate>             delegate;
 
@@ -50,7 +56,7 @@
 
 - (void)createNewAudioPlayerWithProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID forTrack:(NSInteger)trackId andFilePath:(NSString *)filepath;
 
-- (void)removeTextureForTimelineobjectID:(NSInteger)anID;
+- (void)removeTimelineobjectWithID:(NSInteger)anID andType:(VSFileKind)type;
 
 - (NSOpenGLContext *)openGLContext;
 

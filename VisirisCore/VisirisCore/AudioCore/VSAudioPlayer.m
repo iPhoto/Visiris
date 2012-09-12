@@ -64,4 +64,8 @@
     }
 }
 
+- (void)completeStop{
+    [self.audioPlayer stop];
+}
+
 @end

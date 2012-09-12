@@ -35,4 +35,10 @@
  */
 - (void)stopPlaying;
 
+/**
+ * Gets called when a timlineobject gets removed
+ * @param timelineobjectID Unique ID of the timelineobject
+ */
+- (void)deleteTimelineobjectID:(NSInteger)timelineobjectID;
+
 @end

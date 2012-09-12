@@ -27,6 +27,8 @@
 		270692D31594F25F001A9329 /* VSQCRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 270692D11594F25D001A9329 /* VSQCRenderer.h */; };
 		270692D41594F25F001A9329 /* VSQCRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 270692D21594F25E001A9329 /* VSQCRenderer.m */; };
 		270692D61594F94F001A9329 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 270692D51594F94F001A9329 /* Quartz.framework */; };
+		271341EF16007607003E5168 /* VSLayermode.h in Headers */ = {isa = PBXBuildFile; fileRef = 271341ED16007607003E5168 /* VSLayermode.h */; };
+		271341F016007607003E5168 /* VSLayermode.m in Sources */ = {isa = PBXBuildFile; fileRef = 271341EE16007607003E5168 /* VSLayermode.m */; };
 		2726745B157F76A400EBE6B0 /* VSTextureManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 27267459157F76A400EBE6B0 /* VSTextureManager.h */; };
 		2726745C157F76A400EBE6B0 /* VSTextureManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2726745A157F76A400EBE6B0 /* VSTextureManager.m */; };
 		2745457415AEDC400064597D /* VSPBufferRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 2745457215AEDC400064597D /* VSPBufferRenderer.h */; };
@@ -89,6 +91,8 @@
 		270692D11594F25D001A9329 /* VSQCRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSQCRenderer.h; sourceTree = "<group>"; };
 		270692D21594F25E001A9329 /* VSQCRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSQCRenderer.m; sourceTree = "<group>"; };
 		270692D51594F94F001A9329 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
+		271341ED16007607003E5168 /* VSLayermode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VSLayermode.h; path = CoreServices/VSLayermode.h; sourceTree = "<group>"; };
+		271341EE16007607003E5168 /* VSLayermode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VSLayermode.m; path = CoreServices/VSLayermode.m; sourceTree = "<group>"; };
 		27267459157F76A400EBE6B0 /* VSTextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTextureManager.h; sourceTree = "<group>"; };
 		2726745A157F76A400EBE6B0 /* VSTextureManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTextureManager.m; sourceTree = "<group>"; };
 		2745457215AEDC400064597D /* VSPBufferRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSPBufferRenderer.h; sourceTree = "<group>"; };
@@ -176,6 +180,8 @@
 				279820DF15B85A4B00E8AA8E /* VSPlaybackMode.h */,
 				274C70CC157E81DD0031F9B2 /* VSImageContext.h */,
 				274C70CD157E81DD0031F9B2 /* VSImageContext.m */,
+				271341ED16007607003E5168 /* VSLayermode.h */,
+				271341EE16007607003E5168 /* VSLayermode.m */,
 			);
 			name = CoreServices;
 			sourceTree = "<group>";
@@ -366,6 +372,7 @@
 				27A6CA1615B753DD004C6DFB /* NSMutableDictionary+VSAudioPlayerManger.h in Headers */,
 				276D436615B7FC8200389C86 /* VSAudioCoreHandover.h in Headers */,
 				279820E015B85A4B00E8AA8E /* VSPlaybackMode.h in Headers */,
+				271341EF16007607003E5168 /* VSLayermode.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -476,6 +483,7 @@
 				27A6CA1215B74FA0004C6DFB /* VSAudioPlayer.m in Sources */,
 				27A6CA1715B753DD004C6DFB /* NSMutableDictionary+VSAudioPlayerManger.m in Sources */,
 				276D436715B7FC8200389C86 /* VSAudioCoreHandover.m in Sources */,
+				271341F016007607003E5168 /* VSLayermode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

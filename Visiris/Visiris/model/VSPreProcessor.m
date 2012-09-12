@@ -32,7 +32,7 @@
 -(id)initWithTimeline:(VSTimeline *)timeline{
     if(self = [super init]){
         self.timeline = timeline;
-        self.renderCoreReceptionist = [[VSCoreReceptionist alloc] init];
+        self.renderCoreReceptionist = [[VSCoreReceptionist alloc] initWithSize:[VSProjectSettings sharedProjectSettings].frameSize];
     }
     return self;
 }
@@ -61,8 +61,11 @@
 -(void) timelineObjectsWillBeRemoved:(NSArray *)removedTimelineObjects{
     //DDLogInfo(@"%@",removedTimelineObjects);
     
+    
+    
     for (VSTimelineObject *timelineObject in removedTimelineObjects){
-        [self.renderCoreReceptionist removeTextureForTimelineobjectID:timelineObject.timelineObjectID];
+        [self.renderCoreReceptionist removeTimelineobjectWithID:timelineObject.timelineObjectID andType:timelineObject.sourceObject.projectItem.fileType.fileKind];
+        
     }
 }
 

@@ -23,7 +23,7 @@
 /** Position of the Vertices */
 @property (assign) GLuint       attributePosition;
 
-/** TODO this is obsolete */
-@property (assign) GLuint       uniformFadefactor;
+/** Layermode */
+@property (assign) GLuint       uniformLayermode;
 
 @end

@@ -67,7 +67,7 @@
 /** OpenGLContext */
 @property (strong) NSOpenGLContext*			textureContext;
 
-/** TODO COMMENT */
+/** In our case 2D Texture */
 @property (assign) GLenum					textureTarget;
 
 /** Final Texture */
@@ -77,7 +77,7 @@
 /**
  * Basic Initialization for the PBuffer and the QCPatch
  * @param path Absolute Path of the QuartzComposerPatch
- * @param target TODO COMMENT
+ * @param target 2D_Texture
  * @param width Width of the texture
  * @param height Height of the texture
  * @param context OpenGLContext
@@ -89,17 +89,17 @@
  * @param time Actual time
  * @return YES if succeded
  */
-- (BOOL) updateTextureForTime:(NSTimeInterval)time;
+- (BOOL)updateTextureForTime:(NSTimeInterval)time;
 
 /**
- * TODO COMMENT
+ * The actual Texture which can be used for rendering
  */
-- (GLenum) textureTarget;
+- (GLuint)textureName;
 
 /**
- * TODO COMMENT
+ * Deallocating the texture and destroy the GLcontext
  */
-- (GLuint) textureName;
+- (void)delete;
 
 /*
 - (unsigned) textureWidth;

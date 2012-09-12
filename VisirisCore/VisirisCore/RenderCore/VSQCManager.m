@@ -35,13 +35,25 @@
 
 - (void)createQCRendererWithSize:(NSSize) size withTrackId:(NSInteger) trackId withPath:(NSString *)path withContext:(NSOpenGLContext *)context withFormat:(NSOpenGLPixelFormat *)format withObjectItemID:(NSInteger)objectItemID{
     
-    
     VSQCRenderer *tempRenderer = [[VSQCRenderer alloc] initWithPath:path withSize:size withContext:context withPixelformat:format withTrackID:trackId];
     [self.quartzRendererForObjectId setObject:tempRenderer forKey:[NSNumber numberWithInteger:objectItemID]];
 }
-
+ 
 - (VSQCRenderer *)getQCRendererForObjectId:(NSInteger)objectID{
     return [self.quartzRendererForObjectId objectForKey:[NSNumber numberWithInteger:objectID]];
+}
+
+- (void)deleteQCRenderer:(NSInteger)timelineObjectID{
+    VSQCRenderer *temp = [self.quartzRendererForObjectId objectForKey:[NSNumber numberWithInteger:timelineObjectID]];
+    [temp deleteRenderer];
+    [self.quartzRendererForObjectId removeObjectForKey:[NSNumber numberWithInteger:timelineObjectID]];
+}
+
+- (void)resize:(NSSize)size{
+    for (id objectID in self.quartzRendererForObjectId) {
+        VSQCRenderer *temp = [self.quartzRendererForObjectId objectForKey:objectID];
+        [temp resize:size];
+    }
 }
 
 @end

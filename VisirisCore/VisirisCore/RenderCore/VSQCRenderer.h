@@ -51,4 +51,17 @@
  * @param inputValues The Dictionary containing all the information of the values
  */
 - (void)setPublicInputsWithValues:(NSDictionary*)inputValues;
+
+/**
+ * Deletes the renderer including the pbuffer and texture
+ */
+- (void)deleteRenderer;
+
+/**
+ * Resizes the texture
+ * @param size The new Size
+ */
+- (void)resize:(NSSize)size;
+
+
 @end
