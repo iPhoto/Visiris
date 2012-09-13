@@ -109,9 +109,7 @@
 }
 
 -(void) computePixelTimeRatio{
-    
-    DDLogInfo(@"%f - %f",self.duration,self.pixelLength);
-    
+
     double newRatio = self.duration / self.pixelLength;
     
     if(newRatio < VSMinimumPixelTimeRatio)
@@ -129,11 +127,9 @@
  * Called when ratio between the length of trackholder's width and the duration of the timeline.
  */
 -(void) pixelTimeRatioDidChange{
-    
     self.timelineScrollView.trackHolderWidth = [self pixelForTimestamp:self.duration];
     [self setPlayheadMarkerLocation];
     self.timelineScrollView.pixelTimeRatio = self.pixelTimeRatio;
-    
 }
 
 /**

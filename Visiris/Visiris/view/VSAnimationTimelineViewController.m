@@ -50,8 +50,6 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     [self.view setAutoresizesSubviews:YES];
     
     [super awakeFromNib];
-    
-//    ((VSAnimationTimelineView*)self.view).resizingDelegate = nil;
 }
 
 #pragma mark - VSPlayHeadRulerMarkerDelegate Implementation
@@ -76,6 +74,7 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 
 #pragma mark - Methods
 
+
 -(void) showTimelineForTimelineObject:(VSTimelineObject*) timelineObject{
     
     if(self.timelineObject){
@@ -85,14 +84,8 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     }
     
     self.timelineObject = timelineObject;
-    
-    [self computePixelTimeRatio];
-    DDLogInfo(@"pixelTimeRati: %f",self.pixelTimeRatio);
-    [self.view setFrameSize:self.view.superview.frame.size];
-    
+
     if(self.timelineObject){
-        
-        [self.scrollView setTrackHolderWidth:self.scrollView.documentVisibleRect.size.width];
         
         for(VSParameter *parameter in [self.timelineObject visibleParameters]){
             
@@ -122,8 +115,27 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     
     [self.scrollView.trackHolderView setFrameSize:newSize];
     [self computePixelTimeRatio];
+}
+
+
+
+
+#pragma mark- VSViewResizingDelegate implementation
+
+-(void) frameOfView:(NSView *)view wasSetFrom:(NSRect)oldRect to:(NSRect)newRect{
     
-   // ((VSAnimationTimelineView*)self.view).resizingDelegate = self;
+    if(newRect.size.width != 0){
+        [self computePixelTimeRatio];
+//        if(oldRect.size.width != newRect.size.width){
+//            
+//            NSRect newDocumentFrame = [self.timelineScrollView.trackHolderView frame];
+//            
+//            //updates the width according to how the width of the view has been resized
+//            newDocumentFrame.size.width += newRect.size.width - oldRect.size.width;
+//            [self.timelineScrollView.trackHolderView setFrame:(newDocumentFrame)];
+//            [self computePixelTimeRatio];
+//        }
+    }
 }
 
 -(void) resetTimeline{

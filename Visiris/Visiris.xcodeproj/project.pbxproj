@@ -1146,7 +1146,6 @@
 				5BD35BCB15D959D4001A74E0 /* VSAnimationTimelineScrollView.m */,
 				5BD35BCD15D959F0001A74E0 /* VSAnimationTimelineContentView.h */,
 				5BD35BCE15D959F0001A74E0 /* VSAnimationTimelineContentView.m */,
-				5BD35BE415D9688F001A74E0 /* VSAnimationTrackViewController.h */,
 			);
 			name = timeline;
 			sourceTree = "<group>";
@@ -1154,6 +1153,7 @@
 		5BD35BEA15D96AC9001A74E0 /* animationTrack */ = {
 			isa = PBXGroup;
 			children = (
+				5BD35BE415D9688F001A74E0 /* VSAnimationTrackViewController.h */,
 				5BD35BE515D96890001A74E0 /* VSAnimationTrackViewController.m */,
 				5BD35BEB15D96ADB001A74E0 /* VSAnimationTrackView.h */,
 				5BD35BEC15D96ADB001A74E0 /* VSAnimationTrackView.m */,

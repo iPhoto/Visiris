@@ -35,7 +35,7 @@
 				<string key="NSClassName">NSApplication</string>
 			</object>
 			<object class="NSCustomView" id="1005">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="NSSplitView" id="981300445">
@@ -48,9 +48,10 @@
 								<array class="NSMutableArray" key="NSSubviews"/>
 								<string key="NSFrameSize">{158, 339}</string>
 								<reference key="NSSuperview" ref="981300445"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="70263976"/>
 								<string key="NSReuseIdentifierKey">_NS:11</string>
-								<string key="NSClassName">VSTestFlippedView</string>
+								<string key="NSClassName">VSFlippedView</string>
 							</object>
 							<object class="NSCustomView" id="70263976">
 								<reference key="NSNextResponder" ref="981300445"/>
@@ -58,12 +59,15 @@
 								<array class="NSMutableArray" key="NSSubviews"/>
 								<string key="NSFrame">{{159, 0}, {302, 339}}</string>
 								<reference key="NSSuperview" ref="981300445"/>
+								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:13</string>
-								<string key="NSClassName">VSFlippedView</string>
+								<string key="NSClassName">NSView</string>
 							</object>
 						</array>
 						<string key="NSFrame">{{1, 0}, {461, 339}}</string>
 						<reference key="NSSuperview" ref="1005"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="912598720"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="NSIsVertical">YES</bool>
@@ -71,6 +75,8 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{462, 340}</string>
+				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="981300445"/>
 				<string key="NSClassName">VSTimelineObjectPropertiesView</string>
 			</object>
@@ -240,26 +246,6 @@
 						<reference key="parent" ref="981300445"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">542</int>
-						<reference key="object" ref="852304744"/>
-						<reference key="parent" ref="1005"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">543</int>
-						<reference key="object" ref="842459337"/>
-						<reference key="parent" ref="1005"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">544</int>
-						<reference key="object" ref="394080991"/>
-						<reference key="parent" ref="1005"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">545</int>
-						<reference key="object" ref="949990436"/>
-						<reference key="parent" ref="1005"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">451</int>
 						<reference key="object" ref="912598720"/>
 						<array class="NSMutableArray" key="children">
@@ -308,6 +294,26 @@
 						<reference key="object" ref="616295485"/>
 						<reference key="parent" ref="912598720"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">543</int>
+						<reference key="object" ref="842459337"/>
+						<reference key="parent" ref="1005"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">545</int>
+						<reference key="object" ref="949990436"/>
+						<reference key="parent" ref="1005"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">542</int>
+						<reference key="object" ref="852304744"/>
+						<reference key="parent" ref="1005"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">544</int>
+						<reference key="object" ref="394080991"/>
+						<reference key="parent" ref="1005"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -342,7 +348,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">562</int>
+			<int key="maxID">568</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -360,14 +366,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/VSFlippedView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">VSTestFlippedView</string>
-					<string key="superclassName">NSView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/VSTestFlippedView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
