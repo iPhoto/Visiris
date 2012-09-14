@@ -117,7 +117,7 @@ vec3 ContrastSaturationBrightness(vec3 color, float brt, float sat, float con)
 #define BlendLinearBurnf                BlendSubstractf
 #define BlendAddf(base, blend)          min(base + blend, 1.0)
 #define BlendSubstractf(base, blend) 	max(base + blend - 1.0, 0.0)
-#define BlendLightenf(base, blend) 		max(blend, base)
+#define BlendLightenf(base, blend) 		max(blend, base) 
 #define BlendDarkenf(base, blend) 		min(blend, base)
 #define BlendLinearLightf(base, blend) 	(blend < 0.5 ? BlendLinearBurnf(base, (2.0 * blend)) : BlendLinearDodgef(base, (2.0 * (blend - 0.5))))
 #define BlendScreenf(base, blend) 		(1.0 - ((1.0 - base) * (1.0 - blend)))
@@ -134,35 +134,37 @@ vec3 ContrastSaturationBrightness(vec3 color, float brt, float sat, float con)
 //Blendmodes
 #define BlendNormal(base, blend)        (blend + base*(1.0 - blend.a))
 #define BlendLighten                    BlendLightenf
-#define BlendDarken                     BlendDarkenf
-#define BlendMultiply(base, blend) 		(base * blend)
+#define BlendDarken(base, blend)        (BlendDarkenf(base, blend) + base*(1.0 - blend.a))
+#define BlendMultiply(base, blend) 		(base * blend + base*(1.0 - blend.a))
 #define BlendAverage(base, blend) 		((base + blend) / 2.0)
 #define BlendAdd(base, blend)           min(base + blend, vec4(1.0))
-#define BlendSubstract(base, blend) 	max(base + blend - vec4(1.0), vec4(0.0))
+#define BlendSubstract(base, blend) 	(max(base + blend - vec4(1.0), vec4(0.0)) + base*(1.0 - blend.a))
 #define BlendDifference(base, blend) 	abs(base - blend)
 #define BlendNegation(base, blend)      (vec4(1.0) - abs(vec4(1.0) - base - blend))
 #define BlendExclusion(base, blend) 	(base + blend - 2.0 * base * blend)
 
 #define BlendScreen(base, blend) 		Blend(base, blend, BlendScreenf)
-#define BlendOverlay(base, blend) 		Blend(base, blend, BlendOverlayf)
+#define BlendOverlay(base, blend) 		(Blend(base, blend, BlendOverlayf))
 #define BlendSoftLight(base, blend) 	Blend(base, blend, BlendSoftLightf)
-#define BlendHardLight(base, blend) 	BlendOverlay(blend, base)
-#define BlendColorDodge(base, blend) 	Blend(base, blend, BlendColorDodgef)
-#define BlendColorBurn(base, blend)     Blend(base, blend, BlendColorBurnf)
+#define BlendHardLight(base, blend) 	(BlendOverlay(blend, base) + base*(1.0 - blend.a))
+
+//HIER WEITERMACHEN!!!!!!
+#define BlendColorDodge(base, blend) 	(Blend(base, blend, BlendColorDodgef))
+#define BlendColorBurn(base, blend)     (Blend(base, blend, BlendColorBurnf) + base*(1.0 - blend.a))
 #define BlendLinearDodge                BlendAdd
 #define BlendLinearBurn                 BlendSubstract
 // Linear Light is another contrast-increasing mode
 // If the blend color is darker than midgray, Linear Light darkens the image by decreasing the brightness. If the blend color is lighter than midgray, the result is a brighter image due to increased brightness.
-#define BlendLinearLight(base, blend) 	Blend(base, blend, BlendLinearLightf)
-#define BlendVividLight(base, blend) 	Blend(base, blend, BlendVividLightf)
-#define BlendPinLight(base, blend) 		Blend(base, blend, BlendPinLightf)
-#define BlendHardMix(base, blend) 		Blend(base, blend, BlendHardMixf)
+#define BlendLinearLight(base, blend) 	(Blend(base, blend, BlendLinearLightf) + base*(1.0 - blend.a))
+#define BlendVividLight(base, blend) 	(Blend(base, blend, BlendVividLightf) + base*(1.0 - blend.a))
+#define BlendPinLight(base, blend) 		(Blend(base, blend, BlendPinLightf) + base*(1.0 - blend.a))
+#define BlendHardMix(base, blend) 		(Blend(base, blend, BlendHardMixf) + base*(1.0 - blend.a))
 #define BlendReflect(base, blend) 		Blend(base, blend, BlendReflectf)
-#define BlendGlow(base, blend)          BlendReflect(blend, base)
+#define BlendGlow(base, blend)          (BlendReflect(blend, base) + base*(1.0 - blend.a))
 #define BlendPhoenix(base, blend) 		(min(base, blend) - max(base, blend) + vec4(1.0))
-#define BlendOpacity(base, blend, F, O)	(F(base, blend) * O + blend * (1.0 - O))
- 
- 
+#define BlendLuminosity(base, blend)    (BlendLuminosityf(base, blend) + base*(1.0 - blend.a))
+
+
 vec4 BlendHue(vec4 base, vec4 blend)
 {
 	vec3 baseHSL = RGBToHSL(base.rgb);
@@ -187,23 +189,18 @@ vec4 BlendColor(vec4 base, vec4 blend)
 }
 
 // Luminosity Blend mode creates the result color by combining the hue and saturation of the base color with the luminance of the blend color.
-vec4 BlendLuminosity(vec4 base, vec4 blend)
+vec4 BlendLuminosityf(vec4 base, vec4 blend)
 {
 	vec3 baseHSL = RGBToHSL(base.rgb);
 	vec3 temp = HSLToRGB(vec3(baseHSL.r, baseHSL.g, RGBToHSL(blend.rgb).b));
     return vec4(temp.r,temp.g,temp.b,(base.a+blend.a)/2.0);
 } 
 
-////////////////////////////
-
 
 void main()
 {
-    vec4 blend = texture2D(textures[0], texcoord);
-    vec4 base = texture2D(textures[1], texcoord);
-    
-  //  gl_FragColor = BlendNormal(base, blend);
-    
+    vec4 base = texture2D(textures[0], texcoord);
+    vec4 blend = texture2D(textures[1], texcoord);
 
     if (layermode == 1.0) {
         gl_FragColor = BlendNormal(base, blend);
@@ -296,74 +293,19 @@ void main()
                 {
                     if (layermode < 26.0)
                     {
-                        if (layermode < 25.0)     gl_FragColor = BlendGlow(base, blend);
+                        if (layermode < 25.0)   gl_FragColor = BlendGlow(base, blend);
                         else                    gl_FragColor = BlendPhoenix(base, blend);
                     }
-                    else
-                    {
-                        if (layermode < 27.0)     gl_FragColor = BlendNormal(base, blend);
-                        else                    gl_FragColor = BlendHue(base, blend);
-                    }
+                    else                        gl_FragColor = BlendHue(base, blend);
                 }
                 else
                     if (layermode < 30.0)
                     {
-                        if (layermode < 29.0)     gl_FragColor = BlendSaturation(base, blend);
+                        if (layermode < 29.0)   gl_FragColor = BlendSaturation(base, blend);
                         else                    gl_FragColor = BlendColor(base, blend);
                     }
                     else                        gl_FragColor = BlendLuminosity(base, blend);
             }
         }
     }
-    
-    
-    /*
-    switch (layermode) {
-        case 1:  gl_FragColor = BlendNormal(base, blend);       break;
-        case 2:  gl_FragColor = BlendLighten(base, blend);      break;
-        case 3:  gl_FragColor = BlendDarken(base, blend);       break;
-        case 4:  gl_FragColor = BlendMultiply(base, blend);     break;
-        case 5:  gl_FragColor = BlendAverage(base, blend);      break;
-        case 6:  gl_FragColor = BlendAdd(base, blend);          break;
-        case 7:  gl_FragColor = BlendSubstract(base, blend);    break;
-        case 8:  gl_FragColor = BlendDifference(base, blend);   break;
-     
-        case 9:  gl_FragColor = BlendNegation(base, blend);     break;
-        case 10: gl_FragColor = BlendExclusion(base, blend);    break;
-        case 11: gl_FragColor = BlendScreen(base, blend);       break;
-        case 12: gl_FragColor = BlendOverlay(base, blend);      break;
-        case 13: gl_FragColor = BlendSoftLight(base, blend);    break;
-        case 14: gl_FragColor = BlendHardLight(base, blend);    break;
-        case 15: gl_FragColor = BlendColorDodge(base, blend);   break;
-     
-        case 16: gl_FragColor = BlendColorBurn(base, blend);    break;
-        case 17: gl_FragColor = BlendLinearDodge(base, blend);  break;
-        case 18: gl_FragColor = BlendLinearBurn(base, blend);   break;
-        case 19: gl_FragColor = BlendLinearLight(base, blend);  break;
-     
-     
-     
-        case 20: gl_FragColor = BlendVividLight(base, blend);   break;
-        case 21: gl_FragColor = BlendPinLight(base, blend);     break;
-     
-     
-     
-        case 22: gl_FragColor = BlendHardMix(base, blend);      break;
-        case 23: gl_FragColor = BlendReflect(base, blend);      break;
-     
-     
-     
-        case 24: gl_FragColor = BlendGlow(base, blend);         break;
-        case 25: gl_FragColor = BlendPhoenix(base, blend);      break;
-     
-        case 26: gl_FragColor = BlendOpacity(base, blend);      break;
-        case 27: gl_FragColor = BlendHue(base, blend);          break;
-     
-        case 28: gl_FragColor = BlendSaturation(base, blend);   break;
-        case 29: gl_FragColor = BlendColor(base, blend);        break;
-        case 30: gl_FragColor = BlendLuminosity(base, blend);   break;
-        default:
-            gl_FragColor = BlendNormal(base, blend);
-            break;
-     */
 }
