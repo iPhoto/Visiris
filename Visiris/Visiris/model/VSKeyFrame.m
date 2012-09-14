@@ -23,5 +23,43 @@
     return self;
 }
 
+#pragma mark - Properties
+
+-(NSString*) stringValue{
+    if([self.value isKindOfClass:[NSString class]]){
+        return (NSString*) self.value;
+    }
+    
+return @"";
+}
+
+-(void) setStringValue:(NSString *)stringValue{
+    self.value = stringValue;
+}
+
+-(float) floatValue{
+    if([self.value isKindOfClass:[NSNumber class]]){
+        return [self.value floatValue];
+    }
+    
+    return 0.0;
+}
+
+-(void) setFloatValue:(float)floatValue{
+    self.value = [NSNumber numberWithFloat:floatValue];
+}
+
+-(BOOL) boolValue{
+    if([self.value isKindOfClass:[NSNumber class]]){
+        return [self.value boolValue];
+    }
+    
+    return NO;
+}
+
+-(void) setBoolValue:(BOOL)boolValue{
+    self.value = [NSNumber numberWithBool:boolValue];
+}
+
 
 @end

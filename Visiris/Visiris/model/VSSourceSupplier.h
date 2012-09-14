@@ -32,11 +32,4 @@
  */
 - (NSDictionary *)getAtrributesForTimestamp:(double) aTimestamp;
 
-/**
- * Converts the given globalTimestamp to one relative to the VSTimelineObject
- * @param aGlobalTimestamp Global timeStamp to be converted in relative one.
- * @return Returns the converted relative timestamp
- */
-- (double)convertGlobalTimestampToLocalTimestamp:(double)aGlobalTimestamp;
-
 @end

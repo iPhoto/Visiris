@@ -10,6 +10,13 @@
 #import "VSViewDelegate.h"
 
 @class VSParameter;
+@class VSKeyFrame;
+
+@protocol VSParameterViewKeyFrameDelegate <NSObject>
+
+-(VSKeyFrame*) addKeyFrameToParameter:(VSParameter*) parameter withValue:(id) value;
+
+@end
 
 /**
  * Subclass of NSViewController responsible for displaying a VSParameter.
@@ -71,7 +78,13 @@
 
 @property (strong) NSComboBox * comboBox;
 
+@property id<VSParameterViewKeyFrameDelegate> keyFrameDelegate;
+
+@property VSKeyFrame *currentKeyframe;
+
 - (IBAction)comboBoxSelectionHasChanged:(NSComboBox *)sender;
+
+- (IBAction)keyFrameButton:(id)sender;
 
 #pragma mark - init
 

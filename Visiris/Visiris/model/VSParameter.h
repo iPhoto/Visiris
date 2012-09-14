@@ -53,6 +53,10 @@
 
 @property id defaultValue;
 
+@property (readonly) NSArray *editableKeyFrames;
+
+@property (readonly) VSKeyFrame *defaultKeyFrame;
+
 #pragma mark - Init
 
 
@@ -91,32 +95,32 @@
  */
 -(VSKeyFrame*) keyFrameForTimestamp:(double) timestamp;
 
-/**
- * Returns the value of the animation at the current timestamp as float
- *
- * If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
- * @param timestamp Timestamp the value will returned for. The timestamp is relative to the animation time.
- * @return The value of the parameter the animation is connected with for the given timestamp.  If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
- */
--(float) floatValueForTimestamp:(double) timestamp;
-
-/**
- * Returns the value of the animation at the current timestamp as NSString
- *
- * If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
- * @param timestamp Timestamp the value will returned for. The timestamp is relative to the animation time.
- * @return The value of the parameter the animation is connected with for the given timestamp.  If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
- */
--(NSString*) stringValueForTimestamp:(double) timestamp;
-
-/**
- * Returns the value of the animation at the current timestamp as boolean
- *
- * If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
- * @param timestamp Timestamp the value will returned for. The timestamp is relative to the animation time.
- * @return The value of the parameter the animation is connected with for the given timestamp.  If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
- */
--(BOOL) boolValueForTimestamp:(double) timestamp;
+///**
+// * Returns the value of the animation at the current timestamp as float
+// *
+// * If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
+// * @param timestamp Timestamp the value will returned for. The timestamp is relative to the animation time.
+// * @return The value of the parameter the animation is connected with for the given timestamp.  If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
+// */
+//-(float) floatValueForTimestamp:(double) timestamp;
+//
+///**
+// * Returns the value of the animation at the current timestamp as NSString
+// *
+// * If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
+// * @param timestamp Timestamp the value will returned for. The timestamp is relative to the animation time.
+// * @return The value of the parameter the animation is connected with for the given timestamp.  If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
+// */
+//-(NSString*) stringValueForTimestamp:(double) timestamp;
+//
+///**
+// * Returns the value of the animation at the current timestamp as boolean
+// *
+// * If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
+// * @param timestamp Timestamp the value will returned for. The timestamp is relative to the animation time.
+// * @return The value of the parameter the animation is connected with for the given timestamp.  If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
+// */
+//-(BOOL) boolValueForTimestamp:(double) timestamp;
 
 /**
  * Returns the value stored in the keyframe with timestamp -1 as float
@@ -155,14 +159,12 @@
  */
 -(void) setDefaultFloatValue:(float) value;
 
-
-
 /**
  * Adds a new Keyframe with the value for the timestamp
  * @param aValue Value of the new VSKeyFrame
  * @param aTimestamp Timestamp the keyFrame is created for. The timestamp is relative to the animation time.
  */
--(void) addKeyFrameWithValue:(id) aValue forTimestamp:(double) aTimestamp;
+-(VSKeyFrame*) addKeyFrameWithValue:(id) aValue forTimestamp:(double) aTimestamp;
 
 /**
  * Removes the keyFrame with the aTimestamp.

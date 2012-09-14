@@ -229,7 +229,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 }
 
 -(void) showParameters{
-    [self.timelineObjectsParameterViewController showParameters:[self.timelineObject visibleParameters]];
+    [self.timelineObjectsParameterViewController showParametersOfTimelineObject:self.timelineObject];
     NSSize newSize = [self.timelineObjectsParameterViewController.scrollView.documentView frame].size;
     
     newSize.height += self.animationTimelineViewController.scrollView.horizontalScroller.frame.size.height;
@@ -248,9 +248,10 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
         
         
         if(_timelineObject){
-            [self.timelineObject removeObserver:self forKeyPath:@"name"];
+            //[self.timelineObject removeObserver:self forKeyPath:@"name"];
             [self setTimelineObjectName:[self.nameTextField stringValue]];
             [self.timelineObjectsParameterViewController resetParameters];
+            
         }
         
         _timelineObject = timelineObject;
@@ -259,7 +260,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
         
         float width = self.view.frame.size.width - [[self.splitView.subviews objectAtIndex:0] frame].size.width - self.splitView.dividerThickness;
 
-        [self.timelineObject addObserver:self forKeyPath:@"name" options:0 context:nil];
+//        [self.timelineObject addObserver:self forKeyPath:@"name" options:0 context:nil];
         
         [self showParameters];
         

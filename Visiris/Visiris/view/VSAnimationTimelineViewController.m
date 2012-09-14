@@ -13,6 +13,9 @@
 #import "VSAnimationTimelineScrollView.h"
 #import "VSAnimationTrackViewController.h"
 #import "VSAnimationTimelineView.h"
+#import "VSTimeline.h"
+#import "VSDocument.h"
+#import "VSPlayhead.h"
 
 #import "VSCoreServices.h"
 
@@ -23,6 +26,8 @@
 @property float trackHeight;
 
 @property NSMutableArray *animationTrackViewControllers;
+
+@property VSPlayHead *playhead;
 
 @end
 
@@ -39,17 +44,46 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     if(self = [super initWithNibName:defaultNib bundle:nil]){
         self.animationTrackViewControllers = [[NSMutableArray alloc]init];
         self.trackHeight = trackHeight;
+        
     }
     
     return self;
 }
 
-
 -(void) awakeFromNib{
     [self.view setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
     [self.view setAutoresizesSubviews:YES];
     
+    
     [super awakeFromNib];
+}
+
+
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    //moves the playheadMarker if the currentPosition of the timelines Playhead has been changed
+    if([keyPath isEqualToString:@"currentTimePosition"]){
+        double playheadTimestamp = [[object valueForKey:keyPath] doubleValue];
+        double localTimestamp = [self.timelineObject localTimestampOfGlobalTimestamp:playheadTimestamp];
+        
+        float markerLocation = [super pixelForTimestamp:0];
+        
+        
+        if(localTimestamp != -1){
+            markerLocation = [super pixelForTimestamp:localTimestamp];
+            
+        }
+        else if(playheadTimestamp > self.timelineObject.endTime){
+            markerLocation = [super pixelForTimestamp:self.timelineObject.duration];
+        }
+        [self.scrollView movePlayHeadMarkerToLocation:markerLocation];
+    }
+}
+
+-(void) moveMainPlayheadAccordingToAnimationTimelinesPlayheadLocation:(CGFloat) location{
+    double newTimePosition = [super timestampForPixelValue:location];
+    double globalTimePosition = [self.timelineObject globalTimestampOfLocalTimestamp:newTimePosition];
+    
+    self.playhead.currentTimePosition = globalTimePosition;
 }
 
 #pragma mark - VSPlayHeadRulerMarkerDelegate Implementation
@@ -59,19 +93,21 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 }
 
 -(void) didMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView{
-
 }
 
 -(CGFloat) willMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView toLocation:(CGFloat)location{
-
+    
+    [self moveMainPlayheadAccordingToAnimationTimelinesPlayheadLocation:location];
+    
     return location;
 }
 
 -(CGFloat) playHeadRulerMarker:(NSRulerMarker *)playheadMarker willJumpInContainingView:(NSView *)aView toLocation:(CGFloat)location{
     
+    [self moveMainPlayheadAccordingToAnimationTimelinesPlayheadLocation:location];
+    
     return location;
 }
-
 #pragma mark - Methods
 
 
@@ -83,8 +119,19 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
         }
     }
     
+    if(self.playhead){
+        //[self removeObserver:self.playhead forKeyPath:@"currentTimePosition"];
+    }
+    
+    self.playhead = ((VSDocument*)[[NSDocumentController sharedDocumentController] currentDocument]).timeline.playHead;
+    
+    [self.playhead addObserver:self
+                             forKeyPath:@"currentTimePosition"
+                                options:NSKeyValueObservingOptionNew
+                                context:nil];
+    
     self.timelineObject = timelineObject;
-
+    
     if(self.timelineObject){
         
         for(VSParameter *parameter in [self.timelineObject visibleParameters]){
@@ -126,15 +173,15 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     
     if(newRect.size.width != 0){
         [self computePixelTimeRatio];
-//        if(oldRect.size.width != newRect.size.width){
-//            
-//            NSRect newDocumentFrame = [self.timelineScrollView.trackHolderView frame];
-//            
-//            //updates the width according to how the width of the view has been resized
-//            newDocumentFrame.size.width += newRect.size.width - oldRect.size.width;
-//            [self.timelineScrollView.trackHolderView setFrame:(newDocumentFrame)];
-//            [self computePixelTimeRatio];
-//        }
+        //        if(oldRect.size.width != newRect.size.width){
+        //
+        //            NSRect newDocumentFrame = [self.timelineScrollView.trackHolderView frame];
+        //
+        //            //updates the width according to how the width of the view has been resized
+        //            newDocumentFrame.size.width += newRect.size.width - oldRect.size.width;
+        //            [self.timelineScrollView.trackHolderView setFrame:(newDocumentFrame)];
+        //            [self computePixelTimeRatio];
+        //        }
     }
 }
 

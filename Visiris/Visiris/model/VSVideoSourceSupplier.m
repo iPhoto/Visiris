@@ -227,7 +227,7 @@
 }
 
 -(double) convertGlobalTimestampToLocalTimestamp:(double)aGlobalTimestamp{
-    double localTimestamp = [super convertGlobalTimestampToLocalTimestamp:aGlobalTimestamp];
+    double localTimestamp = [self.timelineObject localTimestampOfGlobalTimestamp:aGlobalTimestamp];
     
     localTimestamp = localTimestamp <= self.timelineObject.sourceDuration ? localTimestamp :  fmod(localTimestamp, self.timelineObject.sourceDuration);
     

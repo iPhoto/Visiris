@@ -35,6 +35,8 @@
  */
 -(id) valueForTimestamp:(double) timestamp;
 
+-(float) floatValueForTimestamp:(double) timestamp;
+
 /**
  * Returns the key frame of the animation at the current timestamp.
  *
@@ -58,7 +60,7 @@
  * @param aValue Value of the new VSKeyFrame
  * @param aTimestamp Timestamp the keyFrame is created for. The timestamp is relative to the animation time.
  */
--(void) addKeyFrameWithValue:(id) aValue forTimestamp:(double) aTimestamp;
+-(VSKeyFrame*) addKeyFrameWithValue:(id) aValue forTimestamp:(double) aTimestamp;
 
 /**
  * Removes the keyFrame with the aTimestamp.

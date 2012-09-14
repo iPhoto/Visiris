@@ -54,8 +54,15 @@
 }
 
 - (void)initObservers {
-    [self.timeline.playHead addObserver:self forKeyPath:@"scrubbing" options:0 context:nil];
-    [self.timeline.playHead addObserver:self forKeyPath:@"jumping" options:0 context:nil];
+    [self.timeline.playHead addObserver:self
+                             forKeyPath:@"scrubbing"
+                                options:0
+                                context:nil];
+    
+    [self.timeline.playHead addObserver:self
+                             forKeyPath:@"jumping"
+                                options:0
+                                context:nil];
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{

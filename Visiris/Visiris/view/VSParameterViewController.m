@@ -12,6 +12,7 @@
 #import "VSParameter.h"
 #import "VSOptionParameter.h"
 #import "VSAnimation.h"
+#import "VSKeyFrame.h"
 
 #import "VSCoreServices.h"
 
@@ -74,7 +75,6 @@ static NSString* defaultNib = @"VSParameterView";
         ((VSParameterView*) self.view).viewDelegate = self;
     }
     [self.view setAutoresizingMask:NSViewWidthSizable];
-    [_parameter addObserver:self forKeyPath:@"defaultValue" options:0 context:nil];
 }
 
 
@@ -83,7 +83,7 @@ static NSString* defaultNib = @"VSParameterView";
 //TODO: change only the value
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     //observers if the defaultValue of the parameter has changed
-    if([keyPath isEqualToString:@"defaultValue"]){
+    if([keyPath isEqualToString:@"value"]){
         [self updateParameterValue];
     }
 }
@@ -91,7 +91,9 @@ static NSString* defaultNib = @"VSParameterView";
 -(void) showParameter:(VSParameter *)parameter{
     
     self.parameter = parameter;
-    [self.parameter addObserver:self forKeyPath:@"defaultValue" options:0 context:nil];
+    self.currentKeyframe = self.parameter.defaultKeyFrame;
+    
+    [self.currentKeyframe addObserver:self forKeyPath:@"value" options:0 context:nil];
     
     [self.nameLabel setStringValue: NSLocalizedString(self.parameter.name, @"")];
     
@@ -106,30 +108,11 @@ static NSString* defaultNib = @"VSParameterView";
 #pragma mark - Methods
 
 -(void) saveParameterAndRemoveObserver{
-    [self.parameter removeObserver:self forKeyPath:@"defaultValue"];
+    [self.currentKeyframe removeObserver:self forKeyPath:@"value"];
     
-    if([self.parameter isKindOfClass:[VSOptionParameter class]]){
-        [self setOptionsParameterDefaultValue:[self.comboBox objectValueOfSelectedItem]];
-    }
-    else{
-        switch (self.parameter.dataType) {
-            case VSParameterDataTypeBool:
-                [self setParametersDefaultBoolValue:[self boolValueForButtonState:self.checkBox.state]];
-                break;
-            case VSParameterDataTypeFloat:
-            {
-                [self setParametersDefaultFloatValue:[self.textField floatValue]];
-                break;
-            }
-            case VSParameterDataTypeString:
-                [self setParametersDefaultStringValue:[self.textField stringValue]];
-                break;
-            default:
-                [self setParametersDefaultStringValue:[self.textField stringValue]];
-                break;
-        }
-    }
+    [self storeParameterValue];
 }
+
 
 #pragma mark - VSViewDelegate Implentation
 
@@ -156,28 +139,84 @@ static NSString* defaultNib = @"VSParameterView";
 #pragma mark - NSComboBoxDelegate Implementation
 
 -(void) comboBoxSelectionDidChange:(NSNotification *)notification{
-    [self setOptionsParameterDefaultValue:[((NSComboBox*) notification.object) objectValueOfSelectedItem]];
+    [self storeParameterValue];
 }
 
 #pragma mark - IBActions
 
 - (IBAction)textValueHasChanged:(id)sender {
-    [self setParameterValueWithText:[sender stringValue]];
+    [self storeParameterValue];
 }
 
 - (IBAction)boolValueHasChanged:(NSButton *)sender {
-    
-    [self setParametersDefaultBoolValue:[self boolValueForButtonState:sender.state]];
+    [self storeParameterValue];
 }
 
 - (IBAction)valueSliderTextHasChanged:(NSTextField *)sender {
-    [self setParameterValueWithText:[sender stringValue]];
-    [self.horizontalSlider setFloatValue:[self.parameter defaultFloatValue]];
+    [self storeParameterValue];
 }
 
 - (IBAction)sliderValueHasChanged:(NSSlider *)sender {
-    [self setParameterValueWithText:[sender stringValue]];
-    [self.textField setFloatValue:[self.parameter defaultFloatValue]];
+    [self.textField setFloatValue:sender.floatValue];
+    [self storeParameterValue];
+}
+
+- (IBAction)keyFrameButton:(id)sender {
+    if([self keyFrameDelegateRespondsToSelector:@selector(addKeyFrameToParameter:withValue:)]){
+        VSKeyFrame *newKeyFrame = [self.keyFrameDelegate addKeyFrameToParameter:self.parameter withValue:[self currentParameterValue]];
+    }
+}
+
+-(void) storeParameterValue{
+    
+    id currentValue = [self currentParameterValue];
+    
+    if(![self.parameter isKindOfClass:[VSOptionParameter class]]){
+        switch (self.parameter.dataType) {
+            case VSParameterDataTypeBool:
+                self.currentKeyframe.boolValue = [currentValue boolValue];
+                break;
+            case VSParameterDataTypeFloat:
+                self.currentKeyframe.floatValue = [currentValue floatValue];
+                break;
+            case VSParameterDataTypeString:
+                self.currentKeyframe.stringValue = currentValue;
+                break;
+            default:
+                self.currentKeyframe.stringValue = currentValue;
+                break;
+        }
+    }
+    else{
+        self.currentKeyframe.value = [self.comboBox objectValueOfSelectedItem];
+    }
+}
+
+-(id) currentParameterValue{
+    
+    id value = nil;
+    
+    if(![self.parameter isKindOfClass:[VSOptionParameter class]]){
+        switch (self.parameter.dataType) {
+            case VSParameterDataTypeBool:
+                value = [NSNumber numberWithBool:[self boolValueForButtonState:self.checkBox.state]];
+                break;
+            case VSParameterDataTypeFloat:
+                value = [NSNumber numberWithFloat:[self.textField floatValue]];
+                break;
+            case VSParameterDataTypeString:
+                value = [self.textField stringValue];
+                break;
+            default:
+                value = [self.textField stringValue];
+                break;
+        }
+    }
+    else{
+        value =[self.comboBox objectValueOfSelectedItem];
+    }
+    
+    return value;
 }
 
 #pragma mark - Private Methods
@@ -196,17 +235,17 @@ static NSString* defaultNib = @"VSParameterView";
     else{
         switch (self.parameter.dataType) {
             case VSParameterDataTypeBool:
-                [self.checkBox setState:[self buttonStateOfBooleanValue:[self.parameter defaultBoolValue]]];
+                [self.checkBox setState:[self buttonStateOfBooleanValue:self.currentKeyframe.boolValue]];
                 break;
             case VSParameterDataTypeFloat:
-                [self.horizontalSlider setFloatValue:[self.parameter defaultFloatValue]];
-                [self.textField setFloatValue:[self.parameter defaultFloatValue]];
+                [self.horizontalSlider setFloatValue:self.currentKeyframe.floatValue];
+                [self.textField setFloatValue:self.currentKeyframe.floatValue];
                 break;
             case VSParameterDataTypeString:
-                [self.textField setStringValue:[self.parameter defaultStringValue]];
+                [self.textField setStringValue:self.currentKeyframe.stringValue];
                 break;
             default:
-                [self.textField setStringValue:[self.parameter defaultStringValue]];
+                [self.textField setStringValue:self.currentKeyframe.stringValue];
                 break;
         }
     }
@@ -245,8 +284,8 @@ static NSString* defaultNib = @"VSParameterView";
         
         id value = [((VSOptionParameter*) self.parameter).options objectForKey:key];
         
-        if([self.parameter.defaultValue isEqual:value]){
-            [self.comboBox selectItemWithObjectValue:key];
+        if([self.currentKeyframe.value isEqual:value]){
+//            [self.comboBox selectItemWithObjectValue:key];
         }
     }
     
@@ -260,7 +299,7 @@ static NSString* defaultNib = @"VSParameterView";
     [self.parameterHolder addConstraints:constraints];
 }
 
-/** 
+/**
  * Shows paramters of the type VSParameterDataTypeString.
  */
 -(void) showStringParameter{
@@ -282,7 +321,7 @@ static NSString* defaultNib = @"VSParameterView";
     
     [self.parameterHolder addConstraints:constraints];
     
-    [self.textField setStringValue:self.parameter.defaultStringValue];
+    [self.textField setStringValue:self.currentKeyframe.stringValue];
     [self.textField setTarget:self];
     [self.textField setAction:@selector(textValueHasChanged:)];
     
@@ -299,7 +338,7 @@ static NSString* defaultNib = @"VSParameterView";
     self.checkBox= [[NSButton alloc]init];
     [self.checkBox setTitle:self.parameter.name];
     [self.checkBox setButtonType:NSSwitchButton];
-    [self.checkBox setState:[self buttonStateOfBooleanValue:self.parameter.defaultBoolValue]];
+    [self.checkBox setState:[self buttonStateOfBooleanValue:self.currentKeyframe.boolValue]];
     
     [self.parameterHolder addSubview:self.checkBox];
     
@@ -325,7 +364,7 @@ static NSString* defaultNib = @"VSParameterView";
 -(void) showFloatParameter{
     [self showStringParameter];
     
-    [self.textField setFloatValue:self.parameter.defaultFloatValue];
+    [self.textField setFloatValue:self.currentKeyframe.floatValue];
     [self.textField setTarget:self];
     [self.textField setAction:@selector(valueSliderTextHasChanged:)];
     
@@ -366,7 +405,7 @@ static NSString* defaultNib = @"VSParameterView";
 -(void) initValueSlider{
     [self.horizontalSlider setMinValue:self.parameter.rangeMinValue];
     [self.horizontalSlider setMaxValue:self.parameter.rangeMaxValue];
-    [self.horizontalSlider setFloatValue:self.parameter.defaultFloatValue];
+    [self.horizontalSlider setFloatValue:self.currentKeyframe.floatValue];
     
     [self.horizontalSlider setTarget:self];
     [self.horizontalSlider setAction:@selector(sliderValueHasChanged:)];
@@ -402,75 +441,90 @@ static NSString* defaultNib = @"VSParameterView";
         return NO;
     }
 }
+//
+///**
+// * Sets the given string as defaultValue of the parameter.
+// *
+// * The string is converted according to the parameterType of the paramter
+// * @param aString NSString to be set as defaultValue of the parameter
+// */
+//-(void) setParameterValueWithText:(NSString*) aString{
+//    
+//    switch (self.parameter.dataType) {
+//        case VSParameterDataTypeFloat:
+//            [self setParametersDefaultFloatValue:[aString floatValue]];
+//            break;
+//            
+//        case VSParameterDataTypeString:
+//            [self setParametersDefaultStringValue:aString];
+//            break;
+//            
+//        default:
+//            break;
+//    }
+//}
+//
+///**
+// * Sets the given value as the parameter's defaultFloatValue and registers the change at the view's undoManager
+// * @param aFloatValue Value to be set as the parameter's default value.
+// */
+//-(void) setParametersDefaultFloatValue:(float) aFloatValue{
+//    if(self.parameter.defaultFloatValue != aFloatValue){
+//        
+//        [self registerDefaultValueUndo];
+//        [self.parameter setDefaultFloatValue:aFloatValue];
+//    }
+//}
+//
+///**
+// * Sets the default value of the VSParamter and registers it for undoing
+// */
+//-(void) registerDefaultValueUndo{
+//    [self.parameter undoParametersDefaultValueChange:self.parameter.defaultValue atUndoManager:self.view.undoManager];
+//}
+//
+///**
+// * Sets the given value as the parameter's defaultStringValue and registers the change at the view's undoManager
+// * @param aStringValue Value to be set as the parameter's default value.
+// */
+//-(void) setParametersDefaultStringValue:(NSString*) aStringValue{
+//    if(![self.parameter.defaultStringValue isEqualToString:aStringValue]){
+//        [self registerDefaultValueUndo];
+//        
+//        [self.parameter setDefaultStringValue:aStringValue];
+//    }
+//}
+//
+///**
+// * Sets the given value as the parameter's defaultBoolValue and registers the change at the view's undoManager
+// * @param aBoolValue Value to be set as the parameter's default value.
+// */
+//-(void) setParametersDefaultBoolValue:(BOOL) aBoolValue{
+//    if(self.parameter.defaultBoolValue != aBoolValue){
+//        [self registerDefaultValueUndo];
+//        
+//        [self.parameter setDefaultBoolValue:aBoolValue];
+//    }
+//}
 
 /**
- * Sets the given string as defaultValue of the parameter.
- *
- * The string is converted according to the parameterType of the paramter
- * @param aString NSString to be set as defaultValue of the parameter
+ * Checks if the delegate is able to respond to the given Selector
+ * @param selector Selector the delegate will be checked for if it is able respond to
+ * @return YES if the delegate is able to respond to the selector, NO otherweis
  */
--(void) setParameterValueWithText:(NSString*) aString{
+-(BOOL) keyFrameDelegateRespondsToSelector:(SEL) selector{
+    if(self.keyFrameDelegate != nil){
+        if([self.keyFrameDelegate conformsToProtocol:@protocol(VSParameterViewKeyFrameDelegate) ]){
+            if([self.keyFrameDelegate respondsToSelector: selector]){
+                return YES;
+            }
+        }
+    }
     
-    switch (self.parameter.dataType) {
-        case VSParameterDataTypeFloat:
-            [self setParametersDefaultFloatValue:[aString floatValue]];
-            break;
-            
-        case VSParameterDataTypeString:
-            [self setParametersDefaultStringValue:aString];
-            break;
-            
-        default:
-            break;
-    }
+    return NO;
 }
-
-/**
- * Sets the given value as the parameter's defaultFloatValue and registers the change at the view's undoManager
- * @param aFloatValue Value to be set as the parameter's default value.
- */
--(void) setParametersDefaultFloatValue:(float) aFloatValue{
-    if(self.parameter.defaultFloatValue != aFloatValue){
-        
-        [self registerDefaultValueUndo];
-        [self.parameter setDefaultFloatValue:aFloatValue];
-    }
-}
-
-/**
- * Sets the default value of the VSParamter and registers it for undoing
- */
--(void) registerDefaultValueUndo{
-    [self.parameter undoParametersDefaultValueChange:self.parameter.defaultValue atUndoManager:self.view.undoManager];
-}
-
-/**
- * Sets the given value as the parameter's defaultStringValue and registers the change at the view's undoManager
- * @param aStringValue Value to be set as the parameter's default value.
- */
--(void) setParametersDefaultStringValue:(NSString*) aStringValue{
-    if(![self.parameter.defaultStringValue isEqualToString:aStringValue]){
-        [self registerDefaultValueUndo];
-        
-        [self.parameter setDefaultStringValue:aStringValue];
-    }
-}
-
-/**
- * Sets the given value as the parameter's defaultBoolValue and registers the change at the view's undoManager
- * @param aBoolValue Value to be set as the parameter's default value.
- */
--(void) setParametersDefaultBoolValue:(BOOL) aBoolValue{
-    if(self.parameter.defaultBoolValue != aBoolValue){
-        [self registerDefaultValueUndo];
-        
-        [self.parameter setDefaultBoolValue:aBoolValue];
-    }
-}
-
 
 -(void) setOptionsParameterDefaultValue:(id) key{
     ((VSOptionParameter*)self.parameter).selectedKey = key;
 }
-
 @end

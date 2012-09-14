@@ -12,6 +12,12 @@
 
 #import "VSCoreServices.h"
 
+@interface VSAnimation()
+
+@property NSArray *sortedKeyFrameTimestamps;
+
+@end
+
 @implementation VSAnimation
 
 /** Timestamp of the default KeyFrame */
@@ -40,8 +46,21 @@
 
 #pragma mark - Methods
 
--(void) addKeyFrameWithValue:(id) aValue forTimestamp:(double)aTimestamp{
-    [self.keyFrames setObject:[[VSKeyFrame alloc] initWithValue:aValue forTimestamp:aTimestamp] forKey:[NSNumber numberWithDouble:aTimestamp]];
+-(VSKeyFrame*) addKeyFrameWithValue:(id) aValue forTimestamp:(double)aTimestamp{
+    VSKeyFrame* newKeyFrame = [[VSKeyFrame alloc] initWithValue:aValue forTimestamp:aTimestamp];
+    [self.keyFrames setObject:newKeyFrame forKey:[NSNumber numberWithDouble:aTimestamp]];
+    
+    self.sortedKeyFrameTimestamps = [self.keyFrames allKeys];
+    
+    self.sortedKeyFrameTimestamps = [self.sortedKeyFrameTimestamps sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2){
+        if([obj1 doubleValue] > [obj2 doubleValue]){
+            return NSOrderedDescending;
+        }
+        
+        return NSOrderedAscending;
+    }];
+    
+    return newKeyFrame;
 }
 
 -(void) removeKeyFrameAt:(double)aTimestamp{
@@ -63,6 +82,33 @@
         return nil;
     
     return keyFrame.value;
+}
+
+-(float) floatValueForTimestamp:(double)timestamp{
+    
+    if(self.keyFrames.count == 1){
+        return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:0]]).floatValue;
+    }
+    else{
+        NSUInteger nexKeyFrameIndex = [self.sortedKeyFrameTimestamps indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            if([obj doubleValue] > timestamp){
+                return YES;
+            }
+            return NO;
+        }];
+    
+        if(nexKeyFrameIndex == NSNotFound){
+            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps lastObject]]).floatValue;
+        }
+        else{
+            VSKeyFrame *keyframe1 = (VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:nexKeyFrameIndex-1]];
+            
+            VSKeyFrame *keyframe2 = (VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:nexKeyFrameIndex]];
+            
+            return ((keyframe2.timestamp - keyframe1.timestamp) / (keyframe2.floatValue - keyframe1.floatValue)) * timestamp + keyframe1.floatValue;
+            
+        }
+    }
 }
 
 -(VSKeyFrame*) keyFrameForTimestamp:(double)timestamp{

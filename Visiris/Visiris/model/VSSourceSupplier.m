@@ -39,7 +39,7 @@
     if(self.timelineObject){
         for(VSParameter *parameter in [self.timelineObject.parameters allValues]){
             if([parameter isKindOfClass:[VSParameter class]]){
-                [result setValue:parameter.defaultValue forKey:parameter.type];
+                [result setValue:[parameter valueForTimestamp:aTimestamp] forKey:parameter.type];
             }
         }
     }
@@ -47,10 +47,5 @@
     return result;
     
 }
-
-- (double)convertGlobalTimestampToLocalTimestamp:(double)aGlobalTimestamp{
-    return aGlobalTimestamp - self.timelineObject.startTime;
-}
-
 
 @end

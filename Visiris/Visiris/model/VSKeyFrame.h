@@ -24,6 +24,11 @@
 /** Timestamp the VSKeyframe is set for. The timestamp is relative to the animation time. */
 @property double timestamp;
 
+@property NSString *stringValue;
+
+@property float floatValue;
+
+@property BOOL boolValue;
 
 
 #pragma mark - Init

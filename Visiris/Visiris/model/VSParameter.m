@@ -107,7 +107,23 @@
 }
 
 -(id) valueForTimestamp:(double)timestamp{
-    return [self.animation valueForTimestamp:timestamp];
+    return [self.animation valueForTimestamp:DEFAULT_KEY_FRAME_TIMESTAMP];
+    switch(self.dataType){
+        case VSParameterDataTypeBool:{
+            return [self.animation valueForTimestamp:DEFAULT_KEY_FRAME_TIMESTAMP];
+            break;
+        }
+        case VSParameterDataTypeFloat:{
+            return [NSNumber numberWithFloat:[self.animation floatValueForTimestamp:timestamp]];
+            break;
+        }
+        case VSParameterDataTypeString:{
+            return [self.animation valueForTimestamp:DEFAULT_KEY_FRAME_TIMESTAMP];
+            break;
+        }
+    }
+
+    return nil;
 }
 
 
@@ -158,8 +174,9 @@
     [self setDefaultValue:newNumber];
 }
 
--(void) addKeyFrameWithValue:(id) aValue forTimestamp:(double)aTimestamp{
-    [self.animation addKeyFrameWithValue:aValue forTimestamp:aTimestamp];
+-(VSKeyFrame*) addKeyFrameWithValue:(id) aValue forTimestamp:(double)aTimestamp{
+    VSKeyFrame* newKeyFrame = [self.animation addKeyFrameWithValue:aValue forTimestamp:aTimestamp];
+    return newKeyFrame;
 }
 
 -(void) removeKeyFrameAt:(double)aTimestamp{
@@ -244,6 +261,20 @@
     [self willChangeValueForKey:@"defaultValue"];
     [self setValue:defaultValue forKeyFramAtTimestamp:DEFAULT_KEY_FRAME_TIMESTAMP];
     [self didChangeValueForKey:@"defaultValue"];
+}
+
+-(NSArray*) editableKeyFrames{
+    if(self.animation.keyFrames.count == 1){
+        return [[NSArray alloc] init];
+    }
+    
+    NSMutableArray *result = [NSMutableArray arrayWithArray:[self.animation.keyFrames allValues]];;
+    [result removeObject:self.defaultKeyFrame];
+    return [NSArray arrayWithArray:result];
+}
+
+-(VSKeyFrame*) defaultKeyFrame{
+    return [self.animation keyFrameForTimestamp:DEFAULT_KEY_FRAME_TIMESTAMP];
 }
 
 

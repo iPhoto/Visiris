@@ -71,6 +71,7 @@
 }
 
 
+
 #pragma mark - VSViewKeyDownDelegate
 
 -(void) didReceiveKeyDownEvent:(NSEvent *)theEvent{
@@ -109,17 +110,19 @@
 }
 
 -(void) computePixelTimeRatio{
-
-    double newRatio = self.duration / self.pixelLength;
     
-    if(newRatio < VSMinimumPixelTimeRatio)
-    {
-        newRatio = VSMinimumPixelTimeRatio;
-    }
-    
-    if(newRatio != self.pixelTimeRatio){
-        self.pixelTimeRatio = newRatio;
-        [self pixelTimeRatioDidChange];
+    if(self.pixelLength > 0){
+        double newRatio = self.duration / self.pixelLength;
+        
+        if(newRatio < VSMinimumPixelTimeRatio)
+        {
+            newRatio = VSMinimumPixelTimeRatio;
+        }
+        
+        if(newRatio != self.pixelTimeRatio){
+            self.pixelTimeRatio = newRatio;
+            [self pixelTimeRatioDidChange];
+        }
     }
 }
 

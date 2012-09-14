@@ -106,9 +106,20 @@ static NSString* defaultNib = @"VSMainTimelineView";
  * Registratres the class for observing
  */
 -(void) initObservers{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectPropertIesDidTurnInactive:) name:VSTimelineObjectPropertiesDidTurnInactive object:nil];
-    [self.timeline addObserver:self forKeyPath:@"duration" options:0 context:nil];
-    [self.timeline.playHead addObserver:self forKeyPath:@"currentTimePosition" options:NSKeyValueObservingOptionNew context:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(timelineObjectPropertIesDidTurnInactive:)
+                                                 name:VSTimelineObjectPropertiesDidTurnInactive
+                                               object:nil];
+    
+    [self.timeline addObserver:self
+                    forKeyPath:@"duration"
+                       options:0
+                       context:nil];
+    
+    [self.timeline.playHead addObserver:self
+                             forKeyPath:@"currentTimePosition"
+                                options:NSKeyValueObservingOptionNew
+                                context:nil];
 }
 
 

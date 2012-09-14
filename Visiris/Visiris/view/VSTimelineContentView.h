@@ -62,6 +62,8 @@
 /** Delegate VSTrackHolderView communicates like defined in VSPlayHeadRulerMarkerDelegate*/
 @property id<VSTrackHolderViewDelegate> trackHolderViewDelegate;
 
+-(void) setViewsProperties;
+
 /**
  * Updates the guideline for the given location
  * @param location Location the guidelin is updated for
