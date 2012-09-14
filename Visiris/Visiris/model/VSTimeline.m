@@ -244,12 +244,14 @@
 
 #pragma mark AccessTimeLineObjects
 
+//Todo: what happens with the track order if a new track is added?
 - (NSArray *)timelineObjectsForTimestamp:(double)aTimestamp
 {
     NSMutableArray *currentActiveTimeLineObjects = [[NSMutableArray alloc] init ];
     
     //iteratres through the timeline's tracks and adds the VSTimlineObject active at this timestamp to the currentActiveTimeLineObjects-Array
-    for(VSTrack *track in self.tracks){
+    for(NSInteger i = self.tracks.count - 1; i >= 0; i--){
+        VSTrack *track = [self.tracks objectAtIndex:i];
         VSTimelineObject *currentObject = [track timelineObjectAtTimestamp:aTimestamp];
         if(currentObject){
             [currentActiveTimeLineObjects addObject:currentObject];

@@ -53,6 +53,7 @@
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, self.size.width, self.size.height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, theImage.data);
         _timeLineObjectId = timeLineObjectId;
         theImage.needsUpdate = NO;
+        [self unbind];
     }
 }
 

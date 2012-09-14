@@ -26,5 +26,10 @@
 	<string>Copyright © 2012 __MyCompanyName__. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
 	<string></string>
+	<key>LSEnvironment</key>
+	<dict>
+		<key>GL_ENABLE_DEBUG_ATTACH</key>
+		<string></string>
+	</dict>
 </dict>
 </plist>

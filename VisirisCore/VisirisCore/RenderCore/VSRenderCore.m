@@ -134,11 +134,15 @@
 #pragma mark- Methods
 
 -(void)renderFrameOfCoreHandovers:(NSArray *)theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double)theTimestamp{
-                
-    NSMutableArray *mutableCoreHandovers = [NSMutableArray arrayWithArray:theCoreHandovers];
         
 	[[self openGLContext] makeCurrentContext];
     CGLLockContext([[self openGLContext] CGLContextObj]);
+    
+    //[self debugOpenGLTextures];
+
+    
+    NSMutableArray *mutableCoreHandovers = [NSMutableArray arrayWithArray:theCoreHandovers];
+
 
     [self compareOldSize:self.oldSize withCurrentSize:theFrameSize];
 
@@ -164,19 +168,19 @@
         }
         case 2:
         {
-            [self combineTheFirstTwoObjects:textures withLayermode:[self layerMode:[mutableCoreHandovers objectAtIndex:0]]];
+            [self combineTheFirstTwoObjects:textures withLayermode:[self layerMode:[mutableCoreHandovers objectAtIndex:1]]];
             outPutTexture = self.frameBufferObjectCurrent.texture;
             [[self openGLContext] flushBuffer];
             break;
         }
         default:
         {            
-            [self combineTheFirstTwoObjects:textures withLayermode:0];
+            [self combineTheFirstTwoObjects:textures withLayermode:[self layerMode:[mutableCoreHandovers objectAtIndex:1]]];
 
             for (NSInteger i = 1; i < textures.count -1; i++) {
                 [self swapFBO];
                 NSNumber *texture = (NSNumber *)[textures objectAtIndex:(i+1)];
-                [self combineTexture:self.frameBufferObjectOld.texture with:texture.intValue andLayermode:1];
+                [self combineTexture:self.frameBufferObjectOld.texture with:texture.intValue andLayermode:[self layerMode:[mutableCoreHandovers objectAtIndex:i+1]]];
             }
              
             outPutTexture = self.frameBufferObjectCurrent.texture;
@@ -184,8 +188,9 @@
         }
     }
     
-    //NSLog(@"outputtexture: %d",outPutTexture);
+   // NSLog(@"outputtexture: %d",outPutTexture);
     
+   // [[self openGLContext] update];
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
     
     if (self.delegate) {
@@ -196,6 +201,9 @@
 }
 
 - (void)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*)colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path withObjectItemID:(NSInteger)objectItemID{
+
+   // [[self openGLContext] makeCurrentContext];
+  //  CGLLockContext([[self openGLContext] CGLContextObj]);
 
     switch (type) {
         case VSFileKindImage:
@@ -214,6 +222,8 @@
         default:
             break;
     }
+    
+  //  CGLUnlockContext([[self openGLContext] CGLContextObj]);
 }
 
 - (void)deleteTextureFortimelineobjectID:(NSInteger)theID{
@@ -237,10 +247,10 @@
  * @layermode The Layermode (multiply, add, ...) is an int because of the uniform
  */
 - (void)combineTheFirstTwoObjects:(NSArray *) textures withLayermode:(float)layermode{
-    NSNumber *texture0 = (NSNumber *)[textures objectAtIndex:0];
-    NSNumber *texture1 = (NSNumber *)[textures objectAtIndex:1];
+    NSNumber *base = (NSNumber *)[textures objectAtIndex:0];
+    NSNumber *blend = (NSNumber *)[textures objectAtIndex:1];
     
-    [self combineTexture:texture0.intValue with:texture1.intValue andLayermode:layermode];
+    [self combineTexture:base.intValue with:blend.intValue andLayermode:layermode];
 }
 
 /**
@@ -249,7 +259,7 @@
  * @param upperTexture BlendTexture
  * @layermode The Layermode (multiply, add, ...) is an float (should be int) because of the uniform
  */
-- (void)combineTexture:(GLuint)bottomtexture with:(GLuint)upperTexture andLayermode:(float)layermode{
+- (void)combineTexture:(GLuint)base with:(GLuint)blend andLayermode:(float)layermode{
     [self.frameBufferObjectCurrent bind];
     
     glViewport(0, 0, self.frameBufferObjectCurrent.size.width,self.frameBufferObjectCurrent.size.height);
@@ -259,15 +269,13 @@
         
     glUseProgram(self.layerShader.program);
     glUniform1f(self.layerShader.uniformLayermode, layermode);
-    
-   // NSLog(@"Layermode: %d",layermode);
-    
+        
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, bottomtexture);
+    glBindTexture(GL_TEXTURE_2D, base);
     glUniform1i(self.layerShader.uniformTexture1, 0);
     
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, upperTexture);
+    glBindTexture(GL_TEXTURE_2D, blend);
     glUniform1i(self.layerShader.uniformTexture2, 1);
     
     glBindBuffer(GL_ARRAY_BUFFER, self.vertex_buffer);

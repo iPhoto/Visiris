@@ -36,7 +36,6 @@
         <option name="Reflect">VSBlendModeReflect</option>
         <option name="Glow">VSBlendModeGlow</option>
         <option name="Phoenix">VSBlendModePhoenix</option>
-        <option name="Opacity">VSBlendModeOpacity</option>
         <option name="Hue">VSBlendModeHue</option>
         <option name="Saturation">VSBlendModeSaturation</option>
         <option name="Color">VSBlendModeColor</option>

@@ -47,7 +47,6 @@ static NSDictionary*    dic;
            [NSNumber numberWithInt:23.0f], @"VSBlendModeReflect",
            [NSNumber numberWithInt:24.0f], @"VSBlendModeGlow",
            [NSNumber numberWithInt:25.0f], @"VSBlendModePhoenix",
-           [NSNumber numberWithInt:26.0f], @"VSBlendModeOpacity",
            [NSNumber numberWithInt:27.0f], @"VSBlendModeHue",
            [NSNumber numberWithInt:28.0f], @"VSBlendModeSaturation",
            [NSNumber numberWithInt:29.0f], @"VSBlendModeColor",

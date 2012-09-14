@@ -77,6 +77,7 @@
     glBindTexture(GL_TEXTURE_2D, self.texture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, self.size.width , self.size.height, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, NULL);
     glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, self.texture, 0);
     
