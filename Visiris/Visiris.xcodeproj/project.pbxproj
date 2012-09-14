@@ -147,6 +147,8 @@
 		5B603FA9157F824A0045A1EA /* VSPlayHead.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B603FA8157F824A0045A1EA /* VSPlayHead.m */; };
 		5B70F71B15C2E650002B54ED /* VSPlayheadMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B70F71A15C2E650002B54ED /* VSPlayheadMarker.m */; };
 		5B7BFFC71592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BFFC61592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m */; };
+		5BAC770616034B9400DF3BB0 /* VSKeyFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAC770516034B9400DF3BB0 /* VSKeyFrameView.m */; };
+		5BAC770916034BA100DF3BB0 /* VSKeyFrameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAC770816034BA100DF3BB0 /* VSKeyFrameViewController.m */; };
 		5BBF2A0615FF42A0009D79C7 /* VSScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BBF2A0515FF42A0009D79C7 /* VSScrollView.m */; };
 		5BCDF1DC15D50291002AA5BD /* VSTimelineObjectPropertiesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BCDF1DB15D50291002AA5BD /* VSTimelineObjectPropertiesView.m */; };
 		5BD35BBA15D90B3D001A74E0 /* VSTestFlippedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BB915D90B3D001A74E0 /* VSTestFlippedView.m */; };
@@ -393,6 +395,10 @@
 		5B7BFFC51592143C00CEA1E8 /* VSTimelineObjectViewIntersection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineObjectViewIntersection.h; sourceTree = "<group>"; };
 		5B7BFFC61592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineObjectViewIntersection.m; sourceTree = "<group>"; };
 		5BAB35D315B4153D008B4793 /* VSTimelineScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineScrollView.h; sourceTree = "<group>"; };
+		5BAC770416034B9400DF3BB0 /* VSKeyFrameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSKeyFrameView.h; sourceTree = "<group>"; };
+		5BAC770516034B9400DF3BB0 /* VSKeyFrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSKeyFrameView.m; sourceTree = "<group>"; };
+		5BAC770716034BA100DF3BB0 /* VSKeyFrameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSKeyFrameViewController.h; sourceTree = "<group>"; };
+		5BAC770816034BA100DF3BB0 /* VSKeyFrameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSKeyFrameViewController.m; sourceTree = "<group>"; };
 		5BBF2A0415FF42A0009D79C7 /* VSScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSScrollView.h; sourceTree = "<group>"; };
 		5BBF2A0515FF42A0009D79C7 /* VSScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSScrollView.m; sourceTree = "<group>"; };
 		5BBFF52615BD34020050CB58 /* VSDoubleFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSDoubleFrame.h; sourceTree = "<group>"; };
@@ -1094,6 +1100,17 @@
 			name = timeline;
 			sourceTree = "<group>";
 		};
+		5BAC770216034B7F00DF3BB0 /* keyFrame */ = {
+			isa = PBXGroup;
+			children = (
+				5BAC770416034B9400DF3BB0 /* VSKeyFrameView.h */,
+				5BAC770516034B9400DF3BB0 /* VSKeyFrameView.m */,
+				5BAC770716034BA100DF3BB0 /* VSKeyFrameViewController.h */,
+				5BAC770816034BA100DF3BB0 /* VSKeyFrameViewController.m */,
+			);
+			name = keyFrame;
+			sourceTree = "<group>";
+		};
 		5BBFF52215BD33780050CB58 /* structs */ = {
 			isa = PBXGroup;
 			children = (
@@ -1115,6 +1132,7 @@
 		5BD35BC115D95923001A74E0 /* animationTimeline */ = {
 			isa = PBXGroup;
 			children = (
+				5BAC770216034B7F00DF3BB0 /* keyFrame */,
 				5BD35BE915D96ABD001A74E0 /* timeline */,
 				5BD35BEA15D96AC9001A74E0 /* animationTrack */,
 			);
@@ -1405,6 +1423,8 @@
 				5BFB871115DA2F8C00D405AF /* VSTimelineViewController.m in Sources */,
 				5BEF5AFB15FE1F5E00F0FE8A /* VSOptionParameter.m in Sources */,
 				5BBF2A0615FF42A0009D79C7 /* VSScrollView.m in Sources */,
+				5BAC770616034B9400DF3BB0 /* VSKeyFrameView.m in Sources */,
+				5BAC770916034BA100DF3BB0 /* VSKeyFrameViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

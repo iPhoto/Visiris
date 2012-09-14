@@ -24,6 +24,9 @@
 /** Stores the device connected with the parameter if ther is one */
 @property (strong) VSDeviceParameterMapper *deviceParameterMapper;
 
+@property (strong, readonly) NSMutableArray *sortedKeyFrameTimestamps;
+
+@property NSNumber* test;
 
 #pragma mark - Methods
 /**

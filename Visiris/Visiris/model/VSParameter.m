@@ -101,13 +101,13 @@
     
     return copy;
 }
-
--(NSString*) description{
-    return [NSString stringWithFormat:@"Name: %@",self.name];
-}
+//
+//-(NSString*) description{
+//    return [NSString stringWithFormat:@"Name: %@",self.name];
+//}
 
 -(id) valueForTimestamp:(double)timestamp{
-    return [self.animation valueForTimestamp:DEFAULT_KEY_FRAME_TIMESTAMP];
+
     switch(self.dataType){
         case VSParameterDataTypeBool:{
             return [self.animation valueForTimestamp:DEFAULT_KEY_FRAME_TIMESTAMP];
@@ -176,6 +176,8 @@
 
 -(VSKeyFrame*) addKeyFrameWithValue:(id) aValue forTimestamp:(double)aTimestamp{
     VSKeyFrame* newKeyFrame = [self.animation addKeyFrameWithValue:aValue forTimestamp:aTimestamp];
+    DDLogInfo(@"in param: %@ %@",self, self.animation);
+    self.test++;
     return newKeyFrame;
 }
 

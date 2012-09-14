@@ -7,9 +7,16 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "VSViewResizingDelegate.h"
 
-@interface VSAnimationTrackViewController : NSViewController
+@class VSParameter;
 
--(id) initWithFrame:(NSRect) trackFrame andColor:(NSColor*) trackColor;
+@interface VSAnimationTrackViewController : NSViewController<VSViewResizingDelegate>
 
+@property VSParameter *parameter;
+@property NSMutableArray *keyFrameViewControllers;
+@property double pixelTimeRatio;
+
+-(id) initWithFrame:(NSRect) trackFrame andColor:(NSColor*) trackColor forParameter:(VSParameter*) parameter andPixelTimeRatio:(double) pixelTimeRatio;
+-(void) reset;
 @end

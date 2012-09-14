@@ -24,9 +24,9 @@
 
 @property NSView *documentView;
 
-@property VSAnimationTimelineViewController *animationTimelineViewController;
+@property (strong) VSAnimationTimelineViewController *animationTimelineViewController;
 
-@property VSTimelineObjectParametersViewController *timelineObjectsParameterViewController;
+@property (strong) VSTimelineObjectParametersViewController *timelineObjectsParameterViewController;
 
 @property int numberOfParameters;
 
@@ -192,12 +192,6 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 #pragma mark - VSFrameResizingDelegate
 
 -(void) scrollView:(NSScrollView *)scrollView changedBoundsFrom:(NSRect)fromBounds to:(NSRect)toBounds{
-    
-    DDLogInfo(@"holder: %@",NSStringFromRect(self.animationTimelineHolder.frame));
-    DDLogInfo(@"scrollView: %@",NSStringFromRect(self.animationTimelineViewController.scrollView.frame));
-    DDLogInfo(@"documentView: %@",NSStringFromRect([self.animationTimelineViewController.scrollView.documentView frame]));
-    DDLogInfo(@"trackHolder : %@",NSStringFromRect(self.animationTimelineViewController.scrollView.trackHolderView.frame));
-    
     VSScrollView *scrollViewToScroll = nil;
     
     if([scrollView isEqual:self.animationTimelineViewController.scrollView]){

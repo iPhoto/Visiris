@@ -25,7 +25,7 @@
 
 @property float trackHeight;
 
-@property NSMutableArray *animationTrackViewControllers;
+@property (strong) NSMutableArray *animationTrackViewControllers;
 
 @property VSPlayHead *playhead;
 
@@ -59,7 +59,7 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 }
 
 
--(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{DDLogInfo(keyPath);
     //moves the playheadMarker if the currentPosition of the timelines Playhead has been changed
     if([keyPath isEqualToString:@"currentTimePosition"]){
         double playheadTimestamp = [[object valueForKey:keyPath] doubleValue];
@@ -110,6 +110,18 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 }
 #pragma mark - Methods
 
+/**
+ * Called when ratio between the length of trackholder's width and the duration of the timeline.
+ */
+-(void) pixelTimeRatioDidChange{
+    
+    [super pixelTimeRatioDidChange];
+    
+    //tells all VSTrackViewControlls in the timeline, that the pixelItemRation has been changed
+    for(VSAnimationTimelineViewController *animationTrackViewController in self.animationTrackViewControllers){
+        animationTrackViewController.pixelTimeRatio = self.pixelTimeRatio;
+    }
+}
 
 -(void) showTimelineForTimelineObject:(VSTimelineObject*) timelineObject{
     
@@ -117,10 +129,6 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
         if(self.timelineObject != timelineObject){
             [self resetTimeline];
         }
-    }
-    
-    if(self.playhead){
-        //[self removeObserver:self.playhead forKeyPath:@"currentTimePosition"];
     }
     
     self.playhead = ((VSDocument*)[[NSDocumentController sharedDocumentController] currentDocument]).timeline.playHead;
@@ -133,8 +141,10 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     self.timelineObject = timelineObject;
     
     if(self.timelineObject){
+    
+        NSArray *parameters = [self.timelineObject visibleParameters];
         
-        for(VSParameter *parameter in [self.timelineObject visibleParameters]){
+        for(VSParameter *parameter in parameters){
             
             
             float width = self.scrollView.visibleTrackViewsHolderWidth;
@@ -143,7 +153,10 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
             
             NSColor *trackColor = self.animationTrackViewControllers.count % 2 == 0 ? self.evenTrackColor : self.oddTrackColor;
             
-            VSAnimationTrackViewController *animationTrackViewController = [[VSAnimationTrackViewController alloc]initWithFrame:trackRect andColor:trackColor];
+            VSAnimationTrackViewController *animationTrackViewController = [[VSAnimationTrackViewController alloc]
+                                                                            initWithFrame:trackRect                                           andColor:trackColor                forParameter:parameter
+                                                                            andPixelTimeRatio:self.pixelTimeRatio];
+            
             
             [self.animationTrackViewControllers addObject:animationTrackViewController];
             
@@ -154,6 +167,8 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
             [animationTrackViewController.view setFrame:trackRect];
             
             [self.scrollView addTrackView:animationTrackViewController.view];
+            
+            animationTrackViewController.parameter = [self.timelineObject.parameters objectForKey:parameter.type];
         }
     }
     

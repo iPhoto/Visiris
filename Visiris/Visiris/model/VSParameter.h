@@ -57,6 +57,8 @@
 
 @property (readonly) VSKeyFrame *defaultKeyFrame;
 
+@property NSInteger test;
+
 #pragma mark - Init
 
 

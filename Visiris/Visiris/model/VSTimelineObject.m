@@ -90,7 +90,7 @@
     
     VSCoreHandover *coreHandover = nil;
     
-    double localTimestamp = [self globalTimestampOfLocalTimestamp:aTimestamp];
+    double localTimestamp = [self localTimestampOfGlobalTimestamp:aTimestamp];
     
     if ([self.supplier isKindOfClass:[VSFrameSourceSupplier class]] ) {
         coreHandover = [[VSFrameCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp withPlayMode:mode]

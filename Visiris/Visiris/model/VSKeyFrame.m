@@ -23,6 +23,10 @@
     return self;
 }
 
+-(NSString*) description{
+    return [NSString stringWithFormat:@"Timestamp: %f, Value: %@",self.timestamp, self.value];
+}
+
 #pragma mark - Properties
 
 -(NSString*) stringValue{
