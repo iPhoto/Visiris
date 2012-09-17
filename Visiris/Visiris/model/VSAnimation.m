@@ -112,11 +112,6 @@
             VSKeyFrame *keyframe2 = (VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:nexKeyFrameIndex]];
             
             float result = ((keyframe2.floatValue - keyframe1.floatValue)  / (keyframe2.timestamp - keyframe1.timestamp) ) * (timestamp-keyframe1.timestamp) + keyframe1.floatValue;
-            DDLogInfo(@"%f %f %f",(keyframe2.timestamp - keyframe1.timestamp),(keyframe2.floatValue - keyframe1.floatValue),(timestamp-keyframe1.timestamp));
-            DDLogInfo(@"key1: %@ key2: %@",keyframe1,keyframe2);
-            DDLogInfo(@"result: %f",result);
-            DDLogInfo(@"%f %f",keyframe2.floatValue, keyframe1.floatValue);
-            DDLogInfo(@"timestamp: %f",timestamp);
             
             return result;
             

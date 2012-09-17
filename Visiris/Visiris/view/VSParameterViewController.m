@@ -83,7 +83,7 @@ static NSString* defaultNib = @"VSParameterView";
 //TODO: change only the value
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     //observers if the defaultValue of the parameter has changed
-    if([keyPath isEqualToString:@"value"]){
+    if([keyPath isEqualToString:@"currentValue"]){
         [self updateParameterValue];
     }
 }
@@ -91,9 +91,9 @@ static NSString* defaultNib = @"VSParameterView";
 -(void) showParameter:(VSParameter *)parameter{
     
     self.parameter = parameter;
-    self.currentKeyframe = self.parameter.defaultKeyFrame;
-    
-    [self.currentKeyframe addObserver:self forKeyPath:@"value" options:0 context:nil];
+//    self.currentKeyframe = self.parameter.defaultKeyFrame;
+//    
+    [self.parameter addObserver:self forKeyPath:@"currentValue" options:0 context:nil];
     
     [self.nameLabel setStringValue: NSLocalizedString(self.parameter.name, @"")];
     
@@ -171,20 +171,22 @@ static NSString* defaultNib = @"VSParameterView";
     
     id currentValue = [self currentParameterValue];
     
-    if(![self.parameter isKindOfClass:[VSOptionParameter class]]){
-        switch (self.parameter.dataType) {
-            case VSParameterDataTypeBool:
-                self.currentKeyframe.boolValue = [currentValue boolValue];
-                break;
-            case VSParameterDataTypeFloat:
-                self.currentKeyframe.floatValue = [currentValue floatValue];
-                break;
-            case VSParameterDataTypeString:
-                self.currentKeyframe.stringValue = currentValue;
-                break;
-            default:
-                self.currentKeyframe.stringValue = currentValue;
-                break;
+    if(self.currentKeyframe){
+        if(![self.parameter isKindOfClass:[VSOptionParameter class]]){
+            switch (self.parameter.dataType) {
+                case VSParameterDataTypeBool:
+                    self.currentKeyframe.boolValue = [currentValue boolValue];
+                    break;
+                case VSParameterDataTypeFloat:
+                    self.currentKeyframe.floatValue = [currentValue floatValue];
+                    break;
+                case VSParameterDataTypeString:
+                    self.currentKeyframe.stringValue = currentValue;
+                    break;
+                default:
+                    self.currentKeyframe.stringValue = currentValue;
+                    break;
+            }
         }
     }
     else{
@@ -235,17 +237,17 @@ static NSString* defaultNib = @"VSParameterView";
     else{
         switch (self.parameter.dataType) {
             case VSParameterDataTypeBool:
-                [self.checkBox setState:[self buttonStateOfBooleanValue:self.currentKeyframe.boolValue]];
+                [self.checkBox setState:[self buttonStateOfBooleanValue:self.parameter.currentBoolValue]];
                 break;
             case VSParameterDataTypeFloat:
-                [self.horizontalSlider setFloatValue:self.currentKeyframe.floatValue];
-                [self.textField setFloatValue:self.currentKeyframe.floatValue];
+                [self.horizontalSlider setFloatValue:self.parameter.currentFloatValue];
+                [self.textField setFloatValue:self.parameter.currentFloatValue];
                 break;
             case VSParameterDataTypeString:
-                [self.textField setStringValue:self.currentKeyframe.stringValue];
+                [self.textField setStringValue:self.parameter.currentStringValue];
                 break;
             default:
-                [self.textField setStringValue:self.currentKeyframe.stringValue];
+                [self.textField setStringValue:self.parameter.currentStringValue];
                 break;
         }
     }
@@ -284,8 +286,8 @@ static NSString* defaultNib = @"VSParameterView";
         
         id value = [((VSOptionParameter*) self.parameter).options objectForKey:key];
         
-        if([self.currentKeyframe.value isEqual:value]){
-//            [self.comboBox selectItemWithObjectValue:key];
+        if([self.parameter.currentValue isEqual:value]){
+            //            [self.comboBox selectItemWithObjectValue:key];
         }
     }
     
@@ -321,7 +323,7 @@ static NSString* defaultNib = @"VSParameterView";
     
     [self.parameterHolder addConstraints:constraints];
     
-    [self.textField setStringValue:self.currentKeyframe.stringValue];
+    [self.textField setStringValue:self.parameter.currentStringValue];
     [self.textField setTarget:self];
     [self.textField setAction:@selector(textValueHasChanged:)];
     
@@ -335,10 +337,10 @@ static NSString* defaultNib = @"VSParameterView";
  */
 -(void) showBoolParameter{
     
-    self.checkBox= [[NSButton alloc]init];
+    self.checkBox = [[NSButton alloc]init];
     [self.checkBox setTitle:self.parameter.name];
     [self.checkBox setButtonType:NSSwitchButton];
-    [self.checkBox setState:[self buttonStateOfBooleanValue:self.currentKeyframe.boolValue]];
+    [self.checkBox setState:[self buttonStateOfBooleanValue:self.parameter.currentBoolValue]];
     
     [self.parameterHolder addSubview:self.checkBox];
     
@@ -364,7 +366,7 @@ static NSString* defaultNib = @"VSParameterView";
 -(void) showFloatParameter{
     [self showStringParameter];
     
-    [self.textField setFloatValue:self.currentKeyframe.floatValue];
+    [self.textField setFloatValue:self.parameter.currentFloatValue];
     [self.textField setTarget:self];
     [self.textField setAction:@selector(valueSliderTextHasChanged:)];
     
@@ -405,7 +407,7 @@ static NSString* defaultNib = @"VSParameterView";
 -(void) initValueSlider{
     [self.horizontalSlider setMinValue:self.parameter.rangeMinValue];
     [self.horizontalSlider setMaxValue:self.parameter.rangeMaxValue];
-    [self.horizontalSlider setFloatValue:self.currentKeyframe.floatValue];
+    [self.horizontalSlider setFloatValue:self.parameter.currentFloatValue];
     
     [self.horizontalSlider setTarget:self];
     [self.horizontalSlider setAction:@selector(sliderValueHasChanged:)];
@@ -449,16 +451,16 @@ static NSString* defaultNib = @"VSParameterView";
 // * @param aString NSString to be set as defaultValue of the parameter
 // */
 //-(void) setParameterValueWithText:(NSString*) aString{
-//    
+//
 //    switch (self.parameter.dataType) {
 //        case VSParameterDataTypeFloat:
 //            [self setParametersDefaultFloatValue:[aString floatValue]];
 //            break;
-//            
+//
 //        case VSParameterDataTypeString:
 //            [self setParametersDefaultStringValue:aString];
 //            break;
-//            
+//
 //        default:
 //            break;
 //    }
@@ -470,7 +472,7 @@ static NSString* defaultNib = @"VSParameterView";
 // */
 //-(void) setParametersDefaultFloatValue:(float) aFloatValue{
 //    if(self.parameter.defaultFloatValue != aFloatValue){
-//        
+//
 //        [self registerDefaultValueUndo];
 //        [self.parameter setDefaultFloatValue:aFloatValue];
 //    }
@@ -490,7 +492,7 @@ static NSString* defaultNib = @"VSParameterView";
 //-(void) setParametersDefaultStringValue:(NSString*) aStringValue{
 //    if(![self.parameter.defaultStringValue isEqualToString:aStringValue]){
 //        [self registerDefaultValueUndo];
-//        
+//
 //        [self.parameter setDefaultStringValue:aStringValue];
 //    }
 //}
@@ -502,7 +504,7 @@ static NSString* defaultNib = @"VSParameterView";
 //-(void) setParametersDefaultBoolValue:(BOOL) aBoolValue{
 //    if(self.parameter.defaultBoolValue != aBoolValue){
 //        [self registerDefaultValueUndo];
-//        
+//
 //        [self.parameter setDefaultBoolValue:aBoolValue];
 //    }
 //}

@@ -14,6 +14,7 @@
 
 @interface VSParameter()
 
+@property id currentValue;
 
 @end
 
@@ -32,6 +33,7 @@
 @synthesize hidden                  = _hidden;
 @synthesize rangeMaxValue           = _rangeMaxValue;
 @synthesize rangeMinValue           = _rangeMinValue;
+@synthesize currentValue            = _currentValue;
 
 #pragma mark - Init
 
@@ -73,6 +75,8 @@
             self.configuredDefaultValue = theDefaultValue;
             
         }
+        
+        self.currentValue = self.configuredDefaultValue;
         self.animation = [[VSAnimation alloc] init];
         [self.animation addKeyFrameWithValue:self.configuredDefaultValue forTimestamp:DEFAULT_KEY_FRAME_TIMESTAMP];
     }
@@ -129,6 +133,14 @@
 
 -(VSKeyFrame*) keyFrameForTimestamp:(double)timestamp{
     return [self.animation keyFrameForTimestamp:timestamp];
+}
+
+-(void) updateCurrentValueForTimestamp:(double) aTimestamp{
+    id value = [self valueForTimestamp:aTimestamp];
+    if([self.type isEqualToString:VSParameterKeyPositionX]){
+        DDLogInfo(@"currentValue: %@ for %f",value, aTimestamp);
+    }
+    [self setValue:value forKey:@"currentValue"];
 }
 
 //TODO: error-handlin
@@ -188,6 +200,30 @@
 -(void) undoParametersDefaultValueChange:(id) oldValue atUndoManager:(NSUndoManager *)undoManager{
     [[undoManager prepareWithInvocationTarget:self] undoParametersDefaultValueChange:self.defaultValue atUndoManager:undoManager];
     self.defaultValue = oldValue;
+}
+
+-(NSString*) currentStringValue{
+    if([_currentValue isKindOfClass:[NSString class]]){
+        return (NSString*) _currentValue;
+    }
+    
+    return @"";
+}
+
+-(bool) currentBoolValue{
+    if([_currentValue isKindOfClass:[NSNumber class]]){
+        return [_currentValue boolValue];
+    }
+    
+    return false;
+}
+
+-(float) currentFloatValue{
+    if([_currentValue isKindOfClass:[NSNumber class]]){
+        return [_currentValue floatValue];
+    }
+    
+    return 0.0f;
 }
 
 #pragma mark - Private Methods
@@ -277,6 +313,14 @@
 
 -(VSKeyFrame*) defaultKeyFrame{
     return [self.animation keyFrameForTimestamp:DEFAULT_KEY_FRAME_TIMESTAMP];
+}
+
+-(id) currentValue{
+    return _currentValue;
+}
+
+-(void) setCurrentValue:(id)currentValue{
+    _currentValue = currentValue;
 }
 
 

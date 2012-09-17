@@ -59,6 +59,8 @@
 
 @property NSInteger test;
 
+@property (readonly) id currentValue;
+
 #pragma mark - Init
 
 
@@ -181,5 +183,12 @@
  */
 -(void) undoParametersDefaultValueChange:(id) oldValue atUndoManager:(NSUndoManager*) undoManager;
 
+-(void) updateCurrentValueForTimestamp:(double) aTimestamp;
+
+-(NSString*) currentStringValue;
+
+-(bool) currentBoolValue;
+
+-(float) currentFloatValue;
 
 @end

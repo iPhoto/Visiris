@@ -16,6 +16,7 @@
 #import "VSTimeline.h"
 #import "VSDocument.h"
 #import "VSPlayhead.h"
+#import "VSParameter.h"
 
 #import "VSCoreServices.h"
 
@@ -59,14 +60,13 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 }
 
 
--(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{DDLogInfo(keyPath);
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     //moves the playheadMarker if the currentPosition of the timelines Playhead has been changed
     if([keyPath isEqualToString:@"currentTimePosition"]){
         double playheadTimestamp = [[object valueForKey:keyPath] doubleValue];
         double localTimestamp = [self.timelineObject localTimestampOfGlobalTimestamp:playheadTimestamp];
         
         float markerLocation = [super pixelForTimestamp:0];
-        
         
         if(localTimestamp != -1){
             markerLocation = [super pixelForTimestamp:localTimestamp];
@@ -76,6 +76,10 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
             markerLocation = [super pixelForTimestamp:self.timelineObject.duration];
         }
         [self.scrollView movePlayHeadMarkerToLocation:markerLocation];
+        
+        for(VSParameter *parameter in self.timelineObject.visibleParameters){
+            [parameter updateCurrentValueForTimestamp:localTimestamp];
+        }
     }
 }
 
