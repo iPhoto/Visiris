@@ -26,7 +26,7 @@
 
 @property (strong, readonly) NSMutableArray *sortedKeyFrameTimestamps;
 
-@property NSNumber* test;
+@property (strong) id defaultValue;
 
 #pragma mark - Methods
 /**
@@ -70,5 +70,6 @@
  * @param aTimestamp The timestamp the keyfram is deleted for.
  */
 -(void) removeKeyFrameAt:(double) aTimestamp;
+
 
 @end

@@ -7,13 +7,12 @@
 //
 
 #import <Cocoa/Cocoa.h>
-
 #import "VSParameterViewController.h"
 
 @class VSScrollView;
 @class VSTimelineObject;
 
-@interface VSTimelineObjectParametersViewController : NSViewController<VSParameterViewKeyFrameDelegate>
+@interface VSTimelineObjectParametersViewController : NSViewController
 
 @property NSArray *parameters;
 
@@ -29,7 +28,9 @@
 
 -(id) initWithDefaultNibAndParameterViewHeight:(float) parameterViewHeight;
 
--(void) showParametersOfTimelineObject:(VSTimelineObject*) timelineObject;
+-(void) showParametersOfTimelineObject:(VSTimelineObject*) timelineObject connectedWithDelegate:(id<VSParameterViewKeyFrameDelegate>) delegate;
+
+-(void) selectKeyFrame:(VSKeyFrame*) keyFrame ofParameter:(VSParameter*) parameter;
 
 /**
  * Removes all Parameter views

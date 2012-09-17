@@ -10,6 +10,8 @@
 
 #import "VSTimelineObjectPropertiesView.h"
 #import "VSScrollView.h"
+#import "VSParameterViewController.h"
+#import "VSAnimationTimelineViewController.h"
 
 @class VSTimelineObject;
 @class VSTestView;
@@ -19,7 +21,7 @@
  *
  * Creates a VSParameterViewController for everey parameter of its VSTimelineObject
  */
-@interface VSTimelineObjectPropertiesViewController : NSViewController<NSSplitViewDelegate, VSViewResizingDelegate, VSScrollViewScrollingDelegate>
+@interface VSTimelineObjectPropertiesViewController : NSViewController<NSSplitViewDelegate, VSViewResizingDelegate, VSScrollViewScrollingDelegate, VSParameterViewKeyFrameDelegate, VSKeyFrameSelectingDelegate>
 
 /** VSTimelineObject which properties VSTimelineObjectPropertiesViewController is representing */
 @property VSTimelineObject *timelineObject;

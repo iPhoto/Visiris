@@ -50,22 +50,20 @@
     
     NSNumber *key = [NSNumber numberWithDouble:aTimestamp];
     [self.keyFrames setObject:newKeyFrame forKey:key];
-
     
-    NSUInteger newIndex = [self.sortedKeyFrameTimestamps indexOfObject:key inSortedRange:NSMakeRange(0, self.sortedKeyFrameTimestamps.count) options:NSBinarySearchingFirstEqual usingComparator:^NSComparisonResult(id obj1, id obj2) {
+    
+    
+    [self.sortedKeyFrameTimestamps addObject:key];
+    
+    [self.sortedKeyFrameTimestamps sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         if([obj1 doubleValue] > [obj2 doubleValue]){
             return NSOrderedDescending;
         }
-        
         return NSOrderedAscending;
     }];
     
-    if(newIndex == NSNotFound){
-        newIndex = self.sortedKeyFrameTimestamps.count;
-    }
+    DDLogInfo(@"added keyFrame at index: %@", self.sortedKeyFrameTimestamps);
     
-    [self.sortedKeyFrameTimestamps insertObject:key atIndex:newIndex];
-
     return newKeyFrame;
 }
 
@@ -92,7 +90,10 @@
 
 -(float) floatValueForTimestamp:(double)timestamp{
     
-    if(self.keyFrames.count == 1){
+    if(self.keyFrames.count == 0){
+        return [self.defaultValue floatValue];
+    }
+    else if(self.keyFrames.count == 1){
         return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:0]]).floatValue;
     }
     else{
@@ -102,15 +103,18 @@
             }
             return NO;
         }];
-    
+        
         if(nexKeyFrameIndex == NSNotFound){
+            
             return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps lastObject]]).floatValue;
+        }
+        else if(nexKeyFrameIndex == 0){
+            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:0]]).floatValue;
         }
         else{
             VSKeyFrame *keyframe1 = (VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:nexKeyFrameIndex-1]];
             
             VSKeyFrame *keyframe2 = (VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:nexKeyFrameIndex]];
-            
             float result = ((keyframe2.floatValue - keyframe1.floatValue)  / (keyframe2.timestamp - keyframe1.timestamp) ) * (timestamp-keyframe1.timestamp) + keyframe1.floatValue;
             
             return result;
@@ -122,6 +126,8 @@
 -(VSKeyFrame*) keyFrameForTimestamp:(double)timestamp{
     return [self.keyFrames objectForKey:[NSNumber numberWithDouble:timestamp]];
 }
+
+
 
 #pragma mark - Properties
 

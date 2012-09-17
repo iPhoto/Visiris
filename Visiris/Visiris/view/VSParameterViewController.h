@@ -80,7 +80,7 @@
 
 @property id<VSParameterViewKeyFrameDelegate> keyFrameDelegate;
 
-@property VSKeyFrame *currentKeyframe;
+@property VSKeyFrame *selectedKeyframe;
 
 - (IBAction)comboBoxSelectionHasChanged:(NSComboBox *)sender;
 

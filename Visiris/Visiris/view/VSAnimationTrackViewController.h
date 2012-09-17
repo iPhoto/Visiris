@@ -10,6 +10,7 @@
 #import "VSViewResizingDelegate.h"
 
 @class VSParameter;
+@class VSKeyFrameViewController;
 
 @interface VSAnimationTrackViewController : NSViewController<VSViewResizingDelegate>
 
@@ -19,4 +20,5 @@
 
 -(id) initWithFrame:(NSRect) trackFrame andColor:(NSColor*) trackColor forParameter:(VSParameter*) parameter andPixelTimeRatio:(double) pixelTimeRatio;
 -(void) reset;
+-(VSKeyFrameViewController*) keyFrameViewControllerAtXPosition:(float) xPosition;
 @end

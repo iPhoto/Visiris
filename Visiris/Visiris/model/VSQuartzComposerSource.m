@@ -65,7 +65,15 @@
                 maximumValue = [((NSNumber*) maxValid) floatValue];
             }
             
-            VSParameter *newParameter = [[VSParameter alloc] initWithName:name asType:name forDataType:parameterDataType withDefaultValue:defaultValue orderNumber:i editable:YES hidden:NO rangeMinValue:minimumValue rangeMaxValue:maximumValue];
+            VSParameter *newParameter = [[VSParameter alloc] initWithName:name andID:i
+                                                                   asType:name
+                                                              forDataType:parameterDataType
+                                                         withDefaultValue:defaultValue
+                                                              orderNumber:i
+                                                                 editable:YES
+                                                                   hidden:NO
+                                                            rangeMinValue:minimumValue
+                                                            rangeMaxValue:maximumValue];
             
             if(newParameter){
                 [qcPublicInputParameters setValue:newParameter forKey:key];

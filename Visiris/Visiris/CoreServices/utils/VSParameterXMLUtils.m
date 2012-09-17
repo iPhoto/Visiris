@@ -82,7 +82,7 @@
                 defaultValue = [tmpValue stringValue];
                 break;
             case VSParameterDataTypeFloat:
-                defaultValue = [NSNumber numberWithBool:[[tmpValue objectValue] floatValue]];
+                defaultValue = [NSNumber numberWithFloat:[[tmpValue objectValue] floatValue]];
                 break;
             default:
                 break;
@@ -92,6 +92,7 @@
     
     if([[parameterElement elementsForName:PARAMETER_XML_OPTION_NODE] count]){
         VSOptionParameter *newOptionParameter = [[VSOptionParameter alloc] initWithName:name
+                                                                                  andID:orderNumber
                                                                                  asType:type
                                                                             forDataType:dataType
                                                                        withDefaultValue:defaultValue
@@ -122,6 +123,7 @@
     }
     else{
         newParameter = [[VSParameter alloc] initWithName:name
+                                                   andID:orderNumber
                                                   asType:type
                                              forDataType:dataType
                                         withDefaultValue:defaultValue

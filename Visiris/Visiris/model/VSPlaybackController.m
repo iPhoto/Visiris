@@ -12,6 +12,8 @@
 #import "VSPreviewViewController.h"
 #import "VSPlayHead.h"
 #import "VSProjectSettings.h"
+#import "VSTimelineObject.h"
+#import "VSParameter.h"
 
 @interface VSPlaybackController()
 
@@ -24,6 +26,9 @@
 @property VSPreProcessor* preProcessor;
 
 @property VSTimeline* timeline;
+
+@property VSTimelineObject *selectedTimelineObject;
+
 @end
 
 @implementation VSPlaybackController
@@ -63,6 +68,12 @@
                              forKeyPath:@"jumping"
                                 options:0
                                 context:nil];
+        
+        //Adding Observer for TimelineObjects got selected
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectsGotSelected:) name:VSTimelineObjectsGotSelected object:nil];
+        
+        //Adding Observer for TimelineObjects got unselected
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectsGotUnselected:) name:VSTimelineObjectsGotUnselected object:nil];
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
@@ -97,6 +108,14 @@
                 [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
             }
             [self stop];
+        }
+    }
+    else if([keyPath isEqualToString:@"currentValue"]){
+        if(self.playbackMode == VSPlaybackModeStanding){
+            self.playbackMode = VSPlaybackModeJumping;
+            if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
+                [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
+            }
         }
     }
     
@@ -148,6 +167,32 @@
 
 
 #pragma mark - Private Methods
+
+-(void) timelineObjectsGotUnselected:(NSNotification *) notification{
+    DDLogInfo(@"%@",self.selectedTimelineObject);
+    for(VSParameter *parameter in [self.selectedTimelineObject.parameters allValues]){
+        [parameter removeObserver:self forKeyPath:@"currentValue"];
+    }
+     
+    self.selectedTimelineObject = nil;
+}
+
+-(void) timelineObjectsGotSelected:(NSNotification *) notification{
+    if([[notification object] isKindOfClass:[NSArray class]]){
+        NSArray *selectedTimelineObjects = (NSArray*) [notification object];
+        
+        if(selectedTimelineObjects && selectedTimelineObjects.count > 0){
+            if([[selectedTimelineObjects objectAtIndex:0] isKindOfClass:[VSTimelineObject class]]){
+                
+                self.selectedTimelineObject = (VSTimelineObject*) [selectedTimelineObjects objectAtIndex:0];
+                DDLogInfo(@"%@",self.selectedTimelineObject);
+                for(VSParameter *parameter in [self.selectedTimelineObject.parameters allValues]){
+                    [parameter addObserver:self forKeyPath:@"currentValue" options:0 context:nil];
+                }
+            }
+        }
+    }
+}
 
 /**
  * Sets the current VSPlaybackMode and tells the preprocessor to the render the current frame

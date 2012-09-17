@@ -51,15 +51,11 @@
 /** Every parameter has its own animation. As soon as an parameter is initialized, a new Keyframe for the timestamp -1 with its default value is added */
 @property (strong) VSAnimation *animation;
 
-@property id defaultValue;
-
-@property (readonly) NSArray *editableKeyFrames;
-
-@property (readonly) VSKeyFrame *defaultKeyFrame;
-
-@property NSInteger test;
-
 @property (readonly) id currentValue;
+
+@property (readonly) id defaultValue;
+
+@property (readonly) NSInteger ID;
 
 #pragma mark - Init
 
@@ -77,7 +73,7 @@
  * @param hidden Indicates wheter the parameter is shown in the gui or not.
  * @return self;
  */
--(id) initWithName:(NSString *) theName asType:(NSString*) aType forDataType:(VSParameterDataType) aDataType withDefaultValue:(id) theDefaultValue orderNumber:(NSInteger) aOrderNumber editable:(BOOL) editable hidden:(BOOL) hidden rangeMinValue:(float) minRangeValue rangeMaxValue:(float) maxRangeValue;
+-(id) initWithName:(NSString *) theName andID:(NSInteger) theID asType:(NSString*) aType forDataType:(VSParameterDataType) aDataType withDefaultValue:(id) theDefaultValue orderNumber:(NSInteger) aOrderNumber editable:(BOOL) editable hidden:(BOOL) hidden rangeMinValue:(float) minRangeValue rangeMaxValue:(float) maxRangeValue;
 
 
 #pragma mark - Methods
@@ -187,8 +183,10 @@
 
 -(NSString*) currentStringValue;
 
--(bool) currentBoolValue;
+-(BOOL) currentBoolValue;
 
 -(float) currentFloatValue;
+
+-(void) setValue:(id)value forKeyFrame:(VSKeyFrame*) keyFrame;
 
 @end

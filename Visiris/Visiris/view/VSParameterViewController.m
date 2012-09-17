@@ -38,6 +38,7 @@
 @synthesize horizontalSlider    = _valueSlider;
 @synthesize parameterHolder     = _parameterHolder;
 @synthesize parameter           = _parameter;
+@synthesize selectedKeyframe    = _selectedKeyframe;
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
 static NSString* defaultNib = @"VSParameterView";
@@ -91,8 +92,7 @@ static NSString* defaultNib = @"VSParameterView";
 -(void) showParameter:(VSParameter *)parameter{
     
     self.parameter = parameter;
-//    self.currentKeyframe = self.parameter.defaultKeyFrame;
-//    
+    
     [self.parameter addObserver:self forKeyPath:@"currentValue" options:0 context:nil];
     
     [self.nameLabel setStringValue: NSLocalizedString(self.parameter.name, @"")];
@@ -108,7 +108,7 @@ static NSString* defaultNib = @"VSParameterView";
 #pragma mark - Methods
 
 -(void) saveParameterAndRemoveObserver{
-    [self.currentKeyframe removeObserver:self forKeyPath:@"value"];
+    [self.selectedKeyframe removeObserver:self forKeyPath:@"value"];
     
     [self storeParameterValue];
 }
@@ -162,35 +162,38 @@ static NSString* defaultNib = @"VSParameterView";
 }
 
 - (IBAction)keyFrameButton:(id)sender {
-    if([self keyFrameDelegateRespondsToSelector:@selector(addKeyFrameToParameter:withValue:)]){
-        VSKeyFrame *newKeyFrame = [self.keyFrameDelegate addKeyFrameToParameter:self.parameter withValue:[self currentParameterValue]];
-    }
+    [self addNewKeyFrame];
 }
 
 -(void) storeParameterValue{
     
     id currentValue = [self currentParameterValue];
     
-    if(self.currentKeyframe){
+    if(!self.parameter.animation.keyFrames.count){
         if(![self.parameter isKindOfClass:[VSOptionParameter class]]){
             switch (self.parameter.dataType) {
                 case VSParameterDataTypeBool:
-                    self.currentKeyframe.boolValue = [currentValue boolValue];
+                    self.parameter.defaultBoolValue= [currentValue boolValue];
                     break;
                 case VSParameterDataTypeFloat:
-                    self.currentKeyframe.floatValue = [currentValue floatValue];
+                    self.parameter.defaultFloatValue = [currentValue floatValue];
                     break;
                 case VSParameterDataTypeString:
-                    self.currentKeyframe.stringValue = currentValue;
+                    self.parameter.defaultStringValue = currentValue;
                     break;
                 default:
-                    self.currentKeyframe.stringValue = currentValue;
+                    self.parameter.defaultStringValue = currentValue;
                     break;
             }
         }
     }
     else{
-        self.currentKeyframe.value = [self.comboBox objectValueOfSelectedItem];
+        if(self.selectedKeyframe){
+            [self.parameter setValue:currentValue forKeyFrame:self.selectedKeyframe];
+        }
+        else{
+            [self addNewKeyFrame];
+        }
     }
 }
 
@@ -223,6 +226,22 @@ static NSString* defaultNib = @"VSParameterView";
 
 #pragma mark - Private Methods
 
+-(void) addNewKeyFrame{
+    if(!self.selectedKeyframe){
+        if([self keyFrameDelegateRespondsToSelector:@selector(addKeyFrameToParameter:withValue:)]){
+           VSKeyFrame *newKeyFrame = [self.keyFrameDelegate addKeyFrameToParameter:self.parameter withValue:[self currentParameterValue]];
+            
+            if(newKeyFrame){
+                self.selectedKeyframe = newKeyFrame;
+            }
+        }
+    }
+    else{
+        [self.parameter setValue:[self currentParameterValue] forKeyFrame:self.selectedKeyframe];
+    }
+    
+}
+
 #pragma mark - Show Parameter
 
 /**
@@ -232,7 +251,7 @@ static NSString* defaultNib = @"VSParameterView";
     [self.nameLabel setStringValue: NSLocalizedString(self.parameter.name, @"")];
     
     if([self.parameter isKindOfClass:[VSOptionParameter class]]){
-        [self.comboBox selectItemWithObjectValue:((VSOptionParameter*)self.parameter).selectedKey];
+        // [self.comboBox selectItemWithObjectValue:((VSOptionParameter*)self.parameter).selectedKey];
     }
     else{
         switch (self.parameter.dataType) {
@@ -529,4 +548,5 @@ static NSString* defaultNib = @"VSParameterView";
 -(void) setOptionsParameterDefaultValue:(id) key{
     ((VSOptionParameter*)self.parameter).selectedKey = key;
 }
+
 @end
