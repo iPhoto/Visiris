@@ -76,11 +76,6 @@
 -(id) initWithPreProcessor:(VSPreProcessor*) preProcessor timeline:(VSTimeline*) timeline;
 
 /**
- * Starts playing the scene form currentTimestamp of VSPlaybackController
- */
--(void) startPlaybackFromCurrentTimeStamp;
-
-/**
  * Starts the playback
  */
 -(void) play;

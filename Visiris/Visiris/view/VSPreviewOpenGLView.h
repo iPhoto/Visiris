@@ -23,8 +23,9 @@
 - (void)initOpenGLWithSharedContext:(NSOpenGLContext *)openGLContext;
 -(void) setFrameProportionally:(NSRect) frameRect;
 
-- (void) drawView;
-- (void) startDisplayLink;
-- (void) stopDisplayLink;
+- (void)drawView;
+- (void)startDisplayLink;
+- (void)stopDisplayLink;
+- (double)refreshPeriod;
 
 @end

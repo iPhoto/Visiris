@@ -87,8 +87,7 @@
         [_openGLContext clearDrawable];
 }
 
-- (CVReturn) getFrameForTime:(const CVTimeStamp*)outputTime
-{
+- (CVReturn) getFrameForTime:(const CVTimeStamp*)outputTime{
     @autoreleasepool {
         [self.playBackcontroller renderFramesForCurrentTimestamp];
         [self drawView];
@@ -99,12 +98,10 @@
 static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime, CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext)
 {
     CVReturn result = [(__bridge VSPreviewOpenGLView*)displayLinkContext getFrameForTime:outputTime];
-    
     return result;
 }
 
-- (void) setupDisplayLink
-{
+- (void) setupDisplayLink{
 	// Create a display link capable of being used with all active displays
 	CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
 	
@@ -117,8 +114,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink, cglContext, cglPixelFormat);
 }
 
-- (void) drawRect:(NSRect)dirtyRect
-{
+- (void) drawRect:(NSRect)dirtyRect{
     [super drawRect:dirtyRect];
     
 	// Ignore if the display link is still running
@@ -129,8 +125,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     
 }
 
-- (void) reshape
-{
+- (void) reshape{
 	// This method will be called on the main thread when resizing, but we may be drawing on a secondary thread through the display link
 	// Add a mutex around to avoid the threads accessing the context simultaneously
 	CGLLockContext([[self openGLContext] CGLContextObj]);
@@ -144,8 +139,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
 }
 
-- (void) drawView
-{
+- (void) drawView{
 	// This method will be called on both the main thread (through -drawRect:) and a secondary thread (through the display link rendering loop)
 	// Also, when resizing the view, -reshape is called on the main thread, but we may be drawing on a secondary thread
 	// Add a mutex around to avoid the threads accessing the context simultaneously
@@ -179,11 +173,14 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	[[self openGLContext] flushBuffer];
 	
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
+   // NSLog(@"%f",[self refreshPeriod]);
 }
 
 - (void) startDisplayLink{
 	if (displayLink && !CVDisplayLinkIsRunning(displayLink))
 		CVDisplayLinkStart(displayLink);
+    
+    CVTimeStamp stamp;
     
 
    // DDLogInfo(@"startDisplayLink");
@@ -195,6 +192,10 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     
 
  //   DDLogInfo(@"stopDisplayLink");
+}
+
+- (double)refreshPeriod{
+    return CVDisplayLinkGetActualOutputVideoRefreshPeriod(self.displayLink);
 }
 
 @end

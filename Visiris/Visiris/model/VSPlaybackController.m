@@ -104,12 +104,6 @@
 
 #pragma mark - Methods
 
-- (void)startPlaybackFromCurrentTimeStamp
-{
-    NSThread* timerThread = [[NSThread alloc] initWithTarget:self selector:@selector(startTimer) object:nil]; //Create a new thread
-    [timerThread start];
-}
-
 -(void) didFinisheRenderingTexture:(GLuint)theTexture forTimestamp:(double)theTimestamp{
     
     if(self.delegate){
@@ -128,7 +122,7 @@
     }
 }
 
-- (void)renderFramesForCurrentTimestamp{
+- (void)renderFramesForCurrentTimestamp{    
     if(self.playbackMode == VSPlaybackModePlaying){
         [self computeNewCurrentTimestamp];
     }
@@ -182,6 +176,7 @@
     
     self.timeline.playHead.currentTimePosition = self.currentTimestamp;
     self.playbackStartTime = currentTime;
+  //  NSLog(@"PlaybackstartTime %f", self.currentTimestamp);
 }
 
 
