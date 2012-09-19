@@ -38,10 +38,6 @@
 
 - (void)renderFrameAtTimestamp:(double)aTimestamp withHandovers:(NSArray *)theHandovers forSize:(NSSize)theFrameSize withPlayMode:(VSPlaybackMode)playMode
 {
-    [[self.renderCore openglContext] makeCurrentContext];
-    
-   // NSLog(@"currentContext: %@", s)
-    
     //return if Handovers is nil
     if (theHandovers == nil)
         return;
@@ -83,7 +79,7 @@
 }
 
 - (void)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path withObjectItemID:(NSInteger)objectItemID{
-    
+
     [self.renderCore createNewTextureForSize:textureSize colorMode:colorMode forTrack:trackID withType:type withOutputSize:size withPath:path withObjectItemID:(NSInteger)objectItemID];
 }
 

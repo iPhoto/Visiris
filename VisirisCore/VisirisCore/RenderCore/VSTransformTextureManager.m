@@ -122,8 +122,7 @@
 }
 
 - (void)createFBOWithSize:(NSSize)size trackId:(NSInteger) trackId{
-    NSLog(@"trackID: %ld",trackId);
-    
+
     if ([self.fboForTrack objectForKey:[NSNumber numberWithInteger:trackId]]) {
         return;
     }

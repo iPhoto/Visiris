@@ -15,7 +15,9 @@
 @implementation VSImageSourceSupplier
 
 -(VSImage *) getFrameForTimestamp:(double)aTimestamp withPlayMode:(VSPlaybackMode)playMode{
-    if (self.vsImage == nil) {
+    
+    
+    if (self.vsImage.data == NULL) {
         
         self.vsImage = [[VSImage alloc] init];
         
@@ -28,9 +30,10 @@
         size_t height = CGImageGetHeight(image);
         CGRect rect = CGRectMake(0.0f, 0.0f, width, height);
         
-        void *imageData = malloc(width * height * 4);
+        self.vsImage.data = malloc(width * height * 4);
         CGColorSpaceRef colourSpace = CGColorSpaceCreateDeviceRGB();
-        CGContextRef ctx = CGBitmapContextCreate(imageData, width, height, 8, width * 4, colourSpace, kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst);
+        
+        CGContextRef ctx = CGBitmapContextCreate(self.vsImage.data, width, height, 8, width * 4, colourSpace, kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst);
         CFRelease(colourSpace);
         //CGContextTranslateCTM(ctx, 0, height);
         //CGContextScaleCTM(ctx, 1.0f, -1.0f);
@@ -39,11 +42,14 @@
         CGContextRelease(ctx);
         CFRelease(image);
         
-        self.vsImage.data = (char *)imageData;
+    //    self.vsImage.data = (char *)imageData;
+   //     memcpy(self.vsImage.data, <#const void *#>, <#unsigned long#>)
         self.vsImage.size = NSMakeSize(width, height);
         self.vsImage.needsUpdate = YES;
          
     }
+
+
     return self.vsImage;
 }
 @end

@@ -29,7 +29,6 @@
         
         glGenTextures(1, &_texture);
         glBindTexture(GL_TEXTURE_2D, self.texture);
-        
         glPixelStorei(GL_UNPACK_ROW_LENGTH, size.width);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -40,6 +39,7 @@
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, _size.width, _size.height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, imageData);
         
         free(imageData);
+
     }
     return  self;
 }
@@ -50,6 +50,11 @@
     if (self.timeLineObjectId != timeLineObjectId ||
         theImage.needsUpdate ) {
         [self bind];
+        
+        //fuck you fucking two fuck lines
+        glPixelStorei(GL_UNPACK_ROW_LENGTH, self.size.width);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, self.size.width, self.size.height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, theImage.data);
         _timeLineObjectId = timeLineObjectId;
         theImage.needsUpdate = NO;
@@ -58,6 +63,7 @@
 }
 
 -(void)bind{
+    
     glBindTexture(GL_TEXTURE_2D, self.texture);
 }
 

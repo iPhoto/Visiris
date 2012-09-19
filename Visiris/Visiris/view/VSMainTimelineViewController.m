@@ -260,7 +260,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
             double timePosition = [super timestampForPixelValue:position.x];
             double duration = [super timestampForPixelValue:width];
             
-            DDLogInfo(@"dura vgl: %f - %f",projectItem.duration,duration);
+            //DDLogInfo(@"dura vgl: %f - %f",projectItem.duration,duration);
             //Sets the first object as the selected one wich's properites are shown
             if(i==0){
                 objectToBeSelected = [self.timeline

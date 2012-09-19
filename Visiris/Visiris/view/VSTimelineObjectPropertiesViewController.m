@@ -228,9 +228,9 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 
 -(void) scrollView:(NSScrollView *)scrollView changedBoundsFrom:(NSRect)fromBounds to:(NSRect)toBounds{
     
-    DDLogInfo(@"timeline whil bounding: %@",NSStringFromRect([self.animationTimelineViewController.scrollView.documentView frame]));
+    //DDLogInfo(@"timeline whil bounding: %@",NSStringFromRect([self.animationTimelineViewController.scrollView.documentView frame]));
     
-    DDLogInfo(@"param whil bounding: %@",NSStringFromRect([self.timelineObjectsParameterViewController.scrollView.documentView frame]));
+    //DDLogInfo(@"param whil bounding: %@",NSStringFromRect([self.timelineObjectsParameterViewController.scrollView.documentView frame]));
     
     VSScrollView *scrollViewToScroll = nil;
     

@@ -566,7 +566,7 @@ static NSString* defaultNib = @"VSTrackView";
                 
                 if([result isKindOfClass:[VSTimelineObjectViewController class]]){
                     VSTimelineObjectViewController *tmpController = (VSTimelineObjectViewController*) result;
-                    DDLogInfo(@"settingwidht: %@ %f",NSStringFromVSDoubleFrame(tmpController.timelineObjectView.doubleFrame), self.pixelTimeRatio);
+                    //DDLogInfo(@"settingwidht: %@ %f",NSStringFromVSDoubleFrame(tmpController.timelineObjectView.doubleFrame), self.pixelTimeRatio);
                     [timelineObjectsWidth addObject: [NSNumber numberWithDouble:tmpController.timelineObjectView.doubleFrame.width]];
                     [timelineObjectsPositions addObject: [NSValue valueWithPoint:tmpController.view.frame.origin]];
                     
