@@ -49,7 +49,7 @@
     if(self = [super init]){
         self.preProcessor = preProcessor;
         self.timeline = timeline;
-
+        
         self.playbackMode = VSPlaybackModeStanding;
         
         [self initObservers];
@@ -68,12 +68,18 @@
                              forKeyPath:@"jumping"
                                 options:0
                                 context:nil];
-        
-        //Adding Observer for TimelineObjects got selected
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectsGotSelected:) name:VSTimelineObjectsGotSelected object:nil];
-        
-        //Adding Observer for TimelineObjects got unselected
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectsGotUnselected:) name:VSTimelineObjectsGotUnselected object:nil];
+    
+    //Adding Observer for TimelineObjects got selected
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(timelineObjectsGotSelected:)
+                                                 name:VSTimelineObjectsGotSelected
+                                               object:nil];
+    
+    //Adding Observer for TimelineObjects got unselected
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(timelineObjectsGotUnselected:)
+                                                 name:VSTimelineObjectsGotUnselected
+                                               object:nil];
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
@@ -157,6 +163,7 @@
 
 -(void) play{
     self.playbackMode = VSPlaybackModePlaying;
+    self.currentTimestamp =self.timeline.playHead.currentTimePosition;
     self.playbackStartTime = [[NSDate date] timeIntervalSince1970]*1000;
 }
 
@@ -169,11 +176,10 @@
 #pragma mark - Private Methods
 
 -(void) timelineObjectsGotUnselected:(NSNotification *) notification{
-    DDLogInfo(@"%@",self.selectedTimelineObject);
     for(VSParameter *parameter in [self.selectedTimelineObject.parameters allValues]){
         [parameter removeObserver:self forKeyPath:@"currentValue"];
     }
-     
+    
     self.selectedTimelineObject = nil;
 }
 
@@ -185,7 +191,7 @@
             if([[selectedTimelineObjects objectAtIndex:0] isKindOfClass:[VSTimelineObject class]]){
                 
                 self.selectedTimelineObject = (VSTimelineObject*) [selectedTimelineObjects objectAtIndex:0];
-                DDLogInfo(@"%@",self.selectedTimelineObject);
+                
                 for(VSParameter *parameter in [self.selectedTimelineObject.parameters allValues]){
                     [parameter addObserver:self forKeyPath:@"currentValue" options:0 context:nil];
                 }
@@ -215,7 +221,7 @@
  * Computs the current timestamp while playing
  */
 -(void) computeNewCurrentTimestamp{
-    double currentTime = [[NSDate date] timeIntervalSince1970]*1000;        
+    double currentTime = [[NSDate date] timeIntervalSince1970]*1000;
     
     self.currentTimestamp += currentTime - self.playbackStartTime;
     

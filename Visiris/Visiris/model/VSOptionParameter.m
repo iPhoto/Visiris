@@ -84,7 +84,13 @@
 }
 
 -(id) selectedKey{
-    return [[self.options allKeysForObject:[super defaultValue]] objectAtIndex:0];
+    if(self.animation.keyFrames.count){
+        return [[self.options allKeysForObject:[super currentValue]] objectAtIndex:0];
+    }
+    else{
+        return [[self.options allKeysForObject:[super defaultValue]] objectAtIndex:0];
+    }
 }
+
 
 @end

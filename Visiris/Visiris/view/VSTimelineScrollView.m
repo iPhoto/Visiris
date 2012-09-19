@@ -138,6 +138,10 @@
     
     [self.playheadMarker setMarkerLocation:location];
     
+    if([self delegateRespondsToSelector:@selector(playHeadRulerMarker:didJumpInContainingView:toLocation:)]){
+        [self.playheadMarkerDelegate playHeadRulerMarker:self.playheadMarker didJumpInContainingView:self.trackHolderView toLocation:location];
+    }
+    
     return location;
 }
 

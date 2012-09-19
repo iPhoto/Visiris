@@ -61,8 +61,7 @@
         }
         return NSOrderedAscending;
     }];
-    
-    DDLogInfo(@"added keyFrame at index: %@", self.sortedKeyFrameTimestamps);
+
     
     return newKeyFrame;
 }
@@ -119,6 +118,63 @@
             
             return result;
             
+        }
+    }
+}
+
+-(NSString*) stringValueForTimestamp:(double) timestamp{
+    if(self.keyFrames.count == 0){
+        return self.defaultValue;
+    }
+    else if(self.keyFrames.count == 1){
+        return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:0]]).stringValue;
+    }
+    else{
+        NSUInteger nexKeyFrameIndex = [self.sortedKeyFrameTimestamps indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            if([obj doubleValue] > timestamp){
+                return YES;
+            }
+            return NO;
+        }];
+        
+        
+        if(nexKeyFrameIndex == NSNotFound){
+            
+            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps lastObject]]).stringValue;
+        }
+        else if(nexKeyFrameIndex == 0){
+            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:0]]).stringValue;
+        }
+        else{
+            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:nexKeyFrameIndex-1]]).stringValue;
+        }
+    }
+}
+
+-(BOOL) boolValueForTimestamp:(double) timestamp{
+    if(self.keyFrames.count == 0){
+        return [self.defaultValue boolValue];
+    }
+    else if(self.keyFrames.count == 1){
+        return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:0]]).boolValue;
+    }
+    else{
+        NSUInteger nexKeyFrameIndex = [self.sortedKeyFrameTimestamps indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            if([obj doubleValue] > timestamp){
+                return YES;
+            }
+            return NO;
+        }];
+        
+        if(nexKeyFrameIndex == NSNotFound){
+            
+            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps lastObject]]).boolValue;
+        }
+        else if(nexKeyFrameIndex == 0){
+            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:0]]).boolValue;
+        }
+        else{
+            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:nexKeyFrameIndex-1]]).boolValue;
         }
     }
 }

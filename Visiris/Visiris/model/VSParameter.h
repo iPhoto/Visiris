@@ -53,7 +53,7 @@
 
 @property (readonly) id currentValue;
 
-@property (readonly) id defaultValue;
+@property id defaultValue;
 
 @property (readonly) NSInteger ID;
 

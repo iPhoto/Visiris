@@ -108,7 +108,7 @@ static NSString* defaultNib = @"VSParameterView";
 #pragma mark - Methods
 
 -(void) saveParameterAndRemoveObserver{
-    [self.selectedKeyframe removeObserver:self forKeyPath:@"value"];
+    [self.parameter removeObserver:self forKeyPath:@"currentValue"];
     
     [self storeParameterValue];
 }
@@ -138,7 +138,7 @@ static NSString* defaultNib = @"VSParameterView";
 
 #pragma mark - NSComboBoxDelegate Implementation
 
--(void) comboBoxSelectionDidChange:(NSNotification *)notification{
+-(void) comboBoxWillDismiss:(NSNotification *)notification{
     [self storeParameterValue];
 }
 
@@ -186,6 +186,11 @@ static NSString* defaultNib = @"VSParameterView";
                     break;
             }
         }
+        else
+        {
+            self.parameter.defaultValue = currentValue;
+        }
+            
     }
     else{
         if(self.selectedKeyframe){
@@ -218,7 +223,7 @@ static NSString* defaultNib = @"VSParameterView";
         }
     }
     else{
-        value =[self.comboBox objectValueOfSelectedItem];
+        value = [((VSOptionParameter*)self.parameter).options objectForKey:[self.comboBox objectValueOfSelectedItem]];
     }
     
     return value;
@@ -251,7 +256,7 @@ static NSString* defaultNib = @"VSParameterView";
     [self.nameLabel setStringValue: NSLocalizedString(self.parameter.name, @"")];
     
     if([self.parameter isKindOfClass:[VSOptionParameter class]]){
-        // [self.comboBox selectItemWithObjectValue:((VSOptionParameter*)self.parameter).selectedKey];
+        [self.comboBox selectItemWithObjectValue:((VSOptionParameter*)self.parameter).selectedKey];
     }
     else{
         switch (self.parameter.dataType) {
@@ -302,13 +307,9 @@ static NSString* defaultNib = @"VSParameterView";
     
     for(id key in ((VSOptionParameter*) self.parameter).options){
         [self.comboBox addItemWithObjectValue:key];
-        
-        id value = [((VSOptionParameter*) self.parameter).options objectForKey:key];
-        
-        if([self.parameter.currentValue isEqual:value]){
-            //            [self.comboBox selectItemWithObjectValue:key];
-        }
     }
+    
+    [self.comboBox selectItemWithObjectValue:((VSOptionParameter*)self.parameter).selectedKey];
     
     NSDictionary *viewsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:self.comboBox,@"comboBox", nil];
     NSString *constraintString = [NSString stringWithFormat:@"|-[comboBox]-|"];

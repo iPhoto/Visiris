@@ -40,6 +40,10 @@
 
 -(float) floatValueForTimestamp:(double) timestamp;
 
+-(NSString*) stringValueForTimestamp:(double) timestamp;
+
+-(BOOL) boolValueForTimestamp:(double) timestamp;
+
 /**
  * Returns the key frame of the animation at the current timestamp.
  *

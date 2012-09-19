@@ -118,7 +118,7 @@
 
     switch(self.dataType){
         case VSParameterDataTypeBool:{
-            return self.animation.defaultValue;
+            return [NSNumber numberWithBool:[self.animation boolValueForTimestamp:timestamp]];
             break;
         }
         case VSParameterDataTypeFloat:{
@@ -126,7 +126,12 @@
             break;
         }
         case VSParameterDataTypeString:{
-            return self.animation.defaultValue;
+            NSString *result = [self.animation stringValueForTimestamp:timestamp];
+            return result;
+            break;
+        }
+        default:{
+            return [self.animation stringValueForTimestamp:timestamp];
             break;
         }
     }
@@ -154,33 +159,6 @@
 
 -(BOOL) boolValueForTimestamp:(double)timestamp{
     return[self booleanValueOf:[self valueForTimestamp:timestamp]];
-}
-
--(float) defaultFloatValue{
-    return [self floatValueOf:self.animation.defaultValue];
-}
-
--(void) setDefaultFloatValue:(float) value{
-    self.animation.defaultValue = [NSNumber numberWithFloat:value];
-    self.currentValue = self.animation.defaultValue;
-}
-
--(BOOL) defaultBoolValue{
-    return [self booleanValueOf:self.animation.defaultValue];
-}
-
--(void) setDefaultBoolValue:(BOOL) value{
-    self.animation.defaultValue = [NSNumber numberWithBool:value];
-    self.currentValue = self.animation.defaultValue;
-}
-
--(NSString*) defaultStringValue{
-    return [self stringValueOf:self.animation.defaultValue];
-}
-
--(void) setDefaultStringValue:(NSString*) value{
-    self.animation.defaultValue = [NSString stringWithString:value];
-    self.currentValue = self.animation.defaultValue;
 }
 
 
@@ -309,6 +287,38 @@
 
 -(id) defaultValue{
     return self.animation.defaultValue;
+}
+
+-(void) setDefaultValue:(id)defaultValue{
+    self.animation.defaultValue = defaultValue;
+    self.currentValue = self.animation.defaultValue;
+}
+
+-(float) defaultFloatValue{
+    return [self floatValueOf:self.animation.defaultValue];
+}
+
+-(void) setDefaultFloatValue:(float) value{
+    self.animation.defaultValue = [NSNumber numberWithFloat:value];
+    self.currentValue = self.animation.defaultValue;
+}
+
+-(BOOL) defaultBoolValue{
+    return [self booleanValueOf:self.animation.defaultValue];
+}
+
+-(void) setDefaultBoolValue:(BOOL) value{
+    self.animation.defaultValue = [NSNumber numberWithBool:value];
+    self.currentValue = self.animation.defaultValue;
+}
+
+-(NSString*) defaultStringValue{
+    return [self stringValueOf:self.animation.defaultValue];
+}
+
+-(void) setDefaultStringValue:(NSString*) value{
+    self.animation.defaultValue = [NSString stringWithString:value];
+    self.currentValue = self.animation.defaultValue;
 }
 
 

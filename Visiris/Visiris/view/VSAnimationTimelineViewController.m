@@ -108,9 +108,6 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     return YES;
 }
 
--(void) didMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView{
-}
-
 -(CGFloat) willMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView toLocation:(CGFloat)location{
     
     [self moveMainPlayheadAccordingToAnimationTimelinesPlayheadLocation:location];
