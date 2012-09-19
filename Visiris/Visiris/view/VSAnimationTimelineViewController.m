@@ -59,7 +59,8 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 }
 
 
--(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{DDLogInfo(keyPath);
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    //DDLogInfo(keyPath);
     //moves the playheadMarker if the currentPosition of the timelines Playhead has been changed
     if([keyPath isEqualToString:@"currentTimePosition"]){
         double playheadTimestamp = [[object valueForKey:keyPath] doubleValue];
