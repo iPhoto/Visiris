@@ -67,22 +67,23 @@
 -(VSImage *) getFrameForTimestamp:(double)aTimestamp withPlayMode:(VSPlaybackMode)playMode{
 
     //TODO this is sparta - no its slow!
-    aTimestamp /= 1000.0;
+    
+    double videoTimestamp = [self convertToVideoTimestamp:aTimestamp] / 1000.0;
     
     if (playMode == VSPlaybackModePlaying) {
         if (self.isReadingVideo == NO) {
             self.isReadingVideo = YES;
-            [self readMovie:self.url atTime:aTimestamp];
+            [self readMovie:self.url atTime:videoTimestamp];
         }
         
-        if (self.currentFrame < [self framesFromSeconds:aTimestamp]) {
+        if (self.currentFrame < [self framesFromSeconds:videoTimestamp]) {
             [self readNextMovieFrame];
             self.currentFrame++;
             self.vsImage.needsUpdate = YES;
         }
     }
     else {
-        [self getPreviewImageAtTime:aTimestamp];
+        [self getPreviewImageAtTime:videoTimestamp];
         self.isReadingVideo = NO;
         [self.movieReader cancelReading];
         self.vsImage.needsUpdate = YES;
@@ -226,11 +227,9 @@
     return frames;
 }
 
--(double) convertGlobalTimestampToLocalTimestamp:(double)aGlobalTimestamp{
-    double localTimestamp = [super convertGlobalTimestampToLocalTimestamp:aGlobalTimestamp];
-    
+-(double) convertToVideoTimestamp:(double)localTimestamp{
     localTimestamp = localTimestamp <= self.timelineObject.sourceDuration ? localTimestamp :  fmod(localTimestamp, self.timelineObject.sourceDuration);
-    
+
     return localTimestamp;
 }
 

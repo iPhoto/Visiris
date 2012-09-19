@@ -36,7 +36,7 @@
 				<string key="NSClassName">NSApplication</string>
 			</object>
 			<object class="NSCustomView" id="1005">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="NSScrollView" id="853472995">
@@ -52,14 +52,12 @@
 										<int key="NSvFlags">274</int>
 										<string key="NSFrameSize">{340, 235}</string>
 										<reference key="NSSuperview" ref="17268664"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="288472868"/>
 										<string key="NSReuseIdentifierKey">_NS:13</string>
 									</object>
 								</array>
 								<string key="NSFrame">{{1, 1}, {340, 235}}</string>
 								<reference key="NSSuperview" ref="853472995"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="361482946"/>
 								<string key="NSReuseIdentifierKey">_NS:11</string>
 								<reference key="NSDocView" ref="361482946"/>
@@ -79,7 +77,6 @@
 								<int key="NSvFlags">-2147483392</int>
 								<string key="NSFrame">{{-100, -100}, {15, 235}}</string>
 								<reference key="NSSuperview" ref="853472995"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="9663536"/>
 								<string key="NSReuseIdentifierKey">_NS:15</string>
 								<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
@@ -93,7 +90,6 @@
 								<int key="NSvFlags">-2147483392</int>
 								<string key="NSFrame">{{-100, -100}, {325, 15}}</string>
 								<reference key="NSSuperview" ref="853472995"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="17268664"/>
 								<string key="NSReuseIdentifierKey">_NS:26</string>
 								<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
@@ -105,7 +101,6 @@
 						</array>
 						<string key="NSFrameSize">{342, 237}</string>
 						<reference key="NSSuperview" ref="1005"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="17268664"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<int key="NSsFlags">133122</int>
@@ -118,8 +113,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{342, 237}</string>
-				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="853472995"/>
 				<string key="NSClassName">VSTimelineObjectParametersView</string>
 			</object>

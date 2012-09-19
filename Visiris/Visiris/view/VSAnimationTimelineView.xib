@@ -36,7 +36,7 @@
 				<string key="NSClassName">NSApplication</string>
 			</object>
 			<object class="NSCustomView" id="1005">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="NSScrollView" id="473804628">
@@ -52,14 +52,12 @@
 										<int key="NSvFlags">274</int>
 										<string key="NSFrameSize">{158, 158}</string>
 										<reference key="NSSuperview" ref="611193273"/>
-										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="743704311"/>
 										<string key="NSReuseIdentifierKey">_NS:13</string>
 									</object>
 								</array>
 								<string key="NSFrame">{{1, 1}, {158, 158}}</string>
 								<reference key="NSSuperview" ref="473804628"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="191457487"/>
 								<string key="NSReuseIdentifierKey">_NS:11</string>
 								<reference key="NSDocView" ref="191457487"/>
@@ -79,7 +77,6 @@
 								<int key="NSvFlags">256</int>
 								<string key="NSFrame">{{159, 1}, {15, 158}}</string>
 								<reference key="NSSuperview" ref="473804628"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="611193273"/>
 								<string key="NSReuseIdentifierKey">_NS:15</string>
 								<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
@@ -93,7 +90,6 @@
 								<int key="NSvFlags">256</int>
 								<string key="NSFrame">{{1, 159}, {158, 15}}</string>
 								<reference key="NSSuperview" ref="473804628"/>
-								<reference key="NSWindow"/>
 								<string key="NSReuseIdentifierKey">_NS:26</string>
 								<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 								<int key="NSsFlags">1</int>
@@ -104,7 +100,6 @@
 						</array>
 						<string key="NSFrameSize">{175, 175}</string>
 						<reference key="NSSuperview" ref="1005"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="611193273"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<int key="NSsFlags">133170</int>
@@ -117,8 +112,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{175, 175}</string>
-				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="473804628"/>
 				<string key="NSClassName">VSAnimationTimelineView</string>
 			</object>

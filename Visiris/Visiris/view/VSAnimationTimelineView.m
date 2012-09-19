@@ -10,6 +10,8 @@
 
 @implementation VSAnimationTimelineView
 
+
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
@@ -19,5 +21,6 @@
     
     return self;
 }
+
 
 @end

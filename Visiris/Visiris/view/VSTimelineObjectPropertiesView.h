@@ -7,10 +7,10 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "VSFrameResizingDelegate.h"
+#import "VSViewResizingDelegate.h"
 
 @interface VSTimelineObjectPropertiesView : NSView
 
-@property id<VSFrameResizingDelegate> resizingDelegate;
+@property id<VSViewResizingDelegate> resizingDelegate;
 
 @end

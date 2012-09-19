@@ -90,7 +90,7 @@
     
     VSCoreHandover *coreHandover = nil;
     
-    double localTimestamp = [self.supplier convertGlobalTimestampToLocalTimestamp:aTimestamp];
+    double localTimestamp = [self localTimestampOfGlobalTimestamp:aTimestamp];
     
     if ([self.supplier isKindOfClass:[VSFrameSourceSupplier class]] ) {
         coreHandover = [[VSFrameCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp withPlayMode:mode]
@@ -131,6 +131,18 @@
 -(void) changeName:(NSString *)newName andRegisterAt:(NSUndoManager *)undoManager{
     [[undoManager prepareWithInvocationTarget:self] changeName:self.name andRegisterAt:undoManager];
     self.name = newName;
+}
+
+- (double)localTimestampOfGlobalTimestamp:(double)aGlobalTimestamp{   
+    if(aGlobalTimestamp < self.startTime || aGlobalTimestamp > self.endTime){
+        return -1.0;
+    }
+    
+    return aGlobalTimestamp - self.startTime;;
+}
+
+-(double) globalTimestampOfLocalTimestamp:(double)aLocalTimestamp{
+    return aLocalTimestamp + self.startTime;
 }
 
 #pragma mark - Properties

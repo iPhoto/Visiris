@@ -74,10 +74,6 @@ static NSString* defaultNib = @"VSMainTimelineView";
 -(id) initWithDefaultNibAccordingForTimeline:(VSTimeline*)timeline{
     if(self = [self initWithDefaultNib]){
         self.timeline = timeline;
-        
-        if([self.view isKindOfClass:[VSMainTimelineView class]]){
-            ((VSMainTimelineView*) self.view).timelineViewDelegate = self;
-        }
     }
     return self;
 }
@@ -97,7 +93,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
         ((VSMainTimelineView*) self.view).mouseMoveDelegate = self;
     }
     
-    [self initScrollView];
+    [super awakeFromNib];
     
     [self initTracks];
     
@@ -110,18 +106,20 @@ static NSString* defaultNib = @"VSMainTimelineView";
  * Registratres the class for observing
  */
 -(void) initObservers{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectPropertIesDidTurnInactive:) name:VSTimelineObjectPropertiesDidTurnInactive object:nil];
-    [self.timeline addObserver:self forKeyPath:@"duration" options:0 context:nil];
-    [self.timeline.playHead addObserver:self forKeyPath:@"currentTimePosition" options:NSKeyValueObservingOptionNew context:nil];
-}
-
-
-/**
- * Sets the frame of the trackHolder and the AutoresizingMasks
- */
--(void) initScrollView{
-    self.scrollView.zoomingDelegate = self;
-    self.scrollView.playheadMarkerDelegate = self;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(timelineObjectPropertIesDidTurnInactive:)
+                                                 name:VSTimelineObjectPropertiesDidTurnInactive
+                                               object:nil];
+    
+    [self.timeline addObserver:self
+                    forKeyPath:@"duration"
+                       options:0
+                       context:nil];
+    
+    [self.timeline.playHead addObserver:self
+                             forKeyPath:@"currentTimePosition"
+                                options:NSKeyValueObservingOptionNew
+                                context:nil];
 }
 
 
@@ -197,20 +195,23 @@ static NSString* defaultNib = @"VSMainTimelineView";
     [self removeSelectedTimelineObjects];
 }
 
-#pragma mark- VSTimelineViewDelegate implementation
+#pragma mark- VSViewResizingDelegate implementation
 
--(void) viewDidResizeFromFrame:(NSRect)oldFrame toFrame:(NSRect)newFrame{
+-(void) frameOfView:(NSView *)view wasSetFrom:(NSRect)oldRect to:(NSRect)newRect{
     
-    if(oldFrame.size.width != newFrame.size.width){
+    if(oldRect.size.width != newRect.size.width){
         
         NSRect newDocumentFrame = [self.scrollView.trackHolderView frame];
         
         //updates the width according to how the width of the view has been resized
-        newDocumentFrame.size.width += newFrame.size.width - oldFrame.size.width;
+        newDocumentFrame.size.width += newRect.size.width - oldRect.size.width;
         [self.scrollView.trackHolderView setFrame:(newDocumentFrame)];
         [self computePixelTimeRatio];
     }
 }
+
+
+#pragma mark - VSViewKeyDownDelegate
 
 -(void) didReceiveKeyDownEvent:(NSEvent *)theEvent{
     if(theEvent){
@@ -224,8 +225,6 @@ static NSString* defaultNib = @"VSMainTimelineView";
                 break;
         }
     }
-    
-    
 }
 
 

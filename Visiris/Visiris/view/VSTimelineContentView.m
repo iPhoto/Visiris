@@ -33,24 +33,24 @@
 
 #pragma mark - Init
 
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.scrollOffset = NSZeroPoint;
-        
-        [self initLayer];
-        [self initGuideLine];
-        [self initObservers];
+        [self setViewsProperties];
     }
     
     return self;
 }
 
--(void) awakeFromNib{
+-(void) setViewsProperties{
+    self.scrollOffset = NSZeroPoint;
     
+    [self initLayer];
+    [self initGuideLine];
+    [self initObservers];
 }
-
 /**
  * Inits the observers of the view
  */

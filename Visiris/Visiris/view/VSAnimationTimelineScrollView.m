@@ -38,8 +38,7 @@
     
     [self setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
     [self setAutoresizesSubviews:YES];
-    
-    [((NSView*)self.documentView) setAutoresizingMask: NSViewWidthSizable];
+
 }
 
 

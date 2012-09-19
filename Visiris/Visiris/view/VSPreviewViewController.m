@@ -137,7 +137,7 @@ static NSString* defaultNib = @"VSPreviewView";
 
 #pragma mark - VSFrameResizingDelegate implementation
 
--(void) frameOfView:(NSView *)view wasSetTo:(NSRect)newRect{
+-(void) frameOfView:(NSView *)view wasSetFrom:(NSRect)oldRect to:(NSRect)newRect{
     [self setOpenGLViewFameAccordingToAspectRatioInSuperview:newRect];
 }
 

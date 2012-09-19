@@ -19,7 +19,4 @@
 
 -(id) initWithDefaultNib;
 
-/** View which holds the properties subviews */
-@property (weak) IBOutlet NSView *contentView;
-
 @end

@@ -25,6 +25,12 @@
     [[self trackColor] setFill];
     
     NSRectFill(dirtyRect);
+    [self.delegate frameOfView:self wasSetFrom:NSZeroRect to:NSZeroRect];
+}
+
+-(void) setFrame:(NSRect)frameRect{
+    [super setFrame:frameRect];
+    
 }
 
 @end

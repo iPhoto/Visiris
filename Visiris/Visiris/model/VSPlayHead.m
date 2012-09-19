@@ -10,10 +10,6 @@
 
 @implementation VSPlayHead
 
-@synthesize currentTimePosition = _currentTimePosition;
 
-@synthesize scrubbing           = _scrubbing;
-
-@synthesize jumping             = jumping;
 
 @end

@@ -12,12 +12,18 @@
 #import "VSParameterViewController.h"
 #import "VSParameter.h"
 #import "VSScrollView.h"
+#import "VSDocument.h"
+#import "VSTimeline.h"
+#import "VSPlayhead.h"
+#import "VSTimelineObject.h"
 
 #import "VSCoreServices.h"
 
 @interface VSTimelineObjectParametersViewController ()
 
 @property NSMutableArray *parameterViewControllers;
+
+@property VSPlayHead *playhead;
 
 @end
 
@@ -34,6 +40,18 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
     if(self = [self initWithNibName:defaultNib bundle:nil]){
         self.parameterViewControllers = [[NSMutableArray alloc]init];
         self.parameterViewHeight = parameterViewHeight;
+        
+        if(self.playhead){
+//            [self removeObserver:self.playhead forKeyPath:@"currentTimePosition"];
+        }
+        
+        self.playhead = ((VSDocument*)[[NSDocumentController sharedDocumentController] currentDocument]).timeline.playHead;
+        
+//        [self.playhead addObserver:self
+//                        forKeyPath:@"currentTimePosition"
+//                           options:NSKeyValueObservingOptionNew
+//                           context:nil];
+        
         self.view.identifier = @"VSTimelineObjectParametersView";
     }
     
@@ -63,23 +81,31 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
     [self.scrollView.contentView setAutoresizesSubviews:NO];
 }
 
+#pragma mark - VSParameterViewKeyFrameDelegate Implementation
 
+-(VSKeyFrame*) addKeyFrameToParameter:(VSParameter *)parameter withValue:(id)value{
+    return [parameter addKeyFrameWithValue:value forTimestamp:[self.timelineObject localTimestampOfGlobalTimestamp:self.playhead.currentTimePosition]];
+}
 
 #pragma mark - Methods
 
 /**
  * Inits and displays a ParameterView for every parameter stored in the timelineObject property
  */
--(void) showParameters:(NSArray *)parameters{
-    self.parameters = parameters;
+-(void) showParametersOfTimelineObject:(VSTimelineObject*) timelineObject{
     
-    if(parameters && parameters.count){
+    self.timelineObject = timelineObject;
+    self.parameters = self.timelineObject.visibleParameters;
+    
+    if(self.parameters && self.parameters.count){
         
         int i = 0;
         
         for(VSParameter *parameter in self.parameters){
             
             VSParameterViewController *parameteViewController = [[VSParameterViewController alloc] initWithDefaultNibAndBackgroundColor:i++%2==0?self.evenColor:self.oddColor];
+            
+            parameteViewController.keyFrameDelegate = self;
             
             if(self.parameterViewControllers.count){
                 VSParameterViewController *lastParameterController = [self.parameterViewControllers lastObject];
@@ -121,14 +147,6 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
                                                                      attribute:NSLayoutAttributeBottom
                                                                     multiplier:1.0
                                                                       constant:0.0]];
-                
-//                [constraints addObject: [NSLayoutConstraint constraintWithItem:parameteViewController.view
-//                                                                     attribute:NSLayoutAttributeHeight
-//                                                                     relatedBy:NSLayoutRelationEqual
-//                                                                        toItem:((VSParameterViewController*) [self.parameterViewControllers lastObject]).view
-//                                                                     attribute:NSLayoutAttributeHeight
-//                                                                    multiplier:1.0
-//                                                                      constant:0.0]];
                 
                 [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[parameterView(==%f)]",self.parameterViewHeight]
                                                                                                        options:0

@@ -26,7 +26,7 @@
 @end
 
 @implementation VSPropertiesViewController
-@synthesize contentView = _contentView;
+
 @synthesize projectItemPropertiesViewController = _projectItemPropertiesViewController;
 @synthesize timelineObjectPropertiesViewController = _timelineObjectPropertiesViewController;
 
@@ -59,8 +59,8 @@ static NSString* defaultNib = @"VSPropertiesView";
     [self.view setAutoresizingMask:NSViewHeightSizable | NSViewWidthSizable];
     [self.view setAutoresizesSubviews:YES];
     
-    [self.contentView setAutoresizingMask:NSViewHeightSizable | NSViewWidthSizable];
-    [self.contentView setAutoresizesSubviews:YES];
+    [self.view setAutoresizingMask:NSViewHeightSizable | NSViewWidthSizable];
+    [self.view setAutoresizesSubviews:YES];
     
     
     //inits the two properties subviews
@@ -142,8 +142,8 @@ static NSString* defaultNib = @"VSPropertiesView";
  * @param notification NSNotification storing the selected VSTimelineObject
  */
 -(void) timelineObjectsGotUnselected:(NSNotification *) notification{
-    if(self.contentView.subviews.count > 0){
-        if([[self.contentView subviews] objectAtIndex:0] == self.timelineObjectPropertiesViewController.view){
+    if(self.view.subviews.count > 0){
+        if([[self.view subviews] objectAtIndex:0] == self.timelineObjectPropertiesViewController.view){
             [self.timelineObjectPropertiesViewController.view removeFromSuperview];
         }
     }
@@ -155,31 +155,33 @@ static NSString* defaultNib = @"VSPropertiesView";
  */
 -(void) showSubview:(NSView*) subView{
     
-    if(!self.contentView.subviews.count){
-        [self.contentView addSubview:subView];
+    if(!self.view.subviews.count){
+        [self.view addSubview:subView];
         
     }
-    else if([[self.contentView subviews] objectAtIndex:0] != subView){
+    else if([[self.view subviews] objectAtIndex:0] != subView){
         
         //Sends a notification if the timelineObjects Properties are hidden
-        if([[self.contentView subviews] objectAtIndex:0] == self.timelineObjectPropertiesViewController.view){
+        if([[self.view subviews] objectAtIndex:0] == self.timelineObjectPropertiesViewController.view){
             [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectPropertiesDidTurnInactive object:[NSArray arrayWithObject:self.timelineObjectPropertiesViewController.timelineObject]];
         }
         
         //Neccessary to check once more if the contentView has any subviews because timelineObjectsGotUnselected got have been called meanwhile
-
-        if(!self.contentView.subviews.count)
-            [self.contentView addSubview:subView];
+        if(!self.view.subviews.count)
+            [self.view addSubview:subView];
         else
-            [self.contentView replaceSubview:[self.contentView.subviews objectAtIndex:0] with:subView];
+            [self.view replaceSubview:[self.view.subviews objectAtIndex:0] with:subView];
     }
     
-    NSRect frame = self.contentView.frame;
-
-    [subView setFrame:frame];
+    NSRect frame = self.view.frame;
+    frame.origin = NSZeroPoint;
     
     [subView setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
     [subView setAutoresizesSubviews:YES];
+    
+    [subView setFrame:frame];
+    
+    
 }
 
 @end

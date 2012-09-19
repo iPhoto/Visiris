@@ -27,13 +27,6 @@
 
 #pragma mark - NSView
 
-- (void)drawRect:(NSRect)dirtyRect
-{
-    [[NSColor greenColor] setFill];
-    NSRectFill(dirtyRect);
-    
-}
-
 -(BOOL) isFlipped{
     return YES;
 }

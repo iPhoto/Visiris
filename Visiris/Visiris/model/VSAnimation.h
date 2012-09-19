@@ -24,6 +24,9 @@
 /** Stores the device connected with the parameter if ther is one */
 @property (strong) VSDeviceParameterMapper *deviceParameterMapper;
 
+@property (strong, readonly) NSMutableArray *sortedKeyFrameTimestamps;
+
+@property NSNumber* test;
 
 #pragma mark - Methods
 /**
@@ -34,6 +37,8 @@
  * @return The value of the parameter the animation is connected with for the given timestamp. If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
  */
 -(id) valueForTimestamp:(double) timestamp;
+
+-(float) floatValueForTimestamp:(double) timestamp;
 
 /**
  * Returns the key frame of the animation at the current timestamp.
@@ -58,7 +63,7 @@
  * @param aValue Value of the new VSKeyFrame
  * @param aTimestamp Timestamp the keyFrame is created for. The timestamp is relative to the animation time.
  */
--(void) addKeyFrameWithValue:(id) aValue forTimestamp:(double) aTimestamp;
+-(VSKeyFrame*) addKeyFrameWithValue:(id) aValue forTimestamp:(double) aTimestamp;
 
 /**
  * Removes the keyFrame with the aTimestamp.

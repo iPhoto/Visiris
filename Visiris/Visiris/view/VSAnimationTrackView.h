@@ -7,9 +7,9 @@
 //
 
 #import <Cocoa/Cocoa.h>
-
+#import "VSViewResizingDelegate.h"
 @interface VSAnimationTrackView : NSView
 
 @property NSColor *trackColor;
-
+@property id<VSViewResizingDelegate> delegate;
 @end
