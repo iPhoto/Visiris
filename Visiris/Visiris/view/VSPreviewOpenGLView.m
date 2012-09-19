@@ -151,8 +151,12 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	// Add a mutex around to avoid the threads accessing the context simultaneously
     CGLLockContext([[self openGLContext] CGLContextObj]);
     
+  //  NSLog(@"PREVIEW VIEW Current Context (before makeCurrentcontext): %@", [NSOpenGLContext currentContext]);
+
 	// Make sure we draw to the right context
 	[[self openGLContext] makeCurrentContext];
+   // NSLog(@"PREVIEW VIEW Current Context : %@", [NSOpenGLContext currentContext]);
+
    
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

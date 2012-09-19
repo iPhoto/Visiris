@@ -21,6 +21,8 @@
 #import "VSTransformTextureManager.h"
 #import "VSLayermode.h"
 
+#include <OpenGL/CGLProfiler.h>
+
 @interface VSRenderCore()
 
 /** Defines the coordinate for the plane */
@@ -134,12 +136,9 @@
 #pragma mark- Methods
 
 -(void)renderFrameOfCoreHandovers:(NSArray *)theCoreHandovers forFrameSize:(NSSize)theFrameSize forTimestamp:(double)theTimestamp{
-        
+    
 	[[self openGLContext] makeCurrentContext];
     CGLLockContext([[self openGLContext] CGLContextObj]);
-    
-    //[self debugOpenGLTextures];
-
     
     NSMutableArray *mutableCoreHandovers = [NSMutableArray arrayWithArray:theCoreHandovers];
 
@@ -147,6 +146,7 @@
     [self compareOldSize:self.oldSize withCurrentSize:theFrameSize];
 
     //Create a array with only glTextures in it
+    
     NSMutableArray *textures = [self createTextures:mutableCoreHandovers atTime:theTimestamp forOutputSize:theFrameSize];
     
     
@@ -164,6 +164,7 @@
             NSNumber *texture = (NSNumber *)[textures objectAtIndex:0];
             outPutTexture = texture.intValue;
             [[self openGLContext] flushBuffer];
+            // glFinish();
             break;
         }
         case 2:
@@ -187,10 +188,10 @@
             break;
         }
     }
-    
-   // NSLog(@"outputtexture: %d",outPutTexture);
-    
-   // [[self openGLContext] update];
+        
+    [[self openGLContext] update];
+    glFinish();
+
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
     
     if (self.delegate) {
@@ -198,13 +199,14 @@
             [self.delegate renderCore:self didFinishRenderingTexture:outPutTexture forTimestamp:theTimestamp];
         }
     }
+    
 }
 
 - (void)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*)colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path withObjectItemID:(NSInteger)objectItemID{
-
-   // [[self openGLContext] makeCurrentContext];
-  //  CGLLockContext([[self openGLContext] CGLContextObj]);
-
+ 
+    [[self openGLContext] makeCurrentContext];
+    CGLLockContext([[self openGLContext] CGLContextObj]);
+    
     switch (type) {
         case VSFileKindImage:
         case VSFileKindVideo:
@@ -222,8 +224,7 @@
         default:
             break;
     }
-    
-  //  CGLUnlockContext([[self openGLContext] CGLContextObj]);
+    CGLUnlockContext([[self openGLContext] CGLContextObj]);
 }
 
 - (void)deleteTextureFortimelineobjectID:(NSInteger)theID{
@@ -323,7 +324,6 @@
  * @return NSMutableArraz with only GLuint Textures in it.
  */
 - (NSMutableArray *)createTextures:(NSArray *)handovers atTime:(double)time forOutputSize:(NSSize)outputSize{
-    
     NSMutableArray *textures = [[NSMutableArray alloc] init];
     
     //cycles through handovers
@@ -446,10 +446,6 @@
  */
 - (float)layerMode:(VSCoreHandover *)handover{
     NSString *tempString = (NSString *)[handover.attributes objectForKey:@"VSParameterKeyBlendMode"];
-   // NSLog(@"Attribute: %@",tempString);
-   // NSLog(@"int: %d",[VSLayermode intFromString:tempString]);
-
-  //  NSLog(@"nummer %d",[VSLayermode intFromString:tempString]);
     return [VSLayermode floatFromString:tempString];
 }
 

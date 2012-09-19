@@ -30,7 +30,7 @@
 
 - (void) readMovie:(NSURL *)url atTime:(double) time;
 - (void) readNextMovieFrame;
-- (void) updateInfo: (id*)message;
+- (void) updateInfo: (id)message;
 
 @end
 
@@ -70,11 +70,20 @@
     
     double videoTimestamp = [self convertToVideoTimestamp:aTimestamp] / 1000.0;
     
+    //NSLog(@"TimeStamp: %f", videoTimestamp);
+    
     if (playMode == VSPlaybackModePlaying) {
+        
+        if(self.currentFrame > 60 && videoTimestamp < 1.0 ){
+            [self.movieReader cancelReading];
+            [self readMovie:self.url atTime:videoTimestamp];
+            [self readNextMovieFrame];
+        } 
+        
         if (self.isReadingVideo == NO) {
             self.isReadingVideo = YES;
             [self readMovie:self.url atTime:videoTimestamp];
-        }
+        } 
         
         if (self.currentFrame < [self framesFromSeconds:videoTimestamp]) {
             [self readNextMovieFrame];
@@ -174,9 +183,9 @@
      }];
 }
 
-//- (void) updateInfo: (id)message{
-//    NSLog(@"%@",message);
-//}
+- (void) updateInfo:(id)message{
+    NSLog(@"%@",message);
+}
 
 
 
@@ -210,7 +219,7 @@
             NSTimeInterval scanDuration = -[self.startTime timeIntervalSinceNow];
             float scanMultiplier = self.videoDuration / scanDuration;
             NSString* info = [NSString stringWithFormat:@"Done\n\nvideo duration: %f seconds\nscan duration: %f seconds\nmultiplier: %f", self.videoDuration, scanDuration, scanMultiplier];
-            [self performSelectorOnMainThread:@selector(updateInfo:) withObject:info waitUntilDone:YES];
+           [self performSelectorOnMainThread:@selector(updateInfo:) withObject:info waitUntilDone:YES];
         }
     }
     else{

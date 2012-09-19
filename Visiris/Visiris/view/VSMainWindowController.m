@@ -140,7 +140,7 @@ static NSString* defaultNib = @"MainWindow";
     [view setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
     [view setAutoresizesSubviews:YES];
     
-    NSLog(@"loading view: %@ with frame: %@",view, NSStringFromRect(frame));
+    //NSLog(@"loading view: %@ with frame: %@",view, NSStringFromRect(frame));
 }
 
 #pragma mark - NSSplitViewDelegate Implementation

@@ -13,7 +13,7 @@
 
 /** Parameter for the x-value of the position of a VSTimelineObject */
 extern NSString* VSParameterKeyPositionX;
-
+ 
 /** Parameter for the y-value of the position of a VSTimelineObject */
 extern NSString* VSParameterKeyPositionY;
 

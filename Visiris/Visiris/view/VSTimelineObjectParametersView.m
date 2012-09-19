@@ -31,6 +31,9 @@
     return YES;
 }
 
-
+-(void) setFrame:(NSRect)frameRect{
+    [super setFrame:frameRect];
+   // DDLogInfo(@"frame of parametersView: %@",NSStringFromRect(self.frame));
+}
 
 @end
