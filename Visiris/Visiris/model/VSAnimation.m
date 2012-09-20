@@ -61,7 +61,8 @@
         }
         return NSOrderedAscending;
     }];
-
+    
+    DDLogInfo(@"keyFrames: %@",self.keyFrames);
     
     return newKeyFrame;
 }
@@ -183,7 +184,15 @@
     return [self.keyFrames objectForKey:[NSNumber numberWithDouble:timestamp]];
 }
 
+-(void) changeKeyFrames:(VSKeyFrame *)keyFrame timestamp:(double)newTimestamp{
+    DDLogInfo(@"keyf %@",keyFrame);
+    NSNumber *key = [NSNumber numberWithDouble:keyFrame.timestamp];
+    VSKeyFrame *newKeyFrame = [self.keyFrames objectForKey:key];
+    DDLogInfo(@"keyFrames: %@", [self.keyFrames allKeys]);
+    [self.keyFrames removeObjectForKey:[NSNumber numberWithDouble:keyFrame.timestamp]];
 
+    
+}
 
 #pragma mark - Properties
 

@@ -76,4 +76,6 @@
 -(void) removeKeyFrameAt:(double) aTimestamp;
 
 
+-(void) changeKeyFrames:(VSKeyFrame*) keyFrame timestamp:(double) newTimestamp;
+
 @end

@@ -213,6 +213,10 @@
     self.currentValue = keyFrame.value;
 }
 
+-(void) changeKeyFrames:(VSKeyFrame *)keyFrame timestamp:(double)newTimestamp{
+    [self.animation changeKeyFrames:keyFrame timestamp:newTimestamp];
+}
+
 #pragma mark - Private Methods
 
 /**

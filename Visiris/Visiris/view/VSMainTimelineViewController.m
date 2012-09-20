@@ -370,11 +370,17 @@ static NSString* defaultNib = @"VSMainTimelineView";
     return newDoubleFrame;
 }
 
+-(void) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController wasResizedOnTrack:(VSTrackViewController *)trackViewController{
+    
+    [self setTimelineDurationAccordingToTimelineWidth];
+}
+
+
 
 
 #pragma mark Moving
 
--(NSPoint) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController WillBeDraggedOnTrack:(VSTrackViewController *)trackViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition withSnappingDeltaX:(float)snappingDeltaX{
+-(NSPoint) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController WillBeDraggedOnTrack:(VSTrackViewController *)trackViewController fromPjosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition withSnappingDeltaX:(float)snappingDeltaX{
     
     float deltaX = newPosition.x - oldPosition.x;
     

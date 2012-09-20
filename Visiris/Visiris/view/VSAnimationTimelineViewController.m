@@ -18,6 +18,7 @@
 #import "VSPlayhead.h"
 #import "VSKeyFrameViewController.h"
 #import "VSParameter.h"
+#import "VSKeyFrame.h"
 
 #import "VSCoreServices.h"
 
@@ -121,6 +122,50 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     
     return location;
 }
+
+#pragma mark - VSAnimationTrackViewController
+
+-(BOOL) keyFrameViewController:(VSKeyFrameViewController *)keyFrameViewController wantsToBeSelectedOnTrack:(VSAnimationTrackViewController *)track{
+    BOOL result = false;
+    if([self keyFrameSelectingDelegateRespondsToSelector:@selector(wantToSelectKeyFrame:ofParamater:)]){
+        result = [self.keyFrameSelectingDelegate wantToSelectKeyFrame:keyFrameViewController.keyFrame ofParamater:track.parameter];
+    }
+    
+    if(result){
+        for(VSAnimationTrackViewController *animationTrackViewController in self.animationTrackViewControllers){
+            [animationTrackViewController unselectAllKeyFrames];
+        }
+    }
+    
+    return result;
+}
+
+//TODO: sending changend values
+-(NSPoint) keyFrameViewControllersView:(VSKeyFrameViewController *)keyFrameViewController wantsToBeDraggeFrom:(NSPoint)fromPoint to:(NSPoint)toPoint onTrack:(VSAnimationTrackViewController *)track{
+    
+    NSPoint result = toPoint;
+    
+    if([self keyFrameSelectingDelegateRespondsToSelector:@selector(keyFrame:ofParameter:willBeMovedFromTimestamp:toTimestamp:andFromValue:toValue:)]){
+        
+        double fromTimestamp = [self timestampForPixelValue:fromPoint.x];
+        double toTimestamp = [self timestampForPixelValue:toPoint.x];
+        
+        id fromValue = keyFrameViewController.keyFrame.value;
+        id toValue = fromValue;
+        
+        bool allowedToMove = [self.keyFrameSelectingDelegate keyFrame:keyFrameViewController.keyFrame
+                                                          ofParameter:track.parameter
+                                             willBeMovedFromTimestamp:fromTimestamp
+                                                          toTimestamp:&toTimestamp andFromValue:fromValue toValue:&toValue];
+        
+        if(allowedToMove){
+            float newX = [self pixelForTimestamp:toTimestamp];
+            result = NSMakePoint(newX, fromPoint.y);
+        }
+    }
+    return result;
+}
+
 #pragma mark - Methods
 
 /**
@@ -170,6 +215,7 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
                                                                             initWithFrame:trackRect                                           andColor:trackColor                forParameter:parameter
                                                                             andPixelTimeRatio:self.pixelTimeRatio];
             
+            animationTrackViewController.delegate = self;
             
             [self.animationTrackViewControllers addObject:animationTrackViewController];
             
@@ -225,7 +271,7 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
  */
 -(BOOL) keyFrameSelectingDelegateRespondsToSelector:(SEL) selector{
     if(self.keyFrameSelectingDelegate != nil){
-        if([self.keyFrameSelectingDelegate conformsToProtocol:@protocol(VSKeyFrameSelectingDelegate) ]){
+        if([self.keyFrameSelectingDelegate conformsToProtocol:@protocol(VSKeyFrameEditingDelegate) ]){
             if([self.keyFrameSelectingDelegate respondsToSelector: selector]){
                 return YES;
             }

@@ -7,7 +7,10 @@
 //
 
 #import <Cocoa/Cocoa.h>
+
 #import "VSTimelineViewController.h"
+
+#import "VSAnimationTrackViewController.h"
 
 @class VSAnimationTimelineScrollView;
 @class VSTimelineObject;
@@ -15,13 +18,19 @@
 @class VSKeyFrame;
 @class VSParameter;
 
-@protocol VSKeyFrameSelectingDelegate <NSObject>
+@protocol VSKeyFrameEditingDelegate <NSObject>
 
 -(void) playheadIsOverKeyFrame:(VSKeyFrame*) keyFrame ofParameter:(VSParameter*) paramter;
 
+-(BOOL) wantToSelectKeyFrame:(VSKeyFrame*) keyFrame ofParamater:(VSParameter*) parameter;
+
+-(BOOL) keyFrame:(VSKeyFrame*) keyFrame ofParameter:(VSParameter*) parameter willBeMovedFromTimestamp:(double) fromTimestamp toTimestamp:(double*) toTimestamp andFromValue:(id) fromValue toValue:(id*) toValue;
+
 @end
 
-@interface VSAnimationTimelineViewController : VSTimelineViewController
+
+
+@interface VSAnimationTimelineViewController : VSTimelineViewController<VSAnimationTrackViewControllerDelegate>
 
 /**
  * Inits the controller with the .nib-File stored in defaultNib (VSBrowserView)
@@ -38,6 +47,6 @@
 
 @property VSPlayHead *playhead;
 
-@property id<VSKeyFrameSelectingDelegate> keyFrameSelectingDelegate;
+@property id<VSKeyFrameEditingDelegate> keyFrameSelectingDelegate;
 
 @end

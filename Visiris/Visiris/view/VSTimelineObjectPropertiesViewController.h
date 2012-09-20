@@ -21,7 +21,7 @@
  *
  * Creates a VSParameterViewController for everey parameter of its VSTimelineObject
  */
-@interface VSTimelineObjectPropertiesViewController : NSViewController<NSSplitViewDelegate, VSViewResizingDelegate, VSScrollViewScrollingDelegate, VSParameterViewKeyFrameDelegate, VSKeyFrameSelectingDelegate>
+@interface VSTimelineObjectPropertiesViewController : NSViewController<NSSplitViewDelegate, VSViewResizingDelegate, VSScrollViewScrollingDelegate, VSParameterViewKeyFrameDelegate, VSKeyFrameEditingDelegate>
 
 /** VSTimelineObject which properties VSTimelineObjectPropertiesViewController is representing */
 @property VSTimelineObject *timelineObject;

@@ -31,4 +31,8 @@
  */
 -(void) mouseDragged:(NSEvent*) theEvent onView:(NSView*) view;
 
+-(void) mouseDown:(NSEvent*) theEvent onView:(NSView*) view;
+
+-(NSPoint) view:(NSView*) view wantsToBeDraggedFrom:(NSPoint) fromPoint to:(NSPoint) toPoint;
+
 @end
