@@ -61,8 +61,7 @@
 
 - (GLuint)renderAtTme:(double)time{
     
-    //NSLog(@"time: %f",time);
-
+    //todo slow
     time /= 1000.0;
     [[self context] makeCurrentContext];
     
@@ -113,7 +112,7 @@
 #pragma mark - Private Methods
 
 - (VSPBufferRenderer *)createPBufferRenderer{
-    return [[VSPBufferRenderer alloc] initWithCompositionPath:self.path textureTarget:GL_TEXTURE_2D textureWidth:self.size.width textureHeight:self.size.height openGLContext:self.context];
+    return [[VSPBufferRenderer alloc] initWithCompositionPath:self.path textureWidth:self.size.width textureHeight:self.size.height openGLContext:self.context];
 
 }
 

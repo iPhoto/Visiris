@@ -129,7 +129,7 @@
         self.transformTextureManager = [[VSTransformTextureManager alloc] initWithContext:self.openGLContext];
         
         self.oldSize = size;
-        [self debugOpenGLTextures];
+      //[self debugOpenGLTextures];
     }
     return self;
 }
