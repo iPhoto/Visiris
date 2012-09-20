@@ -33,6 +33,12 @@
  */
 -(void) didStopScrubbingAtTimestamp:(double) aTimestamp;
 
+//TODO comment
+- (uint64_t)hostTime;
+
+//TODO comment
+- (double)refreshPeriod;
+
 @end
 
 

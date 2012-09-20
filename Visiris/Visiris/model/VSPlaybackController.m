@@ -24,6 +24,12 @@
 @property VSPreProcessor* preProcessor;
 
 @property VSTimeline* timeline;
+
+//todo
+@property (assign) double deltaTime;
+
+//todo
+@property (assign) double counter;
 @end
 
 @implementation VSPlaybackController
@@ -36,6 +42,8 @@
 @synthesize playbackStartTime   = _playbackStartTime;
 @synthesize frameWasRender      = _frameWasRender;
 @synthesize playbackMode        = _playbackMode;
+@synthesize deltaTime           = _deltaTime;
+@synthesize counter             = _counter;
 
 #pragma mark - Init
 
@@ -48,6 +56,9 @@
         self.playbackMode = VSPlaybackModeStanding;
         
         [self initObservers];
+        
+        self.counter = 0.0;
+        self.deltaTime = 0.0;
     }
     
     return self;
@@ -122,17 +133,31 @@
     }
 }
 
-- (void)renderFramesForCurrentTimestamp{    
+- (void)renderFramesForCurrentTimestamp{
+        
+    
+    self.counter += self.deltaTime/1000.0;
+    
+    //todo is this slow?
+    double period = 1.0 / [VSProjectSettings sharedProjectSettings].frameRate;
+
+    if (self.counter >= period) {
+        self.counter -= period;
+        
+        [self renderCurrentFrame];
+    }
+     
     if(self.playbackMode == VSPlaybackModePlaying){
         [self computeNewCurrentTimestamp];
     }
-    
-    [self renderCurrentFrame];
 }
 
 -(void) play{
     self.playbackMode = VSPlaybackModePlaying;
-    self.playbackStartTime = [[NSDate date] timeIntervalSince1970]*1000;
+    
+    if([self.delegate conformsToProtocol:@protocol(VSPlaybackControllerDelegate)]){
+        self.playbackStartTime = [self.delegate hostTime];
+    }
 }
 
 -(void) stop{
@@ -147,6 +172,7 @@
  * Sets the current VSPlaybackMode and tells the preprocessor to the render the current frame
  */
 -(void) renderCurrentFrame{
+    
     if (self.preProcessor) {
         [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:[VSProjectSettings sharedProjectSettings].frameSize withPlayMode:self.playbackMode];
     }
@@ -163,20 +189,24 @@
 /**
  * Computs the current timestamp while playing
  */
--(void) computeNewCurrentTimestamp{
-    double currentTime = [[NSDate date] timeIntervalSince1970]*1000;        
+- (void)computeNewCurrentTimestamp{
+
+    double currentTime;
     
-    self.currentTimestamp += currentTime - self.playbackStartTime;
-    
+    if([self.delegate conformsToProtocol:@protocol(VSPlaybackControllerDelegate)]){
+        currentTime = [self.delegate hostTime];
+    }
+    else
+        NSLog(@"ERROR: delegate not responding");
+
+    self.deltaTime = (currentTime - self.playbackStartTime)/1000000.0;
+    self.currentTimestamp += self.deltaTime;
+        
     if(self.currentTimestamp > self.timeline.duration){
         self.currentTimestamp = 0;
-    }
-    
-    
-    
+    }    
     self.timeline.playHead.currentTimePosition = self.currentTimestamp;
     self.playbackStartTime = currentTime;
-  //  NSLog(@"PlaybackstartTime %f", self.currentTimestamp);
 }
 
 

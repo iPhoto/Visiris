@@ -18,6 +18,8 @@
 @property (strong) NSOpenGLPixelFormat      *pixelFormat;
 @property (assign) CVDisplayLinkRef         displayLink;
 @property (assign) GLuint                   texture;
+@property (assign) CVTimeStamp              stamp;
+
 
 - (id) initWithFrame:(NSRect)frameRect;
 - (void)initOpenGLWithSharedContext:(NSOpenGLContext *)openGLContext;
@@ -27,5 +29,6 @@
 - (void)startDisplayLink;
 - (void)stopDisplayLink;
 - (double)refreshPeriod;
+- (uint64_t)hostTime;
 
 @end

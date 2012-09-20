@@ -15,6 +15,7 @@
 @implementation VSPreviewOpenGLView
 @synthesize openGLContext=_openGLContext,pixelFormat,displayLink;
 @synthesize texture = _texture;
+@synthesize stamp = _stamp;
 
 @synthesize playBackcontroller = _playBackcontroller;
 
@@ -173,14 +174,11 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	[[self openGLContext] flushBuffer];
 	
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
-   // NSLog(@"%f",[self refreshPeriod]);
 }
 
 - (void) startDisplayLink{
 	if (displayLink && !CVDisplayLinkIsRunning(displayLink))
 		CVDisplayLinkStart(displayLink);
-    
-    CVTimeStamp stamp;
     
 
    // DDLogInfo(@"startDisplayLink");
@@ -196,6 +194,11 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 
 - (double)refreshPeriod{
     return CVDisplayLinkGetActualOutputVideoRefreshPeriod(self.displayLink);
+}
+
+- (uint64_t)hostTime{
+    CVDisplayLinkGetCurrentTime(self.displayLink,&_stamp);
+    return _stamp.hostTime;
 }
 
 @end
