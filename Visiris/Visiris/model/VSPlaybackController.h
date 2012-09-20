@@ -33,6 +33,12 @@
  */
 -(void) didStopScrubbingAtTimestamp:(double) aTimestamp;
 
+//TODO comment
+- (uint64_t)hostTime;
+
+//TODO comment
+- (double)refreshPeriod;
+
 @end
 
 
@@ -74,11 +80,6 @@
  * @return self
  */
 -(id) initWithPreProcessor:(VSPreProcessor*) preProcessor timeline:(VSTimeline*) timeline;
-
-/**
- * Starts playing the scene form currentTimestamp of VSPlaybackController
- */
--(void) startPlaybackFromCurrentTimeStamp;
 
 /**
  * Starts the playback

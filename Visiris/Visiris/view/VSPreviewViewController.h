@@ -32,6 +32,8 @@
 /** NSView wrapping VSPreviewOpenGLView */ 
 @property (weak) IBOutlet NSView *openGLViewHolder;
 
+- (IBAction)frameRateSliderHasChanged:(NSSlider *)sender;
+
 #pragma mark - init
 
 /**
@@ -56,5 +58,11 @@
  * @return IBAction
  */
 - (IBAction)stop:(NSButton *)sender;
+
+//TODO COMMENT
+- (uint64_t)hostTime;
+
+//TODO COMMENT
+- (double)refreshPeriod;
 
 @end

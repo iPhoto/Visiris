@@ -28,6 +28,14 @@ static VSProjectSettings* sharedProjectSettings = nil;
     return sharedProjectSettings;
 }
 
+-(id)init{
+    if (self = [super init]) {
+        self.frameRate = 30;
+        self.frameSize = NSMakeSize(640.0f, 480.0f);
+    }
+    return self;
+}
+
 #pragma mark - Properties
 
 -(float) aspectRatio{

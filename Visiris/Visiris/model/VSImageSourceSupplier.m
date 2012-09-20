@@ -52,4 +52,9 @@
 
     return self.vsImage;
 }
+
+- (void)dealloc{
+    free(self.vsImage.data);
+}
+
 @end

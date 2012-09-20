@@ -129,6 +129,7 @@
         self.transformTextureManager = [[VSTransformTextureManager alloc] initWithContext:self.openGLContext];
         
         self.oldSize = size;
+        [self debugOpenGLTextures];
     }
     return self;
 }
@@ -429,7 +430,17 @@
  * For Debugging the OpenglTextures. prints out how many textures are allocated.
  */
 - (void)debugOpenGLTextures{
-    // glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxSize);
+    
+    int maxSize;
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxSize);
+    NSLog(@"GL_MAX_TEXTURE_SIZE: %d", maxSize);
+    
+    glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxSize);
+    NSLog(@"GL_MAX_TEXTURE_IMAGE_UNITS: %d", maxSize);
+    
+    glGetIntegerv(GL_MAX_TEXTURE_UNITS, &maxSize);
+    NSLog(@"GL_MAX_TEXTURE_UNITS: %d", maxSize);
+    
     int counter = 0;
     
     for (int i = 0; i < 10; i++) {

@@ -157,18 +157,18 @@ static NSString* defaultNib = @"VSPreviewView";
     openGLViewRect.size.height = superViewsRect.size.height - self.openGLViewMarginTop - self.openGLViewMarginBottom;
     
     
-//    //resizes the NSRect according to the aspectRatio stored in VSProjectSettings
-//    float aspectRatio = [VSProjectSettings sharedProjectSettings].aspectRatio;
-//    
-//    float proportionalHeight = openGLViewRect.size.width / aspectRatio;
-//    
-//    if(proportionalHeight<openGLViewRect.size.height){
-//        openGLViewRect.size.height = proportionalHeight;
-//    }
-//    else{
-//        openGLViewRect.size.width = openGLViewRect.size.height * aspectRatio;
-//    }
-//    
+    //resizes the NSRect according to the aspectRatio stored in VSProjectSettings
+    float aspectRatio = [VSProjectSettings sharedProjectSettings].aspectRatio;
+    
+    float proportionalHeight = openGLViewRect.size.width / aspectRatio;
+    
+    if(proportionalHeight<openGLViewRect.size.height){
+        openGLViewRect.size.height = proportionalHeight;
+    }
+    else{
+        openGLViewRect.size.width = openGLViewRect.size.height * aspectRatio;
+    }
+    
     openGLViewRect.origin.x = (superViewsRect.size.width - openGLViewRect.size.width) / 2.0f;
     openGLViewRect.origin.y = (NSMaxY(superViewsRect) - NSMaxY(openGLViewRect)) / 2.0f;
 
@@ -232,4 +232,16 @@ static NSString* defaultNib = @"VSPreviewView";
     return _playbackController;
 }
 
+- (uint64_t)hostTime{
+    return [self.openGLView hostTime];
+}
+
+- (double)refreshPeriod{
+    return [self.openGLView refreshPeriod];
+}
+
+
+- (IBAction)frameRateSliderHasChanged:(NSSlider *)sender {
+    [VSProjectSettings sharedProjectSettings].frameRate = [sender integerValue];
+}
 @end

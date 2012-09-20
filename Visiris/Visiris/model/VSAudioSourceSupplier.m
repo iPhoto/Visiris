@@ -10,11 +10,4 @@
 
 @implementation VSAudioSourceSupplier
 
-/*- (id)initWithTimelineObject:(VSTimelineObject *)aTimelineObject{
-    if (self = [super initWithTimelineObject:aTimelineObject]) {
-        
-    }
-    return self;
-}*/
-
 @end
