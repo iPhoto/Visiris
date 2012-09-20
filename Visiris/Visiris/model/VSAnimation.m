@@ -50,22 +50,19 @@
     
     NSNumber *key = [NSNumber numberWithDouble:aTimestamp];
     [self.keyFrames setObject:newKeyFrame forKey:key];
-
     
-    NSUInteger newIndex = [self.sortedKeyFrameTimestamps indexOfObject:key inSortedRange:NSMakeRange(0, self.sortedKeyFrameTimestamps.count) options:NSBinarySearchingFirstEqual usingComparator:^NSComparisonResult(id obj1, id obj2) {
+    
+    
+    [self.sortedKeyFrameTimestamps addObject:key];
+    
+    [self.sortedKeyFrameTimestamps sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         if([obj1 doubleValue] > [obj2 doubleValue]){
             return NSOrderedDescending;
         }
-        
         return NSOrderedAscending;
     }];
-    
-    if(newIndex == NSNotFound){
-        newIndex = self.sortedKeyFrameTimestamps.count;
-    }
-    
-    [self.sortedKeyFrameTimestamps insertObject:key atIndex:newIndex];
 
+    
     return newKeyFrame;
 }
 
@@ -92,7 +89,10 @@
 
 -(float) floatValueForTimestamp:(double)timestamp{
     
-    if(self.keyFrames.count == 1){
+    if(self.keyFrames.count == 0){
+        return [self.defaultValue floatValue];
+    }
+    else if(self.keyFrames.count == 1){
         return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:0]]).floatValue;
     }
     else{
@@ -102,21 +102,19 @@
             }
             return NO;
         }];
-    
+        
         if(nexKeyFrameIndex == NSNotFound){
+            
             return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps lastObject]]).floatValue;
+        }
+        else if(nexKeyFrameIndex == 0){
+            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:0]]).floatValue;
         }
         else{
             VSKeyFrame *keyframe1 = (VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:nexKeyFrameIndex-1]];
             
             VSKeyFrame *keyframe2 = (VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:nexKeyFrameIndex]];
-            
             float result = ((keyframe2.floatValue - keyframe1.floatValue)  / (keyframe2.timestamp - keyframe1.timestamp) ) * (timestamp-keyframe1.timestamp) + keyframe1.floatValue;
-            DDLogInfo(@"%f %f %f",(keyframe2.timestamp - keyframe1.timestamp),(keyframe2.floatValue - keyframe1.floatValue),(timestamp-keyframe1.timestamp));
-            DDLogInfo(@"key1: %@ key2: %@",keyframe1,keyframe2);
-            DDLogInfo(@"result: %f",result);
-            DDLogInfo(@"%f %f",keyframe2.floatValue, keyframe1.floatValue);
-            DDLogInfo(@"timestamp: %f",timestamp);
             
             return result;
             
@@ -124,9 +122,68 @@
     }
 }
 
+-(NSString*) stringValueForTimestamp:(double) timestamp{
+    if(self.keyFrames.count == 0){
+        return self.defaultValue;
+    }
+    else if(self.keyFrames.count == 1){
+        return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:0]]).stringValue;
+    }
+    else{
+        NSUInteger nexKeyFrameIndex = [self.sortedKeyFrameTimestamps indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            if([obj doubleValue] > timestamp){
+                return YES;
+            }
+            return NO;
+        }];
+        
+        
+        if(nexKeyFrameIndex == NSNotFound){
+            
+            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps lastObject]]).stringValue;
+        }
+        else if(nexKeyFrameIndex == 0){
+            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:0]]).stringValue;
+        }
+        else{
+            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:nexKeyFrameIndex-1]]).stringValue;
+        }
+    }
+}
+
+-(BOOL) boolValueForTimestamp:(double) timestamp{
+    if(self.keyFrames.count == 0){
+        return [self.defaultValue boolValue];
+    }
+    else if(self.keyFrames.count == 1){
+        return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:0]]).boolValue;
+    }
+    else{
+        NSUInteger nexKeyFrameIndex = [self.sortedKeyFrameTimestamps indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            if([obj doubleValue] > timestamp){
+                return YES;
+            }
+            return NO;
+        }];
+        
+        if(nexKeyFrameIndex == NSNotFound){
+            
+            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps lastObject]]).boolValue;
+        }
+        else if(nexKeyFrameIndex == 0){
+            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:0]]).boolValue;
+        }
+        else{
+            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:nexKeyFrameIndex-1]]).boolValue;
+        }
+    }
+}
+
 -(VSKeyFrame*) keyFrameForTimestamp:(double)timestamp{
     return [self.keyFrames objectForKey:[NSNumber numberWithDouble:timestamp]];
 }
+
+
 
 #pragma mark - Properties
 

@@ -33,14 +33,6 @@
 -(BOOL) shouldMovePlayHeadRulerMarker:(NSRulerMarker*) playheadMarker inContainingView:(NSView*) aView;
 
 /**
- * Called after the playheadMakrer was moved
- *
- * @param playheadMarker The maker that was moved
- * @param aView NSView the playhead marker is placed in
- */
--(void) didMovePlayHeadRulerMarker:(NSRulerMarker*) playheadMarker inContainingView:(NSView*) aView;
-
-/**
  * Called before the playheadMakrer is moved
  *
  * @param playheadMarker The maker that will be movd
@@ -60,6 +52,17 @@
  */
 -(CGFloat) playHeadRulerMarker:(NSRulerMarker*) playheadMarker willJumpInContainingView:(NSView*) aView toLocation:(CGFloat) location;
 
+@optional
+
+-(void) playHeadRulerMarker:(NSRulerMarker *)playheadMarker didJumpInContainingView:(NSView *)aView toLocation:(CGFloat)location;
+
+/**
+ * Called after the playheadMakrer was moved
+ *
+ * @param playheadMarker The maker that was moved
+ * @param aView NSView the playhead marker is placed in
+ */
+-(void) didMovePlayHeadRulerMarker:(NSRulerMarker*) playheadMarker inContainingView:(NSView*) aView;
 
 @end
 

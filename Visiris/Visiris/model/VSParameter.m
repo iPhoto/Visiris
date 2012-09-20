@@ -9,17 +9,17 @@
 #import "VSParameter.h"
 
 #import "VSAnimation.h"
+#import "VSKeyFrame.h"
 
 #import "VSCoreServices.h"
 
 @interface VSParameter()
 
 
+
 @end
 
 @implementation VSParameter
-
-#define DEFAULT_KEY_FRAME_TIMESTAMP -1
 
 @synthesize animation               = _animation;
 @synthesize type                    = _type;
@@ -32,18 +32,20 @@
 @synthesize hidden                  = _hidden;
 @synthesize rangeMaxValue           = _rangeMaxValue;
 @synthesize rangeMinValue           = _rangeMinValue;
+@synthesize currentValue            = _currentValue;
+@synthesize ID                      = _ID;
 
 #pragma mark - Init
 
--(id) initWithName:(NSString *)theName asType:(NSString *)aType forDataType:(VSParameterDataType)aDataType withDefaultValue:(id)theDefaultValue orderNumber:(NSInteger)aOrderNumber editable:(BOOL)editable hidden:(BOOL)hidden rangeMinValue:(float)minRangeValue rangeMaxValue:(float)maxRangeValue{
+-(id) initWithName:(NSString *)theName andID:(NSInteger) theID asType:(NSString *)aType forDataType:(VSParameterDataType)aDataType withDefaultValue:(id)theDefaultValue orderNumber:(NSInteger)aOrderNumber editable:(BOOL)editable hidden:(BOOL)hidden rangeMinValue:(float)minRangeValue rangeMaxValue:(float)maxRangeValue{
     if(self = [super init]){
         self.name = theName;
+        _ID = theID;
         self.type = aType;
         self.dataType = aDataType;
         self.hidden = hidden;
         self.editable = editable;
         self.orderNumber = aOrderNumber;
-        
         
         if(maxRangeValue > minRangeValue){
             self.rangeMaxValue = maxRangeValue;
@@ -55,7 +57,7 @@
             switch (self.dataType) {
                 case VSParameterDataTypeString:
                     self.configuredDefaultValue = [[NSString alloc] init];
-                    self.configuredDefaultValue = @"Hallo";
+                    self.configuredDefaultValue = @"";
                     break;
                 case VSParameterDataTypeFloat:
                     if(self.hasRange){
@@ -73,8 +75,12 @@
             self.configuredDefaultValue = theDefaultValue;
             
         }
+        
+        self.currentValue = [self.configuredDefaultValue copy];
+        
         self.animation = [[VSAnimation alloc] init];
-        [self.animation addKeyFrameWithValue:self.configuredDefaultValue forTimestamp:DEFAULT_KEY_FRAME_TIMESTAMP];
+        self.animation.defaultValue = [self.configuredDefaultValue copy];
+        
     }
     return self;
 }
@@ -85,6 +91,7 @@
 -(id) copyWithZone:(NSZone *)zone{
     
     VSParameter *copy = [[VSParameter allocWithZone:zone] initWithName:self.name
+                                                                 andID:self.ID
                                                                 asType:self.type
                                                            forDataType:self.dataType
                                                       withDefaultValue:self.configuredDefaultValue
@@ -95,9 +102,10 @@
                                                          rangeMaxValue:self.rangeMaxValue];
     
     
-    copy.animation = [self.animation copy];
+    copy.currentValue = [self.configuredDefaultValue copy];
     
-    [copy.animation addKeyFrameWithValue:copy.configuredDefaultValue forTimestamp:DEFAULT_KEY_FRAME_TIMESTAMP];
+    copy.animation = [self.animation copy];
+    copy.animation.defaultValue = [self.configuredDefaultValue copy];
     
     return copy;
 }
@@ -110,7 +118,7 @@
 
     switch(self.dataType){
         case VSParameterDataTypeBool:{
-            return [self.animation valueForTimestamp:DEFAULT_KEY_FRAME_TIMESTAMP];
+            return [NSNumber numberWithBool:[self.animation boolValueForTimestamp:timestamp]];
             break;
         }
         case VSParameterDataTypeFloat:{
@@ -118,7 +126,12 @@
             break;
         }
         case VSParameterDataTypeString:{
-            return [self.animation valueForTimestamp:DEFAULT_KEY_FRAME_TIMESTAMP];
+            NSString *result = [self.animation stringValueForTimestamp:timestamp];
+            return result;
+            break;
+        }
+        default:{
+            return [self.animation stringValueForTimestamp:timestamp];
             break;
         }
     }
@@ -129,6 +142,10 @@
 
 -(VSKeyFrame*) keyFrameForTimestamp:(double)timestamp{
     return [self.animation keyFrameForTimestamp:timestamp];
+}
+
+-(void) updateCurrentValueForTimestamp:(double) aTimestamp{
+    [self setValue:[self valueForTimestamp:aTimestamp] forKey:@"currentValue"];
 }
 
 //TODO: error-handlin
@@ -144,40 +161,16 @@
     return[self booleanValueOf:[self valueForTimestamp:timestamp]];
 }
 
--(float) defaultFloatValue{
-    return [self floatValueForTimestamp:DEFAULT_KEY_FRAME_TIMESTAMP];
-}
-
--(NSString*)defaultStringValue{
-    return [self stringValueForTimestamp:DEFAULT_KEY_FRAME_TIMESTAMP];
-}
-
--(BOOL) defaultBoolValue{
-    return [self boolValueForTimestamp:DEFAULT_KEY_FRAME_TIMESTAMP];
-}
 
 -(void) setValue:(id)value forKeyFramAtTimestamp:(double)timestamp{
     value = [self changeIfNotInRange:value];
     [self.animation setValue:value forKeyFramAtTimestamp:timestamp];
 }
 
--(void) setDefaultBoolValue:(BOOL)value{
-    [self setDefaultValue:[NSNumber numberWithBool:value]];
-}
-
--(void) setDefaultStringValue:(NSString *)value{
-    [self setDefaultValue:value];
-}
-
--(void) setDefaultFloatValue:(float)value{
-    NSNumber *newNumber = [NSNumber numberWithFloat:value];
-    [self setDefaultValue:newNumber];
-}
-
 -(VSKeyFrame*) addKeyFrameWithValue:(id) aValue forTimestamp:(double)aTimestamp{
     VSKeyFrame* newKeyFrame = [self.animation addKeyFrameWithValue:aValue forTimestamp:aTimestamp];
-    DDLogInfo(@"in param: %@ %@",self, self.animation);
-    self.test++;
+    self.currentValue = newKeyFrame.value;
+    
     return newKeyFrame;
 }
 
@@ -186,8 +179,38 @@
 }
 
 -(void) undoParametersDefaultValueChange:(id) oldValue atUndoManager:(NSUndoManager *)undoManager{
-    [[undoManager prepareWithInvocationTarget:self] undoParametersDefaultValueChange:self.defaultValue atUndoManager:undoManager];
-    self.defaultValue = oldValue;
+    [[undoManager prepareWithInvocationTarget:self] undoParametersDefaultValueChange:self.animation.defaultValue atUndoManager:undoManager];
+    self.animation.defaultValue = oldValue;
+}
+
+-(NSString*) currentStringValue{
+    if([_currentValue isKindOfClass:[NSString class]]){
+        return (NSString*) _currentValue;
+    }
+    
+    return @"";
+}
+
+-(BOOL) currentBoolValue{
+    if([_currentValue isKindOfClass:[NSNumber class]]){
+        return [_currentValue boolValue];
+    }
+    
+    return false;
+}
+
+-(float) currentFloatValue{
+    if([_currentValue isKindOfClass:[NSNumber class]]){
+        return [_currentValue floatValue];
+    }
+    
+    return 0.0f;
+}
+
+-(void) setValue:(id)value forKeyFrame:(VSKeyFrame *)keyFrame{
+    [self.animation setValue:value forKeyFramAtTimestamp:keyFrame.timestamp];
+    
+    self.currentValue = keyFrame.value;
 }
 
 #pragma mark - Private Methods
@@ -254,29 +277,48 @@
 
 #pragma mark - Properties
 
+-(id) currentValue{
+    return _currentValue;
+}
+
+-(void) setCurrentValue:(id)currentValue{
+    _currentValue = currentValue;
+}
+
 -(id) defaultValue{
-    
-    return [self valueForTimestamp:DEFAULT_KEY_FRAME_TIMESTAMP];
+    return self.animation.defaultValue;
 }
 
 -(void) setDefaultValue:(id)defaultValue{
-    [self willChangeValueForKey:@"defaultValue"];
-    [self setValue:defaultValue forKeyFramAtTimestamp:DEFAULT_KEY_FRAME_TIMESTAMP];
-    [self didChangeValueForKey:@"defaultValue"];
+    self.animation.defaultValue = defaultValue;
+    self.currentValue = self.animation.defaultValue;
 }
 
--(NSArray*) editableKeyFrames{
-    if(self.animation.keyFrames.count == 1){
-        return [[NSArray alloc] init];
-    }
-    
-    NSMutableArray *result = [NSMutableArray arrayWithArray:[self.animation.keyFrames allValues]];;
-    [result removeObject:self.defaultKeyFrame];
-    return [NSArray arrayWithArray:result];
+-(float) defaultFloatValue{
+    return [self floatValueOf:self.animation.defaultValue];
 }
 
--(VSKeyFrame*) defaultKeyFrame{
-    return [self.animation keyFrameForTimestamp:DEFAULT_KEY_FRAME_TIMESTAMP];
+-(void) setDefaultFloatValue:(float) value{
+    self.animation.defaultValue = [NSNumber numberWithFloat:value];
+    self.currentValue = self.animation.defaultValue;
+}
+
+-(BOOL) defaultBoolValue{
+    return [self booleanValueOf:self.animation.defaultValue];
+}
+
+-(void) setDefaultBoolValue:(BOOL) value{
+    self.animation.defaultValue = [NSNumber numberWithBool:value];
+    self.currentValue = self.animation.defaultValue;
+}
+
+-(NSString*) defaultStringValue{
+    return [self stringValueOf:self.animation.defaultValue];
+}
+
+-(void) setDefaultStringValue:(NSString*) value{
+    self.animation.defaultValue = [NSString stringWithString:value];
+    self.currentValue = self.animation.defaultValue;
 }
 
 

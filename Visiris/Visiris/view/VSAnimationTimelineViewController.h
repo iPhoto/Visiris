@@ -11,7 +11,15 @@
 
 @class VSAnimationTimelineScrollView;
 @class VSTimelineObject;
+@class VSPlayHead;
+@class VSKeyFrame;
+@class VSParameter;
 
+@protocol VSKeyFrameSelectingDelegate <NSObject>
+
+-(void) playheadIsOverKeyFrame:(VSKeyFrame*) keyFrame ofParameter:(VSParameter*) paramter;
+
+@end
 
 @interface VSAnimationTimelineViewController : VSTimelineViewController
 
@@ -27,5 +35,9 @@
 @property NSColor *oddTrackColor;
 
 @property NSColor *evenTrackColor;
+
+@property VSPlayHead *playhead;
+
+@property id<VSKeyFrameSelectingDelegate> keyFrameSelectingDelegate;
 
 @end

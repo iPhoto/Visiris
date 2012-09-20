@@ -16,6 +16,8 @@
 #import "VSTimeline.h"
 #import "VSDocument.h"
 #import "VSPlayhead.h"
+#import "VSKeyFrameViewController.h"
+#import "VSParameter.h"
 
 #import "VSCoreServices.h"
 
@@ -26,8 +28,6 @@
 @property float trackHeight;
 
 @property (strong) NSMutableArray *animationTrackViewControllers;
-
-@property VSPlayHead *playhead;
 
 @end
 
@@ -54,20 +54,17 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     [self.view setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
     [self.view setAutoresizesSubviews:YES];
     
-    
     [super awakeFromNib];
 }
 
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-    //DDLogInfo(keyPath);
     //moves the playheadMarker if the currentPosition of the timelines Playhead has been changed
     if([keyPath isEqualToString:@"currentTimePosition"]){
         double playheadTimestamp = [[object valueForKey:keyPath] doubleValue];
         double localTimestamp = [self.timelineObject localTimestampOfGlobalTimestamp:playheadTimestamp];
         
         float markerLocation = [super pixelForTimestamp:0];
-        
         
         if(localTimestamp != -1){
             markerLocation = [super pixelForTimestamp:localTimestamp];
@@ -76,7 +73,25 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
         else if(playheadTimestamp > self.timelineObject.endTime){
             markerLocation = [super pixelForTimestamp:self.timelineObject.duration];
         }
+        
         [self.scrollView movePlayHeadMarkerToLocation:markerLocation];
+        
+        for(VSParameter *parameter in self.timelineObject.visibleParameters){
+            [parameter updateCurrentValueForTimestamp:localTimestamp];
+        }
+        
+        for(VSAnimationTrackViewController *trackViewController in self.animationTrackViewControllers){
+            VSKeyFrameViewController *keyFrameViewController = [trackViewController keyFrameViewControllerAtXPosition:markerLocation];
+            
+            VSKeyFrame *selectedKeyFrame = nil;
+            
+            if(keyFrameViewController){
+                selectedKeyFrame = keyFrameViewController.keyFrame;
+            }
+            if([self keyFrameSelectingDelegateRespondsToSelector:@selector(playheadIsOverKeyFrame:ofParameter:)]){
+                [self.keyFrameSelectingDelegate playheadIsOverKeyFrame:selectedKeyFrame ofParameter:trackViewController.parameter];
+            }
+        }
     }
 }
 
@@ -91,9 +106,6 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 
 -(BOOL) shouldMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView{
     return YES;
-}
-
--(void) didMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView{
 }
 
 -(CGFloat) willMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView toLocation:(CGFloat)location{
@@ -135,14 +147,14 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     self.playhead = ((VSDocument*)[[NSDocumentController sharedDocumentController] currentDocument]).timeline.playHead;
     
     [self.playhead addObserver:self
-                             forKeyPath:@"currentTimePosition"
-                                options:NSKeyValueObservingOptionNew
-                                context:nil];
+                    forKeyPath:@"currentTimePosition"
+                       options:NSKeyValueObservingOptionNew
+                       context:nil];
     
     self.timelineObject = timelineObject;
     
     if(self.timelineObject){
-    
+        
         NSArray *parameters = [self.timelineObject visibleParameters];
         
         for(VSParameter *parameter in parameters){
@@ -180,9 +192,6 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     [self computePixelTimeRatio];
 }
 
-
-
-
 #pragma mark- VSViewResizingDelegate implementation
 
 -(void) frameOfView:(NSView *)view wasSetFrom:(NSRect)oldRect to:(NSRect)newRect{
@@ -207,6 +216,23 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     }
     
     [self.animationTrackViewControllers removeAllObjects];
+}
+
+/**
+ * Checks if the delegate is able to respond to the given Selector
+ * @param selector Selector the delegate will be checked for if it is able respond to
+ * @return YES if the delegate is able to respond to the selector, NO otherweis
+ */
+-(BOOL) keyFrameSelectingDelegateRespondsToSelector:(SEL) selector{
+    if(self.keyFrameSelectingDelegate != nil){
+        if([self.keyFrameSelectingDelegate conformsToProtocol:@protocol(VSKeyFrameSelectingDelegate) ]){
+            if([self.keyFrameSelectingDelegate respondsToSelector: selector]){
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
 }
 
 #pragma mark - Properties

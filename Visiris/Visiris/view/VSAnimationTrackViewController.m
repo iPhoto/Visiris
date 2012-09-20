@@ -74,6 +74,18 @@
     }
 }
 
+-(VSKeyFrameViewController*) keyFrameViewControllerAtXPosition:(float) xPosition{
+    for(VSKeyFrameViewController *keyFrameViewController in self.keyFrameViewControllers){
+        NSPoint testPoint = NSMakePoint(xPosition, keyFrameViewController.keyFrameView.frame.origin.y);
+        
+        if(NSPointInRect(testPoint, keyFrameViewController.keyFrameView.frame)){
+            return keyFrameViewController;
+        }
+     }
+    
+    return nil;
+}
+
 #pragma mark - Properties
 
 -(void) setPixelTimeRatio:(double)pixelTimeRatio{

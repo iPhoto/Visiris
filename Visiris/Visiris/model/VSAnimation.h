@@ -26,7 +26,7 @@
 
 @property (strong, readonly) NSMutableArray *sortedKeyFrameTimestamps;
 
-@property NSNumber* test;
+@property (strong) id defaultValue;
 
 #pragma mark - Methods
 /**
@@ -39,6 +39,10 @@
 -(id) valueForTimestamp:(double) timestamp;
 
 -(float) floatValueForTimestamp:(double) timestamp;
+
+-(NSString*) stringValueForTimestamp:(double) timestamp;
+
+-(BOOL) boolValueForTimestamp:(double) timestamp;
 
 /**
  * Returns the key frame of the animation at the current timestamp.
@@ -70,5 +74,6 @@
  * @param aTimestamp The timestamp the keyfram is deleted for.
  */
 -(void) removeKeyFrameAt:(double) aTimestamp;
+
 
 @end

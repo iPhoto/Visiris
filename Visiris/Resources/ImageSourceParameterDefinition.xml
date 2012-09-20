@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <parameters>
-    <parameter name="Position X" type="VSParameterKeyPositionX" dataType="float" defaultValue="0" fromValue="-10" toValue="10" editable="true" hidden="false"></parameter>
-    <parameter name="Position Y" type="VSParameterKeyPositionY" dataType="float" defaultValue="0" fromValue="-10" toValue="10" editable="true" hidden="false"></parameter>
+    <parameter name="Position X" type="VSParameterKeyPositionX" dataType="float" defaultValue="0" fromValue="-1" toValue="1" editable="true" hidden="false"></parameter>
+    <parameter name="Position Y" type="VSParameterKeyPositionY" dataType="float" defaultValue="0" fromValue="-1" toValue="1" editable="true" hidden="false"></parameter>
     <parameter name="Position Z" type="VSParameterKeyPositionZ" dataType="float" defaultValue="1" fromValue="-10" toValue="10" editable="true" hidden="false"></parameter>
     <parameter name="Rotation X" type="VSParameterKeyRotationX" dataType="float" defaultValue="0" fromValue="-360" toValue="360" editable="true" hidden="false"></parameter>
     <parameter name="Rotation Y" type="VSParameterKeyRotationY" dataType="float" defaultValue="0" fromValue="-360" toValue="360" editable="true" hidden="false"></parameter>

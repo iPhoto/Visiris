@@ -18,9 +18,10 @@
 
 @implementation VSOptionParameter
 
--(id) initWithName:(NSString *)theName asType:(NSString *)aType forDataType:(VSParameterDataType)aDataType withDefaultValue:(id)theDefaultValue orderNumber:(NSInteger)aOrderNumber editable:(BOOL)editable hidden:(BOOL)hidden rangeMinValue:(float)minRangeValue rangeMaxValue:(float)maxRangeValue{
+-(id) initWithName:(NSString *)theName andID:(NSInteger)theID asType:(NSString *)aType forDataType:(VSParameterDataType)aDataType withDefaultValue:(id)theDefaultValue orderNumber:(NSInteger)aOrderNumber editable:(BOOL)editable hidden:(BOOL)hidden rangeMinValue:(float)minRangeValue rangeMaxValue:(float)maxRangeValue{
     
     self = [super initWithName:theName
+                         andID:theID
                         asType:aType
                    forDataType:aDataType
               withDefaultValue:theDefaultValue
@@ -47,6 +48,7 @@
     VSParameter *superCopy = [super copyWithZone:zone];
     
     VSOptionParameter *copy = [[VSOptionParameter alloc] initWithName:superCopy.name
+                                                                andID:superCopy.ID
                                                                asType:superCopy.type
                                                           forDataType:superCopy.dataType
                                                      withDefaultValue:superCopy.defaultValue
@@ -78,11 +80,17 @@
 #pragma mark Properties
 
 -(void) setSelectedKey:(id)selectedKey{
-    [super setDefaultValue:[self.options objectForKey:selectedKey]];
+    self.animation.defaultValue = [self.options objectForKey:selectedKey];
 }
 
 -(id) selectedKey{
-    return [[self.options allKeysForObject:[super defaultValue]] objectAtIndex:0];
+    if(self.animation.keyFrames.count){
+        return [[self.options allKeysForObject:[super currentValue]] objectAtIndex:0];
+    }
+    else{
+        return [[self.options allKeysForObject:[super defaultValue]] objectAtIndex:0];
+    }
 }
+
 
 @end
