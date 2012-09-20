@@ -27,6 +27,7 @@
 
 @property VSTimeline* timeline;
 
+@property VSTimelineObject *selectedTimelineObject;
 //todo
 @property (assign) double deltaTime;
 
@@ -156,21 +157,29 @@
 }
 
 - (void)renderFramesForCurrentTimestamp{
-        
-    
-    self.counter += self.deltaTime/1000.0;
-    
-    //todo is this slow?
-    double period = 1.0 / [VSProjectSettings sharedProjectSettings].frameRate;
-
-    if (self.counter >= period) {
-        self.counter -= period;
-        
-        [self renderCurrentFrame];
-    }
-     
-    if(self.playbackMode == VSPlaybackModePlaying){
-        [self computeNewCurrentTimestamp];
+    switch (self.playbackMode) {
+        case VSPlaybackModePlaying:
+            [self computeNewCurrentTimestamp];
+            
+            self.counter += self.deltaTime/1000.0;
+            
+            //todo is this slow?
+            double period = 1.0 / [VSProjectSettings sharedProjectSettings].frameRate;
+            
+            if (self.counter >= period) {
+                self.counter -= period;
+                
+                [self renderCurrentFrame];
+            }
+            break;
+        case VSPlaybackModeJumping:
+        case VSPlaybackModeScrubbing:
+            [self renderCurrentFrame];
+            self.counter = 0.0;
+            break;
+        default:
+            NSLog(@"ERROR in RENDERFRAMESFORCURRENTTIMESTAMP");
+            break;
     }
 }
 

@@ -242,4 +242,8 @@
     return localTimestamp;
 }
 
+- (void)dealloc{
+    free(self.vsImage.data);
+}
+
 @end
