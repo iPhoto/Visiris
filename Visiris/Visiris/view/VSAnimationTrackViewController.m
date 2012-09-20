@@ -41,7 +41,7 @@
         self.pixelTimeRatio = pixelTimeRatio;
         self.keyFrameViewControllers =[[NSMutableArray alloc]init];
         [parameter.animation addObserver:self
-                              forKeyPath:@"sortedKeyFrameTimestamps"
+                              forKeyPath:@"keyFrames"
                                  options:0
                                  context:nil];
         
@@ -52,7 +52,7 @@
 }
 
 -(void) initKeyFrames{
-    for(VSKeyFrame *keyframe in [self.parameter.animation.keyFrames allValues]){
+    for(VSKeyFrame *keyframe in self.parameter.animation.keyFrames){
         [self addKeyFrameView:keyframe];
     }
 }
@@ -60,14 +60,15 @@
 #pragma mark - NSViewController
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-    if([keyPath isEqualToString:@"sortedKeyFrameTimestamps"]){
+    if([keyPath isEqualToString:@"keyFrames"]){
         
         if([[change valueForKey:@"kind"] intValue] == NSKeyValueMinusSetMutation){
             
-            NSArray *newKeyFramesTimestamps = [((NSArray*)[object valueForKey:keyPath]) objectsAtIndexes:[change valueForKey:@"indexes"]];
             
-            for(NSNumber *timestamp in newKeyFramesTimestamps){
-                [self addKeyFrameView:[self.parameter.animation.keyFrames objectForKey:timestamp]];
+            NSArray *newKeyFrames = [self.parameter.animation.keyFrames objectsAtIndexes:[change valueForKey:@"indexes"]];
+            
+            for(VSKeyFrame *keyFrame in newKeyFrames){
+                [self addKeyFrameView:keyFrame];
             }
         }
         

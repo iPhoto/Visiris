@@ -212,7 +212,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     
     [parameter changeKeyFrames:keyFrame timestamp:*toTimestamp];
     
-   // keyFrame.timestamp = *toTimestamp;
+    [parameter updateCurrentValueForTimestamp:self.animationTimelineViewController.playhead.currentTimePosition];
     
     return YES;
 }

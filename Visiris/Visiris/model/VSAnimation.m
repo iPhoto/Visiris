@@ -16,19 +16,23 @@
 
 @end
 
+@interface VSAnimation()
+
+
+@end
+
 @implementation VSAnimation
 
 /** Timestamp of the default KeyFrame */
 
-@synthesize keyFrames = _keyFrames;
-@synthesize deviceParameterMapper = _deviceParameterMapper;
-@synthesize sortedKeyFrameTimestamps = _sortedKeyFrameTimestamps;
+@synthesize deviceParameterMapper   = _deviceParameterMapper;
+@synthesize keyFrames               = _keyFrames;
+
 #pragma mark - Init
 
 -(id) init{
     if(self = [super init]){
-        self.keyFrames =[[NSMutableDictionary alloc] init];
-        _sortedKeyFrameTimestamps = [[NSMutableArray alloc]init];
+        _keyFrames =[[NSMutableArray alloc]init];
     }
     
     return self;
@@ -48,45 +52,26 @@
 -(VSKeyFrame*) addKeyFrameWithValue:(id) aValue forTimestamp:(double)aTimestamp{
     VSKeyFrame* newKeyFrame = [[VSKeyFrame alloc] initWithValue:aValue forTimestamp:aTimestamp];
     
-    NSNumber *key = [NSNumber numberWithDouble:aTimestamp];
-    [self.keyFrames setObject:newKeyFrame forKey:key];
-    
-    
-    
-    [self.sortedKeyFrameTimestamps addObject:key];
-    
-    [self.sortedKeyFrameTimestamps sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        if([obj1 doubleValue] > [obj2 doubleValue]){
+    [self.keyFrames addObject:newKeyFrame];
+
+    [self.keyFrames sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        if([obj1 timestamp] > [obj2 timestamp]){
             return NSOrderedDescending;
         }
         return NSOrderedAscending;
     }];
     
-    DDLogInfo(@"keyFrames: %@",self.keyFrames);
+
     
     return newKeyFrame;
 }
 
--(void) removeKeyFrameAt:(double)aTimestamp{
-    [self.keyFrames removeObjectForKey:[NSNumber numberWithDouble:aTimestamp]];
+-(void) removeKeyFrame:(VSKeyFrame *)keyFrame{
+    [self.keyFrames removeObject:keyFrame];
 }
 
--(void) setValue:(id)value forKeyFramAtTimestamp:(double)timestamp{
-    VSKeyFrame *keyFrame = [self keyFrameForTimestamp:timestamp];
-    
-    if(keyFrame){
-        keyFrame.value = value;
-    }
-}
 
--(id) valueForTimestamp:(double)timestamp{
-    VSKeyFrame *keyFrame = [self keyFrameForTimestamp:timestamp];
-    
-    if(!keyFrame)
-        return nil;
-    
-    return keyFrame.value;
-}
+#pragma mark - Computing current Values
 
 -(float) floatValueForTimestamp:(double)timestamp{
     
@@ -94,11 +79,11 @@
         return [self.defaultValue floatValue];
     }
     else if(self.keyFrames.count == 1){
-        return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:0]]).floatValue;
+        return ((VSKeyFrame*)[self.keyFrames objectAtIndex:0]).floatValue;
     }
     else{
-        NSUInteger nexKeyFrameIndex = [self.sortedKeyFrameTimestamps indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-            if([obj doubleValue] > timestamp){
+        NSUInteger nexKeyFrameIndex = [self.keyFrames indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            if([obj timestamp] > timestamp){
                 return YES;
             }
             return NO;
@@ -106,15 +91,15 @@
         
         if(nexKeyFrameIndex == NSNotFound){
             
-            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps lastObject]]).floatValue;
+            return ((VSKeyFrame*)[self.keyFrames lastObject]).floatValue;
         }
         else if(nexKeyFrameIndex == 0){
-            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:0]]).floatValue;
+            return ((VSKeyFrame*)[self.keyFrames objectAtIndex:0]).floatValue;
         }
         else{
-            VSKeyFrame *keyframe1 = (VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:nexKeyFrameIndex-1]];
+            VSKeyFrame *keyframe1 = (VSKeyFrame*)[self.keyFrames objectAtIndex:nexKeyFrameIndex-1];
             
-            VSKeyFrame *keyframe2 = (VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:nexKeyFrameIndex]];
+            VSKeyFrame *keyframe2 = (VSKeyFrame*)[self.keyFrames objectAtIndex:nexKeyFrameIndex];
             float result = ((keyframe2.floatValue - keyframe1.floatValue)  / (keyframe2.timestamp - keyframe1.timestamp) ) * (timestamp-keyframe1.timestamp) + keyframe1.floatValue;
             
             return result;
@@ -128,11 +113,11 @@
         return self.defaultValue;
     }
     else if(self.keyFrames.count == 1){
-        return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:0]]).stringValue;
+        return ((VSKeyFrame*)[self.keyFrames  objectAtIndex:0]).stringValue;
     }
     else{
-        NSUInteger nexKeyFrameIndex = [self.sortedKeyFrameTimestamps indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-            if([obj doubleValue] > timestamp){
+        NSUInteger nexKeyFrameIndex = [self.keyFrames indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            if([obj timestamp] > timestamp){
                 return YES;
             }
             return NO;
@@ -141,13 +126,13 @@
         
         if(nexKeyFrameIndex == NSNotFound){
             
-            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps lastObject]]).stringValue;
+            return ((VSKeyFrame*)[self.keyFrames lastObject]).stringValue;
         }
         else if(nexKeyFrameIndex == 0){
-            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:0]]).stringValue;
+            return ((VSKeyFrame*)[self.keyFrames objectAtIndex:0]).stringValue;
         }
         else{
-            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:nexKeyFrameIndex-1]]).stringValue;
+            return ((VSKeyFrame*)[self.keyFrames objectAtIndex:nexKeyFrameIndex-1]).stringValue;
         }
     }
 }
@@ -157,11 +142,11 @@
         return [self.defaultValue boolValue];
     }
     else if(self.keyFrames.count == 1){
-        return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:0]]).boolValue;
+        return ((VSKeyFrame*)[self.keyFrames objectAtIndex:0]).boolValue;
     }
     else{
-        NSUInteger nexKeyFrameIndex = [self.sortedKeyFrameTimestamps indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-            if([obj doubleValue] > timestamp){
+        NSUInteger nexKeyFrameIndex = [self.keyFrames indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            if([obj timestamp] > timestamp){
                 return YES;
             }
             return NO;
@@ -169,36 +154,35 @@
         
         if(nexKeyFrameIndex == NSNotFound){
             
-            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps lastObject]]).boolValue;
+            return ((VSKeyFrame*)[self.keyFrames lastObject]).boolValue;
         }
         else if(nexKeyFrameIndex == 0){
-            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:0]]).boolValue;
+            return ((VSKeyFrame*)[self.keyFrames objectAtIndex:0]).boolValue;
         }
         else{
-            return ((VSKeyFrame*)[self.keyFrames objectForKey:[self.sortedKeyFrameTimestamps objectAtIndex:nexKeyFrameIndex-1]]).boolValue;
+            return ((VSKeyFrame*)[self.keyFrames objectAtIndex:nexKeyFrameIndex-1]).boolValue;
         }
     }
 }
 
--(VSKeyFrame*) keyFrameForTimestamp:(double)timestamp{
-    return [self.keyFrames objectForKey:[NSNumber numberWithDouble:timestamp]];
-}
-
 -(void) changeKeyFrames:(VSKeyFrame *)keyFrame timestamp:(double)newTimestamp{
-    DDLogInfo(@"keyf %@",keyFrame);
-    NSNumber *key = [NSNumber numberWithDouble:keyFrame.timestamp];
-    VSKeyFrame *newKeyFrame = [self.keyFrames objectForKey:key];
-    DDLogInfo(@"keyFrames: %@", [self.keyFrames allKeys]);
-    [self.keyFrames removeObjectForKey:[NSNumber numberWithDouble:keyFrame.timestamp]];
-
+    keyFrame.timestamp = newTimestamp;
     
+    [self.keyFrames sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        if([obj1 timestamp] > [obj2 timestamp]){
+            return NSOrderedDescending;
+        }
+        return NSOrderedAscending;
+    }];
 }
 
 #pragma mark - Properties
 
--(NSMutableArray*) sortedKeyFrameTimestamps
+-(NSMutableArray*) keyFrames
 {
-    return [self mutableArrayValueForKey:@"sortedKeyFrameTimestamps"];
+    return [self mutableArrayValueForKey:@"keyFrames"];
 }
+
+
 
 @end

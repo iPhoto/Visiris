@@ -19,47 +19,21 @@
 @interface VSAnimation : NSObject<NSCopying>
 
 /** List of all VSKeyFrames of the animation */
-@property (strong) NSMutableDictionary *keyFrames;
+@property (strong,readonly) NSMutableArray *keyFrames;
 
 /** Stores the device connected with the parameter if ther is one */
 @property (strong) VSDeviceParameterMapper *deviceParameterMapper;
 
-@property (strong, readonly) NSMutableArray *sortedKeyFrameTimestamps;
-
 @property (strong) id defaultValue;
 
 #pragma mark - Methods
-/**
- * Returns the value of the animation at the current timestamp.
- *
- * If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
- * @param timestamp Timestamp the value will returned for. The timestamp is relative to the animation time.
- * @return The value of the parameter the animation is connected with for the given timestamp. If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
- */
--(id) valueForTimestamp:(double) timestamp;
+
 
 -(float) floatValueForTimestamp:(double) timestamp;
 
 -(NSString*) stringValueForTimestamp:(double) timestamp;
 
 -(BOOL) boolValueForTimestamp:(double) timestamp;
-
-/**
- * Returns the key frame of the animation at the current timestamp.
- *
- * If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
- * @param timestamp Timestamp the keyframe will returned for. The timestamp is relative to the animation time.
- * @return The keyframe, if a keyfram was set for this timestamp, nil otherwise
- */
--(VSKeyFrame*) keyFrameForTimestamp:(double) timestamp;
-
-
-/**
- * Sets the value of the key frame at the given timestamp
- * @param value Value set for key frame at the timestamp
- * @param timestamp Timestamp of the key frame
- */
--(void) setValue:(id) value forKeyFramAtTimestamp:(double) timestamp;
 
 
 /**
@@ -69,11 +43,8 @@
  */
 -(VSKeyFrame*) addKeyFrameWithValue:(id) aValue forTimestamp:(double) aTimestamp;
 
-/**
- * Removes the keyFrame with the aTimestamp.
- * @param aTimestamp The timestamp the keyfram is deleted for.
- */
--(void) removeKeyFrameAt:(double) aTimestamp;
+
+-(void) removeKeyFrame:(VSKeyFrame*) keyFrame;
 
 
 -(void) changeKeyFrames:(VSKeyFrame*) keyFrame timestamp:(double) newTimestamp;
