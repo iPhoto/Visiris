@@ -132,6 +132,7 @@
 
 - (void)deleteFBOforTrackID:(NSInteger)trackID{
     
+    //TODO doenst get called - the whole reference Counting is missing
     VSFrameBufferObject *temp = [self.fboForTrack objectForKey:[NSNumber numberWithInteger:trackID]];
     [temp delete];
     [self.fboForTrack removeObjectForKey:[NSNumber numberWithInteger:trackID]];

@@ -8,7 +8,7 @@
 
 #import "VSQCManager.h"
 #import "VSQCRenderer.h"
-#import "VSTexture.h"
+//#import "VSTexture.h"
 
 @interface VSQCManager()
 
@@ -40,7 +40,7 @@
 
 - (void)createQCRendererWithSize:(NSSize)size withTrackId:(NSInteger) trackId withPath:(NSString *)path withContext:(NSOpenGLContext *)context withFormat:(NSOpenGLPixelFormat *)format withObjectItemID:(NSInteger)objectItemID{
     
-    VSTexture *texture = [self createTextureWithSize:size trackId:trackId];
+    NSNumber *texture = [self createTextureAtTrackId:trackId];
     
     VSQCRenderer *tempRenderer = [[VSQCRenderer alloc] initWithPath:path
                                                            withSize:size
@@ -69,25 +69,35 @@
     }
 }
 
-- (VSTexture *)createTextureWithSize:(NSSize)size trackId:(NSInteger) trackId{
+- (NSNumber *)createTextureAtTrackId:(NSInteger) trackId{
     
-    VSTexture *texture = [self.textureForTrackID objectForKey:[NSNumber numberWithInteger:trackId]];
+    NSNumber *texture = [self.textureForTrackID objectForKey:[NSNumber numberWithInteger:trackId]];
     
     if (texture) {
         return texture;
     }
     
-    texture = [[VSTexture alloc] initEmptyTextureWithSize:size trackId:trackId];
+    GLuint textureName;
+    glGenTextures(1, &textureName);
+    glBindTexture(GL_TEXTURE_2D, textureName);    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    texture = [NSNumber numberWithInt:textureName];
+    
     [self.textureForTrackID setObject:texture forKey:[NSNumber numberWithInteger:trackId]];
     return texture;
 }
 
-
-//- (void)deleteFBOforTrackID:(NSInteger)trackID{
-//    
-//    VSFrameBufferObject *temp = [self.fboForTrack objectForKey:[NSNumber numberWithInteger:trackID]];
-//    [temp delete];
-//    [self.fboForTrack removeObjectForKey:[NSNumber numberWithInteger:trackID]];
-//}
+- (void)deleteTextureForTrackID:(NSInteger)trackID{
+    
+    //TODO doenst get called - the whole reference Counting is missing
+    NSNumber *texture = [self.textureForTrackID objectForKey:[NSNumber numberWithInteger:trackID]];
+    GLuint textureName = [texture intValue];
+    glDeleteTextures(1, &textureName);
+    [self.textureForTrackID removeObjectForKey:[NSNumber numberWithInteger:trackID]];
+}
 
 @end

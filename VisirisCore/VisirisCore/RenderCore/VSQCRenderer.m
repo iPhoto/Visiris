@@ -29,7 +29,7 @@
 @property (strong) NSString             *path;
 
 //todo
-@property (strong) VSTexture              *texture;
+@property (strong) NSNumber              *texture;
 
 
 @end
@@ -48,7 +48,7 @@
 
 #pragma Mark - Init
 
-- (id)initWithPath:(NSString *)path withSize:(NSSize)size withContext:(NSOpenGLContext *)context withPixelformat:(NSOpenGLPixelFormat *)format withTrackID:(NSInteger)trackid withTexture:(VSTexture *)texture{
+- (id)initWithPath:(NSString *)path withSize:(NSSize)size withContext:(NSOpenGLContext *)context withPixelformat:(NSOpenGLPixelFormat *)format withTrackID:(NSInteger)trackid withTexture:(NSNumber *)texture{
     if (self = [super init]) {
 
         _trackId = trackid;

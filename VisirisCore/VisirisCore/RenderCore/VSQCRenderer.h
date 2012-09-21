@@ -32,7 +32,7 @@
  * @param format The Format for the OpenGLCOntext
  * @param trackid The TrackID of the TimelineObject
  */
-- (id)initWithPath:(NSString *)path withSize:(NSSize)size withContext:(NSOpenGLContext *)context withPixelformat:(NSOpenGLPixelFormat *)format withTrackID:(NSInteger)trackid withTexture:(VSTexture *)texture;
+- (id)initWithPath:(NSString *)path withSize:(NSSize)size withContext:(NSOpenGLContext *)context withPixelformat:(NSOpenGLPixelFormat *)format withTrackID:(NSInteger)trackid withTexture:(NSNumber *)texture;
 
 /**
  * Updates and returns the Texture

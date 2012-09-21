@@ -55,15 +55,14 @@
 @synthesize	pixelBufferContext  = _pixelBufferContext;
 @synthesize	renderer            = _renderer;
 @synthesize	textureContext      = _textureContext;
-@synthesize	textureName         = _textureName;
-//@synthesize texture             = _texture;
+@synthesize texture             = _texture;
 
 
 #pragma Mark - Init
 
-- (id) initWithCompositionPath:(NSString*)path textureWidth:(unsigned)width textureHeight:(unsigned)height openGLContext:(NSOpenGLContext*)context withTexture:(VSTexture *)texture
+- (id) initWithCompositionPath:(NSString*)path textureWidth:(unsigned)width textureHeight:(unsigned)height openGLContext:(NSOpenGLContext*)context withTexture:(NSNumber *)texture
 {    
-   // self.texture = texture;
+    self.texture = [texture intValue];
     
 	NSOpenGLPixelFormatAttribute	attributes[] = {
         kCGLPFAAccelerated,
@@ -74,7 +73,7 @@
         0
     };
     
-	NSOpenGLPixelFormat*			format = [[NSOpenGLPixelFormat alloc] initWithAttributes:attributes];
+	NSOpenGLPixelFormat* format = [[NSOpenGLPixelFormat alloc] initWithAttributes:attributes];
 	
 	//Check parameters - Rendering at sizes smaller than 16x16 will likely produce garbage and we only support 2D or RECT textures
 	if(![path length] || (width < 16) || (height < 16) || (context == nil)) {
@@ -109,16 +108,7 @@
 			return nil;
 		}
 		
-        
-		glGenTextures(1, &_textureName);
-		
-		glBindTexture(GL_TEXTURE_2D, _textureName);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		
-		//Update the texture immediately
+        //Update the texture immediately
 		[self updateTextureForTime:0.0];
 	}
 	
@@ -131,8 +121,7 @@
     [_textureContext makeCurrentContext];
 		
 	//Bind the texture and update its contents
-//	glBindTexture(GL_TEXTURE_2D, _textureName);
-//  glBindTexture(GL_TEXTURE_2D,[self.texture texture]);
+    glBindTexture(GL_TEXTURE_2D, _texture);
 	[_textureContext setTextureImageToPixelBuffer:_pixelBuffer colorBuffer:GL_FRONT];
 }
 
@@ -170,9 +159,9 @@
 	return success;
 }
 
-//- (GLuint)textureName{
-//    return [self.texture texture];
-//}
+- (GLuint)textureName{
+    return _texture;
+}
 
 
 - (void)delete{

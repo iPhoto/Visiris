@@ -69,11 +69,8 @@
 /** OpenGLContext */
 @property (strong) NSOpenGLContext*			textureContext;
 
-/** Final Texture */
-@property (assign) GLuint					textureName;
-
-//todo
-//@property (strong) VSTexture                *texture;
+/** Final GLTexture */
+@property (assign) GLuint                   texture;
 
 
 /**
@@ -84,7 +81,7 @@
  * @param height Height of the texture
  * @param context OpenGLContext
  */
-- (id) initWithCompositionPath:(NSString*)path textureWidth:(unsigned)width textureHeight:(unsigned)height openGLContext:(NSOpenGLContext*)context withTexture:(VSTexture *)texture;
+- (id) initWithCompositionPath:(NSString*)path textureWidth:(unsigned)width textureHeight:(unsigned)height openGLContext:(NSOpenGLContext*)context withTexture:(NSNumber *)texture;
 
 /**
  * Update QCPatch and renders it to texture
