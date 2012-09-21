@@ -189,4 +189,6 @@
 
 -(void) setValue:(id)value forKeyFrame:(VSKeyFrame*) keyFrame;
 
+-(void) changeKeyFrames:(VSKeyFrame*) keyFrame timestamp:(double) newTimestamp;
+
 @end

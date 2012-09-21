@@ -87,6 +87,10 @@
     return copy;
 }
 
+-(void) dealloc{
+    DDLogInfo(@"dealloc");
+}
+
 #pragma mark - Methods
 
 -(double) endTime{

@@ -17,7 +17,8 @@
 #import "VSAnimationTimelineViewController.h"
 #import "VSAnimationTimelineScrollView.h"
 #import "VSAnimationTimelineContentView.h"
-
+#import "VSKeyFrame.h"
+#import "VSPlayhead.h"
 #import "VSCoreServices.h"
 
 @interface VSTimelineObjectPropertiesViewController ()
@@ -200,6 +201,20 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 
 -(void) playheadIsOverKeyFrame:(VSKeyFrame *)keyFrame ofParameter:(VSParameter *)paramter{
     [self.timelineObjectsParameterViewController selectKeyFrame:keyFrame ofParameter:paramter];
+}
+
+-(BOOL) wantToSelectKeyFrame:(VSKeyFrame*) keyFrame ofParamater:(VSParameter *)parameter{
+    self.animationTimelineViewController.playhead.currentTimePosition = [self.timelineObject globalTimestampOfLocalTimestamp:keyFrame.timestamp];
+    return YES;
+}
+
+-(BOOL) keyFrame:(VSKeyFrame *)keyFrame ofParameter:(VSParameter *)parameter willBeMovedFromTimestamp:(double)fromTimestamp toTimestamp:(double *)toTimestamp andFromValue:(id)fromValue toValue:(__autoreleasing id *)toValue{
+    
+    [parameter changeKeyFrames:keyFrame timestamp:*toTimestamp];
+    
+    [parameter updateCurrentValueForTimestamp:self.animationTimelineViewController.playhead.currentTimePosition];
+    
+    return YES;
 }
 
 #pragma mark - VSFrameResizingDelegate Implementation

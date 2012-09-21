@@ -139,34 +139,6 @@
     return nil;
 }
 
-
--(VSKeyFrame*) keyFrameForTimestamp:(double)timestamp{
-    return [self.animation keyFrameForTimestamp:timestamp];
-}
-
--(void) updateCurrentValueForTimestamp:(double) aTimestamp{
-    [self setValue:[self valueForTimestamp:aTimestamp] forKey:@"currentValue"];
-}
-
-//TODO: error-handlin
--(float) floatValueForTimestamp:(double)timestamp{
-    return[self floatValueOf:[self valueForTimestamp:timestamp]];
-}
-
--(NSString*) stringValueForTimestamp:(double)timestamp{
-    return[self stringValueOf:[self valueForTimestamp:timestamp]];
-}
-
--(BOOL) boolValueForTimestamp:(double)timestamp{
-    return[self booleanValueOf:[self valueForTimestamp:timestamp]];
-}
-
-
--(void) setValue:(id)value forKeyFramAtTimestamp:(double)timestamp{
-    value = [self changeIfNotInRange:value];
-    [self.animation setValue:value forKeyFramAtTimestamp:timestamp];
-}
-
 -(VSKeyFrame*) addKeyFrameWithValue:(id) aValue forTimestamp:(double)aTimestamp{
     VSKeyFrame* newKeyFrame = [self.animation addKeyFrameWithValue:aValue forTimestamp:aTimestamp];
     self.currentValue = newKeyFrame.value;
@@ -174,8 +146,8 @@
     return newKeyFrame;
 }
 
--(void) removeKeyFrameAt:(double)aTimestamp{
-    [self.animation removeKeyFrameAt:aTimestamp];
+-(void) updateCurrentValueForTimestamp:(double) aTimestamp{
+    [self setValue:[self valueForTimestamp:aTimestamp] forKey:@"currentValue"];
 }
 
 -(void) undoParametersDefaultValueChange:(id) oldValue atUndoManager:(NSUndoManager *)undoManager{
@@ -208,9 +180,13 @@
 }
 
 -(void) setValue:(id)value forKeyFrame:(VSKeyFrame *)keyFrame{
-    [self.animation setValue:value forKeyFramAtTimestamp:keyFrame.timestamp];
+    keyFrame.value = value;
     
     self.currentValue = keyFrame.value;
+}
+
+-(void) changeKeyFrames:(VSKeyFrame *)keyFrame timestamp:(double)newTimestamp{
+    [self.animation changeKeyFrames:keyFrame timestamp:newTimestamp];
 }
 
 #pragma mark - Private Methods

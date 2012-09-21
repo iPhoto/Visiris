@@ -23,14 +23,14 @@
 
 @interface VSTrackViewController ()
 
-/** Instance of VSProjectItemController */ 
+/** Instance of VSProjectItemController */
 @property VSProjectItemController *projectItemController;
 
 /** Instance of VSProjectItemRepresentationController */
 @property VSProjectItemRepresentationController *projectItemRepresentationController;
 
 
-/** NSMutableArray storing all VSTimelineObjectViewControllers of the VSTimelineObjectViews added to the VSTrackViewController */ 
+/** NSMutableArray storing all VSTimelineObjectViewControllers of the VSTimelineObjectViews added to the VSTrackViewController */
 @property (strong) NSMutableArray *timelineObjectViewControllers;
 
 @end
@@ -130,7 +130,7 @@ static NSString* defaultNib = @"VSTrackView";
         self.pixelTimeRatio = newRatio;
         
         //tells all its VSTimelineObjectViewController's that the ratio has changed
-        for(VSTimelineObjectViewController *controller in self.timelineObjectViewControllers){    
+        for(VSTimelineObjectViewController *controller in self.timelineObjectViewControllers){
             [controller changePixelTimeRatio:self.pixelTimeRatio];
         }
     }
@@ -224,7 +224,12 @@ static NSString* defaultNib = @"VSTrackView";
 #pragma mark Snapping
 
 -(BOOL) computeSnappingXValueForMoveableActiveTimelineObjectsMovedAccordingToDeltaX:(float)deltaX snappingDeltaX:(float *)snappingDeltaX{
-    return [self computeSnappingDeltaX:snappingDeltaX atSide:VSSnapBothSides forTimelineObjects:[self activeSelectedAndTemporaryTimelineObjectViewControllers] movedAccordingToDeltaX:deltaX widthChangedAccordingToDeltaWidth:0];
+    
+    return [self computeSnappingDeltaX:snappingDeltaX
+                                atSide:VSSnapBothSides
+                    forTimelineObjects:[self activeSelectedAndTemporaryTimelineObjectViewControllers]
+                movedAccordingToDeltaX:deltaX
+     widthChangedAccordingToDeltaWidth:0];
 }
 
 -(BOOL) computeSnappingDeltaX:(float *)snappingDeltaX atSide:(VSSnapAtSide) snapAtSide forTimelineObjects:(NSArray*) timelineObjectViewControllers movedAccordingToDeltaX:(float) deltaX widthChangedAccordingToDeltaWidth:(float) deltaWidth{
@@ -289,7 +294,7 @@ static NSString* defaultNib = @"VSTrackView";
             //creates the rects where unionRect is able to snap
             NSRect leftSnappingSourceRect = NSMakeRect(unionRect.origin.x - SNAPPING_AREA / 2.0, unionRect.origin.y,SNAPPING_AREA, unionRect.size.height);
             NSRect rightSnappingSourceRect = leftSnappingSourceRect;
-            rightSnappingSourceRect.origin.x = NSMaxX(unionRect) - SNAPPING_AREA / 2.0f;    
+            rightSnappingSourceRect.origin.x = NSMaxX(unionRect) - SNAPPING_AREA / 2.0f;
             
             //iterates through all timelineObjectViewController in staticObjects and checks if the snappinRects of the unionRect are intersecting the snapping-rects of the objects in staticObjects
             for(VSTimelineObjectViewController *timelineObjectViewController in staticObjects){
@@ -317,7 +322,7 @@ static NSString* defaultNib = @"VSTrackView";
             
         }
         
-    } 
+    }
     return NO;
 }
 
@@ -437,7 +442,10 @@ static NSString* defaultNib = @"VSTrackView";
             }
             
             if([self delegateRespondsToSelector:@selector(splitTimelineObject:ofTrack:byRects:)]){
-                [self.delegate splitTimelineObject:intersectedTimelineObjectViewController ofTrack:self byRects:intersectionRects];
+                
+                [self.delegate splitTimelineObject:intersectedTimelineObjectViewController
+                                           ofTrack:self
+                                           byRects:intersectionRects];
             }
             
         }
@@ -446,7 +454,7 @@ static NSString* defaultNib = @"VSTrackView";
     [self resetIntersections];
 }
 
--(void) setTimelineObjectViewsIntersectedByMoveableTimelineObjects{    
+-(void) setTimelineObjectViewsIntersectedByMoveableTimelineObjects{
     [self setTimelineObjectViews:[self unselectedTimelineObjectViewControllers] IntersectedByTimelineObjectViews:[self activeSelectedAndTemporaryTimelineObjectViewControllers]];
 }
 
@@ -454,7 +462,7 @@ static NSString* defaultNib = @"VSTrackView";
     NSArray *intersectedTimelineObjectViewControllers = [self intersectedTimelineObjectViewControllers];
     
     for(VSTimelineObjectViewController *intersectedTimelineObjectViewController in intersectedTimelineObjectViewControllers){
-        [intersectedTimelineObjectViewController removeAllIntersections];   
+        [intersectedTimelineObjectViewController removeAllIntersections];
     }
 }
 
@@ -474,7 +482,7 @@ static NSString* defaultNib = @"VSTrackView";
         switch (kind) {
             case NSKeyValueChangeInsertion:
             {
-                if(![[change valueForKey:@"notificationIsPrior"] boolValue]){ 
+                if(![[change valueForKey:@"notificationIsPrior"] boolValue]){
                     NSArray *allTimelineObjects = [object valueForKey:keyPath];
                     NSArray *newTimelineObjects = [allTimelineObjects objectsAtIndexes:[change  objectForKey:@"indexes"]];
                     
@@ -486,7 +494,7 @@ static NSString* defaultNib = @"VSTrackView";
             }
             case NSKeyValueChangeRemoval:
             {
-                if([[change valueForKey:@"notificationIsPrior"] boolValue]){ 
+                if([[change valueForKey:@"notificationIsPrior"] boolValue]){
                     NSArray *allTimelineObjects = [object valueForKey:keyPath];
                     NSArray *removedTimelineObjects = [allTimelineObjects objectsAtIndexes:[change  objectForKey:@"indexes"]];
                     
@@ -518,7 +526,7 @@ static NSString* defaultNib = @"VSTrackView";
     
     if(trackView){
         
-        //stores the 
+        //stores the
         NSMutableArray *droppedProjectItems = [[NSMutableArray alloc] init];
         
         //if the draggingPasteboard stored in draggingInfo contains VSProjectItemRepresentation-Objects, they are temporary stored in droppedProjectItems
@@ -587,13 +595,13 @@ static NSString* defaultNib = @"VSTrackView";
         
         //Sets the actino name of the undo action
         [self.view.undoManager setActionName:droppedProjectItems.count > 1
-         ? NSLocalizedString(@"Adding Objects", @"Undo Action for adding objects to the timeline") 
+         ? NSLocalizedString(@"Adding Objects", @"Undo Action for adding objects to the timeline")
                                             : NSLocalizedString(@"Adding Object", @"Undo Action for adding one object to the timeline")];
         [self.view.undoManager endUndoGrouping];
     }
     
     
-    //clears VSTrackView'S temporary stored timelineObjects 
+    //clears VSTrackView'S temporary stored timelineObjects
     [self resetTemporaryTimelineObjects];
     
     return result;
@@ -604,7 +612,7 @@ static NSString* defaultNib = @"VSTrackView";
     if(!trackView)
         return;
     
-    //sets the positions for all views of VSTimelineObjectViewControllers stored in self.temporaryTimelineObjectViewControllers 
+    //sets the positions for all views of VSTimelineObjectViewControllers stored in self.temporaryTimelineObjectViewControllers
     if([self.temporaryTimelineObjectViewControllers count] > 0){
         
         VSTimelineObjectViewController *firstTimelineObjectViewController = (VSTimelineObjectViewController*) [self.temporaryTimelineObjectViewControllers objectAtIndex:0];
@@ -665,7 +673,7 @@ static NSString* defaultNib = @"VSTrackView";
     int i = 0;
     double currentTotalWidth = 0;
     
-    //for each VSProjectItemRepresentation found and stored in draggedProjectItems a new VSTimelineObjectProxy is created and added to self.temporaryTimelineObjectViewControllers 
+    //for each VSProjectItemRepresentation found and stored in draggedProjectItems a new VSTimelineObjectProxy is created and added to self.temporaryTimelineObjectViewControllers
     for(VSProjectItemRepresentation *item in draggedProjectItems){
         VSTimelineObjectViewController *timelineObjectViewController = [self addNewTemporaryTimelineObjectProxyBasedOn:item atPosition:position toTrack:trackView temporaryID:i];
         
@@ -831,7 +839,7 @@ static NSString* defaultNib = @"VSTrackView";
 
 #pragma mark Dragging (Moving)
 
--(NSPoint) timelineObjectWillBeDragged:(VSTimelineObjectViewController *)timelineObjectViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition forMousePosition:(NSPoint)mousePosition{    
+-(NSPoint) timelineObjectWillBeDragged:(VSTimelineObjectViewController *)timelineObjectViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition forMousePosition:(NSPoint)mousePosition{
     
     float deltaXPosition = newPosition.x - oldPosition.x;
     float snappingDeltaX;
