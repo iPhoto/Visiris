@@ -32,14 +32,6 @@
 #define VALUE_SLIDER_MINIMUM_WIDTH 50
 
 
-@synthesize nameLabel           = _nameLabel;
-@synthesize textField           = _valueField;
-@synthesize checkBox            = _boolValueField;
-@synthesize horizontalSlider    = _valueSlider;
-@synthesize parameterHolder     = _parameterHolder;
-@synthesize parameter           = _parameter;
-@synthesize selectedKeyframe    = _selectedKeyframe;
-
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
 static NSString* defaultNib = @"VSParameterView";
 
