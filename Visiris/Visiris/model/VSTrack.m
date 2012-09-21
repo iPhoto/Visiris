@@ -47,7 +47,9 @@
 
 -(BOOL) removTimelineObject:(VSTimelineObject *)aTimelineObject{
     if([self.timelineObjects containsObject:aTimelineObject]){
+        
         [self.timelineObjects removeObject:aTimelineObject];
+        
         return YES;
     }
     else{

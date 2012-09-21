@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VSTexture.h"
 
 /**
  * VSQCRenderer is able to render a basic QuartzComposerPatch
@@ -31,7 +32,7 @@
  * @param format The Format for the OpenGLCOntext
  * @param trackid The TrackID of the TimelineObject
  */
-- (id)initWithPath:(NSString *)path withSize:(NSSize)size withContext:(NSOpenGLContext *)context withPixelformat:(NSOpenGLPixelFormat *)format withTrackID:(NSInteger)trackid;
+- (id)initWithPath:(NSString *)path withSize:(NSSize)size withContext:(NSOpenGLContext *)context withPixelformat:(NSOpenGLPixelFormat *)format withTrackID:(NSInteger)trackid withTexture:(VSTexture *)texture;
 
 /**
  * Updates and returns the Texture
@@ -39,12 +40,6 @@
  * @return textureID
  */
 - (GLuint)renderAtTme:(double)time;
-
-/**
- * Getter for the textureID
- * @return textureID
- */
-- (GLuint)texture;
 
 /**
  * Depending on the Patch it is possible to set Inputvalues which alter the effect

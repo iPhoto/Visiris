@@ -45,7 +45,7 @@
  
  */
 
-#import <OpenGL/CGLMacro.h>
+//#import <OpenGL/CGLMacro.h>
 
 #import "VSPBufferRenderer.h"
 
@@ -56,23 +56,25 @@
 @synthesize	renderer            = _renderer;
 @synthesize	textureContext      = _textureContext;
 @synthesize	textureName         = _textureName;
+//@synthesize texture             = _texture;
 
 
 #pragma Mark - Init
 
-- (id) initWithCompositionPath:(NSString*)path textureWidth:(unsigned)width textureHeight:(unsigned)height openGLContext:(NSOpenGLContext*)context
-{
-	//IMPORTANT: We use the macros provided by <OpenGL/CGLMacro.h> which provide better performances and allows us not to bother with making sure the current context is valid
-	CGLContextObj					cgl_ctx = [context CGLContextObj];
+- (id) initWithCompositionPath:(NSString*)path textureWidth:(unsigned)width textureHeight:(unsigned)height openGLContext:(NSOpenGLContext*)context withTexture:(VSTexture *)texture
+{    
+   // self.texture = texture;
+    
 	NSOpenGLPixelFormatAttribute	attributes[] = {
-        NSOpenGLPFAPixelBuffer,
-        NSOpenGLPFANoRecovery,
-        NSOpenGLPFAAccelerated,
-        NSOpenGLPFADepthSize, 24,
-        (NSOpenGLPixelFormatAttribute) 0
+        kCGLPFAAccelerated,
+        kCGLPFANoRecovery,
+        kCGLPFADoubleBuffer,
+        kCGLPFAColorSize, 24,
+        kCGLPFADepthSize, 16,
+        0
     };
+    
 	NSOpenGLPixelFormat*			format = [[NSOpenGLPixelFormat alloc] initWithAttributes:attributes];
-	GLint							saveTextureName;
 	
 	//Check parameters - Rendering at sizes smaller than 16x16 will likely produce garbage and we only support 2D or RECT textures
 	if(![path length] || (width < 16) || (height < 16) || (context == nil)) {
@@ -107,22 +109,14 @@
 			return nil;
 		}
 		
+        
 		glGenTextures(1, &_textureName);
 		
-		//Configure the texture - For extra safety, we save and restore the currently bound texture
-		glGetIntegerv((GL_TEXTURE_2D == GL_TEXTURE_RECTANGLE_EXT ? GL_TEXTURE_BINDING_RECTANGLE_EXT : GL_TEXTURE_BINDING_2D), &saveTextureName);
 		glBindTexture(GL_TEXTURE_2D, _textureName);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		if(GL_TEXTURE_2D == GL_TEXTURE_RECTANGLE_EXT) {
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		}
-		else {
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		}
-		glBindTexture(GL_TEXTURE_2D, saveTextureName);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		
 		//Update the texture immediately
 		[self updateTextureForTime:0.0];
@@ -133,27 +127,18 @@
 
 #pragma mark - Methods
 
-- (void) _updateTextureOnTargetContext
-{
-	//IMPORTANT: We use the macros provided by <OpenGL/CGLMacro.h> which provide better performances and allows us not to bother with making sure the current context is valid
-	CGLContextObj					cgl_ctx = [_textureContext CGLContextObj];
-	GLint							saveTextureName;
-	
-	//Save the currently bound texture
-	glGetIntegerv(GL_TEXTURE_BINDING_RECTANGLE_EXT, &saveTextureName);
-	
+- (void) _updateTextureOnTargetContext{
+    [_textureContext makeCurrentContext];
+		
 	//Bind the texture and update its contents
-	glBindTexture(GL_TEXTURE_2D, _textureName);
+//	glBindTexture(GL_TEXTURE_2D, _textureName);
+//  glBindTexture(GL_TEXTURE_2D,[self.texture texture]);
 	[_textureContext setTextureImageToPixelBuffer:_pixelBuffer colorBuffer:GL_FRONT];
-	
-	//Restore the previously bound texture
-	glBindTexture(GL_TEXTURE_2D, saveTextureName);
 }
 
-- (BOOL)updateTextureForTime:(NSTimeInterval)time
-{
-	//IMPORTANT: We use the macros provided by <OpenGL/CGLMacro.h> which provide better performances and allows us not to bother with making sure the current context is valid
-	CGLContextObj					cgl_ctx = [_pixelBufferContext CGLContextObj];
+- (BOOL)updateTextureForTime:(NSTimeInterval)time{
+
+    [_pixelBufferContext makeCurrentContext];
 	BOOL							success;
 	NSOpenGLPixelBuffer*			pBuffer;
 	
@@ -185,13 +170,18 @@
 	return success;
 }
 
+//- (GLuint)textureName{
+//    return [self.texture texture];
+//}
+
+
 - (void)delete{
 	//IMPORTANT: We use the macros provided by <OpenGL/CGLMacro.h> which provide better performances and allows us not to bother with making sure the current context is valid
-	CGLContextObj cgl_ctx = [_textureContext CGLContextObj];
+//	CGLContextObj cgl_ctx = [_textureContext CGLContextObj];
 	
 	//Destroy the texture on the target OpenGL context
-	if(_textureName)
-        glDeleteTextures(1, &_textureName);
+//	if(_textureName)
+//        glDeleteTextures(1, &_textureName);
     
 	//Destroy the OpenGL context
 	[_pixelBufferContext clearDrawable];

@@ -48,6 +48,8 @@
 #import <AppKit/AppKit.h>
 #import <Quartz/Quartz.h>
 #import <OpenGL/gl.h>
+#import "VSTexture.h"
+
 
 
 /**
@@ -70,6 +72,9 @@
 /** Final Texture */
 @property (assign) GLuint					textureName;
 
+//todo
+//@property (strong) VSTexture                *texture;
+
 
 /**
  * Basic Initialization for the PBuffer and the QCPatch
@@ -79,7 +84,7 @@
  * @param height Height of the texture
  * @param context OpenGLContext
  */
-- (id) initWithCompositionPath:(NSString*)path textureWidth:(unsigned)width textureHeight:(unsigned)height openGLContext:(NSOpenGLContext*)context;
+- (id) initWithCompositionPath:(NSString*)path textureWidth:(unsigned)width textureHeight:(unsigned)height openGLContext:(NSOpenGLContext*)context withTexture:(VSTexture *)texture;
 
 /**
  * Update QCPatch and renders it to texture

@@ -28,6 +28,10 @@
 /** The Path of the Renderer on the Disk */
 @property (strong) NSString             *path;
 
+//todo
+@property (strong) VSTexture              *texture;
+
+
 @end
 
 
@@ -40,10 +44,11 @@
 @synthesize pBufferRenderer     = _pBufferRenderer;
 @synthesize size                = _size;
 @synthesize path                = _path;
+@synthesize texture             = _texture;
 
 #pragma Mark - Init
 
-- (id)initWithPath:(NSString *)path withSize:(NSSize)size withContext:(NSOpenGLContext *)context withPixelformat:(NSOpenGLPixelFormat *)format withTrackID:(NSInteger)trackid{
+- (id)initWithPath:(NSString *)path withSize:(NSSize)size withContext:(NSOpenGLContext *)context withPixelformat:(NSOpenGLPixelFormat *)format withTrackID:(NSInteger)trackid withTexture:(VSTexture *)texture{
     if (self = [super init]) {
 
         _trackId = trackid;
@@ -51,6 +56,7 @@
         self.pixelFormat = format;
         self.size = size;
         self.path = path;
+        self.texture = texture;
 
         self.pBufferRenderer = [self createPBufferRenderer];
     }
@@ -72,17 +78,11 @@
 		[self.pBufferRenderer updateTextureForTime:time];
 	}
 	else
-    {
-        glColor4f(1.0, 1.0, 1.0, 1.0);
-    }
+        NSLog(@"ERROR im quartzschassssss");
     
     [self.context flushBuffer];
     
     return [self.pBufferRenderer textureName];
-}
-
-- (GLuint) texture{
-    return [_pBufferRenderer textureName];
 }
 
 - (void)setPublicInputsWithValues:(NSDictionary *)inputValues{
@@ -112,7 +112,11 @@
 #pragma mark - Private Methods
 
 - (VSPBufferRenderer *)createPBufferRenderer{
-    return [[VSPBufferRenderer alloc] initWithCompositionPath:self.path textureWidth:self.size.width textureHeight:self.size.height openGLContext:self.context];
+    return [[VSPBufferRenderer alloc] initWithCompositionPath:self.path
+                                                 textureWidth:self.size.width
+                                                textureHeight:self.size.height
+                                                openGLContext:self.context
+                                                  withTexture:self.texture];
 
 }
 

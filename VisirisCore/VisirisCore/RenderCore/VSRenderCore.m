@@ -128,8 +128,7 @@
         
         self.transformTextureManager = [[VSTransformTextureManager alloc] initWithContext:self.openGLContext];
         
-        self.oldSize = size;
-      //[self debugOpenGLTextures];
+        self.oldSize = size;        
     }
     return self;
 }
@@ -211,11 +210,20 @@
     switch (type) {
         case VSFileKindImage:
         case VSFileKindVideo:
-            [self.textureManager createTextureWithSize:textureSize trackId:trackID withObjectItemID:objectItemID];
+            [self.textureManager createTextureWithSize:textureSize
+                                               trackId:trackID
+                                      withObjectItemID:objectItemID];
+            
             [self.transformTextureManager createFBOWithSize:size trackId:trackID];
             break;
         case VSFileKindQuartzComposerPatch:
-            [self.qcpManager createQCRendererWithSize:size withTrackId:trackID withPath:path withContext:self.openGLContext withFormat:self.pixelFormat withObjectItemID:objectItemID];
+            [self.qcpManager createQCRendererWithSize:size
+                                          withTrackId:trackID
+                                             withPath:path
+                                          withContext:self.openGLContext
+                                           withFormat:self.pixelFormat
+                                     withObjectItemID:objectItemID];
+            
             [self.transformTextureManager createFBOWithSize:size trackId:trackID];
             break;
         case VSFileKindAudio:

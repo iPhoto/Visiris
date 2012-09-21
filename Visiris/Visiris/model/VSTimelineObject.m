@@ -8,6 +8,8 @@
 
 #import "VSTimelineObject.h"
 
+#import "VSCoreServices.h"
+
 #import "VSProjectItem.h"
 #import "VSTimelineObjectSource.h"
 #import "VSFrameSourceSupplier.h"
@@ -38,6 +40,11 @@
     }
     
     return self;
+}
+
+- (void)dealloc
+{
+    DDLogInfo(@"dealloc");
 }
 
 //#pragma mark - NSCoding implementation

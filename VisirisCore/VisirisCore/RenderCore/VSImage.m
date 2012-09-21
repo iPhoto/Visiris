@@ -19,6 +19,7 @@
 -(id)init{
     if (self = [super init]) {
         _needsUpdate = YES;
+        _data = NULL;
     }
     return self;
 }

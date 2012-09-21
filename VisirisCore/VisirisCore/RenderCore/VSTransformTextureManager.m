@@ -49,10 +49,6 @@
         self.fboForTrack = [[NSMutableDictionary alloc] init];
         
         [self make_resources];
-     //   [self createFBOWithSize:NSMakeSize(800.0f, 600.0f) trackId:1];
-   //     VSFrameBufferObject *fbo = [[VSFrameBufferObject alloc] initWithSize:NSMakeSize(800.0f, 600.0f)];
-    //    [self.fboForTrack setObject:fbo forKey:[NSNumber numberWithInteger:1]];
-
     }
     return self;
 }
@@ -60,10 +56,6 @@
 #pragma mark - Methods
 
 - (GLuint)transformTexture:(GLuint)texture atTrack:(NSInteger)trackId withAttributes:(NSDictionary *)attributes withTextureSize:(NSSize)textureSize forOutputSize:(NSSize)outputSize isQCPatch:(BOOL)qcPatch{
-    
-    //NSLog(@"texturesize: %@",NSStringFromSize(textureSize) );    
-    //NSLog(@"outputsize: %@",NSStringFromSize(outputSize) );    
-    //NSLog(@"%@",attributes );    
     
     VSFrameBufferObject *fbo = [self getFboForTrackId:trackId];
 
@@ -129,7 +121,6 @@
     
     VSFrameBufferObject *fbo = [[VSFrameBufferObject alloc] initWithSize:size];
     [self.fboForTrack setObject:fbo forKey:[NSNumber numberWithInteger:trackId]];
-     
 }
 
 - (void)resizeOutputSize:(NSSize)size{

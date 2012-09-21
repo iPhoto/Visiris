@@ -43,7 +43,6 @@
         CFRelease(image);
         
     //    self.vsImage.data = (char *)imageData;
-   //     memcpy(self.vsImage.data, <#const void *#>, <#unsigned long#>)
         self.vsImage.size = NSMakeSize(width, height);
         self.vsImage.needsUpdate = YES;
          
@@ -51,10 +50,6 @@
 
 
     return self.vsImage;
-}
-
-- (void)dealloc{
-    free(self.vsImage.data);
 }
 
 @end

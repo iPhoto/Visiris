@@ -20,4 +20,10 @@
     return nil;
 }
 
+- (void)dealloc{
+    if (self.vsImage.data != NULL) {
+        free(self.vsImage.data);
+    }
+}
+
 @end
