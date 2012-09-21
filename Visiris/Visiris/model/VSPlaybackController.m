@@ -27,7 +27,7 @@
 
 @property VSTimeline* timeline;
 
-@property VSTimelineObject *selectedTimelineObject;
+@property (weak) VSTimelineObject*selectedTimelineObject;
 //todo
 @property (assign) double deltaTime;
 
@@ -200,7 +200,7 @@
 #pragma mark - Private Methods
 
 -(void) timelineObjectsGotUnselected:(NSNotification *) notification{
-    for(VSParameter *parameter in [self.selectedTimelineObject.parameters allValues]){
+    for(VSParameter *parameter in [self.selectedTimelineObject visibleParameters]){
         [parameter removeObserver:self forKeyPath:@"currentValue"];
     }
     
@@ -216,7 +216,7 @@
                 
                 self.selectedTimelineObject = (VSTimelineObject*) [selectedTimelineObjects objectAtIndex:0];
                 
-                for(VSParameter *parameter in [self.selectedTimelineObject.parameters allValues]){
+                for(VSParameter *parameter in [self.selectedTimelineObject visibleParameters]){
                     [parameter addObserver:self forKeyPath:@"currentValue" options:0 context:nil];
                 }
             }

@@ -14,10 +14,6 @@
 
 @interface VSAnimation()
 
-@end
-
-@interface VSAnimation()
-
 
 @end
 
@@ -50,6 +46,11 @@
 #pragma mark - Methods
 
 -(VSKeyFrame*) addKeyFrameWithValue:(id) aValue forTimestamp:(double)aTimestamp{
+    
+    if(!self.keyFrames){
+        _keyFrames = [[NSMutableArray alloc]init];
+    }
+    
     VSKeyFrame* newKeyFrame = [[VSKeyFrame alloc] initWithValue:aValue forTimestamp:aTimestamp];
     
     [self.keyFrames addObject:newKeyFrame];
@@ -180,9 +181,18 @@
 
 -(NSMutableArray*) keyFrames
 {
-    return [self mutableArrayValueForKey:@"keyFrames"];
+    NSMutableArray *result= [self mutableArrayValueForKey:@"keyFrames"];
+    return result;
 }
 
+
+-(void) insertObject:(VSKeyFrame *)object inKeyFramesAtIndex:(NSUInteger)index{
+    [self.keyFrames insertObject:object atIndex:index];
+}
+
+-(void) insertKeyFrames:(NSArray *)array atIndexes:(NSIndexSet *)indexes{
+    [self.keyFrames insertObjects:array atIndexes:indexes];
+}
 
 
 @end

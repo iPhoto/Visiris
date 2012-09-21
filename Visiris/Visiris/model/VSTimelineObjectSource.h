@@ -21,7 +21,7 @@
 @property (strong) NSDictionary *parameters;
 
 
-#pragma mark - Functins
+#pragma mark - Functions
 
 
 -(id) initWithProjectItem:(VSProjectItem*) aProjectItem andParameters:(NSDictionary*) parameters;

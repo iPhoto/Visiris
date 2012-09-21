@@ -24,7 +24,7 @@
 
 @interface VSAnimationTimelineViewController ()
 
-@property VSTimelineObject *timelineObject;
+@property (weak) VSTimelineObject*timelineObject;
 
 @property float trackHeight;
 
@@ -226,8 +226,6 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
             [animationTrackViewController.view setFrame:trackRect];
             
             [self.scrollView addTrackView:animationTrackViewController.view];
-            
-            animationTrackViewController.parameter = [self.timelineObject.parameters objectForKey:parameter.type];
         }
     }
     

@@ -25,7 +25,8 @@
 
 @implementation VSAnimationTrackViewController
 
-@synthesize pixelTimeRatio = _pixelTimeRatio;
+@synthesize pixelTimeRatio  = _pixelTimeRatio;
+@synthesize parameter       = _parameter;
 
 #define KEYFRAME_WIDTH  6
 #define KEYFRAME_HEIGHT 6
@@ -40,10 +41,8 @@
         self.parameter = parameter;
         self.pixelTimeRatio = pixelTimeRatio;
         self.keyFrameViewControllers =[[NSMutableArray alloc]init];
-        [parameter.animation addObserver:self
-                              forKeyPath:@"keyFrames"
-                                 options:0
-                                 context:nil];
+        
+        
         
         [self initKeyFrames];
     }
@@ -115,9 +114,6 @@
         result = [self.delegate keyFrameViewControllersView:keyFrameViewController wantsToBeDraggeFrom:fromPoint to:toPoint onTrack:self];
     }
     
-    DDLogInfo(@"keyFrameViewControllers %@", self.keyFrameViewControllers);
-    DDLogInfo(@"keyFrames %@",self.parameter.animation.keyFrames);
-    
     return result;
 }
 
@@ -159,6 +155,22 @@
 
 -(double) pixelTimeRatio{
     return _pixelTimeRatio;
+}
+
+-(void) setParameter:(VSParameter *)parameter{
+    _parameter = parameter;
+    [self.parameter.animation addObserver:self
+                               forKeyPath:@"keyFrames"
+                                  options:0
+                                  context:nil];
+}
+
+-(VSParameter*) parameter{
+    return _parameter;
+}
+
+-(void) dealloc{
+    [self.parameter.animation removeObserver:self forKeyPath:@"keyFrames"];
 }
 
 @end

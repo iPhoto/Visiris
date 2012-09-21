@@ -24,7 +24,7 @@
 @interface VSTimelineObjectPropertiesViewController : NSViewController<NSSplitViewDelegate, VSViewResizingDelegate, VSScrollViewScrollingDelegate, VSParameterViewKeyFrameDelegate, VSKeyFrameEditingDelegate>
 
 /** VSTimelineObject which properties VSTimelineObjectPropertiesViewController is representing */
-@property VSTimelineObject *timelineObject;
+@property (weak) VSTimelineObject*timelineObject;
 
 #pragma mark - Init
 /** ScrollView's documentView */

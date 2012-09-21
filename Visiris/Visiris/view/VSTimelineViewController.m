@@ -106,7 +106,10 @@
 }
 
 -(double) pixelForTimestamp:(double) timestamp{
-    return timestamp / self.pixelTimeRatio;
+    if(self.pixelTimeRatio > 0)
+        return timestamp / self.pixelTimeRatio;
+    else
+        return 0;
 }
 
 -(void) computePixelTimeRatio{

@@ -39,7 +39,8 @@
             id value = [qcDictionary valueForKey:key];
             
             if([value isKindOfClass:[VSParameter class]]){
-                [qcAttributes setValue:((VSParameter*) value).defaultValue forKey:key];
+
+                [qcAttributes setValue:[((VSParameter*) value) valueForTimestamp:aTimestamp] forKey:key];
             }
         }
         

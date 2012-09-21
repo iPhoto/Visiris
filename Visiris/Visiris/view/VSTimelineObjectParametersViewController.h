@@ -16,7 +16,7 @@
 
 @property NSArray *parameters;
 
-@property VSTimelineObject *timelineObject;
+@property (weak) VSTimelineObject*timelineObject;
 
 @property float parameterViewHeight;
 
