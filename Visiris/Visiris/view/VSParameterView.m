@@ -37,23 +37,6 @@
     [super setFrame:frameRect];
 }
 
-
--(BOOL) acceptsFirstResponder{
-    return NO;
-}
-
--(BOOL) becomeFirstResponder{
-    return NO;
-}
-
--(void) setNextKeyView:(NSView *)next{
-    if([self delegateRespondsToSelector:@selector(nextKeyViewOfView:willBeSet:)]){
-        next = [self.viewDelegate nextKeyViewOfView:self willBeSet:next];
-    }
-    
-    [super setNextKeyView:next];
-}
-
 #pragma mark - Private Methods
 
 /**

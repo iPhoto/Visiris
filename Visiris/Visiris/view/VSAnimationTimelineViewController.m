@@ -90,7 +90,9 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
                 selectedKeyFrame = keyFrameViewController.keyFrame;
             }
             if([self keyFrameSelectingDelegateRespondsToSelector:@selector(playheadIsOverKeyFrame:ofParameter:)]){
-                [self.keyFrameSelectingDelegate playheadIsOverKeyFrame:selectedKeyFrame ofParameter:trackViewController.parameter];
+                
+                [self.keyFrameSelectingDelegate playheadIsOverKeyFrame:selectedKeyFrame
+                                                           ofParameter:trackViewController.parameter];
             }
         }
     }
@@ -128,7 +130,8 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 -(BOOL) keyFrameViewController:(VSKeyFrameViewController *)keyFrameViewController wantsToBeSelectedOnTrack:(VSAnimationTrackViewController *)track{
     BOOL result = false;
     if([self keyFrameSelectingDelegateRespondsToSelector:@selector(wantToSelectKeyFrame:ofParamater:)]){
-        result = [self.keyFrameSelectingDelegate wantToSelectKeyFrame:keyFrameViewController.keyFrame ofParamater:track.parameter];
+        result = [self.keyFrameSelectingDelegate wantToSelectKeyFrame:keyFrameViewController.keyFrame
+                                                          ofParamater:track.parameter];
     }
     
     if(result){
@@ -203,8 +206,6 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
         NSArray *parameters = [self.timelineObject visibleParameters];
         
         for(VSParameter *parameter in parameters){
-            
-            
             float width = self.scrollView.visibleTrackViewsHolderWidth;
             
             NSRect trackRect = NSMakeRect(0, self.animationTrackViewControllers.count*self.trackHeight , width, self.trackHeight);
