@@ -17,7 +17,7 @@
     
 -(BOOL) keyFrameViewController:(VSKeyFrameViewController *)keyFrameViewController wantsToBeSelectedOnTrack:(VSAnimationTrackViewController*) track;
 
--(NSPoint) keyFrameViewControllersView:(VSKeyFrameViewController*) keyFrameViewController wantsToBeDraggeFrom:(NSPoint) fromPoint to:(NSPoint) toPoint onTrack:(VSAnimationTrackViewController*) track;
+-(NSPoint) keyFrameViewControllersView:(VSKeyFrameViewController*) keyFrameViewController wantsToBeDraggedFrom:(NSPoint) fromPoint to:(NSPoint) toPoint onTrack:(VSAnimationTrackViewController*) track;
 
 @end
 
@@ -34,4 +34,6 @@
 -(void) reset;
 -(VSKeyFrameViewController*) keyFrameViewControllerAtXPosition:(float) xPosition;
 -(void) unselectAllKeyFrames;
+-(float) parameterValueOfPixelPosition:(float) pixelValue forKeyFrame:(VSKeyFrameViewController *) keyFrameViewController;
+-(float) pixelPositonForKeyFramesValue:(VSKeyFrameViewController *)keyFrameViewController;
 @end

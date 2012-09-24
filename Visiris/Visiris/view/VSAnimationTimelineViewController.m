@@ -144,7 +144,7 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 }
 
 //TODO: sending changend values
--(NSPoint) keyFrameViewControllersView:(VSKeyFrameViewController *)keyFrameViewController wantsToBeDraggeFrom:(NSPoint)fromPoint to:(NSPoint)toPoint onTrack:(VSAnimationTrackViewController *)track{
+-(NSPoint) keyFrameViewControllersView:(VSKeyFrameViewController *)keyFrameViewController wantsToBeDraggedFrom:(NSPoint)fromPoint to:(NSPoint)toPoint onTrack:(VSAnimationTrackViewController *)track{
     
     NSPoint result = toPoint;
     
@@ -156,6 +156,10 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
         id fromValue = keyFrameViewController.keyFrame.value;
         id toValue = fromValue;
         
+        if(track.parameter.dataType == VSParameterDataTypeFloat){
+            toValue = [NSNumber numberWithFloat:[track parameterValueOfPixelPosition:toPoint.y forKeyFrame:keyFrameViewController]];
+        }
+        
         bool allowedToMove = [self.keyFrameSelectingDelegate keyFrame:keyFrameViewController.keyFrame
                                                           ofParameter:track.parameter
                                              willBeMovedFromTimestamp:fromTimestamp
@@ -163,7 +167,9 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
         
         if(allowedToMove){
             float newX = [self pixelForTimestamp:toTimestamp];
-            result = NSMakePoint(newX, fromPoint.y);
+            float newY = [track pixelPositonForKeyFramesValue:keyFrameViewController];
+            
+            result = NSMakePoint(newX, newY);
         }
     }
     return result;
@@ -278,6 +284,32 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     }
     
     return NO;
+}
+
+#pragma mark - Private Methods
+
+#pragma mark - Playhead
+
+/**
+ * Sets the plahead marker according to the playhead's currentposition on the timeline
+ */
+-(void) setPlayheadMarkerLocation{
+    CGFloat newLocation = [self pixelForGlobalTimestamp:self.playhead.currentTimePosition];
+    
+    [self.scrollView movePlayHeadMarkerToLocation:newLocation];
+}
+
+/**
+ * Returns the current Location of the Playhead Marker
+ * @return current location of the PlayheadMarker
+ */
+-(float) currentPlayheadMarkerLocation{
+    return self.scrollView.playheadMarkerLocation;
+}
+
+
+-(double) pixelForGlobalTimestamp:(double) timestamp{
+    return [self pixelForTimestamp:[self.timelineObject localTimestampOfGlobalTimestamp:timestamp]];
 }
 
 #pragma mark - Properties
