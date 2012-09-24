@@ -77,15 +77,14 @@
 
 - (void)setVolume:(float)volume{
     
-    NSLog(@"volume: %f", volume);
-  //  return;
     if ([self.audioPlayer volume] != volume) {
         [self.audioPlayer setVolume:volume];
     }
 }
 
 - (void)completeStop{
-    NSLog(@"Audio complete Stop not working");
+    //TODO is this neccessary
+//    NSLog(@"Audio complete Stop not working");
 }
 
 @end
