@@ -8,6 +8,8 @@
 
 #import "VSAnimationTimelineView.h"
 
+#import "VSCoreServices.h"
+
 @implementation VSAnimationTimelineView
 
 
@@ -20,6 +22,12 @@
     }
     
     return self;
+}
+
+#pragma mark - NSView
+
+-(void) drawRect:(NSRect)dirtyRect{
+    DDLogInfo(@"drawREct");
 }
 
 

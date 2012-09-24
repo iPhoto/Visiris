@@ -13,26 +13,41 @@
 
 @interface VSKeyFrameViewController ()
 
-
+@property NSSize size;
 
 @end 
 
 
 @implementation VSKeyFrameViewController
 
-@synthesize pixelTimeRatio = _pixelTimeRatio;
+@synthesize pixelTimeRatio  = _pixelTimeRatio;
 
-- (id)initWithKeyFrame:(VSKeyFrame *)keyFrame withSize:(NSSize)size forPixelTimeRatio:(double)pixelTimeRatio{
+- (id)initWithKeyFrame:(VSKeyFrame *)keyFrame withSize:(NSSize)size forPixelTimeRatio:(double)pixelTimeRatio andDelegate:(id<VSKeyFrameViewControllerDelegate>)delegate{
     if(self = [super init]){
         self.keyFrame = keyFrame;
         self.size = size;
-        NSRect keyFrameFrame = NSMakeRect(0, 0, size.width, size.height);
-        self.view = self.keyFrameView = [[VSKeyFrameView alloc] initWithFrame:keyFrameFrame];
-        self.keyFrameView.mouseDelegate = self;
+        self.view = self.keyFrameView = [[VSKeyFrameView alloc] init];
         self.pixelTimeRatio = pixelTimeRatio;
+        self.delegate = delegate;
+        
+        [self initObservers];
+        
+        [self.view setFrame:[self computeFrameRect]];
+        self.keyFrameView.mouseDelegate = self;
+        
     }
     
     return self;
+}
+
+-(void) initObservers{
+    [self.keyFrame addObserver:self forKeyPath:@"value" options:0 context:nil];
+}
+
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if([keyPath isEqualToString:@"value"]){
+        [self.view setFrame:[self computeFrameRect]];
+    }
 }
 
 -(double) timestampForPixelValue:(double) pixelPosition{
@@ -82,14 +97,25 @@
     return NO;
 }
 
+-(NSRect) computeFrameRect{
+    float originX = [self pixelForTimestamp:self.keyFrame.timestamp] - self.view.frame.size.width / 2.0f;
+    float originY = self.view.frame.size.height / 2.0f;
+    
+    if([self delegateRespondsToSelector:@selector(pixelPositonForKeyFramesValue:)]){
+        originY = [self.delegate pixelPositonForKeyFramesValue:self];
+
+    }
+    
+    return NSMakeRect(originX, originY, self.size.width, self.size.height);
+}
+
 #pragma mark - Properties
+
 
 -(void) setPixelTimeRatio:(double)pixelTimeRatio{
     _pixelTimeRatio = pixelTimeRatio;
     
-    NSPoint newOrigin = NSMakePoint([self pixelForTimestamp:self.keyFrame.timestamp] - self.view.frame.size.width / 2.0 , 20);
-    
-    [self.keyFrameView setFrameOrigin:newOrigin];
+    [self.keyFrameView setFrame: [self computeFrameRect]];
 }
 
 -(double) pixelTimeRatio{

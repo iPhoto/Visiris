@@ -269,7 +269,6 @@
     return self.trackHolderView.frame.size.width;
 }
 
-
 -(void) setTrackHolderWidth:(float)trackHolderWidth{
     [self.trackHolderView setFrameSize:NSMakeSize(trackHolderWidth, self.trackHolderView.frame.size.height)];
 }

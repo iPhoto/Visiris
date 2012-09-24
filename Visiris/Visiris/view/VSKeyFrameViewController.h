@@ -18,6 +18,8 @@
 
 -(NSPoint) keyFrameViewControllersView:(VSKeyFrameViewController*) keyFrameViewController wantsToBeDraggeFrom:(NSPoint) fromPoint to:(NSPoint) toPoint;
 
+-(float) pixelPositonForKeyFramesValue:(VSKeyFrameViewController *) keyFrameViewController;
+
 @end
 
 #import "VSViewMouseEventsDelegate.h"
@@ -26,12 +28,11 @@
 
 @property VSKeyFrame *keyFrame;
 @property VSKeyFrameView *keyFrameView;
-@property NSSize size;
-@property double pixelTimeRatio;
 @property id<VSKeyFrameViewControllerDelegate> delegate;
 @property BOOL selected;
+@property double pixelTimeRatio;
 
--(id) initWithKeyFrame:(VSKeyFrame*) keyFrame withSize:(NSSize) size forPixelTimeRatio:(double) pixelTimeRatio;
+- (id)initWithKeyFrame:(VSKeyFrame *)keyFrame withSize:(NSSize)size forPixelTimeRatio:(double)pixelTimeRatio andDelegate:(id<VSKeyFrameViewControllerDelegate>) delegate;
 
 
 @end

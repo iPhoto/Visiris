@@ -91,11 +91,36 @@
 #pragma mark - VSTimelineScrollViewZoomingDelegate
 
 -(void) timelineScrollView:(VSTimelineScrollView *)scrollView wasZoomedAtPosition:(NSPoint)position{
+    double positionTimestamp =[self timestampForPixelValue:position.x];
     
+    [self computePixelTimeRatio];
+    
+    float newPosition = [self pixelForTimestamp:positionTimestamp];
+    
+    float ratio = position.x - newPosition;
+    NSRect clipViewBounds = self.timelineScrollView.contentView.bounds;
+    clipViewBounds.origin.x -= ratio;
+    
+    [self.timelineScrollView.contentView setBounds:clipViewBounds];
 }
 
 -(NSRect) timelineScrollView:(VSTimelineScrollView *)scrollView wantsToBeZoomedAccordingToScrollWheel:(float)amount atPosition:(NSPoint)mousePosition forCurrentFrame:(NSRect)currentFrame{
-    return currentFrame;
+    if(amount == 0.0)// || self.trackHolder.frame.size.width < self.scrollView.documentVisibleRect.size.width)
+        return currentFrame;
+    
+    NSRect newTrackHolderFrame = currentFrame;
+    
+    float zoomFactor = 1.0 + amount;
+    
+    float deltaWidth = self.timelineScrollView.documentVisibleRect.size.width * zoomFactor -self.timelineScrollView.documentVisibleRect.size.width;
+    
+    newTrackHolderFrame.size.width += deltaWidth;
+    
+    if(newTrackHolderFrame.size.width < self.timelineScrollView.documentVisibleRect.size.width){
+        newTrackHolderFrame.size.width = self.timelineScrollView.documentVisibleRect.size.width;
+    }
+    
+    return newTrackHolderFrame;
 }
 
 

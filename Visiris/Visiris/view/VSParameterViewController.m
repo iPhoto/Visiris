@@ -81,6 +81,14 @@ static NSString* defaultNib = @"VSParameterView";
     }
 }
 
+#pragma mark - Methods
+
+-(void) saveParameterAndRemoveObserver{
+    [self.parameter removeObserver:self forKeyPath:@"currentValue"];
+    
+    [self storeParameterValue];
+}
+
 -(void) showParameter:(VSParameter *)parameter{
     
     self.parameter = parameter;
@@ -96,15 +104,6 @@ static NSString* defaultNib = @"VSParameterView";
         [self showParameter];
     }
 }
-
-#pragma mark - Methods
-
--(void) saveParameterAndRemoveObserver{
-    [self.parameter removeObserver:self forKeyPath:@"currentValue"];
-    
-    [self storeParameterValue];
-}
-
 
 #pragma mark - VSViewDelegate Implentation
 
@@ -157,6 +156,11 @@ static NSString* defaultNib = @"VSParameterView";
     [self addNewKeyFrame];
 }
 
+
+
+
+#pragma mark - Private Methods
+
 -(void) storeParameterValue{
     
     id currentValue = [self currentParameterValue];
@@ -182,7 +186,7 @@ static NSString* defaultNib = @"VSParameterView";
         {
             self.parameter.defaultValue = currentValue;
         }
-            
+        
     }
     else{
         if(self.selectedKeyframe){
@@ -220,8 +224,6 @@ static NSString* defaultNib = @"VSParameterView";
     
     return value;
 }
-
-#pragma mark - Private Methods
 
 -(void) addNewKeyFrame{
     if(!self.selectedKeyframe){
@@ -338,10 +340,7 @@ static NSString* defaultNib = @"VSParameterView";
     [self.textField setStringValue:self.parameter.currentStringValue];
     [self.textField setTarget:self];
     [self.textField setAction:@selector(textValueHasChanged:)];
-    
     [self.textField setDelegate:self];
-    
-    
 }
 
 /**
@@ -455,71 +454,6 @@ static NSString* defaultNib = @"VSParameterView";
         return NO;
     }
 }
-//
-///**
-// * Sets the given string as defaultValue of the parameter.
-// *
-// * The string is converted according to the parameterType of the paramter
-// * @param aString NSString to be set as defaultValue of the parameter
-// */
-//-(void) setParameterValueWithText:(NSString*) aString{
-//
-//    switch (self.parameter.dataType) {
-//        case VSParameterDataTypeFloat:
-//            [self setParametersDefaultFloatValue:[aString floatValue]];
-//            break;
-//
-//        case VSParameterDataTypeString:
-//            [self setParametersDefaultStringValue:aString];
-//            break;
-//
-//        default:
-//            break;
-//    }
-//}
-//
-///**
-// * Sets the given value as the parameter's defaultFloatValue and registers the change at the view's undoManager
-// * @param aFloatValue Value to be set as the parameter's default value.
-// */
-//-(void) setParametersDefaultFloatValue:(float) aFloatValue{
-//    if(self.parameter.defaultFloatValue != aFloatValue){
-//
-//        [self registerDefaultValueUndo];
-//        [self.parameter setDefaultFloatValue:aFloatValue];
-//    }
-//}
-//
-///**
-// * Sets the default value of the VSParamter and registers it for undoing
-// */
-//-(void) registerDefaultValueUndo{
-//    [self.parameter undoParametersDefaultValueChange:self.parameter.defaultValue atUndoManager:self.view.undoManager];
-//}
-//
-///**
-// * Sets the given value as the parameter's defaultStringValue and registers the change at the view's undoManager
-// * @param aStringValue Value to be set as the parameter's default value.
-// */
-//-(void) setParametersDefaultStringValue:(NSString*) aStringValue{
-//    if(![self.parameter.defaultStringValue isEqualToString:aStringValue]){
-//        [self registerDefaultValueUndo];
-//
-//        [self.parameter setDefaultStringValue:aStringValue];
-//    }
-//}
-//
-///**
-// * Sets the given value as the parameter's defaultBoolValue and registers the change at the view's undoManager
-// * @param aBoolValue Value to be set as the parameter's default value.
-// */
-//-(void) setParametersDefaultBoolValue:(BOOL) aBoolValue{
-//    if(self.parameter.defaultBoolValue != aBoolValue){
-//        [self registerDefaultValueUndo];
-//
-//        [self.parameter setDefaultBoolValue:aBoolValue];
-//    }
-//}
 
 /**
  * Checks if the delegate is able to respond to the given Selector
@@ -541,5 +475,6 @@ static NSString* defaultNib = @"VSParameterView";
 -(void) setOptionsParameterDefaultValue:(id) key{
     ((VSOptionParameter*)self.parameter).selectedKey = key;
 }
+
 
 @end

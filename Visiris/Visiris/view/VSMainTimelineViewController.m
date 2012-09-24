@@ -141,7 +141,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
     if([keyPath isEqualToString:@"duration"]){
         
         //updates the frame of the scrollViews trackHolderView
-
+        
         
         self.scrollView.trackHolderWidth = [super pixelForTimestamp:[[object valueForKey:keyPath] doubleValue]];
         
@@ -577,47 +577,6 @@ static NSString* defaultNib = @"VSMainTimelineView";
 
 
 
-
-#pragma mark - VSTimelineScrollViewZoomingDelegate implementation
-
--(NSRect) timelineScrollView:(VSMainTimelineScrollView *)scrollView wantsToBeZoomedAccordingToScrollWheel:(float)amount atPosition:(NSPoint)mousePosition forCurrentFrame:(NSRect)currentFrame{
-    
-    if(amount == 0.0)// || self.trackHolder.frame.size.width < self.scrollView.documentVisibleRect.size.width)
-        return currentFrame;
-    
-    NSRect newTrackHolderFrame = currentFrame;
-    
-    float zoomFactor = 1.0 + amount;
-    
-    float deltaWidth = self.scrollView.documentVisibleRect.size.width * zoomFactor -self.scrollView.documentVisibleRect.size.width;
-    
-    newTrackHolderFrame.size.width += deltaWidth;
-    
-    if(newTrackHolderFrame.size.width < self.scrollView.documentVisibleRect.size.width){
-        newTrackHolderFrame.size.width = self.scrollView.documentVisibleRect.size.width;
-    }
-    
-    return newTrackHolderFrame;
-    
-    
-}
-
--(void) timelineScrollView:(VSMainTimelineScrollView *)scrollView wasZoomedAtPosition:(NSPoint)position{
-    double positionTimestamp =[super timestampForPixelValue:position.x];
-    
-    [self computePixelTimeRatio];
-    
-    float newPosition = [super pixelForTimestamp:positionTimestamp];
-    
-    float ratio = position.x - newPosition;
-    NSRect clipViewBounds = self.scrollView.contentView.bounds;
-    clipViewBounds.origin.x -= ratio;
-    
-    [self.scrollView.contentView setBounds:clipViewBounds];
-}
-
-
-
 #pragma mark - VSViewMouseEventsDelegate Implementation
 
 -(void) mouseDragged:(NSEvent *)theEvent onView:(NSView *)view{
@@ -1007,7 +966,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
  */
 -(void) setPlayheadMarkerLocation{
     CGFloat newLocation = [super pixelForTimestamp:self.timeline.playHead.currentTimePosition];
-
+    
     [self.scrollView movePlayHeadMarkerToLocation:newLocation];
 }
 
@@ -1110,7 +1069,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
     
     //Size and position of the track
     int width = self.scrollView.visibleTrackViewsHolderWidth;
-
+    
     NSInteger yPosition = (VSTrackViewHeight+VSTrackViewMargin) * ([self.trackViewControllers count]);
     
     NSRect newFrame = NSMakeRect(0,yPosition,width,VSTrackViewHeight);
