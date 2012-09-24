@@ -12,7 +12,8 @@
 @interface VSAudioPlayer()
 
 /** The AudioPlayer is provided by the AVFoundation framework and is for playing audio */
-@property (strong) AVAudioPlayer *audioPlayer;
+@property (strong) AVPlayer *audioPlayer;
+
 
 @end
 
@@ -29,13 +30,29 @@
     if (self = [super init]) {
 
         __autoreleasing NSError *error = nil;
-        self.audioPlayer = [[AVAudioPlayer alloc] initWithData:[NSData dataWithContentsOfFile:path] error:&error];
+//        self.audioPlayer = [[AVAudioPlayer alloc] initWithData:[NSData dataWithContentsOfFile:path] error:&error];
+        NSURL *url = [[NSURL alloc] initFileURLWithPath:path];
+
+        AVAsset *asset = [AVURLAsset URLAssetWithURL:url options:nil];
+
+        
+        AVMutableComposition *composition = [[AVMutableComposition alloc] init];
+        
+        AVMutableCompositionTrack *compositionAudioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+        
+        [compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero,asset.duration)
+                                       ofTrack:[[asset tracksWithMediaType:AVMediaTypeAudio]objectAtIndex:0]
+                                        atTime:kCMTimeZero
+                                         error:&error];
+                
+        self.audioPlayer = [[AVPlayer alloc] initWithPlayerItem:[[AVPlayerItem alloc] initWithAsset:composition]];
+        
+        
+        
         if (error) {
             NSLog(@"ERROR im Audioerstellen");
             [NSApp presentError:error];
         }
-        else 
-            [self.audioPlayer prepareToPlay];
     }
     return self;
 }
@@ -44,13 +61,13 @@
 #pragma mark - Methods
 
 - (void)playAtTime:(double)time{
-    if ([self.audioPlayer isPlaying] == NO) {
+    //TODO soll nicht immer abgefragt werden....vielleicht nur einmal in der sekunde oder so (also die ganze funktion)
+    if ( [self.audioPlayer rate] == 0.0) {
         [self.audioPlayer play];
     }
-    
-    //TODO 0.05 is kind of magic
-    if (abs((time - [self.audioPlayer currentTime])) > 0.05) {
-        [self.audioPlayer setCurrentTime:time];
+//    //TODO 0.05 is kind of magic        
+    if (abs(time - CMTimeGetSeconds([self.audioPlayer currentTime])) > 0.05) {
+        [self.audioPlayer seekToTime:CMTimeMakeWithSeconds(time, 1)];
     }
 }
 
@@ -59,13 +76,16 @@
 }
 
 - (void)setVolume:(float)volume{
+    
+    NSLog(@"volume: %f", volume);
+  //  return;
     if ([self.audioPlayer volume] != volume) {
         [self.audioPlayer setVolume:volume];
     }
 }
 
 - (void)completeStop{
-    [self.audioPlayer stop];
+    NSLog(@"Audio complete Stop not working");
 }
 
 @end

@@ -77,19 +77,16 @@
         
         switch (timelineObject.sourceObject.projectItem.fileType.fileKind) {
             case VSFileKindAudio:
-            {
                 [self handleAudioTimelineObject:timelineObject atTrack:aTrack];
-            }
-            break;
-                
-            case VSFileKindImage:
+                break;
             case VSFileKindVideo:
-            case VSFileKindQuartzComposerPatch:
-            {
                 [self handleFrameTimelineObject:timelineObject atTrack:aTrack];
-            }
+                [self handleAudioTimelineObject:timelineObject atTrack:aTrack];
+                break;
+            case VSFileKindImage:
+            case VSFileKindQuartzComposerPatch:
+                [self handleFrameTimelineObject:timelineObject atTrack:aTrack];
             break;
-
                 default:
                 break;
         }

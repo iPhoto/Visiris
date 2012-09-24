@@ -43,13 +43,10 @@
 - (void)playAudioOfHandovers:(NSArray *)handovers atTimeStamp:(double)timeStamp{
         
     for (VSCoreHandover *coreHandover in handovers) {
-        if ([coreHandover isKindOfClass:[VSAudioCoreHandover class]]){   
-            
-            float volume = [[coreHandover.attributes objectForKey:VSParameterAudioVolume] floatValue];
-                        
-            NSInteger objectID = coreHandover.timeLineObjectID;
-            [self.audioPlayerManager playAudioOfObjectID:objectID atTime:coreHandover.timestamp/1000.0 atVolume:volume];
-        }
+        float volume = [[coreHandover.attributes objectForKey:VSParameterAudioVolume] floatValue];
+                    
+        NSInteger objectID = coreHandover.timeLineObjectID;
+        [self.audioPlayerManager playAudioOfObjectID:objectID atTime:coreHandover.timestamp/1000.0 atVolume:volume];
     }
 }
 

@@ -27,6 +27,7 @@
 @property (strong) AVAssetImageGenerator    *imageGenerator;
 @property (assign) float                    frameRate;
 @property (assign) int                      currentFrame;
+//@property (strong) AVPlayer                 *DELETEPlayer;
 
 - (void) readMovie:(NSURL *)url atTime:(double) time;
 - (void) readNextMovieFrame;
@@ -47,6 +48,7 @@
 @synthesize imageGenerator  = _imageGenerator;
 @synthesize frameRate       = _frameRate;
 @synthesize currentFrame    = _currentFrame;
+//@synthesize DELETEPlayer;
 
 - (id)initWithTimelineObject:(VSTimelineObject *)aTimelineObject{
     if (self = [super initWithTimelineObject:aTimelineObject]) {
@@ -109,16 +111,10 @@
     CGImageRef image = [self.imageGenerator copyCGImageAtTime:timePoint actualTime:&actualTime error:&error];
     
     if (image != NULL) {
-        //NSString *actualTimeString = (__bridge NSString *)CMTimeCopyDescription(NULL, actualTime);
-        //NSString *requestedTimeString = (__bridge NSString *)CMTimeCopyDescription(NULL, timePoint);
-        //NSLog(@"got image: Asked for %@, got %@", requestedTimeString, actualTimeString);
-                
         CGRect rect = CGRectMake(0.0f, 0.0f, self.vsImage.size.width, self.vsImage.size.height);        
         CGColorSpaceRef colourSpace = CGColorSpaceCreateDeviceRGB();
         CGContextRef ctx = CGBitmapContextCreate(self.imageData, self.vsImage.size.width, self.vsImage.size.height, 8, self.vsImage.size.width * 4, colourSpace, kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst);
         CFRelease(colourSpace);
-        //CGContextTranslateCTM(ctx, 0, height);
-        //CGContextScaleCTM(ctx, 1.0f, -1.0f);
         CGContextSetBlendMode(ctx, kCGBlendModeCopy);
         CGContextDrawImage(ctx, rect, image);
         CGContextRelease(ctx);
@@ -134,6 +130,52 @@
      ^{
          dispatch_async(dispatch_get_main_queue(),
                         ^{
+                            
+                            //AVAssetTrack *audioTrack = nil;
+//                            audioTrack = [[self.asset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0];
+                            
+//                            NSError* error = NULL;
+//
+//                            AVMutableComposition *composition = [[AVMutableComposition alloc] init];
+//
+//                            AVMutableCompositionTrack *compositionAudioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+//                            
+//                            [compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero,self.asset.duration)
+//                                                            ofTrack:[[self.asset tracksWithMediaType:AVMediaTypeAudio]objectAtIndex:0]
+//                                                             atTime:kCMTimeZero
+//                                                              error:&error];
+//                            
+//                            NSLog(@"error: %@",error);
+//                            
+//                            self.DELETEPlayer = [[AVPlayer alloc] initWithPlayerItem:[[AVPlayerItem alloc] initWithAsset:composition]];
+                            
+
+                            
+
+                            
+                            // composition a
+
+//                            AVMutableCompositionTrack *compositionAudioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio
+                            //                                                                                                        preferredTrackID: kCMPersistentTrackID_Invalid];
+
+                            
+//                            AVPlayer *player = [[AVPlayer alloc] initWithPlayerItem:[[AVPlayerItem alloc] initWithAsset:audioTrack]];
+
+                           // audioTrack
+                         //   [AVAsset alloc] init
+                          //  AVAsset
+//                             [AVMutableComposition alloc]
+                            
+                            
+//                            
+//                            [compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero,urlAsset.duration) ofTrack:audioAssetTrack atTime:kCMTimeZero error:&error];
+//
+//
+//                            
+//                            AVPlayerItem* audioPlayerItem = [AVPlayerItem playerItemWithAsset:<#(AVAsset *)#>];
+//                            AVPlayer* audioPlayer = [[AVPlayer playerWithPlayerItem:audioPlayerItem] retain];
+//                            [audioPlayer play];
+                            
                             AVAssetTrack* videoTrack = nil;
                             NSArray* tracks = [self.asset tracksWithMediaType:AVMediaTypeVideo];
                             if ([tracks count] == 1)
@@ -189,8 +231,16 @@
 
 
 
-- (void) readNextMovieFrame{        
-    if (self.movieReader.status == AVAssetReaderStatusReading){        
+- (void) readNextMovieFrame{
+//    NSLog(@"Player created:%ld",self.DELETEPlayer.status);
+    
+//    if (self.DELETEPlayer.currentItem.status == AVPlayerItemStatusReadyToPlay)
+//    {
+//        
+//        [self.DELETEPlayer play];
+//    }
+
+    if (self.movieReader.status == AVAssetReaderStatusReading){
         AVAssetReaderTrackOutput * output = [self.movieReader.outputs objectAtIndex:0];
         //[output ]
         CMSampleBufferRef sampleBuffer = [output copyNextSampleBuffer]; // this is the most expensive call

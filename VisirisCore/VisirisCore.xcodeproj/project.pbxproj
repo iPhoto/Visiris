@@ -67,6 +67,9 @@
 		27A6CA1915B75820004C6DFB /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27A6CA1815B7581F004C6DFB /* AVFoundation.framework */; };
 		27AF8FC815B56546007A0322 /* VSTransformTextureManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 27AF8FC615B56546007A0322 /* VSTransformTextureManager.h */; };
 		27AF8FC915B56546007A0322 /* VSTransformTextureManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 27AF8FC715B56546007A0322 /* VSTransformTextureManager.m */; };
+		27B5F69E161061B200E9E332 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27B5F69D161061B200E9E332 /* CoreMedia.framework */; };
+		27B5F6A216106E2C00E9E332 /* VSVideoCoreHandover.h in Headers */ = {isa = PBXBuildFile; fileRef = 27B5F6A016106E2B00E9E332 /* VSVideoCoreHandover.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		27B5F6A316106E2C00E9E332 /* VSVideoCoreHandover.m in Sources */ = {isa = PBXBuildFile; fileRef = 27B5F6A116106E2B00E9E332 /* VSVideoCoreHandover.m */; };
 		27C5606915877DAC00E14DCE /* VSImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 27C5606715877DAC00E14DCE /* VSImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		27C5606A15877DAC00E14DCE /* VSImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C5606815877DAC00E14DCE /* VSImage.m */; };
 		5B14E9A415641B0200AFF08C /* VSCoreHandover.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B14E9A015641B0200AFF08C /* VSCoreHandover.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -131,6 +134,9 @@
 		27A6CA1815B7581F004C6DFB /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		27AF8FC615B56546007A0322 /* VSTransformTextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTransformTextureManager.h; sourceTree = "<group>"; };
 		27AF8FC715B56546007A0322 /* VSTransformTextureManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTransformTextureManager.m; sourceTree = "<group>"; };
+		27B5F69D161061B200E9E332 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		27B5F6A016106E2B00E9E332 /* VSVideoCoreHandover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSVideoCoreHandover.h; sourceTree = "<group>"; };
+		27B5F6A116106E2B00E9E332 /* VSVideoCoreHandover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSVideoCoreHandover.m; sourceTree = "<group>"; };
 		27C5606715877DAC00E14DCE /* VSImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSImage.h; sourceTree = "<group>"; };
 		27C5606815877DAC00E14DCE /* VSImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSImage.m; sourceTree = "<group>"; };
 		5B14E9A015641B0200AFF08C /* VSCoreHandover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSCoreHandover.h; sourceTree = "<group>"; };
@@ -159,6 +165,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27B5F69E161061B200E9E332 /* CoreMedia.framework in Frameworks */,
 				27A6CA1915B75820004C6DFB /* AVFoundation.framework in Frameworks */,
 				270692D61594F94F001A9329 /* Quartz.framework in Frameworks */,
 				274C70D1157E82EE0031F9B2 /* QuartzCore.framework in Frameworks */,
@@ -263,6 +270,8 @@
 				5B14E9A915641B5D00AFF08C /* VSQuartzComposerHandover.m */,
 				276D436415B7FC8200389C86 /* VSAudioCoreHandover.h */,
 				276D436515B7FC8200389C86 /* VSAudioCoreHandover.m */,
+				27B5F6A016106E2B00E9E332 /* VSVideoCoreHandover.h */,
+				27B5F6A116106E2B00E9E332 /* VSVideoCoreHandover.m */,
 			);
 			path = handOvers;
 			sourceTree = "<group>";
@@ -288,6 +297,7 @@
 		5B19BF67155D0E4E00807769 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				27B5F69D161061B200E9E332 /* CoreMedia.framework */,
 				27A6CA1815B7581F004C6DFB /* AVFoundation.framework */,
 				270692D51594F94F001A9329 /* Quartz.framework */,
 				274C70D0157E82EE0031F9B2 /* QuartzCore.framework */,
@@ -373,6 +383,7 @@
 				276D436615B7FC8200389C86 /* VSAudioCoreHandover.h in Headers */,
 				279820E015B85A4B00E8AA8E /* VSPlaybackMode.h in Headers */,
 				271341EF16007607003E5168 /* VSLayermode.h in Headers */,
+				27B5F6A216106E2C00E9E332 /* VSVideoCoreHandover.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -484,6 +495,7 @@
 				27A6CA1715B753DD004C6DFB /* NSMutableDictionary+VSAudioPlayerManger.m in Sources */,
 				276D436715B7FC8200389C86 /* VSAudioCoreHandover.m in Sources */,
 				271341F016007607003E5168 /* VSLayermode.m in Sources */,
+				27B5F6A316106E2C00E9E332 /* VSVideoCoreHandover.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

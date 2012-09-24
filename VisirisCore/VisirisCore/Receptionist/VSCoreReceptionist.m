@@ -13,6 +13,7 @@
 #import "VSQuartzComposerHandover.h"
 #import "VSAudioCoreHandover.h"
 #import "VSFileKind.h"
+#import "VSVideoCoreHandover.h"
 
 @interface VSCoreReceptionist()
 
@@ -52,10 +53,16 @@
         NSMutableArray *audioArray = [[NSMutableArray alloc] init];
         
         for(VSCoreHandover *coreHandover in theHandovers){
+                    
             
-            if ([coreHandover isKindOfClass:[VSFrameCoreHandover class]] || [coreHandover isKindOfClass:[VSQuartzComposerHandover class]]){         
+            if ([coreHandover isKindOfClass:[VSFrameCoreHandover class]] ||
+                [coreHandover isKindOfClass:[VSQuartzComposerHandover class]])
+            {
                 [frameArray addObject:coreHandover];
-            }else if ([coreHandover isKindOfClass:[VSAudioCoreHandover class]]) {
+            }
+            if ([coreHandover isKindOfClass:[VSAudioCoreHandover class]] ||
+                [coreHandover isKindOfClass:[VSVideoCoreHandover class]])
+            {
                 [audioArray addObject:coreHandover];
             }
         }
