@@ -10,6 +10,12 @@
 
 #import "VSCoreServices.h"
 
+@interface VSTimelineView()
+
+@property NSTrackingArea *trackingArea;
+
+@end
+
 @implementation VSTimelineView
 
 @synthesize resizingDelegate    = _timelineViewDelegate;
@@ -21,7 +27,8 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code here.
+        self.trackingArea = [[NSTrackingArea alloc] initWithRect:self.frame options:(NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingActiveAlways ) owner:self userInfo:nil];
+        [self addTrackingArea:self.trackingArea];
     }
     
     return self;
@@ -51,15 +58,16 @@
 
 -(void) keyDown:(NSEvent *)theEvent{
     if([self keyDownDelegateRespondsToSelector:@selector(didReceiveKeyDownEvent:)]){
+        DDLogInfo(@"received %@", NSStringFromClass([self class]));
         [self.keyDownDelegate didReceiveKeyDownEvent:theEvent];
     }
+    [self.nextResponder keyDown:theEvent];
 }
 
 -(void) mouseDragged:(NSEvent *)theEvent{
     if([self mouseMoveDelegateRespondsToSelector:@selector(mouseDragged:onView:)]) {
         [self.mouseMoveDelegate mouseDragged:theEvent onView:self];
     }
-        
 }
 
 #pragma mark- VSTrackViewDelegate implementation
@@ -74,6 +82,12 @@
                     [self.resizingDelegate frameOfView:self wasSetFrom:oldFrame to:self.frame];
             }
     }
+    
+    if([self.trackingAreas containsObject:self.trackingArea]){
+        [self removeTrackingArea:self.trackingArea];
+    }
+    self.trackingArea = [[NSTrackingArea alloc] initWithRect:self.frame options:(NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingActiveAlways ) owner:self userInfo:nil];
+    [self addTrackingArea:self.trackingArea];
 }
 
 #pragma mark - Private Methods

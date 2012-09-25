@@ -14,10 +14,11 @@
 
 #pragma mark - Init
 
--(id) initWithValue:(id)aValue forTimestamp:(double)aTimestamp{
+-(id) initWithValue:(id)aValue forTimestamp:(double)aTimestamp andID:(NSUInteger)ID{
     if(self = [self init]){
         self.value = aValue;
         self.timestamp = aTimestamp;
+        self.ID = ID;
     }
     
     return self;

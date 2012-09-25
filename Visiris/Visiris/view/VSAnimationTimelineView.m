@@ -10,6 +10,12 @@
 
 #import "VSCoreServices.h"
 
+@interface VSAnimationTimelineView()
+
+
+
+@end
+
 @implementation VSAnimationTimelineView
 
 
@@ -18,17 +24,17 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code here.
+        
     }
     
     return self;
 }
 
-#pragma mark - NSView
 
--(void) drawRect:(NSRect)dirtyRect{
-    DDLogInfo(@"drawREct");
+
+
+-(void) mouseEntered:(NSEvent *)theEvent{
+    [self.window makeFirstResponder:self];
 }
-
 
 @end

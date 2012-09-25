@@ -156,6 +156,19 @@ static NSString* defaultNib = @"VSParameterView";
     [self addNewKeyFrame];
 }
 
+- (IBAction)previousKeyFrame:(id)sender {
+    if([self keyFrameDelegateRespondsToSelector:@selector(parameterViewController:wantsToGoToPreviousFrameOfParameter:)]){
+        [self.keyFrameDelegate parameterViewController:self
+                   wantsToGoToPreviousFrameOfParameter:self.parameter];
+    }
+}
+
+- (IBAction)nextKeyFrame:(id)sender {
+    if([self keyFrameDelegateRespondsToSelector:@selector(parameterViewController:wantsToGoToNextKeyFrameOfParameter:)]){
+        [self.keyFrameDelegate parameterViewController:self
+                    wantsToGoToNextKeyFrameOfParameter:self.parameter];
+    }
+}
 
 
 
@@ -475,6 +488,4 @@ static NSString* defaultNib = @"VSParameterView";
 -(void) setOptionsParameterDefaultValue:(id) key{
     ((VSOptionParameter*)self.parameter).selectedKey = key;
 }
-
-
 @end

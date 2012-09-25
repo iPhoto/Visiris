@@ -26,6 +26,8 @@
 
 -(BOOL) keyFrame:(VSKeyFrame*) keyFrame ofParameter:(VSParameter*) parameter willBeMovedFromTimestamp:(double) fromTimestamp toTimestamp:(double*) toTimestamp andFromValue:(id) fromValue toValue:(id*) toValue;
 
+-(BOOL) selectedKeyFramesWantsBeDeleted;
+
 @end
 
 
@@ -38,6 +40,12 @@
 -(id) initWithDefaultNibAndTrackHeight:(float) trackHeight;
 
 -(void) showTimelineForTimelineObject:(VSTimelineObject*) timelineObject;
+
+-(VSAnimationTrackViewController *) trackViewControllerOfParameter:(VSParameter *) parameter;
+
+-(void) moveToNearestKeyFrameLeftOfParameter:(VSParameter*) parameter;
+
+-(void) moveToNearestKeyFrameRightOfParameter:(VSParameter*) parameter;
 
 @property (weak) IBOutlet VSAnimationTimelineScrollView *scrollView;
 

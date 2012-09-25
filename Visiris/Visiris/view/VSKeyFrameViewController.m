@@ -44,6 +44,12 @@
     [self.keyFrame addObserver:self forKeyPath:@"value" options:0 context:nil];
 }
 
+#pragma mark - NSViewController
+
+-(void) dealloc{
+    [self.keyFrame removeObserver:self forKeyPath:@"value"];
+}
+
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     if([keyPath isEqualToString:@"value"]){
         [self.view setFrame:[self computeFrameRect]];
@@ -122,7 +128,7 @@
     return _pixelTimeRatio;
 }
 
--(BOOL) getSelected{
+-(BOOL) selected{
     return self.keyFrameView.selected;
 }
 

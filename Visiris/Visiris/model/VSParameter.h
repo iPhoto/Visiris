@@ -95,51 +95,7 @@
  */
 -(VSKeyFrame*) keyFrameForTimestamp:(double) timestamp;
 
-///**
-// * Returns the value of the animation at the current timestamp as float
-// *
-// * If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
-// * @param timestamp Timestamp the value will returned for. The timestamp is relative to the animation time.
-// * @return The value of the parameter the animation is connected with for the given timestamp.  If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
-// */
-//-(float) floatValueForTimestamp:(double) timestamp;
-//
-///**
-// * Returns the value of the animation at the current timestamp as NSString
-// *
-// * If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
-// * @param timestamp Timestamp the value will returned for. The timestamp is relative to the animation time.
-// * @return The value of the parameter the animation is connected with for the given timestamp.  If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
-// */
-//-(NSString*) stringValueForTimestamp:(double) timestamp;
-//
-///**
-// * Returns the value of the animation at the current timestamp as boolean
-// *
-// * If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
-// * @param timestamp Timestamp the value will returned for. The timestamp is relative to the animation time.
-// * @return The value of the parameter the animation is connected with for the given timestamp.  If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
-// */
-//-(BOOL) boolValueForTimestamp:(double) timestamp;
-
-/**
- * Returns the value stored in the keyframe with timestamp -1 as float
- * @return The value stored in the keyframe with timestamp -1
- */
--(float) defaultFloatValue;
-
-/**
- * Returns the value stored in the keyframe with timestamp -1 as NSString
- * @return The value stored in the keyframe with timestamp -1 as NSString
- */
--(NSString*) defaultStringValue;
-
-/**
- * Returns the value stored in the keyframe with timestamp -1 as BOOL
- * @return The value stored in the keyframe with timestamp -1 as BOOL
- */
--(BOOL) defaultBoolValue;
-
+#pragma mark - Default Values
 
 /**
  * Sets the NSString value for the keyframe with the timestamp -1
@@ -167,12 +123,6 @@
 -(VSKeyFrame*) addKeyFrameWithValue:(id) aValue forTimestamp:(double) aTimestamp;
 
 /**
- * Removes the keyFrame with the aTimestamp.
- * @param aTimestamp The timestamp the keyfram is deleted for.
- */
--(void) removeKeyFrameAt:(double) aTimestamp;
-
-/**
  * Set as selector for undoing changes of the parameter's default value
  * @param oldValue DefaultValue of the parameter before the change.
  * @param undoManager NSUndoManager the change of the defaultValue is registrated at.
@@ -190,5 +140,7 @@
 -(void) setValue:(id)value forKeyFrame:(VSKeyFrame*) keyFrame;
 
 -(void) changeKeyFrames:(VSKeyFrame*) keyFrame timestamp:(double) newTimestamp;
+
+-(void) removeKeyFrame:(VSKeyFrame*) keyFrameToRemove;
 
 @end

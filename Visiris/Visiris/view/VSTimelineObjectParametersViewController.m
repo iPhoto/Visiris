@@ -171,4 +171,10 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
     ((VSParameterViewController*)[self.parameterViewControllers objectForKey:[NSNumber numberWithInteger:parameter.ID]]).selectedKeyframe = keyFrame;
 }
 
+-(void) unselectAllSelectedKeyFrames{
+    for(VSParameterViewController *parameterViewController in [self.parameterViewControllers allValues]){
+        parameterViewController.selectedKeyframe = nil;
+    }
+}
+
 @end

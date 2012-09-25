@@ -11,10 +11,14 @@
 
 @class VSParameter;
 @class VSKeyFrame;
+@class VSParameterViewController;
 
 @protocol VSParameterViewKeyFrameDelegate <NSObject>
 
 -(VSKeyFrame*) addKeyFrameToParameter:(VSParameter*) parameter withValue:(id) value;
+
+-(void) parameterViewController:(VSParameterViewController*) parameterView wantsToGoToNextKeyFrameOfParameter:(VSParameter*) parameter;
+-(void) parameterViewController:(VSParameterViewController*) parameterView wantsToGoToPreviousFrameOfParameter:(VSParameter*) parameter;
 
 @end
 
@@ -31,6 +35,12 @@
 
 @property (weak) IBOutlet NSView *parameterHolder;
 
+
+#pragma mark - IBAction
+
+- (IBAction)previousKeyFrame:(id)sender;
+
+- (IBAction)nextKeyFrame:(id)sender;
 
 /** 
  * Called when the value of the textField has changed.

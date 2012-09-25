@@ -12,4 +12,5 @@
 
 @property NSColor *trackColor;
 @property id<VSViewResizingDelegate> delegate;
+@property NSArray *keyFrameConnectionPaths;
 @end

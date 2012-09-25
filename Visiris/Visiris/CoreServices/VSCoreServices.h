@@ -17,6 +17,7 @@
 #import "VSFormattingUtils.h"
 #import "VSParameterXMLUtils.h"
 #import "VSQuartzCompositionUtils.h"
+#import "VSFrameUtils.h"
 
 /* Structs */
 #import "VSDoubleFrame.h"

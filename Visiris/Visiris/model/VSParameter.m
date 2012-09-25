@@ -251,6 +251,10 @@
     return value;
 }
 
+-(void) removeKeyFrame:(VSKeyFrame *)keyFrameToRemove{
+    [self.animation removeKeyFrame:keyFrameToRemove];
+}
+
 #pragma mark - Properties
 
 -(id) currentValue{

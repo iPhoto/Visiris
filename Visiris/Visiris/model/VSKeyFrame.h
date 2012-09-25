@@ -30,6 +30,7 @@
 
 @property BOOL boolValue;
 
+@property NSUInteger ID;
 
 #pragma mark - Init
 
@@ -39,6 +40,6 @@
  * @param aTimestamp Timestamp the VSKeyframe is set for. The timestamp is relative to the animation time.
  * @return self
  */
--(id) initWithValue:(NSData*) aValue forTimestamp:(double) aTimestamp;
+-(id) initWithValue:(NSData*) aValue forTimestamp:(double) aTimestamp andID:(NSUInteger) ID;
 
 @end

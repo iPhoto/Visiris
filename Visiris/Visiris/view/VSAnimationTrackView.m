@@ -20,12 +20,17 @@
     return self;
 }
 
-- (void)drawRect:(NSRect)dirtyRect
-{
+- (void)drawRect:(NSRect)dirtyRect{
     [[self trackColor] setFill];
     
     NSRectFill(dirtyRect);
     [self.delegate frameOfView:self wasSetFrom:NSZeroRect to:NSZeroRect];
+    
+    [[NSColor greenColor] setStroke];
+    
+    for(NSBezierPath *connectionPath in self.keyFrameConnectionPaths){
+        [connectionPath stroke];
+    }
 }
 
 -(void) setFrame:(NSRect)frameRect{

@@ -21,8 +21,6 @@
 #import "VSTransformTextureManager.h"
 #import "VSLayermode.h"
 
-#include <OpenGL/CGLProfiler.h>
-
 @interface VSRenderCore()
 
 /** Defines the coordinate for the plane */

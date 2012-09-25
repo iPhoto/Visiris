@@ -26,7 +26,6 @@
 @interface VSAnimationTrackViewController : NSViewController<VSViewResizingDelegate, VSKeyFrameViewControllerDelegate>
 
 @property VSParameter *parameter;
-@property NSMutableArray *keyFrameViewControllers;
 @property double pixelTimeRatio;
 @property id<VSAnimationTrackViewControllerDelegate> delegate;
 
@@ -36,4 +35,7 @@
 -(void) unselectAllKeyFrames;
 -(float) parameterValueOfPixelPosition:(float) pixelValue forKeyFrame:(VSKeyFrameViewController *) keyFrameViewController;
 -(float) pixelPositonForKeyFramesValue:(VSKeyFrameViewController *)keyFrameViewController;
+-(void) removeSelectedKeyFrames;
+-(VSKeyFrameViewController*) nearestKeyFrameViewRightOfXPosition:(float) xPosition;
+-(VSKeyFrameViewController*) nearestKeyFrameViewLeftOfXPosition:(float) xPosition;
 @end

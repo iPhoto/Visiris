@@ -14,6 +14,7 @@
 
 @interface VSAnimation()
 
+@property NSUInteger currentKeyframeID;
 
 @end
 
@@ -51,7 +52,7 @@
         _keyFrames = [[NSMutableArray alloc]init];
     }
     
-    VSKeyFrame* newKeyFrame = [[VSKeyFrame alloc] initWithValue:aValue forTimestamp:aTimestamp];
+    VSKeyFrame* newKeyFrame = [[VSKeyFrame alloc] initWithValue:aValue forTimestamp:aTimestamp andID:[self nextKeyFrameID]];
     
     [self.keyFrames addObject:newKeyFrame];
 
@@ -175,6 +176,10 @@
         }
         return NSOrderedAscending;
     }];
+}
+
+-(NSUInteger) nextKeyFrameID{
+    return ++self.currentKeyframeID;
 }
 
 #pragma mark - Properties

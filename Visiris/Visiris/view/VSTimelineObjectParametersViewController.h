@@ -32,6 +32,8 @@
 
 -(void) selectKeyFrame:(VSKeyFrame*) keyFrame ofParameter:(VSParameter*) parameter;
 
+-(void) unselectAllSelectedKeyFrames;
+
 /**
  * Removes all Parameter views
  */
