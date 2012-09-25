@@ -20,6 +20,7 @@
 #import "VSLayerShader.h"
 #import "VSTransformTextureManager.h"
 #import "VSLayermode.h"
+#import "VSBackgroundShader.h"
 
 @interface VSRenderCore()
 
