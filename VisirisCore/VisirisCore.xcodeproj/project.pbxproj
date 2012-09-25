@@ -31,6 +31,10 @@
 		271341F016007607003E5168 /* VSLayermode.m in Sources */ = {isa = PBXBuildFile; fileRef = 271341EE16007607003E5168 /* VSLayermode.m */; };
 		2726745B157F76A400EBE6B0 /* VSTextureManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 27267459157F76A400EBE6B0 /* VSTextureManager.h */; };
 		2726745C157F76A400EBE6B0 /* VSTextureManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2726745A157F76A400EBE6B0 /* VSTextureManager.m */; };
+		27443E7616109E740090AD5F /* VSBackgroundShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 27443E7416109E740090AD5F /* VSBackgroundShader.h */; };
+		27443E7716109E740090AD5F /* VSBackgroundShader.m in Sources */ = {isa = PBXBuildFile; fileRef = 27443E7516109E740090AD5F /* VSBackgroundShader.m */; };
+		27443E7B1610A04B0090AD5F /* background.fs.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 27443E791610A04B0090AD5F /* background.fs.glsl */; };
+		27443E7C1610A04B0090AD5F /* background.vs.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 27443E7A1610A04B0090AD5F /* background.vs.glsl */; };
 		2745457415AEDC400064597D /* VSPBufferRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 2745457215AEDC400064597D /* VSPBufferRenderer.h */; };
 		2745457515AEDC400064597D /* VSPBufferRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2745457315AEDC400064597D /* VSPBufferRenderer.m */; };
 		274C70CE157E81DD0031F9B2 /* VSImageContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 274C70CC157E81DD0031F9B2 /* VSImageContext.h */; };
@@ -98,6 +102,10 @@
 		271341EE16007607003E5168 /* VSLayermode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VSLayermode.m; path = CoreServices/VSLayermode.m; sourceTree = "<group>"; };
 		27267459157F76A400EBE6B0 /* VSTextureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTextureManager.h; sourceTree = "<group>"; };
 		2726745A157F76A400EBE6B0 /* VSTextureManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTextureManager.m; sourceTree = "<group>"; };
+		27443E7416109E740090AD5F /* VSBackgroundShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSBackgroundShader.h; sourceTree = "<group>"; };
+		27443E7516109E740090AD5F /* VSBackgroundShader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSBackgroundShader.m; sourceTree = "<group>"; };
+		27443E791610A04B0090AD5F /* background.fs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = background.fs.glsl; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
+		27443E7A1610A04B0090AD5F /* background.vs.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = background.vs.glsl; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
 		2745457215AEDC400064597D /* VSPBufferRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSPBufferRenderer.h; sourceTree = "<group>"; };
 		2745457315AEDC400064597D /* VSPBufferRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSPBufferRenderer.m; sourceTree = "<group>"; };
 		274C70CC157E81DD0031F9B2 /* VSImageContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VSImageContext.h; path = CoreServices/VSImageContext.h; sourceTree = "<group>"; };
@@ -217,6 +225,8 @@
 				2761514A1577F290005177C5 /* VSShader.m */,
 				27973E8F15B41C3A0051C16F /* VSLayerShader.h */,
 				27973E9015B41C3B0051C16F /* VSLayerShader.m */,
+				27443E7416109E740090AD5F /* VSBackgroundShader.h */,
+				27443E7516109E740090AD5F /* VSBackgroundShader.m */,
 				27973E9815B441D20051C16F /* VSTransformShader.h */,
 				27973E9915B441D20051C16F /* VSTransformShader.m */,
 				27AF8FC615B56546007A0322 /* VSTransformTextureManager.h */,
@@ -228,6 +238,8 @@
 		27A135A4157608FD00883B96 /* Shader */ = {
 			isa = PBXGroup;
 			children = (
+				27443E791610A04B0090AD5F /* background.fs.glsl */,
+				27443E7A1610A04B0090AD5F /* background.vs.glsl */,
 				27A135A5157608FD00883B96 /* layering.fs.glsl */,
 				27A135A6157608FD00883B96 /* layering.vs.glsl */,
 				27973E9415B43CA00051C16F /* transform.fs.glsl */,
@@ -384,6 +396,7 @@
 				279820E015B85A4B00E8AA8E /* VSPlaybackMode.h in Headers */,
 				271341EF16007607003E5168 /* VSLayermode.h in Headers */,
 				27B5F6A216106E2C00E9E332 /* VSVideoCoreHandover.h in Headers */,
+				27443E7616109E740090AD5F /* VSBackgroundShader.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -445,6 +458,8 @@
 				27A135A8157608FD00883B96 /* layering.vs.glsl in Resources */,
 				27973E9615B43CA00051C16F /* transform.fs.glsl in Resources */,
 				27973E9715B43CA00051C16F /* transform.vs.glsl in Resources */,
+				27443E7B1610A04B0090AD5F /* background.fs.glsl in Resources */,
+				27443E7C1610A04B0090AD5F /* background.vs.glsl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -496,6 +511,7 @@
 				276D436715B7FC8200389C86 /* VSAudioCoreHandover.m in Sources */,
 				271341F016007607003E5168 /* VSLayermode.m in Sources */,
 				27B5F6A316106E2C00E9E332 /* VSVideoCoreHandover.m in Sources */,
+				27443E7716109E740090AD5F /* VSBackgroundShader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -26,6 +26,7 @@
 @synthesize uniformTranslateY           = _uniformTranslateY;
 @synthesize uniformTranslateZ           = _uniformTranslateZ;
 @synthesize uniformIsQCPatch            = _uniformIsQCPatch;
+@synthesize uniformAlpha                = _uniformAlpha;
 
 
 #pragma Mark - Init
@@ -48,6 +49,7 @@
         self.uniformTranslateY          = glGetUniformLocation(self.program, "translateY");
         self.uniformTranslateZ          = glGetUniformLocation(self.program, "translateZ");
         self.uniformIsQCPatch           = glGetUniformLocation(self.program, "isQCPatch");
+        self.uniformAlpha               = glGetUniformLocation(self.program, "alpha");
     }
     return self;
 }

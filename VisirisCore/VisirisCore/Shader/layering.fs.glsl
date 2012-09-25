@@ -132,7 +132,7 @@ vec3 ContrastSaturationBrightness(vec3 color, float brt, float sat, float con)
 
 
 //Blendmodes
-#define BlendNormal(base, blend)        (blend + base*(1.0 - blend.a))
+#define BlendNormal(base, blend)        (blend  + base*(1.0 - blend.a))
 #define BlendLighten                    BlendLightenf
 #define BlendDarken(base, blend)        (BlendDarkenf(base, blend) + base*(1.0 - blend.a))
 #define BlendMultiply(base, blend) 		(base * blend + base*(1.0 - blend.a))
@@ -142,13 +142,10 @@ vec3 ContrastSaturationBrightness(vec3 color, float brt, float sat, float con)
 #define BlendDifference(base, blend) 	abs(base - blend)
 #define BlendNegation(base, blend)      (vec4(1.0) - abs(vec4(1.0) - base - blend))
 #define BlendExclusion(base, blend) 	(base + blend - 2.0 * base * blend)
-
 #define BlendScreen(base, blend) 		Blend(base, blend, BlendScreenf)
 #define BlendOverlay(base, blend) 		(Blend(base, blend, BlendOverlayf))
 #define BlendSoftLight(base, blend) 	Blend(base, blend, BlendSoftLightf)
 #define BlendHardLight(base, blend) 	(BlendOverlay(blend, base) + base*(1.0 - blend.a))
-
-//HIER WEITERMACHEN!!!!!!
 #define BlendColorDodge(base, blend) 	(Blend(base, blend, BlendColorDodgef))
 #define BlendColorBurn(base, blend)     (Blend(base, blend, BlendColorBurnf) + base*(1.0 - blend.a))
 #define BlendLinearDodge                BlendAdd
@@ -194,14 +191,15 @@ vec4 BlendLuminosityf(vec4 base, vec4 blend)
 	vec3 baseHSL = RGBToHSL(base.rgb);
 	vec3 temp = HSLToRGB(vec3(baseHSL.r, baseHSL.g, RGBToHSL(blend.rgb).b));
     return vec4(temp.r,temp.g,temp.b,(base.a+blend.a)/2.0);
-} 
-
+}
 
 void main()
 {
     vec4 base = texture2D(textures[0], texcoord);
     vec4 blend = texture2D(textures[1], texcoord);
-
+    
+    blend *= vec4(blend.a);
+    
     if (layermode == 1.0) {
         gl_FragColor = BlendNormal(base, blend);
     }
