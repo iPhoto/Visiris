@@ -213,7 +213,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
 
 #pragma mark - VSViewKeyDownDelegate
 
--(void) didReceiveKeyDownEvent:(NSEvent *)theEvent{
+-(void) view:(NSView *)view didReceiveKeyDownEvent:(NSEvent *)theEvent{
     if(theEvent){
         unichar keyCode = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];
         [self interpretKeyEvents:[NSArray arrayWithObject:theEvent]];

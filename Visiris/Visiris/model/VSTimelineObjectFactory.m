@@ -27,7 +27,7 @@
 @property (strong) NSMutableDictionary *sourceSupplierClasses;
 
 /** last unique timelineObjectID */
-@property NSInteger lastAssignedTimelineObjectID;
+@property NSUInteger lastAssignedTimelineObjectID;
 @end
 
 @implementation VSTimelineObjectFactory

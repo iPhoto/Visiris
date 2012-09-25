@@ -199,6 +199,12 @@
 
 #pragma mark - Private Methods
 
+/**
+ * Called when a VSTimelineObjectsGotUnselected-Notification was received.
+ *
+ * Removes the obserserves for the currentValues of the unselected VSTimelineObject's parameters
+ * @param notification NSNotification storing the unselected VSTimelineObject
+ */
 -(void) timelineObjectsGotUnselected:(NSNotification *) notification{
     for(VSParameter *parameter in [self.selectedTimelineObject visibleParameters]){
         [parameter removeObserver:self forKeyPath:@"currentValue"];
@@ -207,6 +213,12 @@
     self.selectedTimelineObject = nil;
 }
 
+/**
+ * Called when a VSTimelineObjectsGotSelected-Notification was received.
+ *
+ * Adds obserserves for the currentValues of the selected VSTimelineObject's parameters
+ * @param notification NSNotification storing the selected VSTimelineObject
+ */
 -(void) timelineObjectsGotSelected:(NSNotification *) notification{
     if([[notification object] isKindOfClass:[NSArray class]]){
         NSArray *selectedTimelineObjects = (NSArray*) [notification object];
@@ -217,7 +229,11 @@
                 self.selectedTimelineObject = (VSTimelineObject*) [selectedTimelineObjects objectAtIndex:0];
                 
                 for(VSParameter *parameter in [self.selectedTimelineObject visibleParameters]){
-                    [parameter addObserver:self forKeyPath:@"currentValue" options:0 context:nil];
+                    
+                    [parameter addObserver:self
+                                forKeyPath:@"currentValue"
+                                   options:0
+                                   context:nil];
                 }
             }
         }

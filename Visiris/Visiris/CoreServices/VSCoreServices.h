@@ -40,7 +40,6 @@
 #import "VSLog.h"
 
 /*Categories*/
-#import "NSColor+CGColorSupport.h"
 #import "NSImage+QuickLook.h"
 
 #endif

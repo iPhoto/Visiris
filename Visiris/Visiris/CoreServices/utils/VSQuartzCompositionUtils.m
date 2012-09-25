@@ -23,13 +23,12 @@
 static NSDictionary *visirisParameterDataTypeForQCPortAttributeTypeKey;
 
 +(void) initialize{
-    visirisParameterDataTypeForQCPortAttributeTypeKey = 
-    [[NSDictionary alloc] initWithObjectsAndKeys:
-     [NSNumber numberWithInt:VSParameterDataTypeBool],QCPortTypeBoolean,
-     [NSNumber numberWithInt:VSParameterDataTypeFloat],QCPortTypeNumber,
-     [NSNumber numberWithInt:VSParameterDataTypeString],QCPortTypeString,
-     [NSNumber numberWithInt:VSParameterDataTypeString],QCPortTypeIndex,
-     nil];
+    visirisParameterDataTypeForQCPortAttributeTypeKey = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                                         [NSNumber numberWithInt:VSParameterDataTypeBool],QCPortTypeBoolean,
+                                                         [NSNumber numberWithInt:VSParameterDataTypeFloat],QCPortTypeNumber,
+                                                         [NSNumber numberWithInt:VSParameterDataTypeString],QCPortTypeString,
+                                                         [NSNumber numberWithInt:VSParameterDataTypeString],QCPortTypeIndex,
+                                                         nil];
 }
 
 +(NSMutableDictionary*) publicInputPortsOfQuartzComposerPath:(NSString*) filePath{

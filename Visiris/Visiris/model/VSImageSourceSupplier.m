@@ -16,7 +16,6 @@
 
 -(VSImage *) getFrameForTimestamp:(double)aTimestamp withPlayMode:(VSPlaybackMode)playMode{
     
-    
     if (self.vsImage.data == NULL) {
         
         self.vsImage = [[VSImage alloc] init];

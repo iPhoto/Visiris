@@ -9,9 +9,14 @@
 #import "VSProjectSettings.h"
 
 @implementation VSProjectSettings
-@synthesize frameRate = _frameRate;
-@synthesize frameSize = _frameSize;
-@synthesize projectName = _projectName;
+
+#define DEFAULT_FRAME_RATE 60
+#define DEFAULT_FRAME_WIDTH 1280
+#define DEFAULT_FRAME_HEIGHT 720
+
+@synthesize frameRate       = _frameRate;
+@synthesize frameSize       = _frameSize;
+@synthesize projectName     = _projectName;
 
 static VSProjectSettings* sharedProjectSettings = nil;
 
@@ -30,8 +35,8 @@ static VSProjectSettings* sharedProjectSettings = nil;
 
 -(id)init{
     if (self = [super init]) {
-        self.frameRate = 60;
-        self.frameSize = NSMakeSize(1280, 720);
+        self.frameRate = DEFAULT_FRAME_RATE;
+        self.frameSize = NSMakeSize(DEFAULT_FRAME_WIDTH, DEFAULT_FRAME_HEIGHT);
     }
     return self;
 }

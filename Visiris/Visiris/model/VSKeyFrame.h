@@ -24,12 +24,16 @@
 /** Timestamp the VSKeyframe is set for. The timestamp is relative to the animation time. */
 @property double timestamp;
 
+/** Value of the keyFrame as NSString */
 @property NSString *stringValue;
 
+/** Value of the keyFrame as float */
 @property float floatValue;
 
+/** Value of the keyFrame as BOOL */
 @property BOOL boolValue;
 
+/** ID of the keyFrame. Unique for all keyFrames of one VSAnimation */
 @property NSUInteger ID;
 
 #pragma mark - Init
@@ -38,6 +42,7 @@
  * Inits the VSKeyFrame with the given value and timestamp.
  * @param aValue Value of the paramter the VSKeyFrame is connected to.
  * @param aTimestamp Timestamp the VSKeyframe is set for. The timestamp is relative to the animation time.
+ * @param ID Unique id of the parameter
  * @return self
  */
 -(id) initWithValue:(NSData*) aValue forTimestamp:(double) aTimestamp andID:(NSUInteger) ID;

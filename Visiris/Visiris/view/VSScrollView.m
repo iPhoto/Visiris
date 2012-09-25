@@ -18,6 +18,8 @@
 
 @implementation VSScrollView
 
+#pragma mark - Init
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
@@ -28,33 +30,25 @@
     return self;
 }
 
-- (void)drawRect:(NSRect)dirtyRect
-{
-    // Drawing code here.
-}
-
 -(void) awakeFromNib{
     [self.contentView setPostsBoundsChangedNotifications:YES];
     
     self.lastBounds = self.contentView.bounds;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(boundsDidChange:) name:NSViewBoundsDidChangeNotification object:self.contentView];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(boundsDidChange:)
+                                                 name:NSViewBoundsDidChangeNotification
+                                               object:self.contentView];
 }
 
--(void) boundsDidChange:(NSNotification*) notification{
-    if([self scrollingDelegateRespondsToSelector:@selector(scrollView:changedBoundsFrom:to:)]){
-        [self.scrollingDelegate scrollView:self changedBoundsFrom:self.lastBounds to:((NSView*) notification.object).bounds];
-    }
-    
-    self.lastBounds = ((NSView*) notification.object).bounds;
-}
+#pragma mark - Events
 
 -(void) scrollWheel:(NSEvent *)theEvent{
     
     BOOL allowedToScroll = YES;
     
-    if([self scrollingDelegateRespondsToSelector:@selector(scrollView:willBeScrolledByScrollWheelEvent:)]){
-        allowedToScroll = [self.scrollingDelegate scrollView:self willBeScrolledByScrollWheelEvent:theEvent];
+    if([self scrollingDelegateRespondsToSelector:@selector(scrollView:wantsToBeScrolledByScrollWheelEvent:)]){
+        allowedToScroll = [self.scrollingDelegate scrollView:self wantsToBeScrolledByScrollWheelEvent:theEvent];
     }
     
     if(allowedToScroll){
@@ -62,10 +56,19 @@
     }
 }
 
+#pragma mark - Methods
+
 -(void) setBoundsOriginWithouthNotifiying:(NSPoint) boundsOrigin{
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:NSViewBoundsDidChangeNotification object:self.contentView];
+    [[NSNotificationCenter defaultCenter]removeObserver:self
+                                                   name:NSViewBoundsDidChangeNotification
+                                                 object:self.contentView];
+    
     [self.contentView setBoundsOrigin:boundsOrigin];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(boundsDidChange:) name:NSViewBoundsDidChangeNotification object:self.contentView];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(boundsDidChange:)
+                                                 name:NSViewBoundsDidChangeNotification
+                                               object:self.contentView];
 }
 
 #pragma mark - Private Methods
@@ -85,6 +88,18 @@
     }
     
     return NO;
+}
+
+/**
+ * Method called when NSViewBoundsDidChangeNotification is sent
+ * @param notification NSNotification storing the information of the NSViewBoundsDidChangeNotification
+ */
+-(void) boundsDidChange:(NSNotification*) notification{
+    if([self scrollingDelegateRespondsToSelector:@selector(scrollView:changedBoundsFrom:to:)]){
+        [self.scrollingDelegate scrollView:self changedBoundsFrom:self.lastBounds to:((NSView*) notification.object).bounds];
+    }
+    
+    self.lastBounds = ((NSView*) notification.object).bounds;
 }
 
 @end

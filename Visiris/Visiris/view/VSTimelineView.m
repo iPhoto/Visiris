@@ -57,9 +57,8 @@
 
 
 -(void) keyDown:(NSEvent *)theEvent{
-    if([self keyDownDelegateRespondsToSelector:@selector(didReceiveKeyDownEvent:)]){
-        DDLogInfo(@"received %@", NSStringFromClass([self class]));
-        [self.keyDownDelegate didReceiveKeyDownEvent:theEvent];
+    if([self keyDownDelegateRespondsToSelector:@selector(view:didReceiveKeyDownEvent:)]){
+        [self.keyDownDelegate view:self didReceiveKeyDownEvent:theEvent];
     }
     [self.nextResponder keyDown:theEvent];
 }

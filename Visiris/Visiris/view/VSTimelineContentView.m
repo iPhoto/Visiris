@@ -8,6 +8,8 @@
 
 #import "VSTimelineContentView.h"
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "VSTimelineRulerView.h"
 #import "VSPlayheadMarker.h"
 
@@ -44,6 +46,9 @@
     return self;
 }
 
+/**
+ * Inits the view
+ **/
 -(void) setViewsProperties{
     self.scrollOffset = NSZeroPoint;
     
@@ -79,15 +84,24 @@
     [self.layer addSublayer:self.guideLine];
 }
 
--(void) drawRect:(NSRect)dirtyRect{
-    [[NSColor redColor] setFill];
-    NSRectFill(dirtyRect);
-}
-
 #pragma mark - NSView
 
 -(BOOL) isFlipped{
     return YES;
+}
+
+#pragma mark - Methods
+
+-(void) moveGuidelineToPosition:(CGFloat) location{
+    NSRect layerRect = self.frame;
+    layerRect.size.width = 1;
+    layerRect.origin.x = round(location+self.scrollOffset.x);
+    layerRect.origin.y = 0;
+    
+    [CATransaction begin];
+    [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+    [self.guideLine setFrame:NSIntegralRect(layerRect)];
+    [CATransaction commit];
 }
 
 
@@ -131,22 +145,6 @@
     }
 }
 
-
-
--(void) moveGuidelineToPosition:(CGFloat) location{
-    NSRect layerRect = self.frame;
-    layerRect.size.width = 1;
-    layerRect.origin.x = round(location+self.scrollOffset.x);
-    layerRect.origin.y = 0;
-    
-    [CATransaction begin];
-    [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
-    [self.guideLine setFrame:NSIntegralRect(layerRect)];
-    [CATransaction commit];
-}
-
-
-
 #pragma mark - Private Methods
 
 /**
@@ -165,6 +163,10 @@
     return NO;
 }
 
+/*+
+ * Called when NSViewBoundsDidChangeNotification is called
+ * @param notification NSNotification send by the NSViewBoundsDidChangeNotification
+ */
 -(void) boundsDidChange:(NSNotification*) notification{
     if(notification.object == self.enclosingScrollView.contentView){
         [self updateScrollOffset];
@@ -182,6 +184,5 @@
     self.scrollOffset = NSMakePoint(xOffset, yOffset);
 }
 
-#pragma mark - Properties
 
 @end

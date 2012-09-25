@@ -21,7 +21,7 @@
 @property double pixelTimeRatio;
 @property (readonly) double duration;
 @property (readonly) float pixelLength;
-@property (readonly) VSTimelineScrollView *timelineScrollView;
+@property (readonly, weak) VSTimelineScrollView *timelineScrollView;
 @property (readonly) double playheadTimePosition;
 
 /**

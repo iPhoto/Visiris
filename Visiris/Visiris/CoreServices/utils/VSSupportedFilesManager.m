@@ -106,7 +106,11 @@ static NSString* quartzComposerSupplierClassString;
  @param name Name of the VSFileType. Usually its extension. E.g. PNG, MOV,... 
  */ 
 +(void) addSupportedVideo: (NSString*) fileType name:(NSString*)name{
-    [self addSupportedFile:fileType  name:name ofKind:VSFileKindVideo classString:videoClassString supplierClassString:videoSupplierClassString];
+    [self addSupportedFile:fileType
+                      name:name
+                    ofKind:VSFileKindVideo
+               classString:videoClassString
+       supplierClassString:videoSupplierClassString];
 }
 
 /**
@@ -116,7 +120,11 @@ static NSString* quartzComposerSupplierClassString;
  @param name Name of the VSFileType. Usually its extension. E.g. PNG, MOV,... 
  */ 
 +(void) addSupportedImage: (NSString*) fileType name:(NSString*)name{
-    [self addSupportedFile:fileType name:name ofKind:VSFileKindImage classString:imageClassString supplierClassString:imageSupplierClassString];
+    [self addSupportedFile:fileType
+                      name:name
+                    ofKind:VSFileKindImage
+               classString:imageClassString
+       supplierClassString:imageSupplierClassString];
 }
 
 /**
@@ -126,7 +134,11 @@ static NSString* quartzComposerSupplierClassString;
  @param name Name of the VSFileType. Usually its extension. E.g. PNG, MOV,... 
  */ 
 +(void) addSupportedQuartzComposer: (NSString*) fileType name:(NSString*)name{
-    [self addSupportedFile:fileType name:name ofKind:VSFileKindQuartzComposerPatch classString:quartzComposerClassString supplierClassString:quartzComposerSupplierClassString];
+    [self addSupportedFile:fileType
+                      name:name
+                    ofKind:VSFileKindQuartzComposerPatch
+               classString:quartzComposerClassString
+       supplierClassString:quartzComposerSupplierClassString];
 }
 
 /**
@@ -136,7 +148,11 @@ static NSString* quartzComposerSupplierClassString;
  @param name Name of the VSFileType. Usually its extension. E.g. PNG, MOV,... 
  */ 
 +(void) addSupportedAudio: (NSString*) fileType name:(NSString*)name{
-    [self addSupportedFile:fileType name:name ofKind:VSFileKindAudio classString:audioClassString supplierClassString:audioSupplierClassString];
+    [self addSupportedFile:fileType
+                      name:name
+                    ofKind:VSFileKindAudio
+               classString:audioClassString
+       supplierClassString:audioSupplierClassString];
 }
 
 /**
@@ -148,7 +164,11 @@ static NSString* quartzComposerSupplierClassString;
  @param supplierClassString Name of the child-class of VSSourceSupplier associated with that fileType. The class is usually depending on the the fileKind
  */
 +(void) addSupportedFile: (NSString*) uti name:(NSString*) name ofKind:(VSFileKind) kind  classString:(NSString*) classString supplierClassString:(NSString*) supplierClassString{
-    [supportedFiles setObject:[[VSFileType alloc] initWithName:name uti:uti ofKind:kind timelineObjectSourceClassString:classString supplierClassString:supplierClassString ] forKey:uti];
+    [supportedFiles setObject:[[VSFileType alloc] initWithName:name
+                                                           uti:uti
+                                                        ofKind:kind
+                               timelineObjectSourceClassString:classString
+                                           supplierClassString:supplierClassString ] forKey:uti];
 }
 
 @end

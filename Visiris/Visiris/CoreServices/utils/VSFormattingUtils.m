@@ -30,8 +30,6 @@
     formatedTimeString = [formatedTimeString stringByReplacingOccurrencesOfString:@"ss" withString:[NSString stringWithFormat:componentFormat,seconds]];
     formatedTimeString = [formatedTimeString stringByReplacingOccurrencesOfString:@"tt" withString:[NSString stringWithFormat:componentFormat,tenth]];
     
-//    [NSString stringWithFormat:@"%02d:%02d:%02d:%02d",hours,minutes,seconds,tenth];
-    
     return formatedTimeString;
 }
 

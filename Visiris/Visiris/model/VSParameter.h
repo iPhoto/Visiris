@@ -51,18 +51,23 @@
 /** Every parameter has its own animation. As soon as an parameter is initialized, a new Keyframe for the timestamp -1 with its default value is added */
 @property (strong) VSAnimation *animation;
 
+/** current value of the parameter according to it's animation and a timestamp given when updateCurrentValue is called */
 @property (readonly) id currentValue;
 
+/** default value of the parameter which is the the same as the configuredDefaultValue when the parameter is created. The default value is changed while no keyFrame is added to the parameter's animation */
 @property id defaultValue;
 
-@property (readonly) NSInteger ID;
+/** the paramter's ID */
+@property (readonly) NSUInteger ID;
 
 #pragma mark - Init
 
 
 /**
- * Inits the VSParameter with the given data, inits its animation with a keyFRame holding the defaultValue at timestamp -1
+ * Inits the VSParameter with the given data
+ *
  * @param theName Name of the parameter
+ * @param theID Unique ID of the parameter
  * @param aType Type of the parameter like defined in VSParameterTypes.h
  * @param aDataType VSParameterDataType defining the paramters DataType
  * @param theDefaultValue Default value of the parameter. As soon as an parameter is initialized, a new Keyframe for the timestamp -1 with its default value is added.
@@ -86,16 +91,8 @@
  */
 -(id) valueForTimestamp:(double) timestamp;
 
-/**
- * Returns the key frame of the animation at the current timestamp.
- *
- * If an VSDeviceParameterMapper is set, it returns the current Device value mapped to the parameter values
- * @param timestamp Timestamp the keyframe will returned for. The timestamp is relative to the animation time.
- * @return The keyframe, if a keyfram was set for this timestamp, nil otherwise
- */
--(VSKeyFrame*) keyFrameForTimestamp:(double) timestamp;
 
-#pragma mark - Default Values
+#pragma mark Default Values
 
 /**
  * Sets the NSString value for the keyframe with the timestamp -1
@@ -129,18 +126,50 @@
  */
 -(void) undoParametersDefaultValueChange:(id) oldValue atUndoManager:(NSUndoManager*) undoManager;
 
+/**
+ * Updates the parameter's currentValue-Property for the given timestamp.
+ *
+ * Tells it's animation to compute the parameters value for the timestamp
+ * @param aTimestamp Timestamp the value is computed for
+ */
 -(void) updateCurrentValueForTimestamp:(double) aTimestamp;
 
+/**
+ * Current Value as NSString
+ * @return The currentValue of the Parameter as NSString
+ */
 -(NSString*) currentStringValue;
 
+/**
+ * Current Value as BOOL
+ * @return The currentValue of the Parameter as BOOL
+ */
 -(BOOL) currentBoolValue;
 
+/**
+ * Current Value as float
+ * @return The currentValue of the Parameter as float
+ */
 -(float) currentFloatValue;
 
+/**
+ * Changes the keyFrames value and sets it as currentValue of the parameter.
+ * @param value Value the given keyFrame's value will be changed
+ * @param keyFrame VSKeyFrame the value will be changed of
+ */
 -(void) setValue:(id)value forKeyFrame:(VSKeyFrame*) keyFrame;
 
+/**
+ * Changes the timestamp of the given keyFrame
+ * @param keyFrame VSKeyFrame the timestamp will be changed of
+ * @param newTimestamp Timestamp the given keyFrame's timestamp will be set to
+ */
 -(void) changeKeyFrames:(VSKeyFrame*) keyFrame timestamp:(double) newTimestamp;
 
+/**
+ * Removes the given VSKeyFrame from the parameter's animation
+ * @param keyFrameToRemove VSKeyFrame which will be removed from the parameter's animation
+ */
 -(void) removeKeyFrame:(VSKeyFrame*) keyFrameToRemove;
 
 @end

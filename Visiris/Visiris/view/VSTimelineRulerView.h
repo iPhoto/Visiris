@@ -13,5 +13,8 @@
  * !!!! Please add mor here !!!
  */
 @interface VSTimelineRulerView : NSRulerView
+
+/** PixelTimeRatio of the timeline the rulerview represents the timecodes for */
 @property double pixelTimeRatio;
+
 @end

@@ -69,6 +69,11 @@
 
 
 
+
+
+
+
+
 /**
  * Protocoll defining how the VSTimelineScrollView communicates with its zoomingDelegate.
  */
@@ -94,13 +99,20 @@
 @end
 
 
+
+
+
+
+
+
+
 /**
  * Subclass of NSScrollView. Used for scrollView in the timelineView to handle the interaction with the scrool wheel differently
  */
 @interface VSTimelineScrollView : VSScrollView<VSTrackHolderViewDelegate>
 
 /** DocumentView of the scrollView */
-@property VSTimelineContentView *trackHolderView;
+@property (strong) VSTimelineContentView *trackHolderView;
 
 /** Ratio between the width of the timelineView and the duration of the VSTimeline it's reperesenting */
 @property double pixelTimeRatio;
@@ -115,13 +127,15 @@
 @property (readonly) float visibleTrackViewsHolderWidth;
 
 /** Delegate the class communicates with as defined in VSTimelineScrollViewZoomingDelegate */
-@property id<VSTimelineScrollViewZoomingDelegate> zoomingDelegate;
+@property (weak) id<VSTimelineScrollViewZoomingDelegate> zoomingDelegate;
 
 /** Delegate VSTrackHolderView communicates like defined in VSPlayHeadRulerMarkerDelegate*/
-@property id<VSPlayHeadRulerMarkerDelegate> playheadMarkerDelegate;
+@property (weak) id<VSPlayHeadRulerMarkerDelegate> playheadMarkerDelegate;
 
+/** Current width of the trackHolder. Properties area usually overriden by the Childclasses of VSTimelineScrollView. */
 @property float trackHolderWidth;
 
+/** Thicknes of the horizontalRuler displaying the timecodes */
 @property (readonly) CGFloat timelecodeRulerThickness;
 
 /**

@@ -48,11 +48,12 @@
  */
 -(CGFloat) mouseDownOnRulerView:(NSRulerView*) rulerView atLocation:(CGFloat) location;
 
-
 @end
 
 
 @class VSPlayheadMarker;
+
+
 
 /**
  * Subclass of NSView holding views representing the tracks of the timeline. Besides responsible for the playhead marker and the horizontal rulerview

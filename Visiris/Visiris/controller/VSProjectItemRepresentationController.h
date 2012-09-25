@@ -19,7 +19,7 @@
 @interface VSProjectItemRepresentationController : NSObject
 
 /** Stores the representations for all VSProjectItmes in the project */
-@property (readonly) NSMutableArray  *projectItemRepresentations;
+@property (strong, readonly) NSMutableArray  *projectItemRepresentations;
 
 #pragma mark- Functions
 /**

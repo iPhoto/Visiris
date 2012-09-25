@@ -10,7 +10,6 @@
 
 #import "VSProjectItemRepresentation.h"
 #import "VSTimelineObjectViewController.h"
-#import "NSColor+CGColorSupport.h"
 
 #import "VSCoreServices.h"
 

@@ -49,22 +49,6 @@
     DDLogInfo(@"dealloc");
 }
 
-//#pragma mark - NSCoding implementation
-//
-//-(void) encodeWithCoder:(NSCoder *)aCoder{
-//    
-//    [aCoder encodeObject:self.sourceObject forKey:@"sourceObject"];
-//    [aCoder encodeInt:self.textureID forKey:@"textureID"];
-//}
-//
-//-(id) initWithCoder:(NSCoder *)aDecoder{
-//    self.sourceObject = [aDecoder decodeObjectForKey:@"sourceObject"];
-//    self.textureID = [aDecoder decodeIntForKey:@"textureID"];
-//    
-//    self.supplier = [[VSSourceSupplier alloc] initWithTimelineObject:self];
-//    
-//    return self;
-//}
 
 #pragma mark - NSCopying Implementation
 

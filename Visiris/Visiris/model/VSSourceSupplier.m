@@ -31,11 +31,8 @@
     return self;
 }
 
-
-//TODO: returns only the defaultValueForNow
 - (NSDictionary *)getAtrributesForTimestamp:(double)aTimestamp{
-    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
-    
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];    
     if(self.timelineObject){
         for(VSParameter *parameter in [self.timelineObject.parameters allValues]){
             if([parameter isKindOfClass:[VSParameter class]]){

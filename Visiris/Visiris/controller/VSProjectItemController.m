@@ -106,7 +106,12 @@ static VSProjectItemController* sharedProjectItemController = nil;
         duration = [VSFileUtils durationInMillisecondsOfFile:filePath];
     }
     
-    newItem = [[VSProjectItem alloc] initWithFile:filePath ofType:type name:name fileSize:fileSize duration:duration itemID:[self getNewProjectItemID]];
+    newItem = [[VSProjectItem alloc] initWithFile:filePath
+                                           ofType:type
+                                             name:name
+                                         fileSize:fileSize
+                                         duration:duration
+                                           itemID:[self getNewProjectItemID]];
     
     return newItem;
     

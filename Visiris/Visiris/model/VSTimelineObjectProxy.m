@@ -32,20 +32,6 @@
     return self;
 }
 
-#pragma mark - NSCoding Implementation
-
-//-(void) encodeWithCoder:(NSCoder *)aCoder{
-//    [aCoder encodeDouble:self.startTime forKey:@"startTime"];
-//    [aCoder encodeDouble:self.duration forKey:@"duration"];
-//    [aCoder encodeObject:self.name forKey:@"name"];
-//    [aCoder encodeObject:self.icon forKey:@"icon"];
-//    [aCoder encodeBool:self.selected forKey:@"selected"];
-//    [aCoder encodeInt:self.timelineObjectID forKey:@"timelineObjectID"];
-//}
-//
-//-(id) initWithCoder:(NSCoder *)aDecoder{
-//
-//}
 
 #pragma mark - NSCopying Implementation
 

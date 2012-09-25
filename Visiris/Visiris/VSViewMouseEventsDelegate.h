@@ -31,8 +31,20 @@
  */
 -(void) mouseDragged:(NSEvent*) theEvent onView:(NSView*) view;
 
+/**
+ * Called when a mouseDown on an NSView happend
+ * @param theEvent NSEvent of the mouseDown-Event
+ * @param view NSView the mouse was pressed down on
+ */
 -(void) mouseDown:(NSEvent*) theEvent onView:(NSView*) view;
 
+/**
+ * Called when a view wants to be draggged around by the mouse in its mouseDragged-Event
+ * @param view View that wants to be dragged
+ * @param fromPoint Current origin of the frame
+ * @param toPoint Point the origin of the frame wants to be changed to
+ * @return NSPoint the origin of the frame will be changed to
+ */
 -(NSPoint) view:(NSView*) view wantsToBeDraggedFrom:(NSPoint) fromPoint to:(NSPoint) toPoint;
 
 @end

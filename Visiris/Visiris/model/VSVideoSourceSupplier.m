@@ -194,9 +194,8 @@
                                 NSNumber* value = [NSNumber numberWithUnsignedInt: kCVPixelFormatType_32BGRA];
                                 NSDictionary* videoSettings = [NSDictionary dictionaryWithObject:value forKey:key]; 
                                 
-                                AVAssetReaderTrackOutput* output = [AVAssetReaderTrackOutput 
-                                                                    assetReaderTrackOutputWithTrack:videoTrack 
-                                                                    outputSettings:videoSettings];
+                                AVAssetReaderTrackOutput* output = [AVAssetReaderTrackOutput assetReaderTrackOutputWithTrack:videoTrack
+                                                                                                              outputSettings:videoSettings];
                                 //    output.alwaysCopiesSampleData = NO;
                                 
                                 [self.movieReader addOutput:output];
