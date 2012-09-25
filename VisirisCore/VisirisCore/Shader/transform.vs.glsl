@@ -98,6 +98,7 @@ void main()
     float qcRotate = 0.0;
     
     
+    //TODO create own program to delete this if or input variable from outside
     if (isQCPatch) {
         qcRotate = 180.0;
     }

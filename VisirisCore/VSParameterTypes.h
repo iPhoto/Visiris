@@ -45,4 +45,6 @@ extern NSString* VSParameterQuartzComposerPublicInputs;
 
 extern NSString* VSParameterKeyBlendMode;
 
+extern NSString* VSParameterKeyAlpha;
+
 #endif

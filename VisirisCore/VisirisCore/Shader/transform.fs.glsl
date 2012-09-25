@@ -3,10 +3,15 @@
 #version 120
 
 uniform sampler2D texture;
+uniform float alpha;
 
 varying vec2 texcoord;
 
 void main()
-{
-    gl_FragColor = texture2D(texture, texcoord);
+{    
+    vec4 color = texture2D(texture, texcoord);
+    
+    color.a *= alpha;
+   // color.b += 1.0-color.a;
+    gl_FragColor = color;
 }

@@ -81,8 +81,7 @@
     glUniform1f(self.shader.uniformTranslateY, [[attributes valueForKey:VSParameterKeyPositionY] floatValue]);
     glUniform1f(self.shader.uniformTranslateZ, [[attributes valueForKey:VSParameterKeyPositionZ] floatValue]);
     glUniform1f(self.shader.uniformIsQCPatch, qcPatch);
-
-    
+    glUniform1f(self.shader.uniformAlpha,   [[attributes valueForKey:VSParameterKeyAlpha] floatValue]);
     
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);

@@ -45,10 +45,9 @@
 
 - (void)createAudioPlayerForProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID atTrack:(NSInteger)trackID andFilePath:(NSString *)path{
     
-    NSLog(@"create objectID %ld", objectItemID);
+//    NSLog(@"create objectID %ld", objectItemID);
 
     if (path) {
-
         NSMutableDictionary *trackPlayer = [self.playerCollectionToTrackID playerCollectionForTrackID:trackID];
         if (!trackPlayer) {
             
@@ -76,7 +75,7 @@
         }
     }
     
-    [self printReferenceTable];
+//    [self printReferenceTable];
 }
 
 - (void)playAudioOfObjectID:(NSInteger)objectID atTime:(double)time atVolume:(float)volume{
@@ -99,12 +98,12 @@
 }
 
 - (void)deleteTimelineobjectID:(NSInteger)objectID{
-    NSLog(@"delete objectID %ld", objectID);
-    NSLog(@"description: %@",((VSAudioPlayer *)[self.playerToObjectID objectForKey:[NSNumber numberWithInteger:objectID]]).description);
+//    NSLog(@"delete objectID %ld", objectID);
+//    NSLog(@"description: %@",((VSAudioPlayer *)[self.playerToObjectID objectForKey:[NSNumber numberWithInteger:objectID]]).description);
     VSAudioPlayer *temp = (VSAudioPlayer *)[self.playerToObjectID objectForKey:[NSNumber numberWithInteger:objectID]];
     
     [self decrementReferenceCounting:temp];
-    [self printReferenceTable];
+//    [self printReferenceTable];
 
 }
 

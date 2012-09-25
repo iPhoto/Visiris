@@ -30,8 +30,8 @@ static VSProjectSettings* sharedProjectSettings = nil;
 
 -(id)init{
     if (self = [super init]) {
-        self.frameRate = 30;
-        self.frameSize = NSMakeSize(640.0f, 480.0f);
+        self.frameRate = 60;
+        self.frameSize = NSMakeSize(1280, 720);
     }
     return self;
 }

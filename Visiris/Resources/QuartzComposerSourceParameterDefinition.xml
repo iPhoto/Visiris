@@ -9,6 +9,7 @@
     <parameter name="Width" type="VSParameterKeyScaleWidth" dataType="float" defaultValue="1" fromValue="0" toValue="10"  editable="true"  hidden="false"></parameter>
     <parameter name="Height" type="VSParameterKeyScaleHeight" dataType="float" defaultValue="1" fromValue="0" toValue="10" editable="true"></parameter>
     <parameter name="Visible" type="VSParameterKeyVisibility" dataType="bool" defaultValue="true" editable="true"  hidden="false"></parameter>
+    <parameter name="Alpha" type="VSParameterKeyAlpha" dataType="float" defaultValue="1" fromValue="0" toValue="1" editable="true" hidden="false"></parameter>
     <parameter name="Blend Mode" type="VSParameterKeyBlendMode" dataType="string" editable="true" hidden="false">
         <option name="Normal">VSBlendModeNormal</option>
         <option name="Lighten">VSBlendModeLighten</option>

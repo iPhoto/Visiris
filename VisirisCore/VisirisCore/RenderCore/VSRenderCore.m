@@ -50,6 +50,9 @@
 /** The LayerShader is needed when 2 or more objects have to be mixed to one texture */
 @property (strong) VSLayerShader                    *layerShader;
 
+/** The Backgroundshader is for correct alpha */
+@property (strong) VSBackgroundShader               *backgroundShader;
+
 /** Texture Manager stores the VSTextures for Images and Videos */
 @property (strong) VSTextureManager                 *textureManager;
 
@@ -80,6 +83,7 @@
 @synthesize qcpManager                  = _qcpManager;
 @synthesize transformTextureManager     = _transformTextureManager;
 @synthesize oldSize                     = _oldSize;
+@synthesize backgroundShader            = _backgroundShader;
 
 #pragma mark- Init
 
@@ -102,10 +106,13 @@
         if (!_pixelFormat)
             NSLog(@"No OpenGL pixel format");
         
+        
         _openGLContext = [[NSOpenGLContext alloc] initWithFormat:_pixelFormat shareContext:nil];
         
         [ _openGLContext makeCurrentContext];
         
+      //  glEnable(GL_BLEND);
+            
         GLint swapInt = 1;
 		[ _openGLContext setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; 
 		
@@ -120,13 +127,14 @@
         self.frameBufferObjectOld = self.frameBufferObjectTwo;
         
         self.layerShader = [[VSLayerShader alloc] init];
+        self.backgroundShader = [[VSBackgroundShader alloc] init];
 
         self.textureManager = [[VSTextureManager alloc] init];        
         self.qcpManager = [[VSQCManager alloc] init];       
         
         self.transformTextureManager = [[VSTransformTextureManager alloc] initWithContext:self.openGLContext];
         
-        self.oldSize = size;        
+        self.oldSize = size;
     }
     return self;
 }
@@ -160,9 +168,8 @@
         case 1:
         {
             NSNumber *texture = (NSNumber *)[textures objectAtIndex:0];
-            outPutTexture = texture.intValue;
-            [[self openGLContext] flushBuffer];
-            // glFinish();
+            [self mergeWithBackground:texture.intValue];
+            outPutTexture = self.frameBufferObjectCurrent.texture;
             break;
         }
         case 2:
@@ -255,10 +262,12 @@
  * @layermode The Layermode (multiply, add, ...) is an int because of the uniform
  */
 - (void)combineTheFirstTwoObjects:(NSArray *) textures withLayermode:(float)layermode{
-    NSNumber *base = (NSNumber *)[textures objectAtIndex:0];
-    NSNumber *blend = (NSNumber *)[textures objectAtIndex:1];
     
-    [self combineTexture:base.intValue with:blend.intValue andLayermode:layermode];
+    NSNumber *texture = (NSNumber *)[textures objectAtIndex:0];
+    [self mergeWithBackground:texture.intValue];
+    [self swapFBO];
+    NSNumber *blend = (NSNumber *)[textures objectAtIndex:1];
+    [self combineTexture:self.frameBufferObjectOld.texture with:blend.intValue andLayermode:layermode];
 }
 
 /**
@@ -457,6 +466,47 @@
     }
     NSLog(@"There are %d valid Textures on the GPU",counter);
 }
+
+//TODO 
+- (void)mergeWithBackground:(GLuint)texture {
+    [self.frameBufferObjectCurrent bind];
+    
+    glViewport(0, 0, self.frameBufferObjectCurrent.size.width,self.frameBufferObjectCurrent.size.height);
+    
+//    glClear(GL_COLOR_BUFFER_BIT);
+//    glColor3f(0.0f, 0.0f, 0.0f);
+    
+    glUseProgram(self.backgroundShader.program);
+//    glUniform1f(self.layerShader.uniformLayermode, layermode);
+    
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glUniform1i(self.backgroundShader.uniformTexture, 0);
+    
+    
+    glBindBuffer(GL_ARRAY_BUFFER, self.vertex_buffer);
+    glVertexAttribPointer(self.backgroundShader.attributePosition,  /* attribute */
+                          2,                                /* size */
+                          GL_FLOAT,                         /* type */
+                          GL_FALSE,                         /* normalized? */
+                          sizeof(GLfloat)*2,                /* stride */
+                          (void*)0                          /* array buffer offset */
+                          );
+    glEnableVertexAttribArray(self.backgroundShader.attributePosition);
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.element_buffer);
+    glDrawElements(GL_TRIANGLE_STRIP,  /* mode */
+                   4,                  /* count */
+                   GL_UNSIGNED_SHORT,  /* type */
+                   (void*)0            /* element array buffer offset */
+                   );
+    
+    glDisableVertexAttribArray(self.backgroundShader.attributePosition);
+    
+    [self.frameBufferObjectCurrent unbind];
+    [[self openGLContext] flushBuffer];
+}
+
 
 /**
  * todo

@@ -20,7 +20,9 @@
 #import "VisirisCore/VSQuartzComposerHandover.h"
 #import "VSSourceSupplier.h"
 #import "VSAudioSourceSupplier.h"
+#import "VSVideoSourceSupplier.h"
 #import "VisirisCore/VSAudioCoreHandover.h"
+#import "VisirisCore/VSVideoCoreHandover.h"
 
 @implementation VSTimelineObject
 
@@ -100,10 +102,20 @@
     double localTimestamp = [self localTimestampOfGlobalTimestamp:aTimestamp];
     
     if ([self.supplier isKindOfClass:[VSFrameSourceSupplier class]] ) {
-        coreHandover = [[VSFrameCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp withPlayMode:mode]
-                                                    andAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp]
-                                                     forTimestamp:localTimestamp
-                                                            forId:self.timelineObjectID];
+        
+        
+        if ([self.supplier isKindOfClass:[VSVideoSourceSupplier class]]) {
+            coreHandover = [[VSVideoCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp withPlayMode:mode]
+                                                        andAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp]
+                                                         forTimestamp:localTimestamp
+                                                                forId:self.timelineObjectID];
+        }
+        else {
+            coreHandover = [[VSFrameCoreHandover alloc] initWithFrame:[(VSFrameSourceSupplier *)self.supplier getFrameForTimestamp:localTimestamp withPlayMode:mode]
+                                                        andAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp]
+                                                         forTimestamp:localTimestamp
+                                                                forId:self.timelineObjectID];
+        }
     }
     else if ([self.supplier isKindOfClass:[VSQuartzComposerSourceSupplier class]]){
         coreHandover = [[VSQuartzComposerHandover alloc] initWithAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp]
