@@ -13,29 +13,21 @@
 #import "VSPlaybackController.h"
 
 @implementation VSPreviewOpenGLView
-@synthesize openGLContext=_openGLContext,pixelFormat,displayLink;
+@synthesize openGLContext=_openGLContext,pixelFormat;
 @synthesize texture = _texture;
-@synthesize stamp = _stamp;
 
-@synthesize playBackcontroller = _playBackcontroller;
-
-- (id)initWithFrame:(NSRect)frame
-{
+- (id)initWithFrame:(NSRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        //NSLog(@"initWithFrame");
-        [[NSNotificationCenter defaultCenter] addObserver:self 
-												 selector:@selector(reshape) 
+        [[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(reshape)
 													 name:NSViewGlobalFrameDidChangeNotification
 												   object:self];
-        
     }
-    
     return self;
 }
 
-- (void)initOpenGLWithSharedContext:(NSOpenGLContext *)openGLContext
-{
+- (void)initOpenGLWithSharedContext:(NSOpenGLContext *)openGLContext{
     NSOpenGLPixelFormatAttribute attribs[] =
     {
 		kCGLPFAAccelerated,
@@ -51,28 +43,24 @@
     if (!pixelFormat)
 		NSLog(@"No OpenGL pixel format");
 	
+
 	// NSOpenGLView does not handle context sharing, so we draw to a custom NSView instead
 	_openGLContext = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:openGLContext];
 	
     [[self openGLContext] makeCurrentContext];
     
+    glEnable( GL_TEXTURE_2D );
+    
     // Synchronize buffer swaps with vertical refresh rate
     GLint swapInt = 1;
-    [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; 
-    
-    [self setupDisplayLink];
-}
-
--(void) setFrame:(NSRect)frameRect{
-    
+    [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
 }
 
 -(void) setFrameProportionally:(NSRect) frameRect{
     [super setFrame:frameRect];
 }
 
-- (void)lockFocus
-{
+- (void)lockFocus{
     NSOpenGLContext* context = [self openGLContext];
     [super lockFocus];
     if ([context view] != self) {
@@ -81,49 +69,18 @@
     [context makeCurrentContext];
 }
 
--(void) viewDidMoveToWindow
-{
+-(void) viewDidMoveToWindow{
     [super viewDidMoveToWindow];
     if ([self window] == nil)
         [_openGLContext clearDrawable];
-}
-
-- (CVReturn) getFrameForTime:(const CVTimeStamp*)outputTime{
-    @autoreleasepool {
-        [self.playBackcontroller renderFramesForCurrentTimestamp];
-        [self drawView];
-        return kCVReturnSuccess;
-    }
-}
-
-static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime, CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext)
-{
-    CVReturn result = [(__bridge VSPreviewOpenGLView*)displayLinkContext getFrameForTime:outputTime];
-    return result;
-}
-
-- (void) setupDisplayLink{
-	// Create a display link capable of being used with all active displays
-	CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
-	
-	// Set the renderer output callback function
-	CVDisplayLinkSetOutputCallback(displayLink, &MyDisplayLinkCallback, (__bridge void *)(self));
-    
-	// Set the display link for the current renderer
-	CGLContextObj cglContext = [[self openGLContext] CGLContextObj];
-	CGLPixelFormatObj cglPixelFormat = [[self pixelFormat] CGLPixelFormatObj];
-	CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink, cglContext, cglPixelFormat);
 }
 
 - (void) drawRect:(NSRect)dirtyRect{
     [super drawRect:dirtyRect];
     
 	// Ignore if the display link is still running
-	if (!CVDisplayLinkIsRunning(displayLink))
-    {
-		[self drawView];    
-    }
-    
+//	if (!CVDisplayLinkIsRunning(displayLink))
+		[self drawView];
 }
 
 - (void) reshape{
@@ -146,21 +103,14 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	// Add a mutex around to avoid the threads accessing the context simultaneously
     CGLLockContext([[self openGLContext] CGLContextObj]);
     
-  //  NSLog(@"PREVIEW VIEW Current Context (before makeCurrentcontext): %@", [NSOpenGLContext currentContext]);
-
 	// Make sure we draw to the right context
 	[[self openGLContext] makeCurrentContext];
-   // NSLog(@"PREVIEW VIEW Current Context : %@", [NSOpenGLContext currentContext]);
-
-   
+    
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    if (self.texture != 0) {        
-        glEnable( GL_TEXTURE_2D );
+    
+    if (self.texture != 0) {
         glBindTexture( GL_TEXTURE_2D, self.texture );
-        
-        //NSLog(@"view texture: %d", self.texture);
                 
         glBegin( GL_QUADS );
         glTexCoord2d(0.0,1.0); glVertex2d(-1.0,-1.0);
@@ -172,33 +122,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     }
     
 	[[self openGLContext] flushBuffer];
-	
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
-}
-
-- (void) startDisplayLink{
-	if (displayLink && !CVDisplayLinkIsRunning(displayLink))
-		CVDisplayLinkStart(displayLink);
-    
-
-   // DDLogInfo(@"startDisplayLink");
-}
-
-- (void)stopDisplayLink{
-	if (displayLink && CVDisplayLinkIsRunning(displayLink))
-		CVDisplayLinkStop(displayLink);
-    
-
- //   DDLogInfo(@"stopDisplayLink");
-}
-
-- (double)refreshPeriod{
-    return CVDisplayLinkGetActualOutputVideoRefreshPeriod(self.displayLink);
-}
-
-- (uint64_t)hostTime{
-    CVDisplayLinkGetCurrentTime(self.displayLink,&_stamp);
-    return _stamp.hostTime;
 }
 
 @end

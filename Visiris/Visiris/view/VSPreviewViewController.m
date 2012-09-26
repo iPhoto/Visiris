@@ -30,6 +30,9 @@
 /** Rigth Margin of the openGLView to its superview */
 @property NSInteger openGLViewMarginRight;
 
+@property (assign) CVDisplayLinkRef         displayLink;
+
+
 @end
 
 @implementation VSPreviewViewController
@@ -42,6 +45,7 @@
 @synthesize openGLViewMarginLeft    = _openGLViewMarginLeft;
 @synthesize openGLViewMarginRight   = _openGLViewMarginRight;
 @synthesize playbackController      = _playbackController;
+@synthesize displayLink             = _displayLink;
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
 static NSString* defaultNib = @"VSPreviewView";
@@ -71,7 +75,7 @@ static NSString* defaultNib = @"VSPreviewView";
 
 #pragma  mark - VSViewController
 
--(void) awakeFromNib{ 
+-(void) awakeFromNib{
     if(self.view){
         
         [self initOpenGLView];
@@ -109,6 +113,7 @@ static NSString* defaultNib = @"VSPreviewView";
 -(void) initOpenGLView{
     [self.openGLView initOpenGLWithSharedContext:self.openGLContext];
     [self.openGLView setAutoresizingMask:NSViewNotSizable];
+    [self setupDisplayLink];
 }
 
 #pragma mark - IBAction
@@ -125,14 +130,16 @@ static NSString* defaultNib = @"VSPreviewView";
 
 -(void) texture:(GLuint)theTexture isReadyForTimestamp:(double)theTimestamp{
     self.openGLView.texture = theTexture;
+    [self.openGLView drawView];
+
 }
 
 -(void) didStartScrubbingAtTimestamp:(double)aTimestamp{
-    [self.openGLView startDisplayLink];
+    [self startDisplayLink];
 }
 
 -(void) didStopScrubbingAtTimestamp:(double)aTimestamp{
-    [self.openGLView stopDisplayLink];
+    [self stopDisplayLink];
 }
 
 #pragma mark - VSFrameResizingDelegate implementation
@@ -171,11 +178,9 @@ static NSString* defaultNib = @"VSPreviewView";
     
     openGLViewRect.origin.x = (superViewsRect.size.width - openGLViewRect.size.width) / 2.0f;
     openGLViewRect.origin.y = (NSMaxY(superViewsRect) - NSMaxY(openGLViewRect)) / 2.0f;
-
-
-    [self.openGLView setFrameProportionally:NSIntegralRect(openGLViewRect)];
     
-//    [self.openGLView setFrame:openGLViewRect];
+    
+    [self.openGLView setFrameProportionally:NSIntegralRect(openGLViewRect)];
     
     [VSProjectSettings sharedProjectSettings].frameSize = self.openGLView.frame.size;
     
@@ -188,7 +193,7 @@ static NSString* defaultNib = @"VSPreviewView";
  */
 - (void)startPlayback {
     if(self.playbackController){
-        [self.openGLView startDisplayLink];
+        [self startDisplayLink];
         [self.playbackController play];
     }
 }
@@ -198,7 +203,7 @@ static NSString* defaultNib = @"VSPreviewView";
  */
 - (void)stopPlayback {
     if(self.playbackController){
-        [self.openGLView stopDisplayLink];
+        [self stopDisplayLink];
         [self.playbackController stop];
     }
 }
@@ -223,7 +228,7 @@ static NSString* defaultNib = @"VSPreviewView";
 
 -(void) setPlaybackController:(VSPlaybackController *)playBackController{
     
-    self.openGLView.playBackcontroller = playBackController;
+    //self.openGLView.playBackcontroller = playBackController;
     
     _playbackController = playBackController;
 }
@@ -232,14 +237,53 @@ static NSString* defaultNib = @"VSPreviewView";
     return _playbackController;
 }
 
-- (uint64_t)hostTime{
-    return [self.openGLView hostTime];
+- (void) startDisplayLink{
+	if (_displayLink && !CVDisplayLinkIsRunning(_displayLink))
+		CVDisplayLinkStart(_displayLink);
+    // DDLogInfo(@"startDisplayLink");
+}
+
+- (void)stopDisplayLink{
+	if (_displayLink && CVDisplayLinkIsRunning(_displayLink))
+		CVDisplayLinkStop(_displayLink);
+    //   DDLogInfo(@"stopDisplayLink");
 }
 
 - (double)refreshPeriod{
-    return [self.openGLView refreshPeriod];
+    return CVDisplayLinkGetActualOutputVideoRefreshPeriod(self.displayLink);
 }
 
+- (uint64_t)hostTime{
+    CVTimeStamp stamp;
+    CVDisplayLinkGetCurrentTime(self.displayLink,&stamp);
+    return stamp.hostTime;
+}
+
+- (CVReturn) getFrameForTime:(const CVTimeStamp*)outputTime{
+    @autoreleasepool {
+        [self.playbackController renderFramesForCurrentTimestamp];
+        return kCVReturnSuccess;
+    }
+}
+
+static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime, CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext)
+{
+    CVReturn result = [(__bridge VSPreviewViewController*)displayLinkContext getFrameForTime:outputTime];
+    return result;
+}
+
+- (void) setupDisplayLink{
+	// Create a display link capable of being used with all active displays
+	CVDisplayLinkCreateWithActiveCGDisplays(&_displayLink);
+	
+	// Set the renderer output callback function
+	CVDisplayLinkSetOutputCallback(_displayLink, &MyDisplayLinkCallback, (__bridge void *)(self));
+    
+	// Set the display link for the current renderer
+	CGLContextObj cglContext = [[self.openGLView openGLContext] CGLContextObj];
+	CGLPixelFormatObj cglPixelFormat = [[self.openGLView pixelFormat] CGLPixelFormatObj];
+	CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(_displayLink, cglContext, cglPixelFormat);
+}
 
 - (IBAction)frameRateSliderHasChanged:(NSSlider *)sender {
     [VSProjectSettings sharedProjectSettings].frameRate = [sender integerValue];

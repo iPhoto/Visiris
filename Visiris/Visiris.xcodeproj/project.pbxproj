@@ -27,6 +27,7 @@
 		2795881A15906D7B00E24B57 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2795881915906D7B00E24B57 /* AVFoundation.framework */; };
 		2799F8E61599C8B800008489 /* VSQuartzCompositionUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2799F8E51599C8B800008489 /* VSQuartzCompositionUtils.m */; };
 		2799F8E91599C96D00008489 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2799F8E81599C96D00008489 /* Quartz.framework */; };
+		27EEDA381612F6490075EE42 /* VSSecondScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 27EEDA371612F6490075EE42 /* VSSecondScreen.m */; };
 		5B0E366615876E9300F15026 /* VSTrackLabelsRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366515876E9300F15026 /* VSTrackLabelsRulerView.m */; };
 		5B0E366C15876EEB00F15026 /* VSTrackLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366B15876EEB00F15026 /* VSTrackLabel.m */; };
 		5B0EFF96158A1F410000445C /* playhead.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B0EFF95158A1F410000445C /* playhead.png */; };
@@ -178,6 +179,8 @@
 		2795881915906D7B00E24B57 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		2799F8E51599C8B800008489 /* VSQuartzCompositionUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSQuartzCompositionUtils.m; sourceTree = "<group>"; };
 		2799F8E81599C96D00008489 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
+		27EEDA361612F6490075EE42 /* VSSecondScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSSecondScreen.h; sourceTree = "<group>"; };
+		27EEDA371612F6490075EE42 /* VSSecondScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSSecondScreen.m; sourceTree = "<group>"; };
 		5B05472216009868002FF9A9 /* VSViewKeyDownDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSViewKeyDownDelegate.h; sourceTree = "<group>"; };
 		5B0E366415876E9300F15026 /* VSTrackLabelsRulerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTrackLabelsRulerView.h; sourceTree = "<group>"; };
 		5B0E366515876E9300F15026 /* VSTrackLabelsRulerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTrackLabelsRulerView.m; sourceTree = "<group>"; };
@@ -884,6 +887,8 @@
 				5B35BFB01577A573009911EC /* VSPreviewView.xib */,
 				5B35BFB11577A573009911EC /* VSPreviewViewController.h */,
 				5B35BFB21577A573009911EC /* VSPreviewViewController.m */,
+				27EEDA361612F6490075EE42 /* VSSecondScreen.h */,
+				27EEDA371612F6490075EE42 /* VSSecondScreen.m */,
 			);
 			name = preview;
 			sourceTree = "<group>";
@@ -1431,6 +1436,7 @@
 				5BAC770616034B9400DF3BB0 /* VSKeyFrameView.m in Sources */,
 				5BAC770916034BA100DF3BB0 /* VSKeyFrameViewController.m in Sources */,
 				5B250992161088BE003B715F /* VSFrameUtils.m in Sources */,
+				27EEDA381612F6490075EE42 /* VSSecondScreen.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

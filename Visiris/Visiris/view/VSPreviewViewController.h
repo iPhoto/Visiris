@@ -29,7 +29,7 @@
 /** VSPreviewOpenGLView showing the the content of the openGLContext */
 @property (weak) IBOutlet VSPreviewOpenGLView *openGLView;
 
-/** NSView wrapping VSPreviewOpenGLView */ 
+/** NSView wrapping VSPreviewOpenGLView */
 @property (weak) IBOutlet NSView *openGLViewHolder;
 
 - (IBAction)frameRateSliderHasChanged:(NSSlider *)sender;
