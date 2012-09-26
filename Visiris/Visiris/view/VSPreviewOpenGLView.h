@@ -8,22 +8,16 @@
 
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/CVDisplayLink.h>
+#import "VSOpenGLView.h"
 
 @class VSPlaybackController;
 
 /**
  * ADD DESCRIPTION HERE
  */
-@interface VSPreviewOpenGLView : NSView <NSCoding>
+@interface VSPreviewOpenGLView : VSOpenGLView
 
-@property (strong) NSOpenGLContext          *openGLContext;
-@property (strong) NSOpenGLPixelFormat      *pixelFormat;
-@property (assign) GLuint                   texture;
-
-- (id) initWithFrame:(NSRect)frameRect;
-- (void)initOpenGLWithSharedContext:(NSOpenGLContext *)openGLContext;
--(void) setFrameProportionally:(NSRect) frameRect;
-
-- (void)drawView;
+- (id)initWithFrame:(NSRect)frameRect;
+- (void)setFrameProportionally:(NSRect) frameRect;
 
 @end

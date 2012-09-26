@@ -13,27 +13,30 @@
 #import "VSProjectSettings.h"
 
 #import "VSCoreServices.h"
+#import "VSFullScreenController.h"
 
 
 
 @interface VSPreviewViewController ()
 
 /** Top Margin of the openGLView to its superview */
-@property NSInteger openGLViewMarginTop;
+@property NSInteger         openGLViewMarginTop;
 
 /** Bottom Margin of the openGLView to its superview */
-@property NSInteger openGLViewMarginBottom;
+@property NSInteger         openGLViewMarginBottom;
 
 /** Left Margin of the openGLView to its superview */
-@property NSInteger openGLViewMarginLeft;
+@property NSInteger         openGLViewMarginLeft;
 
 /** Rigth Margin of the openGLView to its superview */
-@property NSInteger openGLViewMarginRight;
+@property NSInteger         openGLViewMarginRight;
 
 @property (assign) CVDisplayLinkRef         displayLink;
 
+@property (strong) VSFullScreenController       *secondScreen;
 
 @end
+
 
 @implementation VSPreviewViewController
 
@@ -46,6 +49,7 @@
 @synthesize openGLViewMarginRight   = _openGLViewMarginRight;
 @synthesize playbackController      = _playbackController;
 @synthesize displayLink             = _displayLink;
+@synthesize secondScreen            = _secondScreen;
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
 static NSString* defaultNib = @"VSPreviewView";
@@ -72,27 +76,9 @@ static NSString* defaultNib = @"VSPreviewView";
     return self;
 }
 
--(void) awakeFromNib{
-    if(self.view){
-        
-        [self initOpenGLView];
-        
-        [self initObservers];
-        
-        [self storeOpenGLViewsMargins];
-        
-        [self setOpenGLViewFameAccordingToAspectRatioInSuperview:self.view.frame];
-        
-        if([self.view isKindOfClass:[VSPreviewView class]]){
-            ((VSPreviewView*) self.view).frameResizingDelegate = self;
-        }
-    }
-}
-
-#pragma  mark - VSViewController
-
-
-
+/**
+ * Inits the observerse of VSPreviewViewController
+ */
 -(void) initObservers{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playKeyWasPressed:) name:VSPlayKeyWasPressed object:nil];
 }
@@ -111,9 +97,13 @@ static NSString* defaultNib = @"VSPreviewView";
 /**
  * Inits the openGLView and sets its autoresizing behaviour
  */
--(void) initOpenGLView{
-    [self.openGLView initOpenGLWithSharedContext:self.openGLContext];
+- (void)initOpenGLView{
+    //todo das geht besser
+    [self.openGLView setOpenGLWithSharedContext:self.openGLContext];
     [self.openGLView setAutoresizingMask:NSViewNotSizable];
+    
+    self.secondScreen = [[VSFullScreenController alloc] initWithContext:self.openGLContext atScreen:1];
+    
     [self setupDisplayLink];
 }
 
@@ -155,8 +145,8 @@ static NSString* defaultNib = @"VSPreviewView";
 
 -(void) texture:(GLuint)theTexture isReadyForTimestamp:(double)theTimestamp{
     self.openGLView.texture = theTexture;
+    [self.secondScreen updateWithTexture:theTexture];
     [self.openGLView drawView];
-
 }
 
 -(void) didStartScrubbingAtTimestamp:(double)aTimestamp{
@@ -184,6 +174,11 @@ static NSString* defaultNib = @"VSPreviewView";
  *
  * @param superViewsRect Frame of the openGLView's super view
  */
+/**
+ * Computes a NSRect openGLView according to the aspectRatio stored in VSProjectSettings. Ensures that the openGLView is resized proportionally and positoned according to its margin-values in its superview
+ *
+ * @param superViewsRect Frame of the openGLView's super view
+ */
 -(void) setOpenGLViewFameAccordingToAspectRatioInSuperview:(NSRect) superViewsRect{
     
     NSRect openGLViewRect;
@@ -202,14 +197,15 @@ static NSString* defaultNib = @"VSPreviewView";
         openGLViewRect.size.height = proportionalHeight;
     }
     
-        openGLViewRect.size.width = openGLViewRect.size.height * aspectRatio;
+    openGLViewRect.size.width = openGLViewRect.size.height * aspectRatio;
     
     
     openGLViewRect.origin.x = (superViewsRect.size.width - openGLViewRect.size.width) / 2.0f;
     openGLViewRect.origin.y = (NSMaxY(superViewsRect) - NSMaxY(openGLViewRect)) / 2.0f;
     
-    
+    [VSProjectSettings sharedProjectSettings].frameSize = openGLViewRect.size;
     [self.openGLView setFrameProportionally:NSIntegralRect(openGLViewRect)];
+    
     
     
     [self.openGLView setNeedsLayout:YES];
@@ -313,7 +309,4 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 	CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(_displayLink, cglContext, cglPixelFormat);
 }
 
-- (IBAction)frameRateSliderHasChanged:(NSSlider *)sender {
-    [VSProjectSettings sharedProjectSettings].frameRate = [sender integerValue];
-}
 @end
