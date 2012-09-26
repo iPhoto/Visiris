@@ -33,6 +33,9 @@
 
 //todo
 @property (assign) double counter;
+
+@property (weak) VSOutputController *outputController;
+
 @end
 
 @implementation VSPlaybackController
@@ -41,7 +44,6 @@
 @synthesize timeline            = _timeline;
 @synthesize currentTimestamp    = _currentTimestamp;
 @synthesize playbackTimer       = _playbackTimer;
-@synthesize delegate            = _delegate;
 @synthesize playbackStartTime   = _playbackStartTime;
 @synthesize frameWasRender      = _frameWasRender;
 @synthesize playbackMode        = _playbackMode;
@@ -49,7 +51,6 @@
 @synthesize counter             = _counter;
 
 #pragma mark - Init
-
 
 -(id) initWithPreProcessor:(VSPreProcessor *)preProcessor timeline:(VSTimeline *)timeline{
     if(self = [super init]){
@@ -62,6 +63,8 @@
         
         self.counter = 0.0;
         self.deltaTime = 0.0;
+        
+        self.outputController = [VSOutputController sharedOutputController];
     }
     
     return self;
@@ -89,6 +92,27 @@
                                              selector:@selector(timelineObjectsGotUnselected:)
                                                  name:VSTimelineObjectsGotUnselected
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(playKeyWasPressed:)
+                                                 name:VSPlayKeyWasPressed
+                                               object:nil];
+}
+
+/**
+ * Called when the VSPlayKeyWasPressed notification was received.
+ *
+ * Stops the the playback if the playMode of the playbackController is VSPlaybackModePlaying and starts it otherwise
+ *
+ * @param theNotification NSNotification send from the notification
+ */
+-(void) playKeyWasPressed:(NSNotification*) theNotification{
+    if(self.playbackMode != VSPlaybackModePlaying){
+        [self play];
+    }
+    else {
+        [self stop];
+    }
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
@@ -100,9 +124,8 @@
             self.currentTimestamp = [[object valueForKey:@"currentTimePosition"] doubleValue];
             
             
-            if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
-                [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
-            }
+            [self.outputController didStartScrubbingAtTimestamp:self.currentTimestamp];
+            
         }
     }
     
@@ -113,24 +136,22 @@
         
         if(scrubbing){
             self.playbackMode = VSPlaybackModeScrubbing;
-            if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
-                [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
-            }
+            [self.outputController didStartScrubbingAtTimestamp:self.currentTimestamp];
+            
         }
         else{
             self.playbackMode = VSPlaybackModeNone;
-            if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
-                [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
-            }
+            [self.outputController didStopScrubbingAtTimestamp:self.currentTimestamp];
+            
             [self stop];
         }
     }
     else if([keyPath isEqualToString:@"currentValue"]){
         if(self.playbackMode == VSPlaybackModeNone){
             self.playbackMode = VSPlaybackModeJumping;
-            if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
-                [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
-            }
+            
+            [self.outputController didStartScrubbingAtTimestamp:self.currentTimestamp];
+            
         }
     }
     
@@ -140,18 +161,13 @@
 
 -(void) didFinisheRenderingTexture:(GLuint)theTexture forTimestamp:(double)theTimestamp{
     
-    if(self.delegate){
-        if([self.delegate conformsToProtocol:@protocol(VSPlaybackControllerDelegate) ]){
-            if([self.delegate respondsToSelector:@selector(texture:isReadyForTimestamp:)]){
-                [self.delegate texture:theTexture isReadyForTimestamp:theTimestamp];
-            }
-        }
-    }
+    
+    [self.outputController texture:theTexture isReadyForTimestamp:theTimestamp];
+    
+    
     
     if(self.playbackMode == VSPlaybackModeJumping){
-        if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
-            [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
-        }
+        [self.outputController didStopScrubbingAtTimestamp:self.currentTimestamp];
         self.playbackMode = VSPlaybackModeNone;
     }
 }
@@ -178,7 +194,7 @@
             self.counter = 0.0;
             break;
         default:
-            NSLog(@"ERROR in RENDERFRAMESFORCURRENTTIMESTAMP");
+            DDLogInfo(@"VSPlabackMode is none");
             break;
     }
 }
@@ -187,23 +203,25 @@
     if(self.playbackMode == VSPlaybackModeNone){
         self.playbackMode = VSPlaybackModeJumping;
         
-        if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
-            [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
-        }
+        
+        [self.outputController didStartScrubbingAtTimestamp:self.currentTimestamp];
+        
     }
 }
 
 -(void) play{
-    self.playbackMode = VSPlaybackModePlaying;
+   
+    [self.outputController startPlayback];
+    self.playbackStartTime = self.outputController.hostTime;
+
     
-    if([self.delegate conformsToProtocol:@protocol(VSPlaybackControllerDelegate)]){
-        self.playbackStartTime = [self.delegate hostTime];
-    }
+    self.playbackMode = VSPlaybackModePlaying;
 }
 
 -(void) stop{
     self.playbackMode = VSPlaybackModeNone;
     [self.preProcessor stopPlayback];
+    [self.outputController stopPlayback];
 }
 
 
@@ -261,9 +279,7 @@
     
     //if the render of the was started because the playhead was moved by clicking somewhere on the timeline, the rendering is turned off after the frame was rendered
     if(self.playbackMode == VSPlaybackModeJumping){
-        if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
-            [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
-        }
+        [self.outputController didStopScrubbingAtTimestamp:self.currentTimestamp];
         self.playbackMode = VSPlaybackModeNone;
     }
 }
@@ -272,40 +288,20 @@
  * Computs the current timestamp while playing
  */
 - (void)computeNewCurrentTimestamp{
-
+    
     double currentTime;
     
-    if([self.delegate conformsToProtocol:@protocol(VSPlaybackControllerDelegate)]){
-        currentTime = [self.delegate hostTime];
-    }
-    else
-        NSLog(@"ERROR: delegate not responding");
-
+    currentTime = [self.outputController hostTime];
+    
+    
     self.deltaTime = (currentTime - self.playbackStartTime)/1000000.0;
     self.currentTimestamp += self.deltaTime;
-        
+    
     if(self.currentTimestamp > self.timeline.duration){
         self.currentTimestamp = 0;
-    }    
+    }
     self.timeline.playHead.currentTimePosition = self.currentTimestamp;
     self.playbackStartTime = currentTime;
-}
-
-
-/**
- * Checks if the delegate of VSPlaybackControllerDelegate is able to respond to the given Selector
- * @param selector Selector the delegate will be checked for if it is able respond to
- * @return YES if the delegate is able to respond to the selector, NO otherweis
- */
--(BOOL) delegateRespondsToSelector:(SEL) selector{
-    if(self.delegate){
-        if([self.delegate conformsToProtocol:@protocol(VSPlaybackControllerDelegate)]){
-            if([self.delegate respondsToSelector:selector]){
-                return YES;
-            }
-        }
-    }
-    return NO;
 }
 
 @end

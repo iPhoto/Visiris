@@ -20,5 +20,5 @@
 @property (strong) NSColor *trackColor;
 
 /** Stores the connection between the keyframes of the track */
-@property (weak) NSArray *keyFrameConnectionPaths;
+@property (strong) NSArray *keyFrameConnectionPaths;
 @end

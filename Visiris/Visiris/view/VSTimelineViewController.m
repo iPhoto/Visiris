@@ -52,25 +52,6 @@
     self.scrollView.playheadMarkerDelegate = self;
 }
 
-#pragma mark- VSViewResizingDelegate implementation
-
--(void) frameOfView:(NSView *)view wasSetFrom:(NSRect)oldRect to:(NSRect)newRect{
-    
-    if(newRect.size.width != 0){
-        
-        if(oldRect.size.width != newRect.size.width){
-            
-            NSRect newDocumentFrame = [self.scrollView.trackHolderView frame];
-            
-            //updates the width according to how the width of the view has been resized
-            newDocumentFrame.size.width += newRect.size.width - oldRect.size.width;
-            [self.scrollView.trackHolderView setFrame:(newDocumentFrame)];
-            [self computePixelTimeRatio];
-        }
-    }
-}
-
-
 
 #pragma mark - VSViewKeyDownDelegate
 
@@ -121,6 +102,15 @@
     }
     
     return newTrackHolderFrame;
+}
+
+#pragma mark- VSViewResizingDelegate implementation
+
+-(void) frameOfView:(NSView *)view wasSetFrom:(NSRect)oldRect to:(NSRect)newRect{
+    
+    if(oldRect.size.width != newRect.size.width){
+        [self computePixelTimeRatio];
+    }
 }
 
 
@@ -181,7 +171,7 @@
     [self scrollIfNewLocationOfPlayheadIsOutsideOfVisibleRect:newPixelPosition];
     
     self.playhead.currentTimePosition = newTimePosition;
-
+    
     self.playhead.jumping = YES;
     self.playhead.jumping = NO;
 }

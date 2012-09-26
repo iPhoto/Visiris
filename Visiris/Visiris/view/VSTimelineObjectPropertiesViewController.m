@@ -198,7 +198,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 #pragma mark - VSFrameResizingDelegate Implementation
 
 -(void) frameOfView:(NSView *)view wasSetFrom:(NSRect)oldRect to:(NSRect)newRect{
-    DDLogInfo(@"nothing implemented");
+    //DDLogInfo(@"nothing implemented");
 }
 
 #pragma mark - VSKeyFrameSelectingDelegate Implementation

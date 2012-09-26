@@ -582,6 +582,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
     }
 }
 
+#pragma mark - Private Methods
 
 #pragma mark Pixel Time Ratio
 

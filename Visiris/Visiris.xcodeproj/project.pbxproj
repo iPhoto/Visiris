@@ -159,6 +159,7 @@
 		5B35C0A31577A912009911EC /* VSTimelineConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C08F1577A912009911EC /* VSTimelineConstants.m */; };
 		5B35C0A51577A912009911EC /* VSLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0961577A912009911EC /* VSLogFormatter.m */; };
 		5B603FA9157F824A0045A1EA /* VSPlayHead.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B603FA8157F824A0045A1EA /* VSPlayHead.m */; };
+		5B60CC5B16135EE800557892 /* VSOutputController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B60CC5A16135EE800557892 /* VSOutputController.m */; };
 		5B70F71B15C2E650002B54ED /* VSPlayheadMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B70F71A15C2E650002B54ED /* VSPlayheadMarker.m */; };
 		5B7BFFC71592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BFFC61592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m */; };
 		5BAC770616034B9400DF3BB0 /* VSKeyFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAC770516034B9400DF3BB0 /* VSKeyFrameView.m */; };
@@ -439,6 +440,8 @@
 		5B603FA7157F824A0045A1EA /* VSPlayHead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSPlayHead.h; sourceTree = "<group>"; };
 		5B603FA8157F824A0045A1EA /* VSPlayHead.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSPlayHead.m; sourceTree = "<group>"; };
 		5B60CC5316134E5300557892 /* VSMainTimelineScrollViewDocumentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSMainTimelineScrollViewDocumentView.h; sourceTree = "<group>"; };
+		5B60CC5916135EE800557892 /* VSOutputController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSOutputController.h; sourceTree = "<group>"; };
+		5B60CC5A16135EE800557892 /* VSOutputController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSOutputController.m; sourceTree = "<group>"; };
 		5B70F71915C2E650002B54ED /* VSPlayheadMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSPlayheadMarker.h; sourceTree = "<group>"; };
 		5B70F71A15C2E650002B54ED /* VSPlayheadMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSPlayheadMarker.m; sourceTree = "<group>"; };
 		5B7BFFC51592143C00CEA1E8 /* VSTimelineObjectViewIntersection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineObjectViewIntersection.h; sourceTree = "<group>"; };
@@ -674,6 +677,8 @@
 				5B35BF371577A573009911EC /* VSProjectItemController.m */,
 				5B35BF381577A573009911EC /* VSProjectItemRepresentationController.h */,
 				5B35BF391577A573009911EC /* VSProjectItemRepresentationController.m */,
+				5B60CC5916135EE800557892 /* VSOutputController.h */,
+				5B60CC5A16135EE800557892 /* VSOutputController.m */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -715,7 +720,6 @@
 		5B35BF9E1577A573009911EC /* view */ = {
 			isa = PBXGroup;
 			children = (
-				5B60CC5216132C3B00557892 /* fullscreenOutput */,
 				5BD35BC015D95891001A74E0 /* base */,
 				5B35C0AD1577AF3C009911EC /* mainWindow */,
 				5B35C0AC1577AF32009911EC /* objectBrowser */,
@@ -1197,13 +1201,6 @@
 				5B05472216009868002FF9A9 /* VSViewKeyDownDelegate.h */,
 			);
 			name = protocolls;
-			sourceTree = "<group>";
-		};
-		5B60CC5216132C3B00557892 /* fullscreenOutput */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = fullscreenOutput;
 			sourceTree = "<group>";
 		};
 		5B9AD00F15C01ACA00A1D1C0 /* timeline */ = {

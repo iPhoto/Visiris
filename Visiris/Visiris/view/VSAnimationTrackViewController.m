@@ -359,7 +359,6 @@
 }
 
 -(void) addKeyFrameConnectionPathsObject:(VSKeyFrameViewController *)object{
-    
     if(self.keyFrameViewControllers.count){
         NSUInteger indexOfObject = [self.keyFrameViewControllers indexOfObject:object];
         
@@ -379,7 +378,7 @@
             [connectionPath lineToPoint:NSMakePoint(NSMaxX(self.view.frame), [VSFrameUtils midPointOfFrame:object.view.frame].y)];
         }
         
-        [self.keyFrameConnectionPaths setObject:connectionPath forKey:[NSNumber numberWithInteger:object.keyFrame.ID]];
+        
         
         
         //if there is an keyFrame left of the newly added one the path for stored for the keyFrames ID is linedTo the midPoint of the newly added one
@@ -404,6 +403,8 @@
             [self.keyFrameConnectionPaths setObject:pathToNewKeyFrame forKey:[NSNumber numberWithInteger:-1]];
         }
         
+        [self.keyFrameConnectionPaths setObject:connectionPath forKey:[NSNumber numberWithInteger:object.keyFrame.ID]];
+
         //The changed paths are given to the view to be redrawn
         ((VSAnimationTrackView*)self.view).keyFrameConnectionPaths = [self.keyFrameConnectionPaths allValues];
         [self.view setNeedsDisplay:YES];

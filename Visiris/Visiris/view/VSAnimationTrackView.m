@@ -8,6 +8,8 @@
 
 #import "VSAnimationTrackView.h"
 
+#import "VSCoreServices.h"
+
 @implementation VSAnimationTrackView
 
 - (id)initWithFrame:(NSRect)frame
@@ -21,11 +23,13 @@
 }
 
 - (void)drawRect:(NSRect)dirtyRect{
+    [super drawRect:dirtyRect];
     [[self trackColor] setFill];
     
     NSRectFill(dirtyRect);
     
     [[NSColor greenColor] setStroke];
+    
     
     for(NSBezierPath *connectionPath in self.keyFrameConnectionPaths){
         [connectionPath stroke];

@@ -11,6 +11,7 @@
 #import "VSPlaybackController.h"
 #import "VSPreviewView.h"
 #import "VSProjectSettings.h"
+#import "VSOutputController.h"
 
 #import "VSCoreServices.h"
 #import "VSFullScreenController.h"
@@ -31,9 +32,13 @@
 /** Rigth Margin of the openGLView to its superview */
 @property NSInteger         openGLViewMarginRight;
 
-@property (assign) CVDisplayLinkRef         displayLink;
+@property (strong) NSOpenGLContext *openGLContext;
 
-@property (strong) VSFullScreenController       *secondScreen;
+
+
+
+
+
 
 @end
 
@@ -48,8 +53,7 @@
 @synthesize openGLViewMarginLeft    = _openGLViewMarginLeft;
 @synthesize openGLViewMarginRight   = _openGLViewMarginRight;
 @synthesize playbackController      = _playbackController;
-@synthesize displayLink             = _displayLink;
-@synthesize secondScreen            = _secondScreen;
+@synthesize fullScreenController            = _secondScreen;
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
 static NSString* defaultNib = @"VSPreviewView";
@@ -57,9 +61,10 @@ static NSString* defaultNib = @"VSPreviewView";
 #pragma mark - Init
 
 
--(id) initWithDefaultNibForOpenGLContext:(NSOpenGLContext *)theOpenGLContext{
+-(id) initWithDefaultNib{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
-        self.openGLContext = theOpenGLContext;
+        self.openGLContext = [[VSOutputController sharedOutputController] registerAsOutput:self];
+        self.fullScreenController = [[VSFullScreenController alloc] init];
     }
     
     return self;
@@ -76,12 +81,6 @@ static NSString* defaultNib = @"VSPreviewView";
     return self;
 }
 
-/**
- * Inits the observerse of VSPreviewViewController
- */
--(void) initObservers{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playKeyWasPressed:) name:VSPlayKeyWasPressed object:nil];
-}
 
 
 /**
@@ -101,10 +100,6 @@ static NSString* defaultNib = @"VSPreviewView";
     //todo das geht besser
     [self.openGLView setOpenGLWithSharedContext:self.openGLContext];
     [self.openGLView setAutoresizingMask:NSViewNotSizable];
-    
-    self.secondScreen = [[VSFullScreenController alloc] initWithContext:self.openGLContext atScreen:1];
-    
-    [self setupDisplayLink];
 }
 
 
@@ -115,8 +110,6 @@ static NSString* defaultNib = @"VSPreviewView";
         
         [self initOpenGLView];
         
-        [self initObservers];
-        
         [self storeOpenGLViewsMargins];
         
         [self setOpenGLViewFameAccordingToAspectRatioInSuperview:self.view.frame];
@@ -125,6 +118,13 @@ static NSString* defaultNib = @"VSPreviewView";
             ((VSPreviewView*) self.view).frameResizingDelegate = self;
         }
     }
+}
+
+#pragma mark - VSOpenGLOutputDelegate
+
+-(void) showTexture:(GLuint)texture{
+    self.openGLView.texture = texture;
+    [self.openGLView drawView];
 }
 
 #pragma mark - IBAction
@@ -141,21 +141,6 @@ static NSString* defaultNib = @"VSPreviewView";
     [VSProjectSettings sharedProjectSettings].frameRate = [sender integerValue];
 }
 
-#pragma mark - VSPlaybackControllerDelegate implementation
-
--(void) texture:(GLuint)theTexture isReadyForTimestamp:(double)theTimestamp{
-    self.openGLView.texture = theTexture;
-    [self.secondScreen updateWithTexture:theTexture];
-    [self.openGLView drawView];
-}
-
--(void) didStartScrubbingAtTimestamp:(double)aTimestamp{
-    [self startDisplayLink];
-}
-
--(void) didStopScrubbingAtTimestamp:(double)aTimestamp{
-    [self stopDisplayLink];
-}
 
 #pragma mark - VSFrameResizingDelegate implementation
 
@@ -169,11 +154,6 @@ static NSString* defaultNib = @"VSPreviewView";
 
 #pragma mark - Private Methods
 
-/**
- * Computes a NSRect openGLView according to the aspectRatio stored in VSProjectSettings. Ensures that the openGLView is resized proportionally and positoned according to its margin-values in its superview
- *
- * @param superViewsRect Frame of the openGLView's super view
- */
 /**
  * Computes a NSRect openGLView according to the aspectRatio stored in VSProjectSettings. Ensures that the openGLView is resized proportionally and positoned according to its margin-values in its superview
  *
@@ -217,7 +197,6 @@ static NSString* defaultNib = @"VSPreviewView";
  */
 - (void)startPlayback {
     if(self.playbackController){
-        [self startDisplayLink];
         [self.playbackController play];
     }
 }
@@ -227,26 +206,11 @@ static NSString* defaultNib = @"VSPreviewView";
  */
 - (void)stopPlayback {
     if(self.playbackController){
-        [self stopDisplayLink];
         [self.playbackController stop];
     }
 }
 
-/**
- * Called when the VSPlayKeyWasPressed notification was received.
- *
- * Stops the the playback if the playMode of the playbackController is VSPlaybackModePlaying and starts it otherwise
- *
- * @param theNotification NSNotification send from the notification
- */
--(void) playKeyWasPressed:(NSNotification*) theNotification{
-    if(self.playbackController.playbackMode == VSPlaybackModePlaying){
-        [self stopPlayback];
-    }
-    else {
-        [self startPlayback];
-    }
-}
+
 
 #pragma mark - Properties
 
@@ -261,52 +225,9 @@ static NSString* defaultNib = @"VSPreviewView";
     return _playbackController;
 }
 
-- (void) startDisplayLink{
-	if (_displayLink && !CVDisplayLinkIsRunning(_displayLink))
-		CVDisplayLinkStart(_displayLink);
-    // DDLogInfo(@"startDisplayLink");
-}
 
-- (void)stopDisplayLink{
-	if (_displayLink && CVDisplayLinkIsRunning(_displayLink))
-		CVDisplayLinkStop(_displayLink);
-    //   DDLogInfo(@"stopDisplayLink");
-}
 
-- (double)refreshPeriod{
-    return CVDisplayLinkGetActualOutputVideoRefreshPeriod(self.displayLink);
+- (IBAction)toggleFullScreen:(id)sender {
+    [self.fullScreenController toggleFullScreenForScreen:1];
 }
-
-- (uint64_t)hostTime{
-    CVTimeStamp stamp;
-    CVDisplayLinkGetCurrentTime(self.displayLink,&stamp);
-    return stamp.hostTime;
-}
-
-- (CVReturn) getFrameForTime:(const CVTimeStamp*)outputTime{
-    @autoreleasepool {
-        [self.playbackController renderFramesForCurrentTimestamp];
-        return kCVReturnSuccess;
-    }
-}
-
-static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime, CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext)
-{
-    CVReturn result = [(__bridge VSPreviewViewController*)displayLinkContext getFrameForTime:outputTime];
-    return result;
-}
-
-- (void) setupDisplayLink{
-	// Create a display link capable of being used with all active displays
-	CVDisplayLinkCreateWithActiveCGDisplays(&_displayLink);
-	
-	// Set the renderer output callback function
-	CVDisplayLinkSetOutputCallback(_displayLink, &MyDisplayLinkCallback, (__bridge void *)(self));
-    
-	// Set the display link for the current renderer
-	CGLContextObj cglContext = [[self.openGLView openGLContext] CGLContextObj];
-	CGLPixelFormatObj cglPixelFormat = [[self.openGLView pixelFormat] CGLPixelFormatObj];
-	CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(_displayLink, cglContext, cglPixelFormat);
-}
-
 @end

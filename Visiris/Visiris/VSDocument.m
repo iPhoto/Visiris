@@ -15,6 +15,7 @@
 #import "VSPreProcessor.h"
 #import "VSPlaybackController.h"
 #import "VSProjectSettings.h"
+#import "VSOutputController.h"
 
 #import "VSExternalInputManager.h"
 

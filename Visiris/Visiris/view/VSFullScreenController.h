@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-@interface VSFullScreenController : NSObject
+#import "VSOutputController.h"
 
-- (id)initWithContext:(NSOpenGLContext *)context atScreen:(NSInteger)screenID;
+@interface VSFullScreenController : NSObject<VSOpenGLOutputDelegate>
 
-- (void)updateWithTexture:(GLuint)texture;
+- (id)init;
+
+-(void) toggleFullScreenForScreen:(NSUInteger) screenID;
 
 @end
