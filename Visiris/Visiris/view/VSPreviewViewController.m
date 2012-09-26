@@ -72,9 +72,6 @@ static NSString* defaultNib = @"VSPreviewView";
     return self;
 }
 
-
-#pragma  mark - VSViewController
-
 -(void) awakeFromNib{
     if(self.view){
         
@@ -91,6 +88,10 @@ static NSString* defaultNib = @"VSPreviewView";
         }
     }
 }
+
+#pragma  mark - VSViewController
+
+
 
 -(void) initObservers{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playKeyWasPressed:) name:VSPlayKeyWasPressed object:nil];
