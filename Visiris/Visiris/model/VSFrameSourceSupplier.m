@@ -20,6 +20,7 @@
     return nil;
 }
 
+//TODO: Dealloc not called yet
 - (void)dealloc{
     if (self.vsImage.data != NULL) {
         free(self.vsImage.data);

@@ -6,11 +6,11 @@
 //
 //
 
-#import "VSAnimationTimelineContentView.h"
+#import "VSAnimationTimelineScrollViewDocumentView.h"
 
 #import "VSCoreServices.h"
 
-@implementation VSAnimationTimelineContentView
+@implementation VSAnimationTimelineScrollViewDocumentView
 
 -(id) init{
     if(self = [super initWithFrame:NSZeroRect]){

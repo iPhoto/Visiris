@@ -19,17 +19,17 @@
 
 #pragma mark- Properties
 /** Name of the VSFileType. Usually its extension. E.g. PNG, MOV,... */
-@property   (strong)    NSString*   name;
+@property (strong) NSString* name;
 
 /** Uniform Type Identifier of the file type. */
-@property   (strong)    NSString*   uti;
+@property (strong) NSString* uti;
 
 /** Name of the child-class of VSTimelineObejctSource associated with that fileType. The class is usually depending on the the fileKind. 
  */
-@property   (strong)    NSString*   timelineObjectSourceClassString;
+@property (strong) NSString* timelineObjectSourceClassString;
 
 /** Kind of the file like stored in the VSFileKind-Enum. E.g.: IMAGE, MOVIE, AUDIO, QUARTZ-COMPOSER. According to the fileKind the classString is set. */
-@property               VSFileKind  fileKind;
+@property VSFileKind fileKind;
 
 /** Name of the child-class of VSSourceSupplier associated with that fileType. The class is usually depending on the the fileKind. 
  */

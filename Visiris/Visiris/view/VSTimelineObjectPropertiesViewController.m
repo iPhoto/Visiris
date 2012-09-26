@@ -16,7 +16,7 @@
 #import "VSTimelineObjectPropertiesView.h"
 #import "VSAnimationTimelineViewController.h"
 #import "VSAnimationTimelineScrollView.h"
-#import "VSAnimationTimelineContentView.h"
+#import "VSAnimationTimelineScrollViewDocumentView.h"
 #import "VSKeyFrame.h"
 #import "VSPlayhead.h"
 #import "VSCoreServices.h"

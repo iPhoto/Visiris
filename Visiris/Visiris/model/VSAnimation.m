@@ -72,10 +72,20 @@
     [self.keyFrames removeObject:keyFrame];
 }
 
+-(void) changeKeyFrames:(VSKeyFrame *)keyFrame timestamp:(double)newTimestamp{
+    keyFrame.timestamp = newTimestamp;
+    
+    [self.keyFrames sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        if([obj1 timestamp] > [obj2 timestamp]){
+            return NSOrderedDescending;
+        }
+        return NSOrderedAscending;
+    }];
+}
 
-#pragma mark - Computing current Values
+#pragma mark Computing current Values
 
--(float) floatValueForTimestamp:(double)timestamp{
+-(float) computeFloatValueForTimestamp:(double)timestamp{
     
     if(self.keyFrames.count == 0){
         return [self.defaultValue floatValue];
@@ -110,7 +120,7 @@
     }
 }
 
--(NSString*) stringValueForTimestamp:(double) timestamp{
+-(NSString*) computStringValueForTimestamp:(double) timestamp{
     if(self.keyFrames.count == 0){
         return self.defaultValue;
     }
@@ -139,7 +149,7 @@
     }
 }
 
--(BOOL) boolValueForTimestamp:(double) timestamp{
+-(BOOL) copmuteBoolValueForTimestamp:(double) timestamp{
     if(self.keyFrames.count == 0){
         return [self.defaultValue boolValue];
     }
@@ -167,17 +177,12 @@
     }
 }
 
--(void) changeKeyFrames:(VSKeyFrame *)keyFrame timestamp:(double)newTimestamp{
-    keyFrame.timestamp = newTimestamp;
-    
-    [self.keyFrames sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        if([obj1 timestamp] > [obj2 timestamp]){
-            return NSOrderedDescending;
-        }
-        return NSOrderedAscending;
-    }];
-}
+#pragma mark - Private Methods
 
+/**
+ * Generates the next available, unique ID for a keyFrame
+ * @return Unique ID for an keyFrame of the animation
+ */
 -(NSUInteger) nextKeyFrameID{
     return ++self.currentKeyframeID;
 }

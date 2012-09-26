@@ -22,13 +22,13 @@
 @property (strong, readonly) NSMutableArray* timelineObjects;
 
 /** Name of the track */
-@property NSString* name;
+@property (strong) NSString* name;
 
 /** Indicates if the Track is an audio- or an Visual-Track */
 @property VSTrackType type;
 
 /** id of the track */
-@property NSInteger trackID;
+@property NSUInteger trackID;
 
 /**
  * Inits a new Track with the given values.

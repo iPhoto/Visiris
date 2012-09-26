@@ -20,7 +20,7 @@
 @property NSInteger frameRate;
 
 /** Name of the project */
-@property NSString *projectName;
+@property (strong) NSString *projectName;
 
 /** Aspect Ratio of the frameSize (width / height) */
 @property (readonly) float aspectRatio;

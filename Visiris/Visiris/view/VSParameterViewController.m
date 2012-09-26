@@ -65,7 +65,7 @@ static NSString* defaultNib = @"VSParameterView";
 -(void) awakeFromNib{
     
     if([self.view isKindOfClass:[VSParameterView class]]){
-        ((VSParameterView*) self.view).viewDelegate = self;
+//        ((VSParameterView*) self.view).viewDelegate = self;
     }
     [self.view setAutoresizingMask:NSViewWidthSizable];
 }

@@ -7,8 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "VSTimelineContentView.h"
+#import "VSTimelineScrollViewDocumentView.h"
 
-@interface VSMainTimelineContentView : VSTimelineContentView
+@interface VSMainTimelineContentView : VSTimelineScrollViewDocumentView
 
 @end

@@ -24,6 +24,8 @@
     return self;
 }
 
+#pragma mark - NSObject
+
 -(NSString*) description{
     return [NSString stringWithFormat:@"Timestamp: %f, Value: %@",self.timestamp, self.value];
 }
@@ -34,8 +36,7 @@
     if([self.value isKindOfClass:[NSString class]]){
         return (NSString*) self.value;
     }
-    
-return @"";
+    return @"";
 }
 
 -(void) setStringValue:(NSString *)stringValue{
@@ -65,6 +66,5 @@ return @"";
 -(void) setBoolValue:(BOOL)boolValue{
     self.value = [NSNumber numberWithBool:boolValue];
 }
-
 
 @end

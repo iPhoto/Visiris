@@ -12,6 +12,7 @@
 
 @interface VSTimelineView()
 
+/** NSTrackingArea covering the whole frame of the view to make it first responder as soon as the mouse enters the view*/
 @property NSTrackingArea *trackingArea;
 
 @end
@@ -57,9 +58,8 @@
 
 
 -(void) keyDown:(NSEvent *)theEvent{
-    if([self keyDownDelegateRespondsToSelector:@selector(didReceiveKeyDownEvent:)]){
-        DDLogInfo(@"received %@", NSStringFromClass([self class]));
-        [self.keyDownDelegate didReceiveKeyDownEvent:theEvent];
+    if([self keyDownDelegateRespondsToSelector:@selector(view:didReceiveKeyDownEvent:)]){
+        [self.keyDownDelegate view:self didReceiveKeyDownEvent:theEvent];
     }
     [self.nextResponder keyDown:theEvent];
 }
@@ -68,6 +68,11 @@
     if([self mouseMoveDelegateRespondsToSelector:@selector(mouseDragged:onView:)]) {
         [self.mouseMoveDelegate mouseDragged:theEvent onView:self];
     }
+}
+
+-(void) mouseEntered:(NSEvent *)theEvent{
+    //tells the window to make the view to firstResponder as soon as the mouse is over the trackingArea covering the whole view
+    [self.window makeFirstResponder:self];
 }
 
 #pragma mark- VSTrackViewDelegate implementation

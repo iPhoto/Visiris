@@ -29,13 +29,13 @@
 @property int timeCodeLineHeight;
  
 /** Paragraph style of the timecode label */
-@property NSMutableParagraphStyle *paragrapheStyle;
+@property (strong) NSMutableParagraphStyle *paragrapheStyle;
 
 /** text attributes of the timecode label */
-@property NSMutableDictionary *textAttributes;
+@property (strong) NSMutableDictionary *textAttributes;
 
 /** Format string for the timecode like definend VSFormattingUtils*/
-@property NSString *timeFormat;
+@property (strong) NSString *timeFormat;
 
 /** Rect of the timecode label */
 @property NSRect timecodeRect;
@@ -50,13 +50,12 @@
 @property float unitStrokeCenter;
 
 /** storing all paths before drawing */
-@property NSBezierPath *unitPaths;
+@property (strong) NSBezierPath *unitPaths;
 @end
 
 @implementation VSTimelineRulerView
 
 @synthesize pixelTimeRatio = _pixelTimeRatio;
-@synthesize timecodeRect = _timecodeRect;
 
 #pragma mark - Init
 

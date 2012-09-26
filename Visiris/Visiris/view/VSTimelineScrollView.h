@@ -11,7 +11,7 @@
 #import <Cocoa/Cocoa.h>
 
 #import "VSScrollView.h"
-#import "VSTimelineContentView.h"
+#import "VSTimelineScrollViewDocumentView.h"
 
 @class VSTimelineScrollView;
 
@@ -54,6 +54,13 @@
 
 @optional
 
+/**
+ * Call after the playheadMarker jump to a new Location
+ * 
+ * @param playheadMarker NSRulerMarker representing the Playhead of the timeline
+ * @param aView NSView holding the playheadMarker
+ * @param location Location the given playheadMarker has jumped to
+ */
 -(void) playHeadRulerMarker:(NSRulerMarker *)playheadMarker didJumpInContainingView:(NSView *)aView toLocation:(CGFloat)location;
 
 /**
@@ -65,6 +72,8 @@
 -(void) didMovePlayHeadRulerMarker:(NSRulerMarker*) playheadMarker inContainingView:(NSView*) aView;
 
 @end
+
+
 
 
 
@@ -94,13 +103,20 @@
 @end
 
 
+
+
+
+
+
+
+
 /**
  * Subclass of NSScrollView. Used for scrollView in the timelineView to handle the interaction with the scrool wheel differently
  */
 @interface VSTimelineScrollView : VSScrollView<VSTrackHolderViewDelegate>
 
 /** DocumentView of the scrollView */
-@property VSTimelineContentView *trackHolderView;
+@property (strong) VSTimelineScrollViewDocumentView *trackHolderView;
 
 /** Ratio between the width of the timelineView and the duration of the VSTimeline it's reperesenting */
 @property double pixelTimeRatio;
@@ -115,13 +131,15 @@
 @property (readonly) float visibleTrackViewsHolderWidth;
 
 /** Delegate the class communicates with as defined in VSTimelineScrollViewZoomingDelegate */
-@property id<VSTimelineScrollViewZoomingDelegate> zoomingDelegate;
+@property (weak) id<VSTimelineScrollViewZoomingDelegate> zoomingDelegate;
 
 /** Delegate VSTrackHolderView communicates like defined in VSPlayHeadRulerMarkerDelegate*/
-@property id<VSPlayHeadRulerMarkerDelegate> playheadMarkerDelegate;
+@property (weak) id<VSPlayHeadRulerMarkerDelegate> playheadMarkerDelegate;
 
+/** Current width of the trackHolder. Properties area usually overriden by the Childclasses of VSTimelineScrollView. */
 @property float trackHolderWidth;
 
+/** Thicknes of the horizontalRuler displaying the timecodes */
 @property (readonly) CGFloat timelecodeRulerThickness;
 
 /**

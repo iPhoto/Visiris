@@ -12,7 +12,7 @@
 
 @interface VSPostProcessor()
 
-@property VSPlaybackController *playbackController;
+@property (weak) VSPlaybackController *playbackController;
 @end
 
 @implementation VSPostProcessor

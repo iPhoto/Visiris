@@ -30,9 +30,9 @@ static VSProjectItemRepresentationController* sharedProjectItemController = nil;
 -(id) init{
     if(self = [super init]){
         self.projectItemController = [VSProjectItemController sharedManager];
-        [self.projectItemController addObserver:self forKeyPath:@"projectItems" options:0 context:nil];
-        
         _projectItemRepresentations = [NSMutableArray arrayWithCapacity:0];
+        
+        [self initObservers];
         
         [self initProjectItemRepresentations];
     }
@@ -40,6 +40,12 @@ static VSProjectItemRepresentationController* sharedProjectItemController = nil;
     return self;
 }
 
+-(void) initObservers{
+    [self.projectItemController addObserver:self
+                                 forKeyPath:@"projectItems"
+                                    options:0
+                                    context:nil];
+}
 
 
 #pragma mark - NSObject Methods
@@ -86,7 +92,13 @@ static VSProjectItemRepresentationController* sharedProjectItemController = nil;
     
     NSImage *icon = [VSFileImageCreator createIconForProjectItem:projectItem.filePath];
     
-    return [[VSProjectItemRepresentation alloc] initWithFile:projectItem.filePath ofType:projectItem.fileType name:projectItem.name fileSize:projectItem.fileSize duration:projectItem.duration itemID:projectItem.itemID fileIcon:icon];
+    return [[VSProjectItemRepresentation alloc] initWithFile:projectItem.filePath
+                                                      ofType:projectItem.fileType
+                                                        name:projectItem.name
+                                                    fileSize:projectItem.fileSize
+                                                    duration:projectItem.duration
+                                                      itemID:projectItem.itemID
+                                                    fileIcon:icon];
 }
 
 -(BOOL) addNewRepresentationOfProjectItem:(VSProjectItem*) projectItem{

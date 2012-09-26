@@ -13,10 +13,14 @@
 #import "VSCoreServices.h"
 
 @interface VSOptionParameter()
-@property NSMutableDictionary *options;
+
+@property (strong) NSMutableDictionary *options;
+
 @end
 
 @implementation VSOptionParameter
+
+#pragma mark - Init
 
 -(id) initWithName:(NSString *)theName andID:(NSInteger)theID asType:(NSString *)aType forDataType:(VSParameterDataType)aDataType withDefaultValue:(id)theDefaultValue orderNumber:(NSInteger)aOrderNumber editable:(BOOL)editable hidden:(BOOL)hidden rangeMinValue:(float)minRangeValue rangeMaxValue:(float)maxRangeValue{
     
@@ -63,6 +67,8 @@
     
     return copy;
 }
+
+#pragma mark - Methods
 
 -(void) addOptionWithKey:(id) key forValue:(id) value{
     

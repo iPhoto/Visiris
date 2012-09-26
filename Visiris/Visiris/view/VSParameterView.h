@@ -7,7 +7,6 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "VSViewDelegate.h"
 
 
 /**
@@ -16,7 +15,5 @@
 @interface VSParameterView : NSView
 
 @property NSColor *fillColor;
-
-@property id<VSViewDelegate> viewDelegate;
 
 @end

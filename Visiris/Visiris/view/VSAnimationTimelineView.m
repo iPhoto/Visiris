@@ -20,21 +20,4 @@
 
 
 
-- (id)initWithFrame:(NSRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        
-    }
-    
-    return self;
-}
-
-
-
-
--(void) mouseEntered:(NSEvent *)theEvent{
-    [self.window makeFirstResponder:self];
-}
-
 @end

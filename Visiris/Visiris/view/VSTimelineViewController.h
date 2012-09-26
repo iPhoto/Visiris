@@ -9,20 +9,37 @@
 #import <Cocoa/Cocoa.h>
 
 #import "VSTimelineScrollView.h"
-#import "VSTimelineContentView.h"
+#import "VSTimelineScrollViewDocumentView.h"
 #import "VSTimelineView.h"
 #import "VSViewMouseEventsDelegate.h"
 #import "VSViewResizingDelegate.h"
 
-
+@class VSPlayHead;
 
 @interface VSTimelineViewController : NSViewController<VSViewResizingDelegate, VSViewMouseEventsDelegate, VSViewKeyDownDelegate, VSPlayHeadRulerMarkerDelegate,VSTimelineScrollViewZoomingDelegate>
 
+/** Ratio between the pixel-length of the timeline and the the duration of the timeline milliseconds */
 @property double pixelTimeRatio;
+
+/** Duration of the timeline, neccessary for computing the pixelTimeRatio. Property must be implemented in child class. */
 @property (readonly) double duration;
+
+/** Length of the timelien in pixel, neccessary for computing the pixelTimeRatio. Property must be implemented in child class. */
 @property (readonly) float pixelLength;
-@property (readonly) VSTimelineScrollView *timelineScrollView;
+
+/** Subclass of NSScrollView holding the timeline's tracks. Property must be implemented in child class. */
+@property (weak) IBOutlet VSTimelineScrollView *scrollView;
+
+/** CurrentTimePosition of the timeline's playhead. Property must be implemented in child class. */
 @property (readonly) double playheadTimePosition;
+
+/** Playhead of the the timeline. Property must be implemented in child class. */
+@property (readonly,weak) VSPlayHead *playhead;
+
+/** Current location of the NSRulerMarker used as representaiton of the timeline's playhead. Property must be implemented in child class. */
+@property (readonly) float currentPlayheadMarkerLocation;
+
+#pragma mark - Protected Methods
 
 /**
  * Translates the given pixel value to a timestamp according to the pixelTimeRation
@@ -47,6 +64,24 @@
  * Called when ratio between the length of trackholder's width and the duration of the timeline.
  */
 -(void) pixelTimeRatioDidChange;
+
+/**
+ * Sets the plahead marker according to the playhead's currentposition on the timeline
+ */
+-(void) setPlayheadMarkerLocation;
+
+/**
+ * Computes the new currentTimePosition of the timeline's playhead after the playhead-marker would have been moved the default distance, updates the currentTimePosition and sets the playhead's jumping-flag to YES
+ * @param forward Indicates wheter the playhead is moved left or right
+ */
+-(void) letPlayheadJumpOverTheDefaultDistanceForward:(BOOL) forward;
+
+/**
+ * If the given location the Playhead has been moved to is outside of the visibleRect of the scrollView the view is scrolled.
+ *
+ *@param newLocation Location the Playhead has been moved to
+ */
+-(void) scrollIfNewLocationOfPlayheadIsOutsideOfVisibleRect:(float) newLocation;
 
 /**
  * Sets the plahead marker according to the playhead's currentposition on the timeline

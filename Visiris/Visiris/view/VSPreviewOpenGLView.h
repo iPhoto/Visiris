@@ -11,6 +11,9 @@
 
 @class VSPlaybackController;
 
+/**
+ * ADD DESCRIPTION HERE
+ */
 @interface VSPreviewOpenGLView : NSView <NSCoding>
 
 @property (strong) NSOpenGLContext          *openGLContext;

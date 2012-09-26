@@ -13,14 +13,19 @@
 
 @interface VSKeyFrameViewController ()
 
+/** Size of the VSKeyFrameView the VSKeyFrameViewController is responsible for */
 @property NSSize size;
 
 @end 
 
 
+
+
 @implementation VSKeyFrameViewController
 
 @synthesize pixelTimeRatio  = _pixelTimeRatio;
+
+#pragma mark - Init
 
 - (id)initWithKeyFrame:(VSKeyFrame *)keyFrame withSize:(NSSize)size forPixelTimeRatio:(double)pixelTimeRatio andDelegate:(id<VSKeyFrameViewControllerDelegate>)delegate{
     if(self = [super init]){
@@ -56,18 +61,10 @@
     }
 }
 
--(double) timestampForPixelValue:(double) pixelPosition{
-    return pixelPosition * self.pixelTimeRatio;
-}
-
--(double) pixelForTimestamp:(double) timestamp{
-    return timestamp / self.pixelTimeRatio;
-}
-
 #pragma mark - VSViewMouseEventsDelegate
 
 -(void) mouseDown:(NSEvent *)theEvent onView:(NSView *)view{
-
+    
     
     if([self delegateRespondsToSelector:@selector(keyFrameViewControllerWantsToBeSelected:)]){
         self.selected = [self.delegate keyFrameViewControllerWantsToBeSelected:self];
@@ -85,7 +82,42 @@
     return result;
 }
 
+
 #pragma mark - Private Methods
+
+/**
+ * Converts the given pixelPosition to a timestamp according to the current pixelTimeRatio
+ * @param pixelPosition x-Position to be converted to a timestamp
+ * @return Corresponding timestamp to the given pixelPosition
+ */
+-(double) timestampForPixelValue:(double) pixelPosition{
+    return pixelPosition * self.pixelTimeRatio;
+}
+
+/**
+ * Converts the given timestamp to a pixel-position according to the current pixelTimeRatio
+ * @param timestamp to be converted to a pixel-position
+ * @return Corresponding position to the given timestamp
+ */
+-(double) pixelForTimestamp:(double) timestamp{
+    return timestamp / self.pixelTimeRatio;
+}
+
+/**
+ * Computes the frame-rect for the VSKeyFrameViewController's view according to its timestamp and value
+ * @return NSRect defining size and position of the VSKeyFrameViewController's view
+ */
+-(NSRect) computeFrameRect{
+    float originX = [self pixelForTimestamp:self.keyFrame.timestamp] - self.view.frame.size.width / 2.0f;
+    float originY = self.view.frame.size.height / 2.0f;
+    
+    if([self delegateRespondsToSelector:@selector(pixelPositonForKeyFramesValue:)]){
+        originY = [self.delegate pixelPositonForKeyFramesValue:self];
+
+    }
+    
+    return NSMakeRect(originX, originY, self.size.width, self.size.height);
+}
 
 /**
  * Checks if the delegate of VSPlaybackControllerDelegate is able to respond to the given Selector
@@ -103,20 +135,7 @@
     return NO;
 }
 
--(NSRect) computeFrameRect{
-    float originX = [self pixelForTimestamp:self.keyFrame.timestamp] - self.view.frame.size.width / 2.0f;
-    float originY = self.view.frame.size.height / 2.0f;
-    
-    if([self delegateRespondsToSelector:@selector(pixelPositonForKeyFramesValue:)]){
-        originY = [self.delegate pixelPositonForKeyFramesValue:self];
-
-    }
-    
-    return NSMakeRect(originX, originY, self.size.width, self.size.height);
-}
-
 #pragma mark - Properties
-
 
 -(void) setPixelTimeRatio:(double)pixelTimeRatio{
     _pixelTimeRatio = pixelTimeRatio;

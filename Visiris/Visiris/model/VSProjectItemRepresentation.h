@@ -19,13 +19,13 @@
 #pragma mark- Properties
 
 /** Thumbnail of the file */
-@property   (strong)    NSImage *icon;
+@property (strong) NSImage *icon;
 
 /** Formated string of the fileSize in the format: 1,5 MB 0,45 KB*/
-@property (readonly) NSString* fileSizeString;
+@property (readonly,strong) NSString* fileSizeString;
 
 /** Formated string of the duration in the format: hh:mm:ss */
-@property (readonly) NSString* durationString;
+@property (readonly,strong) NSString* durationString;
 
 #pragma mark- init
 

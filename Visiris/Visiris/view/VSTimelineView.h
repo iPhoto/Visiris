@@ -24,6 +24,7 @@
 /** Delegate VSTimelineView informs about mouseEvents as definined in VSViewMouseEventsDelegate-Protocoll */
 @property id<VSViewMouseEventsDelegate> mouseMoveDelegate;
 
+/** Delegate VSTimelineView informs about keyDownEvens as definend in VSViewKeyDownDelegate-Protocoll */
 @property id<VSViewKeyDownDelegate> keyDownDelegate;
 
 @end

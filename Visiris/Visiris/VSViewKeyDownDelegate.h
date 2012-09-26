@@ -8,12 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ * Defines how a Subclass of NSView informs its delegate about keyDowns
+ */
 @protocol VSViewKeyDownDelegate <NSObject>
 
 /**
  * Called when VSTimelineView received an keyDown-Event
  * @param theEvent NSEvent of the keyDown-Event
  */
--(void) didReceiveKeyDownEvent:(NSEvent*) theEvent;
+-(void) view:(NSView*) view didReceiveKeyDownEvent:(NSEvent*) theEvent;
 
 @end

@@ -8,6 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 
+/**
+ * Subclass of NSView which fill's itselves frame red for testing purposes
+ */
 @interface VSTestView : NSView
 
 @end

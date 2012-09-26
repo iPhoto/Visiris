@@ -64,8 +64,6 @@
  */
 -(NSArray *) visibleParameters;
 
-
-
 /**
  * Changes the name of VSTimelineObject and registers the change at the give undoManger
  * @param newName Name the VSTimelineObject's name will be changed to.

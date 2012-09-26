@@ -21,7 +21,7 @@
 #pragma mark- Properties
 
 /** Holds the projectItmes the controller is responsible */
-@property   (strong, readonly)    NSMutableArray  *projectItems;
+@property (strong, readonly)    NSMutableArray  *projectItems;
 
 
 #pragma mark- Functions

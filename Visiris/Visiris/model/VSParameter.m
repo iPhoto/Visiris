@@ -47,34 +47,9 @@
         self.editable = editable;
         self.orderNumber = aOrderNumber;
         
-        if(maxRangeValue > minRangeValue){
-            self.rangeMaxValue = maxRangeValue;
-            self.rangeMinValue = minRangeValue;
-            self.hasRange = YES;
-        }
+        [self initRangesWithMin:minRangeValue andMax:maxRangeValue];
         
-        if(!theDefaultValue){
-            switch (self.dataType) {
-                case VSParameterDataTypeString:
-                    self.configuredDefaultValue = [[NSString alloc] init];
-                    self.configuredDefaultValue = @"";
-                    break;
-                case VSParameterDataTypeFloat:
-                    if(self.hasRange){
-                        self.configuredDefaultValue = [NSNumber numberWithFloat:self.rangeMinValue];
-                    }
-                    else {
-                        self.configuredDefaultValue = [NSNumber numberWithFloat:0];
-                    }
-                    break;
-                case VSParameterDataTypeBool:
-                    self.configuredDefaultValue = [NSNumber numberWithBool:NO];
-            }
-        }
-        else {
-            self.configuredDefaultValue = theDefaultValue;
-            
-        }
+        [self initDefaultValueWith:theDefaultValue];
         
         self.currentValue = [self.configuredDefaultValue copy];
         
@@ -85,6 +60,38 @@
     return self;
 }
 
+-(void) initRangesWithMin:(float) minRangeValue andMax:(float)maxRangeValue{
+    if(maxRangeValue > minRangeValue){
+        self.rangeMaxValue = maxRangeValue;
+        self.rangeMinValue = minRangeValue;
+        self.hasRange = YES;
+    }
+}
+
+-(void) initDefaultValueWith:(id) defaultValue{
+    if(!defaultValue){
+        switch (self.dataType) {
+            case VSParameterDataTypeString:
+                self.configuredDefaultValue = [[NSString alloc] init];
+                self.configuredDefaultValue = @"";
+                break;
+            case VSParameterDataTypeFloat:
+                if(self.hasRange){
+                    self.configuredDefaultValue = [NSNumber numberWithFloat:self.rangeMinValue];
+                }
+                else {
+                    self.configuredDefaultValue = [NSNumber numberWithFloat:0];
+                }
+                break;
+            case VSParameterDataTypeBool:
+                self.configuredDefaultValue = [NSNumber numberWithBool:NO];
+        }
+    }
+    else {
+        self.configuredDefaultValue = defaultValue;
+        
+    }
+}
 
 
 #pragma mark - VSCopying
@@ -109,29 +116,27 @@
     
     return copy;
 }
-//
-//-(NSString*) description{
-//    return [NSString stringWithFormat:@"Name: %@",self.name];
-//}
+
+#pragma mark - Methods
 
 -(id) valueForTimestamp:(double)timestamp{
 
     switch(self.dataType){
         case VSParameterDataTypeBool:{
-            return [NSNumber numberWithBool:[self.animation boolValueForTimestamp:timestamp]];
+            return [NSNumber numberWithBool:[self.animation copmuteBoolValueForTimestamp:timestamp]];
             break;
         }
         case VSParameterDataTypeFloat:{
-            return [NSNumber numberWithFloat:[self.animation floatValueForTimestamp:timestamp]];
+            return [NSNumber numberWithFloat:[self.animation computeFloatValueForTimestamp:timestamp]];
             break;
         }
         case VSParameterDataTypeString:{
-            NSString *result = [self.animation stringValueForTimestamp:timestamp];
+            NSString *result = [self.animation computStringValueForTimestamp:timestamp];
             return result;
             break;
         }
         default:{
-            return [self.animation stringValueForTimestamp:timestamp];
+            return [self.animation computStringValueForTimestamp:timestamp];
             break;
         }
     }
@@ -181,12 +186,15 @@
 
 -(void) setValue:(id)value forKeyFrame:(VSKeyFrame *)keyFrame{
     keyFrame.value = value;
-    
     self.currentValue = keyFrame.value;
 }
 
 -(void) changeKeyFrames:(VSKeyFrame *)keyFrame timestamp:(double)newTimestamp{
     [self.animation changeKeyFrames:keyFrame timestamp:newTimestamp];
+}
+
+-(void) removeKeyFrame:(VSKeyFrame *)keyFrameToRemove{
+    [self.animation removeKeyFrame:keyFrameToRemove];
 }
 
 #pragma mark - Private Methods
@@ -235,6 +243,11 @@
     }
 }
 
+/**
+ * Changes the value of the given id if it's not in the parameter's range
+ * @param value that will be checked if its in the parameters range
+ * @reutrn Returns the corrected Value if it wasn't in the parameter's range and the unchanged value otherwise
+ */
 -(id) changeIfNotInRange:(id) value{
     if(self.dataType == VSParameterDataTypeFloat && self.hasRange){
         NSNumber *number = value;
@@ -249,10 +262,6 @@
     }
     
     return value;
-}
-
--(void) removeKeyFrame:(VSKeyFrame *)keyFrameToRemove{
-    [self.animation removeKeyFrame:keyFrameToRemove];
 }
 
 #pragma mark - Properties
@@ -279,7 +288,7 @@
 }
 
 -(void) setDefaultFloatValue:(float) value{
-    self.animation.defaultValue = [NSNumber numberWithFloat:value];
+    self.animation.defaultValue =  [self changeIfNotInRange:[NSNumber numberWithFloat:value]];
     self.currentValue = self.animation.defaultValue;
 }
 

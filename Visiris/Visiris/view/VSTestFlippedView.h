@@ -8,6 +8,11 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface VSTestFlippedView : NSView
+#import "VSFlippedView.h"
+
+/**
+ * Subclass of VSFlippedView which fills it's frame green for testing purposes
+ */
+@interface VSTestFlippedView : VSFlippedView
 
 @end

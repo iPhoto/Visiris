@@ -145,32 +145,6 @@ static NSString* defaultNib = @"MainWindow";
 
 #pragma mark - NSSplitViewDelegate Implementation
 
--(void) splitViewWillResizeSubviews:(NSNotification *)notification{
-    
-    NSSplitView *splitView = (NSSplitView*)[notification object];
-    if(splitView == self.mainSplitView){
-        for(NSView* subview in splitView.subviews)
-        {
-            
-//            if(subview == self.timelineViewController.view){
-//                if(subview.frame.size.height > 100){
-//                    [subview setFrameSize:NSMakeSize(subview.frame.size.width, 100)];
-//                }
-//            }
-        }
-    }
-//    else if(splitView == self.topSplitView){
-//        for(NSView *subView in splitView.subviews){
-//            if(subView.frame.size.width < 50){
-//                DDLogInfo(@"%@ is Collpased: %d", subView,               [splitView isSubviewCollapsed:subView]);
-//                NSRect frame = subView.frame;
-//                frame.size.width = 50;
-//                [subView setFrame:frame];
-//            }
-//        }
-//    }
-}
-
 -(CGFloat) splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex{
 //    DDLogInfo(@"proposedMinimumPosition: %f for dividerIndex : %ld",proposedMinimumPosition,dividerIndex);
     if(splitView == self.topSplitView){
@@ -182,8 +156,7 @@ static NSString* defaultNib = @"MainWindow";
                 return proposedMinimumPosition + 200;
                 break;
         }
-    }
-    
+    }   
     return proposedMinimumPosition;
 }
 

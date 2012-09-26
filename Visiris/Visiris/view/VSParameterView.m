@@ -39,22 +39,6 @@
 
 #pragma mark - Private Methods
 
-/**
- * Checks if the delegate is able to respond to the given Selector
- * @param selector Selector the delegate will be checked for if it is able respond to
- * @return YES if the delegate is able to respond to the selector, NO otherweis
- */
--(BOOL) delegateRespondsToSelector:(SEL) selector{
-    if(self.viewDelegate){
-        if([self.viewDelegate conformsToProtocol:@protocol(VSViewDelegate) ]){
-            if([self.viewDelegate respondsToSelector: selector]){
-                return YES;
-            }
-        }
-    }
-    
-    return NO;
-}
 
 #pragma mark - Properties
 

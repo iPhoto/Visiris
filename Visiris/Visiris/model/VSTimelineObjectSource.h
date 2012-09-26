@@ -15,7 +15,7 @@
 @interface VSTimelineObjectSource : NSObject<NSCopying>
 
 /** ProjectItem the source represents */
-@property VSProjectItem* projectItem;
+@property (weak) VSProjectItem* projectItem;
 
 /** NSDictionary containing theparameters, the type - Property of VSParameter is used as Key. */
 @property (strong) NSDictionary *parameters;

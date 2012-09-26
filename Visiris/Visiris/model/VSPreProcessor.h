@@ -18,7 +18,7 @@
 @interface VSPreProcessor : NSObject<VSTimelineTimelineObjectsDelegate>
 
 /** The timeline is asked for currently active VStimelineObjects */
-@property VSTimeline *timeline;
+@property (weak) VSTimeline *timeline;
 
 /** The VSCoreReceptionist is connection to to VSRenderCore. */
 @property (strong) VSCoreReceptionist *renderCoreReceptionist;

@@ -8,6 +8,8 @@
 
 #import "VSTimelineObjectViewController.h"
 
+#import <QuartzCore/QuartzCore.h>
+
 #import "VSTimelineObjectProxy.h"
 #import "VSTimelineObjectViewIntersection.h"
 

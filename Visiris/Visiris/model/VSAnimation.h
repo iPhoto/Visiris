@@ -24,16 +24,31 @@
 /** Stores the device connected with the parameter if ther is one */
 @property (strong) VSDeviceParameterMapper *deviceParameterMapper;
 
+/** Value of the parameter the VSAnimatin is connected with when no keyFrame was set yet */
 @property (strong) id defaultValue;
 
 #pragma mark - Methods
 
+/**
+ * Computes the float-value for the given timestamp of the animation according to its keyFrames 
+ * @param timestamp Timestamp the value is computed for
+ * @return The float-value for the given timestamp the animation has according to its keyFrames
+ */
+-(float) computeFloatValueForTimestamp:(double) timestamp;
 
--(float) floatValueForTimestamp:(double) timestamp;
+/**
+ * Computes the NSString-value for the given timestamp of the animation according to its keyFrames
+ * @param timestamp Timestamp the value is computed for
+ * @return The NSString-value for the given timestamp the animation has according to its keyFrames
+ */
+-(NSString*) computStringValueForTimestamp:(double) timestamp;
 
--(NSString*) stringValueForTimestamp:(double) timestamp;
-
--(BOOL) boolValueForTimestamp:(double) timestamp;
+/**
+ * Computes the BOOL-value for the given timestamp of the animation according to its keyFrames
+ * @param timestamp Timestamp the value is computed for
+ * @return The BOOL-value for the given timestamp the animation has according to its keyFrames
+ */
+-(BOOL) copmuteBoolValueForTimestamp:(double) timestamp;
 
 
 /**
@@ -43,10 +58,17 @@
  */
 -(VSKeyFrame*) addKeyFrameWithValue:(id) aValue forTimestamp:(double) aTimestamp;
 
-
+/**
+ * Removes the given keyFrame from the animation
+ * @param keyFrame VSKeyFrame which will be removed
+ */
 -(void) removeKeyFrame:(VSKeyFrame*) keyFrame;
 
-
+/**
+ * Changes the timestamp of the given keyFrame
+ * @param keyFrame VSKeyFrame the timestamp is changed of
+ * @param newTimestamp Double-value the timestamp of the given keyFrame is set to
+ */
 -(void) changeKeyFrames:(VSKeyFrame*) keyFrame timestamp:(double) newTimestamp;
 
 @end

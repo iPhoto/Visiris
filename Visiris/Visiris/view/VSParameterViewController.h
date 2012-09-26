@@ -7,7 +7,6 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "VSViewDelegate.h"
 
 @class VSParameter;
 @class VSKeyFrame;
@@ -27,7 +26,7 @@
  *
  * Displays controls to edit the parameter's default value depending on the type of the VSParameter the VSParameterViewController represents. 
  */
-@interface VSParameterViewController : NSViewController<VSViewDelegate,NSTextFieldDelegate, NSComboBoxDelegate>
+@interface VSParameterViewController : NSViewController<NSTextFieldDelegate, NSComboBoxDelegate>
 
 /** Displays the name of paramter the View represents */
 @property (weak) IBOutlet NSTextField *nameLabel;

@@ -56,7 +56,7 @@
         self.preProcessor = preProcessor;
         self.timeline = timeline;
         
-        self.playbackMode = VSPlaybackModeStanding;
+        self.playbackMode = VSPlaybackModeNone;
         
         [self initObservers];
         
@@ -118,7 +118,7 @@
             }
         }
         else{
-            self.playbackMode = VSPlaybackModeStanding;
+            self.playbackMode = VSPlaybackModeNone;
             if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
                 [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
             }
@@ -126,7 +126,7 @@
         }
     }
     else if([keyPath isEqualToString:@"currentValue"]){
-        if(self.playbackMode == VSPlaybackModeStanding){
+        if(self.playbackMode == VSPlaybackModeNone){
             self.playbackMode = VSPlaybackModeJumping;
             if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
                 [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
@@ -152,7 +152,7 @@
         if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
             [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
         }
-        self.playbackMode = VSPlaybackModeStanding;
+        self.playbackMode = VSPlaybackModeNone;
     }
 }
 
@@ -183,6 +183,16 @@
     }
 }
 
+-(void) updateCurrentFrame{
+    if(self.playbackMode == VSPlaybackModeNone){
+        self.playbackMode = VSPlaybackModeJumping;
+        
+        if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
+            [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
+        }
+    }
+}
+
 -(void) play{
     self.playbackMode = VSPlaybackModePlaying;
     
@@ -192,13 +202,19 @@
 }
 
 -(void) stop{
-    self.playbackMode = VSPlaybackModeStanding;
+    self.playbackMode = VSPlaybackModeNone;
     [self.preProcessor stopPlayback];
 }
 
 
 #pragma mark - Private Methods
 
+/**
+ * Called when a VSTimelineObjectsGotUnselected-Notification was received.
+ *
+ * Removes the obserserves for the currentValues of the unselected VSTimelineObject's parameters
+ * @param notification NSNotification storing the unselected VSTimelineObject
+ */
 -(void) timelineObjectsGotUnselected:(NSNotification *) notification{
     for(VSParameter *parameter in [self.selectedTimelineObject visibleParameters]){
         [parameter removeObserver:self forKeyPath:@"currentValue"];
@@ -207,6 +223,12 @@
     self.selectedTimelineObject = nil;
 }
 
+/**
+ * Called when a VSTimelineObjectsGotSelected-Notification was received.
+ *
+ * Adds obserserves for the currentValues of the selected VSTimelineObject's parameters
+ * @param notification NSNotification storing the selected VSTimelineObject
+ */
 -(void) timelineObjectsGotSelected:(NSNotification *) notification{
     if([[notification object] isKindOfClass:[NSArray class]]){
         NSArray *selectedTimelineObjects = (NSArray*) [notification object];
@@ -217,7 +239,11 @@
                 self.selectedTimelineObject = (VSTimelineObject*) [selectedTimelineObjects objectAtIndex:0];
                 
                 for(VSParameter *parameter in [self.selectedTimelineObject visibleParameters]){
-                    [parameter addObserver:self forKeyPath:@"currentValue" options:0 context:nil];
+                    
+                    [parameter addObserver:self
+                                forKeyPath:@"currentValue"
+                                   options:0
+                                   context:nil];
                 }
             }
         }
@@ -238,7 +264,7 @@
         if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
             [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
         }
-        self.playbackMode = VSPlaybackModeStanding;
+        self.playbackMode = VSPlaybackModeNone;
     }
 }
 

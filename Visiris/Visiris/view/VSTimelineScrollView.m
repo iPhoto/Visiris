@@ -18,15 +18,16 @@
 @interface VSTimelineScrollView()
 
 /** Subclass of NSRulerView, displaying the timecode above the timeline */
-@property VSTimelineRulerView *timelineRulerView;
+@property (strong) VSTimelineRulerView *timelineRulerView;
 
 /** Subclass of NSRulerMarker Displaying the current Position of the playhead in the timelineRulerView */
-@property VSPlayheadMarker *playheadMarker;
+@property (strong) VSPlayheadMarker *playheadMarker;
 
 @end
 
 @implementation VSTimelineScrollView
-@synthesize zoomingDelegate = _zoomingDelegate;
+
+
 @synthesize pixelTimeRatio = _pixelTimeRatio;
 
 #pragma mark - Init
@@ -50,13 +51,15 @@
     [self.trackHolderView setFrame:NSMakeRect(0, 0, self.visibleTrackViewsHolderWidth, self.frame.size.height)];
 }
 
+/**
+ * Inits the documentView with the trackHolderView
+ */
 -(void) initDocumentView{
     self.documentView = self.trackHolderView;
     self.trackHolderView.trackHolderViewDelegate = self;
     
     [self.contentView setWantsLayer:YES];
     [self.contentView.layer addSublayer:self.trackHolderView.layer];
-       
 }
 
 /**
@@ -107,7 +110,8 @@
 -(BOOL) shouldMoveMarker:(NSRulerMarker *)marker inTrackHolderView:(VSMainTimelineContentView *)trackHolderView{
     if(marker == self.playheadMarker){
         if([self delegateRespondsToSelector:@selector(shouldMovePlayHeadRulerMarker:inContainingView:)]){
-            return [self.playheadMarkerDelegate shouldMovePlayHeadRulerMarker:self.playheadMarker inContainingView:trackHolderView];
+            return [self.playheadMarkerDelegate shouldMovePlayHeadRulerMarker:self.playheadMarker
+                                                             inContainingView:trackHolderView];
         }
     }
     
@@ -116,7 +120,8 @@
 -(void) didMoveRulerMarker:(NSRulerMarker *)marker inTrackHolderView:(VSMainTimelineContentView *)trackHolderView{
     if(marker == self.playheadMarker){
         if([self delegateRespondsToSelector:@selector(didMovePlayHeadRulerMarker:inContainingView:)]){
-            [self.playheadMarkerDelegate didMovePlayHeadRulerMarker:self.playheadMarker inContainingView:trackHolderView];
+            [self.playheadMarkerDelegate didMovePlayHeadRulerMarker:self.playheadMarker
+                                                   inContainingView:trackHolderView];
         }
     }
 }
@@ -124,7 +129,9 @@
 -(CGFloat) willMoveRulerMarker:(NSRulerMarker *)marker inTrackHolderView:(VSMainTimelineContentView *)trackHolderView toLocation:(CGFloat)location{
     if(marker == self.playheadMarker){
         if([self delegateRespondsToSelector:@selector(willMovePlayHeadRulerMarker:inContainingView:toLocation:)]){
-            location = [self.playheadMarkerDelegate willMovePlayHeadRulerMarker:marker inContainingView:trackHolderView toLocation:location];
+            location = [self.playheadMarkerDelegate willMovePlayHeadRulerMarker:marker
+                                                               inContainingView:trackHolderView
+                                                                     toLocation:location];
         }
     }
     
@@ -133,13 +140,17 @@
 
 -(CGFloat) mouseDownOnRulerView:(NSRulerView *)rulerView atLocation:(CGFloat)location{
     if([self delegateRespondsToSelector:@selector(playHeadRulerMarker:willJumpInContainingView:toLocation:)]){
-        location = [self.playheadMarkerDelegate playHeadRulerMarker:self.playheadMarker willJumpInContainingView:self.trackHolderView toLocation:location];
+        location = [self.playheadMarkerDelegate playHeadRulerMarker:self.playheadMarker
+                                           willJumpInContainingView:self.trackHolderView
+                                                         toLocation:location];
     }
     
     [self.playheadMarker setMarkerLocation:location];
     
     if([self delegateRespondsToSelector:@selector(playHeadRulerMarker:didJumpInContainingView:toLocation:)]){
-        [self.playheadMarkerDelegate playHeadRulerMarker:self.playheadMarker didJumpInContainingView:self.trackHolderView toLocation:location];
+        [self.playheadMarkerDelegate playHeadRulerMarker:self.playheadMarker
+                                 didJumpInContainingView:self.trackHolderView
+                                              toLocation:location];
     }
     
     return location;
@@ -230,7 +241,12 @@
     }
 }
 
-
+/**
+ * Adds the given NSView as a Track of the Timeline.
+ *
+ * Adds the view as SubView of the ScrollViews document view and resizes its frame according to the sizes of all tracks fo the scrollView
+ * @param aTrackView NSView to be added as track of the timeline
+ */
 -(void) addTrackView:(NSView *)aTrackView{
     [self.trackHolderView addSubview:aTrackView];
     [self.trackHolderView.layer addSublayer:aTrackView.layer];
@@ -276,7 +292,5 @@
 -(CGFloat) timelecodeRulerThickness{
     return self.timelineRulerView.ruleThickness;
 }
-
-
 
 @end

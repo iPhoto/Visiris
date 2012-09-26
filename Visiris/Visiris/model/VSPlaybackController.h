@@ -58,10 +58,10 @@
 @property id<VSPlaybackControllerDelegate> delegate;
 
 /** The VSPrePRrocess is called to process data for a specific timestamp. */
-@property (readonly) VSPreProcessor *preProcessor;
+@property (readonly, weak) VSPreProcessor *preProcessor;
 
 /** The VSTimline is called when the current timestamp has changed. */
-@property (readonly) VSTimeline *timeline;
+@property (readonly, weak) VSTimeline *timeline;
 
 /** The currently active TimeStamp */
 @property double currentTimestamp;
@@ -102,5 +102,10 @@
  * Tells the VSPreProcessor to render the frame for the currentTimestamp for given frame size
  */
 - (void)renderFramesForCurrentTimestamp;
+
+/**
+ * Tells the VSPreProcessor to render the current frame again
+ */
+-(void) updateCurrentFrame;
 
 @end
