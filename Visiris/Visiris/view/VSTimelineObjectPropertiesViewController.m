@@ -90,7 +90,9 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     [self animationTimelineHolder];
 }
 
-
+/**
+ * Instantiates a VSAnimationTimelineViewController, stores its view as subView of animationTimelineHolder and sets the view's properties
+ */
 -(void) initAnimationTimeline{
     [self.animationTimelineHolder setAutoresizesSubviews:YES];
     [self.animationTimelineHolder setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
@@ -117,6 +119,9 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     
 }
 
+/**
+ * Instantiates a VSTimelineObjectParametersViewController, stores its view as subView of parametersHolder and sets the view's properties
+ */
 -(void) initParameterView{
     [self.parametersHolder setAutoresizesSubviews:YES];
     [self.parametersHolder setAutoresizingMask: NSViewWidthSizable];
@@ -175,22 +180,17 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     }
 }
 
-#pragma mark IBAction
-- (IBAction)nameTextFieldHasChanged:(NSTextField *)sender {
-    [self setTimelineObjectName:[sender stringValue]];
-}
-
 #pragma mark - VSParameterViewKeyFrameDelegate Implementation
 
 -(VSKeyFrame*) addKeyFrameToParameter:(VSParameter *)parameter withValue:(id)value{
      return [parameter addKeyFrameWithValue:value forTimestamp:self.animationTimelineViewController.playheadTimePosition];
 }
 
--(void) parameterViewController:(VSParameterViewController *)parameterView wantsToGoToNextKeyFrameOfParameter:(VSParameter *)parameter{
+-(void) parameterViewController:(VSParameterViewController *)parameterView wantsPlayheadToGoToNextKeyFrameOfParameter:(VSParameter *)parameter{
     [self.animationTimelineViewController moveToNearestKeyFrameRightOfParameter:parameter];
 }
 
--(void) parameterViewController:(VSParameterViewController *)parameterView wantsToGoToPreviousFrameOfParameter:(VSParameter *)parameter{
+-(void) parameterViewController:(VSParameterViewController *)parameterView wantsPlayheadToGoToPreviousFrameOfParameter:(VSParameter *)parameter{
     
     [self.animationTimelineViewController moveToNearestKeyFrameLeftOfParameter:parameter];
 }
@@ -198,15 +198,10 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 #pragma mark - VSFrameResizingDelegate Implementation
 
 -(void) frameOfView:(NSView *)view wasSetFrom:(NSRect)oldRect to:(NSRect)newRect{
-    //    if(self.timelineObjectsParameterViewController. > (self.numberOfParameters * PARAMETER_VIEW_HEIGHT)){
-    //        [self.documentView setFrameSize:NSMakeSize(self.documentView.frame.size.width, self.scrollView.contentView.frame.size.height)];
-    //    }
-    //    else{
-    //        [self.documentView setFrameSize:NSMakeSize(self.documentView.frame.size.width, [self parameterViewHeight])];
-    //    }
+    DDLogInfo(@"nothing implemented");
 }
 
-#pragma mark - VSKeyFrameSelectingDelegate Implemntation
+#pragma mark - VSKeyFrameSelectingDelegate Implementation
 
 -(void) playheadIsOverKeyFrame:(VSKeyFrame *)keyFrame ofParameter:(VSParameter *)paramter{
     [self.parametersViewController selectKeyFrame:keyFrame ofParameter:paramter];
@@ -233,7 +228,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     return YES;
 }
 
-#pragma mark - VSFrameResizingDelegate Implementation
+#pragma mark - VSScrollViewScrollingDelegate Implementation
 
 -(void) scrollView:(NSScrollView *)scrollView changedBoundsFrom:(NSRect)fromBounds to:(NSRect)toBounds{
     
@@ -267,6 +262,9 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     }
 }
 
+/**
+ * Tells the parametersViewController to show the parameters of the timelineObject 
+ */
 -(void) showParameters{
     [self.parametersViewController showParametersOfTimelineObject:self.timelineObject connectedWithDelegate:self];
     NSSize newSize = [self.parametersViewController.scrollView.documentView frame].size;
@@ -276,6 +274,9 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     [self.parametersViewController.scrollView.documentView setFrameSize:newSize];
 }
 
+/**
+ * Tells the animationTimelineViewController to show the the animationTimeline of the timelineObject
+ */
 -(void) showAnimationTimeline{
     [self.animationTimelineViewController showTimelineForTimelineObject:self.timelineObject];
 }

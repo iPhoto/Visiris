@@ -6,8 +6,8 @@
 //
 //
 
-#import "VSMainTimelineContentView.h"
+#import "VSMainTimelineScrollViewDocumentView.h"
 
-@implementation VSMainTimelineContentView
+@implementation VSMainTimelineScrollViewDocumentView
 
 @end

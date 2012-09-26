@@ -8,6 +8,9 @@
 
 #import "VSTimelineView.h"
 
+/**
+ * Subclass of VSTimelineView
+ */
 @interface VSMainTimelineView : VSTimelineView
 
 @end

@@ -13,6 +13,8 @@
  */
 @protocol VSScrollViewScrollingDelegate <NSObject>
 
+@optional
+
 /**
  * Informs about an ongoing scrolling-Event of the scrollView
  * @param scrollView NSScrollView the scrollEvent happens in

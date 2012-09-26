@@ -16,6 +16,13 @@
 
 @class VSPlayHead;
 
+
+/**
+ * VSTimelineViewController is the base-class for all TimelineViewControllers of the project
+ *
+ * VSTimelineViewController holds a various number of VSTrackViewController representing the VSTracks of the VSTimeline and acts as delegate for the VSTrackViewControllers.
+ * !!!!!!Please add more here
+ */
 @interface VSTimelineViewController : NSViewController<VSViewResizingDelegate, VSViewMouseEventsDelegate, VSViewKeyDownDelegate, VSPlayHeadRulerMarkerDelegate,VSTimelineScrollViewZoomingDelegate>
 
 /** Ratio between the pixel-length of the timeline and the the duration of the timeline milliseconds */
@@ -83,9 +90,11 @@
  */
 -(void) scrollIfNewLocationOfPlayheadIsOutsideOfVisibleRect:(float) newLocation;
 
+
 /**
- * Sets the plahead marker according to the playhead's currentposition on the timeline
+ * Computes the new currentTimePosition of the timeline's playhead after the playhead-marker would have been moved the given distance, updates the currentTimePosition and sets the playhead's jumping-flag to YES
+ * @param distance Distance the Playhead will be moved
  */
--(void) setPlayheadMarkerLocation;
+-(void) letPlayheadJumpOverDistance:(float) distance;
 
 @end

@@ -197,27 +197,29 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     if(self.timelineObject){
         
         NSArray *parameters = [self.timelineObject visibleParameters];
-        
-        float width = self.scrollView.visibleTrackViewsHolderWidth;
+
         
         for(VSParameter *parameter in parameters){
+            
+            float width = self.scrollView.visibleTrackViewsHolderWidth;
             
             NSRect trackRect = NSMakeRect(0, self.animationTrackViewControllers.count*self.trackHeight , width, self.trackHeight);
             
             NSColor *trackColor = self.animationTrackViewControllers.count % 2 == 0 ? self.evenTrackColor : self.oddTrackColor;
             
-            VSAnimationTrackViewController *animationTrackViewController = [[VSAnimationTrackViewController alloc]initWithFrame:trackRect
-                                                                                                                       andColor:trackColor
-                                                                                                                   forParameter:parameter
-                                                                                                              andPixelTimeRatio:self.pixelTimeRatio];
+            VSAnimationTrackViewController *animationTrackViewController = [[VSAnimationTrackViewController alloc]
+                                                                            initWithFrame:trackRect                                           andColor:trackColor                forParameter:parameter
+                                                                            andPixelTimeRatio:self.pixelTimeRatio];
             
             animationTrackViewController.delegate = self;
             
-            [self.animationTrackViewControllers setObject:animationTrackViewController
-                                                   forKey:[NSNumber numberWithInteger:parameter.ID]];
+            [self.animationTrackViewControllers setObject:animationTrackViewController forKeyedSubscript:[NSNumber numberWithInteger:parameter.ID]];
             
             [animationTrackViewController.view setFrame:trackRect];
+            
             [animationTrackViewController.view setAutoresizingMask:NSViewWidthSizable];
+            
+            [animationTrackViewController.view setFrame:trackRect];
             
             [self.scrollView addTrackView:animationTrackViewController.view];
         }
@@ -436,7 +438,9 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 }
 
 /**
- * Converts the given location of the Playhead to a global Timestamp and sets is the currenTimePosition of the playhed
+ * Converts the given location of the Playhead to a global Timestamp and sets is the currenTimePosition of the playhead
+ *
+ * @param location Location the mainPlayHead is move to
  */
 -(void) moveMainPlayheadAccordingToAnimationTimelinesPlayheadLocation:(CGFloat) location{
     self.playhead.currentTimePosition = [self globalTimestampForPixelPosition:location];;
@@ -446,6 +450,8 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
  * Called when the currentTimePosition of the playhead has been changed.
  *
  * Computes the pixel position of playheadMarker according to given timePosition and moves the PlayheadMarker to this locaiton. Afterwards the VSKeyFrameViews which are at the new positon of the playhead are set as selected and the currentValues of all parameters are updated.
+ *
+ * @param newTimeposition Timestamp the playhead has been moved to
  */
 -(void) playHeadsCurrentTimePositionHasBeenChangedToTimePosition:(double)newTimeposition{
     
@@ -462,6 +468,8 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
  * Sets the VSKeyFrameViews which are at the given markerLocation as selected
  *
  * Iterates through its VSAnimationTrackViewController and tells them to return the VSKeyFrameViewController which is at the given markerLocation. Afterwards it informs its keyFrameSelectingDelegate about the selected keyFrames.
+ *
+ * @param markerLocation Location of playhead marker where is looked for keyFrames to select
  */
 -(void) selectKeyFramesAtPlayheadMarkersLocation:(float) markerLocation{
     for(VSAnimationTrackViewController *trackViewController in [self.animationTrackViewControllers allValues]){

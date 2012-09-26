@@ -34,6 +34,7 @@
 /** Wrapper for the VSParameterViews*/
 @property (weak) IBOutlet NSView *parametersHolder;
 
+/** Wrapper for the view of the VSAnimationTimelineViewController */
 @property (weak) IBOutlet NSView *animationTimelineHolder;
 
 /** label for the name of VSTimelineObject */
@@ -46,7 +47,5 @@
  * Inits the controller with the .nib-File stored in defaultNib (VSBrowserView)
  */
 -(id) initWithDefaultNib;
-
-- (IBAction)nameTextFieldHasChanged:(NSTextField *)sender;
 
 @end

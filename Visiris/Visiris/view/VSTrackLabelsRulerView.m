@@ -13,7 +13,11 @@
 #import "VSCoreServices.h"
 
 @interface VSTrackLabelsRulerView()
+
+/** paragraph style for the tracknames */
 @property NSMutableParagraphStyle *paragrapheStyle;
+
+/** textAttributes for the tracknames */
 @property NSMutableDictionary *textAttributes;
 @end
 

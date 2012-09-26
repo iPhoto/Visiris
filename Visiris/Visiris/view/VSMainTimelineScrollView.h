@@ -10,6 +10,9 @@
 
 @class VSTrackLabel;
 
+/**
+ * Subclass of VSTimelineScrollView used as ScrollView in VSMainTimelineViewController
+ */
 @interface VSMainTimelineScrollView : VSTimelineScrollView
 
 /**

@@ -16,7 +16,7 @@
 #import "VSTimelineRulerView.h"
 #import "VSTimelineObject.h"
 #import "VSTrackLabel.h"
-#import "VSMainTimelineContentView.h"
+#import "VSMainTimelineScrollViewDocumentView.h"
 #import "VSProjectItemRepresentation.h"
 
 #import "VSCoreServices.h"
@@ -379,7 +379,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
 
 #pragma mark Moving
 
--(NSPoint) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController WillBeDraggedOnTrack:(VSTrackViewController *)trackViewController fromPjosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition withSnappingDeltaX:(float)snappingDeltaX{
+-(NSPoint) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController WillBeDraggedOnTrack:(VSTrackViewController *)trackViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition withSnappingDeltaX:(float)snappingDeltaX{
     
     float deltaX = newPosition.x - oldPosition.x;
     

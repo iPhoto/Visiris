@@ -14,6 +14,7 @@
  */
 @interface VSParameterView : NSView
 
+/** Background-Color of the view */
 @property NSColor *fillColor;
 
 @end

@@ -66,6 +66,8 @@
 
 /**
  * Called when the Slider controlling the Framerate
+ * @param sender Control which has called the action
+ * @return IBAction
  */
 - (IBAction)frameRateSliderHasChanged:(NSSlider *)sender;
 
