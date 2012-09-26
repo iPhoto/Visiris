@@ -11,8 +11,10 @@
 
 @interface VSOSCClient ()
 {
-    OSCInPort                                   *_inPort;
 }
+
+@property (strong) OSCInPort                    *_inPort;
+
 @end
 
 @implementation VSOSCClient
