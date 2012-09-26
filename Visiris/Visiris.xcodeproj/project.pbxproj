@@ -1557,6 +1557,7 @@
 				27EEDA381612F6490075EE42 /* VSFullScreenController.m in Sources */,
 				27C5EB9A1613381C00A441D4 /* VSOpenGLView.m in Sources */,
 				27C5EB9E1613408900A441D4 /* VSFullScreenOpenGLView.m in Sources */,
+				5B60CC5B16135EE800557892 /* VSOutputController.m in Sources */,
 				27726EED161381BB00C0AEEB /* VSExternalInputManager.m in Sources */,
 				27726EF0161381DC00C0AEEB /* VSOSCInputManager.m in Sources */,
 				27726EF51613822000C0AEEB /* VSOSCClient.m in Sources */,

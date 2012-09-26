@@ -98,6 +98,9 @@
     
     self.timeline.timelineObjectsDelegate = self.preProcessor;
     
+    [[VSOutputController sharedOutputController] connectWithOpenGLContext:self.preProcessor.renderCoreReceptionist.openGLContext];
+    
+    [VSOutputController sharedOutputController].playbackController = self.playbackController;
     // Start Client
     self.externalInputManager = [[VSExternalInputManager alloc] init];
 }
