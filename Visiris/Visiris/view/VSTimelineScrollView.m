@@ -8,7 +8,7 @@
 
 #import "VSTimelineScrollView.h"
 
-#import "VSMainTimelineContentView.h"
+#import "VSMainTimelineScrollViewDocumentView.h"
 #import "VSTimelineRulerView.h"
 #import "VSPlayheadMarker.h"
 #import "VSTrackLabelsRulerView.h"
@@ -107,7 +107,7 @@
 
 #pragma mark - VSTrackHolderViewDelegate Implementaion
 
--(BOOL) shouldMoveMarker:(NSRulerMarker *)marker inTrackHolderView:(VSMainTimelineContentView *)trackHolderView{
+-(BOOL) shouldMoveMarker:(NSRulerMarker *)marker inTrackHolderView:(VSMainTimelineScrollViewDocumentView *)trackHolderView{
     if(marker == self.playheadMarker){
         if([self delegateRespondsToSelector:@selector(shouldMovePlayHeadRulerMarker:inContainingView:)]){
             return [self.playheadMarkerDelegate shouldMovePlayHeadRulerMarker:self.playheadMarker
@@ -117,7 +117,7 @@
     
     return NO;
 }
--(void) didMoveRulerMarker:(NSRulerMarker *)marker inTrackHolderView:(VSMainTimelineContentView *)trackHolderView{
+-(void) didMoveRulerMarker:(NSRulerMarker *)marker inTrackHolderView:(VSMainTimelineScrollViewDocumentView *)trackHolderView{
     if(marker == self.playheadMarker){
         if([self delegateRespondsToSelector:@selector(didMovePlayHeadRulerMarker:inContainingView:)]){
             [self.playheadMarkerDelegate didMovePlayHeadRulerMarker:self.playheadMarker
@@ -126,7 +126,7 @@
     }
 }
 
--(CGFloat) willMoveRulerMarker:(NSRulerMarker *)marker inTrackHolderView:(VSMainTimelineContentView *)trackHolderView toLocation:(CGFloat)location{
+-(CGFloat) willMoveRulerMarker:(NSRulerMarker *)marker inTrackHolderView:(VSMainTimelineScrollViewDocumentView *)trackHolderView toLocation:(CGFloat)location{
     if(marker == self.playheadMarker){
         if([self delegateRespondsToSelector:@selector(willMovePlayHeadRulerMarker:inContainingView:toLocation:)]){
             location = [self.playheadMarkerDelegate willMovePlayHeadRulerMarker:marker
@@ -170,6 +170,20 @@
         [self.timelineRulerView setNeedsDisplayInRect:self.playheadMarker.imageRectInRuler];
         [self.timelineRulerView setNeedsDisplayInRect:formerImageRect];
     }
+}
+
+
+-(void) addTrackView:(NSView *)aTrackView{
+    [self.trackHolderView addSubview:aTrackView];
+    [self.trackHolderView.layer addSublayer:aTrackView.layer];
+    
+    NSRect tmp = [[[self.trackHolderView subviews] objectAtIndex:0] frame];
+    
+    for(NSView *subView in self.trackHolderView.subviews){
+        tmp = NSUnionRect(tmp, subView.frame);
+    }
+    
+    [self.trackHolderView setFrameSize:NSMakeSize(self.documentVisibleRect.size.width, tmp.size.height)];
 }
 
 #pragma mark - Private Methods
@@ -239,25 +253,6 @@
             [self.zoomingDelegate timelineScrollView:self wasZoomedAtPosition:position];
         }
     }
-}
-
-/**
- * Adds the given NSView as a Track of the Timeline.
- *
- * Adds the view as SubView of the ScrollViews document view and resizes its frame according to the sizes of all tracks fo the scrollView
- * @param aTrackView NSView to be added as track of the timeline
- */
--(void) addTrackView:(NSView *)aTrackView{
-    [self.trackHolderView addSubview:aTrackView];
-    [self.trackHolderView.layer addSublayer:aTrackView.layer];
-    
-    NSRect tmp = [[[self.trackHolderView subviews] objectAtIndex:0] frame];
-    
-    for(NSView *subView in self.trackHolderView.subviews){
-        tmp = NSUnionRect(tmp, subView.frame);
-    }
-    
-    [self.trackHolderView setFrameSize:NSMakeSize(self.documentVisibleRect.size.width, tmp.size.height)];
 }
 
 #pragma mark - Properties

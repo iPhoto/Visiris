@@ -16,15 +16,18 @@
 
 #import "VSCoreServices.h"
 
+
 @interface VSParameterViewController ()
 
-
-/** VSParemter the view displayes. */
+/** VSParemteer the view displayes. */
 @property VSParameter *parameter;
 
+/** Background-color of the view */
 @property NSColor *color;
 
 @end
+
+
 
 @implementation VSParameterViewController
 
@@ -34,8 +37,6 @@
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
 static NSString* defaultNib = @"VSParameterView";
-
-
 
 
 #pragma mark - Init
@@ -73,7 +74,6 @@ static NSString* defaultNib = @"VSParameterView";
 
 #pragma mark - NSViewController
 
-//TODO: change only the value
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     //observers if the defaultValue of the parameter has changed
     if([keyPath isEqualToString:@"currentValue"]){
@@ -159,14 +159,14 @@ static NSString* defaultNib = @"VSParameterView";
 - (IBAction)previousKeyFrame:(id)sender {
     if([self keyFrameDelegateRespondsToSelector:@selector(parameterViewController:wantsToGoToPreviousFrameOfParameter:)]){
         [self.keyFrameDelegate parameterViewController:self
-                   wantsToGoToPreviousFrameOfParameter:self.parameter];
+                   wantsPlayheadToGoToPreviousFrameOfParameter:self.parameter];
     }
 }
 
 - (IBAction)nextKeyFrame:(id)sender {
     if([self keyFrameDelegateRespondsToSelector:@selector(parameterViewController:wantsToGoToNextKeyFrameOfParameter:)]){
         [self.keyFrameDelegate parameterViewController:self
-                    wantsToGoToNextKeyFrameOfParameter:self.parameter];
+                    wantsPlayheadToGoToNextKeyFrameOfParameter:self.parameter];
     }
 }
 
@@ -174,6 +174,52 @@ static NSString* defaultNib = @"VSParameterView";
 
 #pragma mark - Private Methods
 
+/**
+ * Checks if the delegate is able to respond to the given Selector
+ * @param selector Selector the delegate will be checked for if it is able respond to
+ * @return YES if the delegate is able to respond to the selector, NO otherweis
+ */
+-(BOOL) keyFrameDelegateRespondsToSelector:(SEL) selector{
+    if(self.keyFrameDelegate != nil){
+        if([self.keyFrameDelegate conformsToProtocol:@protocol(VSParameterViewKeyFrameDelegate) ]){
+            if([self.keyFrameDelegate respondsToSelector: selector]){
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
+}
+
+/**
+ * Tells the keyFrameDelegate to create a new keyFrame with the currentParameterValue
+ *
+ * if selectedKeyFrame is set its value is changed instead of creating a new Keyframe.
+ */
+-(void) addNewKeyFrame{
+    if(!self.selectedKeyframe){
+        if([self keyFrameDelegateRespondsToSelector:@selector(addKeyFrameToParameter:withValue:)]){
+            VSKeyFrame *newKeyFrame = [self.keyFrameDelegate addKeyFrameToParameter:self.parameter withValue:[self currentParameterValue]];
+            
+            if(newKeyFrame){
+                self.selectedKeyframe = newKeyFrame;
+            }
+        }
+    }
+    else{
+        [self.parameter setValue:[self currentParameterValue] forKeyFrame:self.selectedKeyframe];
+    }
+    
+}
+
+#pragma mark  Storing Parameter Values
+
+
+/**
+ * Stores the current value of the controls representing the paramter as it's value.
+ *
+ * If the parameter doesn't have any keyFrames yet, the value is stored in the parameter's defaultValue otherwise in a keyFrame.
+ */
 -(void) storeParameterValue{
     
     id currentValue = [self currentParameterValue];
@@ -201,6 +247,8 @@ static NSString* defaultNib = @"VSParameterView";
         }
         
     }
+    
+    //If the selectedKeyframe is nil a new KeyFrame is added
     else{
         if(self.selectedKeyframe){
             [self.parameter setValue:currentValue forKeyFrame:self.selectedKeyframe];
@@ -211,6 +259,11 @@ static NSString* defaultNib = @"VSParameterView";
     }
 }
 
+/**
+ * Current Value of the controls representing a parameters value
+ * 
+ * @return Value of the controls according to the parameter's dataType
+ */
 -(id) currentParameterValue{
     
     id value = nil;
@@ -238,23 +291,21 @@ static NSString* defaultNib = @"VSParameterView";
     return value;
 }
 
--(void) addNewKeyFrame{
-    if(!self.selectedKeyframe){
-        if([self keyFrameDelegateRespondsToSelector:@selector(addKeyFrameToParameter:withValue:)]){
-           VSKeyFrame *newKeyFrame = [self.keyFrameDelegate addKeyFrameToParameter:self.parameter withValue:[self currentParameterValue]];
-            
-            if(newKeyFrame){
-                self.selectedKeyframe = newKeyFrame;
-            }
-        }
+/**
+ * Returns the correlating bool value of the given button state.
+ * @param state Button state the correlating bool value is returned for.
+ * @return YES if the given state is NSOnState, NO otherwise
+ */
+-(BOOL) boolValueForButtonState:(NSInteger) state{
+    if (state == NSOnState) {
+        return YES;
     }
-    else{
-        [self.parameter setValue:[self currentParameterValue] forKeyFrame:self.selectedKeyframe];
+    else {
+        return NO;
     }
-    
 }
 
-#pragma mark - Show Parameter
+#pragma mark Show Parameter
 
 /**
  * Shows the parameter stored in the parameter property according to its VSParameterDataType
@@ -284,6 +335,9 @@ static NSString* defaultNib = @"VSParameterView";
     }
 }
 
+/**
+ * According to the parameter's dataType different controls are shown
+ */
 -(void) showParameter{
     switch (self.parameter.dataType) {
         case VSParameterDataTypeBool:
@@ -301,26 +355,33 @@ static NSString* defaultNib = @"VSParameterView";
     }
 }
 
+/**
+ * Creates an comboBox filled with the options stored in the VSOptionParameter
+ */
 -(void) showOptionParameter{
     self.comboBox = [[NSComboBox alloc] init];
+    [self.comboBox setEditable:NO];
+    [self.comboBox setDelegate:self];
+    
     [self.parameterHolder addSubview:self.comboBox];
     
     NSSize size = self.comboBox.intrinsicContentSize;
     size.width = 0;
     
     [self.comboBox setFrameSize:size];
-    [self.comboBox setEditable:NO];
-    [self.comboBox setDelegate:self];
     
+    //inits the options of the comboBox
     for(id key in ((VSOptionParameter*) self.parameter).options){
         [self.comboBox addItemWithObjectValue:key];
     }
     
+    //sets the currently selected item
     [self.comboBox selectItemWithObjectValue:((VSOptionParameter*)self.parameter).selectedKey];
     
+    
+    //sets the constraints
     NSDictionary *viewsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:self.comboBox,@"comboBox", nil];
     NSString *constraintString = [NSString stringWithFormat:@"|-[comboBox]-|"];
-    
     NSArray *constraints =  [NSLayoutConstraint constraintsWithVisualFormat:constraintString options:0 metrics:nil views:viewsDictionary];
     
     [self.comboBox setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -332,28 +393,27 @@ static NSString* defaultNib = @"VSParameterView";
  * Shows paramters of the type VSParameterDataTypeString.
  */
 -(void) showStringParameter{
-    [self.parameterHolder removeConstraints:self.parameterHolder.constraints];
     
     self.textField = [[NSTextField alloc]init];
     [self.parameterHolder addSubview:self.textField];
+    
     [self.textField setTranslatesAutoresizingMaskIntoConstraints:NO];
     
     [self.textField setFrameSize:self.textField.intrinsicContentSize];
+    [self.textField setStringValue:self.parameter.currentStringValue];
+    [self.textField setTarget:self];
+    [self.textField setAction:@selector(textValueHasChanged:)];
+    [self.textField setDelegate:self];
     
+    
+    // create the constraints
     NSDictionary *viewsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:self.textField,@"textValueField", nil];
-    
     NSString *constraintString = [NSString stringWithFormat:@"|-[textValueField]-|"];
-    
     NSArray *constraints =  [NSLayoutConstraint constraintsWithVisualFormat:constraintString options:NSLayoutFormatAlignAllCenterY metrics:nil views:viewsDictionary];
     
     [self.parameterHolder removeConstraints:self.parameterHolder.constraints];
     
     [self.parameterHolder addConstraints:constraints];
-    
-    [self.textField setStringValue:self.parameter.currentStringValue];
-    [self.textField setTarget:self];
-    [self.textField setAction:@selector(textValueHasChanged:)];
-    [self.textField setDelegate:self];
 }
 
 /**
@@ -409,6 +469,9 @@ static NSString* defaultNib = @"VSParameterView";
     
 }
 
+/**
+ * Creates the constraints for parameter of dataType VSParameterDataTypeFloat and with hasRange = YES
+ */
 -(void) setConstraintsForParameterWithRange{
     [self.horizontalSlider setTranslatesAutoresizingMaskIntoConstraints:NO];
     
@@ -428,6 +491,9 @@ static NSString* defaultNib = @"VSParameterView";
     [self.parameterHolder addConstraints:constraints];
 }
 
+/**
+ * Inits the value slider
+ */
 -(void) initValueSlider{
     [self.horizontalSlider setMinValue:self.parameter.rangeMinValue];
     [self.horizontalSlider setMaxValue:self.parameter.rangeMaxValue];
@@ -449,43 +515,5 @@ static NSString* defaultNib = @"VSParameterView";
     else {
         return NSOffState;
     }
-}
-
-
-#pragma mark - Set Parameter
-
-/**
- * Returns the correlating bool value of the given button state.
- * @param state Button state the correlating bool value is returned for.
- * @return YES if the given state is NSOnState, NO otherwise
- */
--(BOOL) boolValueForButtonState:(NSInteger) state{
-    if (state == NSOnState) {
-        return YES;
-    }
-    else {
-        return NO;
-    }
-}
-
-/**
- * Checks if the delegate is able to respond to the given Selector
- * @param selector Selector the delegate will be checked for if it is able respond to
- * @return YES if the delegate is able to respond to the selector, NO otherweis
- */
--(BOOL) keyFrameDelegateRespondsToSelector:(SEL) selector{
-    if(self.keyFrameDelegate != nil){
-        if([self.keyFrameDelegate conformsToProtocol:@protocol(VSParameterViewKeyFrameDelegate) ]){
-            if([self.keyFrameDelegate respondsToSelector: selector]){
-                return YES;
-            }
-        }
-    }
-    
-    return NO;
-}
-
--(void) setOptionsParameterDefaultValue:(id) key{
-    ((VSOptionParameter*)self.parameter).selectedKey = key;
 }
 @end

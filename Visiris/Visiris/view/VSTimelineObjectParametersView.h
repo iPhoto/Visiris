@@ -8,6 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 
+/**
+ * Disyplay one VSParameter
+ */
 @interface VSTimelineObjectParametersView : NSView
 
 @end

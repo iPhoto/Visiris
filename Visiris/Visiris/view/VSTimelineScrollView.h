@@ -150,8 +150,10 @@
 
 
 /**
- * Adds the given view as subView and inits it as track
- * @param aTrackView NSView to add as new Track
+ * Adds the given NSView as a Track of the Timeline.
+ *
+ * Adds the view as SubView of the ScrollViews document view and resizes its frame according to the sizes of all tracks fo the scrollView
+ * @param aTrackView NSView to be added as track of the timeline
  */
 -(void) addTrackView:(NSView*) aTrackView;
 

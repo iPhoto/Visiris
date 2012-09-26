@@ -8,7 +8,7 @@
 
 #import "VSMainTimelineScrollView.h"
 
-#import "VSMainTimelineContentView.h"
+#import "VSMainTimelineScrollViewDocumentView.h"
 
 #import "VSTrackLabelsRulerView.h"
 
@@ -38,7 +38,7 @@
 
 -(void) awakeFromNib{
     
-    self.trackHolderView = [[VSMainTimelineContentView alloc] init];
+    self.trackHolderView = [[VSMainTimelineScrollViewDocumentView alloc] init];
     [super awakeFromNib];
     
     [self initTrackLabelsRuler];

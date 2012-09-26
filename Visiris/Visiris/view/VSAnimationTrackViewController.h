@@ -81,12 +81,63 @@
 
 #pragma mark - Methods
 
--(void) reset;
+/**
+ * Finds out if any of the VSKeyFrameView the VSAnimationTrackViewController is responisble for is at the given xPosition.
+ * 
+ * If any keyFrame is ate the given position it is set as selected
+ *
+ * @param xPosition Funtion tries to find the VSKeyFrameView which is at the xPosition
+ *
+ * @return Returns the VSKeyFrameViewController responsible for the view which is at the given position if one is found, nil otherwise.
+ */
 -(VSKeyFrameViewController*) keyFrameViewControllerAtXPosition:(float) xPosition;
+
+/**
+ * Sets alle currently selected VSKeyFrameViewControllers as unselected
+ */
 -(void) unselectAllKeyFrames;
--(float) parameterValueOfPixelPosition:(float) pixelValue forKeyFrame:(VSKeyFrameViewController *) keyFrameViewController;
+
+/**
+ * Translates the given pixelPosition interpreted as origin.y of VSKeyFrameViewController's view to a value fitting the range of VSKeyFrameViewController's VSKeyFrame
+ *
+ * This funtion works for float-Values only
+ *
+ * @param pixelPosition Position interpret as origin.y of VSKeyFrameViewController's view.
+ * @param keyFrameViewController VSKeyFrameViewController which is responsible for the VSKeyFrame holding the value
+ *
+ *@return The translated float-value if it was possible to transate it, the value stored in VSKeyFrameViewController's VSKeyFrame otherwise
+ */
+-(float) parameterValueOfPixelPosition:(float) pixelPosition forKeyFrame:(VSKeyFrameViewController *) keyFrameViewController;
+
+/**
+ * Translates the value of keyFrameViewController's VSKeyFrame to a pixel position representing origin.y of the view's frame.
+ *
+ * @param keyFrameViewController VSKeyFrameViewController representing the VSKeyFrame which's value is be translated.
+ * 
+ * @return Pixel Position if the translation was successfull, the midpoint.y of keyFrameViewController' view otherwise
+ */
 -(float) pixelPositonForKeyFramesValue:(VSKeyFrameViewController *)keyFrameViewController;
+
+/**
+ * Removes the currently selected keyFrames of the track
+ */
 -(void) removeSelectedKeyFrames;
+
+/**
+ * Iterates through all VSKeyFrameViewController of the track and finds out which is the nearest to the given xPosition
+ *
+ * @param xPosition Position where is search from to the right
+ *
+ * @return VSKeyFrameViewController if one was right of the position, nil otherwise
+ */
 -(VSKeyFrameViewController*) nearestKeyFrameViewRightOfXPosition:(float) xPosition;
+
+/**
+ * Iterates through all VSKeyFrameViewController of the track and finds out which is the nearest to the given xPosition
+ *
+ * @param xPosition Position where is search from to the left
+ *
+ * @return VSKeyFrameViewController if one was left of the position, nil otherwise
+ */
 -(VSKeyFrameViewController*) nearestKeyFrameViewLeftOfXPosition:(float) xPosition;
 @end

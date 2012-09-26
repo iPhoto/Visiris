@@ -43,16 +43,7 @@
     return self;
 }
 
-/**
- * Inits the view
- **/
--(void) setViewsProperties{
-    self.scrollOffset = NSZeroPoint;
-    
-    [self initLayer];
-    [self initGuideLine];
-    [self initObservers];
-}
+
 /**
  * Inits the observers of the view
  */
@@ -88,6 +79,14 @@
 }
 
 #pragma mark - Methods
+
+-(void) setViewsProperties{
+    self.scrollOffset = NSZeroPoint;
+    
+    [self initLayer];
+    [self initGuideLine];
+    [self initObservers];
+}
 
 -(void) moveGuidelineToPosition:(CGFloat) location{
     NSRect layerRect = self.frame;

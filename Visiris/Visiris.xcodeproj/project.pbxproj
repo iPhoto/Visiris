@@ -159,7 +159,7 @@
 		5BD35BCF15D959F0001A74E0 /* VSAnimationTimelineScrollViewDocumentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BCE15D959F0001A74E0 /* VSAnimationTimelineScrollViewDocumentView.m */; };
 		5BD35BD115D95B25001A74E0 /* VSTimelineScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BD015D95B25001A74E0 /* VSTimelineScrollView.m */; };
 		5BD35BD415D95B3E001A74E0 /* VSMainTimelineScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BD315D95B3E001A74E0 /* VSMainTimelineScrollView.m */; };
-		5BD35BD715D95BCE001A74E0 /* VSMainTimelineContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BD615D95BCE001A74E0 /* VSMainTimelineContentView.m */; };
+		5BD35BD715D95BCE001A74E0 /* VSMainTimelineScrollViewDocumentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BD615D95BCE001A74E0 /* VSMainTimelineScrollViewDocumentView.m */; };
 		5BD35BDA15D95C39001A74E0 /* VSMainTimelineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BD915D95C38001A74E0 /* VSMainTimelineView.m */; };
 		5BD35BDE15D95F2C001A74E0 /* VSTimelineObjectParametersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BDC15D95F28001A74E0 /* VSTimelineObjectParametersViewController.m */; };
 		5BD35BDF15D95F2C001A74E0 /* VSTimelineObjectParametersView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5BD35BDD15D95F29001A74E0 /* VSTimelineObjectParametersView.xib */; };
@@ -390,6 +390,7 @@
 		5B538B78159B12D20031363E /* VSQuartzCompositionUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSQuartzCompositionUtils.h; sourceTree = "<group>"; };
 		5B603FA7157F824A0045A1EA /* VSPlayHead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSPlayHead.h; sourceTree = "<group>"; };
 		5B603FA8157F824A0045A1EA /* VSPlayHead.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSPlayHead.m; sourceTree = "<group>"; };
+		5B60CC5316134E5300557892 /* VSMainTimelineScrollViewDocumentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSMainTimelineScrollViewDocumentView.h; sourceTree = "<group>"; };
 		5B70F71915C2E650002B54ED /* VSPlayheadMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSPlayheadMarker.h; sourceTree = "<group>"; };
 		5B70F71A15C2E650002B54ED /* VSPlayheadMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSPlayheadMarker.m; sourceTree = "<group>"; };
 		5B7BFFC51592143C00CEA1E8 /* VSTimelineObjectViewIntersection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineObjectViewIntersection.h; sourceTree = "<group>"; };
@@ -418,8 +419,7 @@
 		5BD35BD015D95B25001A74E0 /* VSTimelineScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineScrollView.m; sourceTree = "<group>"; };
 		5BD35BD215D95B3E001A74E0 /* VSMainTimelineScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSMainTimelineScrollView.h; sourceTree = "<group>"; };
 		5BD35BD315D95B3E001A74E0 /* VSMainTimelineScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSMainTimelineScrollView.m; sourceTree = "<group>"; };
-		5BD35BD515D95BCE001A74E0 /* VSMainTimelineContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSMainTimelineContentView.h; sourceTree = "<group>"; };
-		5BD35BD615D95BCE001A74E0 /* VSMainTimelineContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSMainTimelineContentView.m; sourceTree = "<group>"; };
+		5BD35BD615D95BCE001A74E0 /* VSMainTimelineScrollViewDocumentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSMainTimelineScrollViewDocumentView.m; sourceTree = "<group>"; };
 		5BD35BD815D95C38001A74E0 /* VSMainTimelineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSMainTimelineView.h; sourceTree = "<group>"; };
 		5BD35BD915D95C38001A74E0 /* VSMainTimelineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSMainTimelineView.m; sourceTree = "<group>"; };
 		5BD35BDB15D95F27001A74E0 /* VSTimelineObjectParametersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineObjectParametersViewController.h; sourceTree = "<group>"; };
@@ -594,6 +594,7 @@
 		5B35BF9E1577A573009911EC /* view */ = {
 			isa = PBXGroup;
 			children = (
+				5B60CC5216132C3B00557892 /* fullscreenOutput */,
 				5BD35BC015D95891001A74E0 /* base */,
 				5B35C0AD1577AF3C009911EC /* mainWindow */,
 				5B35C0AC1577AF32009911EC /* objectBrowser */,
@@ -1073,6 +1074,13 @@
 			name = protocolls;
 			sourceTree = "<group>";
 		};
+		5B60CC5216132C3B00557892 /* fullscreenOutput */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = fullscreenOutput;
+			sourceTree = "<group>";
+		};
 		5B9AD00F15C01ACA00A1D1C0 /* timeline */ = {
 			isa = PBXGroup;
 			children = (
@@ -1081,8 +1089,8 @@
 				5B35BFCB1577A573009911EC /* VSMainTimelineViewController.m */,
 				5BD35BD215D95B3E001A74E0 /* VSMainTimelineScrollView.h */,
 				5BD35BD315D95B3E001A74E0 /* VSMainTimelineScrollView.m */,
-				5BD35BD515D95BCE001A74E0 /* VSMainTimelineContentView.h */,
-				5BD35BD615D95BCE001A74E0 /* VSMainTimelineContentView.m */,
+				5B60CC5316134E5300557892 /* VSMainTimelineScrollViewDocumentView.h */,
+				5BD35BD615D95BCE001A74E0 /* VSMainTimelineScrollViewDocumentView.m */,
 				5BD35BD815D95C38001A74E0 /* VSMainTimelineView.h */,
 				5BD35BD915D95C38001A74E0 /* VSMainTimelineView.m */,
 			);
@@ -1411,7 +1419,7 @@
 				5BD35BCF15D959F0001A74E0 /* VSAnimationTimelineScrollViewDocumentView.m in Sources */,
 				5BD35BD115D95B25001A74E0 /* VSTimelineScrollView.m in Sources */,
 				5BD35BD415D95B3E001A74E0 /* VSMainTimelineScrollView.m in Sources */,
-				5BD35BD715D95BCE001A74E0 /* VSMainTimelineContentView.m in Sources */,
+				5BD35BD715D95BCE001A74E0 /* VSMainTimelineScrollViewDocumentView.m in Sources */,
 				5BD35BDA15D95C39001A74E0 /* VSMainTimelineView.m in Sources */,
 				5BD35BDE15D95F2C001A74E0 /* VSTimelineObjectParametersViewController.m in Sources */,
 				5BD35BE315D95F48001A74E0 /* VSTimelineObjectParametersView.m in Sources */,

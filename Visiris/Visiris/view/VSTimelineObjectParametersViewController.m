@@ -20,7 +20,7 @@
 
 @interface VSTimelineObjectParametersViewController ()
 
-
+/** stores the VSKeyFrameViewController instantiated for every VSParameter of the timelineObejct. The ID of the parameter is used as Key. */
 @property NSMutableDictionary *parameterViewControllers;
 
 @end
@@ -28,7 +28,6 @@
 @implementation VSTimelineObjectParametersViewController
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
-@synthesize scrollView = _scrollView;
 static NSString* defaultNib = @"VSTimelineObjectParametersView";
 
 
@@ -38,9 +37,6 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
     if(self = [self initWithNibName:defaultNib bundle:nil]){
         self.parameterViewControllers = [[NSMutableDictionary alloc]init];
         self.parameterViewHeight = parameterViewHeight;
-        
-        
-        self.view.identifier = @"VSTimelineObjectParametersView";
     }
     
     return self;
@@ -73,37 +69,39 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
 
 #pragma mark - Methods
 
-/**
- * Inits and displays a ParameterView for every parameter stored in the timelineObject property
- */
+
 -(void) showParametersOfTimelineObject:(VSTimelineObject*) timelineObject connectedWithDelegate:(id<VSParameterViewKeyFrameDelegate>) delegate{
     
     self.timelineObject = timelineObject;
-    self.parameters = self.timelineObject.visibleParameters;
+    NSArray *parameters = self.timelineObject.visibleParameters;
     
     VSParameterViewController *lastParameterController;
     
-    if(self.parameters && self.parameters.count){
+    if(parameters && parameters.count){
         
         int i = 0;
         
-        for(VSParameter *parameter in self.parameters){
+        for(VSParameter *parameter in parameters){
             
-            VSParameterViewController *parameteViewController = [[VSParameterViewController alloc] initWithDefaultNibAndBackgroundColor:i++%2==0?self.evenColor:self.oddColor];
+            NSColor *backgroundColor = i++%2==0?self.evenColor:self.oddColor;
             
+            VSParameterViewController *parameteViewController = [[VSParameterViewController alloc] initWithDefaultNibAndBackgroundColor:backgroundColor];
+
+
             parameteViewController.keyFrameDelegate = delegate;
-            
             [parameteViewController showParameter:parameter];
-                    
             
             [self.scrollView.documentView addSubview:parameteViewController.view];
-            
+
             
             [parameteViewController.view setAutoresizingMask:NSViewWidthSizable];
             [parameteViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
-            
             [self.view addConstraints:[self constrainsForParameterView:parameteViewController.view
                                                                  below:lastParameterController.view]];
+            
+            
+            
+            
             
             [self.parameterViewControllers setObject:parameteViewController
                                               forKey:[NSNumber numberWithInteger:parameter.ID]];
@@ -113,7 +111,7 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
         
         [self.view.window recalculateKeyViewLoop];
         
-        [self.scrollView.documentView setFrameSize:NSMakeSize(((NSView*)self.scrollView.documentView).frame.size.width, (self.parameters.count) * self.parameterViewHeight)];  
+        [self.scrollView.documentView setFrameSize:NSMakeSize(((NSView*)self.scrollView.documentView).frame.size.width, (parameters.count) * self.parameterViewHeight)];  
     }
 }
  
@@ -155,9 +153,7 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
     return constraints;
 }
 
-/**
- * Removes all Parameter views
- */
+
 -(void) resetParameters{
     if(self.parameterViewControllers.count){
         for(VSParameterViewController *ctrl in [self.parameterViewControllers allValues]){
@@ -168,6 +164,7 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
         [self.parameterViewControllers removeAllObjects];
     }
 }
+
 
 -(void) selectKeyFrame:(VSKeyFrame*) keyFrame ofParameter:(VSParameter*) parameter{
     ((VSParameterViewController*)[self.parameterViewControllers objectForKey:[NSNumber numberWithInteger:parameter.ID]]).selectedKeyframe = keyFrame;

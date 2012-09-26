@@ -11,13 +11,13 @@
 #import "VSTrackViewController.h"
 #import "VSMainTimelineView.h"
 #import "VSTimelineViewController.h"
-#import "VSMainTimelineContentView.h"
+#import "VSMainTimelineScrollViewDocumentView.h"
 #import "VSMainTimelineScrollView.h"
 
 
 @class VSTimeline;
 @class VSTimelineRulerView;
-@class VSMainTimelineContentView;
+@class VSMainTimelineScrollViewDocumentView;
 @class VSMainTimelineScrollView;
 
 /**
@@ -50,11 +50,5 @@
  * @return self
  */
 -(id) initWithDefaultNibAccordingForTimeline:(VSTimeline*)timeline;
-
-/**
- * Computes the new currentTimePosition of the timeline's playhead after the playhead-marker would have been moved the given distance, updates the currentTimePosition and sets the playhead's jumping-flag to YES
- * @param distance Distance the Playhead will be moved
- */
--(void) letPlayheadJumpOverDistance:(float) distance;
 
 @end

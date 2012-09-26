@@ -19,18 +19,29 @@
 
 @interface VSAnimationTrackViewController ()
 
+/** VSAnimationTrackViewController' view */
 @property VSAnimationTrackView *animationTrackView;
+
+/** NSRect where the keyFrames can be positionend and dragged around */
 @property (readonly) NSRect keyFramesArea;
+
+/** Holding the paths drawn as connectors between to keyFrames. The ID of the VSKeyFrame the path starts from is used as key */
 @property NSMutableDictionary *keyFrameConnectionPaths;
+
+/** VSKeyFrameViewControllers representing the keyFrames the VSAnimationTrackViewController is responsible for */
 @property NSMutableArray *keyFrameViewControllers;
 
 @end
 
+
+
+
 @implementation VSAnimationTrackViewController
 
-@synthesize pixelTimeRatio              = _pixelTimeRatio;
-@synthesize parameter                   = _parameter;
+@synthesize pixelTimeRatio  = _pixelTimeRatio;
+@synthesize parameter       = _parameter;
 
+/** Default widht and height of the keyFrameViews */
 #define KEYFRAME_WIDTH  6
 #define KEYFRAME_HEIGHT 6
 
@@ -47,21 +58,24 @@
         self.keyFrameConnectionPaths =[[NSMutableDictionary alloc] init];
         [self initKeyFrames];
     }
-    self.parameter.editable = NO;
     return self;
 }
 
+/**
+ * Iterates through all keyFrames of the parameter's animation and creates a VSKeyFrameViewController for each
+ */
 -(void) initKeyFrames{
     for(VSKeyFrame *keyframe in self.parameter.animation.keyFrames){
-        [self addKeyFrameView:keyframe andSetSelectedFlag:NO];
+        [self addKeyFrameView:keyframe andSetIsAsSelected:NO];
     }
 }
 
 #pragma mark - NSViewController
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    
+    //observes if new keyFrames have been added or have been removed
     if([keyPath isEqualToString:@"keyFrames"]){
-        
         NSInteger kind = [[change valueForKey:@"kind"] intValue];
         
         switch (kind) {
@@ -71,7 +85,7 @@
                     NSArray *newKeyFrames = [self.parameter.animation.keyFrames objectsAtIndexes:[change valueForKey:@"indexes"]];
                     
                     for(VSKeyFrame *keyFrame in newKeyFrames){
-                        [self addKeyFrameView:keyFrame andSetSelectedFlag:YES];
+                        [self addKeyFrameView:keyFrame andSetIsAsSelected:YES];
                     }
                 }
                 break;
@@ -81,43 +95,27 @@
                 if([[change valueForKey:@"notificationIsPrior"] boolValue]){
                     NSArray *newKeyFrames = [self.parameter.animation.keyFrames objectsAtIndexes:[change valueForKey:@"indexes"]];
                     
-                    [self removeKeyFrameViews:newKeyFrames];
+                    [self removeKeyFrameViewControllers:newKeyFrames];
                 }
                 break;
             }
         }
     }
+    
+    //if the frame of a keyFrameView was changed its neccessary to update the connector-Paths between them
     else if([keyPath isEqualToString:@"view.frame"]){
         if([object isKindOfClass:[VSKeyFrameViewController class]]){
             VSKeyFrameViewController *changedKeyFrame = (VSKeyFrameViewController*)object;
-            NSUInteger indexOfObject = [self.keyFrameViewControllers indexOfObject:object];
             
-            BOOL alreadySwapped = NO;
-            
-            if(indexOfObject > 0){
-                VSKeyFrameViewController *prevKeyFrameController = [self.keyFrameViewControllers objectAtIndex:indexOfObject-1];
-                
-                if(changedKeyFrame.keyFrame.timestamp < prevKeyFrameController.keyFrame.timestamp){
-                    [self.keyFrameViewControllers exchangeObjectAtIndex:indexOfObject withObjectAtIndex:indexOfObject-1];
-                    
-                    alreadySwapped = YES;
-                }
-                
-                [self addKeyFrameConnectionPathsObject:prevKeyFrameController];
-            }
-            if(!alreadySwapped && indexOfObject + 1 < self.keyFrameViewControllers.count){
-                VSKeyFrameViewController *nextKeyFrameController = [self.keyFrameViewControllers objectAtIndex:indexOfObject+1];
-                
-                if(changedKeyFrame.keyFrame.timestamp > nextKeyFrameController.keyFrame.timestamp){
-                    [self.keyFrameViewControllers exchangeObjectAtIndex:indexOfObject withObjectAtIndex:indexOfObject+1];
-                }
-                
-                [self addKeyFrameConnectionPathsObject:nextKeyFrameController];
-            }
-            
-            [self addKeyFrameConnectionPathsObject:(VSKeyFrameViewController*)object];
+            [self frameHasBeenChangedOfKeyFrameViewControllers:changedKeyFrame];
         }
     }
+}
+
+
+-(void) dealloc{
+    [self.parameter.animation removeObserver:self
+                                  forKeyPath:@"keyFrames"];
 }
 
 #pragma mark - Methods
@@ -203,6 +201,31 @@
     }
 }
 
+-(float) pixelPositonForKeyFramesValue:(VSKeyFrameViewController *)keyFrameViewController{
+    
+    float pixelPosition = self.view.frame.size.height / 2.0f;
+    
+    if(self.parameter){
+        if(self.parameter.hasRange){
+            float range =  self.parameter.rangeMaxValue - self.parameter.rangeMinValue;
+            pixelPosition = self.keyFramesArea.size.height / range * (keyFrameViewController.keyFrame.floatValue-self.parameter.rangeMinValue);
+        }
+    }
+    pixelPosition -= keyFrameViewController.view.frame.size.width / 2.0f;
+    return pixelPosition;
+}
+
+-(float) parameterValueOfPixelPosition:(float) pixelPosition forKeyFrame:(VSKeyFrameViewController *) keyFrameViewController{
+    if(self.parameter){
+        if(self.parameter.hasRange){
+            float range =  self.parameter.rangeMaxValue - self.parameter.rangeMinValue;
+            return range / self.keyFramesArea.size.height * (pixelPosition) + self.parameter.rangeMinValue;
+        }
+    }
+    return keyFrameViewController.keyFrame.floatValue;
+}
+
+
 #pragma mark - VSKeyFrameViewControllerDelegate Implementation
 
 -(BOOL) keyFrameViewControllerWantsToBeSelected:(VSKeyFrameViewController *)keyFrameViewController{
@@ -243,37 +266,58 @@
     return result;
 }
 
--(float) pixelPositonForKeyFramesValue:(VSKeyFrameViewController *)keyFrameViewController{
-    
-    float pixelPosition = self.view.frame.size.height / 2.0f;
-    
-    if(self.parameter){
-        if(self.parameter.hasRange){
-            float range =  self.parameter.rangeMaxValue - self.parameter.rangeMinValue;
-            pixelPosition = self.keyFramesArea.size.height / range * (keyFrameViewController.keyFrame.floatValue-self.parameter.rangeMinValue);
-        }
-    }
-    pixelPosition -= keyFrameViewController.view.frame.size.width / 2.0f;
-    return pixelPosition;
-}
-
--(float) parameterValueOfPixelPosition:(float) pixelValue forKeyFrame:(VSKeyFrameViewController *) keyFrameViewController{
-    if(self.parameter){
-        if(self.parameter.hasRange){
-            float range =  self.parameter.rangeMaxValue - self.parameter.rangeMinValue;
-            return range / self.keyFramesArea.size.height * (pixelValue) + self.parameter.rangeMinValue;
-        }
-    }
-    return keyFrameViewController.keyFrame.floatValue;
-}
-
 #pragma mark - Private Methods
 
--(void) addKeyFrameView:(VSKeyFrame*) keyFrame andSetSelectedFlag:(BOOL) selected{
-    VSKeyFrameViewController *keyFrameViewController = [[VSKeyFrameViewController alloc] initWithKeyFrame:keyFrame
-                                                                                                 withSize:NSMakeSize(KEYFRAME_WIDTH, KEYFRAME_HEIGHT)
-                                                                                        forPixelTimeRatio:self.pixelTimeRatio
-                                                                                              andDelegate:self];
+/**
+ * Called when the frame of one of VSKeyFrameViewController's views have been changed
+ * 
+ * @param keyFrameViewController VSKeyFrameViewController which's view's frame has been changed
+ */
+-(void) frameHasBeenChangedOfKeyFrameViewControllers:(VSKeyFrameViewController*) keyFrameViewController{
+    
+    NSUInteger indexOfObject = [self.keyFrameViewControllers indexOfObject:keyFrameViewController];
+    
+    BOOL alreadySwapped = NO;
+    
+    //checks if the new Value of the keyFrame is smaller than the one of the KeyFrame left to it if there is one. If Yes the keyFrame swapp positions and the connection-Path for the prevKeyFrameController is updated
+    if(indexOfObject > 0){
+        VSKeyFrameViewController *prevKeyFrameController = [self.keyFrameViewControllers objectAtIndex:indexOfObject-1];
+        
+        if(keyFrameViewController.keyFrame.timestamp < prevKeyFrameController.keyFrame.timestamp){
+            [self.keyFrameViewControllers exchangeObjectAtIndex:indexOfObject withObjectAtIndex:indexOfObject-1];
+            
+            alreadySwapped = YES;
+        }
+        
+        [self addKeyFrameConnectionPathsObject:prevKeyFrameController];
+    }
+    
+    //checks if the new Value of the keyFrame is bigger than the one of the KeyFrame rigth to it if there is one. If Yes the keyFrame swapp positions and the connection-Path for the nextKeyFrameController is updated
+    if(!alreadySwapped && indexOfObject + 1 < self.keyFrameViewControllers.count){
+        VSKeyFrameViewController *nextKeyFrameController = [self.keyFrameViewControllers objectAtIndex:indexOfObject+1];
+        
+        if(keyFrameViewController.keyFrame.timestamp > nextKeyFrameController.keyFrame.timestamp){
+            [self.keyFrameViewControllers exchangeObjectAtIndex:indexOfObject withObjectAtIndex:indexOfObject+1];
+        }
+        
+        [self addKeyFrameConnectionPathsObject:nextKeyFrameController];
+    }
+    
+    //udpates the keyFrameViewController connection-Path
+    [self addKeyFrameConnectionPathsObject:(VSKeyFrameViewController*)keyFrameViewController];
+}
+
+/**
+ * Creates a new VSKeyFrameViewController for representing the given keyFrame, inits it and adds its view as subview. The selection-state of the newly created VSKeyFrameViewController is set according to the given flag.
+ *
+ * @param keyFrame VSKeyFrame the VSKeyFrameViewController will be added for
+ * @param selected Indicates wheter the selected flag of VSKeyFrameViewController is set to YES or NO
+ */
+-(void) addKeyFrameView:(VSKeyFrame*) keyFrame andSetIsAsSelected:(BOOL) selected{
+    VSKeyFrameViewController *keyFrameViewController = [[VSKeyFrameViewController alloc]
+                                                        initWithKeyFrame:keyFrame
+                                                        withSize:NSMakeSize(KEYFRAME_WIDTH, KEYFRAME_HEIGHT)
+                                                        forPixelTimeRatio:self.pixelTimeRatio                                              andDelegate:self];
     
     if(selected){
         [self unselectAllKeyFrames];
@@ -285,13 +329,23 @@
     
     [self.view addSubview:keyFrameViewController.view];
     
-    [keyFrameViewController addObserver:self forKeyPath:@"view.frame" options:0 context:nil];
+    keyFrameViewController.selected = selected;
+    
+    [keyFrameViewController addObserver:self
+                             forKeyPath:@"view.frame"
+                                options:0
+                                context:nil];
     
     [self addKeyFrameConnectionPathsObject:keyFrameViewController];
     
-    keyFrameViewController.selected = selected;
+    
 }
 
+/**
+ * Adds the given VSKeyFrameViewController to keyFrameViewControllers and resorts the array according to origin.x of the VSKeyFrameViewControllers views
+ *
+ * @param object VSKeyFrameViewController which will be added to the keyFrameViewControllers
+ */
 -(void) addKeyFrameViewControllersObject:(VSKeyFrameViewController *)object{
     [self.keyFrameViewControllers addObject:object];
     
@@ -311,8 +365,11 @@
         
         NSBezierPath *connectionPath = [[NSBezierPath alloc]init];
         
+        //the connectionPath startsFrom the midPoint of the given object
         [connectionPath moveToPoint:[VSFrameUtils midPointOfFrame:object.view.frame]];
         
+        // if there is one KeyFrame right of the newly added the path is lined to its midpoint
+        // othwise the path is lined to the end of the trackView 
         if(indexOfObject+1 < self.keyFrameViewControllers.count){
             VSKeyFrameViewController *nextController = [self.keyFrameViewControllers objectAtIndex:indexOfObject+1];
             
@@ -322,6 +379,11 @@
             [connectionPath lineToPoint:NSMakePoint(NSMaxX(self.view.frame), [VSFrameUtils midPointOfFrame:object.view.frame].y)];
         }
         
+        [self.keyFrameConnectionPaths setObject:connectionPath forKey:[NSNumber numberWithInteger:object.keyFrame.ID]];
+        
+        
+        //if there is an keyFrame left of the newly added one the path for stored for the keyFrames ID is linedTo the midPoint of the newly added one
+        //Otherwise the line for the path for the key -1 is set up from the left for the track's view to the midpoint of the newly added KeyFrame
         if(indexOfObject> 0){
             NSBezierPath *pathToNewKeyFrame = [[NSBezierPath alloc] init];
             
@@ -342,18 +404,18 @@
             [self.keyFrameConnectionPaths setObject:pathToNewKeyFrame forKey:[NSNumber numberWithInteger:-1]];
         }
         
-        [self.keyFrameConnectionPaths setObject:connectionPath forKey:[NSNumber numberWithInteger:object.keyFrame.ID]];
-        
+        //The changed paths are given to the view to be redrawn
         ((VSAnimationTrackView*)self.view).keyFrameConnectionPaths = [self.keyFrameConnectionPaths allValues];
         [self.view setNeedsDisplay:YES];
     }
     else{
         [self clearKeyFrameConnectionPaths];
     }
-    
-    
 }
 
+/**
+ * Removes all connection-Paths from keyFrameConnectionPaths 
+ */
 -(void) clearKeyFrameConnectionPaths{
     [self.keyFrameConnectionPaths removeAllObjects];
     
@@ -361,12 +423,17 @@
     [self.view setNeedsDisplay:YES];
 }
 
--(void) removeKeyFrameViews:(NSArray*) keyFramesToRemove{
+/**
+ * Removes the VSKeyFrameViewControllers stored in the given NSArray by removing their views from their superviews und removing them from keyFrameViewControllers. Besides that the connection-paths are updated
+ *
+ * @param keyFrameViewControllersToRemove NSArray storing the VSKeyFrameViewControllers which will be removed
+ */
+-(void) removeKeyFrameViewControllers:(NSArray*) keyFrameViewControllersToRemove{
     
     //finding the indices of the VSKeyFrameViewControllers in the keyFrameViewControllers-Array which shall be removed
     NSIndexSet *keyFramesToRemoveIndices = [self.keyFrameViewControllers indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
         if([obj isKindOfClass:[VSKeyFrameViewController class]]){
-            return [keyFramesToRemove containsObject:((VSKeyFrameViewController*) obj).keyFrame];
+            return [keyFrameViewControllersToRemove containsObject:((VSKeyFrameViewController*) obj).keyFrame];
         }
         return NO;
     }];
@@ -445,11 +512,6 @@
 
 -(VSParameter*) parameter{
     return _parameter;
-}
-
--(void) dealloc{
-    [self.parameter.animation removeObserver:self
-                                  forKeyPath:@"keyFrames"];
 }
 
 @end
