@@ -24,20 +24,23 @@
 
 @interface VSAnimationTimelineViewController ()
 
-@property (weak) VSTimelineObject*timelineObject;
-
-@property float trackHeight;
-
+/** Dictionary holding the VSAnimationTrackViewControllers the timeline sets up for its VSTimelineObject. The ID of the VSParameter the different tracks are representing is used as key. The key is neccessary to provide fast queries between the different Parameters and their corresponding tracks. */
 @property (strong) NSMutableDictionary *animationTrackViewControllers;
 
+/** Reference of the VSPlayhead of the VSTimeline stored in the current VSDocument */
+@property (readwrite, weak) VSPlayHead *playhead;
+
 @end
+
+
+
 
 @implementation VSAnimationTimelineViewController
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
-@synthesize scrollView = _scrollView;
 static NSString* defaultNib = @"VSAnimationTimelineView";
 
+@synthesize playhead    = _playhead;
 
 #pragma mark - Init
 
@@ -45,7 +48,6 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     if(self = [super initWithNibName:defaultNib bundle:nil]){
         self.animationTrackViewControllers = [[NSMutableDictionary alloc]init];
         self.trackHeight = trackHeight;
-        
     }
     
     return self;
@@ -58,29 +60,24 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     [super awakeFromNib];
 }
 
+#pragma mark - NSViewController
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     //moves the playheadMarker if the currentPosition of the timelines Playhead has been changed
     if([keyPath isEqualToString:@"currentTimePosition"]){
         double playheadTimestamp = [[object valueForKey:keyPath] doubleValue];
-        [self playHeadsCurrentTimePositionHasBeenChanged:playheadTimestamp];
+        [self playHeadsCurrentTimePositionHasBeenChangedToTimePosition:playheadTimestamp];
     }
-}
-
--(void) moveMainPlayheadAccordingToAnimationTimelinesPlayheadLocation:(CGFloat) location{
-    double newTimePosition = [super timestampForPixelValue:location];
-    double globalTimePosition = [self.timelineObject globalTimestampOfLocalTimestamp:newTimePosition];
-    
-    self.playhead.currentTimePosition = globalTimePosition;
 }
 
 #pragma mark - NSResponder
 
 -(void) moveRight:(id)sender{
-    
+    [self letPlayheadJumpOverTheDefaultDistanceForward:NO];
 }
 
 -(void)moveLeft:(id)sender{
+    [self letPlayheadJumpOverTheDefaultDistanceForward:YES];
 }
 
 -(void) moveWordRight:(id) sender{
@@ -100,6 +97,7 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 }
 
 -(void) deleteToBeginningOfLine:(id)sender{
+    [self removeSelectedKeyFrames];
 }
 
 #pragma mark - VSPlayHeadRulerMarkerDelegate Implementation
@@ -123,7 +121,6 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 }
 
 
-
 #pragma mark - VSAnimationTrackViewController
 
 -(BOOL) keyFrameViewController:(VSKeyFrameViewController *)keyFrameViewController wantsToBeSelectedOnTrack:(VSAnimationTrackViewController *)track{
@@ -144,21 +141,24 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     return result;
 }
 
-//TODO: sending changend values
 -(NSPoint) keyFrameViewControllersView:(VSKeyFrameViewController *)keyFrameViewController wantsToBeDraggedFrom:(NSPoint)fromPoint to:(NSPoint)toPoint onTrack:(VSAnimationTrackViewController *)track{
     
     NSPoint result = toPoint;
     
     if([self keyFrameSelectingDelegateRespondsToSelector:@selector(keyFrame:ofParameter:willBeMovedFromTimestamp:toTimestamp:andFromValue:toValue:)]){
         
+        //converts the vaues of the NSPoints to timestamps and parameter-values
         double fromTimestamp = [self timestampForPixelValue:fromPoint.x];
         double toTimestamp = [self timestampForPixelValue:toPoint.x];
         
         id fromValue = keyFrameViewController.keyFrame.value;
         id toValue = fromValue;
         
+        //if the parameter is a float it's value can be changed by change the y-Position of the its VSKeyFrameView
         if(track.parameter.dataType == VSParameterDataTypeFloat){
-            toValue = [NSNumber numberWithFloat:[track parameterValueOfPixelPosition:toPoint.y forKeyFrame:keyFrameViewController]];
+            
+            toValue = [NSNumber numberWithFloat:[track parameterValueOfPixelPosition:toPoint.y
+                                                                         forKeyFrame:keyFrameViewController]];
         }
         
         bool allowedToMove = [self.keyFrameSelectingDelegate keyFrame:keyFrameViewController.keyFrame
@@ -166,6 +166,7 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
                                              willBeMovedFromTimestamp:fromTimestamp
                                                           toTimestamp:&toTimestamp andFromValue:fromValue toValue:&toValue];
         
+        //if the delegate allows to move, a NSPoint is created according to the toValue and the toTimstamp
         if(allowedToMove){
             float newX = [self pixelForTimestamp:toTimestamp];
             float newY = [track pixelPositonForKeyFramesValue:keyFrameViewController];
@@ -178,18 +179,6 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 
 #pragma mark - Methods
 
-/**
- * Called when ratio between the length of trackholder's width and the duration of the timeline.
- */
--(void) pixelTimeRatioDidChange{
-    
-    [super pixelTimeRatioDidChange];
-    
-    //tells all VSTrackViewControlls in the timeline, that the pixelItemRation has been changed
-    for(VSAnimationTimelineViewController *animationTrackViewController in [self.animationTrackViewControllers allValues]){
-        animationTrackViewController.pixelTimeRatio = self.pixelTimeRatio;
-    }
-}
 
 -(void) showTimelineForTimelineObject:(VSTimelineObject*) timelineObject{
     
@@ -199,43 +188,36 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
         }
     }
     
-    if(self.playhead){
-        [self.playhead removeObserver:self forKeyPath:@"currentTimePosition"];
-    }
-    
-    self.playhead = ((VSDocument*)[[NSDocumentController sharedDocumentController] currentDocument]).timeline.playHead;
-    
-    [self.playhead addObserver:self
-                    forKeyPath:@"currentTimePosition"
-                       options:NSKeyValueObservingOptionNew
-                       context:nil];
-    
     self.timelineObject = timelineObject;
+    
+    [self initPlayhead];
+    
+    
     
     if(self.timelineObject){
         
         NSArray *parameters = [self.timelineObject visibleParameters];
         
+        float width = self.scrollView.visibleTrackViewsHolderWidth;
+        
         for(VSParameter *parameter in parameters){
-            float width = self.scrollView.visibleTrackViewsHolderWidth;
             
             NSRect trackRect = NSMakeRect(0, self.animationTrackViewControllers.count*self.trackHeight , width, self.trackHeight);
             
             NSColor *trackColor = self.animationTrackViewControllers.count % 2 == 0 ? self.evenTrackColor : self.oddTrackColor;
             
-            VSAnimationTrackViewController *animationTrackViewController = [[VSAnimationTrackViewController alloc]
-                                                                            initWithFrame:trackRect                                           andColor:trackColor                forParameter:parameter
-                                                                            andPixelTimeRatio:self.pixelTimeRatio];
+            VSAnimationTrackViewController *animationTrackViewController = [[VSAnimationTrackViewController alloc]initWithFrame:trackRect
+                                                                                                                       andColor:trackColor
+                                                                                                                   forParameter:parameter
+                                                                                                              andPixelTimeRatio:self.pixelTimeRatio];
             
             animationTrackViewController.delegate = self;
             
-            [self.animationTrackViewControllers setObject:animationTrackViewController forKeyedSubscript:[NSNumber numberWithInteger:parameter.ID]];
+            [self.animationTrackViewControllers setObject:animationTrackViewController
+                                                   forKey:[NSNumber numberWithInteger:parameter.ID]];
             
             [animationTrackViewController.view setFrame:trackRect];
-            
             [animationTrackViewController.view setAutoresizingMask:NSViewWidthSizable];
-            
-            [animationTrackViewController.view setFrame:trackRect];
             
             [self.scrollView addTrackView:animationTrackViewController.view];
         }
@@ -245,6 +227,7 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     newSize.width = self.scrollView.documentVisibleRect.size.width;
     
     [self.scrollView.trackHolderView setFrameSize:newSize];
+    
     [self computePixelTimeRatio];
 }
 
@@ -276,31 +259,8 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     }
 }
 
-#pragma mark- VSViewResizingDelegate implementation
 
--(void) frameOfView:(NSView *)view wasSetFrom:(NSRect)oldRect to:(NSRect)newRect{
-    
-    if(newRect.size.width != 0){
-        [self computePixelTimeRatio];
-        //        if(oldRect.size.width != newRect.size.width){
-        //
-        //            NSRect newDocumentFrame = [self.timelineScrollView.trackHolderView frame];
-        //
-        //            //updates the width according to how the width of the view has been resized
-        //            newDocumentFrame.size.width += newRect.size.width - oldRect.size.width;
-        //            [self.timelineScrollView.trackHolderView setFrame:(newDocumentFrame)];
-        //            [self computePixelTimeRatio];
-        //        }
-    }
-}
-
--(void) resetTimeline{
-    for(VSAnimationTrackViewController *animationTrackViewController in [self.animationTrackViewControllers allValues]){
-        [animationTrackViewController.view removeFromSuperview];
-    }
-    
-    [self.animationTrackViewControllers removeAllObjects];
-}
+#pragma mark - Private Methods
 
 /**
  * Checks if the delegate is able to respond to the given Selector
@@ -319,8 +279,59 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     return NO;
 }
 
-#pragma mark - Private Methods
+/**
+ * Called when ratio between the length of trackholder's width and the duration of the timeline.
+ */
+-(void) pixelTimeRatioDidChange{
+    
+    [super pixelTimeRatioDidChange];
+    
+    //tells all VSTrackViewControlls in the timeline, that the pixelItemRation has been changed
+    for(VSAnimationTimelineViewController *animationTrackViewController in [self.animationTrackViewControllers allValues]){
+        animationTrackViewController.pixelTimeRatio = self.pixelTimeRatio;
+    }
+}
 
+/**
+ * Removes all VSAnimationTrackViewControllers stored in animaitonTrackViewControllers
+ */
+-(void) resetTimeline{
+    for(VSAnimationTrackViewController *animationTrackViewController in [self.animationTrackViewControllers allValues]){
+        [animationTrackViewController.view removeFromSuperview];
+    }
+    
+    [self.animationTrackViewControllers removeAllObjects];
+}
+
+/**
+ * Asks it's keyFrameSelectinDelegate if it is allowed to delete the currently selected keyFrames. If yes it iterates through all VSAnimationTrackViewController of the VSAnimationTimlineViewController and tells them to remove the selected keyFrames they are responsible for.
+ */
+-(void) removeSelectedKeyFrames{
+    
+    BOOL allowedToDelete = YES;
+    
+    if([self keyFrameSelectingDelegateRespondsToSelector:@selector(selectedKeyFramesWantsBeDeleted)]){
+        allowedToDelete = [self.keyFrameSelectingDelegate selectedKeyFramesWantsBeDeleted];
+    }
+    
+    if(allowedToDelete){
+        for(VSAnimationTrackViewController *track in [self.animationTrackViewControllers allValues]){
+            [track removeSelectedKeyFrames];
+        }
+        
+        //after deleting the keyFrames the currentValues have to be updated
+        for (VSParameter *parameter in self.timelineObject.visibleParameters){
+            [parameter updateCurrentValueForTimestamp:[super timestampForPixelValue:self.timelineScrollView.playheadMarkerLocation]];
+        }
+    }
+}
+
+
+#pragma mark Moving ot keyFrame
+
+/**
+ * Iterates through all VSAnimationTrackViewController of the VSAnimationTimlineViewController and asks them about their VSKeyFrameViewControllers which are next to the current position of the playhead. Afterwars it finds out which of them are the nearest and moves the playhead to the nearest keyframe.
+ */
 -(void) moveToNearestKeyFrameLeft{
     
     float xPosition = [self currentPlayheadMarkerLocation];
@@ -347,7 +358,9 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     }
 }
 
-
+/**
+ * Iterates through all VSAnimationTrackViewController of the VSAnimationTimlineViewController and asks them about their VSKeyFrameViewControllers which are next to the current position of the playhead. Afterwars it finds out which of them are the nearest and moves the playhead to the nearest keyframe.
+ */
 -(void) moveToNearestKeyFrameRight{
     
     float xPosition = [self currentPlayheadMarkerLocation];
@@ -374,50 +387,85 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     }
 }
 
+#pragma mark Updating parameters' currentValues
+
+/**
+ * Iterates throuh all VSParameter of the timelineObject and tells them to update their currentValues according to the given timestamp
+ *
+ * @param timestamp Timestamp the currentValue is computed for
+ */
+-(void) updateCurrentParameterValuesAtTimestamp:(double) timestamp{
+    for(VSParameter *parameter in self.timelineObject.visibleParameters){
+        [parameter updateCurrentValueForTimestamp:timestamp];
+    }
+}
+
+/**
+ * Iterates throuh all VSParameter of the timelineObject and tells them to update their currentValues according to the currentTimePosition of the playhead
+ */
+-(void) updateCurrentParameterValuesForPlayheadsCurrentTimePosition{
+    [self updateCurrentParameterValuesAtTimestamp:[self localTimestampForGlobalTimestamp:self.playhead.currentTimePosition]];
+}
+
+
+#pragma mark Playhead
+
+/**
+ * Moves the playhead to the midPoint of the view the given VSKeyFrameViewController is responsible for
+ *
+ * @param keyFrameViewController The Playhead is moved to midPoint of the view the keyFrameViewController is responsible for
+ */
 -(void) movePlayheadToKeyFrame:(VSKeyFrameViewController*) keyFrameViewController{
     self.playhead.currentTimePosition = [self globalTimestampForPixelPosition:[VSFrameUtils midPointOfFrame:keyFrameViewController.view.frame].x];
 }
 
--(void) removeSelectedKeyFrames{
-    
-    BOOL allowedToDelete = YES;
-    
-    if([self keyFrameSelectingDelegateRespondsToSelector:@selector(selectedKeyFramesWantsBeDeleted)]){
-        allowedToDelete = [self.keyFrameSelectingDelegate selectedKeyFramesWantsBeDeleted];
+/**
+ * Stores the playhead of timeline of the current VSDocument and adds an Observer to its currentPosition property
+ */
+-(void) initPlayhead{
+    if(self.playhead){
+        [self.playhead removeObserver:self forKeyPath:@"currentTimePosition"];
     }
     
-    if(allowedToDelete){
-        for(VSAnimationTrackViewController *track in [self.animationTrackViewControllers allValues]){
-            [track removeSelectedKeyFrames];
-        }
-        
-        for (VSParameter *parameter in self.timelineObject.visibleParameters){
-            [parameter updateCurrentValueForTimestamp:[super timestampForPixelValue:self.timelineScrollView.playheadMarkerLocation]];
-        }
-    }
+    self.playhead = ((VSDocument*)[[NSDocumentController sharedDocumentController] currentDocument]).timeline.playHead;
+    
+    [self.playhead addObserver:self
+                    forKeyPath:@"currentTimePosition"
+                       options:NSKeyValueObservingOptionNew
+                       context:nil];
 }
 
-#pragma mark Playhead
+/**
+ * Converts the given location of the Playhead to a global Timestamp and sets is the currenTimePosition of the playhed
+ */
+-(void) moveMainPlayheadAccordingToAnimationTimelinesPlayheadLocation:(CGFloat) location{
+    self.playhead.currentTimePosition = [self globalTimestampForPixelPosition:location];;
+}
 
--(void) playHeadsCurrentTimePositionHasBeenChanged:(double)newTimeposition{
+/**
+ * Called when the currentTimePosition of the playhead has been changed.
+ *
+ * Computes the pixel position of playheadMarker according to given timePosition and moves the PlayheadMarker to this locaiton. Afterwards the VSKeyFrameViews which are at the new positon of the playhead are set as selected and the currentValues of all parameters are updated.
+ */
+-(void) playHeadsCurrentTimePositionHasBeenChangedToTimePosition:(double)newTimeposition{
     
-    double localTimestamp = [self.timelineObject localTimestampOfGlobalTimestamp:newTimeposition];
-    
-    float markerLocation = [super pixelForTimestamp:0];
-    
-    if(localTimestamp != -1){
-        markerLocation = [super pixelForTimestamp:localTimestamp];
-    }
-    else if(newTimeposition > self.timelineObject.endTime){
-        markerLocation = [super pixelForTimestamp:self.timelineObject.duration];
-    }
+    float markerLocation = [self localPlayheadLocationOfGlobaPlayheadTimePosition:newTimeposition];
     
     [self.scrollView movePlayHeadMarkerToLocation:markerLocation];
     
+    [self selectKeyFramesAtPlayheadMarkersLocation:markerLocation];
     
-    
-    for(VSAnimationTrackViewController *trackViewController in [self.animationTrackViewControllers allValues]){
+    [self updateCurrentParameterValuesForPlayheadsCurrentTimePosition];
+}
 
+/**
+ * Sets the VSKeyFrameViews which are at the given markerLocation as selected
+ *
+ * Iterates through its VSAnimationTrackViewController and tells them to return the VSKeyFrameViewController which is at the given markerLocation. Afterwards it informs its keyFrameSelectingDelegate about the selected keyFrames.
+ */
+-(void) selectKeyFramesAtPlayheadMarkersLocation:(float) markerLocation{
+    for(VSAnimationTrackViewController *trackViewController in [self.animationTrackViewControllers allValues]){
+        
         [trackViewController unselectAllKeyFrames];
         
         VSKeyFrameViewController *keyFrameViewController = [trackViewController keyFrameViewControllerAtXPosition:markerLocation];
@@ -434,15 +482,29 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
             keyFrameViewController.selected = YES;
         }
     }
-    
-    [self updateCurrentParameterValuesAtTimestamp:localTimestamp];
 }
 
--(void) updateCurrentParameterValuesAtTimestamp:(double) timestamp{
-    for(VSParameter *parameter in self.timelineObject.visibleParameters){
-        [parameter updateCurrentValueForTimestamp:timestamp];
+/**
+ * Translates the given timestamp into an pixel-location of the playhead marker
+ *
+ * @param globalTimePosition Timeposition which is converted to an pixel-location of the playhead marker
+ * @return Pixel-location of the playhead marker according to the given timePosition
+ */
+-(float) localPlayheadLocationOfGlobaPlayheadTimePosition:(double) globalTimePosition{
+    double localTimestamp = [self.timelineObject localTimestampOfGlobalTimestamp:globalTimePosition];
+    
+    float markerLocation = [super pixelForTimestamp:0];
+    
+    if(localTimestamp != -1){
+        markerLocation = [super pixelForTimestamp:localTimestamp];
     }
+    else if(globalTimePosition > self.timelineObject.endTime){
+        markerLocation = [super pixelForTimestamp:self.timelineObject.duration];
+    }
+    
+    return markerLocation;
 }
+
 /**
  * Sets the plahead marker according to the playhead's currentposition on the timeline
  */
@@ -460,15 +522,40 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     return self.scrollView.playheadMarkerLocation;
 }
 
+#pragma mark Translating between pixel postions and timestamps
 
+/**
+ * Translates the given globalTimestamp to a local-timestamp of timelineObject
+ *
+ * @param timestamp Global timestamp to be translated into a local-timestamp of timelineObject
+ */
+-(double) localTimestampForGlobalTimestamp:(double) timestamp{
+    return [self.timelineObject localTimestampOfGlobalTimestamp:timestamp];
+}
+
+/**
+ * Translates the given globalTimestamp to a pixel position according to the timelienObject relative time and the current pixelTimeRatio.
+ *
+ * @param timestamp Global timestamp to be translated into a pixel-position.
+ */
 -(double) pixelForGlobalTimestamp:(double) timestamp{
     return [self pixelForTimestamp:[self.timelineObject localTimestampOfGlobalTimestamp:timestamp]];
 }
 
+/**
+ * Translates the given pixelPosition into an global Timestamp.
+ *
+ * @param position Pixel position to be translated into a global timestamp
+ */
 -(double) globalTimestampForPixelPosition:(double) position{
     return [self.timelineObject globalTimestampOfLocalTimestamp:[self timestampForPixelValue:position]];
 }
 
+/**
+ * Translates the given pixelPosition into an local Timestamp according to timelineObject's relative time and the current pixelTimeRatio
+ *
+ * @param position Pixel position to be translated into a local timestamp
+ */
 -(double) localTimestampForPixelPosition:(double) position{
     return [self.timelineObject localTimestampOfGlobalTimestamp:[self timestampForPixelValue:position]];
 }
@@ -489,6 +576,14 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 
 -(double) playheadTimePosition{
     return [self timestampForPixelValue: self.scrollView.playheadMarkerLocation];
+}
+
+-(void) setPlayhead:(VSPlayHead *)playhead{
+    _playhead = playhead;
+}
+
+-(VSPlayHead*) playhead{
+    return _playhead;
 }
 
 @end

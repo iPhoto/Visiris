@@ -49,7 +49,6 @@
 #define MINIMUM_TIMELINE_OBJECT_PIXEL_WIDTH 10
 
 @implementation VSMainTimelineViewController
-@synthesize scrollView                  = _scvTrackHolder;
 @synthesize trackViewControllers        = _trackViewControllers;
 @synthesize timeline                    = _timeline;
 @synthesize trackOffset                 = _offsetTrack;
@@ -168,11 +167,11 @@ static NSString* defaultNib = @"VSMainTimelineView";
 #pragma mark - NSResponder
 
 -(void) moveRight:(id)sender{
-    [self letPlayheadJumpOverTheDefaultDistance:YES];
+    [self letPlayheadJumpOverTheDefaultDistanceForward:YES];
 }
 
 -(void)moveLeft:(id)sender{
-    [self letPlayheadJumpOverTheDefaultDistance:NO];
+    [self letPlayheadJumpOverTheDefaultDistanceForward:NO];
 }
 
 -(void) moveWordRight:(id) sender{
@@ -575,8 +574,6 @@ static NSString* defaultNib = @"VSMainTimelineView";
     return location;
 }
 
-
-
 #pragma mark - VSViewMouseEventsDelegate Implementation
 
 -(void) mouseDragged:(NSEvent *)theEvent onView:(NSView *)view{
@@ -962,36 +959,6 @@ static NSString* defaultNib = @"VSMainTimelineView";
 #pragma mark - Playhead
 
 /**
- * Sets the plahead marker according to the playhead's currentposition on the timeline
- */
--(void) setPlayheadMarkerLocation{
-    CGFloat newLocation = [super pixelForTimestamp:self.timeline.playHead.currentTimePosition];
-    
-    [self.scrollView movePlayHeadMarkerToLocation:newLocation];
-}
-
-/**
- * Returns the current Location of the Playhead Marker
- * @return current location of the PlayheadMarker
- */
--(float) currentPlayheadMarkerLocation{
-    return self.scrollView.playheadMarkerLocation;
-}
-
-/**
- * Computes the new currentTimePosition of the timeline's playhead after the playhead-marker would have been moved the default distance, updates the currentTimePosition and sets the playhead's jumping-flag to YES
- * @param forward Indicates wheter the playhead is moved left or right
- */
--(void) letPlayheadJumpOverTheDefaultDistance:(BOOL) forward{
-    float deltaMove = 10;
-    
-    if(!forward)
-        deltaMove *= -1;
-    
-    [self letPlayheadJumpOverDistance:deltaMove];
-}
-
-/**
  * Computes the nearest left or right end of all VSTimelineObjectViews on the timeline and jumps to the nearest one
  *
  * @param forward Indicates wheter the nearest VSTimelineObjectView is looke for left or right from the current position of the playhead
@@ -1016,40 +983,6 @@ static NSString* defaultNib = @"VSMainTimelineView";
     [self letPlayheadJumpOverDistance:distanceToNextCut];
 }
 
-/**
- * Computes the new currentTimePosition of the timeline's playhead after the playhead-marker would have been moved the given distance, updates the currentTimePosition and sets the playhead's jumping-flag to YES
- * @param distance Distance the Playhead will be moved
- */
--(void) letPlayheadJumpOverDistance:(float) distance{
-    
-    if(distance == 0){
-        return;
-    }
-    
-    double newPixelPosition = [self currentPlayheadMarkerLocation] + distance;
-    double newTimePosition = [super timestampForPixelValue:newPixelPosition];
-    
-    [self scrollIfNewLocationOfPlayheadIsOutsideOfVisibleRect:newPixelPosition];
-    
-    self.timeline.playHead.currentTimePosition = newTimePosition;
-    
-    self.timeline.playHead.jumping = YES;
-    self.timeline.playHead.jumping = NO;
-    
-}
-
--(void) scrollIfNewLocationOfPlayheadIsOutsideOfVisibleRect:(float) newLocation{
-    NSPoint tmpPoint = NSMakePoint(newLocation, self.scrollView.documentVisibleRect.origin.y);
-    
-    //if the new position of the playhead marker is outside of the visible area of the timeline, the timeline is scrolled to the new position of the playhead marker
-    if(! NSPointInRect(tmpPoint, self.scrollView.documentVisibleRect)){
-        
-        NSPoint currentBoundsOrigin = self.scrollView.contentView.bounds.origin;
-        currentBoundsOrigin.x = newLocation;
-        
-        [self.scrollView.contentView setBoundsOrigin:currentBoundsOrigin];
-    }
-}
 
 #pragma mark - Tracks
 
@@ -1160,6 +1093,14 @@ static NSString* defaultNib = @"VSMainTimelineView";
 
 -(double) playheadTimePosition{
     return self.timeline.playHead.currentTimePosition;
+}
+
+-(VSPlayHead*) playhead{
+    return self.timeline.playHead;
+}
+
+-(float) currentPlayheadMarkerLocation{
+    return self.scrollView.playheadMarkerLocation;
 }
 
 @end

@@ -11,7 +11,7 @@
 
 
 typedef enum {
-    VSPlaybackModeStanding  = 1,
+    VSPlaybackModeNone  = 1,
     VSPlaybackModePlaying   = 2,
     VSPlaybackModeScrubbing = 3,
     VSPlaybackModeJumping   = 4,

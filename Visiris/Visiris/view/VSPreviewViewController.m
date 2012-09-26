@@ -68,26 +68,9 @@ static NSString* defaultNib = @"VSPreviewView";
     return self;
 }
 
-
-#pragma  mark - VSViewController
-
--(void) awakeFromNib{ 
-    if(self.view){
-        
-        [self initOpenGLView];
-        
-        [self initObservers];
-        
-        [self storeOpenGLViewsMargins];
-        
-        [self setOpenGLViewFameAccordingToAspectRatioInSuperview:self.view.frame];
-        
-        if([self.view isKindOfClass:[VSPreviewView class]]){
-            ((VSPreviewView*) self.view).frameResizingDelegate = self;
-        }
-    }
-}
-
+/**
+ * Inits the observerse of VSPreviewViewController
+ */
 -(void) initObservers{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playKeyWasPressed:) name:VSPlayKeyWasPressed object:nil];
 }
@@ -111,6 +94,26 @@ static NSString* defaultNib = @"VSPreviewView";
     [self.openGLView setAutoresizingMask:NSViewNotSizable];
 }
 
+
+#pragma  mark - VSViewController
+
+-(void) awakeFromNib{ 
+    if(self.view){
+        
+        [self initOpenGLView];
+        
+        [self initObservers];
+        
+        [self storeOpenGLViewsMargins];
+        
+        [self setOpenGLViewFameAccordingToAspectRatioInSuperview:self.view.frame];
+        
+        if([self.view isKindOfClass:[VSPreviewView class]]){
+            ((VSPreviewView*) self.view).frameResizingDelegate = self;
+        }
+    }
+}
+
 #pragma mark - IBAction
 
 - (IBAction)play:(NSButton *)sender {
@@ -119,6 +122,10 @@ static NSString* defaultNib = @"VSPreviewView";
 
 - (IBAction)stop:(NSButton *)sender {
     [self stopPlayback];
+}
+
+- (IBAction)frameRateSliderHasChanged:(NSSlider *)sender {
+    [VSProjectSettings sharedProjectSettings].frameRate = [sender integerValue];
 }
 
 #pragma mark - VSPlaybackControllerDelegate implementation
@@ -139,6 +146,10 @@ static NSString* defaultNib = @"VSPreviewView";
 
 -(void) frameOfView:(NSView *)view wasSetFrom:(NSRect)oldRect to:(NSRect)newRect{
     [self setOpenGLViewFameAccordingToAspectRatioInSuperview:newRect];
+}
+
+-(void) viewDidEndLiveResizing:(NSView *)view{
+    [self.playbackController updateCurrentFrame];
 }
 
 #pragma mark - Private Methods
@@ -165,19 +176,17 @@ static NSString* defaultNib = @"VSPreviewView";
     if(proportionalHeight<openGLViewRect.size.height){
         openGLViewRect.size.height = proportionalHeight;
     }
-    else{
+    
         openGLViewRect.size.width = openGLViewRect.size.height * aspectRatio;
-    }
+    
     
     openGLViewRect.origin.x = (superViewsRect.size.width - openGLViewRect.size.width) / 2.0f;
     openGLViewRect.origin.y = (NSMaxY(superViewsRect) - NSMaxY(openGLViewRect)) / 2.0f;
-
-
+    
+    [VSProjectSettings sharedProjectSettings].frameSize = openGLViewRect.size;
     [self.openGLView setFrameProportionally:NSIntegralRect(openGLViewRect)];
     
-//    [self.openGLView setFrame:openGLViewRect];
     
-    [VSProjectSettings sharedProjectSettings].frameSize = self.openGLView.frame.size;
     
     [self.openGLView setNeedsLayout:YES];
     [self.openGLView setNeedsDisplay:YES];
@@ -240,8 +249,4 @@ static NSString* defaultNib = @"VSPreviewView";
     return [self.openGLView refreshPeriod];
 }
 
-
-- (IBAction)frameRateSliderHasChanged:(NSSlider *)sender {
-    [VSProjectSettings sharedProjectSettings].frameRate = [sender integerValue];
-}
 @end

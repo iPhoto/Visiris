@@ -8,11 +8,13 @@
 
 #import "VSAnimationTimelineScrollView.h"
 
-#import "VSAnimationTimelineContentView.h"
+#import "VSAnimationTimelineScrollViewDocumentView.h"
 
 #import "VSCoreServices.h"
 
 @implementation VSAnimationTimelineScrollView
+
+#pragma mark - Init
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -25,11 +27,11 @@
 }
 
 -(void) awakeFromNib{
-    if([self.documentView isKindOfClass:[VSAnimationTimelineContentView class]]){
-        self.trackHolderView = ((VSAnimationTimelineContentView*)self.documentView);
+    if([self.documentView isKindOfClass:[VSAnimationTimelineScrollViewDocumentView class]]){
+        self.trackHolderView = ((VSAnimationTimelineScrollViewDocumentView*)self.documentView);
     }
     else{
-        self.trackHolderView = [[VSAnimationTimelineContentView alloc] init];
+        self.trackHolderView = [[VSAnimationTimelineScrollViewDocumentView alloc] init];
     }
     [super awakeFromNib];
     
@@ -41,6 +43,7 @@
 
 }
 
+#pragma mark - Methods
 
 -(void) addTrackView:(NSView *)aTrackView{
     [super addTrackView:aTrackView];
@@ -53,7 +56,5 @@
     
     [self.trackHolderView setFrameSize:NSMakeSize(self.trackHolderView.frame.size.width, totalHeight)];
 }
-
-#pragma mark - Properties
 
 @end

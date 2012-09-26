@@ -181,15 +181,14 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 		CVDisplayLinkStart(displayLink);
     
 
-   // DDLogInfo(@"startDisplayLink");
+//   DDLogInfo(@"startDisplayLink");
 }
 
 - (void)stopDisplayLink{
 	if (displayLink && CVDisplayLinkIsRunning(displayLink))
 		CVDisplayLinkStop(displayLink);
     
-
- //   DDLogInfo(@"stopDisplayLink");
+//    DDLogInfo(@"stopDisplayLink");
 }
 
 - (double)refreshPeriod{

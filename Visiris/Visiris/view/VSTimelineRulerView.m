@@ -56,7 +56,6 @@
 @implementation VSTimelineRulerView
 
 @synthesize pixelTimeRatio = _pixelTimeRatio;
-@synthesize timecodeRect = _timecodeRect;
 
 #pragma mark - Init
 

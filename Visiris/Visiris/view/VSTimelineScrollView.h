@@ -11,7 +11,7 @@
 #import <Cocoa/Cocoa.h>
 
 #import "VSScrollView.h"
-#import "VSTimelineContentView.h"
+#import "VSTimelineScrollViewDocumentView.h"
 
 @class VSTimelineScrollView;
 
@@ -54,6 +54,13 @@
 
 @optional
 
+/**
+ * Call after the playheadMarker jump to a new Location
+ * 
+ * @param playheadMarker NSRulerMarker representing the Playhead of the timeline
+ * @param aView NSView holding the playheadMarker
+ * @param location Location the given playheadMarker has jumped to
+ */
 -(void) playHeadRulerMarker:(NSRulerMarker *)playheadMarker didJumpInContainingView:(NSView *)aView toLocation:(CGFloat)location;
 
 /**
@@ -65,9 +72,6 @@
 -(void) didMovePlayHeadRulerMarker:(NSRulerMarker*) playheadMarker inContainingView:(NSView*) aView;
 
 @end
-
-
-
 
 
 
@@ -112,7 +116,7 @@
 @interface VSTimelineScrollView : VSScrollView<VSTrackHolderViewDelegate>
 
 /** DocumentView of the scrollView */
-@property (strong) VSTimelineContentView *trackHolderView;
+@property (strong) VSTimelineScrollViewDocumentView *trackHolderView;
 
 /** Ratio between the width of the timelineView and the duration of the VSTimeline it's reperesenting */
 @property double pixelTimeRatio;

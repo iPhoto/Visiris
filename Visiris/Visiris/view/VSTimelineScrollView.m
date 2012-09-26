@@ -26,7 +26,8 @@
 @end
 
 @implementation VSTimelineScrollView
-@synthesize zoomingDelegate = _zoomingDelegate;
+
+
 @synthesize pixelTimeRatio = _pixelTimeRatio;
 
 #pragma mark - Init

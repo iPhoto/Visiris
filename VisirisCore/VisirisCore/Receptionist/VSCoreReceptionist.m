@@ -39,6 +39,7 @@
 
 - (void)renderFrameAtTimestamp:(double)aTimestamp withHandovers:(NSArray *)theHandovers forSize:(NSSize)theFrameSize withPlayMode:(VSPlaybackMode)playMode
 {
+    NSLog(@"size %@", NSStringFromSize(theFrameSize));
     //return if Handovers is nil
     if (theHandovers == nil)
         return;
@@ -78,7 +79,7 @@
                 [self.audioCore playAudioOfHandovers:audioArray atTimeStamp:aTimestamp];
             }else
                 if (playMode == VSPlaybackModeJumping ||
-                playMode == VSPlaybackModeStanding) {
+                playMode == VSPlaybackModeNone) {
                 [self.audioCore stopPlaying];
             }
         }

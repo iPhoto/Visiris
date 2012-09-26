@@ -8,6 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 
+/**
+ * Subclass of NSView wich returns YES for isFlipped
+ */
 @interface VSFlippedView : NSView
 
 @end

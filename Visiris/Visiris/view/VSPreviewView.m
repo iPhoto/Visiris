@@ -11,7 +11,7 @@
 
 @implementation VSPreviewView
 
-@synthesize frameResizingDelegate   = _frameResizingDelegate;
+#pragma mark - Init
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -26,19 +26,42 @@
     
 }
 
+#pragma mark - NSView
+
 -(void) setFrame:(NSRect)frameRect{
     NSRect oldFrame = self.frame;
     
     [super setFrame:frameRect];
     
     //tells its delegate that the view's frame was resized
-    if(self.frameResizingDelegate){
-        if([self.frameResizingDelegate conformsToProtocol:@protocol(VSViewResizingDelegate)]){
-            if([self.frameResizingDelegate respondsToSelector:@selector(frameOfView:wasSetFrom:to:)]){
-                [self.frameResizingDelegate frameOfView:self wasSetFrom:oldFrame to:self.frame];
+    if([self frameResizingDelegateRespondsToSelector:@selector(frameOfView:wasSetFrom:to:)]){
+        [self.frameResizingDelegate frameOfView:self wasSetFrom:oldFrame to:self.frame];
+    }
+}
+
+-(void) viewDidEndLiveResize{
+    if([self frameResizingDelegateRespondsToSelector:@selector(viewDidEndLiveResizing:)]){
+        [self.frameResizingDelegate viewDidEndLiveResizing:self];
+    }
+}
+
+#pragma mark - Private Methods
+
+/**
+ * Checks if the delegate is able to respond to the given Selector
+ * @param selector Selector the delegate will be checked for if it is able respond to
+ * @return YES if the delegate is able to respond to the selector, NO otherweis
+ */
+-(BOOL) frameResizingDelegateRespondsToSelector:(SEL) selector{
+    if(self.frameResizingDelegate != nil){
+        if([self.frameResizingDelegate conformsToProtocol:@protocol(VSViewResizingDelegate) ]){
+            if([self.frameResizingDelegate respondsToSelector: selector]){
+                return YES;
             }
         }
     }
+    
+    return NO;
 }
 
 @end

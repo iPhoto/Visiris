@@ -32,7 +32,11 @@
 /** NSView wrapping VSPreviewOpenGLView */ 
 @property (weak) IBOutlet NSView *openGLViewHolder;
 
-- (IBAction)frameRateSliderHasChanged:(NSSlider *)sender;
+//TODO COMMENT
+@property (readonly) uint64_t hostTime;
+
+//TODO COMMENT
+@property (readonly) double refreshPeriod;
 
 #pragma mark - init
 
@@ -42,6 +46,7 @@
  * @return Returns self
  */
 -(id) initWithDefaultNibForOpenGLContext:(NSOpenGLContext*) theOpenGLContext;
+
 
 #pragma mark - IBAction
 
@@ -59,10 +64,9 @@
  */
 - (IBAction)stop:(NSButton *)sender;
 
-//TODO COMMENT
-- (uint64_t)hostTime;
-
-//TODO COMMENT
-- (double)refreshPeriod;
+/**
+ * Called when the Slider controlling the Framerate
+ */
+- (IBAction)frameRateSliderHasChanged:(NSSlider *)sender;
 
 @end

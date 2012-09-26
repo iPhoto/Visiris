@@ -9,8 +9,12 @@
 #import "VSTimelineScrollView.h"
 
 
-@class VSAnimationTimelineContentView;
+@class VSAnimationTimelineScrollViewDocumentView;
 
+
+/**
+ * Subclass of VSTimelineScrollView used as scrollView in the animation timeline
+ */
 @interface VSAnimationTimelineScrollView : VSTimelineScrollView
 
 @end

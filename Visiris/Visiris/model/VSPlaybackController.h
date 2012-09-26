@@ -103,4 +103,9 @@
  */
 - (void)renderFramesForCurrentTimestamp;
 
+/**
+ * Tells the VSPreProcessor to render the current frame again
+ */
+-(void) updateCurrentFrame;
+
 @end

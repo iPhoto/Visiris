@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "VSTimelineContentView.h"
+#import "VSTimelineScrollViewDocumentView.h"
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -15,7 +15,7 @@
 
 #import "VSCoreServices.h"
 
-@interface VSTimelineContentView()
+@interface VSTimelineScrollViewDocumentView()
 
 /** current offset of view's enclosing scrollView */
 @property NSPoint scrollOffset;
@@ -23,15 +23,12 @@
 /** CALayer to draw a guideline for the current position of the playheadmarker above the view */
 @property (strong) CALayer *guideLine;
 
-
-
 @end
 
-@implementation VSTimelineContentView
 
-@synthesize scrollOffset            = _scrollOffset;
-@synthesize trackHolderViewDelegate = _playheadMarkerDelegate;
-@synthesize guideLine               = _guideLayer;
+
+@implementation VSTimelineScrollViewDocumentView
+
 
 #pragma mark - Init
 

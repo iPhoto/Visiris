@@ -56,7 +56,7 @@
         self.preProcessor = preProcessor;
         self.timeline = timeline;
         
-        self.playbackMode = VSPlaybackModeStanding;
+        self.playbackMode = VSPlaybackModeNone;
         
         [self initObservers];
         
@@ -118,7 +118,7 @@
             }
         }
         else{
-            self.playbackMode = VSPlaybackModeStanding;
+            self.playbackMode = VSPlaybackModeNone;
             if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
                 [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
             }
@@ -126,7 +126,7 @@
         }
     }
     else if([keyPath isEqualToString:@"currentValue"]){
-        if(self.playbackMode == VSPlaybackModeStanding){
+        if(self.playbackMode == VSPlaybackModeNone){
             self.playbackMode = VSPlaybackModeJumping;
             if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
                 [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
@@ -152,7 +152,7 @@
         if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
             [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
         }
-        self.playbackMode = VSPlaybackModeStanding;
+        self.playbackMode = VSPlaybackModeNone;
     }
 }
 
@@ -183,6 +183,16 @@
     }
 }
 
+-(void) updateCurrentFrame{
+    if(self.playbackMode == VSPlaybackModeNone){
+        self.playbackMode = VSPlaybackModeJumping;
+        
+        if([self delegateRespondsToSelector:@selector(didStartScrubbingAtTimestamp:)]){
+            [self.delegate didStartScrubbingAtTimestamp:self.currentTimestamp];
+        }
+    }
+}
+
 -(void) play{
     self.playbackMode = VSPlaybackModePlaying;
     
@@ -192,7 +202,7 @@
 }
 
 -(void) stop{
-    self.playbackMode = VSPlaybackModeStanding;
+    self.playbackMode = VSPlaybackModeNone;
     [self.preProcessor stopPlayback];
 }
 
@@ -254,7 +264,7 @@
         if([self delegateRespondsToSelector:@selector(didStopScrubbingAtTimestamp:)]){
             [self.delegate didStopScrubbingAtTimestamp:self.currentTimestamp];
         }
-        self.playbackMode = VSPlaybackModeStanding;
+        self.playbackMode = VSPlaybackModeNone;
     }
 }
 

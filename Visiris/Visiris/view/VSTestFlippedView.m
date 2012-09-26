@@ -23,13 +23,9 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
     // Drawing code here.
-    [[NSColor redColor] set];
+    [[NSColor greenColor] set];
     
     NSRectFill(dirtyRect);
-}
-
--(BOOL) isFlipped{
-    return YES;
 }
 
 @end

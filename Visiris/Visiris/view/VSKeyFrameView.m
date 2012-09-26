@@ -10,14 +10,19 @@
 
 @interface VSKeyFrameView()
 
+/** Stores the Mouse-Position in mouseDown. Neccessary for computing the right position in mouseDragged */
 @property NSPoint mouseDownOffset;
 
 @end
+
+
 
 @implementation VSKeyFrameView
 
 @synthesize moving      = _moving;
 @synthesize selected    = _selected;
+
+#pragma mark - Init
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -29,10 +34,14 @@
     return self;
 }
 
-
+/**
+ * Inits the view's layer
+ */
 -(void) initLayer{
     [self setWantsLayer:YES];
 }
+
+#pragma mark - NSView
 
 - (void)drawRect:(NSRect)dirtyRect
 {
@@ -43,6 +52,8 @@
 -(BOOL) acceptsFirstMouse:(NSEvent *)theEvent{
     return YES;
 }
+
+#pragma mark - Event Handling
 
 -(void) mouseDown:(NSEvent *)theEvent{
     if([self delegateRespondsToSelector:@selector(mouseDown:onView:)]){
@@ -85,10 +96,13 @@
     return NO;
 }
 
+/**
+ * Set's the style of the view's layer according to its current state
+ */
 -(void) setLayerStyle{
     [self.layer setOpacity:1.0];
     [self.layer setBackgroundColor:[[NSColor redColor]CGColor]];
-     [self.layer setBorderWidth:0];
+    [self.layer setBorderWidth:0];
     if(self.selected){
         [self.layer setBorderColor:[[NSColor yellowColor] CGColor]];
         [self.layer setBorderWidth:1];

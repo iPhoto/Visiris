@@ -30,7 +30,7 @@
 		5B0E366615876E9300F15026 /* VSTrackLabelsRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366515876E9300F15026 /* VSTrackLabelsRulerView.m */; };
 		5B0E366C15876EEB00F15026 /* VSTrackLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366B15876EEB00F15026 /* VSTrackLabel.m */; };
 		5B0EFF96158A1F410000445C /* playhead.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B0EFF95158A1F410000445C /* playhead.png */; };
-		5B0EFF99158A226C0000445C /* VSTimelineContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0EFF98158A226C0000445C /* VSTimelineContentView.m */; };
+		5B0EFF99158A226C0000445C /* VSTimelineScrollViewDocumentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0EFF98158A226C0000445C /* VSTimelineScrollViewDocumentView.m */; };
 		5B12792A15C13A500026AAFD /* NSImage+QuickLook.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B12792815C13A500026AAFD /* NSImage+QuickLook.m */; };
 		5B12792C15C13CAD0026AAFD /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B12792B15C13CAD0026AAFD /* QuickLook.framework */; };
 		5B250992161088BE003B715F /* VSFrameUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B250991161088BE003B715F /* VSFrameUtils.m */; };
@@ -156,7 +156,7 @@
 		5BD35BC615D95943001A74E0 /* VSAnimationTimelineView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5BD35BC415D95943001A74E0 /* VSAnimationTimelineView.xib */; };
 		5BD35BC915D9595E001A74E0 /* VSAnimationTimelineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BC815D9595E001A74E0 /* VSAnimationTimelineView.m */; };
 		5BD35BCC15D959D4001A74E0 /* VSAnimationTimelineScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BCB15D959D4001A74E0 /* VSAnimationTimelineScrollView.m */; };
-		5BD35BCF15D959F0001A74E0 /* VSAnimationTimelineContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BCE15D959F0001A74E0 /* VSAnimationTimelineContentView.m */; };
+		5BD35BCF15D959F0001A74E0 /* VSAnimationTimelineScrollViewDocumentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BCE15D959F0001A74E0 /* VSAnimationTimelineScrollViewDocumentView.m */; };
 		5BD35BD115D95B25001A74E0 /* VSTimelineScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BD015D95B25001A74E0 /* VSTimelineScrollView.m */; };
 		5BD35BD415D95B3E001A74E0 /* VSMainTimelineScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BD315D95B3E001A74E0 /* VSMainTimelineScrollView.m */; };
 		5BD35BD715D95BCE001A74E0 /* VSMainTimelineContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BD615D95BCE001A74E0 /* VSMainTimelineContentView.m */; };
@@ -183,8 +183,8 @@
 		5B0E366A15876EEB00F15026 /* VSTrackLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTrackLabel.h; sourceTree = "<group>"; };
 		5B0E366B15876EEB00F15026 /* VSTrackLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTrackLabel.m; sourceTree = "<group>"; };
 		5B0EFF95158A1F410000445C /* playhead.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playhead.png; sourceTree = "<group>"; };
-		5B0EFF97158A226C0000445C /* VSTimelineContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineContentView.h; sourceTree = "<group>"; };
-		5B0EFF98158A226C0000445C /* VSTimelineContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineContentView.m; sourceTree = "<group>"; };
+		5B0EFF97158A226C0000445C /* VSTimelineScrollViewDocumentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineScrollViewDocumentView.h; sourceTree = "<group>"; };
+		5B0EFF98158A226C0000445C /* VSTimelineScrollViewDocumentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineScrollViewDocumentView.m; sourceTree = "<group>"; };
 		5B12792815C13A500026AAFD /* NSImage+QuickLook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+QuickLook.m"; sourceTree = "<group>"; };
 		5B12792915C13A500026AAFD /* NSImage+QuickLook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+QuickLook.h"; sourceTree = "<group>"; };
 		5B12792B15C13CAD0026AAFD /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
@@ -413,8 +413,8 @@
 		5BD35BC815D9595E001A74E0 /* VSAnimationTimelineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAnimationTimelineView.m; sourceTree = "<group>"; };
 		5BD35BCA15D959D4001A74E0 /* VSAnimationTimelineScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAnimationTimelineScrollView.h; sourceTree = "<group>"; };
 		5BD35BCB15D959D4001A74E0 /* VSAnimationTimelineScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAnimationTimelineScrollView.m; sourceTree = "<group>"; };
-		5BD35BCD15D959F0001A74E0 /* VSAnimationTimelineContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAnimationTimelineContentView.h; sourceTree = "<group>"; };
-		5BD35BCE15D959F0001A74E0 /* VSAnimationTimelineContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAnimationTimelineContentView.m; sourceTree = "<group>"; };
+		5BD35BCD15D959F0001A74E0 /* VSAnimationTimelineScrollViewDocumentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAnimationTimelineScrollViewDocumentView.h; sourceTree = "<group>"; };
+		5BD35BCE15D959F0001A74E0 /* VSAnimationTimelineScrollViewDocumentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAnimationTimelineScrollViewDocumentView.m; sourceTree = "<group>"; };
 		5BD35BD015D95B25001A74E0 /* VSTimelineScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineScrollView.m; sourceTree = "<group>"; };
 		5BD35BD215D95B3E001A74E0 /* VSMainTimelineScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSMainTimelineScrollView.h; sourceTree = "<group>"; };
 		5BD35BD315D95B3E001A74E0 /* VSMainTimelineScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSMainTimelineScrollView.m; sourceTree = "<group>"; };
@@ -1151,8 +1151,8 @@
 				5BD35BC815D9595E001A74E0 /* VSAnimationTimelineView.m */,
 				5BD35BCA15D959D4001A74E0 /* VSAnimationTimelineScrollView.h */,
 				5BD35BCB15D959D4001A74E0 /* VSAnimationTimelineScrollView.m */,
-				5BD35BCD15D959F0001A74E0 /* VSAnimationTimelineContentView.h */,
-				5BD35BCE15D959F0001A74E0 /* VSAnimationTimelineContentView.m */,
+				5BD35BCD15D959F0001A74E0 /* VSAnimationTimelineScrollViewDocumentView.h */,
+				5BD35BCE15D959F0001A74E0 /* VSAnimationTimelineScrollViewDocumentView.m */,
 			);
 			name = timeline;
 			sourceTree = "<group>";
@@ -1182,8 +1182,8 @@
 			children = (
 				5BD35BD015D95B25001A74E0 /* VSTimelineScrollView.m */,
 				5BAB35D315B4153D008B4793 /* VSTimelineScrollView.h */,
-				5B0EFF97158A226C0000445C /* VSTimelineContentView.h */,
-				5B0EFF98158A226C0000445C /* VSTimelineContentView.m */,
+				5B0EFF97158A226C0000445C /* VSTimelineScrollViewDocumentView.h */,
+				5B0EFF98158A226C0000445C /* VSTimelineScrollViewDocumentView.m */,
 				5B35C0A91577AEB4009911EC /* timelineRuler */,
 				5B35BFC71577A573009911EC /* VSTimelineView.h */,
 				5B35BFC81577A573009911EC /* VSTimelineView.m */,
@@ -1398,7 +1398,7 @@
 				5B603FA9157F824A0045A1EA /* VSPlayHead.m in Sources */,
 				5B0E366615876E9300F15026 /* VSTrackLabelsRulerView.m in Sources */,
 				5B0E366C15876EEB00F15026 /* VSTrackLabel.m in Sources */,
-				5B0EFF99158A226C0000445C /* VSTimelineContentView.m in Sources */,
+				5B0EFF99158A226C0000445C /* VSTimelineScrollViewDocumentView.m in Sources */,
 				5B7BFFC71592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m in Sources */,
 				2799F8E61599C8B800008489 /* VSQuartzCompositionUtils.m in Sources */,
 				5B12792A15C13A500026AAFD /* NSImage+QuickLook.m in Sources */,
@@ -1408,7 +1408,7 @@
 				5BD35BC515D95943001A74E0 /* VSAnimationTimelineViewController.m in Sources */,
 				5BD35BC915D9595E001A74E0 /* VSAnimationTimelineView.m in Sources */,
 				5BD35BCC15D959D4001A74E0 /* VSAnimationTimelineScrollView.m in Sources */,
-				5BD35BCF15D959F0001A74E0 /* VSAnimationTimelineContentView.m in Sources */,
+				5BD35BCF15D959F0001A74E0 /* VSAnimationTimelineScrollViewDocumentView.m in Sources */,
 				5BD35BD115D95B25001A74E0 /* VSTimelineScrollView.m in Sources */,
 				5BD35BD415D95B3E001A74E0 /* VSMainTimelineScrollView.m in Sources */,
 				5BD35BD715D95BCE001A74E0 /* VSMainTimelineContentView.m in Sources */,

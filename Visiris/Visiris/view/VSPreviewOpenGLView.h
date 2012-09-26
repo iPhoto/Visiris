@@ -11,14 +11,17 @@
 
 @class VSPlaybackController;
 
+/**
+ * ADD DESCRIPTION HERE
+ */
 @interface VSPreviewOpenGLView : NSView <NSCoding>
 
-@property (strong) VSPlaybackController     *playBackcontroller;
-@property (strong) NSOpenGLContext          *openGLContext;
-@property (strong) NSOpenGLPixelFormat      *pixelFormat;
-@property (assign) CVDisplayLinkRef         displayLink;
-@property (assign) GLuint                   texture;
-@property (assign) CVTimeStamp              stamp;
+@property (strong)  VSPlaybackController     *playBackcontroller;
+@property (strong)  NSOpenGLContext          *openGLContext;
+@property (strong)  NSOpenGLPixelFormat      *pixelFormat;
+@property           CVDisplayLinkRef         displayLink;
+@property           GLuint                   texture;
+@property           CVTimeStamp              stamp;
 
 
 - (id) initWithFrame:(NSRect)frameRect;
