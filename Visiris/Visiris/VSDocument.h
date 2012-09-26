@@ -12,6 +12,8 @@
 @class VSPostProcessor;
 @class VSTimeline;
 @class VSPlaybackController;
+@class VSExternalInputManager;
+
 
 /**
  * Please add more here
@@ -29,6 +31,10 @@
 
 /** VSTimeline is initialized by VSMainWindowController */
 @property (strong) VSTimeline* timeline;
+
+/** VSExternalInputManager is initialized by VSDocument */
+@property (strong) VSExternalInputManager* externalInputManager;
+ 
 
 
 -(BOOL) addFileToProject:(NSString*) fileName;

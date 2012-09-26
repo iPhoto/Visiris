@@ -16,6 +16,8 @@
 #import "VSPlaybackController.h"
 #import "VSProjectSettings.h"
 
+#import "VSExternalInputManager.h"
+
 #import "VSCoreServices.h"
 
 @interface VSDocument()
@@ -94,6 +96,9 @@
     self.preProcessor.renderCoreReceptionist.delegate = self.postProcessor;
     
     self.timeline.timelineObjectsDelegate = self.preProcessor;
+    
+    // Start Client
+    self.externalInputManager = [[VSExternalInputManager alloc] init];
 }
 
 
