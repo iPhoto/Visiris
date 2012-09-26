@@ -8,6 +8,8 @@
 
 #import "VSOpenGLView.h"
 
+#import "VSOutputController.h"
+
 @interface VSOpenGLView()
 
 @end
@@ -20,21 +22,8 @@
 @synthesize texture         = _texture;
 
 - (void)setOpenGLWithSharedContext:(NSOpenGLContext *)openGLContext{
-    NSOpenGLPixelFormatAttribute attribs[] =
-    {
-		kCGLPFAAccelerated,
-		kCGLPFANoRecovery,
-		kCGLPFADoubleBuffer,
-		kCGLPFAColorSize, 24,
-		kCGLPFADepthSize, 16,
-		0
-    };
-	
-    self.pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attribs];
-	
-    if (!self.pixelFormat)
-		NSLog(@"No OpenGL pixel format");
-	
+    
+    self.pixelFormat = [[VSOutputController sharedOutputController] pixelFormat];
     
 	// NSOpenGLView does not handle context sharing, so we draw to a custom NSView instead
 	self.openGLContext = [[NSOpenGLContext alloc] initWithFormat:self.pixelFormat shareContext:openGLContext];

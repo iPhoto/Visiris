@@ -12,6 +12,7 @@
 #import "VSPreviewOpenGLView.h"
 
 @class VSPlaybackController;
+@class VSFullScreenController;
 
 #import "VSPlaybackController.h"
 #import "VSViewResizingDelegate.h"
@@ -19,24 +20,19 @@
 /**
  * Subclass of NSViewController responsible for the Previw at the top-right of the window
  */
-@interface VSPreviewViewController : NSViewController<VSPlaybackControllerDelegate, VSViewResizingDelegate>
-
-@property (strong) NSOpenGLContext *openGLContext;
-
-/** Reference to the VSPlaybackController. Its called to start / stop the playback of the project */
-@property VSPlaybackController *playbackController;
+@interface VSPreviewViewController : NSViewController<VSViewResizingDelegate, VSOpenGLOutputDelegate>
 
 /** VSPreviewOpenGLView showing the the content of the openGLContext */
 @property (weak) IBOutlet VSPreviewOpenGLView *openGLView;
 
 /** NSView wrapping VSPreviewOpenGLView */
 @property (weak) IBOutlet NSView *openGLViewHolder;
+- (IBAction)toggleFullScreen:(id)sender;
 
-//TODO COMMENT
-@property (readonly) uint64_t hostTime;
+/** Reference to the VSPlaybackController. Its called to start / stop the playback of the project */
+@property VSPlaybackController *playbackController;
 
-//TODO COMMENT
-@property (readonly) double refreshPeriod;
+@property (strong) VSFullScreenController       *fullScreenController;
 
 #pragma mark - init
 
@@ -45,7 +41,7 @@
  * @param theOpenGLContext NSOpenGLContext to be displayed in openGLView
  * @return Returns self
  */
--(id) initWithDefaultNibForOpenGLContext:(NSOpenGLContext*) theOpenGLContext;
+-(id) initWithDefaultNib;
 
 
 #pragma mark - IBAction

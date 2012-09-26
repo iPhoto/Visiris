@@ -15,6 +15,7 @@
 #import "VSPreProcessor.h"
 #import "VSPlaybackController.h"
 #import "VSProjectSettings.h"
+#import "VSOutputController.h"
 
 #import "VSCoreServices.h"
 
@@ -94,6 +95,10 @@
     self.preProcessor.renderCoreReceptionist.delegate = self.postProcessor;
     
     self.timeline.timelineObjectsDelegate = self.preProcessor;
+    
+    [[VSOutputController sharedOutputController] connectWithOpenGLContext:self.preProcessor.renderCoreReceptionist.openGLContext];
+    
+    [VSOutputController sharedOutputController].playbackController = self.playbackController;
 }
 
 

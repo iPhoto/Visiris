@@ -211,24 +211,21 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
                                                                             initWithFrame:trackRect                                           andColor:trackColor                forParameter:parameter
                                                                             andPixelTimeRatio:self.pixelTimeRatio];
             
+            [animationTrackViewController.view setAutoresizingMask:NSViewWidthSizable];
+            
             animationTrackViewController.delegate = self;
             
             [self.animationTrackViewControllers setObject:animationTrackViewController forKeyedSubscript:[NSNumber numberWithInteger:parameter.ID]];
             
             [animationTrackViewController.view setFrame:trackRect];
             
-            [animationTrackViewController.view setAutoresizingMask:NSViewWidthSizable];
+            
             
             [animationTrackViewController.view setFrame:trackRect];
             
             [self.scrollView addTrackView:animationTrackViewController.view];
         }
     }
-    
-    NSSize newSize = self.scrollView.trackHolderView.frame.size;
-    newSize.width = self.scrollView.documentVisibleRect.size.width;
-    
-    [self.scrollView.trackHolderView setFrameSize:newSize];
     
     [self computePixelTimeRatio];
 }
@@ -426,7 +423,8 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
  */
 -(void) initPlayhead{
     if(self.playhead){
-        [self.playhead removeObserver:self forKeyPath:@"currentTimePosition"];
+        [self.playhead removeObserver:self
+                           forKeyPath:@"currentTimePosition"];
     }
     
     self.playhead = ((VSDocument*)[[NSDocumentController sharedDocumentController] currentDocument]).timeline.playHead;

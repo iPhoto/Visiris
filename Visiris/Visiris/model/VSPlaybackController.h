@@ -8,39 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-
-/**
- * Protocoll defining how VSPlaybackController talks to its delegate
- */
-@protocol VSPlaybackControllerDelegate <NSObject>
-
-/**
- * Called when VSPlaybackController has received the Texture for the timestamp
- * @param theTexture GLuint defining the newly rendered texture.
- * @param theTimestamp Timestamp the texture was rendered for
- */
--(void) texture:(GLuint) theTexture isReadyForTimestamp:(double) theTimestamp;
-
-/**
- * Called when the Playhead of the timeline the VSPlaybackController started to be scrubbed around the timeline
- * @param theTimestamp Current position of the Playhead.
- */
--(void) didStartScrubbingAtTimestamp:(double) aTimestamp;
-
-/**
- * Called when the Playhead of the timeline the VSPlaybackController stopped scrubbing
- * @param theTimestamp Current position of the Playhead.
- */
--(void) didStopScrubbingAtTimestamp:(double) aTimestamp;
-
-//TODO comment
-- (uint64_t)hostTime;
-
-//TODO comment
-- (double)refreshPeriod;
-
-@end
-
+#import "VSOutputController.h"
 
 
 #import "VSCoreServices.h"
@@ -53,9 +21,6 @@
  * VSPlaybackController start and controls playing of the Visiris Project. It tells the VSPreProcessor to process data for an specific-frame
  */
 @interface VSPlaybackController : NSObject
-
-/** Delegate VSPlaybackController communicates like defined in VSPlaybackControllerDelegate Protocoll */
-@property id<VSPlaybackControllerDelegate> delegate;
 
 /** The VSPrePRrocess is called to process data for a specific timestamp. */
 @property (readonly, weak) VSPreProcessor *preProcessor;

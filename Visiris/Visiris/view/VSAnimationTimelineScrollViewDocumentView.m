@@ -30,5 +30,14 @@
     NSRectFill(dirtyRect);
 }
 
+-(void) setFrame:(NSRect)frameRect{
+
+    if(frameRect.size.height > 840.0){
+        DDLogInfo(@"its bigger");
+    }
+    
+    [super setFrame:frameRect];
+    
+}
 
 @end

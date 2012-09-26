@@ -99,13 +99,12 @@ static NSString* defaultNib = @"MainWindow";
     [self loadView:timelineViewController.view intoSplitView:self.mainSplitView replacingViewAtPosition:1];
     
     
-    self.previewViewController = [[VSPreviewViewController alloc] initWithDefaultNibForOpenGLContext:((VSDocument*) self.document).preProcessor.renderCoreReceptionist.openGLContext];
+    self.previewViewController = [[VSPreviewViewController alloc] initWithDefaultNib];
     
     [self loadView:self.previewViewController.view intoSplitView:self.topSplitView replacingViewAtPosition:2];
     
     self.previewViewController.playbackController = ((VSDocument*) self.document).playbackController;
     
-    ((VSDocument*) self.document).playbackController.delegate = self.previewViewController;
 }
 
 /**
