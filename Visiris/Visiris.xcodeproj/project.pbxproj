@@ -182,6 +182,7 @@
 		5BEF5AFB15FE1F5E00F0FE8A /* VSOptionParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BEF5AFA15FE1F5E00F0FE8A /* VSOptionParameter.m */; };
 		5BFB871115DA2F8C00D405AF /* VSTimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BFB871015DA2F8C00D405AF /* VSTimelineViewController.m */; };
 		A983791C1613C14D00BA8BBC /* VisirisCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A983791B1613C14D00BA8BBC /* VisirisCore.framework */; };
+		A9846FF9161499FD00445A8D /* VisirisCore.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A983791B1613C14D00BA8BBC /* VisirisCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -194,6 +195,7 @@
 				27CFB14516139C4600A19B7A /* VVBasics.framework in CopyFiles */,
 				27CFB14616139C4600A19B7A /* VVMIDI.framework in CopyFiles */,
 				27CFB14716139C4600A19B7A /* VVOSC.framework in CopyFiles */,
+				A9846FF9161499FD00445A8D /* VisirisCore.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
