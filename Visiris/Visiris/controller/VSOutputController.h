@@ -20,8 +20,6 @@
 
 @interface VSOutputController : NSObject
 
-@property (readonly) uint64_t hostTime;
-
 @property (readonly) double refreshPeriod;
 
 @property VSPlaybackController *playbackController;

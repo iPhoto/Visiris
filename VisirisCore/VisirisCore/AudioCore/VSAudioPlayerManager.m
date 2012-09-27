@@ -55,6 +55,9 @@
             [self.playerCollectionToTrackID setObject:trackPlayer forKey:[NSNumber numberWithInteger:trackID]];
             
             VSAudioPlayer *audioPlayer = [[VSAudioPlayer alloc] initWithFilePath:path];
+            if (audioPlayer == nil) {
+                return;
+            }
             
             [trackPlayer setObject:audioPlayer forKey:[NSNumber numberWithInteger:projectItemID]];
 
@@ -66,7 +69,13 @@
             VSAudioPlayer *audioPlayer = [trackPlayer objectForKey:[NSNumber numberWithInteger:projectItemID]];
             
             if (audioPlayer == nil) {
+
                 audioPlayer = [[VSAudioPlayer alloc] initWithFilePath:path];
+                
+                if (audioPlayer == nil) {
+                    return;
+                }
+
                 [trackPlayer setObject:audioPlayer forKey:[NSNumber numberWithInteger:projectItemID]];
             }
             
@@ -80,9 +89,9 @@
 
 - (void)playAudioOfObjectID:(NSInteger)objectID atTime:(double)time atVolume:(float)volume{
     VSAudioPlayer *player = (VSAudioPlayer *)[self.playerToObjectID objectForKey:[NSNumber numberWithInteger:objectID]];
+    
     if (player == nil) {
         NSLog(@"shit happens");
-        
     }
     [player playAtTime:time];
     [player setVolume:volume]; 
