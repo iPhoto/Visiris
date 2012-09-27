@@ -13,6 +13,10 @@
 
 
 
+#import "VSCoreServices.h"
+
+
+
 @interface VSExternalInputManager ()
 
 @property (strong) NSMutableDictionary                          *availableInputManager;
@@ -79,8 +83,6 @@
     for (id<VSExternalInputProtocol> inputManager in [self.availableInputManager allValues]) {
         
         [inputManager startObservingInputs];
-        
-        NSLog(@"started inputManager: %@", inputManager);
     }
 }
 

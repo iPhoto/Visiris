@@ -13,7 +13,7 @@
 {
 }
 
-@property (strong) OSCInPort                    *_inPort;
+@property (strong) OSCInPort                    *inPort;
 
 @end
 

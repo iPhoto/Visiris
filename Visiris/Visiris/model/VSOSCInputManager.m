@@ -10,6 +10,8 @@
 #import "VSOSCInputManager.h"
 #import "VSOSCClient.h"
 
+#import "VSCoreServices.h"
+
 
 #define kVSOSCInputManager_inputRangeStart @"kVSOSCInputManager_inputRangeStart"
 #define kVSOSCInputManager_inputRangeEnd @"kVSOSCInputManager_inputRangeEnd"
@@ -21,6 +23,9 @@
     NSTimer                                             *_portObserverTimer;
     
     OSCManager                                          *_oscManager;
+    
+    NSUInteger                                          _lastPort;
+    NSUInteger                                          _numberOfInputClients;
     
 }
 
@@ -41,16 +46,21 @@
     self = [super init];
     if (self) {
         
-        _observablePorts = NSMakeRange(1234, 1300);
+        _oscManager = [[OSCManager alloc] init];
+        
+        _observablePorts = NSMakeRange(1234, 5000);
         
         /* TODO: Implement Preference Panel
         observablePorts.location = [[NSUserDefaults standardUserDefaults] integerForKey:kVSOSCInputManager_inputRangeStart];
         observablePorts.length = [[NSUserDefaults standardUserDefaults] integerForKey:kVSOSCInputManager_inputRangeEnd];
         */
         
-        int observerPorts = 1;
-        self.availableInputPorts = [[NSMutableArray alloc] initWithCapacity:observerPorts];
-        [self createInputObserver:NSMakeRange(_observablePorts.location, _observablePorts.location+observerPorts)];
+        _lastPort = _observablePorts.location;
+        _numberOfInputClients = 10;
+        
+        
+        self.availableInputPorts = [[NSMutableArray alloc] initWithCapacity:_numberOfInputClients];
+        [self createInputObserver:NSMakeRange(_observablePorts.location, _observablePorts.location+_numberOfInputClients)];
     }
     
     return self;
@@ -64,12 +74,22 @@
 #pragma mark - VSExternalInputProtocol implementation
 - (void)createInputObserver:(NSRange)rangeOfInputPorts
 {
+    NSUInteger currentPortOffset = 0;
     for (NSInteger i = rangeOfInputPorts.location; i < rangeOfInputPorts.length; i++) {
         
-        OSCInPort *inPort = [_oscManager createNewInputForPort:(int)(rangeOfInputPorts.location+i)];
-//        [inPort stop];
-        VSOSCClient *client = [[VSOSCClient alloc] initWithOSCInPort:inPort];
-        [self.availableInputPorts addObject:client];
+        NSUInteger portToListen = rangeOfInputPorts.location + currentPortOffset; //(int)(rangeOfInputPorts.location+i);
+        _lastPort = portToListen;
+        OSCInPort *inPort = [_oscManager createNewInputForPort:(int)portToListen];
+        if (inPort) {
+            [inPort stop];
+            VSOSCClient *client = [[VSOSCClient alloc] initWithOSCInPort:inPort];
+            [self.availableInputPorts addObject:client];
+        }else
+        {
+            DDLogCInfo(@"port %li wasn't available", portToListen);
+            
+            /* Create new ports as long as the inPort variable is not null */
+        }
     }
 }
 
@@ -79,19 +99,22 @@
         [currentOSCClient startObserving];
     }
     
-    NSLog(@"started observing osc ports in range: %ld", self.availableInputPorts.count);
-    
-    _portObserverTimer = [NSTimer scheduledTimerWithTimeInterval:200.0f target:self selector:@selector(observeNextInputs) userInfo:nil repeats:YES];
+    _portObserverTimer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(observeNextInputs) userInfo:nil repeats:YES];
 }
 
 
 - (void)observeNextInputs
 {
-    NSLog(@"OSCManager::observeNextInputs switch to new inputs with range: %ld", self.availableInputPorts.count);
     
+    // try to
     for (VSOSCClient *currentOSCClient in self.availableInputPorts) {
         
-        [currentOSCClient setPort:currentOSCClient.port + self.availableInputPorts.count];
+        unsigned int currentPort = currentOSCClient.port;
+        unsigned int newPort = (unsigned int)(currentPort + self.availableInputPorts.count);
+        DDLogInfo(@"switchin input from port '%i' to new port '%i'", currentPort, newPort);
+        [currentOSCClient stopObserving];
+        [currentOSCClient setPort:newPort];
+        [currentOSCClient startObserving];
     }
 }
 
@@ -106,5 +129,11 @@
     return nil;
 }
 
+
+#pragma mark - OSCInPort Delegate
+- (void)receivedOSCMessage:(OSCMessage *)message
+{
+    NSLog(@"did received message: %@", message);
+}
 
 @end
