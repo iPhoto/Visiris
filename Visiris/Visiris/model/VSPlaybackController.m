@@ -213,7 +213,8 @@
    
     [self.outputController startPlayback];
     self.playbackStartTime = self.outputController.hostTime;
-
+    
+    self.currentTimestamp = self.timeline.playHead.currentTimePosition;
     
     self.playbackMode = VSPlaybackModePlaying;
 }

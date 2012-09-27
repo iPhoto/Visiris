@@ -31,4 +31,12 @@
     return YES;
 }
 
+-(void) drawRect:(NSRect)dirtyRect{
+    [super drawRect:dirtyRect];
+    
+    [[NSColor redColor] setFill];
+    
+    NSRectFill(dirtyRect);
+}
+
 @end

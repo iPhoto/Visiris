@@ -53,7 +53,6 @@
 										<string key="NSFrameSize">{340, 235}</string>
 										<reference key="NSSuperview" ref="17268664"/>
 										<reference key="NSWindow"/>
-										<reference key="NSNextKeyView" ref="288472868"/>
 										<string key="NSReuseIdentifierKey">_NS:13</string>
 									</object>
 								</array>
@@ -106,7 +105,7 @@
 						<string key="NSFrameSize">{342, 237}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="17268664"/>
+						<reference key="NSNextKeyView" ref="288472868"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<int key="NSsFlags">153602</int>
 						<reference key="NSVScroller" ref="288472868"/>
@@ -302,10 +301,10 @@
 				<string key="100.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="101.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="102.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="89.CustomClassName">VSScrollView</string>
+				<string key="89.CustomClassName">VSParametersScrollView</string>
 				<boolean value="NO" key="89.IBNSViewMetadataTranslatesAutoresizingMaskIntoConstraints"/>
 				<string key="89.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="90.CustomClassName">VSFlippedView</string>
+				<string key="90.CustomClassName">VSTestFlippedView</string>
 				<string key="90.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="91.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="92.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -336,11 +335,27 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">VSParametersScrollView</string>
+					<string key="superclassName">VSScrollView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/VSParametersScrollView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">VSScrollView</string>
 					<string key="superclassName">NSScrollView</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/VSScrollView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">VSTestFlippedView</string>
+					<string key="superclassName">VSFlippedView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/VSTestFlippedView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

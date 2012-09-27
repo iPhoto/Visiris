@@ -151,15 +151,12 @@ static NSString* defaultNib = @"VSMainTimelineView";
     }
     
     //moves the playheadMarker if the currentPosition of the timelines Playhead has been changed
-    if([keyPath isEqualToString:@"currentTimePosition"]){
-        if(!self.timeline.playHead.scrubbing){
-            
-            float newPlayHeadPosition = [super pixelForTimestamp:self.timeline.playHead.currentTimePosition];
-            
-            //The playHead Marker position is changed only if the difference of the new to the current playHead Marker position is bigger than VS_PLAYHEAD_MINIMAL_PIXEL_DIFFERENCE
-            if(abs([self currentPlayheadMarkerLocation] - newPlayHeadPosition) >= VS_PLAYHEAD_MINIMAL_PIXEL_DIFFERENCE){
-                [self setPlayheadMarkerLocation];
-            }
+    else if([keyPath isEqualToString:@"currentTimePosition"]){
+        float newPlayHeadPosition = [super pixelForTimestamp:self.timeline.playHead.currentTimePosition];
+        
+        //The playHead Marker position is changed only if the difference of the new to the current playHead Marker position is bigger than VS_PLAYHEAD_MINIMAL_PIXEL_DIFFERENCE
+        if(abs([self currentPlayheadMarkerLocation] - newPlayHeadPosition) >= VS_PLAYHEAD_MINIMAL_PIXEL_DIFFERENCE){
+            [self setPlayheadMarkerLocation];
         }
     }
 }
@@ -548,31 +545,6 @@ static NSString* defaultNib = @"VSMainTimelineView";
 
 
 
-#pragma mark - VSPlayHeadRulerMarkerDelegate Implementation
-
--(BOOL) shouldMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView{
-    self.timeline.playHead.scrubbing = YES;
-    return YES;
-}
-
--(void) didMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView{
-    self.timeline.playHead.scrubbing = NO;
-}
-
--(CGFloat) willMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView toLocation:(CGFloat)location{
-    
-    double newTimePosition = location * self.pixelTimeRatio;
-    self.timeline.playHead.currentTimePosition = newTimePosition;
-    
-    return location;
-}
-
--(CGFloat) playHeadRulerMarker:(NSRulerMarker *)playheadMarker willJumpInContainingView:(NSView *)aView toLocation:(CGFloat)location{
-    
-    [self letPlayheadJumpOverDistance:location - [self currentPlayheadMarkerLocation]];
-    
-    return location;
-}
 
 #pragma mark - VSViewMouseEventsDelegate Implementation
 

@@ -66,7 +66,7 @@ static NSString* defaultNib = @"VSParameterView";
 -(void) awakeFromNib{
     
     if([self.view isKindOfClass:[VSParameterView class]]){
-//        ((VSParameterView*) self.view).viewDelegate = self;
+        //        ((VSParameterView*) self.view).viewDelegate = self;
     }
     [self.view setAutoresizingMask:NSViewWidthSizable];
 }
@@ -119,7 +119,10 @@ static NSString* defaultNib = @"VSParameterView";
     if(control == self.textField){
         if(self.textField.action){
             if([self respondsToSelector:control.action]){
+                #pragma clang diagnostic push
+                #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
                 [self performSelector:control.action withObject:control];
+                #pragma clang diagnostic pop
             }
         }
     }
@@ -159,14 +162,14 @@ static NSString* defaultNib = @"VSParameterView";
 - (IBAction)previousKeyFrame:(id)sender {
     if([self keyFrameDelegateRespondsToSelector:@selector(parameterViewController:wantsToGoToPreviousFrameOfParameter:)]){
         [self.keyFrameDelegate parameterViewController:self
-                   wantsPlayheadToGoToPreviousFrameOfParameter:self.parameter];
+           wantsPlayheadToGoToPreviousFrameOfParameter:self.parameter];
     }
 }
 
 - (IBAction)nextKeyFrame:(id)sender {
     if([self keyFrameDelegateRespondsToSelector:@selector(parameterViewController:wantsToGoToNextKeyFrameOfParameter:)]){
         [self.keyFrameDelegate parameterViewController:self
-                    wantsPlayheadToGoToNextKeyFrameOfParameter:self.parameter];
+            wantsPlayheadToGoToNextKeyFrameOfParameter:self.parameter];
     }
 }
 
@@ -261,7 +264,7 @@ static NSString* defaultNib = @"VSParameterView";
 
 /**
  * Current Value of the controls representing a parameters value
- * 
+ *
  * @return Value of the controls according to the parameter's dataType
  */
 -(id) currentParameterValue{

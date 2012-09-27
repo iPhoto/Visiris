@@ -30,6 +30,7 @@
 		27C5EB9A1613381C00A441D4 /* VSOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C5EB991613381C00A441D4 /* VSOpenGLView.m */; };
 		27C5EB9E1613408900A441D4 /* VSFullScreenOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C5EB9D1613408900A441D4 /* VSFullScreenOpenGLView.m */; };
 		27EEDA381612F6490075EE42 /* VSFullScreenController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27EEDA371612F6490075EE42 /* VSFullScreenController.m */; };
+		5B039BFA16143C3900059F5E /* VSParametersScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B039BF916143C3800059F5E /* VSParametersScrollView.m */; };
 		5B0E366615876E9300F15026 /* VSTrackLabelsRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366515876E9300F15026 /* VSTrackLabelsRulerView.m */; };
 		5B0E366C15876EEB00F15026 /* VSTrackLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366B15876EEB00F15026 /* VSTrackLabel.m */; };
 		5B0EFF96158A1F410000445C /* playhead.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B0EFF95158A1F410000445C /* playhead.png */; };
@@ -187,6 +188,8 @@
 		27C5EB9D1613408900A441D4 /* VSFullScreenOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFullScreenOpenGLView.m; sourceTree = "<group>"; };
 		27EEDA361612F6490075EE42 /* VSFullScreenController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFullScreenController.h; sourceTree = "<group>"; };
 		27EEDA371612F6490075EE42 /* VSFullScreenController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFullScreenController.m; sourceTree = "<group>"; };
+		5B039BF816143C3800059F5E /* VSParametersScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSParametersScrollView.h; sourceTree = "<group>"; };
+		5B039BF916143C3800059F5E /* VSParametersScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSParametersScrollView.m; sourceTree = "<group>"; };
 		5B05472216009868002FF9A9 /* VSViewKeyDownDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSViewKeyDownDelegate.h; sourceTree = "<group>"; };
 		5B0E366415876E9300F15026 /* VSTrackLabelsRulerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTrackLabelsRulerView.h; sourceTree = "<group>"; };
 		5B0E366515876E9300F15026 /* VSTrackLabelsRulerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTrackLabelsRulerView.m; sourceTree = "<group>"; };
@@ -881,6 +884,8 @@
 				5B35BFAB1577A573009911EC /* VSParameterViewController.m */,
 				5B35BFA81577A573009911EC /* VSParameterView.m */,
 				5B35BFA91577A573009911EC /* VSParameterView.xib */,
+				5B039BF816143C3800059F5E /* VSParametersScrollView.h */,
+				5B039BF916143C3800059F5E /* VSParametersScrollView.m */,
 			);
 			name = parameter;
 			sourceTree = "<group>";
@@ -1455,6 +1460,7 @@
 				27C5EB9A1613381C00A441D4 /* VSOpenGLView.m in Sources */,
 				27C5EB9E1613408900A441D4 /* VSFullScreenOpenGLView.m in Sources */,
 				5B60CC5B16135EE800557892 /* VSOutputController.m in Sources */,
+				5B039BFA16143C3900059F5E /* VSParametersScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -59,10 +59,8 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
     [self.view setAutoresizesSubviews:YES];
     
     [self.scrollView setAutoresizingMask:NSViewWidthSizable ];
-    [self.scrollView setAutoresizesSubviews:YES];
     
-    [self.scrollView.contentView setAutoresizingMask:NSViewWidthSizable];
-    [self.scrollView.contentView setAutoresizesSubviews:NO];
+    [((NSView*) self.scrollView.documentView) setAutoresizingMask:NSViewWidthSizable];
 }
 
 

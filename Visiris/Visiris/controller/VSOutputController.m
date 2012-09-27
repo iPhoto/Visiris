@@ -87,13 +87,11 @@ static VSOutputController* sharedOutputController = nil;
 - (void) startDisplayLink{
 	if (_displayLink && !CVDisplayLinkIsRunning(_displayLink))
 		CVDisplayLinkStart(_displayLink);
-    DDLogInfo(@"startDisplayLink");
 }
 
 - (void)stopDisplayLink{
 	if (_displayLink && CVDisplayLinkIsRunning(_displayLink))
 		CVDisplayLinkStop(_displayLink);
-    DDLogInfo(@"stopDisplayLink");
 }
 
 -(void) didStartScrubbingAtTimestamp:(double)aTimestamp{
