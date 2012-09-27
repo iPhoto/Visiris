@@ -77,9 +77,20 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 
 -(void) initTimelineObjectProxyObservers{
     
-    [self.timelineObjectProxy addObserver:self forKeyPath:@"selected" options:0 context:nil];
-    [self.timelineObjectProxy addObserver:self forKeyPath:@"duration" options:0 context:nil];
-    [self.timelineObjectProxy addObserver:self forKeyPath:@"startTime" options:0 context:nil];  
+    [self.timelineObjectProxy addObserver:self
+                               forKeyPath:@"selected"
+                                  options:0
+                                  context:nil];
+    
+    [self.timelineObjectProxy addObserver:self
+                               forKeyPath:@"duration"
+                                  options:0
+                                  context:nil];
+    
+    [self.timelineObjectProxy addObserver:self
+                               forKeyPath:@"startTime"
+                                  options:0
+                                  context:nil];
 }
 
 #pragma mark - NSViewController
@@ -117,6 +128,11 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     }
 }
 
+-(void) dealloc{
+    [self.timelineObjectProxy removeObserver:self forKeyPath:@"selected"];
+    [self.timelineObjectProxy removeObserver:self forKeyPath:@"duration"];
+    [self.timelineObjectProxy removeObserver:self forKeyPath:@"startTime"];
+}
 
 #pragma mark - VSTimelineObjectViewDelegate implementation
 

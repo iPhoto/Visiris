@@ -33,6 +33,9 @@
 /** NSMutableArray storing all VSTimelineObjectViewControllers of the VSTimelineObjectViews added to the VSTrackViewController */
 @property (strong) NSMutableArray *timelineObjectViewControllers;
 
+/** NSMutableArray storing all VSTimelineObjectViewControllers of the VSTimelineObjectViews which's VSTimelineObjects were dragged onto the VSTrackView but not dropped yet. Neccessary to give the user a preview where the newly added VSTimelineObject will be placed on the timeline */
+@property (strong) NSMutableArray *temporaryTimelineObjectViewControllers;
+
 @end
 
 // Size of the area objects can be snapped to other objects on the timelien
@@ -91,6 +94,49 @@ static NSString* defaultNib = @"VSTrackView";
     if([self.view isKindOfClass:[VSTrackView class]]){
         
         ((VSTrackView*) self.view).controllerDelegate = self;
+    }
+}
+
+#pragma mark - NSViewController
+
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    //Observes if any changes on the timelineObjects of the VSTrack the VSTrackViewController displays occures
+    if([keyPath isEqualToString:@"timelineObjects"]){
+        
+        NSInteger kind = [[change valueForKey:@"kind"] intValue];
+        
+        switch (kind) {
+            case NSKeyValueChangeInsertion:
+            {
+                if(![[change valueForKey:@"notificationIsPrior"] boolValue]){
+                    NSArray *allTimelineObjects = [object valueForKey:keyPath];
+                    NSArray *newTimelineObjects = [allTimelineObjects objectsAtIndexes:[change  objectForKey:@"indexes"]];
+                    
+                    for(VSTimelineObject *object in newTimelineObjects){
+                        [self addNewTimelineObject:object];
+                    }
+                }
+                break;
+            }
+            case NSKeyValueChangeRemoval:
+            {
+                if([[change valueForKey:@"notificationIsPrior"] boolValue]){
+                    NSArray *allTimelineObjects = [object valueForKey:keyPath];
+                    NSArray *removedTimelineObjects = [allTimelineObjects objectsAtIndexes:[change  objectForKey:@"indexes"]];
+                    
+                    for(VSTimelineObject *object in removedTimelineObjects){
+                        [self removeTimelineObject:object];
+                    }
+                    
+                    if([self delegateRespondsToSelector:@selector(timelineObjectProxies:wereRemovedFromTrack:)]){
+                        [self.delegate timelineObjectProxies:removedTimelineObjects wereRemovedFromTrack:self];
+                    }
+                }
+                break;
+            }
+            default:
+                break;
+        }
     }
 }
 
@@ -154,8 +200,14 @@ static NSString* defaultNib = @"VSTrackView";
             [ctrl.view removeFromSuperview];
         }
         
-        [self.temporaryTimelineObjectViewControllers removeAllObjects];
+        for(NSInteger i = self.timelineObjectViewControllers.count-1;i>=0;i--){
+            [self.temporaryTimelineObjectViewControllers removeObjectAtIndex:i];
+        }
+        
+//        [self.temporaryTimelineObjectViewControllers removeAllObjects];
         [self.view setNeedsDisplayInRect:self.view.visibleRect];
+        
+        return YES;
     }
     
     return NO;
@@ -471,53 +523,6 @@ static NSString* defaultNib = @"VSTrackView";
 
 
 
-#pragma mark - NSViewController
-
--(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-    //Observes if any changes on the timelineObjects of the VSTrack the VSTrackViewController displays occures
-    if([keyPath isEqualToString:@"timelineObjects"]){
-        
-        NSInteger kind = [[change valueForKey:@"kind"] intValue];
-        
-        switch (kind) {
-            case NSKeyValueChangeInsertion:
-            {
-                if(![[change valueForKey:@"notificationIsPrior"] boolValue]){
-                    NSArray *allTimelineObjects = [object valueForKey:keyPath];
-                    NSArray *newTimelineObjects = [allTimelineObjects objectsAtIndexes:[change  objectForKey:@"indexes"]];
-                    
-                    for(VSTimelineObject *object in newTimelineObjects){
-                        [self addNewTimelineObject:object];
-                    }
-                }
-                break;
-            }
-            case NSKeyValueChangeRemoval:
-            {
-                if([[change valueForKey:@"notificationIsPrior"] boolValue]){
-                    NSArray *allTimelineObjects = [object valueForKey:keyPath];
-                    NSArray *removedTimelineObjects = [allTimelineObjects objectsAtIndexes:[change  objectForKey:@"indexes"]];
-                    
-                    for(VSTimelineObject *object in removedTimelineObjects){
-                        [self removeTimelineObject:object];
-                    }
-                    
-                    if([self delegateRespondsToSelector:@selector(timelineObjectProxies:wereRemovedFromTrack:)]){
-                        [self.delegate timelineObjectProxies:removedTimelineObjects wereRemovedFromTrack:self];
-                    }
-                }
-                break;
-            }
-            default:
-                break;
-        }
-    }
-}
-
-
-
-
-
 #pragma mark - VSTrackViewDelegate Implmentation
 
 -(BOOL) trackView:(VSTrackView *)trackView objectsHaveBeenDropped:(id<NSDraggingInfo>)draggingInfo atPosition:(NSPoint)position{
@@ -598,6 +603,8 @@ static NSString* defaultNib = @"VSTrackView";
          ? NSLocalizedString(@"Adding Objects", @"Undo Action for adding objects to the timeline")
                                             : NSLocalizedString(@"Adding Object", @"Undo Action for adding one object to the timeline")];
         [self.view.undoManager endUndoGrouping];
+        
+        
     }
     
     
@@ -1156,13 +1163,26 @@ static NSString* defaultNib = @"VSTrackView";
  * @param aTimelineObject VSTimelineObject to be removed
  */
 -(void) removeTimelineObject:(VSTimelineObject*) aTimelineObject{
-    for(VSTimelineObjectViewController *ctrl in self.timelineObjectViewControllers){
-        if (ctrl.timelineObjectProxy == aTimelineObject) {
-            [ctrl.view removeFromSuperview];
-            [self.timelineObjectViewControllers removeObject:ctrl];
-            return;
+    
+    NSUInteger indexOfObjectToDelete = [self.timelineObjectViewControllers indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj isKindOfClass:[VSTimelineObjectViewController class]]){
+            if(((VSTimelineObjectViewController*)obj).timelineObjectProxy == aTimelineObject){
+                return YES;
+            }
         }
-    }
+        return NO;
+    }];
+    
+    [((VSTimelineObjectViewController*)[self.timelineObjectViewControllers objectAtIndex:indexOfObjectToDelete]).view removeFromSuperview];
+    
+   // VSTimelineObjectViewController *ctrl = [self.timelineObjectViewControllers objectAtIndex:indexOfObjectToDelete];
+    
+    [self.timelineObjectViewControllers removeObjectAtIndex:indexOfObjectToDelete];
+    
+    [self.view setNeedsDisplay:YES];
+    [self.view.layer setNeedsDisplay];
+    
+    
 }
 
 

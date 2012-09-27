@@ -112,13 +112,13 @@
 @interface VSTimelineObjectViewController : NSViewController<VSTimelineObjectViewDelegate>
 
 /** Controllers view casted as VSTimelineObjectView */
-@property VSTimelineObjectView *timelineObjectView;
+@property (strong) VSTimelineObjectView *timelineObjectView;
 
 /** Called according to VSTimelineObjectControllerDelegate protocoll */
-@property id<VSTimelineObjectControllerDelegate> delegate;
+@property (weak) id<VSTimelineObjectControllerDelegate> delegate;
 
 /** VSTimelineObjectProxy of the VSTimelineObject the VSTimelineObjectViewController represents*/
-@property (strong) VSTimelineObjectProxy* timelineObjectProxy;
+@property (weak) VSTimelineObjectProxy* timelineObjectProxy;
 
 
 /** Indicates wheter the VSTimelineObjectViewController's VSTimelineObjectProxy is only a temporary object on the track. */

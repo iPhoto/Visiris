@@ -45,7 +45,7 @@
 }
 
 
--(BOOL) removTimelineObject:(VSTimelineObject *)aTimelineObject{
+-(BOOL) removeTimelineObject:(VSTimelineObject *)aTimelineObject{
     if([self.timelineObjects containsObject:aTimelineObject]){
         
         [self.timelineObjects removeObject:aTimelineObject];
@@ -70,11 +70,12 @@
 
 #pragma mark Undo
 
--(BOOL)removTimelineObject:(VSTimelineObject *)aTimelineObject andRegisterAtUndoManager:(NSUndoManager *)undoManager{
-    BOOL result = [self removTimelineObject:aTimelineObject];
+-(BOOL)removeTimelineObject:(VSTimelineObject *)aTimelineObject andRegisterAtUndoManager:(NSUndoManager *)undoManager{
+    BOOL result = [self removeTimelineObject:aTimelineObject];
+    
     
     if(result){
-        [[undoManager prepareWithInvocationTarget:self] addTimelineObject:aTimelineObject andRegisterAtUndoManager:undoManager];
+//        [undoManager registerUndoWithTarget:self selector:@selector(addTimelineObject:) object:aTimelineObject];
     }
     
     return result;
@@ -84,7 +85,7 @@
     NSArray *selectedTimelineObjects = [self selectedTimelineObjects];
     
     for(VSTimelineObject *timelineObject in selectedTimelineObjects){
-        [self removTimelineObject:timelineObject andRegisterAtUndoManager:undoManager];
+        [self removeTimelineObject:timelineObject andRegisterAtUndoManager:undoManager];
     }
 }
 
@@ -92,7 +93,7 @@
     BOOL result = [self addTimelineObject:timelineObject];
     
     if(result){
-        [[undoManager prepareWithInvocationTarget:self] removTimelineObject:timelineObject andRegisterAtUndoManager:undoManager];
+//        [undoManager registerUndoWithTarget:self selector:@selector(removeTimelineObject:) object:timelineObject];
     }
     
     return result;
