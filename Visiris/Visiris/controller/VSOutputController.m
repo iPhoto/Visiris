@@ -87,13 +87,11 @@ static VSOutputController* sharedOutputController = nil;
 - (void) startDisplayLink{
 	if (_displayLink && !CVDisplayLinkIsRunning(_displayLink))
 		CVDisplayLinkStart(_displayLink);
-    DDLogInfo(@"startDisplayLink");
 }
 
 - (void)stopDisplayLink{
 	if (_displayLink && CVDisplayLinkIsRunning(_displayLink))
 		CVDisplayLinkStop(_displayLink);
-    DDLogInfo(@"stopDisplayLink");
 }
 
 -(void) didStartScrubbingAtTimestamp:(double)aTimestamp{
@@ -155,13 +153,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 - (double)refreshPeriod{
     return CVDisplayLinkGetActualOutputVideoRefreshPeriod(self.displayLink);
 }
-
-- (uint64_t)hostTime{
-    CVTimeStamp stamp;
-    CVDisplayLinkGetCurrentTime(self.displayLink,&stamp);
-    return stamp.hostTime;
-}
-
 
 
 @end

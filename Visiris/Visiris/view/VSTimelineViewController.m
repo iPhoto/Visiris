@@ -113,6 +113,32 @@
     }
 }
 
+#pragma mark - VSPlayHeadRulerMarkerDelegate Implementation
+
+-(BOOL) shouldMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView{
+    self.playhead.scrubbing = YES;
+    return YES;
+}
+
+-(void) didMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView{
+    self.playhead.scrubbing = NO;
+}
+
+-(CGFloat) willMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView toLocation:(CGFloat)location{
+    
+    double newTimePosition = [self timestampForPixelValue:location];
+    self.playhead.currentTimePosition = newTimePosition;
+    
+    return location;
+}
+
+-(CGFloat) playHeadRulerMarker:(NSRulerMarker *)playheadMarker willJumpInContainingView:(NSView *)aView toLocation:(CGFloat)location{
+    
+    [self letPlayheadJumpOverDistance:location - [self currentPlayheadMarkerLocation]];
+    
+    return location;
+}
+
 
 #pragma mark - Protected Methods
 

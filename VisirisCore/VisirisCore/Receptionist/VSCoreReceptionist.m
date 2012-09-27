@@ -53,15 +53,19 @@
         NSMutableArray *audioArray = [[NSMutableArray alloc] init];
         
         for(VSCoreHandover *coreHandover in theHandovers){
-                    
-            
             if ([coreHandover isKindOfClass:[VSFrameCoreHandover class]] ||
                 [coreHandover isKindOfClass:[VSQuartzComposerHandover class]])
             {
                 [frameArray addObject:coreHandover];
+                
+                if ([coreHandover isKindOfClass:[VSVideoCoreHandover class]])
+                {
+                    VSVideoCoreHandover *temp = (VSVideoCoreHandover *)coreHandover;
+                    if (temp.hasAudio)
+                        [audioArray addObject:coreHandover];
+                }
             }
-            if ([coreHandover isKindOfClass:[VSAudioCoreHandover class]] ||
-                [coreHandover isKindOfClass:[VSVideoCoreHandover class]])
+            else if ([coreHandover isKindOfClass:[VSAudioCoreHandover class]])
             {
                 [audioArray addObject:coreHandover];
             }

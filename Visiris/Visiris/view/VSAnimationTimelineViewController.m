@@ -68,6 +68,9 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
         double playheadTimestamp = [[object valueForKey:keyPath] doubleValue];
         [self playHeadsCurrentTimePositionHasBeenChangedToTimePosition:playheadTimestamp];
     }
+    else if ([keyPath isEqualToString:@"duration"]){
+        [self computePixelTimeRatio];
+    }
 }
 
 #pragma mark - NSResponder
@@ -100,24 +103,42 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     [self removeSelectedKeyFrames];
 }
 
-#pragma mark - VSPlayHeadRulerMarkerDelegate Implementation
-
--(BOOL) shouldMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView{
-    return YES;
-}
-
+//#pragma mark - VSPlayHeadRulerMarkerDelegate Implementation
+//
+//-(BOOL) shouldMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView{
+//    self.timeline.playHead.scrubbing = YES;
+//    return YES;
+//}
+//
 -(CGFloat) willMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView toLocation:(CGFloat)location{
     
     [self moveMainPlayheadAccordingToAnimationTimelinesPlayheadLocation:location];
     
     return location;
 }
+//
+//-(CGFloat) playHeadRulerMarker:(NSRulerMarker *)playheadMarker willJumpInContainingView:(NSView *)aView toLocation:(CGFloat)location{
+//    
+//    [self letPlayheadJumpOverDistance:location - [self currentPlayheadMarkerLocation]];
+//    
+//    return location;
+//}
 
--(CGFloat) playHeadRulerMarker:(NSRulerMarker *)playheadMarker willJumpInContainingView:(NSView *)aView toLocation:(CGFloat)location{
+-(void) letPlayheadJumpOverDistance:(float) distance{
     
-    [self moveMainPlayheadAccordingToAnimationTimelinesPlayheadLocation:location];
+    if(distance == 0){
+        return;
+    }
     
-    return location;
+    double newPixelPosition = self.currentPlayheadMarkerLocation + distance;
+    double newTimePosition = [self globalTimestampForPixelPosition:newPixelPosition];
+    
+    [self scrollIfNewLocationOfPlayheadIsOutsideOfVisibleRect:newPixelPosition];
+    
+    self.playhead.currentTimePosition = newTimePosition;
+    
+    self.playhead.jumping = YES;
+    self.playhead.jumping = NO;
 }
 
 
@@ -196,8 +217,13 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     
     if(self.timelineObject){
         
+        [self.timelineObject addObserver:self
+                              forKeyPath:@"duration"
+                                 options:0
+                                 context:nil];
+        
         NSArray *parameters = [self.timelineObject visibleParameters];
-
+        
         
         for(VSParameter *parameter in parameters){
             
@@ -295,6 +321,10 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
  * Removes all VSAnimationTrackViewControllers stored in animaitonTrackViewControllers
  */
 -(void) resetTimeline{
+    
+    [self.timelineObject removeObserver:self
+                             forKeyPath:@"duration"];
+    
     for(VSAnimationTrackViewController *animationTrackViewController in [self.animationTrackViewControllers allValues]){
         [animationTrackViewController.view removeFromSuperview];
     }
@@ -441,7 +471,7 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
  * @param location Location the mainPlayHead is move to
  */
 -(void) moveMainPlayheadAccordingToAnimationTimelinesPlayheadLocation:(CGFloat) location{
-    self.playhead.currentTimePosition = [self globalTimestampForPixelPosition:location];;
+    self.playhead.currentTimePosition = [self globalTimestampForPixelPosition:location];
 }
 
 /**

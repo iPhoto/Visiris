@@ -22,22 +22,7 @@
 
 -(void) awakeFromNib{
     [super setViewsProperties];
-}
-
--(void) drawRect:(NSRect)dirtyRect{
-    [[NSColor blueColor] setFill];
-    
-    NSRectFill(dirtyRect);
-}
-
--(void) setFrame:(NSRect)frameRect{
-
-    if(frameRect.size.height > 840.0){
-        DDLogInfo(@"its bigger");
-    }
-    
-    [super setFrame:frameRect];
-    
+    [self setAutoresizingMask:NSViewWidthSizable];
 }
 
 @end

@@ -30,7 +30,6 @@
     if (self = [super init]) {
 
         __autoreleasing NSError *error = nil;
-//        self.audioPlayer = [[AVAudioPlayer alloc] initWithData:[NSData dataWithContentsOfFile:path] error:&error];
         NSURL *url = [[NSURL alloc] initFileURLWithPath:path];
 
         AVAsset *asset = [AVURLAsset URLAssetWithURL:url options:nil];
@@ -39,6 +38,12 @@
         AVMutableComposition *composition = [[AVMutableComposition alloc] init];
         
         AVMutableCompositionTrack *compositionAudioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+        
+        
+        if([asset tracksWithMediaType:AVMediaTypeAudio].count == 0){
+            return nil;
+        }
+        
         
         [compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero,asset.duration)
                                        ofTrack:[[asset tracksWithMediaType:AVMediaTypeAudio]objectAtIndex:0]

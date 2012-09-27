@@ -212,8 +212,9 @@
 -(void) play{
    
     [self.outputController startPlayback];
-    self.playbackStartTime = self.outputController.hostTime;
-
+    self.playbackStartTime = CFAbsoluteTimeGetCurrent();
+    
+    self.currentTimestamp = self.timeline.playHead.currentTimePosition;
     
     self.playbackMode = VSPlaybackModePlaying;
 }
@@ -291,12 +292,12 @@
     
     double currentTime;
     
-    currentTime = [self.outputController hostTime];
     
+    currentTime = CFAbsoluteTimeGetCurrent();
     
-    self.deltaTime = (currentTime - self.playbackStartTime)/1000000.0;
+    self.deltaTime = (currentTime - self.playbackStartTime)*1000.0;
     self.currentTimestamp += self.deltaTime;
-    
+        
     if(self.currentTimestamp > self.timeline.duration){
         self.currentTimestamp = 0;
     }
