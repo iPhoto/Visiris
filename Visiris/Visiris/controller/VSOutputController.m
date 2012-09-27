@@ -154,12 +154,5 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     return CVDisplayLinkGetActualOutputVideoRefreshPeriod(self.displayLink);
 }
 
-- (uint64_t)hostTime{
-    CVTimeStamp stamp;
-    CVDisplayLinkGetCurrentTime(self.displayLink,&stamp);
-    return stamp.hostTime;
-}
-
-
 
 @end

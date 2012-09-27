@@ -29,6 +29,9 @@
 		27C5EB9A1613381C00A441D4 /* VSOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C5EB991613381C00A441D4 /* VSOpenGLView.m */; };
 		27C5EB9E1613408900A441D4 /* VSFullScreenOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C5EB9D1613408900A441D4 /* VSFullScreenOpenGLView.m */; };
 		27EEDA381612F6490075EE42 /* VSFullScreenController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27EEDA371612F6490075EE42 /* VSFullScreenController.m */; };
+		27F7D11916145A0B00EAAF40 /* VSExternalInputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EEC161381BB00C0AEEB /* VSExternalInputManager.m */; };
+		27F7D11B16145A3D00EAAF40 /* VSOSCInputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EEF161381DC00C0AEEB /* VSOSCInputManager.m */; };
+		27F7D11C16145A4300EAAF40 /* VSOSCClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EF41613822000C0AEEB /* VSOSCClient.m */; };
 		5B039BFA16143C3900059F5E /* VSParametersScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B039BF916143C3800059F5E /* VSParametersScrollView.m */; };
 		5B0E366615876E9300F15026 /* VSTrackLabelsRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366515876E9300F15026 /* VSTrackLabelsRulerView.m */; };
 		5B0E366C15876EEB00F15026 /* VSTrackLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366B15876EEB00F15026 /* VSTrackLabel.m */; };
@@ -209,6 +212,7 @@
 		27CFB13F16139C1D00A19B7A /* VVBasics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVBasics.framework; path = Frameworks/VVBasics.framework; sourceTree = "<group>"; };
 		27CFB14016139C1D00A19B7A /* VVMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVMIDI.framework; path = Frameworks/VVMIDI.framework; sourceTree = "<group>"; };
 		27CFB14116139C1D00A19B7A /* VVOSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVOSC.framework; path = Frameworks/VVOSC.framework; sourceTree = "<group>"; };
+		27EBC3E91614553F0009AB42 /* VisirisCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisirisCore.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-eufjdbcxewmvuyeomwjrnvsxmcxk/Build/Products/Debug/VisirisCore.framework"; sourceTree = "<group>"; };
 		27EEDA361612F6490075EE42 /* VSFullScreenController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFullScreenController.h; sourceTree = "<group>"; };
 		27EEDA371612F6490075EE42 /* VSFullScreenController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFullScreenController.m; sourceTree = "<group>"; };
 		5B039BF816143C3800059F5E /* VSParametersScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSParametersScrollView.h; sourceTree = "<group>"; };
@@ -1546,6 +1550,9 @@
 				27C5EB9E1613408900A441D4 /* VSFullScreenOpenGLView.m in Sources */,
 				5B60CC5B16135EE800557892 /* VSOutputController.m in Sources */,
 				5B039BFA16143C3900059F5E /* VSParametersScrollView.m in Sources */,
+				27F7D11916145A0B00EAAF40 /* VSExternalInputManager.m in Sources */,
+				27F7D11B16145A3D00EAAF40 /* VSOSCInputManager.m in Sources */,
+				27F7D11C16145A4300EAAF40 /* VSOSCClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

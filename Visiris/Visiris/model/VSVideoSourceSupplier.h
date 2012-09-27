@@ -13,4 +13,6 @@
  */
 @interface VSVideoSourceSupplier : VSFrameSourceSupplier
 
+@property (assign) BOOL     hasAudio;
+
 @end

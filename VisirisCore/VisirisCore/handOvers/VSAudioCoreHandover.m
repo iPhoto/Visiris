@@ -11,14 +11,4 @@
 
 @implementation VSAudioCoreHandover
 
-/*
--(id) initWithAttributes:(NSDictionary *)theAttributes forTimestamp:(double)theTimestamp forId:(NSInteger)theId withProjectItemID:(NSInteger)projectItemId {
-    
-    if (self = [super initWithAttributes:theAttributes forTimestamp:theTimestamp forId:theId]) {
-        _projectItemID = projectItemId;
-        _trackID = trackID;
-    }
-    return self;
-}
-*/
 @end
