@@ -200,13 +200,11 @@ static NSString* defaultNib = @"VSTrackView";
             [ctrl.view removeFromSuperview];
         }
         
-        for(NSInteger i = self.timelineObjectViewControllers.count-1;i>=0;i--){
-            [self.temporaryTimelineObjectViewControllers removeObjectAtIndex:i];
-        }
+        DDLogInfo(@"bef del: %@",self.temporaryTimelineObjectViewControllers);
         
-//        [self.temporaryTimelineObjectViewControllers removeAllObjects];
+        [self.temporaryTimelineObjectViewControllers removeAllObjects];
         [self.view setNeedsDisplayInRect:self.view.visibleRect];
-        
+        DDLogInfo(@"bef del: %@",self.temporaryTimelineObjectViewControllers);
         return YES;
     }
     

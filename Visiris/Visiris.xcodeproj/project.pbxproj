@@ -31,12 +31,10 @@
 		27CFB14216139C1D00A19B7A /* VVBasics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CFB13F16139C1D00A19B7A /* VVBasics.framework */; };
 		27CFB14316139C1D00A19B7A /* VVMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CFB14016139C1D00A19B7A /* VVMIDI.framework */; };
 		27CFB14416139C1D00A19B7A /* VVOSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CFB14116139C1D00A19B7A /* VVOSC.framework */; };
-		27EBC3EA1614553F0009AB42 /* VisirisCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27EBC3E91614553F0009AB42 /* VisirisCore.framework */; };
 		27EEDA381612F6490075EE42 /* VSFullScreenController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27EEDA371612F6490075EE42 /* VSFullScreenController.m */; };
 		27F7D11916145A0B00EAAF40 /* VSExternalInputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EEC161381BB00C0AEEB /* VSExternalInputManager.m */; };
 		27F7D11B16145A3D00EAAF40 /* VSOSCInputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EEF161381DC00C0AEEB /* VSOSCInputManager.m */; };
 		27F7D11C16145A4300EAAF40 /* VSOSCClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EF41613822000C0AEEB /* VSOSCClient.m */; };
-		27F7D12E16149D9800EAAF40 /* VisirisCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27F7D12D16149D9800EAAF40 /* VisirisCore.framework */; };
 		5B039BFA16143C3900059F5E /* VSParametersScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B039BF916143C3800059F5E /* VSParametersScrollView.m */; };
 		5B0E366615876E9300F15026 /* VSTrackLabelsRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366515876E9300F15026 /* VSTrackLabelsRulerView.m */; };
 		5B0E366C15876EEB00F15026 /* VSTrackLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366B15876EEB00F15026 /* VSTrackLabel.m */; };
