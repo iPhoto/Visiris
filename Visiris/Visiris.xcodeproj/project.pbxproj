@@ -39,6 +39,7 @@
 		27F7D11B16145A3D00EAAF40 /* VSOSCInputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EEF161381DC00C0AEEB /* VSOSCInputManager.m */; };
 		27F7D11C16145A4300EAAF40 /* VSOSCClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EF41613822000C0AEEB /* VSOSCClient.m */; };
 		27F7D12E16149D9800EAAF40 /* VisirisCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27F7D12D16149D9800EAAF40 /* VisirisCore.framework */; };
+		27F7D12F16149F3800EAAF40 /* VisirisCore.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27F7D12D16149D9800EAAF40 /* VisirisCore.framework */; };
 		5B039BFA16143C3900059F5E /* VSParametersScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B039BF916143C3800059F5E /* VSParametersScrollView.m */; };
 		5B0E366615876E9300F15026 /* VSTrackLabelsRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366515876E9300F15026 /* VSTrackLabelsRulerView.m */; };
 		5B0E366C15876EEB00F15026 /* VSTrackLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366B15876EEB00F15026 /* VSTrackLabel.m */; };
@@ -191,6 +192,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				27F7D12F16149F3800EAAF40 /* VisirisCore.framework in CopyFiles */,
 				27CFB14516139C4600A19B7A /* VVBasics.framework in CopyFiles */,
 				27CFB14616139C4600A19B7A /* VVMIDI.framework in CopyFiles */,
 				27CFB14716139C4600A19B7A /* VVOSC.framework in CopyFiles */,
