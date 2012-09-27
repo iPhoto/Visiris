@@ -141,7 +141,7 @@ static NSString* defaultNib = @"VSParameterView";
 - (IBAction)textValueHasChanged:(id)sender {
     [self storeParameterValue];
 }
-
+ 
 - (IBAction)boolValueHasChanged:(NSButton *)sender {
     [self storeParameterValue];
 }
