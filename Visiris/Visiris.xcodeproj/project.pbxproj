@@ -22,23 +22,23 @@
 
 /* Begin PBXBuildFile section */
 		2761513B1577C97A005177C5 /* aaa.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2761513A1577C97A005177C5 /* aaa.jpg */; };
-		27726EED161381BB00C0AEEB /* VSExternalInputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EEC161381BB00C0AEEB /* VSExternalInputManager.m */; };
-		27726EF0161381DC00C0AEEB /* VSOSCInputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EEF161381DC00C0AEEB /* VSOSCInputManager.m */; };
-		27726EF51613822000C0AEEB /* VSOSCClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EF41613822000C0AEEB /* VSOSCClient.m */; };
 		2795881715906D5000E24B57 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2795881615906D5000E24B57 /* CoreMedia.framework */; };
 		2795881A15906D7B00E24B57 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2795881915906D7B00E24B57 /* AVFoundation.framework */; };
 		2799F8E61599C8B800008489 /* VSQuartzCompositionUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2799F8E51599C8B800008489 /* VSQuartzCompositionUtils.m */; };
 		2799F8E91599C96D00008489 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2799F8E81599C96D00008489 /* Quartz.framework */; };
 		27C5EB9A1613381C00A441D4 /* VSOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C5EB991613381C00A441D4 /* VSOpenGLView.m */; };
 		27C5EB9E1613408900A441D4 /* VSFullScreenOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C5EB9D1613408900A441D4 /* VSFullScreenOpenGLView.m */; };
-		27CFB13D1613999B00A19B7A /* VSExternalInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 27CFB13C1613999B00A19B7A /* VSExternalInput.m */; };
 		27CFB14216139C1D00A19B7A /* VVBasics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CFB13F16139C1D00A19B7A /* VVBasics.framework */; };
 		27CFB14316139C1D00A19B7A /* VVMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CFB14016139C1D00A19B7A /* VVMIDI.framework */; };
 		27CFB14416139C1D00A19B7A /* VVOSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CFB14116139C1D00A19B7A /* VVOSC.framework */; };
 		27CFB14516139C4600A19B7A /* VVBasics.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFB13F16139C1D00A19B7A /* VVBasics.framework */; };
 		27CFB14616139C4600A19B7A /* VVMIDI.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFB14016139C1D00A19B7A /* VVMIDI.framework */; };
 		27CFB14716139C4600A19B7A /* VVOSC.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFB14116139C1D00A19B7A /* VVOSC.framework */; };
+		27EBC3EA1614553F0009AB42 /* VisirisCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27EBC3E91614553F0009AB42 /* VisirisCore.framework */; };
 		27EEDA381612F6490075EE42 /* VSFullScreenController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27EEDA371612F6490075EE42 /* VSFullScreenController.m */; };
+		27F7D11916145A0B00EAAF40 /* VSExternalInputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EEC161381BB00C0AEEB /* VSExternalInputManager.m */; };
+		27F7D11B16145A3D00EAAF40 /* VSOSCInputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EEF161381DC00C0AEEB /* VSOSCInputManager.m */; };
+		27F7D11C16145A4300EAAF40 /* VSOSCClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EF41613822000C0AEEB /* VSOSCClient.m */; };
 		5B039BFA16143C3900059F5E /* VSParametersScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B039BF916143C3800059F5E /* VSParametersScrollView.m */; };
 		5B0E366615876E9300F15026 /* VSTrackLabelsRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366515876E9300F15026 /* VSTrackLabelsRulerView.m */; };
 		5B0E366C15876EEB00F15026 /* VSTrackLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366B15876EEB00F15026 /* VSTrackLabel.m */; };
@@ -182,7 +182,6 @@
 		5BD35BED15D96ADB001A74E0 /* VSAnimationTrackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BEC15D96ADB001A74E0 /* VSAnimationTrackView.m */; };
 		5BEF5AFB15FE1F5E00F0FE8A /* VSOptionParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BEF5AFA15FE1F5E00F0FE8A /* VSOptionParameter.m */; };
 		5BFB871115DA2F8C00D405AF /* VSTimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BFB871015DA2F8C00D405AF /* VSTimelineViewController.m */; };
-		A983791C1613C14D00BA8BBC /* VisirisCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A983791B1613C14D00BA8BBC /* VisirisCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -222,6 +221,7 @@
 		27CFB13F16139C1D00A19B7A /* VVBasics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVBasics.framework; path = Frameworks/VVBasics.framework; sourceTree = "<group>"; };
 		27CFB14016139C1D00A19B7A /* VVMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVMIDI.framework; path = Frameworks/VVMIDI.framework; sourceTree = "<group>"; };
 		27CFB14116139C1D00A19B7A /* VVOSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVOSC.framework; path = Frameworks/VVOSC.framework; sourceTree = "<group>"; };
+		27EBC3E91614553F0009AB42 /* VisirisCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisirisCore.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-eufjdbcxewmvuyeomwjrnvsxmcxk/Build/Products/Debug/VisirisCore.framework"; sourceTree = "<group>"; };
 		27EEDA361612F6490075EE42 /* VSFullScreenController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFullScreenController.h; sourceTree = "<group>"; };
 		27EEDA371612F6490075EE42 /* VSFullScreenController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFullScreenController.m; sourceTree = "<group>"; };
 		5B039BF816143C3800059F5E /* VSParametersScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSParametersScrollView.h; sourceTree = "<group>"; };
@@ -487,7 +487,6 @@
 		5BF875BE15B95E4200CEBBDD /* VSViewMouseEventsDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSViewMouseEventsDelegate.h; sourceTree = "<group>"; };
 		5BFB870F15DA2F8C00D405AF /* VSTimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineViewController.h; sourceTree = "<group>"; };
 		5BFB871015DA2F8C00D405AF /* VSTimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineViewController.m; sourceTree = "<group>"; };
-		A983791B1613C14D00BA8BBC /* VisirisCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisirisCore.framework; path = "../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-cdbzsbszlriaviebcmazsjojzrju/Build/Products/Debug/VisirisCore.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -495,7 +494,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A983791C1613C14D00BA8BBC /* VisirisCore.framework in Frameworks */,
 				5B12792C15C13CAD0026AAFD /* QuickLook.framework in Frameworks */,
 				2799F8E91599C96D00008489 /* Quartz.framework in Frameworks */,
 				2795881A15906D7B00E24B57 /* AVFoundation.framework in Frameworks */,
@@ -507,6 +505,7 @@
 				27CFB14216139C1D00A19B7A /* VVBasics.framework in Frameworks */,
 				27CFB14316139C1D00A19B7A /* VVMIDI.framework in Frameworks */,
 				27CFB14416139C1D00A19B7A /* VVOSC.framework in Frameworks */,
+				27EBC3EA1614553F0009AB42 /* VisirisCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -605,7 +604,6 @@
 		5B35BF061577A49C009911EC = {
 			isa = PBXGroup;
 			children = (
-				A983791B1613C14D00BA8BBC /* VisirisCore.framework */,
 				5B35C0201577A58D009911EC /* External */,
 				5B35C0471577A58D009911EC /* Resources */,
 				5B35BF1B1577A49C009911EC /* Visiris */,
@@ -625,6 +623,7 @@
 		5B35BF141577A49C009911EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				27EBC3E91614553F0009AB42 /* VisirisCore.framework */,
 				5B12792B15C13CAD0026AAFD /* QuickLook.framework */,
 				2799F8E81599C96D00008489 /* Quartz.framework */,
 				2795881915906D7B00E24B57 /* AVFoundation.framework */,
@@ -1562,6 +1561,9 @@
 				27C5EB9E1613408900A441D4 /* VSFullScreenOpenGLView.m in Sources */,
 				5B60CC5B16135EE800557892 /* VSOutputController.m in Sources */,
 				5B039BFA16143C3900059F5E /* VSParametersScrollView.m in Sources */,
+				27F7D11916145A0B00EAAF40 /* VSExternalInputManager.m in Sources */,
+				27F7D11B16145A3D00EAAF40 /* VSOSCInputManager.m in Sources */,
+				27F7D11C16145A4300EAAF40 /* VSOSCClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
