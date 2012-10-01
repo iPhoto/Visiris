@@ -17,6 +17,7 @@
 
 @interface VSTimelineObjectViewController()
 @property double pixelTimeRatio;
+
 @end
 
 
@@ -40,7 +41,16 @@
 static NSString* defaultNib = @"VSTimelinObjectView";
 
 -(id) initWithDefaultNib{
-    if(self = [self initWithNibName:defaultNib bundle:nil]){        
+    if(self = [self initWithNibName:defaultNib bundle:nil]){
+        
+        _intersectedTimelineObjectViews = [[NSMutableDictionary alloc] init];
+        if([self.view isKindOfClass:[VSTimelineObjectView class]]){
+            self.timelineObjectView = (VSTimelineObjectView*) self.view;
+            self.timelineObjectView.delegate = self;
+            self.inactive = NO;
+        }
+        
+        [self initTimelineObjectProxyObservers];
     }
     
     return self;
@@ -48,14 +58,6 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 
 -(void) awakeFromNib{
     
-    _intersectedTimelineObjectViews = [[NSMutableDictionary alloc] init];
-    if([self.view isKindOfClass:[VSTimelineObjectView class]]){
-        self.timelineObjectView = (VSTimelineObjectView*) self.view;
-        self.timelineObjectView.delegate = self;
-        self.inactive = NO;
-    }
-    
-//    [self initTimelineObjectProxyObservers];
     
 }
 

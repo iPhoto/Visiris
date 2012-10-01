@@ -68,7 +68,7 @@ static int resizingAreaWidth = 10;
     self = [super initWithFrame:frame];
     if (self) {
         
-        [self setResizingAreas];
+//        [self setResizingAreas];
     }
     
     return self;

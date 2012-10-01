@@ -198,14 +198,13 @@ static NSString* defaultNib = @"VSTrackView";
     if([self.temporaryTimelineObjectViewControllers count] > 0){
         for (VSTimelineObjectViewController *ctrl in self.temporaryTimelineObjectViewControllers){
             [ctrl.view removeFromSuperview];
-            [ctrl.view.layer removeFromSuperlayer];
-            DDLogInfo(@"rel obs: %@", [ctrl.timelineObjectProxy observationInfo]);
         }
         
-        DDLogInfo(@"release %@",self.track.name);
-
+        DDLogInfo(@"bef del: %@",self.temporaryTimelineObjectViewControllers);
+        
         [self.temporaryTimelineObjectViewControllers removeAllObjects];
         [self.view setNeedsDisplayInRect:self.view.visibleRect];
+        DDLogInfo(@"bef del: %@",self.temporaryTimelineObjectViewControllers);
         return YES;
     }
     
@@ -379,14 +378,14 @@ static NSString* defaultNib = @"VSTrackView";
 
 -(VSTimelineObjectViewController*) addTemporaryTimelineObject:(VSTimelineObjectProxy*) aProxyObject{
     
-    [self.temporaryTimelineObjectViewControllers addObject:[[VSTimelineObjectViewController alloc] initWithDefaultNib]];
-    VSTimelineObjectViewController *newController = [self.timelineObjectViewControllers lastObject];
-    
+    VSTimelineObjectViewController *newController = [[VSTimelineObjectViewController alloc] initWithDefaultNib];
     newController.timelineObjectProxy = aProxyObject;
+    
     newController.timelineObjectView.temporary = YES;
     
     [self setTimelineObjectViewControllersFrame: newController];
     
+    [self.temporaryTimelineObjectViewControllers addObject:newController];
     
     newController.temporary = YES;
     
@@ -396,19 +395,16 @@ static NSString* defaultNib = @"VSTrackView";
     
     [self.view setNeedsDisplayInRect:self.view.visibleRect];
     
-    DDLogInfo(@"add tmp Timelineobject: %@",[self.timelineObjectViewControllers lastObject]);
-    
-    return [self.temporaryTimelineObjectViewControllers lastObject];
+    return newController;
 }
 
 -(VSTimelineObjectViewController*) addTemporaryTimelineObject:(VSTimelineObjectProxy *)aProxyObject withDoubleFrame:(VSDoubleFrame)doubleFrame{
     
-    [self addTemporaryTimelineObject:aProxyObject];
+    VSTimelineObjectViewController *newTimelineObjectViewController = [self addTemporaryTimelineObject:aProxyObject];
     
-    ((VSTimelineObjectViewController*)[self.temporaryTimelineObjectViewControllers lastObject]).viewsDoubleFrame = doubleFrame;
+    newTimelineObjectViewController.viewsDoubleFrame = doubleFrame;
     
-    return [self.temporaryTimelineObjectViewControllers lastObject];
-    
+    return newTimelineObjectViewController;
     
 }
 
@@ -652,56 +648,65 @@ static NSString* defaultNib = @"VSTrackView";
 
 -(NSDragOperation) trackView:(VSTrackView *)trackView objectsHaveEntered:(id<NSDraggingInfo>)draggingInfo atPosition:(NSPoint)position{
     
-    if(!trackView)
-        return NSDraggingFormationNone;
+    NSDraggingContext result = NSDraggingFormationNone;
     
-    NSMutableArray *draggedProjectItems = [[NSMutableArray alloc] init];
-    
-    //if the draggingPasteboard stored in draggingInfo contains VSProjectItemRepresentation-Objects, they are read out and stored in draggedProjectItems
-    if([[draggingInfo draggingPasteboard] canReadObjectForClasses:[NSArray arrayWithObject:[VSProjectItemRepresentation class]] options:nil]){
-        draggedProjectItems = [NSMutableArray arrayWithArray:[[draggingInfo draggingPasteboard] readObjectsForClasses:[NSArray arrayWithObject:[VSProjectItemRepresentation class]] options:nil]];
-    }
-    
-    //if the draggingPasteboard stored in draggingInfo contains file-paths (NSFilenamesPboardType) the paths are read out. VSProjectItemRepresentation are created for every filePath and added to draggedProjectItems
-    if([[[draggingInfo draggingPasteboard] types ] containsObject:NSFilenamesPboardType]){
-        NSData *data = [[draggingInfo draggingPasteboard] dataForType:NSFilenamesPboardType];
+    if(trackView)
+    {
         
-        NSArray *fileNames = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:0 format:kCFPropertyListImmutable errorDescription:nil];
+        NSMutableArray *draggedProjectItems = [[NSMutableArray alloc] init];
         
-        for(NSString *fileName in fileNames){
-            VSProjectItem *tempProjectItem = [self.projectItemController createNewProjectItemFromFile:fileName];
-            if(!tempProjectItem){
-                return NSDragOperationNone;
-            }
-            [draggedProjectItems addObject:[self.projectItemRepresentationController createPresentationOfProjectItem:tempProjectItem]];
-            
+        //if the draggingPasteboard stored in draggingInfo contains VSProjectItemRepresentation-Objects, they are read out and stored in draggedProjectItems
+        if([[draggingInfo draggingPasteboard] canReadObjectForClasses:[NSArray arrayWithObject:[VSProjectItemRepresentation class]] options:nil]){
+            draggedProjectItems = [NSMutableArray arrayWithArray:[[draggingInfo draggingPasteboard] readObjectsForClasses:[NSArray arrayWithObject:[VSProjectItemRepresentation class]] options:nil]];
         }
+        
+        //if the draggingPasteboard stored in draggingInfo contains file-paths (NSFilenamesPboardType) the paths are read out. VSProjectItemRepresentation are created for every filePath and added to draggedProjectItems
+        if([[[draggingInfo draggingPasteboard] types ] containsObject:NSFilenamesPboardType]){
+            NSData *data = [[draggingInfo draggingPasteboard] dataForType:NSFilenamesPboardType];
+            
+            NSArray *fileNames = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:0 format:kCFPropertyListImmutable errorDescription:nil];
+            
+            for(NSString *fileName in fileNames){
+                VSProjectItem *tempProjectItem = [self.projectItemController createNewProjectItemFromFile:fileName];
+                if(!tempProjectItem){
+                    return NSDragOperationNone;
+                }
+                [draggedProjectItems addObject:[self.projectItemRepresentationController createPresentationOfProjectItem:tempProjectItem]];
+                
+            }
+        }
+        
+        
+        int i = 0;
+        double currentTotalWidth = 0;
+        
+        //for each VSProjectItemRepresentation found and stored in draggedProjectItems a new VSTimelineObjectProxy is created and added to self.temporaryTimelineObjectViewControllers
+        for(VSProjectItemRepresentation *item in draggedProjectItems){
+            VSTimelineObjectViewController *timelineObjectViewController = [self addNewTemporaryTimelineObjectProxyBasedOn:item atPosition:position toTrack:trackView temporaryID:i];
+            
+            
+            VSDoubleFrame newDoubleFrame = VSMakeFrame(position.x+currentTotalWidth, timelineObjectViewController.view.frame.origin.y, [self pixelForTimestamp:timelineObjectViewController.timelineObjectProxy.duration], timelineObjectViewController.view.frame.size.height);
+            
+            [timelineObjectViewController.timelineObjectView setDoubleFrame:newDoubleFrame];
+            
+            currentTotalWidth += newDoubleFrame.width;
+            
+            i++;
+        }
+        
+        //if no valid object was found, NSDragOperationNone is returned
+        if([draggedProjectItems count]> 0){
+            result = NSDragOperationMove;
+        }
+        else
+        {
+            result = NSDragOperationNone;
+        }
+        
+        [draggedProjectItems removeAllObjects];
     }
     
-    
-    int i = 0;
-    double currentTotalWidth = 0;
-    
-    //for each VSProjectItemRepresentation found and stored in draggedProjectItems a new VSTimelineObjectProxy is created and added to self.temporaryTimelineObjectViewControllers
-    for(VSProjectItemRepresentation *item in draggedProjectItems){
-        VSTimelineObjectViewController *timelineObjectViewController = [self addNewTemporaryTimelineObjectProxyBasedOn:item atPosition:position toTrack:trackView temporaryID:i];
-        
-        
-        VSDoubleFrame newDoubleFrame = VSMakeFrame(position.x+currentTotalWidth, timelineObjectViewController.view.frame.origin.y, [self pixelForTimestamp:timelineObjectViewController.timelineObjectProxy.duration], timelineObjectViewController.view.frame.size.height);
-        
-        [timelineObjectViewController.timelineObjectView setDoubleFrame:newDoubleFrame];
-        
-        currentTotalWidth += newDoubleFrame.width;
-        
-        i++;
-    }
-    
-    //if no valid object was found, NSDragOperationNone is returned
-    if([draggedProjectItems count]> 0){
-        return NSDragOperationMove;
-    }
-    else
-        return NSDragOperationNone;
+    return result;
 }
 
 -(BOOL) trackView:(VSTrackView *)trackView objectHaveExited:(id<NSDraggingInfo>)draggingInfo{
