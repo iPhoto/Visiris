@@ -13,6 +13,10 @@
  */
 @interface VSVideoSourceSupplier : VSFrameSourceSupplier
 
+/** Flag if Video has a Audioline */
 @property (assign) BOOL     hasAudio;
+
+/** Timestamp of the video - different to localtimestamp because of looping */
+@property (assign) double   videoTimestamp;
 
 @end

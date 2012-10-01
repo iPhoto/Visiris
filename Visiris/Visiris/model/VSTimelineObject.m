@@ -93,7 +93,7 @@
             VSVideoSourceSupplier *temp = (VSVideoSourceSupplier *)self.supplier;
             coreHandover = [[VSVideoCoreHandover alloc] initWithFrame:[temp getFrameForTimestamp:localTimestamp withPlayMode:mode]
                                                         andAttributes:[temp getAtrributesForTimestamp:localTimestamp]
-                                                         forTimestamp:localTimestamp
+                                                         forTimestamp:[temp videoTimestamp]
                                                                 forId:self.timelineObjectID
                                                             withAudio:temp.hasAudio];
             
@@ -114,7 +114,7 @@
     }
     else if ([self.supplier isKindOfClass:[VSAudioSourceSupplier class]]) {
         coreHandover = [[VSAudioCoreHandover alloc] initWithAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp] 
-                                                          forTimestamp:localTimestamp
+                                                          forTimestamp:[(VSAudioSourceSupplier *)self.supplier convertToAudioTimestamp:localTimestamp]
                                                                  forId:self.timelineObjectID];
     }
     else {

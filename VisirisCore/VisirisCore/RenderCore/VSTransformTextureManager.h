@@ -47,10 +47,12 @@
  */
 - (void)resizeOutputSize:(NSSize)size;
 
+//todo
+- (void)decrementReferenceCounting:(NSInteger)trackID;
+
 /**
- * Deletes the FBO of a track
- * @param trackID The ID of the track
+ * CommandLineOutput of the Dictionaries and the referenceCounting
  */
-- (void)deleteFBOforTrackID:(NSInteger)trackID;
+- (void)printDebugLog;
 
 @end

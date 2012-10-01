@@ -42,6 +42,8 @@
 
 - (void)processFrameAtTimestamp:(double)aTimestamp withFrameSize:(NSSize)aFrameSize withPlayMode:(VSPlaybackMode)playMode
 {
+//    NSLog(@"play");
+
     NSArray *currentTimeLineObjects = [self.timeline timelineObjectsForTimestamp:aTimestamp];
     
     NSMutableArray *handoverObjects = [[NSMutableArray alloc] init];
@@ -126,6 +128,7 @@
 }
 
 - (void)stopPlayback{
+//    NSLog(@"stop");
     [self.renderCoreReceptionist stopPlaying];
 }
 

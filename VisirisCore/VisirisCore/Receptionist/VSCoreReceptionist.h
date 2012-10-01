@@ -62,4 +62,7 @@
 
 - (void)stopPlaying;
 
+//TODO
+- (void)printDebugLog;
+
 @end

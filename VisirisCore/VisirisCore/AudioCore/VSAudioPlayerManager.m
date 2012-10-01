@@ -9,6 +9,7 @@
 #import "VSAudioPlayerManager.h"
 #import "NSMutableDictionary+VSAudioPlayerManger.h"
 #import "VSAudioPlayer.h"
+#import "VSReferenceCounting.h"
 
 @interface VSAudioPlayerManager()
 
@@ -19,7 +20,7 @@
 @property (strong) NSMutableDictionary      *playerToObjectID;
 
 /** Is for knowing how many Timelineobjects are referencing one AudioPlayer.*/
-@property (strong) NSMutableDictionary      *referenceCountingToPlayer;
+@property (strong) VSReferenceCounting      *referenceCountingPlayer;
 
 @end
 
@@ -28,6 +29,7 @@
 
 @synthesize playerCollectionToTrackID       = _playerCollectionToTrackID;
 @synthesize playerToObjectID                = _playerToObjectID;
+@synthesize referenceCountingPlayer         = _referenceCountingPlayer;
 
 
 #pragma Mark - Init
@@ -36,7 +38,7 @@
     if (self = [super init]) {
         self.playerCollectionToTrackID = [[NSMutableDictionary alloc] init];
         self.playerToObjectID = [[NSMutableDictionary alloc] init];
-        self.referenceCountingToPlayer = [[NSMutableDictionary alloc] init];
+        self.referenceCountingPlayer = [[VSReferenceCounting alloc] init];
     }
     return self;
 }
@@ -45,8 +47,6 @@
 
 - (void)createAudioPlayerForProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID atTrack:(NSInteger)trackID andFilePath:(NSString *)path{
     
-//    NSLog(@"create objectID %ld", objectItemID);
-
     if (path) {
         NSMutableDictionary *trackPlayer = [self.playerCollectionToTrackID playerCollectionForTrackID:trackID];
         if (!trackPlayer) {
@@ -56,13 +56,14 @@
             
             VSAudioPlayer *audioPlayer = [[VSAudioPlayer alloc] initWithFilePath:path];
             if (audioPlayer == nil) {
+                NSLog(@"ERROR creating audioplayer");
                 return;
             }
             
             [trackPlayer setObject:audioPlayer forKey:[NSNumber numberWithInteger:projectItemID]];
 
             [self.playerToObjectID setObject:audioPlayer forKey:[NSNumber numberWithInteger:objectItemID]];
-            [self incrementReferenceCounting:audioPlayer];
+            [self incrementReferenceCountingOfPlayer:audioPlayer];
         }
         else {
             
@@ -80,11 +81,9 @@
             }
             
             [self.playerToObjectID setObject:audioPlayer forKey:[NSNumber numberWithInteger:objectItemID]];
-            [self incrementReferenceCounting:audioPlayer];
+            [self incrementReferenceCountingOfPlayer:audioPlayer];
         }
     }
-    
-//    [self printReferenceTable];
 }
 
 - (void)playAudioOfObjectID:(NSInteger)objectID atTime:(double)time atVolume:(float)volume{
@@ -106,14 +105,39 @@
     }
 }
 
+- (void)stopPlayingOfTimelineObject:(NSInteger)timelineObjectID{
+    VSAudioPlayer *player = (VSAudioPlayer *)[self.playerToObjectID objectForKey:[NSNumber numberWithInteger:timelineObjectID]];
+    
+    if (player) {
+        [player stopPlaying];
+    }
+    else
+        NSLog(@"ERROR cannont stop a nil thingy");
+}
+
 - (void)deleteTimelineobjectID:(NSInteger)objectID{
 //    NSLog(@"delete objectID %ld", objectID);
-//    NSLog(@"description: %@",((VSAudioPlayer *)[self.playerToObjectID objectForKey:[NSNumber numberWithInteger:objectID]]).description);
     VSAudioPlayer *temp = (VSAudioPlayer *)[self.playerToObjectID objectForKey:[NSNumber numberWithInteger:objectID]];
     
-    [self decrementReferenceCounting:temp];
-//    [self printReferenceTable];
+    if (temp) {
+        [self decrementReferenceCountingOfPlayer:temp];
+        [self.playerToObjectID removeObjectForKey:[NSNumber numberWithInteger:objectID]];
+    }
+}
 
+- (void)debugLog{
+    NSLog(@"++++++++++++++++++++++++++DEBUG LOG AUDIOCORE++++++++++++++++++++++++++");
+    NSLog(@"-----playerCollectionToTrackID-----");
+    for (id key in self.playerCollectionToTrackID) {
+        NSLog(@"trackID: %@, playerCollection: %@", key, [self.playerCollectionToTrackID objectForKey:key]);
+    }
+    
+    NSLog(@"-----playerToObjectID-----");
+    for (id key in self.playerToObjectID) {
+        NSLog(@"id: %@, value: %@", key, [self.playerToObjectID objectForKey:key]);
+    }
+    
+    [self.referenceCountingPlayer printDebugLog];
 }
 
 
@@ -123,63 +147,38 @@
  * Incrementing one specific Referencecounter
  * @param projectItemID The ID of the ProjectItem
  */
-- (void)incrementReferenceCounting:(VSAudioPlayer *)player{
-    
-    NSNumber *current = (NSNumber *)[self.referenceCountingToPlayer objectForKey:[NSNumber numberWithInteger:player.hash]];
-    int currentInt;
-    
-    if (current == nil)
-        currentInt = 0;
-    else
-        currentInt = [current intValue];
-    
-    currentInt++;
-    [self.referenceCountingToPlayer setObject:[NSNumber numberWithInt:currentInt]  forKey:[NSNumber numberWithInteger:player.hash]];
+- (void)incrementReferenceCountingOfPlayer:(VSAudioPlayer *)player{
+    [self.referenceCountingPlayer incrementReferenceOfKey:[NSNumber numberWithInteger:player.hash]];
 }
 
 /**
  * Decrement one specific Referencecounter
  * @param player The reference counter needs the associating player
  */
-- (void)decrementReferenceCounting:(VSAudioPlayer *)player{
-    NSNumber *current = (NSNumber *)[self.referenceCountingToPlayer objectForKey:[NSNumber numberWithInteger:player.hash]];
-    int currentInt;
+- (void)decrementReferenceCountingOfPlayer:(VSAudioPlayer *)player{
     
-    if (current == nil)
-        NSLog(@"Decrementing somethings that not there");
-    else
-        currentInt = [current intValue];
-    
-    currentInt--;
-    
-    if (currentInt == 0) {
-        //delete the reference
-        [self.referenceCountingToPlayer removeObjectForKey:[NSNumber numberWithInteger:player.hash]];
+    if([self.referenceCountingPlayer decrementReferenceOfKey:[NSNumber numberWithInteger:player.hash]] == NO){
         
-        //delete all inside the trackcollection
+        id trackToDelete = nil;
+        
         for (id track in self.playerCollectionToTrackID) {
             NSMutableDictionary *trackDictionary = (NSMutableDictionary *)[self.playerCollectionToTrackID objectForKey:track];
             
             for (id key in trackDictionary) {
+                
                 if (player == [trackDictionary objectForKey:key]) {
                     [trackDictionary removeObjectForKey:key];
                 }
             }
+    
+            if(trackDictionary.count == 0){
+                trackToDelete = track;
+            }
         }
-        [player completeStop];
-    }
-    else{
-        [self.referenceCountingToPlayer setObject:[NSNumber numberWithInt:currentInt]  forKey:[NSNumber numberWithInteger:player.hash]];
-    }
-}
 
-/**
- * A simple Printing Method for Debugging.
- */
-- (void)printReferenceTable{
-    NSLog(@"PrintingReferenceTable----------------------------------------------");
-    for (id key in self.referenceCountingToPlayer) {
-        NSLog(@"player: %@, value: %@", key, [self.referenceCountingToPlayer objectForKey:key]);
+        if(trackToDelete){
+            [self.playerCollectionToTrackID removeObjectForKey:trackToDelete];
+        }
     }
 }
 

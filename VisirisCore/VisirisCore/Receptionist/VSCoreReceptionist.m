@@ -92,6 +92,7 @@
 - (void)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path withObjectItemID:(NSInteger)objectItemID{
 
     [self.renderCore createNewTextureForSize:textureSize colorMode:colorMode forTrack:trackID withType:type withOutputSize:size withPath:path withObjectItemID:(NSInteger)objectItemID];
+    [self printDebugLog];
 }
 
 - (void)createNewAudioPlayerWithProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID forTrack:(NSInteger)trackId andFilePath:(NSString *)filepath{
@@ -106,8 +107,11 @@
             [self.audioCore deleteTimelineobjectID:anID];
             break;
         case VSFileKindImage:
+            [self.renderCore deleteTextureFortimelineobjectID:anID];
+            break;
         case VSFileKindVideo:
             [self.renderCore deleteTextureFortimelineobjectID:anID];
+            [self.audioCore deleteTimelineobjectID:anID];
             break;
         case VSFileKindQuartzComposerPatch:
             [self.renderCore deleteQCPatchForTimelineObjectID:anID];
@@ -115,7 +119,14 @@
         default:
             break;
     }
+    
+    [self printDebugLog];
 }
+
+- (void)printDebugLog{
+    [self.renderCore printDebugLog];
+}
+
 
 #pragma mark - RenderCoreDelegate impl.
 

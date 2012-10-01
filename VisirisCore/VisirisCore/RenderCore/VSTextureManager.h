@@ -35,4 +35,12 @@
  */
 - (void)deleteTextureForTimelineobjectID:(NSInteger)theID;
 
+//todo
+- (NSInteger)trackIDfromObjectID:(NSInteger)objectID;
+
+/**
+ * A simple Printing Method for Debugging.
+ */
+- (void)printDebugLog;
+
 @end

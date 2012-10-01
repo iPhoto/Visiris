@@ -38,17 +38,19 @@
 
 - (void)createAudioPlayerForProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID atTrack:(NSInteger)trackID andFilePath:(NSString *)path{
     [self.audioPlayerManager createAudioPlayerForProjectItemID:projectItemID withObjectItemID:objectItemID atTrack:trackID andFilePath:path];
+    
+//    [self debugLog];
 }
 
 - (void)playAudioOfHandovers:(NSArray *)handovers atTimeStamp:(double)timeStamp{
     
-    //NSLog(@"timestamp: %f", timeStamp);
+//    NSLog(@"timestamp: %f", timeStamp);
     
     for (VSCoreHandover *coreHandover in handovers) {
         float volume = [[coreHandover.attributes objectForKey:VSParameterAudioVolume] floatValue];
                     
         NSInteger objectID = coreHandover.timeLineObjectID;
-        [self.audioPlayerManager playAudioOfObjectID:objectID atTime:coreHandover.timestamp/1000.0 atVolume:volume];
+        [self.audioPlayerManager playAudioOfObjectID:objectID atTime:coreHandover.timestamp atVolume:volume];
     }
 }
 
@@ -56,9 +58,18 @@
     [self.audioPlayerManager stopPlaying];
 }
 
+- (void)stopTimeLineObject:(NSInteger)timelineObjectID{
+    [self.audioPlayerManager stopPlayingOfTimelineObject:timelineObjectID];
+}
+
 - (void)deleteTimelineobjectID:(NSInteger)timelineobjectID{
-   // NSLog(@"Audio deleteID %ld", timelineobjectID);
+    [self stopTimeLineObject:timelineobjectID];
     [self.audioPlayerManager deleteTimelineobjectID:timelineobjectID];
+//    [self debugLog];
+}
+
+- (void)debugLog{
+    [self.audioPlayerManager debugLog];
 }
 
 @end

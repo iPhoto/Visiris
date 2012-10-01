@@ -87,4 +87,7 @@
  */
 - (void)deleteQCPatchForTimelineObjectID:(NSInteger)theID;
 
+//todo
+- (void)printDebugLog;
+
 @end

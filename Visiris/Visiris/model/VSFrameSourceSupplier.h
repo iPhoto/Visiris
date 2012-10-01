@@ -17,8 +17,8 @@
  */
 @interface VSFrameSourceSupplier : VSSourceSupplier
 
+/** VSImage is basically a struct which contains the needed Information of a Frame for creating a OpenglTexture in the Core  */
 @property (strong) VSImage *vsImage;
-
 
 /**
  * Renders a frame for the content the timlineObject represents for the given timestamp in the given size.

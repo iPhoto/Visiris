@@ -96,7 +96,7 @@
     self.trackingArea = [[NSTrackingArea alloc] initWithRect:self.frame options:(NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingActiveAlways ) owner:self userInfo:nil];
     [self addTrackingArea:self.trackingArea];
     
-    DDLogInfo(@"tracking Area of %@: %@",NSStringFromClass([self class]), NSStringFromRect(self.trackingArea.rect));
+//    DDLogInfo(@"tracking Area of %@: %@",NSStringFromClass([self class]), NSStringFromRect(self.trackingArea.rect));
 }
 
 #pragma mark - Private Methods

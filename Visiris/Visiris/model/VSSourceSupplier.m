@@ -7,22 +7,20 @@
 //
 
 #import "VSSourceSupplier.h"
-
 #import "VSParameter.h"
 #import "VSAnimation.h"
 #import "VSTimelineObject.h"
 #import "VSTimelineObjectSource.h"
-
 #import "VSCoreServices.h"
-
-
 
 @implementation VSSourceSupplier
 
 @synthesize timelineObject = _timelineObject;
 
+
 #pragma mark Init
 
+/** VSTimelineObject the Supplier is responsible for */
 -(id) initWithTimelineObject:(VSTimelineObject *)aTimelineObject{
     if(self = [super init]){
         _timelineObject = aTimelineObject;
@@ -30,6 +28,9 @@
     
     return self;
 }
+
+
+#pragma mark - Methods
 
 - (NSDictionary *)getAtrributesForTimestamp:(double)aTimestamp{
     NSMutableDictionary *result = [[NSMutableDictionary alloc] init];    
@@ -40,10 +41,7 @@
             }
         }
     }
-    
     return result;
-    
 }
-
 
 @end

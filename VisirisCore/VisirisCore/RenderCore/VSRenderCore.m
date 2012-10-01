@@ -244,6 +244,7 @@
 }
 
 - (void)deleteTextureFortimelineobjectID:(NSInteger)theID{
+    [self.transformTextureManager decrementReferenceCounting:[self.textureManager trackIDfromObjectID:theID]];
     [self.textureManager deleteTextureForTimelineobjectID:theID];
 }
 
@@ -253,6 +254,11 @@
 
 - (NSOpenGLContext *)openglContext{
     return self.openGLContext;
+}
+
+- (void)printDebugLog{
+    [self.textureManager printDebugLog];
+    [self.transformTextureManager printDebugLog];
 }
 
 

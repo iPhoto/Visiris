@@ -18,6 +18,8 @@
 @implementation VSQuartzComposerSourceSupplier
 
 
+#pragma mark - Methods
+
 -(NSString*) getQuartzComposerPatchFilePath{
     return self.timelineObject.sourceObject.filePath;
 }
@@ -46,9 +48,7 @@
         
         [attributes setObject:qcAttributes forKey:VSParameterQuartzComposerPublicInputs];
     }
-    
     return attributes;
-    
 }
 
 @end

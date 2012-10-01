@@ -36,9 +36,20 @@
 - (void)stopPlaying;
 
 /**
+ * Stops the Playback of a TimelineObject
+ * @param timelineObjectID The ID of the TimelineObject
+ */
+- (void)stopTimeLineObject:(NSInteger)timelineObjectID;
+
+/**
  * Gets called when a timlineobject gets removed
  * @param timelineobjectID Unique ID of the timelineobject
  */
 - (void)deleteTimelineobjectID:(NSInteger)timelineobjectID;
+
+/**
+ * Prints everything that hold Objects
+ */
+- (void)debugLog;
 
 @end
