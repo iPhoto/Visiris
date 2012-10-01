@@ -40,7 +40,6 @@
 
 -(BOOL) addTimelineObject:(VSTimelineObject *)timelineObject{
     [self.timelineObjects addObject:timelineObject];
-    [timelineObject addObserver:self forKeyPath:@"parameters" options:0 context:nil];
     return YES;
 }
 

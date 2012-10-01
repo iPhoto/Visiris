@@ -56,7 +56,7 @@
  */
 - (void)initLayer {
     [self setWantsLayer:YES];
-    [self.layer setZPosition:250];
+    [self.layer setZPosition:20];
     self.layer.backgroundColor = [[NSColor darkGrayColor] CGColor];
 }
 
@@ -67,7 +67,7 @@
     
     self.guideLine = [[CALayer alloc] init];
     self.guideLine.backgroundColor = [[NSColor blueColor] CGColor];
-    [self.guideLine setZPosition:100];
+    [self.guideLine setZPosition:10];
     
     [self.layer addSublayer:self.guideLine];
 }

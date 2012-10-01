@@ -171,6 +171,11 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     
 }
 
+-(void) willBeHidden{
+    [self.animationTimelineViewController resetTimeline];
+    [self.parametersViewController resetParameters];
+    self.timelineObject = nil;
+}
 
 #pragma mark - NSViewController
 
@@ -195,11 +200,6 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     [self.animationTimelineViewController moveToNearestKeyFrameLeftOfParameter:parameter];
 }
 
-#pragma mark - VSFrameResizingDelegate Implementation
-
--(void) frameOfView:(NSView *)view wasSetFrom:(NSRect)oldRect to:(NSRect)newRect{
-    //DDLogInfo(@"nothing implemented");
-}
 
 #pragma mark - VSKeyFrameSelectingDelegate Implementation
 
@@ -252,6 +252,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 
 #pragma mark - Private Methods
 
+
 /**
  * Changes the paramters name
  * @param newName Name the the VSTimelineObject's name will be changed to
@@ -301,6 +302,9 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
         [self showParameters];
         
         [self showAnimationTimeline];
+        
+        [self.animationTimelineViewController.scrollView setBoundsOriginWithouthNotifiying:NSZeroPoint];
+        [self.parametersViewController.scrollView setBoundsOriginWithouthNotifiying:NSZeroPoint];
         
     }
 }

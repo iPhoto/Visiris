@@ -87,7 +87,7 @@
     
     [self.fullScreenWindow orderOut:self.fullScreenWindow];
     [self.fullScreenWindow setReleasedWhenClosed:YES];
-    [self.fullScreenWindow close];
+//    [self.fullScreenWindow close];
 }
 
 -(void) toggleFullScreenForScreen:(NSUInteger) screenID{

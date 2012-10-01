@@ -118,7 +118,7 @@
 @property (weak) id<VSTimelineObjectControllerDelegate> delegate;
 
 /** VSTimelineObjectProxy of the VSTimelineObject the VSTimelineObjectViewController represents*/
-@property (weak) VSTimelineObjectProxy* timelineObjectProxy;
+@property (strong) VSTimelineObjectProxy* timelineObjectProxy;
 
 
 /** Indicates wheter the VSTimelineObjectViewController's VSTimelineObjectProxy is only a temporary object on the track. */

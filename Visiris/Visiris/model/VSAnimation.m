@@ -1,4 +1,4 @@
-//
+ //
 //  VSAnimation.m
 //  VisirisUI
 //
@@ -35,12 +35,20 @@
     return self;
 }
 
+-(id) initWithKeyFrames:(NSMutableArray*) keyFrames{
+    if(self = [self init]){
+        _keyFrames = keyFrames;
+    }
+    
+    return self;
+}
+
 
 #pragma mark - NSCopying Implementation
 
 -(id) copyWithZone:(NSZone *)zone{
-    VSAnimation *copy = [[VSAnimation allocWithZone:zone] init];
-    
+    VSAnimation *copy = [[VSAnimation allocWithZone:zone] initWithKeyFrames:[[NSMutableArray alloc] initWithArray:_keyFrames copyItems:YES]];
+
     return copy;
 }
 
@@ -195,7 +203,6 @@
     return result;
 }
 
-
 -(void) insertObject:(VSKeyFrame *)object inKeyFramesAtIndex:(NSUInteger)index{
     [self.keyFrames insertObject:object atIndex:index];
 }
@@ -203,6 +210,5 @@
 -(void) insertKeyFrames:(NSArray *)array atIndexes:(NSIndexSet *)indexes{
     [self.keyFrames insertObjects:array atIndexes:indexes];
 }
-
 
 @end

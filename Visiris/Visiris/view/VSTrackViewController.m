@@ -199,12 +199,9 @@ static NSString* defaultNib = @"VSTrackView";
         for (VSTimelineObjectViewController *ctrl in self.temporaryTimelineObjectViewControllers){
             [ctrl.view removeFromSuperview];
         }
-        
-        DDLogInfo(@"bef del: %@",self.temporaryTimelineObjectViewControllers);
-        
+
         [self.temporaryTimelineObjectViewControllers removeAllObjects];
         [self.view setNeedsDisplayInRect:self.view.visibleRect];
-        DDLogInfo(@"bef del: %@",self.temporaryTimelineObjectViewControllers);
         return YES;
     }
     
@@ -577,7 +574,7 @@ static NSString* defaultNib = @"VSTrackView";
                 
                 if([result isKindOfClass:[VSTimelineObjectViewController class]]){
                     VSTimelineObjectViewController *tmpController = (VSTimelineObjectViewController*) result;
-                    //DDLogInfo(@"settingwidht: %@ %f",NSStringFromVSDoubleFrame(tmpController.timelineObjectView.doubleFrame), self.pixelTimeRatio);
+
                     [timelineObjectsWidth addObject: [NSNumber numberWithDouble:tmpController.timelineObjectView.doubleFrame.width]];
                     [timelineObjectsPositions addObject: [NSValue valueWithPoint:tmpController.view.frame.origin]];
                     
@@ -1181,8 +1178,7 @@ static NSString* defaultNib = @"VSTrackView";
     }];
     
     [((VSTimelineObjectViewController*)[self.timelineObjectViewControllers objectAtIndex:indexOfObjectToDelete]).view removeFromSuperview];
-    
-    // VSTimelineObjectViewController *ctrl = [self.timelineObjectViewControllers objectAtIndex:indexOfObjectToDelete];
+    [((VSTimelineObjectViewController*)[self.timelineObjectViewControllers objectAtIndex:indexOfObjectToDelete]).view.layer removeFromSuperlayer];
     
     [self.timelineObjectViewControllers removeObjectAtIndex:indexOfObjectToDelete];
     

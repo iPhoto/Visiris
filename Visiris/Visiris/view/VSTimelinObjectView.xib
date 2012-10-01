@@ -48,6 +48,7 @@
 						<string key="NSFrame">{{63, 13}, {205, 17}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<bool key="NSViewIsLayerTreeHost">YES</bool>
 						<string key="NSReuseIdentifierKey">_NS:1505</string>
 						<bool key="NSEnabled">YES</bool>
@@ -180,6 +181,38 @@
 						<reference key="destination" ref="1005"/>
 					</object>
 					<int key="connectionID">35</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: self.timelineObjectProxy.icon</string>
+						<reference key="source" ref="293167993"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="293167993"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">value: self.timelineObjectProxy.icon</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">self.timelineObjectProxy.icon</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">137</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: self.timelineObjectProxy.name</string>
+						<reference key="source" ref="255209236"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="255209236"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">value: self.timelineObjectProxy.name</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">self.timelineObjectProxy.name</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">132</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -445,7 +478,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">128</int>
+			<int key="maxID">137</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">

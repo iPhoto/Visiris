@@ -130,5 +130,10 @@
  */
 -(void) moveToNearestKeyFrameRightOfParameter:(VSParameter*) parameter;
 
+/**
+ * Removes all VSAnimationTrackViewControllers stored in animaitonTrackViewControllers
+ */
+-(void) resetTimeline;
+
 
 @end
