@@ -198,13 +198,14 @@ static NSString* defaultNib = @"VSTrackView";
     if([self.temporaryTimelineObjectViewControllers count] > 0){
         for (VSTimelineObjectViewController *ctrl in self.temporaryTimelineObjectViewControllers){
             [ctrl.view removeFromSuperview];
+            [ctrl.view.layer removeFromSuperlayer];
+            DDLogInfo(@"rel obs: %@", [ctrl.timelineObjectProxy observationInfo]);
         }
         
-        DDLogInfo(@"bef del: %@",self.temporaryTimelineObjectViewControllers);
-        
+        DDLogInfo(@"release %@",self.track.name);
+
         [self.temporaryTimelineObjectViewControllers removeAllObjects];
         [self.view setNeedsDisplayInRect:self.view.visibleRect];
-        DDLogInfo(@"bef del: %@",self.temporaryTimelineObjectViewControllers);
         return YES;
     }
     
@@ -378,14 +379,14 @@ static NSString* defaultNib = @"VSTrackView";
 
 -(VSTimelineObjectViewController*) addTemporaryTimelineObject:(VSTimelineObjectProxy*) aProxyObject{
     
-    VSTimelineObjectViewController *newController = [[VSTimelineObjectViewController alloc] initWithDefaultNib];
-    newController.timelineObjectProxy = aProxyObject;
+    [self.temporaryTimelineObjectViewControllers addObject:[[VSTimelineObjectViewController alloc] initWithDefaultNib]];
+    VSTimelineObjectViewController *newController = [self.timelineObjectViewControllers lastObject];
     
+    newController.timelineObjectProxy = aProxyObject;
     newController.timelineObjectView.temporary = YES;
     
     [self setTimelineObjectViewControllersFrame: newController];
     
-    [self.temporaryTimelineObjectViewControllers addObject:newController];
     
     newController.temporary = YES;
     
@@ -395,16 +396,19 @@ static NSString* defaultNib = @"VSTrackView";
     
     [self.view setNeedsDisplayInRect:self.view.visibleRect];
     
-    return newController;
+    DDLogInfo(@"add tmp Timelineobject: %@",[self.timelineObjectViewControllers lastObject]);
+    
+    return [self.temporaryTimelineObjectViewControllers lastObject];
 }
 
 -(VSTimelineObjectViewController*) addTemporaryTimelineObject:(VSTimelineObjectProxy *)aProxyObject withDoubleFrame:(VSDoubleFrame)doubleFrame{
     
-    VSTimelineObjectViewController *newTimelineObjectViewController = [self addTemporaryTimelineObject:aProxyObject];
+    [self addTemporaryTimelineObject:aProxyObject];
     
-    newTimelineObjectViewController.viewsDoubleFrame = doubleFrame;
+    ((VSTimelineObjectViewController*)[self.temporaryTimelineObjectViewControllers lastObject]).viewsDoubleFrame = doubleFrame;
     
-    return newTimelineObjectViewController;
+    return [self.temporaryTimelineObjectViewControllers lastObject];
+    
     
 }
 
@@ -1173,7 +1177,7 @@ static NSString* defaultNib = @"VSTrackView";
     
     [((VSTimelineObjectViewController*)[self.timelineObjectViewControllers objectAtIndex:indexOfObjectToDelete]).view removeFromSuperview];
     
-   // VSTimelineObjectViewController *ctrl = [self.timelineObjectViewControllers objectAtIndex:indexOfObjectToDelete];
+    // VSTimelineObjectViewController *ctrl = [self.timelineObjectViewControllers objectAtIndex:indexOfObjectToDelete];
     
     [self.timelineObjectViewControllers removeObjectAtIndex:indexOfObjectToDelete];
     

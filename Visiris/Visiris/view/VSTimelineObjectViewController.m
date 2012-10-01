@@ -40,23 +40,7 @@
 static NSString* defaultNib = @"VSTimelinObjectView";
 
 -(id) initWithDefaultNib{
-    if(self = [self initWithNibName:defaultNib bundle:nil]){
-        _intersectedTimelineObjectViews = [[NSMutableDictionary alloc] init];
-        if([self.view isKindOfClass:[VSTimelineObjectView class]]){
-            self.timelineObjectView = (VSTimelineObjectView*) self.view;
-            self.timelineObjectView.delegate = self;
-            self.inactive = NO;
-        }
-        
-    }
-    
-    return self;
-}
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
+    if(self = [self initWithNibName:defaultNib bundle:nil]){        
     }
     
     return self;
@@ -71,7 +55,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
         self.inactive = NO;
     }
     
-    [self initTimelineObjectProxyObservers];
+//    [self initTimelineObjectProxyObservers];
     
 }
 

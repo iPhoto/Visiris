@@ -8,6 +8,15 @@
 
 #import "VSAudioSourceSupplier.h"
 
+#import "VSTimelineObject.h"
+
 @implementation VSAudioSourceSupplier
+
+
+-(double) convertToAudioTimestamp:(double)localTimestamp{
+    localTimestamp = localTimestamp <= self.timelineObject.sourceDuration ? localTimestamp :  fmod(localTimestamp, self.timelineObject.sourceDuration);
+    
+    return localTimestamp;
+}
 
 @end
