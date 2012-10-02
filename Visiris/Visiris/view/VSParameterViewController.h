@@ -164,7 +164,7 @@
 /**
  * Saves the current values of the parameter and removes the observer on parameter.animation.defaultValue
  */
--(void) saveParameterAndRemoveObserver;
+-(void) removeObservers;
 
 /**
  * Shows the neccessary controls according to the type of the parameter

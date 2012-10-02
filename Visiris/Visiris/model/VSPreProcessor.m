@@ -16,6 +16,9 @@
 #import "VSFileType.h"
 #import "VSQuartzCompositionUtils.h"
 #import "VSProjectItem.h"
+#import "VSOutputController.h"
+
+#import "VSCoreServices.h"
 
 @interface VSPreProcessor()
 @end
@@ -61,10 +64,7 @@
 #pragma mark - VSTimelineTimelineObjectsDelegate implementation
 
 -(void) timelineObjectsWillBeRemoved:(NSArray *)removedTimelineObjects{
-    //DDLogInfo(@"%@",removedTimelineObjects);
-    
-    
-    
+
     for (VSTimelineObject *timelineObject in removedTimelineObjects){
         [self.renderCoreReceptionist removeTimelineobjectWithID:timelineObject.timelineObjectID andType:timelineObject.sourceObject.projectItem.fileType.fileKind];
         
@@ -72,8 +72,7 @@
 }
 
 -(void) timelineObjects:(NSArray *)newTimelineObjects haveBeenAddedToTrack:(VSTrack *)aTrack{
-    //DDLogInfo(@"%@",newTimelineObjects);
-    
+
     for(VSTimelineObject *timelineObject in newTimelineObjects){
         
         switch (timelineObject.sourceObject.projectItem.fileType.fileKind) {
