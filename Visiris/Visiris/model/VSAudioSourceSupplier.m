@@ -9,7 +9,6 @@
 #import "VSAudioSourceSupplier.h"
 #import "VSTimelineObject.h"
 
-
 #import "VSTimelineObject.h"
 
 @implementation VSAudioSourceSupplier
