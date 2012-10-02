@@ -7,6 +7,7 @@
 //
 
 #import "VSPreProcessor.h"
+
 #import "VSTimeline.h"
 #import "VisirisCore/VSCoreReceptionist.h"
 #import "VSTimelineObject.h"
@@ -17,6 +18,7 @@
 #import "VSQuartzCompositionUtils.h"
 #import "VSProjectItem.h"
 #import "VSOutputController.h"
+#import "VSPlaybackController.h"
 
 #import "VSCoreServices.h"
 
@@ -25,9 +27,6 @@
 
 
 @implementation VSPreProcessor
-
-@synthesize timeline = _timeline;
-@synthesize renderCoreReceptionist=_renderCoreReceptionist;
 
 
 #pragma mark - Init
@@ -42,11 +41,9 @@
 
 
 #pragma mark - Methods
-
+#
 - (void)processFrameAtTimestamp:(double)aTimestamp withFrameSize:(NSSize)aFrameSize withPlayMode:(VSPlaybackMode)playMode
 {
-//    NSLog(@"play");
-
     NSArray *currentTimeLineObjects = [self.timeline timelineObjectsForTimestamp:aTimestamp];
     
     NSMutableArray *handoverObjects = [[NSMutableArray alloc] init];
@@ -64,15 +61,19 @@
 #pragma mark - VSTimelineTimelineObjectsDelegate implementation
 
 -(void) timelineObjectsWillBeRemoved:(NSArray *)removedTimelineObjects{
-
+    
     for (VSTimelineObject *timelineObject in removedTimelineObjects){
         [self.renderCoreReceptionist removeTimelineobjectWithID:timelineObject.timelineObjectID andType:timelineObject.sourceObject.projectItem.fileType.fileKind];
         
     }
+    
+    if([self delegateRespondsToSelector:@selector(removedTimelineObjectsfromRenderCore:)]){
+        [self.delegate removedTimelineObjectsfromRenderCore:removedTimelineObjects];
+    }
 }
 
 -(void) timelineObjects:(NSArray *)newTimelineObjects haveBeenAddedToTrack:(VSTrack *)aTrack{
-
+    
     for(VSTimelineObject *timelineObject in newTimelineObjects){
         
         switch (timelineObject.sourceObject.projectItem.fileType.fileKind) {
@@ -86,15 +87,40 @@
             case VSFileKindImage:
             case VSFileKindQuartzComposerPatch:
                 [self handleFrameTimelineObject:timelineObject atTrack:aTrack];
-            break;
-                default:
+                break;
+            default:
                 break;
         }
+    }
+
+    if([self delegateRespondsToSelector:@selector(addedTimelineObjectsToRenderCore:)]){
+        [self.delegate addedTimelineObjectsToRenderCore:newTimelineObjects];
     }
 }
 
 #pragma mark - Private Methods
 
+/**
+ * Checks if the delegate is able to respond to the given Selector
+ * @param selector Selector the delegate will be checked for if it is able respond to
+ * @return YES if the delegate is able to respond to the selector, NO otherweis
+ */
+-(BOOL) delegateRespondsToSelector:(SEL) selector{
+    if(self.delegate != nil){
+        if([self.delegate conformsToProtocol:@protocol(VSPreProcessorDelegate) ]){
+            if([self.delegate respondsToSelector: selector]){
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
+}
+
+
+/**
+ *
+ */
 - (void)handleFrameTimelineObject:(VSTimelineObject *)timelineObject atTrack:(VSTrack *)track{
     
     NSSize dimensions = [VSFileUtils dimensionsOfFile:timelineObject.sourceObject.filePath];
@@ -102,18 +128,21 @@
     NSSize outputSize = [VSProjectSettings sharedProjectSettings].frameSize;
     NSInteger objectItemID = timelineObject.timelineObjectID;
     
-   [self.renderCoreReceptionist createNewTextureForSize:dimensions
-                                              colorMode:nil
-                                               forTrack:track.trackID
-                                               withType:type.fileKind
-                                         withOutputSize:outputSize
-                                               withPath:timelineObject.sourceObject.filePath
-                                       withObjectItemID:objectItemID];
-
+    [self.renderCoreReceptionist createNewTextureForSize:dimensions
+                                               colorMode:nil
+                                                forTrack:track.trackID
+                                                withType:type.fileKind
+                                          withOutputSize:outputSize
+                                                withPath:timelineObject.sourceObject.filePath
+                                        withObjectItemID:objectItemID];
+    
 }
 
+/**
+ *
+ */
 - (void)handleAudioTimelineObject:(VSTimelineObject *)timelineObject atTrack:(VSTrack *)track{
-
+    
     if (timelineObject && track) {
         
         NSInteger projectItemID = timelineObject.sourceObject.projectItem.itemID;
@@ -126,7 +155,6 @@
 }
 
 - (void)stopPlayback{
-//    NSLog(@"stop");
     [self.renderCoreReceptionist stopPlaying];
 }
 
