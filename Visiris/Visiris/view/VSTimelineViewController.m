@@ -44,6 +44,10 @@
     }
 }
 
+-(void) dealloc{
+    DDLogInfo(@"dealloc");
+}
+
 /**
  * Sets the frame of the trackHolder and the AutoresizingMasks
  */

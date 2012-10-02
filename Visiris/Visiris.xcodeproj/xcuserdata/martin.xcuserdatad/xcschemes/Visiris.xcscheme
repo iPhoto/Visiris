@@ -60,15 +60,10 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = " -NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints 1"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
       <AdditionalOptions>
-         <AdditionalOption
-            key = "NSZombieEnabled"
-            value = "YES"
-            isEnabled = "YES">
-         </AdditionalOption>
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction

@@ -258,21 +258,19 @@ static NSString* defaultNib = @"VSMainTimelineView";
             //DDLogInfo(@"dura vgl: %f - %f",projectItem.duration,duration);
             //Sets the first object as the selected one wich's properites are shown
             if(i==0){
-                objectToBeSelected = [self.timeline
-                                      addNewTimelineObjectBasedOnProjectItemRepresentation:projectItem
-                                      toTrack:trackViewController.track
-                                      positionedAtTime:timePosition
-                                      withDuration:projectItem.duration
-                                      andRegisterUndoOperation:[self.view undoManager]
+                objectToBeSelected = [self.timeline addNewTimelineObjectBasedOnProjectItemRepresentation:projectItem
+                                                                                                 toTrack:trackViewController.track
+                                                                                        positionedAtTime:timePosition
+                                                                                            withDuration:projectItem.duration
+                                                                                andRegisterUndoOperation:[self.view undoManager]
                                       ];
             }
             else {
-                [self.timeline
-                 addNewTimelineObjectBasedOnProjectItemRepresentation:projectItem
-                 toTrack:trackViewController.track
-                 positionedAtTime:timePosition
-                 withDuration:duration
-                 andRegisterUndoOperation:[self.view undoManager]
+                [self.timeline addNewTimelineObjectBasedOnProjectItemRepresentation:projectItem
+                                                                            toTrack:trackViewController.track
+                                                                   positionedAtTime:timePosition
+                                                                       withDuration:duration
+                                                           andRegisterUndoOperation:[self.view undoManager]
                  ];
             }
             i++;

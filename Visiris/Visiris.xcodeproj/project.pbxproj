@@ -31,15 +31,10 @@
 		27CFB14216139C1D00A19B7A /* VVBasics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CFB13F16139C1D00A19B7A /* VVBasics.framework */; };
 		27CFB14316139C1D00A19B7A /* VVMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CFB14016139C1D00A19B7A /* VVMIDI.framework */; };
 		27CFB14416139C1D00A19B7A /* VVOSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CFB14116139C1D00A19B7A /* VVOSC.framework */; };
-		27CFB14516139C4600A19B7A /* VVBasics.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFB13F16139C1D00A19B7A /* VVBasics.framework */; };
-		27CFB14616139C4600A19B7A /* VVMIDI.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFB14016139C1D00A19B7A /* VVMIDI.framework */; };
-		27CFB14716139C4600A19B7A /* VVOSC.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFB14116139C1D00A19B7A /* VVOSC.framework */; };
 		27EEDA381612F6490075EE42 /* VSFullScreenController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27EEDA371612F6490075EE42 /* VSFullScreenController.m */; };
 		27F7D11916145A0B00EAAF40 /* VSExternalInputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EEC161381BB00C0AEEB /* VSExternalInputManager.m */; };
 		27F7D11B16145A3D00EAAF40 /* VSOSCInputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EEF161381DC00C0AEEB /* VSOSCInputManager.m */; };
 		27F7D11C16145A4300EAAF40 /* VSOSCClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EF41613822000C0AEEB /* VSOSCClient.m */; };
-		27F7D12E16149D9800EAAF40 /* VisirisCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27F7D12D16149D9800EAAF40 /* VisirisCore.framework */; };
-		27F7D12F16149F3800EAAF40 /* VisirisCore.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27F7D12D16149D9800EAAF40 /* VisirisCore.framework */; };
 		5B039BFA16143C3900059F5E /* VSParametersScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B039BF916143C3800059F5E /* VSParametersScrollView.m */; };
 		5B0E366615876E9300F15026 /* VSTrackLabelsRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366515876E9300F15026 /* VSTrackLabelsRulerView.m */; };
 		5B0E366C15876EEB00F15026 /* VSTrackLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366B15876EEB00F15026 /* VSTrackLabel.m */; };
@@ -181,6 +176,11 @@
 		5BD35BE315D95F48001A74E0 /* VSTimelineObjectParametersView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BE215D95F48001A74E0 /* VSTimelineObjectParametersView.m */; };
 		5BD35BE715D96891001A74E0 /* VSAnimationTrackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BE515D96890001A74E0 /* VSAnimationTrackViewController.m */; };
 		5BD35BED15D96ADB001A74E0 /* VSAnimationTrackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BEC15D96ADB001A74E0 /* VSAnimationTrackView.m */; };
+		5BE5179A1614A1220096DFB3 /* VVBasics.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFB13F16139C1D00A19B7A /* VVBasics.framework */; };
+		5BE5179B1614A1220096DFB3 /* VVMIDI.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFB14016139C1D00A19B7A /* VVMIDI.framework */; };
+		5BE5179C1614A1220096DFB3 /* VVOSC.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFB14116139C1D00A19B7A /* VVOSC.framework */; };
+		5BE5179F1614A13C0096DFB3 /* VisirisCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BE5179E1614A13C0096DFB3 /* VisirisCore.framework */; };
+		5BE517A01614A1470096DFB3 /* VisirisCore.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5BE5179E1614A13C0096DFB3 /* VisirisCore.framework */; };
 		5BEF5AFB15FE1F5E00F0FE8A /* VSOptionParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BEF5AFA15FE1F5E00F0FE8A /* VSOptionParameter.m */; };
 		5BFB871115DA2F8C00D405AF /* VSTimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BFB871015DA2F8C00D405AF /* VSTimelineViewController.m */; };
 /* End PBXBuildFile section */
@@ -192,10 +192,10 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				27F7D12F16149F3800EAAF40 /* VisirisCore.framework in CopyFiles */,
-				27CFB14516139C4600A19B7A /* VVBasics.framework in CopyFiles */,
-				27CFB14616139C4600A19B7A /* VVMIDI.framework in CopyFiles */,
-				27CFB14716139C4600A19B7A /* VVOSC.framework in CopyFiles */,
+				5BE5179A1614A1220096DFB3 /* VVBasics.framework in CopyFiles */,
+				5BE5179B1614A1220096DFB3 /* VVMIDI.framework in CopyFiles */,
+				5BE517A01614A1470096DFB3 /* VisirisCore.framework in CopyFiles */,
+				5BE5179C1614A1220096DFB3 /* VVOSC.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,7 +225,6 @@
 		27CFB14116139C1D00A19B7A /* VVOSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVOSC.framework; path = Frameworks/VVOSC.framework; sourceTree = "<group>"; };
 		27EEDA361612F6490075EE42 /* VSFullScreenController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFullScreenController.h; sourceTree = "<group>"; };
 		27EEDA371612F6490075EE42 /* VSFullScreenController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFullScreenController.m; sourceTree = "<group>"; };
-		27F7D12D16149D9800EAAF40 /* VisirisCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisirisCore.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-eufjdbcxewmvuyeomwjrnvsxmcxk/Build/Products/Debug/VisirisCore.framework"; sourceTree = "<group>"; };
 		5B039BF816143C3800059F5E /* VSParametersScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSParametersScrollView.h; sourceTree = "<group>"; };
 		5B039BF916143C3800059F5E /* VSParametersScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSParametersScrollView.m; sourceTree = "<group>"; };
 		5B05472216009868002FF9A9 /* VSViewKeyDownDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSViewKeyDownDelegate.h; sourceTree = "<group>"; };
@@ -484,6 +483,7 @@
 		5BD35BE515D96890001A74E0 /* VSAnimationTrackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAnimationTrackViewController.m; sourceTree = "<group>"; };
 		5BD35BEB15D96ADB001A74E0 /* VSAnimationTrackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAnimationTrackView.h; sourceTree = "<group>"; };
 		5BD35BEC15D96ADB001A74E0 /* VSAnimationTrackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAnimationTrackView.m; sourceTree = "<group>"; };
+		5BE5179E1614A13C0096DFB3 /* VisirisCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisirisCore.framework; path = "../../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-eibgtyufaxcnihdtvmkbpcrlzeqh/Build/Products/Debug/VisirisCore.framework"; sourceTree = "<group>"; };
 		5BEF5AF915FE1F5E00F0FE8A /* VSOptionParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSOptionParameter.h; sourceTree = "<group>"; };
 		5BEF5AFA15FE1F5E00F0FE8A /* VSOptionParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSOptionParameter.m; sourceTree = "<group>"; };
 		5BF875BE15B95E4200CEBBDD /* VSViewMouseEventsDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSViewMouseEventsDelegate.h; sourceTree = "<group>"; };
@@ -496,7 +496,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				27F7D12E16149D9800EAAF40 /* VisirisCore.framework in Frameworks */,
+				5BE5179F1614A13C0096DFB3 /* VisirisCore.framework in Frameworks */,
 				5B12792C15C13CAD0026AAFD /* QuickLook.framework in Frameworks */,
 				2799F8E91599C96D00008489 /* Quartz.framework in Frameworks */,
 				2795881A15906D7B00E24B57 /* AVFoundation.framework in Frameworks */,
@@ -625,7 +625,7 @@
 		5B35BF141577A49C009911EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				27F7D12D16149D9800EAAF40 /* VisirisCore.framework */,
+				5BE5179E1614A13C0096DFB3 /* VisirisCore.framework */,
 				5B12792B15C13CAD0026AAFD /* QuickLook.framework */,
 				2799F8E81599C96D00008489 /* Quartz.framework */,
 				2795881915906D7B00E24B57 /* AVFoundation.framework */,
@@ -1663,6 +1663,7 @@
 					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-eufjdbcxewmvuyeomwjrnvsxmcxk/Build/Products/Debug\"",
 					"\"$(SRCROOT)/External/Frameworks\"",
 					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-cdbzsbszlriaviebcmazsjojzrju/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-eibgtyufaxcnihdtvmkbpcrlzeqh/Build/Products/Debug\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Visiris/Visiris-Prefix.pch";
@@ -1683,6 +1684,7 @@
 					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-eufjdbcxewmvuyeomwjrnvsxmcxk/Build/Products/Debug\"",
 					"\"$(SRCROOT)/External/Frameworks\"",
 					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-cdbzsbszlriaviebcmazsjojzrju/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-eibgtyufaxcnihdtvmkbpcrlzeqh/Build/Products/Debug\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Visiris/Visiris-Prefix.pch";

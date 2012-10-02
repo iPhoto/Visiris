@@ -161,6 +161,8 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
         
         [self.parameterViewControllers removeAllObjects];
     }
+    
+    self.timelineObject = nil;
 }
 
 

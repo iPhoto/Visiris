@@ -13,7 +13,7 @@
  *
  * A Keyframe describes a value for an parameter at a specific timestamp
  */
-@interface VSKeyFrame : NSObject
+@interface VSKeyFrame : NSObject<NSCopying>
 
 
 #pragma mark - Properties
@@ -45,6 +45,6 @@
  * @param ID Unique id of the parameter
  * @return self
  */
--(id) initWithValue:(NSData*) aValue forTimestamp:(double) aTimestamp andID:(NSUInteger) ID;
+-(id) initWithValue:(id) aValue forTimestamp:(double) aTimestamp andID:(NSUInteger) ID;
 
 @end

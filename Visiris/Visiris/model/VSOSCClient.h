@@ -16,6 +16,7 @@
 - (id)initWithOSCInPort:(OSCInPort *)oscInPort;
 
 - (void)startObserving;
+
 - (void)stopObserving;
 
 

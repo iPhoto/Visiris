@@ -23,6 +23,7 @@
 /** Subclass of NSRulerMarker Displaying the current Position of the playhead in the timelineRulerView */
 @property (strong) VSPlayheadMarker *playheadMarker;
 
+@property NSTrackingArea *trackingArea;
 @end
 
 @implementation VSTimelineScrollView
@@ -77,6 +78,17 @@
     
     [self.horizontalRulerView setClientView:self.trackHolderView];
     
+}
+
+-(void) setFrame:(NSRect)frameRect{
+    NSRect oldFrame = self.frame;
+    [super setFrame:frameRect];
+
+    if([self.trackingAreas containsObject:self.trackingArea]){
+        [self removeTrackingArea:self.trackingArea];
+    }
+    self.trackingArea = [[NSTrackingArea alloc] initWithRect:self.frame options:(NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingActiveAlways ) owner:self userInfo:nil];
+    [self addTrackingArea:self.trackingArea];
 }
 
 /**

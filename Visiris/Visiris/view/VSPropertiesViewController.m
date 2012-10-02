@@ -144,6 +144,7 @@ static NSString* defaultNib = @"VSPropertiesView";
 -(void) timelineObjectsGotUnselected:(NSNotification *) notification{
     if(self.view.subviews.count > 0){
         if([[self.view subviews] objectAtIndex:0] == self.timelineObjectPropertiesViewController.view){
+            [self.timelineObjectPropertiesViewController willBeHidden];
             [self.timelineObjectPropertiesViewController.view removeFromSuperview];
         }
     }

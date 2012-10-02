@@ -58,7 +58,7 @@
  * @param aTimelineObject VSTimelineObject that will be removed form the track.
  * @return YES if aTimelineObject was removed successfully, NO otherwise
  */
--(BOOL) removTimelineObject:(VSTimelineObject*) aTimelineObject;
+-(BOOL) removeTimelineObject:(VSTimelineObject*) aTimelineObject;
 
 /**
  * Removes all selected TimelineObecjts from the track and registers the operation at the given undoManager
@@ -73,7 +73,7 @@
  * @param undoManager NSUndoManger the removal of the timelineObject is registrated
  * @return YES if aTimelineObject was removed successfully, NO otherwise
  */
--(BOOL) removTimelineObject:(VSTimelineObject*) aTimelineObject andRegisterAtUndoManager:(NSUndoManager*) undoManager;
+-(BOOL) removeTimelineObject:(VSTimelineObject*) aTimelineObject andRegisterAtUndoManager:(NSUndoManager*) undoManager;
 
 /**
  * Sets the selected property of the given VSTimelineObject to YES.
