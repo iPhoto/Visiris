@@ -226,6 +226,16 @@
 }
 
 
+#pragma mark - VSPreProcessorDelegate Implementation
+
+-(void) removedTimelineObjectsfromRenderCore:(NSArray *)timelineObjects{
+    [self updateCurrentFrame];
+}
+
+-(void) addedTimelineObjectsToRenderCore:(NSArray *)timelineObjects{
+    [self updateCurrentFrame];
+}
+
 #pragma mark - Private Methods
 
 /**

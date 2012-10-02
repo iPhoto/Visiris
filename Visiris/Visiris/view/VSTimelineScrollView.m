@@ -81,7 +81,6 @@
 }
 
 -(void) setFrame:(NSRect)frameRect{
-    NSRect oldFrame = self.frame;
     [super setFrame:frameRect];
 
     if([self.trackingAreas containsObject:self.trackingArea]){
