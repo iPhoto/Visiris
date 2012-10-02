@@ -32,7 +32,7 @@
 /** The Dictionary contains one FBO for each Track */
 @property (strong) NSMutableDictionary  *fboForTrack;
 
-//todo
+/** Counts the number of objects on every trackID */
 @property (strong) VSReferenceCounting  *referenceCountingObjects;
 
 @end

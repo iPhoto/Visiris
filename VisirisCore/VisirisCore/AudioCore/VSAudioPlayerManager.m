@@ -125,7 +125,7 @@
     }
 }
 
-- (void)debugLog{
+- (void)printDebugLog{
     NSLog(@"++++++++++++++++++++++++++DEBUG LOG AUDIOCORE++++++++++++++++++++++++++");
     NSLog(@"-----playerCollectionToTrackID-----");
     for (id key in self.playerCollectionToTrackID) {

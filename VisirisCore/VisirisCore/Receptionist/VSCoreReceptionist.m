@@ -92,12 +92,13 @@
 - (void)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path withObjectItemID:(NSInteger)objectItemID{
 
     [self.renderCore createNewTextureForSize:textureSize colorMode:colorMode forTrack:trackID withType:type withOutputSize:size withPath:path withObjectItemID:(NSInteger)objectItemID];
-    [self printDebugLog];
+//    [self printDebugLog];
 }
 
 - (void)createNewAudioPlayerWithProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID forTrack:(NSInteger)trackId andFilePath:(NSString *)filepath{
 
     [self.audioCore createAudioPlayerForProjectItemID:projectItemID withObjectItemID:objectItemID atTrack:trackId andFilePath:filepath];
+//    [self printDebugLog];
 }
 
 - (void)removeTimelineobjectWithID:(NSInteger)anID andType:(VSFileKind)type{
@@ -120,11 +121,16 @@
             break;
     }
     
-    [self printDebugLog];
+//    [self printDebugLog];
 }
 
 - (void)printDebugLog{
+    NSLog(@"###############################################");
+    NSLog(@"##########D-E-B-U-G - L-O-G - C-O-R-E##########");
+    NSLog(@"###############################################");
     [self.renderCore printDebugLog];
+    [self.audioCore printDebugLog];
+    NSLog(@"###############################################");
 }
 
 

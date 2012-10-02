@@ -63,7 +63,6 @@
 
 
 - (void)printDebugLog{
-    NSLog(@"ReferenceCounting DebugLog");
     for (id key in self.referenceCountingToIDObject) {
         NSLog(@"value: %@, References: %@", key, [self.referenceCountingToIDObject objectForKey:key]);
     }

@@ -87,7 +87,9 @@
  */
 - (void)deleteQCPatchForTimelineObjectID:(NSInteger)theID;
 
-//todo
+/**
+ * Print output of the manager.
+ */
 - (void)printDebugLog;
 
 @end

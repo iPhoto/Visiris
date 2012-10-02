@@ -50,6 +50,6 @@
 /**
  * Prints everything that hold Objects
  */
-- (void)debugLog;
+- (void)printDebugLog;
 
 @end

@@ -38,14 +38,10 @@
 
 - (void)createAudioPlayerForProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID atTrack:(NSInteger)trackID andFilePath:(NSString *)path{
     [self.audioPlayerManager createAudioPlayerForProjectItemID:projectItemID withObjectItemID:objectItemID atTrack:trackID andFilePath:path];
-    
-//    [self debugLog];
 }
 
 - (void)playAudioOfHandovers:(NSArray *)handovers atTimeStamp:(double)timeStamp{
-    
-//    NSLog(@"timestamp: %f", timeStamp);
-    
+        
     for (VSCoreHandover *coreHandover in handovers) {
         float volume = [[coreHandover.attributes objectForKey:VSParameterAudioVolume] floatValue];
                     
@@ -65,11 +61,10 @@
 - (void)deleteTimelineobjectID:(NSInteger)timelineobjectID{
     [self stopTimeLineObject:timelineobjectID];
     [self.audioPlayerManager deleteTimelineobjectID:timelineobjectID];
-//    [self debugLog];
 }
 
-- (void)debugLog{
-    [self.audioPlayerManager debugLog];
+- (void)printDebugLog{
+    [self.audioPlayerManager printDebugLog];
 }
 
 @end

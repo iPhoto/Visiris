@@ -10,7 +10,11 @@
 
 @interface VSLayermode : NSObject
 
-//TODO Comment
+/**
+ * Given the Layermode as string returns the associating number (kind of enum)
+ * @param string Layermode
+ * @return Integer value of the Layermode
+ */
 + (float)floatFromString:(NSString *)string;
 
 @end

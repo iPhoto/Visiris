@@ -249,6 +249,7 @@
 }
 
 - (void)deleteQCPatchForTimelineObjectID:(NSInteger)theID{
+    [self.transformTextureManager decrementReferenceCounting:[self.qcpManager trackIDfromObjectID:theID]];
     [self.qcpManager deleteQCRenderer:theID];
 }
 
@@ -259,6 +260,7 @@
 - (void)printDebugLog{
     [self.textureManager printDebugLog];
     [self.transformTextureManager printDebugLog];
+    [self.qcpManager printDebugLog];
 }
 
 
@@ -475,17 +477,16 @@
     NSLog(@"There are %d valid Textures on the GPU",counter);
 }
 
-//TODO 
+/**
+ * Is called with the bottom Timelineobject for creating for the alpha
+ * @param texture OpenGL Texture
+ */
 - (void)mergeWithBackground:(GLuint)texture {
     [self.frameBufferObjectCurrent bind];
     
     glViewport(0, 0, self.frameBufferObjectCurrent.size.width,self.frameBufferObjectCurrent.size.height);
     
-//    glClear(GL_COLOR_BUFFER_BIT);
-//    glColor3f(0.0f, 0.0f, 0.0f);
-    
     glUseProgram(self.backgroundShader.program);
-//    glUniform1f(self.layerShader.uniformLayermode, layermode);
     
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -515,9 +516,10 @@
     [[self openGLContext] flushBuffer];
 }
 
-
 /**
- * todo
+ * For the shader we cant use strings - so we change it to a float (cant use int either)
+ * @param handover The Handover
+ * @return number of the layermode
  */
 - (float)layerMode:(VSCoreHandover *)handover{
     NSString *tempString = (NSString *)[handover.attributes objectForKey:@"VSParameterKeyBlendMode"];

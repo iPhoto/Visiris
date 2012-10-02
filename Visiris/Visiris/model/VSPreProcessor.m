@@ -71,7 +71,6 @@
     }
 }
 
-//TODO: add colorspace...but i think we don't need it
 -(void) timelineObjects:(NSArray *)newTimelineObjects haveBeenAddedToTrack:(VSTrack *)aTrack{
     //DDLogInfo(@"%@",newTimelineObjects);
     

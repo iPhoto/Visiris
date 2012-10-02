@@ -97,7 +97,6 @@ static NSString* defaultNib = @"VSPreviewView";
  * Inits the openGLView and sets its autoresizing behaviour
  */
 - (void)initOpenGLView{
-    //todo das geht besser
     [self.openGLView setOpenGLWithSharedContext:self.openGLContext];
     [self.openGLView setAutoresizingMask:NSViewNotSizable];
 }

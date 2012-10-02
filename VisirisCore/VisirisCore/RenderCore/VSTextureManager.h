@@ -35,7 +35,11 @@
  */
 - (void)deleteTextureForTimelineobjectID:(NSInteger)theID;
 
-//todo
+/**
+ * Returns the trackID given the ID of a timelineobject
+ * @param objectID ID of the timelineObject
+ * @return ID of the Track
+ */
 - (NSInteger)trackIDfromObjectID:(NSInteger)objectID;
 
 /**

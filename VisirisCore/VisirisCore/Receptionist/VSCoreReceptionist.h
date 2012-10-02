@@ -62,7 +62,9 @@
 
 - (void)stopPlaying;
 
-//TODO
+/**
+ * Prints all Information from the Rendercore and Audiocore
+ */
 - (void)printDebugLog;
 
 @end

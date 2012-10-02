@@ -8,18 +8,21 @@
 
 #import "VSQCManager.h"
 #import "VSQCRenderer.h"
-//#import "VSTexture.h"
+#import "VSReferenceCounting.h"
 
 @interface VSQCManager()
 
 /** The Dictionary contains the Quartzrenderer and are associated with a TimelineobjectID */
-@property (strong) NSMutableDictionary   *quartzRendererForObjectId;
+@property (strong) NSMutableDictionary      *quartzRendererForObjectId;
 
 /** The Dictionary contains one VSTexture for each Track */
-@property (strong) NSMutableDictionary  *textureForTrackID;
+@property (strong) NSMutableDictionary      *textureForTrackID;
 
+/** Counts the number of quartzObjects for each track */
+@property (strong) VSReferenceCounting      *referenceCountingObjects;
 
 @end
+
 
 @implementation VSQCManager
 @synthesize quartzRendererForObjectId = _quartzRendererForObjectId;
@@ -31,6 +34,7 @@
     if (self = [super init]) {
         self.quartzRendererForObjectId = [[NSMutableDictionary alloc] init];
         self.textureForTrackID = [[NSMutableDictionary alloc] init];
+        self.referenceCountingObjects = [[VSReferenceCounting alloc] init];
     }
     return self;
 }
@@ -57,9 +61,16 @@
 }
 
 - (void)deleteQCRenderer:(NSInteger)timelineObjectID{
+   
     VSQCRenderer *temp = [self.quartzRendererForObjectId objectForKey:[NSNumber numberWithInteger:timelineObjectID]];
-    [temp deleteRenderer];
-    [self.quartzRendererForObjectId removeObjectForKey:[NSNumber numberWithInteger:timelineObjectID]];
+    if (temp) {
+        
+        if([self.referenceCountingObjects decrementReferenceOfKey:[NSNumber numberWithInteger:temp.trackId]] == NO){
+            [self deleteTextureForTrackID:temp.trackId];
+        }
+        
+        [self.quartzRendererForObjectId removeObjectForKey:[NSNumber numberWithInteger:timelineObjectID]];
+    }
 }
 
 - (void)resize:(NSSize)size{
@@ -69,7 +80,9 @@
     }
 }
 
-- (NSNumber *)createTextureAtTrackId:(NSInteger) trackId{
+- (NSNumber *)createTextureAtTrackId:(NSInteger)trackId{
+    
+    [self.referenceCountingObjects incrementReferenceOfKey:[NSNumber numberWithInteger:trackId]];
     
     NSNumber *texture = [self.textureForTrackID objectForKey:[NSNumber numberWithInteger:trackId]];
     
@@ -93,11 +106,33 @@
 
 - (void)deleteTextureForTrackID:(NSInteger)trackID{
     
-    //TODO doenst get called - the whole reference Counting is missing
     NSNumber *texture = [self.textureForTrackID objectForKey:[NSNumber numberWithInteger:trackID]];
     GLuint textureName = [texture intValue];
     glDeleteTextures(1, &textureName);
     [self.textureForTrackID removeObjectForKey:[NSNumber numberWithInteger:trackID]];
 }
+
+- (void)printDebugLog{
+    NSLog(@"++++++++++++++++++++++++++DEBUG LOG VSQC MANAGER++++++++++++++++++++++++++");
+    NSLog(@"-----quartzRendererForObjectId-----");
+    for (id objectID in self.quartzRendererForObjectId) {
+        NSLog(@"objectID: %@, quartzRenderer: %@", objectID, [self.quartzRendererForObjectId objectForKey:objectID]);
+    }
+    
+    NSLog(@"-----textureForTrackID-----");
+    for (id trackID in self.textureForTrackID) {
+        NSLog(@"trackID: %@, texture: %@", trackID, [self.textureForTrackID objectForKey:trackID]);
+    }
+    
+    NSLog(@"-----referenceCountingObjects-----");
+    [self.referenceCountingObjects printDebugLog];
+}
+
+- (NSInteger)trackIDfromObjectID:(NSInteger)objectID{
+    
+    VSQCRenderer *tempRenderer = [self.quartzRendererForObjectId objectForKey:[NSNumber numberWithInteger:objectID]];
+    return tempRenderer.trackId;
+}
+
 
 @end
