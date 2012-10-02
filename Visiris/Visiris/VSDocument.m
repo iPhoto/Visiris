@@ -102,7 +102,7 @@
     
     [VSOutputController sharedOutputController].playbackController = self.playbackController;
     // Start Client
-    self.externalInputManager = [[VSExternalInputManager alloc] init];
+//    self.externalInputManager = [[VSExternalInputManager alloc] init];
 }
 
 
