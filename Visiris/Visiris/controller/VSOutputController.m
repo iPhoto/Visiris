@@ -7,22 +7,21 @@
 //
 
 #import "VSOutputController.h"
-
 #import "VSPlaybackController.h"
 
 @interface VSOutputController()
 
 @property (assign) CVDisplayLinkRef displayLink;
-
 @property (strong) NSMutableArray *registratedOutputs;
-
 @property NSOpenGLContext *openGLContext;
 
 @end
 
+
 @implementation VSOutputController
 
 static VSOutputController* sharedOutputController = nil;
+
 
 #pragma mark- Functions
 
@@ -36,6 +35,7 @@ static VSOutputController* sharedOutputController = nil;
     
     return sharedOutputController;
 }
+
 
 #pragma mark - Init
 
@@ -51,6 +51,7 @@ static VSOutputController* sharedOutputController = nil;
 -(void) connectWithOpenGLContext:(NSOpenGLContext*) openGLContext{
     self.openGLContext = openGLContext;
 }
+
 
 #pragma mark - Methods
 

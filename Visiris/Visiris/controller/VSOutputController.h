@@ -20,15 +20,15 @@
 
 @interface VSOutputController : NSObject
 
-@property (readonly) double refreshPeriod;
+@property (readonly) double             refreshPeriod;
+@property VSPlaybackController          *playbackController;
+@property (strong) NSOpenGLPixelFormat  *pixelFormat;
 
-@property VSPlaybackController *playbackController;
-
-@property (strong) NSOpenGLPixelFormat *pixelFormat;
 
 #pragma mark - Functions
 
 +(VSOutputController*)sharedOutputController;
+
 
 #pragma mark - Methods
 
