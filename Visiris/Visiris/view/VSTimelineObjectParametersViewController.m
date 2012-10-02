@@ -155,7 +155,7 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
 -(void) resetParameters{
     if(self.parameterViewControllers.count){
         for(VSParameterViewController *ctrl in [self.parameterViewControllers allValues]){
-            [ctrl saveParameterAndRemoveObserver];
+            [ctrl removeObservers];
             [ctrl.view removeFromSuperview];
         }
         

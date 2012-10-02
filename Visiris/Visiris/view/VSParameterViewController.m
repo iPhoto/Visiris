@@ -83,10 +83,8 @@ static NSString* defaultNib = @"VSParameterView";
 
 #pragma mark - Methods
 
--(void) saveParameterAndRemoveObserver{
+-(void) removeObservers{
     [self.parameter removeObserver:self forKeyPath:@"currentValue"];
-    
-    [self storeParameterValue];
 }
 
 -(void) showParameter:(VSParameter *)parameter{

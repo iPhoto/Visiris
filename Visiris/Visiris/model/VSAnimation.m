@@ -56,6 +56,8 @@
 
 -(VSKeyFrame*) addKeyFrameWithValue:(id) aValue forTimestamp:(double)aTimestamp{
     
+    DDLogInfo(@"addKeyFrameWithValue");
+    
     if(!self.keyFrames){
         _keyFrames = [[NSMutableArray alloc]init];
     }
