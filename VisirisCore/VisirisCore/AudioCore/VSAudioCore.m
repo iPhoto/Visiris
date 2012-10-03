@@ -38,6 +38,7 @@
 
 - (void)createAudioPlayerForProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID atTrack:(NSInteger)trackID andFilePath:(NSString *)path{
     [self.audioPlayerManager createAudioPlayerForProjectItemID:projectItemID withObjectItemID:objectItemID atTrack:trackID andFilePath:path];
+//    NSLog(@"created");
 }
 
 - (void)playAudioOfHandovers:(NSArray *)handovers atTimeStamp:(double)timeStamp{
@@ -61,7 +62,8 @@
 }
 
 - (void)deleteTimelineobjectID:(NSInteger)timelineobjectID{
-    [self stopTimeLineObject:timelineobjectID];
+//    [self stopTimeLineObject:timelineobjectID];
+//    NSLog(@"delete");
     [self.audioPlayerManager deleteTimelineobjectID:timelineobjectID];
 }
 
