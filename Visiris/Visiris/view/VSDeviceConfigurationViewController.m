@@ -75,19 +75,9 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 {
     [self insertNewDeviceRow];
     
-    [self.createDeviceDetailWindow setContentView:self.createDevicePopover.contentViewController.view];
-    [[NSApplication sharedApplication] beginSheet:self.createDeviceDetailWindow modalForWindow:[NSApp keyWindow] modalDelegate:nil didEndSelector:@selector(didFinishCreatingNewInputDeviceFromSheet:) contextInfo:nil];
+    [[NSApplication sharedApplication] beginSheet:self.createDeviceViewController.createDeviceWindow modalForWindow:[NSApp keyWindow] modalDelegate:nil didEndSelector:@selector(didFinishCreatingNewInputDeviceFromSheet:) contextInfo:nil];
 }
 
-- (void)insertNewDeviceRowAndPresentDeviceConfigurationPopover
-{
-    _isCurrentlyPresentingNewDeviceConfigurationPopover = YES;
-    
-    [self insertNewDeviceRow];
-    
-    self.createDevicePopover.delegate = self;
-    [self.createDevicePopover showRelativeToRect:NSMakeRect(0, 0, self.deviceTableView.bounds.size.width, 20) ofView:self.deviceTableView preferredEdge:NSMaxXEdge];
-}
 
 - (void)insertNewDeviceRow
 {
@@ -95,17 +85,6 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
     [self.deviceTableView beginUpdates];
     [self.deviceTableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:0] withAnimation:NSTableViewAnimationSlideDown];
     [self.deviceTableView endUpdates];
-}
-
-- (IBAction)didPressCancelCreatingDeviceButton:(NSButton *)cancelButton
-{
-
-}
-
-
-- (IBAction)didPressFinishedCreatingDeviceButton:(NSButton *)finishButton
-{
-
 }
 
 
@@ -128,7 +107,7 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 {
     
     _isCurrentlyPresentingNewDeviceConfigurationPopover = NO;
-    [self.createDevicePopover close];
+
 }
 
 
@@ -152,13 +131,6 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
     return [self.externalInputManager availableInputs];
 }
 
-
-#pragma mark - NSPopover Delegate
-- (NSWindow *)detachableWindowForPopover:(NSPopover *)popover
-{
-    [self.createDeviceDetailWindow setContentView:popover.contentViewController.view];
-    return self.createDeviceDetailWindow;
-}
 
 #pragma mark - NSTableViewDelegate
 

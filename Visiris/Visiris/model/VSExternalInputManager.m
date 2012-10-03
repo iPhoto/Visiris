@@ -20,6 +20,7 @@
 @interface VSExternalInputManager ()
 
 @property (strong) NSMutableDictionary                          *availableInputManager;
+@property (strong) NSMutableDictionary                          *availableParameter;
 
 @end
 
