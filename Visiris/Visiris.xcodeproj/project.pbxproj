@@ -183,6 +183,13 @@
 		5BE5179C1614A1220096DFB3 /* VVOSC.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFB14116139C1D00A19B7A /* VVOSC.framework */; };
 		5BEF5AFB15FE1F5E00F0FE8A /* VSOptionParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BEF5AFA15FE1F5E00F0FE8A /* VSOptionParameter.m */; };
 		5BFB871115DA2F8C00D405AF /* VSTimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BFB871015DA2F8C00D405AF /* VSTimelineViewController.m */; };
+		A9818DDF1614FC67005321A2 /* VSOSCMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = A9818DDE1614FC67005321A2 /* VSOSCMessage.m */; };
+		A9818DE3161502AB005321A2 /* VSOSCPort.m in Sources */ = {isa = PBXBuildFile; fileRef = A9818DE2161502AB005321A2 /* VSOSCPort.m */; };
+		A9838A43161792CD00DF110C /* VSDeviceConfigurationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9838A41161792CD00DF110C /* VSDeviceConfigurationViewController.m */; };
+		A9838A44161792CD00DF110C /* VSDeviceConfigurationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9838A42161792CD00DF110C /* VSDeviceConfigurationViewController.xib */; };
+		A9838A5C1617B2BC00DF110C /* VSCreateDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9838A5A1617B2BC00DF110C /* VSCreateDeviceViewController.m */; };
+		A9838A5D1617B2BC00DF110C /* VSCreateDeviceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9838A5B1617B2BC00DF110C /* VSCreateDeviceViewController.xib */; };
+		A9D8275A16188A91008985F7 /* VSDeviceParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D8275916188A91008985F7 /* VSDeviceParameter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -490,6 +497,19 @@
 		5BF875BE15B95E4200CEBBDD /* VSViewMouseEventsDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSViewMouseEventsDelegate.h; sourceTree = "<group>"; };
 		5BFB870F15DA2F8C00D405AF /* VSTimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineViewController.h; sourceTree = "<group>"; };
 		5BFB871015DA2F8C00D405AF /* VSTimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineViewController.m; sourceTree = "<group>"; };
+		A9818DDA1614F758005321A2 /* VSOSCClientPortListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSOSCClientPortListener.h; sourceTree = "<group>"; };
+		A9818DDD1614FC67005321A2 /* VSOSCMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSOSCMessage.h; sourceTree = "<group>"; };
+		A9818DDE1614FC67005321A2 /* VSOSCMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSOSCMessage.m; sourceTree = "<group>"; };
+		A9818DE1161502AB005321A2 /* VSOSCPort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSOSCPort.h; sourceTree = "<group>"; };
+		A9818DE2161502AB005321A2 /* VSOSCPort.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSOSCPort.m; sourceTree = "<group>"; };
+		A9838A40161792CD00DF110C /* VSDeviceConfigurationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDeviceConfigurationViewController.h; sourceTree = "<group>"; };
+		A9838A41161792CD00DF110C /* VSDeviceConfigurationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDeviceConfigurationViewController.m; sourceTree = "<group>"; };
+		A9838A42161792CD00DF110C /* VSDeviceConfigurationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VSDeviceConfigurationViewController.xib; sourceTree = "<group>"; };
+		A9838A591617B2BC00DF110C /* VSCreateDeviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSCreateDeviceViewController.h; sourceTree = "<group>"; };
+		A9838A5A1617B2BC00DF110C /* VSCreateDeviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSCreateDeviceViewController.m; sourceTree = "<group>"; };
+		A9838A5B1617B2BC00DF110C /* VSCreateDeviceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VSCreateDeviceViewController.xib; sourceTree = "<group>"; };
+		A9D8275816188A91008985F7 /* VSDeviceParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDeviceParameter.h; sourceTree = "<group>"; };
+		A9D8275916188A91008985F7 /* VSDeviceParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDeviceParameter.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -548,6 +568,9 @@
 		27726EF2161381FC00C0AEEB /* oscClient */ = {
 			isa = PBXGroup;
 			children = (
+				A9818DE01615029B005321A2 /* oscPort */,
+				A9818DDC1614FC4B005321A2 /* oscMessage */,
+				A9818DDA1614F758005321A2 /* VSOSCClientPortListener.h */,
 				27726EF31613822000C0AEEB /* VSOSCClient.h */,
 				27726EF41613822000C0AEEB /* VSOSCClient.m */,
 			);
@@ -950,6 +973,7 @@
 		5B35C0AC1577AF32009911EC /* objectBrowser */ = {
 			isa = PBXGroup;
 			children = (
+				A9838A3E1617926900DF110C /* deviceConfigurator */,
 				5B35C0B11577AF9B009911EC /* projectItemBrowser */,
 				5B35BFA01577A573009911EC /* VSBrowserView.xib */,
 				5B35BFA11577A573009911EC /* VSBrowserViewController.h */,
@@ -1117,10 +1141,12 @@
 		5B35C0B91577B0D7009911EC /* device */ = {
 			isa = PBXGroup;
 			children = (
-				5B35BF691577A573009911EC /* VSDevice.h */,
-				5B35BF6A1577A573009911EC /* VSDevice.m */,
 				5B35BF6B1577A573009911EC /* VSDeviceManager.h */,
 				5B35BF6C1577A573009911EC /* VSDeviceManager.m */,
+				5B35BF691577A573009911EC /* VSDevice.h */,
+				5B35BF6A1577A573009911EC /* VSDevice.m */,
+				A9D8275816188A91008985F7 /* VSDeviceParameter.h */,
+				A9D8275916188A91008985F7 /* VSDeviceParameter.m */,
 			);
 			name = device;
 			sourceTree = "<group>";
@@ -1330,6 +1356,45 @@
 			name = timeline;
 			sourceTree = "<group>";
 		};
+		A9818DDC1614FC4B005321A2 /* oscMessage */ = {
+			isa = PBXGroup;
+			children = (
+				A9818DDD1614FC67005321A2 /* VSOSCMessage.h */,
+				A9818DDE1614FC67005321A2 /* VSOSCMessage.m */,
+			);
+			name = oscMessage;
+			sourceTree = "<group>";
+		};
+		A9818DE01615029B005321A2 /* oscPort */ = {
+			isa = PBXGroup;
+			children = (
+				A9818DE1161502AB005321A2 /* VSOSCPort.h */,
+				A9818DE2161502AB005321A2 /* VSOSCPort.m */,
+			);
+			name = oscPort;
+			sourceTree = "<group>";
+		};
+		A9838A3E1617926900DF110C /* deviceConfigurator */ = {
+			isa = PBXGroup;
+			children = (
+				A9838A5E1617B2C200DF110C /* CreateDevice */,
+				A9838A40161792CD00DF110C /* VSDeviceConfigurationViewController.h */,
+				A9838A41161792CD00DF110C /* VSDeviceConfigurationViewController.m */,
+				A9838A42161792CD00DF110C /* VSDeviceConfigurationViewController.xib */,
+			);
+			name = deviceConfigurator;
+			sourceTree = "<group>";
+		};
+		A9838A5E1617B2C200DF110C /* CreateDevice */ = {
+			isa = PBXGroup;
+			children = (
+				A9838A591617B2BC00DF110C /* VSCreateDeviceViewController.h */,
+				A9838A5A1617B2BC00DF110C /* VSCreateDeviceViewController.m */,
+				A9838A5B1617B2BC00DF110C /* VSCreateDeviceViewController.xib */,
+			);
+			name = CreateDevice;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1417,6 +1482,8 @@
 				5B0EFF96158A1F410000445C /* playhead.png in Resources */,
 				5BD35BC615D95943001A74E0 /* VSAnimationTimelineView.xib in Resources */,
 				5BD35BDF15D95F2C001A74E0 /* VSTimelineObjectParametersView.xib in Resources */,
+				A9838A44161792CD00DF110C /* VSDeviceConfigurationViewController.xib in Resources */,
+				A9838A5D1617B2BC00DF110C /* VSCreateDeviceViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
