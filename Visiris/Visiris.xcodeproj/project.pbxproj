@@ -1636,7 +1636,11 @@
 				27F7D11916145A0B00EAAF40 /* VSExternalInputManager.m in Sources */,
 				27F7D11B16145A3D00EAAF40 /* VSOSCInputManager.m in Sources */,
 				27F7D11C16145A4300EAAF40 /* VSOSCClient.m in Sources */,
-				5B98D1CC161C8EF0002CDE1F /* VSFullScreenHolderView.m in Sources */,
+				A9818DDF1614FC67005321A2 /* VSOSCMessage.m in Sources */,
+				A9818DE3161502AB005321A2 /* VSOSCPort.m in Sources */,
+				A9838A43161792CD00DF110C /* VSDeviceConfigurationViewController.m in Sources */,
+				A9838A5C1617B2BC00DF110C /* VSCreateDeviceViewController.m in Sources */,
+				A9D8275A16188A91008985F7 /* VSDeviceParameter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
