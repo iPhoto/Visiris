@@ -81,7 +81,7 @@
     VSTexture *texture = (VSTexture *)[self.textureToObjectID objectForKey:[NSNumber numberWithInteger:timelineobjectID]];
         
     if (texture == nil) {
-        NSLog(@"fucking shit happens");
+        NSLog(@"createTextureWithSize texture is nil");
     }
     return texture;
 }

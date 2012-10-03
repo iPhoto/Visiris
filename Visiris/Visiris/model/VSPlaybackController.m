@@ -27,7 +27,7 @@
 
 @property VSTimeline* timeline;
 
-@property (weak) VSTimelineObject*selectedTimelineObject;
+@property (strong) VSTimelineObject*selectedTimelineObject;
 //todo
 @property (assign) double deltaTime;
 
@@ -40,15 +40,6 @@
 
 @implementation VSPlaybackController
 
-@synthesize preProcessor        = _preProcessor;
-@synthesize timeline            = _timeline;
-@synthesize currentTimestamp    = _currentTimestamp;
-@synthesize playbackTimer       = _playbackTimer;
-@synthesize playbackStartTime   = _playbackStartTime;
-@synthesize frameWasRender      = _frameWasRender;
-@synthesize playbackMode        = _playbackMode;
-@synthesize deltaTime           = _deltaTime;
-@synthesize counter             = _counter;
 
 #pragma mark - Init
 
@@ -210,7 +201,7 @@
 }
 
 -(void) play{
-   
+    
     [self.outputController startPlayback];
     self.playbackStartTime = CFAbsoluteTimeGetCurrent();
     
@@ -245,11 +236,22 @@
  * @param notification NSNotification storing the unselected VSTimelineObject
  */
 -(void) timelineObjectsGotUnselected:(NSNotification *) notification{
-    for(VSParameter *parameter in [self.selectedTimelineObject visibleParameters]){
-        [parameter removeObserver:self forKeyPath:@"currentValue"];
+    if([[notification object] isKindOfClass:[NSArray class]]){
+        NSArray *unselectedTimelineObjects = notification.object;
+        
+        for(VSTimelineObject *unselectedTimelineObject in unselectedTimelineObjects){
+            [self removeObserversFromSelecteTimelineObject];
+        }
     }
     
     self.selectedTimelineObject = nil;
+    
+}
+
+-(void) removeObserversFromSelecteTimelineObject{
+    for(VSParameter *parameter in [self.selectedTimelineObject visibleParameters]){
+        [parameter removeObserver:self forKeyPath:@"currentValue"];
+    }
 }
 
 /**
@@ -259,24 +261,28 @@
  * @param notification NSNotification storing the selected VSTimelineObject
  */
 -(void) timelineObjectsGotSelected:(NSNotification *) notification{
+    if(self.selectedTimelineObject){
+        [self removeObserversFromSelecteTimelineObject];
+    }
+    
     if([[notification object] isKindOfClass:[NSArray class]]){
-        NSArray *selectedTimelineObjects = (NSArray*) [notification object];
         
-        if(selectedTimelineObjects && selectedTimelineObjects.count > 0){
-            if([[selectedTimelineObjects objectAtIndex:0] isKindOfClass:[VSTimelineObject class]]){
-                
-                self.selectedTimelineObject = (VSTimelineObject*) [selectedTimelineObjects objectAtIndex:0];
-                
-                for(VSParameter *parameter in [self.selectedTimelineObject visibleParameters]){
-                    
-                    [parameter addObserver:self
-                                forKeyPath:@"currentValue"
-                                   options:0
-                                   context:nil];
-                }
+        NSArray *selectedTimelineObjects = notification.object;
+        
+        VSTimelineObject *selectedTimelineObject = [selectedTimelineObjects objectAtIndex:0];
+        if([selectedTimelineObject isKindOfClass:[VSTimelineObject class]]){
+            
+            self.selectedTimelineObject = selectedTimelineObject;
+            
+            for(VSParameter *parameter in [self.selectedTimelineObject visibleParameters]){
+                [parameter addObserver:self
+                            forKeyPath:@"currentValue"
+                               options:0
+                               context:nil];
             }
         }
     }
+    
 }
 
 /**
@@ -307,7 +313,7 @@
     
     self.deltaTime = (currentTime - self.playbackStartTime)*1000.0;
     self.currentTimestamp += self.deltaTime;
-        
+    
     if(self.currentTimestamp > self.timeline.duration){
         self.currentTimestamp = 0;
     }

@@ -27,16 +27,17 @@
 
 #pragma mark - Init
 
--(id) init{
+-(id) initWithDefaultValue:(id)defaultValue{
     if(self = [super init]){
         _keyFrames =[[NSMutableArray alloc]init];
+        self.defaultValue = defaultValue;
     }
     
     return self;
 }
 
--(id) initWithKeyFrames:(NSMutableArray*) keyFrames{
-    if(self = [self init]){
+-(id) initWithDefaultValue:(id)defaultValue andKeyFrames:(NSMutableArray*) keyFrames{
+    if(self = [self initWithDefaultValue:defaultValue]){
         _keyFrames = keyFrames;
     }
     
@@ -47,16 +48,14 @@
 #pragma mark - NSCopying Implementation
 
 -(id) copyWithZone:(NSZone *)zone{
-    VSAnimation *copy = [[VSAnimation allocWithZone:zone] initWithKeyFrames:[[NSMutableArray alloc] initWithArray:_keyFrames copyItems:YES]];
-
+    VSAnimation *copy = [[VSAnimation allocWithZone:zone] initWithDefaultValue:[self.defaultValue copy] andKeyFrames:[[NSMutableArray alloc] initWithArray:_keyFrames copyItems:YES]];
+    
     return copy;
 }
 
 #pragma mark - Methods
 
 -(VSKeyFrame*) addKeyFrameWithValue:(id) aValue forTimestamp:(double)aTimestamp{
-    
-    DDLogInfo(@"addKeyFrameWithValue");
     
     if(!self.keyFrames){
         _keyFrames = [[NSMutableArray alloc]init];

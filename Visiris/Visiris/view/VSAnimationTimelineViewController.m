@@ -1,4 +1,4 @@
-//
+ //
 //  VSAnimationTimelineViewController.m
 //  Visiris
 //
@@ -229,15 +229,16 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
             
             animationTrackViewController.delegate = self;
             
-            [self.animationTrackViewControllers setObject:animationTrackViewController forKeyedSubscript:[NSNumber numberWithInteger:parameter.ID]];
+            [self.animationTrackViewControllers setObject:animationTrackViewController
+                                        forKeyedSubscript:[NSNumber numberWithInteger:parameter.ID]];
             
             [animationTrackViewController.view setFrame:trackRect];
-            
-            
-            
+ 
             [animationTrackViewController.view setFrame:trackRect];
             
             [self.scrollView addTrackView:animationTrackViewController.view];
+            
+            [parameter updateCurrentValueForTimestamp:self.playhead.currentTimePosition];
         }
     }
     
