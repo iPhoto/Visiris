@@ -10,4 +10,6 @@
 
 @interface VSDeviceParameter : NSObject
 
+@property (assign) NSRange                                  deviceValueMappingRange;
+
 @end

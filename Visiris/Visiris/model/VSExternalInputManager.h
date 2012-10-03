@@ -23,6 +23,9 @@
 - (id<VSExternalInputProtocol>)inputManagerForIdentifier:(NSString *)aInputManagerIdentifier;
 
 
+// accessing parameter
+- (float)parameterForKey:(NSString *)key;
+
 #pragma mark - getting information from registered input manager
 - (void)startObservingInputs;
 - (void)stopObservingInputs;

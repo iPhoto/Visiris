@@ -248,6 +248,7 @@
         }
         
         [refSelf.activePorts removeObjectsForKeys:outdatedPorts];
+        DDLogInfo(@"active ports: %@", refSelf.activePorts);        
     };
 }
 
@@ -300,7 +301,13 @@
 
 - (void)oscClient:(VSOSCClient *)client didDiscoveredActivePort:(VSOSCPort *)discoveredPort
 {
-    [self.activePorts setObject:discoveredPort forKey:[NSNumber numberWithUnsignedInt:discoveredPort.port]];
+    VSOSCPort *port = [self.activePorts objectForKey:[NSNumber numberWithUnsignedInt:discoveredPort.port]];
+    if (!port) {
+        [self.activePorts setObject:discoveredPort forKey:[NSNumber numberWithUnsignedInt:discoveredPort.port]];
+    }else
+    {
+        [port addAddress:[discoveredPort.addresses objectAtIndex:0]];
+    }
 }
 
 

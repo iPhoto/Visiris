@@ -15,10 +15,8 @@
 @property (weak) IBOutlet NSButton                                              *addDeviceButton;
 @property (weak) IBOutlet NSTableView                                           *deviceTableView;
 
-@property (strong) IBOutlet NSPopover                                           *createDevicePopover;
-@property (strong) IBOutlet NSWindow                                            *createDeviceDetailWindow;
 
-@property (strong) IBOutlet VSCreateDeviceViewController                        *createDeviceViewController;
+@property (strong) VSCreateDeviceViewController                                 *createDeviceViewController;
 
 
 /**

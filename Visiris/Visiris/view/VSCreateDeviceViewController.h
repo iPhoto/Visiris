@@ -34,12 +34,14 @@
 @property (weak) IBOutlet NSButton                                          *cancelDeviceCreationButton;
 @property (weak) IBOutlet NSButton                                          *createDeviceButton;
 
+@property (strong) IBOutlet NSWindow                                        *createDeviceWindow;
+
 // Bindings
 @property (strong) NSArray                                                  *availableParameter;
 
 
-@property (weak) IBOutlet id<VSCreateDeviceViewControllerDataSource>        dataSource;
-@property (weak) IBOutlet id<VSCreateDeviceViewControllerDelegate>          delegate;
+@property (weak) id<VSCreateDeviceViewControllerDataSource>                 dataSource;
+@property (weak) id<VSCreateDeviceViewControllerDelegate>                   delegate;
 
 
 
