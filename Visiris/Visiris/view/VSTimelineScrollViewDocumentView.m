@@ -82,10 +82,15 @@
     
     NSRect layerRect = self.frame;
     layerRect.size.width = 1;
-layerRect.origin.x = 0;
+    layerRect.origin.x = 0;
     layerRect.origin.y = 0;
     
-[self.guideLine setFrame:NSIntegralRect(layerRect)];
+    [CATransaction begin];
+    [CATransaction setAnimationDuration:0];
+    [self.guideLine setFrame:NSIntegralRect(layerRect)];
+    [CATransaction commit];
+    
+
 
 }
 
@@ -115,12 +120,11 @@ layerRect.origin.x = 0;
     layerRect.origin.x = round(location+self.scrollOffset.x);
     layerRect.origin.y = 0;
     
-//    [CATransaction begin];
-//    [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
-//    [self.guideLine setFrame:NSIntegralRect(layerRect)];
-//    [CATransaction commit];
-    
-    self.guideLine.position = (CGPoint) layerRect.origin;
+    [CATransaction begin];
+    [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+    [self.guideLine setFrame:layerRect];
+    [CATransaction commit];
+
     
     if([self isKindOfClass:[VSAnimationTimelineScrollViewDocumentView class]]){
 //        DDLogInfo(@"guideline layerrect:%@", NSStringFromRect(layerRect));

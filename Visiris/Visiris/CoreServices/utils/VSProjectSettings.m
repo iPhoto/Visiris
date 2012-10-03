@@ -11,8 +11,8 @@
 @implementation VSProjectSettings
 
 #define DEFAULT_FRAME_RATE 60
-#define DEFAULT_FRAME_WIDTH 1280
-#define DEFAULT_FRAME_HEIGHT 720
+#define DEFAULT_FRAME_WIDTH 20
+#define DEFAULT_FRAME_HEIGHT 20
 
 @synthesize frameRate       = _frameRate;
 @synthesize frameSize       = _frameSize;
