@@ -17,7 +17,6 @@
 #import "VSProjectSettings.h"
 #import "VSOutputController.h"
 
-#import "VSExternalInputManager.h"
 
 #import "VSCoreServices.h"
 
@@ -101,8 +100,7 @@
     [[VSOutputController sharedOutputController] connectWithOpenGLContext:self.preProcessor.renderCoreReceptionist.openGLContext];
     
     [VSOutputController sharedOutputController].playbackController = self.playbackController;
-    // Start Client
-    self.externalInputManager = [[VSExternalInputManager alloc] init];
+
 }
 
 

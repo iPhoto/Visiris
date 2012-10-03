@@ -8,28 +8,45 @@
 
 #import <VVOSC/VVOSC.h>
 #import "VSOSCInputManager.h"
-#import "VSOSCClient.h"
 
+// Core Services
 #import "VSCoreServices.h"
+
+// VSOSC
+#import "VSOSCClient.h"
+#import "VSOSCPort.h"
+
+
 
 
 #define kVSOSCInputManager_inputRangeStart @"kVSOSCInputManager_inputRangeStart"
 #define kVSOSCInputManager_inputRangeEnd @"kVSOSCInputManager_inputRangeEnd"
+
+#define kVSOSCInputManager_numberOfDefalutOSCListenPorts 5
+#define kVSOSCInputManager_oscPortWalkthroughInterval 1.0f
+#define kVSOSC_unusedPortLifetime 10
 
 @interface VSOSCInputManager ()
 {
     NSRange                                             _observablePorts;
     
     NSTimer                                             *_portObserverTimer;
+    NSTimer                                             *_activePortListRefreshTimer;
     
     OSCManager                                          *_oscManager;
     
-    NSUInteger                                          _lastPort;
+    unsigned int                                        _lastAssignedPort;
     NSUInteger                                          _numberOfInputClients;
+    
+    dispatch_source_t                                   _oscPortUpdateTimer;
+    dispatch_queue_t                                    _oscPortUpdateQueue;
     
 }
 
 @property (strong) NSMutableArray                       *availableInputPorts;
+@property (strong) NSMutableDictionary                  *activePorts;
+
+@property (strong) NSMutableDictionary                  *activeOSCClients;
 
 
 @end
@@ -48,22 +65,37 @@
         
         _oscManager = [[OSCManager alloc] init];
         
-        _observablePorts = NSMakeRange(1234, 5000);
+        _observablePorts = NSMakeRange(4567, 4600);
         
         /* TODO: Implement Preference Panel
         observablePorts.location = [[NSUserDefaults standardUserDefaults] integerForKey:kVSOSCInputManager_inputRangeStart];
         observablePorts.length = [[NSUserDefaults standardUserDefaults] integerForKey:kVSOSCInputManager_inputRangeEnd];
         */
         
-        _lastPort = _observablePorts.location;
-        _numberOfInputClients = 10;
+        _activeOSCClients = [[NSMutableDictionary alloc] init];
         
+        _oscPortUpdateQueue = dispatch_queue_create("com.graftinc.visiris.oscInputQueue", NULL);
+        _oscPortUpdateTimer = NULL;
+        
+        
+        _lastAssignedPort = (unsigned int)_observablePorts.location;
+        
+        NSUInteger oscPortCount = _observablePorts.length - _observablePorts.location;
+        _numberOfInputClients =  oscPortCount < kVSOSCInputManager_numberOfDefalutOSCListenPorts ? oscPortCount : kVSOSCInputManager_numberOfDefalutOSCListenPorts;
+        
+        _activePorts = [[NSMutableDictionary alloc] init];
         
         self.availableInputPorts = [[NSMutableArray alloc] initWithCapacity:_numberOfInputClients];
-        [self createInputObserver:NSMakeRange(_observablePorts.location, _observablePorts.location+_numberOfInputClients)];
+        [self createInputObserver:_numberOfInputClients atStartPort:_observablePorts.location];
     }
     
     return self;
+}
+
+- (void)dealloc
+{
+    dispatch_release(_oscPortUpdateTimer);
+    dispatch_release(_oscPortUpdateQueue);
 }
 
 - (NSString *)description
@@ -72,23 +104,32 @@
 }
 
 #pragma mark - VSExternalInputProtocol implementation
-- (void)createInputObserver:(NSRange)rangeOfInputPorts
+- (void)createInputObserver:(NSInteger)numberOfClientToCreate atStartPort:(NSUInteger)startPort
 {
-    NSUInteger currentPortOffset = 0;
-    for (NSInteger i = rangeOfInputPorts.location; i < rangeOfInputPorts.length; i++) {
+    unsigned int currentPort = (unsigned int)startPort-1;
+    
+    for (NSInteger i = 0; i < numberOfClientToCreate; i++) {
         
-        NSUInteger portToListen = rangeOfInputPorts.location + currentPortOffset; //(int)(rangeOfInputPorts.location+i);
-        _lastPort = portToListen;
-        OSCInPort *inPort = [_oscManager createNewInputForPort:(int)portToListen];
-        if (inPort) {
-            [inPort stop];
-            VSOSCClient *client = [[VSOSCClient alloc] initWithOSCInPort:inPort];
-            [self.availableInputPorts addObject:client];
-        }else
-        {
-            DDLogCInfo(@"port %li wasn't available", portToListen);
+
+        OSCInPort *inPort = nil;
+        
+        while (!inPort) {
             
-            /* Create new ports as long as the inPort variable is not null */
+            currentPort = [self getNextAvailableOSCPort];
+            
+            inPort = [_oscManager createNewInputForPort:currentPort];
+                       
+
+            if (inPort) {
+                [inPort stop];
+                
+                VSOSCClient *client = [[VSOSCClient alloc] initWithOSCInPort:inPort andType:VSOSCClientPortSniffer];
+                client.delegate = self;
+                client.port = [inPort port];
+                [self.availableInputPorts addObject:client];
+
+                break;
+            }
         }
     }
 }
@@ -99,7 +140,13 @@
         [currentOSCClient startObserving];
     }
     
-    _portObserverTimer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(observeNextInputs) userInfo:nil repeats:YES];
+    if ( self.availableInputPorts.count )
+    {
+        _portObserverTimer = [NSTimer scheduledTimerWithTimeInterval:kVSOSCInputManager_oscPortWalkthroughInterval target:self selector:@selector(observeNextInputs) userInfo:nil repeats:YES];
+    }
+    
+    // after we started to listen for open osc ports, we also start to observing if open ports are still available
+    [self startActivePortObservation];
 }
 
 
@@ -109,24 +156,151 @@
     // try to
     for (VSOSCClient *currentOSCClient in self.availableInputPorts) {
         
-        unsigned int currentPort = currentOSCClient.port;
-        unsigned int newPort = (unsigned int)(currentPort + self.availableInputPorts.count);
-        DDLogInfo(@"switchin input from port '%i' to new port '%i'", currentPort, newPort);
+//        unsigned int currentPort = currentOSCClient.port;
+        unsigned int newPort = [self getNextAvailableOSCPort];
+        
+        
         [currentOSCClient stopObserving];
         [currentOSCClient setPort:newPort];
+        while (![currentOSCClient isBinded]) {
+            
+            [currentOSCClient setPort:[self getNextAvailableOSCPort]];
+        }
         [currentOSCClient startObserving];
     }
+}
+
+- (unsigned int)getNextAvailableOSCPort
+{
+    _lastAssignedPort++;
+    if ( _lastAssignedPort > _observablePorts.length ) {
+        _lastAssignedPort = (unsigned int)_observablePorts.location;
+    }
+    
+    return _lastAssignedPort;
 }
 
 - (void)stopObservingInputs
 {
     [_portObserverTimer invalidate];
     _portObserverTimer = nil;
+    
+    [self stopActivePortObservation];
 }
 
 - (NSArray *)availableInputs;
 {
-    return nil;
+//    return [_activePorts allValues];
+    
+    VSOSCPort *port = [VSOSCPort portWithPort:12345 address:@"/Visiris/Rocks" atTimestamp:[NSDate timeIntervalSinceReferenceDate]];
+    [port addAddress:@"/Visiris/OSC/Rocks"];
+    [port addAddress:@"/Visiris/MIDI/AHHH"];
+    
+    NSArray *array = [NSArray arrayWithObject:port];
+    return array;
+}
+
+
+#pragma mark - Updating OSC Ports
+
+- (dispatch_source_t)oscPortDispatchTimerWithInterval:(uint64_t)interval onQueue:(dispatch_queue_t)dispatchQueue withBlock:(dispatch_block_t)block
+{
+    dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER,
+                                                     0, 0, dispatchQueue);
+    if (timer)
+    {
+        dispatch_source_set_timer(timer, dispatch_walltime(NULL, 0), interval, 1ull*NSEC_PER_SEC);
+        dispatch_source_set_event_handler(timer, block);
+        dispatch_resume(timer);
+    }
+    return timer;
+}
+
+- (void)startActivePortObservation
+{
+
+    if (  !_oscPortUpdateTimer) {
+        _oscPortUpdateTimer = [self oscPortDispatchTimerWithInterval:10ull*NSEC_PER_SEC onQueue:_oscPortUpdateQueue withBlock:[self updateAvailableOSCPortsBlock]];
+    }else
+    {
+        dispatch_resume(_oscPortUpdateTimer);
+    }
+}
+
+
+
+- (dispatch_block_t)updateAvailableOSCPortsBlock
+{
+    __weak VSOSCInputManager *refSelf = self;
+    return ^{
+        
+        NSTimeInterval now = [NSDate timeIntervalSinceReferenceDate];
+        
+        NSArray *allDiscoveredPorts = [refSelf.activePorts allValues];
+        NSMutableArray *outdatedPorts = [NSMutableArray array];
+        
+        for (VSOSCPort *currentPort in allDiscoveredPorts) {
+            
+            NSTimeInterval difference = now - currentPort.lastMessageReceivedTimestamp;
+            if ( difference  > kVSOSC_unusedPortLifetime ) {
+                [outdatedPorts addObject:[NSNumber numberWithUnsignedInt:currentPort.port]];
+            }
+        }
+        
+        [refSelf.activePorts removeObjectsForKeys:outdatedPorts];
+    };
+}
+
+- (void)stopActivePortObservation
+{
+    dispatch_suspend(_oscPortUpdateTimer);
+}
+
+
+#pragma mark - VSOSCClient Management
+- (BOOL)startOSCClientOnPort:(unsigned int)port
+{
+    BOOL oscClientStarted = NO;
+    
+    OSCInPort *inPort = [_oscManager createNewInputForPort:port];
+    
+    VSOSCClient *oscClient = [[VSOSCClient alloc] initWithOSCInPort:inPort andType:VSOSCClientActiveReceiver];
+    if (oscClient) {
+
+        oscClientStarted = YES;
+        [oscClient setPort:port];
+        [oscClient setDelegate:self];
+        
+        [self.activeOSCClients setObject:oscClient forKey:[NSNumber numberWithUnsignedInt:port]];
+    }
+    
+    return oscClientStarted;
+}
+
+
+- (BOOL)stopOSCClientOnPort:(unsigned int)port
+{
+    BOOL oscClientStopped = NO;
+    
+    VSOSCClient *client = [self.activeOSCClients objectForKey:[NSNumber numberWithUnsignedInt:port]];
+    if (client) {
+        oscClientStopped = YES;
+        
+        [client stopObserving];
+    }
+    
+    return oscClientStopped;
+}
+
+#pragma mark - VSOSCClientDelegate
+- (void)oscClient:(VSOSCClient *)client didReceivedMessage:(VSOSCMessage *)message
+{
+
+}
+
+- (void)oscClient:(VSOSCClient *)client didDiscoveredActivePort:(VSOSCPort *)discoveredPort
+{
+    [self.activePorts setObject:discoveredPort forKey:[NSNumber numberWithUnsignedInt:discoveredPort.port]];
 }
 
 

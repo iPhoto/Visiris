@@ -8,11 +8,17 @@
 
 #import "VSBrowserViewController.h"
 
+// ContentViews
 #import "VSProjectItemBrowserViewController.h"
+#import "VSDeviceConfigurationViewController.h"
+
 
 @interface VSBrowserViewController ()
 /** Responsible for the ProjectItem browser View */
 @property (strong) VSProjectItemBrowserViewController* projectItemBrowserViewController;
+
+/** Responsible for the device configuration view */
+@property (strong) VSDeviceConfigurationViewController* deviceConfigurationViewController;
 
 /** List of all ViewControllers which views are displayed as subivews of the browserView */
 @property (strong) NSMutableDictionary *subViewControllers;
@@ -23,6 +29,7 @@
 @synthesize sgmCtrlSelectSubview = _sgmCtrlSelectSubview;
 @synthesize subViewControllers = _subViewControllers;
 @synthesize projectItemBrowserViewController = _projectItemBrowserViewController;
+@synthesize deviceConfigurationViewController = _deviceConfigurationViewController;
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
 static NSString* defaultNib = @"VSBrowserView";
@@ -75,11 +82,17 @@ static NSString* defaultNib = @"VSBrowserView";
  *The controllers are stored in the subViewControllers Dictionary where their keys are representing the conencted segment of sgmCtrlSelectSubview
  */
 -(void) initSubViewControllers{
-    self.subViewControllers = [[NSMutableDictionary alloc] initWithCapacity:0];
+    self.subViewControllers = [[NSMutableDictionary alloc] initWithCapacity:3];
     
+    // project item browser
     self.projectItemBrowserViewController = [[VSProjectItemBrowserViewController alloc] initWithDefaultNib];
+    [self.subViewControllers setObject:self.projectItemBrowserViewController forKey:[NSNumber numberWithInt:0]];
     
-    [self.subViewControllers setObject:self.projectItemBrowserViewController.view forKey:[NSNumber numberWithInt:0]];
+    // device configuration editor
+    self.deviceConfigurationViewController = [[VSDeviceConfigurationViewController alloc] initWithDefaultNib];
+    [self.subViewControllers setObject:self.deviceConfigurationViewController forKey:[NSNumber numberWithInt:2]];
+    
+    
 }
 
 
@@ -98,10 +111,12 @@ static NSString* defaultNib = @"VSBrowserView";
  */
 -(void) showSubViewByIndex:(NSInteger) subViewID{
     //gets the view of the controller stored in the dictionary with subViewID as key 
-    NSView* newView = [self.subViewControllers objectForKey:[NSNumber numberWithInteger:subViewID]];
+    NSView* newView = [(NSViewController *)[self.subViewControllers objectForKey:[NSNumber numberWithInteger:subViewID]] view];
     
     if(newView){
         if([self.contentView.subviews count] > 0){
+//            [[self.contentView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+//            [self.contentView addSubview:newView];
             [self.contentView replaceSubview:[self.contentView.subviews objectAtIndex:0] with:newView];
         }
         else {

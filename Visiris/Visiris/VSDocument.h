@@ -32,8 +32,7 @@
 /** VSTimeline is initialized by VSMainWindowController */
 @property (strong) VSTimeline* timeline;
 
-/** VSExternalInputManager is initialized by VSDocument */
-@property (strong) VSExternalInputManager* externalInputManager;
+
  
 
 

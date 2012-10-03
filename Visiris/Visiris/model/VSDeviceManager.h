@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+
+@class VSDevice;
 /**
  * VSDeviceManager manages all VSDevices and provides them with values for their parameters
  */
@@ -15,5 +17,9 @@
 
 /** Stores the devices */
 @property (strong) NSMutableArray *devices;
+
+
+- (BOOL)addDevice:(VSDevice *)newDevice;
+- (NSUInteger)numberOfDevices;
 
 @end

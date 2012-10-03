@@ -89,7 +89,7 @@
 
 - (void)stopObservingInputs
 {
-    for (id<VSExternalInputProtocol> inputManager in self.availableInputManager) {
+    for (id<VSExternalInputProtocol> inputManager in [self.availableInputManager allValues]) {
 
         [inputManager stopObservingInputs];
     }
@@ -98,6 +98,12 @@
 
 - (NSArray *)availableInputs
 {
-    return nil;
+    NSMutableArray *availableInputs = [NSMutableArray array];
+
+    for (id<VSExternalInputProtocol> inputManager in [self.availableInputManager allValues]) {
+        [availableInputs addObjectsFromArray:[inputManager availableInputs]];
+    }
+    
+    return availableInputs;
 }
 @end
