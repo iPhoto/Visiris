@@ -158,6 +158,7 @@
 		5B60CC5B16135EE800557892 /* VSOutputController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B60CC5A16135EE800557892 /* VSOutputController.m */; };
 		5B70F71B15C2E650002B54ED /* VSPlayheadMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B70F71A15C2E650002B54ED /* VSPlayheadMarker.m */; };
 		5B7BFFC71592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BFFC61592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m */; };
+		5B98D1CC161C8EF0002CDE1F /* VSFullScreenHolderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B98D1CB161C8EF0002CDE1F /* VSFullScreenHolderView.m */; };
 		5BAC770616034B9400DF3BB0 /* VSKeyFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAC770516034B9400DF3BB0 /* VSKeyFrameView.m */; };
 		5BAC770916034BA100DF3BB0 /* VSKeyFrameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAC770816034BA100DF3BB0 /* VSKeyFrameViewController.m */; };
 		5BBF2A0615FF42A0009D79C7 /* VSScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BBF2A0515FF42A0009D79C7 /* VSScrollView.m */; };
@@ -446,6 +447,8 @@
 		5B70F71A15C2E650002B54ED /* VSPlayheadMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSPlayheadMarker.m; sourceTree = "<group>"; };
 		5B7BFFC51592143C00CEA1E8 /* VSTimelineObjectViewIntersection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineObjectViewIntersection.h; sourceTree = "<group>"; };
 		5B7BFFC61592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineObjectViewIntersection.m; sourceTree = "<group>"; };
+		5B98D1CA161C8EF0002CDE1F /* VSFullScreenHolderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFullScreenHolderView.h; sourceTree = "<group>"; };
+		5B98D1CB161C8EF0002CDE1F /* VSFullScreenHolderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFullScreenHolderView.m; sourceTree = "<group>"; };
 		5BAB35D315B4153D008B4793 /* VSTimelineScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineScrollView.h; sourceTree = "<group>"; };
 		5BAC770416034B9400DF3BB0 /* VSKeyFrameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSKeyFrameView.h; sourceTree = "<group>"; };
 		5BAC770516034B9400DF3BB0 /* VSKeyFrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSKeyFrameView.m; sourceTree = "<group>"; };
@@ -551,15 +554,17 @@
 			name = oscClient;
 			sourceTree = "<group>";
 		};
-		27C5EB9F161340A400A441D4 /* fullScreenView */ = {
+		27C5EB9F161340A400A441D4 /* fullScreen */ = {
 			isa = PBXGroup;
 			children = (
 				27C5EB9C1613408800A441D4 /* VSFullScreenOpenGLView.h */,
 				27C5EB9D1613408900A441D4 /* VSFullScreenOpenGLView.m */,
 				27EEDA361612F6490075EE42 /* VSFullScreenController.h */,
 				27EEDA371612F6490075EE42 /* VSFullScreenController.m */,
+				5B98D1CA161C8EF0002CDE1F /* VSFullScreenHolderView.h */,
+				5B98D1CB161C8EF0002CDE1F /* VSFullScreenHolderView.m */,
 			);
-			name = fullScreenView;
+			name = fullScreen;
 			sourceTree = "<group>";
 		};
 		27CFB13A1613998200A19B7A /* inputs */ = {
@@ -720,6 +725,7 @@
 		5B35BF9E1577A573009911EC /* view */ = {
 			isa = PBXGroup;
 			children = (
+				27C5EB9F161340A400A441D4 /* fullScreen */,
 				5BD35BC015D95891001A74E0 /* base */,
 				5B35C0AD1577AF3C009911EC /* mainWindow */,
 				5B35C0AC1577AF32009911EC /* objectBrowser */,
@@ -992,7 +998,6 @@
 		5B35C0B01577AF92009911EC /* preview */ = {
 			isa = PBXGroup;
 			children = (
-				27C5EB9F161340A400A441D4 /* fullScreenView */,
 				27C5EB981613381C00A441D4 /* VSOpenGLView.h */,
 				27C5EB991613381C00A441D4 /* VSOpenGLView.m */,
 				5B35BFAC1577A573009911EC /* VSPreviewOpenGLView.h */,
@@ -1564,6 +1569,7 @@
 				27F7D11916145A0B00EAAF40 /* VSExternalInputManager.m in Sources */,
 				27F7D11B16145A3D00EAAF40 /* VSOSCInputManager.m in Sources */,
 				27F7D11C16145A4300EAAF40 /* VSOSCClient.m in Sources */,
+				5B98D1CC161C8EF0002CDE1F /* VSFullScreenHolderView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,6 +8,8 @@
 
 #import "VSKeyFrameView.h"
 
+#import <QuartzCore/QuartzCore.h>
+
 @interface VSKeyFrameView()
 
 /** Stores the Mouse-Position in mouseDown. Neccessary for computing the right position in mouseDragged */
@@ -102,6 +104,9 @@
  * Set's the style of the view's layer according to its current state
  */
 -(void) setLayerStyle{
+    [CATransaction begin];
+
+    
     [self.layer setOpacity:1.0];
     [self.layer setBackgroundColor:[[NSColor redColor]CGColor]];
     
@@ -113,6 +118,7 @@
     else{
         [self.layer setBorderWidth:0];
     }
+    [CATransaction commit];
 }
 
 #pragma mark - Properties

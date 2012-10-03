@@ -11,15 +11,16 @@
 #import "VSPreviewOpenGLView.h"
 #import "VSOutputController.h"
 #import "VSProjectSettings.h"
-#import "VSOutputController.h"
+#import "VSFullScreenHolderView.h"
 #import "VSCoreServices.h"
+
 #import "VSFullScreenOpenGLView.h"
 
 @interface VSFullScreenController()
-@property (strong) VSFullScreenOpenGLView   *fullScreenView ;
-@property (strong) NSView *holder;
-@property (strong) NSWindow                 *fullScreenWindow;
-@property (weak) NSOpenGLContext            *openGLContext;
+@property (strong) VSFullScreenOpenGLView *fullScreenView ;
+@property (strong) VSFullScreenHolderView *holder;
+@property (strong) NSWindow *fullScreenWindow;
+@property (weak) NSOpenGLContext *openGLContext;
 @property BOOL visible;
 
 @end
@@ -75,7 +76,7 @@
         [self.fullScreenWindow setHidesOnDeactivate:NO];
         
         NSRect openglViewRect = NSMakeRect(0, 0, secondDisplayRect.size.width, secondDisplayRect.size.height);
-        self.holder = [[NSView alloc] initWithFrame:openglViewRect];
+        self.holder = [[VSFullScreenHolderView alloc] initWithFrame:openglViewRect];
         self.fullScreenView = [[VSFullScreenOpenGLView alloc] initWithFrame:openglViewRect];
         [self.fullScreenView setOpenGLWithSharedContext:self.openGLContext];
         [self.fullScreenWindow setContentView: self.holder];
