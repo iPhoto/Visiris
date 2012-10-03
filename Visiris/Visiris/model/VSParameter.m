@@ -53,8 +53,7 @@
         
         self.currentValue = [self.configuredDefaultValue copy];
         
-        self.animation = [[VSAnimation alloc] init];
-        self.animation.defaultValue = [self.configuredDefaultValue copy];
+        self.animation = [[VSAnimation alloc] initWithDefaultValue:[self.configuredDefaultValue copy]];
         
     }
     return self;
@@ -94,7 +93,10 @@
 }
 
 
-#pragma mark - VSCopying
+#pragma mark - NSObject
+
+
+#pragma mark - NSCopying
 -(id) copyWithZone:(NSZone *)zone{
     
     VSParameter *copy = [[VSParameter allocWithZone:zone] initWithName:self.name
@@ -109,10 +111,9 @@
                                                          rangeMaxValue:self.rangeMaxValue];
     
     
-    copy.currentValue = [self.configuredDefaultValue copy];
-    
     copy.animation = [self.animation copy];
-    copy.animation.defaultValue = [self.configuredDefaultValue copy];
+    
+    copy.currentValue = copy.animation.defaultValue;
     
     return copy;
 }

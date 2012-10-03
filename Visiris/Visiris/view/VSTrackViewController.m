@@ -199,7 +199,7 @@ static NSString* defaultNib = @"VSTrackView";
         for (VSTimelineObjectViewController *ctrl in self.temporaryTimelineObjectViewControllers){
             [ctrl.view removeFromSuperview];
         }
-
+        
         [self.temporaryTimelineObjectViewControllers removeAllObjects];
         [self.view setNeedsDisplayInRect:self.view.visibleRect];
         return YES;
@@ -574,7 +574,7 @@ static NSString* defaultNib = @"VSTrackView";
                 
                 if([result isKindOfClass:[VSTimelineObjectViewController class]]){
                     VSTimelineObjectViewController *tmpController = (VSTimelineObjectViewController*) result;
-
+                    
                     [timelineObjectsWidth addObject: [NSNumber numberWithDouble:tmpController.timelineObjectView.doubleFrame.width]];
                     [timelineObjectsPositions addObject: [NSValue valueWithPoint:tmpController.view.frame.origin]];
                     
@@ -882,27 +882,24 @@ static NSString* defaultNib = @"VSTrackView";
     
     [self setTimelineObjectViewsIntersectedByMoveableTimelineObjects];
     
-    if([self delegateRespondsToSelector:@selector(timelineObject:didStopDraggingOnTrack:)]){
-        [self.delegate timelineObject:timelineObjectViewController didStopDraggingOnTrack:self];
-    }
-    
-    
-    
     [self.view.undoManager beginUndoGrouping];
     
     [self updateActiveMoveableTimelineObjectsAccordingToViewsFrame];
     
     //applys the interscetions
     
-    [self applyIntersectionToTimelineObjects];
-    
     [self removeInactiveSelectedTimelineObjectViewControllers];
+    [self applyIntersectionToTimelineObjects];
     [self copyTemporaryTimelineObjectsToTrack];
     [self resetTemporaryTimelineObjects];
     [self unsetSelectedTimelineObjectsAsMoving];
     
     [self.view.undoManager setActionName:NSLocalizedString(@"Move Object", @"Undo action name for moving obejcts on timeline")];
     [self.view.undoManager endUndoGrouping];
+    
+    if([self delegateRespondsToSelector:@selector(timelineObject:didStopDraggingOnTrack:)]){
+        [self.delegate timelineObject:timelineObjectViewController didStopDraggingOnTrack:self];
+    }
     
 }
 
@@ -1159,6 +1156,11 @@ static NSString* defaultNib = @"VSTrackView";
     
     [self.view setNeedsDisplayInRect:self.view.visibleRect];
     
+    if(aTimelineObject.selected){
+        if([self delegateRespondsToSelector:@selector(timelineObjectProxy:willBeSelectedOnTrackViewController:exclusively:)]){
+            [self.delegate timelineObjectProxy:aTimelineObject willBeSelectedOnTrackViewController:self exclusively:YES];
+        }
+    }
     
 }
 

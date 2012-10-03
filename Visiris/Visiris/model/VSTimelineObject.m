@@ -29,7 +29,6 @@
 @synthesize sourceObject        = _sourceObject;
 @synthesize startTime           = _startTime;
 @synthesize duration            = _duration;
-@synthesize name                = _name;
 @synthesize icon                = _icon;
 @synthesize supplier            = _supplier;
 

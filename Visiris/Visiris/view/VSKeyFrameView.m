@@ -28,7 +28,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code here.
+        [self initLayer];
     }
     
     return self;
@@ -38,7 +38,9 @@
  * Inits the view's layer
  */
 -(void) initLayer{
-    [self setWantsLayer:YES];
+//    [self setWantsLayer:YES];
+    self.layer = [[CALayer alloc] init];
+    [self.layer setZPosition:1];
 }
 
 #pragma mark - NSView
@@ -102,10 +104,14 @@
 -(void) setLayerStyle{
     [self.layer setOpacity:1.0];
     [self.layer setBackgroundColor:[[NSColor redColor]CGColor]];
-    [self.layer setBorderWidth:0];
+    
     if(self.selected){
+        [self.layer setBackgroundColor:[[NSColor greenColor]CGColor]];
         [self.layer setBorderColor:[[NSColor yellowColor] CGColor]];
         [self.layer setBorderWidth:1];
+    }
+    else{
+        [self.layer setBorderWidth:0];
     }
 }
 

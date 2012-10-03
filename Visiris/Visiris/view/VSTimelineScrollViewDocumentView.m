@@ -12,6 +12,7 @@
 
 #import "VSTimelineRulerView.h"
 #import "VSPlayheadMarker.h"
+#import "VSAnimationTimelineScrollViewDocumentView.h"
 
 #import "VSCoreServices.h"
 
@@ -98,6 +99,12 @@
     [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
     [self.guideLine setFrame:NSIntegralRect(layerRect)];
     [CATransaction commit];
+    
+    if([self isKindOfClass:[VSAnimationTimelineScrollViewDocumentView class]]){
+        DDLogInfo(@"guideline layerrect:%@", NSStringFromRect(layerRect));
+    }
+    
+    
 }
 
 

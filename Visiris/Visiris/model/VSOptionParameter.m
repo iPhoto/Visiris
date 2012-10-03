@@ -65,6 +65,7 @@
     
     copy.options = [[NSMutableDictionary alloc] initWithDictionary:self.options copyItems:YES];
     
+    
     return copy;
 }
 
@@ -80,6 +81,7 @@
     
     if(!self.configuredDefaultValue){
         self.configuredDefaultValue = [self.options objectForKey:key];
+        self.defaultValue = self.configuredDefaultValue;
     }
 }
 

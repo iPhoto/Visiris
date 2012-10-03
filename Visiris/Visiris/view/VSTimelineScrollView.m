@@ -272,6 +272,7 @@
     if (_pixelTimeRatio != pixelTimeRatio) {
         self.timelineRulerView.pixelTimeRatio = pixelTimeRatio;
     }
+    [self setNeedsDisplay:YES];
     _pixelTimeRatio = pixelTimeRatio;
 }
 

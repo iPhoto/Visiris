@@ -410,7 +410,11 @@ static NSString* defaultNib = @"VSParameterView";
     // create the constraints
     NSDictionary *viewsDictionary = [NSDictionary dictionaryWithObjectsAndKeys:self.textField,@"textValueField", nil];
     NSString *constraintString = [NSString stringWithFormat:@"|-[textValueField]-|"];
-    NSArray *constraints =  [NSLayoutConstraint constraintsWithVisualFormat:constraintString options:NSLayoutFormatAlignAllCenterY metrics:nil views:viewsDictionary];
+    
+    NSArray *constraints =  [NSLayoutConstraint constraintsWithVisualFormat:constraintString
+                                                                    options:NSLayoutFormatAlignAllCenterY
+                                                                    metrics:nil
+                                                                      views:viewsDictionary];
     
     [self.parameterHolder removeConstraints:self.parameterHolder.constraints];
     
