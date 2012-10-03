@@ -42,4 +42,6 @@
 /*Categories*/
 #import "NSImage+QuickLook.h"
 
+#import "RXMLElement.h"
+
 #endif

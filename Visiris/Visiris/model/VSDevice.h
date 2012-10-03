@@ -21,4 +21,8 @@
 /** indicates wheter the device is active or not.*/
 @property BOOL active;
 
+@property (strong) NSString *name;
+
+@property NSUInteger ID;
+
 @end

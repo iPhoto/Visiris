@@ -10,4 +10,6 @@
 
 @interface VSDeviceParameter : NSObject
 
+
+
 @end
