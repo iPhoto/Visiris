@@ -8,6 +8,8 @@
 
 #import "VSDeviceConfigurationViewController.h"
 
+#import "VSCreateDeviceViewController.h"
+
 #import "VSExternalInputManager.h"
 #import "VSDeviceManager.h"
 #import "VSCoreServices.h"
@@ -49,6 +51,11 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
         
         _isCurrentlyPresentingNewDeviceConfigurationPopover = NO;
         
+        
+        self.createDeviceViewController = [[VSCreateDeviceViewController alloc] initWithNibName:@"VSCreateDeviceViewController" bundle:nil];
+        self.createDeviceViewController.delegate = self;
+        
+        
         // Start searching for external input devices
         self.externalInputManager = [[VSExternalInputManager alloc] init];
         
@@ -75,7 +82,16 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 {
     [self insertNewDeviceRow];
     
-    [[NSApplication sharedApplication] beginSheet:self.createDeviceViewController.createDeviceWindow modalForWindow:[NSApp keyWindow] modalDelegate:nil didEndSelector:@selector(didFinishCreatingNewInputDeviceFromSheet:) contextInfo:nil];
+    /* WTF?????!!! */
+    if ( ![[[self.createDeviceViewController.createDeviceWindow contentView] subviews] containsObject:self.createDeviceViewController.view] ) {
+    }
+    
+    [[NSApplication sharedApplication] beginSheet:self.createDeviceViewController.createDeviceWindow modalForWindow:[NSApp keyWindow] modalDelegate:self didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:nil];
+}
+
+- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
+{
+    [sheet orderOut:self];
 }
 
 
@@ -88,13 +104,9 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 }
 
 
-- (void)didFinishCreatingNewInputDeviceFromSheet:(id)sender
-{
-
-}
-
 - (void)deviceCreated:(VSDevice *)device
 {
+    [self dismissSheetWindow];
     _isCurrentlyPresentingNewDeviceConfigurationPopover = NO;
     if (device) {
         [self.deviceManager addDevice:device];
@@ -105,9 +117,14 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 
 - (void)cancelDeviceCreation
 {
-    
+    [self dismissSheetWindow];
     _isCurrentlyPresentingNewDeviceConfigurationPopover = NO;
+}
 
+
+- (void)dismissSheetWindow
+{
+    [[NSApplication sharedApplication] endSheet:self.createDeviceViewController.createDeviceWindow];
 }
 
 

@@ -41,8 +41,9 @@
 {
     [super awakeFromNib];
     
-    // 
+    //
     _parameterCount = 0;
+    
     
     self.availableParameter = [self availableInputParameterFromDataSource];
     
@@ -86,7 +87,7 @@
 
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-
+    
     if ([[tableColumn identifier] isEqualToString:@"Address"]) {
         NSPopUpButtonCell *cell = [tableColumn dataCellForRow:row];
         [[cell menu] setDelegate:self];
@@ -97,6 +98,7 @@
     }
     return @"Parameter";
 }
+
 
 // adding address to parameter
 - (IBAction)didSelectInputAddressForParameter:(id)sender
