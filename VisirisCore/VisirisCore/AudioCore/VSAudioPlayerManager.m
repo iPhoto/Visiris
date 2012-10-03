@@ -56,7 +56,6 @@
             
             VSAudioPlayer *audioPlayer = [[VSAudioPlayer alloc] initWithFilePath:path];
             if (audioPlayer == nil) {
-                NSLog(@"ERROR creating audioplayer");
                 return;
             }
             

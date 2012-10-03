@@ -24,14 +24,15 @@
     return nil;
 }
 
-//TODO: Dealloc not called yet
+//TODO: Dealloc sigbert
 /**
  * Dealloc gets automatically called when the ReferenceCounter reaches zero. As soon it is called it frees the memory.
  */
 - (void)dealloc{
-    if (self.vsImage.data != NULL) {
-        free(self.vsImage.data);
-    }
+    
+//    if (self.vsImage.data != NULL) {
+//        free(self.vsImage.data);
+//    }
 }
 
 @end

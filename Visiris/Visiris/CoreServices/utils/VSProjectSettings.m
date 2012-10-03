@@ -36,7 +36,7 @@ static VSProjectSettings* sharedProjectSettings = nil;
 -(id)init{
     if (self = [super init]) {
         self.frameRate = DEFAULT_FRAME_RATE;
-        self.frameSize = NSMakeSize(DEFAULT_FRAME_WIDTH, DEFAULT_FRAME_HEIGHT);
+        _frameSize = NSMakeSize(DEFAULT_FRAME_WIDTH, DEFAULT_FRAME_HEIGHT);
     }
     return self;
 }

@@ -19,4 +19,12 @@
  */
 +(NSPoint) midPointOfFrame:(NSRect) frame;
 
+/**
+ * Returns the maximal correct proportional Rect in a rect. 
+ * @param rect The input rect
+ * @param superViewRect The superview of the rect
+ * @return maximal Rect
+ */
++ (NSRect)maxProportionalRectinRect:(NSRect)rect inSuperView:(NSRect)superViewRect;
+
 @end

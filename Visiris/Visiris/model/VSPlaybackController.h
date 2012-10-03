@@ -66,7 +66,7 @@
 /**
  * Tells the VSPreProcessor to render the frame for the currentTimestamp for given frame size
  */
-- (void)renderFramesForCurrentTimestamp;
+- (void)renderFramesForCurrentTimestamp:(NSSize)size;
 
 /**
  * Tells the VSPreProcessor to render the current frame again
