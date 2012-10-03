@@ -192,8 +192,9 @@
 		A9818DE3161502AB005321A2 /* VSOSCPort.m in Sources */ = {isa = PBXBuildFile; fileRef = A9818DE2161502AB005321A2 /* VSOSCPort.m */; };
 		A9838A43161792CD00DF110C /* VSDeviceConfigurationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9838A41161792CD00DF110C /* VSDeviceConfigurationViewController.m */; };
 		A9838A44161792CD00DF110C /* VSDeviceConfigurationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9838A42161792CD00DF110C /* VSDeviceConfigurationViewController.xib */; };
-		A9838A5C1617B2BC00DF110C /* VSCreateDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9838A5A1617B2BC00DF110C /* VSCreateDeviceViewController.m */; };
-		A9838A5D1617B2BC00DF110C /* VSCreateDeviceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9838A5B1617B2BC00DF110C /* VSCreateDeviceViewController.xib */; };
+		A986A5E2161CC2590068F3CA /* VSFullScreenHolderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B98D1CB161C8EF0002CDE1F /* VSFullScreenHolderView.m */; };
+		A986A5F9161CC8430068F3CA /* VSCreateDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A986A5F7161CC8430068F3CA /* VSCreateDeviceViewController.m */; };
+		A986A5FA161CC8430068F3CA /* VSCreateDeviceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A986A5F8161CC8430068F3CA /* VSCreateDeviceViewController.xib */; };
 		A9D8275A16188A91008985F7 /* VSDeviceParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D8275916188A91008985F7 /* VSDeviceParameter.m */; };
 /* End PBXBuildFile section */
 
@@ -521,9 +522,9 @@
 		A9838A40161792CD00DF110C /* VSDeviceConfigurationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDeviceConfigurationViewController.h; sourceTree = "<group>"; };
 		A9838A41161792CD00DF110C /* VSDeviceConfigurationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDeviceConfigurationViewController.m; sourceTree = "<group>"; };
 		A9838A42161792CD00DF110C /* VSDeviceConfigurationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VSDeviceConfigurationViewController.xib; sourceTree = "<group>"; };
-		A9838A591617B2BC00DF110C /* VSCreateDeviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSCreateDeviceViewController.h; sourceTree = "<group>"; };
-		A9838A5A1617B2BC00DF110C /* VSCreateDeviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSCreateDeviceViewController.m; sourceTree = "<group>"; };
-		A9838A5B1617B2BC00DF110C /* VSCreateDeviceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VSCreateDeviceViewController.xib; sourceTree = "<group>"; };
+		A986A5F6161CC8430068F3CA /* VSCreateDeviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSCreateDeviceViewController.h; sourceTree = "<group>"; };
+		A986A5F7161CC8430068F3CA /* VSCreateDeviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSCreateDeviceViewController.m; sourceTree = "<group>"; };
+		A986A5F8161CC8430068F3CA /* VSCreateDeviceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VSCreateDeviceViewController.xib; sourceTree = "<group>"; };
 		A9D8275816188A91008985F7 /* VSDeviceParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDeviceParameter.h; sourceTree = "<group>"; };
 		A9D8275916188A91008985F7 /* VSDeviceParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDeviceParameter.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1418,9 +1419,9 @@
 		A9838A5E1617B2C200DF110C /* CreateDevice */ = {
 			isa = PBXGroup;
 			children = (
-				A9838A591617B2BC00DF110C /* VSCreateDeviceViewController.h */,
-				A9838A5A1617B2BC00DF110C /* VSCreateDeviceViewController.m */,
-				A9838A5B1617B2BC00DF110C /* VSCreateDeviceViewController.xib */,
+				A986A5F6161CC8430068F3CA /* VSCreateDeviceViewController.h */,
+				A986A5F7161CC8430068F3CA /* VSCreateDeviceViewController.m */,
+				A986A5F8161CC8430068F3CA /* VSCreateDeviceViewController.xib */,
 			);
 			name = CreateDevice;
 			sourceTree = "<group>";
@@ -1513,7 +1514,7 @@
 				5BD35BC615D95943001A74E0 /* VSAnimationTimelineView.xib in Resources */,
 				5BD35BDF15D95F2C001A74E0 /* VSTimelineObjectParametersView.xib in Resources */,
 				A9838A44161792CD00DF110C /* VSDeviceConfigurationViewController.xib in Resources */,
-				A9838A5D1617B2BC00DF110C /* VSCreateDeviceViewController.xib in Resources */,
+				A986A5FA161CC8430068F3CA /* VSCreateDeviceViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1669,7 +1670,6 @@
 				A9818DDF1614FC67005321A2 /* VSOSCMessage.m in Sources */,
 				A9818DE3161502AB005321A2 /* VSOSCPort.m in Sources */,
 				A9838A43161792CD00DF110C /* VSDeviceConfigurationViewController.m in Sources */,
-				A9838A5C1617B2BC00DF110C /* VSCreateDeviceViewController.m in Sources */,
 				A9D8275A16188A91008985F7 /* VSDeviceParameter.m in Sources */,
 				5B98D1D1161CAA46002CDE1F /* VSFullScreenHolderView.m in Sources */,
 				5B98D1DB161CACFF002CDE1F /* VSDeviceLoader.m in Sources */,
