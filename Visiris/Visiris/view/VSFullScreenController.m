@@ -11,11 +11,13 @@
 #import "VSPreviewOpenGLView.h"
 #import "VSOutputController.h"
 #import "VSProjectSettings.h"
-
+#import "VSOutputController.h"
+#import "VSCoreServices.h"
 #import "VSFullScreenOpenGLView.h"
 
 @interface VSFullScreenController()
 @property (strong) VSFullScreenOpenGLView   *fullScreenView ;
+@property (strong) NSView *holder;
 @property (strong) NSWindow                 *fullScreenWindow;
 @property (weak) NSOpenGLContext            *openGLContext;
 @property BOOL visible;
@@ -69,16 +71,26 @@
         [self.fullScreenWindow setFrame:secondDisplayRect display:YES];
         [self.fullScreenWindow setLevel:NSMainMenuWindowLevel+1];
         [self.fullScreenWindow setOpaque:NO];
+    
         [self.fullScreenWindow setHidesOnDeactivate:NO];
         
-        NSRect viewRect = NSMakeRect(0.0, 0.0, secondDisplayRect.size.width, secondDisplayRect.size.height);
-        
-        self.fullScreenView = [[VSFullScreenOpenGLView alloc] initWithFrame:viewRect];
+        NSRect openglViewRect = NSMakeRect(0, 0, secondDisplayRect.size.width, secondDisplayRect.size.height);
+        self.holder = [[NSView alloc] initWithFrame:openglViewRect];
+        self.fullScreenView = [[VSFullScreenOpenGLView alloc] initWithFrame:openglViewRect];
         [self.fullScreenView setOpenGLWithSharedContext:self.openGLContext];
-        [self.fullScreenWindow setContentView: self.fullScreenView];
+        [self.fullScreenWindow setContentView: self.holder];
         [self.fullScreenWindow makeKeyAndOrderFront:self];
         
-        [VSProjectSettings sharedProjectSettings].frameSize = viewRect.size;
+        
+        [self.holder addSubview:self.fullScreenView];
+        
+                
+        openglViewRect = [VSFrameUtils maxProportionalRectinRect:openglViewRect inSuperView:secondDisplayRect];
+      
+        
+        [self.fullScreenView setFrame:openglViewRect];
+
+        [VSOutputController sharedOutputController].fullScreenSize = openglViewRect.size;
     }
 }
 
@@ -90,7 +102,7 @@
 //    [self.fullScreenWindow close];
 }
 
--(void) toggleFullScreenForScreen:(NSUInteger) screenID{
+-(void) toggleFullScreenForScreen:(NSUInteger) screenID{    
     if(self.visible){
         [self hideFullscreen];
     }
@@ -99,6 +111,7 @@
     }
     
     self.visible = !self.visible;
+    [[VSOutputController sharedOutputController] toggleFullScreen];
 }
 
 

@@ -14,7 +14,7 @@
 @interface VSProjectSettings : NSObject
 
 /** Size of the video-output */
-@property NSSize frameSize;
+@property (readonly) NSSize frameSize;
 
 /** Frame-Rate of the output */
 @property NSInteger frameRate;

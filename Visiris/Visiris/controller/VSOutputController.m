@@ -8,17 +8,24 @@
 
 #import "VSOutputController.h"
 #import "VSPlaybackController.h"
+#import "VSProjectSettings.h"
 
 @interface VSOutputController()
 
-@property (assign) CVDisplayLinkRef displayLink;
-@property (strong) NSMutableArray *registratedOutputs;
-@property NSOpenGLContext *openGLContext;
+@property (assign) CVDisplayLinkRef     displayLink;
+@property (strong) NSMutableArray       *registratedOutputs;
+@property (strong) NSOpenGLContext      *openGLContext;
+@property (assign) BOOL                 isFullScreen;
+@property (assign) NSSize               renderSize;
+@property (assign) GLuint               lastTexture;
+@property (assign) double               lastTimestamp;
 
 @end
 
 
 @implementation VSOutputController
+@synthesize fullScreenSize  = _fullScreenSize;
+@synthesize previewSize     = _previewSize;
 
 static VSOutputController* sharedOutputController = nil;
 
@@ -43,6 +50,10 @@ static VSOutputController* sharedOutputController = nil;
     if(self = [super init]){
         [self setupDisplayLink];
         self.registratedOutputs = [[NSMutableArray alloc] init];
+        self.isFullScreen       = NO;
+        self.renderSize         = [[VSProjectSettings sharedProjectSettings] frameSize];
+        self.lastTexture        = 0;
+        self.lastTimestamp      = 0.0;
     }
     
     return self;
@@ -105,12 +116,15 @@ static VSOutputController* sharedOutputController = nil;
 
 - (CVReturn) getFrameForTime:(const CVTimeStamp*)outputTime{
     @autoreleasepool {
-        [self.playbackController renderFramesForCurrentTimestamp];
+        [self.playbackController renderFramesForCurrentTimestamp:self.renderSize];
         return kCVReturnSuccess;
     }
 }
 
 -(void) texture:(GLuint) theTexture isReadyForTimestamp:(double) theTimestamp{
+    self.lastTexture = theTexture;
+    self.lastTimestamp = theTimestamp;
+    
     for(id<VSOpenGLOutputDelegate> openGlOutput in self.registratedOutputs){
         [openGlOutput showTexture:theTexture];
     }
@@ -155,5 +169,31 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     return CVDisplayLinkGetActualOutputVideoRefreshPeriod(self.displayLink);
 }
 
+- (void)toggleFullScreen{
+    self.isFullScreen = !self.isFullScreen;    
+    [self texture:self.lastTexture isReadyForTimestamp:self.lastTimestamp];
+    [self calcRenderSize];
+}
+
+- (void)setFullScreenSize:(NSSize)fullScreenSize{
+    _fullScreenSize = fullScreenSize;
+    [self calcRenderSize];
+}
+
+- (void)setPreviewSize:(NSSize)previewSize{
+    _previewSize = previewSize;
+    [self renderSize];
+}
+
+- (void)calcRenderSize{
+    if (self.isFullScreen)
+        self.renderSize = self.fullScreenSize;
+    else
+        self.renderSize = self.previewSize;
+    
+    if (self.renderSize.width > [[VSProjectSettings sharedProjectSettings] frameSize].width) {
+        self.renderSize = [[VSProjectSettings sharedProjectSettings] frameSize];
+    }
+}
 
 @end

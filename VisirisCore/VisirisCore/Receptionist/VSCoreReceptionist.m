@@ -39,6 +39,7 @@
 
 - (void)renderFrameAtTimestamp:(double)aTimestamp withHandovers:(NSArray *)theHandovers forSize:(NSSize)theFrameSize withPlayMode:(VSPlaybackMode)playMode
 {
+//    NSLog(@"size: %@:", NSStringFromSize(theFrameSize));
 //    NSLog(@"CoreReceptionist: play");
     //return if Handovers is nil
     if (theHandovers == nil)

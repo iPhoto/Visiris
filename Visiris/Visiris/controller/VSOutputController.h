@@ -23,7 +23,8 @@
 @property (readonly) double             refreshPeriod;
 @property VSPlaybackController          *playbackController;
 @property (strong) NSOpenGLPixelFormat  *pixelFormat;
-
+@property (nonatomic, assign) NSSize    fullScreenSize;
+@property (nonatomic, assign) NSSize    previewSize;
 
 #pragma mark - Functions
 
@@ -60,5 +61,7 @@
 -(void) unregisterOutput:(id<VSOpenGLOutputDelegate>) output;
 
 -(void) connectWithOpenGLContext:(NSOpenGLContext*) openGLContext;
+
+- (void)toggleFullScreen;
 
 @end

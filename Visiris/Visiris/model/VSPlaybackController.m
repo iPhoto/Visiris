@@ -172,7 +172,7 @@
     }
 }
 
-- (void)renderFramesForCurrentTimestamp{
+- (void)renderFramesForCurrentTimestamp:(NSSize)size{
     switch (self.playbackMode) {
         case VSPlaybackModePlaying:
             [self computeNewCurrentTimestamp];
@@ -185,12 +185,12 @@
             if (self.counter >= period) {
                 self.counter -= period;
                 
-                [self renderCurrentFrame];
+                [self renderCurrentFrame:size];
             }
             break;
         case VSPlaybackModeJumping:
         case VSPlaybackModeScrubbing:
-            [self renderCurrentFrame];
+            [self renderCurrentFrame:size];
             self.counter = 0.0;
             break;
         default:
@@ -282,10 +282,10 @@
 /**
  * Sets the current VSPlaybackMode and tells the preprocessor to the render the current frame
  */
--(void) renderCurrentFrame{
+- (void)renderCurrentFrame:(NSSize)size{
     
     if (self.preProcessor) {
-        [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:[VSProjectSettings sharedProjectSettings].frameSize withPlayMode:self.playbackMode];
+        [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:size withPlayMode:self.playbackMode];
     }
     
     //if the render of the was started because the playhead was moved by clicking somewhere on the timeline, the rendering is turned off after the frame was rendered
