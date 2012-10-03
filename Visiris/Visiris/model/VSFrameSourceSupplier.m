@@ -15,8 +15,6 @@
 @implementation VSFrameSourceSupplier
 
 @synthesize vsImage = _vsImage;
-
-
 #pragma mark - Methods
 
 -(VSImage *) getFrameForTimestamp:(double)aTimestamp withPlayMode:(VSPlaybackMode)playMode{
@@ -29,7 +27,7 @@
  */
 - (void)dealloc{
     if (self.vsImage.data != NULL) {
-        free(self.vsImage.data);
+        //free(self.vsImage.data);
     }
 }
 
