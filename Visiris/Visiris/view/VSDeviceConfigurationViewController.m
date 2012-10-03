@@ -112,6 +112,7 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
     
     [self dismissSheetWindow];
     _isCurrentlyPresentingNewDeviceConfigurationPopover = NO;
+    
     if (device) {
         [self.deviceManager addDevice:device];
         

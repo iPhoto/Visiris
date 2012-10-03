@@ -36,6 +36,7 @@
 		27F7D11B16145A3D00EAAF40 /* VSOSCInputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EEF161381DC00C0AEEB /* VSOSCInputManager.m */; };
 		27F7D11C16145A4300EAAF40 /* VSOSCClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EF41613822000C0AEEB /* VSOSCClient.m */; };
 		5B039BFA16143C3900059F5E /* VSParametersScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B039BF916143C3800059F5E /* VSParametersScrollView.m */; };
+		5B0A9C04161CD67C00ABD27D /* VSMiscUtlis.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B98D1E4161CC54E002CDE1F /* VSMiscUtlis.m */; };
 		5B0E366615876E9300F15026 /* VSTrackLabelsRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366515876E9300F15026 /* VSTrackLabelsRulerView.m */; };
 		5B0E366C15876EEB00F15026 /* VSTrackLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0E366B15876EEB00F15026 /* VSTrackLabel.m */; };
 		5B0EFF96158A1F410000445C /* playhead.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B0EFF95158A1F410000445C /* playhead.png */; };
@@ -158,11 +159,8 @@
 		5B60CC5B16135EE800557892 /* VSOutputController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B60CC5A16135EE800557892 /* VSOutputController.m */; };
 		5B70F71B15C2E650002B54ED /* VSPlayheadMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B70F71A15C2E650002B54ED /* VSPlayheadMarker.m */; };
 		5B7BFFC71592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BFFC61592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m */; };
-		5B98D1D1161CAA46002CDE1F /* VSFullScreenHolderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B98D1CB161C8EF0002CDE1F /* VSFullScreenHolderView.m */; };
-		5B98D1DB161CACFF002CDE1F /* VSDeviceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B98D1DA161CACFF002CDE1F /* VSDeviceLoader.m */; };
 		5B98D1E0161CC061002CDE1F /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B98D1DF161CC061002CDE1F /* libxml2.2.dylib */; };
 		5B98D1E2161CC079002CDE1F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B98D1E1161CC079002CDE1F /* libz.dylib */; };
-		5B98D1E5161CC54E002CDE1F /* VSMiscUtlis.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B98D1E4161CC54E002CDE1F /* VSMiscUtlis.m */; };
 		5B98D1EA161CC7CF002CDE1F /* libTBXML.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B98D1E9161CC7CF002CDE1F /* libTBXML.a */; };
 		5BAC770616034B9400DF3BB0 /* VSKeyFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAC770516034B9400DF3BB0 /* VSKeyFrameView.m */; };
 		5BAC770916034BA100DF3BB0 /* VSKeyFrameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAC770816034BA100DF3BB0 /* VSKeyFrameViewController.m */; };
@@ -1671,9 +1669,9 @@
 				A9818DE3161502AB005321A2 /* VSOSCPort.m in Sources */,
 				A9838A43161792CD00DF110C /* VSDeviceConfigurationViewController.m in Sources */,
 				A9D8275A16188A91008985F7 /* VSDeviceParameter.m in Sources */,
-				5B98D1D1161CAA46002CDE1F /* VSFullScreenHolderView.m in Sources */,
-				5B98D1DB161CACFF002CDE1F /* VSDeviceLoader.m in Sources */,
-				5B98D1E5161CC54E002CDE1F /* VSMiscUtlis.m in Sources */,
+				A986A5E2161CC2590068F3CA /* VSFullScreenHolderView.m in Sources */,
+				A986A5F9161CC8430068F3CA /* VSCreateDeviceViewController.m in Sources */,
+				5B0A9C04161CD67C00ABD27D /* VSMiscUtlis.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
