@@ -18,6 +18,7 @@
 #import "VSParameterXMLUtils.h"
 #import "VSQuartzCompositionUtils.h"
 #import "VSFrameUtils.h"
+#import "VSMiscUtlis.h"
 
 /* Structs */
 #import "VSDoubleFrame.h"
@@ -42,6 +43,7 @@
 /*Categories*/
 #import "NSImage+QuickLook.h"
 
-#import "RXMLElement.h"
+#import "TBXML.h"
+#import "TBXML+Compression.h"
 
 #endif

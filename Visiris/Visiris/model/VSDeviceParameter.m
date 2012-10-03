@@ -10,4 +10,13 @@
 
 @implementation VSDeviceParameter
 
+-(id) initWithName:(NSString *)name oscPath:(NSString *)oscPath fromValue:(float)fromValue toValue:(float)toValue{
+    if(self = [super init]){
+        self.name = name;
+        self.oscPath = oscPath;
+    }
+    
+    return self;
+}
+
 @end

@@ -9,6 +9,8 @@
 #import "VSDeviceManager.h"
 
 #import "VSDeviceLoader.h"
+#import "VSDevice.h"
+#import "VSDeviceParameter.h"
 
 #import "VSCoreServices.h"
 
@@ -47,8 +49,8 @@ static NSURL* devicesFolderURL;
 
 -(id) init{
     if(self = [super init]){
+        self.devices = [[NSMutableArray alloc]init];
         [self loadExisitingDevices];
-
     }
     
     return self;
@@ -70,6 +72,37 @@ static NSURL* devicesFolderURL;
 }
 
 -(void) loadDeviceFromXMLFile:(NSString*) filePath{
+    NSError *error;
+
+    NSURL *xmlURL = [NSURL fileURLWithPath:filePath];
+    
+    NSXMLDocument *xmlDocument = [[NSXMLDocument alloc] initWithContentsOfURL: xmlURL options:0 error:&error];
+    
+    NSXMLElement *deviceNode = [xmlDocument rootElement];
+    
+    NSString *name = [[deviceNode attributeForName:@"name"] stringValue];
+
+    VSDevice *device = [[VSDevice alloc] initWithID:[VSMiscUtlis stringWithUUID] andName:name];
+    
+    NSArray *parameterNodes = [deviceNode elementsForName:@"parameter"];
+    
+    for(NSXMLElement *parameterNode in parameterNodes){
+        
+        NSString *name= [[parameterNode attributeForName:@"name"] stringValue];
+        NSString *oscPath= [[parameterNode attributeForName:@"oscPath"] stringValue];
+        
+        float fromValue = [[[parameterNode attributeForName:@"fromValue"] stringValue] floatValue];
+        float toValue = [[[parameterNode attributeForName:@"toValue"] stringValue] floatValue];
+        
+        VSDeviceParameter *deviceParameter = [[VSDeviceParameter alloc] initWithName:name
+                                                                             oscPath:oscPath
+                                                                           fromValue:fromValue
+                                                                             toValue:toValue];
+        
+        [device addParametersObject:deviceParameter];
+    }
+    
+    [self addDevice:device];
 
 }
 
@@ -87,6 +120,10 @@ static NSURL* devicesFolderURL;
     }
     
     return didAddDevice;
+}
+
+-(VSDevice*)objectInDevicesAtIndex:(NSUInteger)index{
+    return [self.devices objectAtIndex:index];
 }
 
 - (NSUInteger)numberOfDevices

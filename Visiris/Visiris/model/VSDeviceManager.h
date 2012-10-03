@@ -19,6 +19,8 @@
 @property (strong) NSMutableArray *devices;
 
 
+-(VSDevice*)objectInDevicesAtIndex:(NSUInteger)index;
+
 - (BOOL)addDevice:(VSDevice *)newDevice;
 - (NSUInteger)numberOfDevices;
 

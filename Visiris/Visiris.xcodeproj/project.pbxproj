@@ -159,10 +159,11 @@
 		5B70F71B15C2E650002B54ED /* VSPlayheadMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B70F71A15C2E650002B54ED /* VSPlayheadMarker.m */; };
 		5B7BFFC71592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BFFC61592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m */; };
 		5B98D1D1161CAA46002CDE1F /* VSFullScreenHolderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B98D1CB161C8EF0002CDE1F /* VSFullScreenHolderView.m */; };
-		5B98D1D8161CAC38002CDE1F /* libRaptureXML.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B98D1D7161CAC38002CDE1F /* libRaptureXML.a */; };
 		5B98D1DB161CACFF002CDE1F /* VSDeviceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B98D1DA161CACFF002CDE1F /* VSDeviceLoader.m */; };
 		5B98D1E0161CC061002CDE1F /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B98D1DF161CC061002CDE1F /* libxml2.2.dylib */; };
 		5B98D1E2161CC079002CDE1F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B98D1E1161CC079002CDE1F /* libz.dylib */; };
+		5B98D1E5161CC54E002CDE1F /* VSMiscUtlis.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B98D1E4161CC54E002CDE1F /* VSMiscUtlis.m */; };
+		5B98D1EA161CC7CF002CDE1F /* libTBXML.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B98D1E9161CC7CF002CDE1F /* libTBXML.a */; };
 		5BAC770616034B9400DF3BB0 /* VSKeyFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAC770516034B9400DF3BB0 /* VSKeyFrameView.m */; };
 		5BAC770916034BA100DF3BB0 /* VSKeyFrameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAC770816034BA100DF3BB0 /* VSKeyFrameViewController.m */; };
 		5BBF2A0615FF42A0009D79C7 /* VSScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BBF2A0515FF42A0009D79C7 /* VSScrollView.m */; };
@@ -460,13 +461,17 @@
 		5B7BFFC61592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineObjectViewIntersection.m; sourceTree = "<group>"; };
 		5B98D1CA161C8EF0002CDE1F /* VSFullScreenHolderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFullScreenHolderView.h; sourceTree = "<group>"; };
 		5B98D1CB161C8EF0002CDE1F /* VSFullScreenHolderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFullScreenHolderView.m; sourceTree = "<group>"; };
-		5B98D1D7161CAC38002CDE1F /* libRaptureXML.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libRaptureXML.a; sourceTree = "<group>"; };
 		5B98D1D9161CACFF002CDE1F /* VSDeviceLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDeviceLoader.h; sourceTree = "<group>"; };
 		5B98D1DA161CACFF002CDE1F /* VSDeviceLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDeviceLoader.m; sourceTree = "<group>"; };
-		5B98D1DC161CBFEC002CDE1F /* RXMLElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RXMLElement.h; sourceTree = "<group>"; };
 		5B98D1DD161CC041002CDE1F /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		5B98D1DF161CC061002CDE1F /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = usr/lib/libxml2.2.dylib; sourceTree = SDKROOT; };
 		5B98D1E1161CC079002CDE1F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		5B98D1E3161CC54E002CDE1F /* VSMiscUtlis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSMiscUtlis.h; sourceTree = "<group>"; };
+		5B98D1E4161CC54E002CDE1F /* VSMiscUtlis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSMiscUtlis.m; sourceTree = "<group>"; };
+		5B98D1E9161CC7CF002CDE1F /* libTBXML.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTBXML.a; sourceTree = "<group>"; };
+		5B98D1EB161CC7DF002CDE1F /* TBXML+Compression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TBXML+Compression.h"; sourceTree = "<group>"; };
+		5B98D1EC161CC7DF002CDE1F /* TBXML+HTTP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TBXML+HTTP.h"; sourceTree = "<group>"; };
+		5B98D1ED161CC7DF002CDE1F /* TBXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TBXML.h; sourceTree = "<group>"; };
 		5BAB35D315B4153D008B4793 /* VSTimelineScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineScrollView.h; sourceTree = "<group>"; };
 		5BAC770416034B9400DF3BB0 /* VSKeyFrameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSKeyFrameView.h; sourceTree = "<group>"; };
 		5BAC770516034B9400DF3BB0 /* VSKeyFrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSKeyFrameView.m; sourceTree = "<group>"; };
@@ -542,7 +547,7 @@
 				27CFB14216139C1D00A19B7A /* VVBasics.framework in Frameworks */,
 				27CFB14316139C1D00A19B7A /* VVMIDI.framework in Frameworks */,
 				27CFB14416139C1D00A19B7A /* VVOSC.framework in Frameworks */,
-				5B98D1D8161CAC38002CDE1F /* libRaptureXML.a in Frameworks */,
+				5B98D1EA161CC7CF002CDE1F /* libTBXML.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -616,7 +621,10 @@
 		27CFB13E16139BDF00A19B7A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5B98D1D6161CAC38002CDE1F /* RaptorXML */,
+				5B98D1EB161CC7DF002CDE1F /* TBXML+Compression.h */,
+				5B98D1EC161CC7DF002CDE1F /* TBXML+HTTP.h */,
+				5B98D1ED161CC7DF002CDE1F /* TBXML.h */,
+				5B98D1E9161CC7CF002CDE1F /* libTBXML.a */,
 				27CFB13F16139C1D00A19B7A /* VVBasics.framework */,
 				27CFB14016139C1D00A19B7A /* VVMIDI.framework */,
 				27CFB14116139C1D00A19B7A /* VVOSC.framework */,
@@ -896,6 +904,8 @@
 				2799F8E51599C8B800008489 /* VSQuartzCompositionUtils.m */,
 				5B250990161088BE003B715F /* VSFrameUtils.h */,
 				5B250991161088BE003B715F /* VSFrameUtils.m */,
+				5B98D1E3161CC54E002CDE1F /* VSMiscUtlis.h */,
+				5B98D1E4161CC54E002CDE1F /* VSMiscUtlis.m */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -1254,16 +1264,6 @@
 				5B05472216009868002FF9A9 /* VSViewKeyDownDelegate.h */,
 			);
 			name = protocolls;
-			sourceTree = "<group>";
-		};
-		5B98D1D6161CAC38002CDE1F /* RaptorXML */ = {
-			isa = PBXGroup;
-			children = (
-				5B98D1DC161CBFEC002CDE1F /* RXMLElement.h */,
-				5B98D1D7161CAC38002CDE1F /* libRaptureXML.a */,
-			);
-			name = RaptorXML;
-			path = Frameworks/RaptorXML;
 			sourceTree = "<group>";
 		};
 		5B9AD00F15C01ACA00A1D1C0 /* timeline */ = {
@@ -1673,6 +1673,7 @@
 				A9D8275A16188A91008985F7 /* VSDeviceParameter.m in Sources */,
 				5B98D1D1161CAA46002CDE1F /* VSFullScreenHolderView.m in Sources */,
 				5B98D1DB161CACFF002CDE1F /* VSDeviceLoader.m in Sources */,
+				5B98D1E5161CC54E002CDE1F /* VSMiscUtlis.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1780,6 +1781,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/External/Frameworks/RaptorXML\"",
+					"\"$(SRCROOT)/External\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -1806,6 +1808,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/External/Frameworks/RaptorXML\"",
+					"\"$(SRCROOT)/External\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;

@@ -10,6 +10,13 @@
 
 @interface VSDeviceParameter : NSObject
 
+-(id) initWithName:(NSString*) name oscPath:(NSString*) oscPath fromValue:(float) fromValue toValue:(float) toValue;
+
+@property (assign) NSRange deviceValueMappingRange;
+
+@property (strong) NSString *name;
+
+@property (strong) NSString *oscPath;
 
 
 @end

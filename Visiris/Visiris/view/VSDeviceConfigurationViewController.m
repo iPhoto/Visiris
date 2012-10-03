@@ -10,6 +10,8 @@
 
 #import "VSExternalInputManager.h"
 #import "VSDeviceManager.h"
+#import "VSDevice.h"
+
 #import "VSCoreServices.h"
 
 @interface VSDeviceConfigurationViewController ()
@@ -137,12 +139,20 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 #pragma mark - NSTableViewDataSource
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
-    return _numberOfDevices;
+    return self.deviceManager.devices.count;
 }
 
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-    return @"Device";
+    if([tableColumn.identifier isEqualToString:@"name"]){
+        return [self.deviceManager objectInDevicesAtIndex:row].name;
+    }
+    else if([tableColumn.identifier isEqualToString:@"id"]){
+        return [self.deviceManager objectInDevicesAtIndex:row].ID;
+    }
+    else{
+        return nil;
+    }
 }
 
 @end

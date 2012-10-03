@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class VSDeviceParameter;
+
 /**
  * A VSDevice represents an external Device like Kinect, Ardunio.
  *
@@ -15,14 +17,18 @@
  */
 @interface VSDevice : NSObject
 
+-(id) initWithID:(NSString*) UUID andName:(NSString*) name;
+
+-(void) addParametersObject:(VSDeviceParameter *)object;
+
 /** Stores the parameters defined for this device */
-@property (strong) NSDictionary *parameters;
+@property (strong) NSMutableDictionary *parameters;
 
 /** indicates wheter the device is active or not.*/
 @property BOOL active;
 
 @property (strong) NSString *name;
 
-@property NSUInteger ID;
+@property NSString *ID;
 
 @end
