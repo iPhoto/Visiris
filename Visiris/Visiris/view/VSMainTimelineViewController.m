@@ -49,12 +49,7 @@
 #define MINIMUM_TIMELINE_OBJECT_PIXEL_WIDTH 10
 
 @implementation VSMainTimelineViewController
-@synthesize trackViewControllers        = _trackViewControllers;
-@synthesize timeline                    = _timeline;
-@synthesize trackOffset                 = _offsetTrack;
-@synthesize autoscrolling               = _autoscrolling;
-@synthesize autoScrollingTimer          = _autoScrollingTimer;
-@synthesize autoscrollMouseLocation     = _autoscrollMouseLocation;
+
 
 // Name of the nib that will be loaded when initWithDefaultNib is called
 static NSString* defaultNib = @"VSMainTimelineView";

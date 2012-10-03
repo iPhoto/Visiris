@@ -118,6 +118,11 @@
                         }
                         
                     }
+                    else{
+                        if([self timelineObjectsDelegateImplementsSelector:@selector(timelineObjectsHaveBeenRemoved)]){
+                            [self.timelineObjectsDelegate timelineObjectsHaveBeenRemoved];
+                        }
+                    }
                     break;
                 }
                 default:

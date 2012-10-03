@@ -36,6 +36,8 @@
  */
 -(void) timelineObjectsWillBeRemoved:(NSArray*) removedTimelineObjects;
 
+-(void) timelineObjectsHaveBeenRemoved;
+
 @end
 
 

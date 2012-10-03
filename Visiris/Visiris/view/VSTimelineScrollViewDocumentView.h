@@ -64,7 +64,7 @@
 /**
  * Subclass of NSView holding views representing the tracks of the timeline. Besides responsible for the playhead marker and the horizontal rulerview
  */
-@interface VSTimelineScrollViewDocumentView : NSView
+@interface VSTimelineScrollViewDocumentView : NSView<CAAction>
 
 /** Delegate VSTrackHolderView communicates like defined in VSPlayHeadRulerMarkerDelegate*/
 @property id<VSTrackHolderViewDelegate> trackHolderViewDelegate;
