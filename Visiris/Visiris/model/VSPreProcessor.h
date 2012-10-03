@@ -10,6 +10,27 @@
 
 #import "VSTimeline.h"
 
+/**
+ * Protocoll defines how VSPreProcessor informs it's delegate about newly to RenderCore added VSTimelineObjects or currently removed VStimelineObjects
+ */
+@protocol VSPreProcessorDelegate <NSObject>
+
+/**
+ * Called when a TimelineObjects were removed from the renderCore
+ * 
+ * @param timelineObjects NSArray of VSTimelineObjects removed from the renderCore
+ */
+-(void) removedTimelineObjectsfromRenderCore:(NSArray*) timelineObjects;
+
+/**
+ * Called when a TimelineObjects were added to the renderCore
+ *
+ * @param timelineObjects NSArray of VSTimelineObjects added to the renderCore
+ */
+-(void) addedTimelineObjectsToRenderCore:(NSArray*) timelineObjects;
+
+@end
+
 @class VSCoreReceptionist;
 
 /**
@@ -23,6 +44,8 @@
 /** The VSCoreReceptionist is connection to to VSRenderCore. */
 @property (strong) VSCoreReceptionist *renderCoreReceptionist;
 
+/** Delegate the VSPreProcessor talks to when timelinObjects were added to or remove from the VSRenderCore as definend in VSPreProcessorDelegate protocoll */
+@property (weak) id<VSPreProcessorDelegate> delegate;
 
 #pragma  mark - Init
 

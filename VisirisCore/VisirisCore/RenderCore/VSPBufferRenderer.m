@@ -153,27 +153,12 @@
 	
 	//Update the texture in the target OpenGL context from the contents of the pBuffer
 	[self _updateTextureOnTargetContext];
-	
-	//Check for errors
-	
+		
 	return success;
 }
 
 - (GLuint)textureName{
     return _texture;
-}
-
-
-- (void)delete{
-	//IMPORTANT: We use the macros provided by <OpenGL/CGLMacro.h> which provide better performances and allows us not to bother with making sure the current context is valid
-//	CGLContextObj cgl_ctx = [_textureContext CGLContextObj];
-	
-	//Destroy the texture on the target OpenGL context
-//	if(_textureName)
-//        glDeleteTextures(1, &_textureName);
-    
-	//Destroy the OpenGL context
-	[_pixelBufferContext clearDrawable];
 }
 
 @end

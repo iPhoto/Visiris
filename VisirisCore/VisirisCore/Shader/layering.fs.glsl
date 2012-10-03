@@ -121,7 +121,11 @@ vec3 ContrastSaturationBrightness(vec3 color, float brt, float sat, float con)
 #define BlendDarkenf(base, blend) 		min(blend, base)
 #define BlendLinearLightf(base, blend) 	(blend < 0.5 ? BlendLinearBurnf(base, (2.0 * blend)) : BlendLinearDodgef(base, (2.0 * (blend - 0.5))))
 #define BlendScreenf(base, blend) 		(1.0 - ((1.0 - base) * (1.0 - blend)))
-#define BlendOverlayf(base, blend)      (base < 0.5 ? (2.0 * base * blend) : (1.0 - 2.0 * (1.0 - base) * (1.0 - blend)))
+
+
+#define BlendOverlayf(base, blend)      (base < 0.5 ? (2.0 * base * blend ) : (1.0 - 2.0 * (1.0 - base) * (1.0 - blend)))
+
+
 #define BlendSoftLightf(base, blend) 	((blend < 0.5) ? (2.0 * base * blend + base * base * (1.0 - 2.0 * blend)) : (sqrt(base) * (2.0 * blend - 1.0) + 2.0 * base * (1.0 - blend)))
 #define BlendColorDodgef(base, blend) 	((blend == 1.0) ? blend : min(base / (1.0 - blend), 1.0))
 #define BlendColorBurnf(base, blend) 	((blend == 0.0) ? blend : max((1.0 - ((1.0 - base) / blend)), 0.0))
@@ -132,7 +136,7 @@ vec3 ContrastSaturationBrightness(vec3 color, float brt, float sat, float con)
 
 
 //Blendmodes
-#define BlendNormal(base, blend)        (blend  + base*(1.0 - blend.a))
+#define BlendNormal(base, blend)        (blend + base*(1.0 - blend.a))
 #define BlendLighten                    BlendLightenf
 #define BlendDarken(base, blend)        (BlendDarkenf(base, blend) + base*(1.0 - blend.a))
 #define BlendMultiply(base, blend) 		(base * blend + base*(1.0 - blend.a))
@@ -143,7 +147,12 @@ vec3 ContrastSaturationBrightness(vec3 color, float brt, float sat, float con)
 #define BlendNegation(base, blend)      (vec4(1.0) - abs(vec4(1.0) - base - blend))
 #define BlendExclusion(base, blend) 	(base + blend - 2.0 * base * blend)
 #define BlendScreen(base, blend) 		Blend(base, blend, BlendScreenf)
-#define BlendOverlay(base, blend) 		(Blend(base, blend, BlendOverlayf))
+
+//////
+#define BlendOverlay(base, blend) 		vec4(BlendOverlayf(base.r, blend.r),BlendOverlayf(base.g, blend.g), BlendOverlayf(base.b, blend.b),BlendOverlayf(base.a, blend.a))
+//#define BlendOverlay(base, blend) 		(Blend(base, blend, BlendOverlayf))
+//////
+
 #define BlendSoftLight(base, blend) 	Blend(base, blend, BlendSoftLightf)
 #define BlendHardLight(base, blend) 	(BlendOverlay(blend, base) + base*(1.0 - blend.a))
 #define BlendColorDodge(base, blend) 	(Blend(base, blend, BlendColorDodgef))

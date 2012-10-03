@@ -17,30 +17,36 @@
 
 @interface VSSourceSupplier()
 
-@property (assign) double                   videoDuration;
+/** Reads out the movie frame by frame */
 @property (strong) AVAssetReader            *movieReader;
-@property (strong) NSURL                    *url;
-@property (strong) NSDate                   *startTime;
-@property (assign) BOOL                     isReadingVideo;
-@property (assign) char*                    imageData;
-@property (strong) AVURLAsset               *asset;
-@property (strong) AVAssetImageGenerator    *imageGenerator;
-@property (assign) float                    frameRate;
-@property (assign) int                      currentFrame;
-//@property (strong) AVPlayer                 *DELETEPlayer;
 
-- (void) readMovie:(NSURL *)url atTime:(double) time;
-- (void) readNextMovieFrame;
-- (void) updateInfo: (id)message;
+/** Path of the actual file on the System */
+@property (strong) NSURL                    *url;
+
+/** Flaf if currentlich Video is playing or just skimming through */
+@property (assign) BOOL                     isReadingVideo;
+
+/** Data of the Image */
+@property (assign) char*                    imageData;
+
+/** Asset of the File - contains all the data of it */
+@property (strong) AVURLAsset               *asset;
+
+/** When user is just skimming through the videofile the imagegenerator creates the imagedata */
+@property (strong) AVAssetImageGenerator    *imageGenerator;
+
+/** Frames per second of the Video */
+@property (assign) float                    frameRate;
+
+/** The Frame the movieReader is currently at */
+@property (assign) int                      currentFrame;
 
 @end
 
 
 @implementation VSVideoSourceSupplier
-@synthesize videoDuration   = _videoDuration;
 @synthesize movieReader     = _movieReader;
 @synthesize url             = _url;
-@synthesize startTime       = _startTime;
 @synthesize vsImage         = _vsImage;
 @synthesize isReadingVideo  = _isReadingVideo;
 @synthesize imageData       = _imageData;
@@ -49,7 +55,15 @@
 @synthesize frameRate       = _frameRate;
 @synthesize currentFrame    = _currentFrame;
 @synthesize hasAudio        = _hasAudio;
+@synthesize videoTimestamp  = _videoTimestamp;
 
+
+#pragma Mark - Init
+
+/**
+ * Initialization of the Timelineobject
+ * @param aTimelineObject The Referencing Timelineobject
+ */
 - (id)initWithTimelineObject:(VSTimelineObject *)aTimelineObject{
     if (self = [super initWithTimelineObject:aTimelineObject]) {
         self.url = [[NSURL alloc] initFileURLWithPath:self.timelineObject.sourceObject.filePath]; 
@@ -59,8 +73,9 @@
         self.imageGenerator.appliesPreferredTrackTransform = YES;
         self.vsImage.size = self.asset.naturalSize;
         self.imageData = malloc(self.vsImage.size.width * self.vsImage.size.height * 4);
+        self.videoTimestamp = 0.0;
         
-        [self readMovie:self.url atTime:0];
+        [self readMovieAtTime:0];
         self.isReadingVideo = YES;
         
         if ([self.asset tracksWithMediaType:AVMediaTypeAudio].count > 0)
@@ -71,40 +86,44 @@
     return self;
 }
 
--(VSImage *) getFrameForTimestamp:(double)aTimestamp withPlayMode:(VSPlaybackMode)playMode{
 
+#pragma mark - Methods
+
+/**
+ * This method gets called every update. It supplies the VSImage
+ * @param aTimestamp The localTimestamp of the timelineobject
+ * @param playMode Playmode is either skimming, klicking or playing.
+ * @return The returnvalue is the updated VSImgae Object
+ */
+-(VSImage *) getFrameForTimestamp:(double)aTimestamp withPlayMode:(VSPlaybackMode)playMode{
+    
     //TODO this is sparta - no its slow!
-    double videoTimestamp = [self convertToVideoTimestamp:aTimestamp] / 1000.0;
-        
+    self.videoTimestamp= [self convertToVideoTimestamp:aTimestamp] / 1000.0;
+
     if (playMode == VSPlaybackModePlaying) {
-        
-        double frames = [self framesFromSeconds:videoTimestamp];
-        
-//        NSLog(@"frames: %f", frames);
-//        
-//        if (fabs(frames - self.currentFrame)) {
-//            
-//        }
-        
-        if(self.currentFrame > 60 && videoTimestamp < 1.0 ){
-            [self.movieReader cancelReading];
-            [self readMovie:self.url atTime:videoTimestamp];
-            [self readNextMovieFrame];
-        } 
+        double frames = [self framesFromSeconds:self.videoTimestamp];
         
         if (self.isReadingVideo == NO) {
             self.isReadingVideo = YES;
-            [self readMovie:self.url atTime:videoTimestamp];
-        } 
-        
-        if (self.currentFrame < frames) {
+            [self readMovieAtTime:self.videoTimestamp];
+        }
+        else if (self.movieReader.status != AVAssetReaderStatusReading)
+        {
+            //If the movieReader is not reading then return the current status of the vsImage (means an empty texture)
+            return self.vsImage;
+        }
+        else if(fabs(frames - self.currentFrame) > self.frameRate){
+            [self.movieReader cancelReading];
+            [self readMovieAtTime:self.videoTimestamp];
+        }
+        else if(self.currentFrame < frames) {
             [self readNextMovieFrame];
             self.currentFrame++;
             self.vsImage.needsUpdate = YES;
         }
     }
     else {
-        [self getPreviewImageAtTime:videoTimestamp];
+        [self getPreviewImageAtTime:self.videoTimestamp];
         self.isReadingVideo = NO;
         [self.movieReader cancelReading];
         self.vsImage.needsUpdate = YES;
@@ -112,7 +131,14 @@
     return self.vsImage;
 }
 
-- (void)getPreviewImageAtTime:(double) timeStamp{         
+
+#pragma mark - Private Methods
+
+/**
+ * This method provides a Image at a given Time. It is not fast but the only way of getting an Image at a given Timestamp
+ * @param timeStamp The Timestamp we want to know
+ */
+- (void)getPreviewImageAtTime:(double)timeStamp{         
     CMTime timePoint = CMTimeMakeWithSeconds(timeStamp, self.asset.duration.timescale);  
     
     CMTime actualTime;
@@ -133,9 +159,11 @@
     }
 }
 
-- (void) readMovie:(NSURL *)url atTime:(double) time{    
-    self.startTime = [NSDate date];
-        
+/**
+ * This method gets called when the Videostartsplaying and initializes Asset.
+ * @param time The Starttime
+ */
+- (void) readMovieAtTime:(double)time{    
     [self.asset loadValuesAsynchronouslyForKeys:[NSArray arrayWithObject:@"tracks"] completionHandler:
      ^{
          dispatch_async(dispatch_get_main_queue(),
@@ -145,9 +173,7 @@
                             if ([tracks count] == 1)
                             {
                                 videoTrack = [tracks objectAtIndex:0];
-                                
-                                self.videoDuration = CMTimeGetSeconds([videoTrack timeRange].duration);
-                                
+                                                                
                                 NSError * error = nil;
                                 
                                 self.movieReader = [[AVAssetReader alloc] initWithAsset:self.asset error:&error];
@@ -159,28 +185,19 @@
                                 NSDictionary* videoSettings = [NSDictionary dictionaryWithObject:value forKey:key]; 
                                 
                                 AVAssetReaderTrackOutput* output = [AVAssetReaderTrackOutput assetReaderTrackOutputWithTrack:videoTrack
-                                                                                                              outputSettings:videoSettings];
-                                //    output.alwaysCopiesSampleData = NO;
-                                
+                                                                                                              outputSettings:videoSettings];                                
                                 [self.movieReader addOutput:output];
                                 
-                                
+                                                            
                                 CMTime cmtime = CMTimeMakeWithSeconds(time,self.asset.duration.timescale);
                                 
                                 CMTimeRange timeRange = CMTimeRangeMake(cmtime, kCMTimePositiveInfinity);
                                 [self.movieReader setTimeRange:timeRange];
                                 
-//                                NSLog(@"timeRange: %@", (__bridge NSString *)CMTimeCopyDescription(NULL, cmtime));
-//                                NSLog(@"insgesammt frames: %lld", self.movieReader.asset.duration.value);
-//                                NSLog(@"framerate: %f", videoTrack.nominalFrameRate);
-                                
                                 self.frameRate = videoTrack.nominalFrameRate;
                                 self.currentFrame = [self framesFromSeconds:time];
 
-                                if ([self.movieReader startReading]){
-                                    //NSLog(@"Video Reading ready");
-                                }
-                                else{
+                                if ([self.movieReader startReading] == NO){
                                     NSLog(@"reading can't be started");
                                 }
                             }
@@ -188,16 +205,12 @@
      }];
 }
 
-- (void) updateInfo:(id)message{
-    NSLog(@"%@",message);
-}
-
-
-
-- (void) readNextMovieFrame{
+/**
+ * Reads out a frame and saves it into the VSImagedata
+ */
+- (void)readNextMovieFrame{
     if (self.movieReader.status == AVAssetReaderStatusReading){
         AVAssetReaderTrackOutput * output = [self.movieReader.outputs objectAtIndex:0];
-        //[output ]
         CMSampleBufferRef sampleBuffer = [output copyNextSampleBuffer]; // this is the most expensive call
         if (sampleBuffer)
         { 
@@ -221,16 +234,18 @@
         }
         else{
             NSLog(@"could not copy next sample buffer. status is %ld", self.movieReader.status);
-            NSTimeInterval scanDuration = -[self.startTime timeIntervalSinceNow];
-            float scanMultiplier = self.videoDuration / scanDuration;
-            NSString* info = [NSString stringWithFormat:@"Done\n\nvideo duration: %f seconds\nscan duration: %f seconds\nmultiplier: %f", self.videoDuration, scanDuration, scanMultiplier];
-           [self performSelectorOnMainThread:@selector(updateInfo:) withObject:info waitUntilDone:YES];
         }
     }
     else{
-        //NSLog(@"Video status is now %ld", self.movieReader.status);
+        NSLog(@"Video status is now %ld", self.movieReader.status);
     }
 }
+
+/**
+ * Creates Frames from Seconds
+ * @param seconds The Seconds we want calculated to frames
+ * @return the Actual frames - normally frames can only be Integer, but this returns a double (maybe this should be improved, not by casting it in a int, rounding it to the nearest int)
+ */
 - (double)framesFromSeconds:(double)seconds{
     int intSeconds;
     double frames;
@@ -241,9 +256,13 @@
     return frames;
 }
 
--(double) convertToVideoTimestamp:(double)localTimestamp{
+/**
+ * Converts the localTimestamp to a videoTimeStamp (handles Looping)
+ * @param localTimestamp localtimestamp of the Timelineobject
+ * @return the VideoTimestamp
+ */
+- (double)convertToVideoTimestamp:(double)localTimestamp{
     localTimestamp = localTimestamp <= self.timelineObject.sourceDuration ? localTimestamp :  fmod(localTimestamp, self.timelineObject.sourceDuration);
-
     return localTimestamp;
 }
 

@@ -9,9 +9,7 @@ varying vec2 texcoord;
 
 void main()
 {    
-    vec4 color = texture2D(texture, texcoord);
-    
+    vec4 color = texture2D(texture, texcoord);    
     color.a *= alpha;
-   // color.b += 1.0-color.a;
     gl_FragColor = color;
 }

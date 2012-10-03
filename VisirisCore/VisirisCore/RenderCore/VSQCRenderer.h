@@ -48,11 +48,6 @@
 - (void)setPublicInputsWithValues:(NSDictionary*)inputValues;
 
 /**
- * Deletes the renderer including the pbuffer and texture
- */
-- (void)deleteRenderer;
-
-/**
  * Resizes the texture
  * @param size The new Size
  */

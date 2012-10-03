@@ -27,6 +27,8 @@
 /** Value of the parameter the VSAnimatin is connected with when no keyFrame was set yet */
 @property (strong) id defaultValue;
 
+-(id) initWithDefaultValue:(id)defaultValue;
+
 #pragma mark - Methods
 
 /**

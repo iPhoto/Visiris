@@ -118,6 +118,11 @@
                         }
                         
                     }
+                    else{
+                        if([self timelineObjectsDelegateImplementsSelector:@selector(timelineObjectsHaveBeenRemoved)]){
+                            [self.timelineObjectsDelegate timelineObjectsHaveBeenRemoved];
+                        }
+                    }
                     break;
                 }
                 default:
@@ -196,11 +201,11 @@
 #pragma mark Remove TimelineObjects
 
 -(BOOL) removeTimelineObject:(VSTimelineObject *)aTimelineObject fromTrack:(VSTrack *)track{
-    return [track removTimelineObject:aTimelineObject];
+    return [track removeTimelineObject:aTimelineObject];
 }
 
 -(BOOL) removeTimelineObject:(VSTimelineObject *)aTimelineObject fromTrack:(VSTrack *)track andRegisterAtUndoManager:(NSUndoManager *)undoManager{
-    return [track removTimelineObject:aTimelineObject andRegisterAtUndoManager:undoManager];
+    return [track removeTimelineObject:aTimelineObject andRegisterAtUndoManager:undoManager];
 }
 
 #pragma mark TimelineObject-Selection

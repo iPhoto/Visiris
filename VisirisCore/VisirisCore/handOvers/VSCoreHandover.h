@@ -15,7 +15,6 @@
  */
 @interface VSCoreHandover : NSObject
 
-//TODO: is the time stamp local or global?
 /** current Time */
 @property (assign) double       timestamp;
 @property (assign) NSInteger    timeLineObjectID;
@@ -32,6 +31,6 @@
  * @param theTimestamp The timestamp the data is set of
  * @param theId ID of the Timelineobject
  */
--(id) initWithAttributes:(NSDictionary *) theAttributes forTimestamp:(double) theTimestamp forId:(NSInteger) theId;
+-(id) initWithAttributes:(NSDictionary *) theAttributes forTimestamp:(double)theTimestamp forId:(NSInteger) theId;
  
 @end

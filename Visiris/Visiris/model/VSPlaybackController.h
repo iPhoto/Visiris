@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "VSOutputController.h"
-
+#import "VSPreProcessor.h"
 
 #import "VSCoreServices.h"
 
@@ -20,7 +20,7 @@
 /**
  * VSPlaybackController start and controls playing of the Visiris Project. It tells the VSPreProcessor to process data for an specific-frame
  */
-@interface VSPlaybackController : NSObject
+@interface VSPlaybackController : NSObject<VSPreProcessorDelegate>
 
 /** The VSPrePRrocess is called to process data for a specific timestamp. */
 @property (readonly, weak) VSPreProcessor *preProcessor;
@@ -66,7 +66,7 @@
 /**
  * Tells the VSPreProcessor to render the frame for the currentTimestamp for given frame size
  */
-- (void)renderFramesForCurrentTimestamp;
+- (void)renderFramesForCurrentTimestamp:(NSSize)size;
 
 /**
  * Tells the VSPreProcessor to render the current frame again

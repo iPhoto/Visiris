@@ -94,6 +94,7 @@
     self.postProcessor = [[VSPostProcessor alloc] initWithPlaybackController:self.playbackController];
     
     self.preProcessor.renderCoreReceptionist.delegate = self.postProcessor;
+    self.preProcessor.delegate = self.playbackController;
     
     self.timeline.timelineObjectsDelegate = self.preProcessor;
     

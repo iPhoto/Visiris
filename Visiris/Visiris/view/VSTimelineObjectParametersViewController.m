@@ -105,6 +105,7 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
                                               forKey:[NSNumber numberWithInteger:parameter.ID]];
             
             lastParameterController = parameteViewController;
+            
         }
         
         [self.view.window recalculateKeyViewLoop];
@@ -155,12 +156,14 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
 -(void) resetParameters{
     if(self.parameterViewControllers.count){
         for(VSParameterViewController *ctrl in [self.parameterViewControllers allValues]){
-            [ctrl saveParameterAndRemoveObserver];
+            [ctrl removeObservers];
             [ctrl.view removeFromSuperview];
         }
         
         [self.parameterViewControllers removeAllObjects];
     }
+    
+    self.timelineObject = nil;
 }
 
 

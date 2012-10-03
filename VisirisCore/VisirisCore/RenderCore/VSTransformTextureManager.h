@@ -36,7 +36,7 @@
 
 /**
  * As soon a Timelineobjects is dropped at an empty Track this Method gets called to create a new FBO
- * @param size The size of the new FBOTexture
+ * @param size The size of the new FBOTexture   `
  * @param trackId The trackID of the FBO
  */
 - (void)createFBOWithSize:(NSSize)size trackId:(NSInteger)trackId;
@@ -47,10 +47,13 @@
  */
 - (void)resizeOutputSize:(NSSize)size;
 
+
+//todo
+- (void)decrementReferenceCounting:(NSInteger)trackID;
+
 /**
- * Deletes the FBO of a track
- * @param trackID The ID of the track
+ * CommandLineOutput of the Dictionaries and the referenceCounting
  */
-- (void)deleteFBOforTrackID:(NSInteger)trackID;
+- (void)printDebugLog;
 
 @end

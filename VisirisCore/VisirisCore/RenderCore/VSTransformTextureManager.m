@@ -8,9 +8,11 @@
 
 #import "VSTransformTextureManager.h"
 #import "VSTransformShader.h"
-#import <OpenGL/glu.h>
 #import "VSFrameBufferObject.h"
 #import "VSParameterTypes.h"
+#import "VSReferenceCounting.h"
+
+#import <OpenGL/glu.h>
 
 
 @interface VSTransformTextureManager()
@@ -30,15 +32,19 @@
 /** The Dictionary contains one FBO for each Track */
 @property (strong) NSMutableDictionary  *fboForTrack;
 
+/** Counts the number of objects on every trackID */
+@property (strong) VSReferenceCounting  *referenceCountingObjects;
+
 @end
 
 
 @implementation VSTransformTextureManager
-@synthesize shader              = _shader;
-@synthesize vertex_buffer       = _vertex_buffer;
-@synthesize element_buffer      = _element_buffer;
-@synthesize glContext           = _glContext;
-@synthesize fboForTrack         = _fboForTrack;
+@synthesize shader                      = _shader;
+@synthesize vertex_buffer               = _vertex_buffer;
+@synthesize element_buffer              = _element_buffer;
+@synthesize glContext                   = _glContext;
+@synthesize fboForTrack                 = _fboForTrack;
+@synthesize referenceCountingObjects    = _referenceCountingObjects;
 
 
 #pragma Mark - Init
@@ -47,6 +53,7 @@
     if (self = [super init]) {
         self.shader = [[VSTransformShader alloc] init];
         self.fboForTrack = [[NSMutableDictionary alloc] init];
+        self.referenceCountingObjects = [[VSReferenceCounting alloc] init];
         
         [self make_resources];
     }
@@ -68,20 +75,20 @@
     glUseProgram(self.shader.program);
     
     
-    glUniform1f(self.shader.uniformObjectWidth, textureSize.width); 
-    glUniform1f(self.shader.uniformObjectHeight, textureSize.height);
-    glUniform1f(self.shader.uniformWindowWidth, outputSize.width);
-    glUniform1f(self.shader.uniformWindowHeight, outputSize.height);
-    glUniform1f(self.shader.uniformScaleX, [[attributes valueForKey:VSParameterKeyScaleWidth] floatValue]);
-    glUniform1f(self.shader.uniformScaleY, [[attributes valueForKey:VSParameterKeyScaleHeight] floatValue]);
-    glUniform1f(self.shader.uniformRotateX, [[attributes valueForKey:VSParameterKeyRotationX] floatValue]);
-    glUniform1f(self.shader.uniformRotateY, [[attributes valueForKey:VSParameterKeyRotationY] floatValue]);
-    glUniform1f(self.shader.uniformRotateZ, [[attributes valueForKey:VSParameterKeyRotationZ] floatValue]);
-    glUniform1f(self.shader.uniformTranslateX, [[attributes valueForKey:VSParameterKeyPositionX] floatValue]);
-    glUniform1f(self.shader.uniformTranslateY, [[attributes valueForKey:VSParameterKeyPositionY] floatValue]);
-    glUniform1f(self.shader.uniformTranslateZ, [[attributes valueForKey:VSParameterKeyPositionZ] floatValue]);
-    glUniform1f(self.shader.uniformIsQCPatch, qcPatch);
-    glUniform1f(self.shader.uniformAlpha,   [[attributes valueForKey:VSParameterKeyAlpha] floatValue]);
+    glUniform1f(self.shader.uniformObjectWidth,     textureSize.width); 
+    glUniform1f(self.shader.uniformObjectHeight,    textureSize.height);
+    glUniform1f(self.shader.uniformWindowWidth,     outputSize.width);
+    glUniform1f(self.shader.uniformWindowHeight,    outputSize.height);
+    glUniform1f(self.shader.uniformScaleX,          [[attributes valueForKey:VSParameterKeyScaleWidth] floatValue]);
+    glUniform1f(self.shader.uniformScaleY,          [[attributes valueForKey:VSParameterKeyScaleHeight] floatValue]);
+    glUniform1f(self.shader.uniformRotateX,         [[attributes valueForKey:VSParameterKeyRotationX] floatValue]);
+    glUniform1f(self.shader.uniformRotateY,         [[attributes valueForKey:VSParameterKeyRotationY] floatValue]);
+    glUniform1f(self.shader.uniformRotateZ,         [[attributes valueForKey:VSParameterKeyRotationZ] floatValue]);
+    glUniform1f(self.shader.uniformTranslateX,      [[attributes valueForKey:VSParameterKeyPositionX] floatValue]);
+    glUniform1f(self.shader.uniformTranslateY,      [[attributes valueForKey:VSParameterKeyPositionY] floatValue]);
+    glUniform1f(self.shader.uniformTranslateZ,      [[attributes valueForKey:VSParameterKeyPositionZ] floatValue]);
+    glUniform1f(self.shader.uniformIsQCPatch,       qcPatch);
+    glUniform1f(self.shader.uniformAlpha,           [[attributes valueForKey:VSParameterKeyAlpha] floatValue]);
     
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -112,7 +119,9 @@
     return fbo.texture;
 }
 
-- (void)createFBOWithSize:(NSSize)size trackId:(NSInteger) trackId{
+- (void)createFBOWithSize:(NSSize)size trackId:(NSInteger)trackId{
+    
+    [self.referenceCountingObjects incrementReferenceOfKey:[NSNumber numberWithInteger:trackId]];
 
     if ([self.fboForTrack objectForKey:[NSNumber numberWithInteger:trackId]]) {
         return;
@@ -129,15 +138,35 @@
     }
 }
 
-- (void)deleteFBOforTrackID:(NSInteger)trackID{
+- (void)decrementReferenceCounting:(NSInteger)trackID{
+    if ([self.referenceCountingObjects decrementReferenceOfKey:[NSNumber numberWithInteger:trackID]] == NO) {
+        [self deleteFBOforTrackID:trackID];
+    }
+}
+
+- (void)printDebugLog{
+    NSLog(@"++++++++++++++++++++++++++DEBUG LOG TRANSFORM-TEXTURE-MANAGER++++++++++++++++++++++++++");
+    NSLog(@"-----fboForTrackID-----");
+    for (id trackID in self.fboForTrack) {
+        NSLog(@"trackID: %@, fbo: %@", trackID, [self.fboForTrack objectForKey:trackID]);
+    }
     
-    //TODO doenst get called - the whole reference Counting is missing
+    NSLog(@"-----referenceCountingObjects-----");
+    [self.referenceCountingObjects printDebugLog];
+}
+
+
+#pragma mark - Private Methods
+
+/**
+ * Deletes the FBO of a track
+ * @param trackID The ID of the track
+ */
+- (void)deleteFBOforTrackID:(NSInteger)trackID{
     VSFrameBufferObject *temp = [self.fboForTrack objectForKey:[NSNumber numberWithInteger:trackID]];
     [temp delete];
     [self.fboForTrack removeObjectForKey:[NSNumber numberWithInteger:trackID]];
 }
-
-#pragma mark - Private Methods
 
 /**
  * Basic Buffercreation for the plane

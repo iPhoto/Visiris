@@ -7,6 +7,7 @@
 //
 
 #import "VSPreProcessor.h"
+
 #import "VSTimeline.h"
 #import "VisirisCore/VSCoreReceptionist.h"
 #import "VSTimelineObject.h"
@@ -16,15 +17,19 @@
 #import "VSFileType.h"
 #import "VSQuartzCompositionUtils.h"
 #import "VSProjectItem.h"
+#import "VSOutputController.h"
+#import "VSPlaybackController.h"
+
+#import "VSCoreServices.h"
 
 @interface VSPreProcessor()
+
+@property NSMutableDictionary *timelineObjectsToRemove;
+
 @end
 
 
 @implementation VSPreProcessor
-
-@synthesize timeline = _timeline;
-@synthesize renderCoreReceptionist=_renderCoreReceptionist;
 
 
 #pragma mark - Init
@@ -39,7 +44,7 @@
 
 
 #pragma mark - Methods
-
+#
 - (void)processFrameAtTimestamp:(double)aTimestamp withFrameSize:(NSSize)aFrameSize withPlayMode:(VSPlaybackMode)playMode
 {
     NSArray *currentTimeLineObjects = [self.timeline timelineObjectsForTimestamp:aTimestamp];
@@ -52,26 +57,37 @@
             [handoverObjects addObject:coreHandover];
         }
     }
-    
-    [self.renderCoreReceptionist renderFrameAtTimestamp:aTimestamp withHandovers:handoverObjects forSize:aFrameSize withPlayMode:playMode];
+    if (handoverObjects.count > 0 ) {
+        [self.renderCoreReceptionist renderFrameAtTimestamp:aTimestamp withHandovers:handoverObjects forSize:aFrameSize withPlayMode:playMode];
+    }
 }
 
 #pragma mark - VSTimelineTimelineObjectsDelegate implementation
 
 -(void) timelineObjectsWillBeRemoved:(NSArray *)removedTimelineObjects{
-    //DDLogInfo(@"%@",removedTimelineObjects);
     
-    
+    self.timelineObjectsToRemove = [[NSMutableDictionary alloc] init];
     
     for (VSTimelineObject *timelineObject in removedTimelineObjects){
-        [self.renderCoreReceptionist removeTimelineobjectWithID:timelineObject.timelineObjectID andType:timelineObject.sourceObject.projectItem.fileType.fileKind];
         
+        [self.timelineObjectsToRemove setObject:[NSNumber numberWithInt:timelineObject.sourceObject.projectItem.fileType.fileKind]  forKey:[NSNumber numberWithInteger:timelineObject.timelineObjectID]];
+        
+//        [self.renderCoreReceptionist removeTimelineobjectWithID:timelineObject.timelineObjectID andType:timelineObject.sourceObject.projectItem.fileType.fileKind];
+        
+    }
+    
+    if([self delegateRespondsToSelector:@selector(removedTimelineObjectsfromRenderCore:)]){
+        [self.delegate removedTimelineObjectsfromRenderCore:removedTimelineObjects];
     }
 }
 
-//TODO: add colorspace...but i think we don't need it
+-(void) timelineObjectsHaveBeenRemoved{
+    for(id key in self.timelineObjectsToRemove){
+        [self.renderCoreReceptionist removeTimelineobjectWithID:[key integerValue] andType:[[self.timelineObjectsToRemove objectForKey:key] intValue]];
+    }
+}
+
 -(void) timelineObjects:(NSArray *)newTimelineObjects haveBeenAddedToTrack:(VSTrack *)aTrack{
-    //DDLogInfo(@"%@",newTimelineObjects);
     
     for(VSTimelineObject *timelineObject in newTimelineObjects){
         
@@ -86,15 +102,40 @@
             case VSFileKindImage:
             case VSFileKindQuartzComposerPatch:
                 [self handleFrameTimelineObject:timelineObject atTrack:aTrack];
-            break;
-                default:
+                break;
+            default:
                 break;
         }
+    }
+
+    if([self delegateRespondsToSelector:@selector(addedTimelineObjectsToRenderCore:)]){
+        [self.delegate addedTimelineObjectsToRenderCore:newTimelineObjects];
     }
 }
 
 #pragma mark - Private Methods
 
+/**
+ * Checks if the delegate is able to respond to the given Selector
+ * @param selector Selector the delegate will be checked for if it is able respond to
+ * @return YES if the delegate is able to respond to the selector, NO otherweis
+ */
+-(BOOL) delegateRespondsToSelector:(SEL) selector{
+    if(self.delegate != nil){
+        if([self.delegate conformsToProtocol:@protocol(VSPreProcessorDelegate) ]){
+            if([self.delegate respondsToSelector: selector]){
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
+}
+
+
+/**
+ *
+ */
 - (void)handleFrameTimelineObject:(VSTimelineObject *)timelineObject atTrack:(VSTrack *)track{
     
     NSSize dimensions = [VSFileUtils dimensionsOfFile:timelineObject.sourceObject.filePath];
@@ -102,18 +143,21 @@
     NSSize outputSize = [VSProjectSettings sharedProjectSettings].frameSize;
     NSInteger objectItemID = timelineObject.timelineObjectID;
     
-   [self.renderCoreReceptionist createNewTextureForSize:dimensions
-                                              colorMode:nil
-                                               forTrack:track.trackID
-                                               withType:type.fileKind
-                                         withOutputSize:outputSize
-                                               withPath:timelineObject.sourceObject.filePath
-                                       withObjectItemID:objectItemID];
-
+    [self.renderCoreReceptionist createNewTextureForSize:dimensions
+                                               colorMode:nil
+                                                forTrack:track.trackID
+                                                withType:type.fileKind
+                                          withOutputSize:outputSize
+                                                withPath:timelineObject.sourceObject.filePath
+                                        withObjectItemID:objectItemID];
+    
 }
 
+/**
+ *
+ */
 - (void)handleAudioTimelineObject:(VSTimelineObject *)timelineObject atTrack:(VSTrack *)track{
-
+    
     if (timelineObject && track) {
         
         NSInteger projectItemID = timelineObject.sourceObject.projectItem.itemID;

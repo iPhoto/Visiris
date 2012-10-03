@@ -12,12 +12,16 @@
 #import "VSProjectItem.h"
 #import "VisirisCore/VSImage.h"
 
+
 @implementation VSImageSourceSupplier
 
--(VSImage *) getFrameForTimestamp:(double)aTimestamp withPlayMode:(VSPlaybackMode)playMode{
+
+#pragma mark - Methods
+
+- (VSImage *)getFrameForTimestamp:(double)aTimestamp withPlayMode:(VSPlaybackMode)playMode{
     
     if (self.vsImage.data == NULL) {
-        
+
         self.vsImage = [[VSImage alloc] init];
         
         NSURL *url = [[NSURL alloc] initFileURLWithPath:self.timelineObject.sourceObject.projectItem.filePath]; 
@@ -34,20 +38,14 @@
         
         CGContextRef ctx = CGBitmapContextCreate(self.vsImage.data, width, height, 8, width * 4, colourSpace, kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst);
         CFRelease(colourSpace);
-        //CGContextTranslateCTM(ctx, 0, height);
-        //CGContextScaleCTM(ctx, 1.0f, -1.0f);
         CGContextSetBlendMode(ctx, kCGBlendModeCopy);
         CGContextDrawImage(ctx, rect, image);
         CGContextRelease(ctx);
         CFRelease(image);
         
-    //    self.vsImage.data = (char *)imageData;
         self.vsImage.size = NSMakeSize(width, height);
         self.vsImage.needsUpdate = YES;
-         
     }
-
-
     return self.vsImage;
 }
 

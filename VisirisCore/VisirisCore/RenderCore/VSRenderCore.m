@@ -210,7 +210,7 @@
 }
 
 - (void)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*)colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path withObjectItemID:(NSInteger)objectItemID{
- 
+     
     [[self openGLContext] makeCurrentContext];
     CGLLockContext([[self openGLContext] CGLContextObj]);
     
@@ -244,15 +244,23 @@
 }
 
 - (void)deleteTextureFortimelineobjectID:(NSInteger)theID{
+    [self.transformTextureManager decrementReferenceCounting:[self.textureManager trackIDfromObjectID:theID]];
     [self.textureManager deleteTextureForTimelineobjectID:theID];
 }
 
 - (void)deleteQCPatchForTimelineObjectID:(NSInteger)theID{
+    [self.transformTextureManager decrementReferenceCounting:[self.qcpManager trackIDfromObjectID:theID]];
     [self.qcpManager deleteQCRenderer:theID];
 }
 
 - (NSOpenGLContext *)openglContext{
     return self.openGLContext;
+}
+
+- (void)printDebugLog{
+    [self.textureManager printDebugLog];
+    [self.transformTextureManager printDebugLog];
+    [self.qcpManager printDebugLog];
 }
 
 
@@ -469,17 +477,16 @@
     NSLog(@"There are %d valid Textures on the GPU",counter);
 }
 
-//TODO 
+/**
+ * Is called with the bottom Timelineobject for creating for the alpha
+ * @param texture OpenGL Texture
+ */
 - (void)mergeWithBackground:(GLuint)texture {
     [self.frameBufferObjectCurrent bind];
     
     glViewport(0, 0, self.frameBufferObjectCurrent.size.width,self.frameBufferObjectCurrent.size.height);
     
-//    glClear(GL_COLOR_BUFFER_BIT);
-//    glColor3f(0.0f, 0.0f, 0.0f);
-    
     glUseProgram(self.backgroundShader.program);
-//    glUniform1f(self.layerShader.uniformLayermode, layermode);
     
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -509,9 +516,10 @@
     [[self openGLContext] flushBuffer];
 }
 
-
 /**
- * todo
+ * For the shader we cant use strings - so we change it to a float (cant use int either)
+ * @param handover The Handover
+ * @return number of the layermode
  */
 - (float)layerMode:(VSCoreHandover *)handover{
     NSString *tempString = (NSString *)[handover.attributes objectForKey:@"VSParameterKeyBlendMode"];

@@ -73,8 +73,6 @@
 -(void) mouseEntered:(NSEvent *)theEvent{
     //tells the window to make the view to firstResponder as soon as the mouse is over the trackingArea covering the whole view
     [self.window makeFirstResponder:self];
-    
-    DDLogInfo(@"mouseEntered in %@",NSStringFromClass([self class]));
 }
 
 #pragma mark- VSTrackViewDelegate implementation
@@ -96,7 +94,7 @@
     self.trackingArea = [[NSTrackingArea alloc] initWithRect:self.frame options:(NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingActiveAlways ) owner:self userInfo:nil];
     [self addTrackingArea:self.trackingArea];
     
-    DDLogInfo(@"tracking Area of %@: %@",NSStringFromClass([self class]), NSStringFromRect(self.trackingArea.rect));
+//    DDLogInfo(@"tracking Area of %@: %@",NSStringFromClass([self class]), NSStringFromRect(self.trackingArea.rect));
 }
 
 #pragma mark - Private Methods

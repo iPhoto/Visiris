@@ -17,7 +17,8 @@
 
 @interface VSCoreReceptionist()
 
-@property (strong) VSAudioCore   *audioCore;
+@property (strong) VSAudioCore      *audioCore;
+@property (assign) BOOL             isPlaying;
 
 @end
 
@@ -33,12 +34,15 @@
         self.renderCore = [[VSRenderCore alloc] initWithSize:size];
         self.audioCore  = [[VSAudioCore alloc] init];
         self.renderCore.delegate = self;
+        self.isPlaying = NO;
     }
     return self;
 }
 
 - (void)renderFrameAtTimestamp:(double)aTimestamp withHandovers:(NSArray *)theHandovers forSize:(NSSize)theFrameSize withPlayMode:(VSPlaybackMode)playMode
 {
+    NSLog(@"renderFrameAtTimestamp");
+    self.isPlaying = YES;
     //return if Handovers is nil
     if (theHandovers == nil)
         return;
@@ -65,21 +69,25 @@
                         [audioArray addObject:coreHandover];
                 }
             }
-            else if ([coreHandover isKindOfClass:[VSAudioCoreHandover class]])
-            {
-                [audioArray addObject:coreHandover];
-            }
+            else
+                if ([coreHandover isKindOfClass:[VSAudioCoreHandover class]])
+                    [audioArray addObject:coreHandover];
         }
         
         if (frameArray.count > 0) {
-            [self.renderCore renderFrameOfCoreHandovers:frameArray forFrameSize:theFrameSize forTimestamp:aTimestamp];
+            if (self.isPlaying) {
+                [self.renderCore renderFrameOfCoreHandovers:frameArray forFrameSize:theFrameSize forTimestamp:aTimestamp];
+            }
         }
         
         if (audioArray.count > 0) {
             
             if (playMode == VSPlaybackModePlaying ||
                 playMode == VSPlaybackModeScrubbing) {
-                [self.audioCore playAudioOfHandovers:audioArray atTimeStamp:aTimestamp];
+                if (self.isPlaying) {
+                    [self.audioCore playAudioOfHandovers:audioArray atTimeStamp:aTimestamp];
+                }
+//                NSLog(@"play AudioArray");
             }else
                 if (playMode == VSPlaybackModeJumping ||
                 playMode == VSPlaybackModeNone) {
@@ -92,22 +100,28 @@
 - (void)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path withObjectItemID:(NSInteger)objectItemID{
 
     [self.renderCore createNewTextureForSize:textureSize colorMode:colorMode forTrack:trackID withType:type withOutputSize:size withPath:path withObjectItemID:(NSInteger)objectItemID];
+//    [self printDebugLog];
 }
 
 - (void)createNewAudioPlayerWithProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID forTrack:(NSInteger)trackId andFilePath:(NSString *)filepath{
 
     [self.audioCore createAudioPlayerForProjectItemID:projectItemID withObjectItemID:objectItemID atTrack:trackId andFilePath:filepath];
+//    [self printDebugLog];
 }
 
 - (void)removeTimelineobjectWithID:(NSInteger)anID andType:(VSFileKind)type{
     
+    NSLog(@"delete");
     switch (type) {
         case VSFileKindAudio:
             [self.audioCore deleteTimelineobjectID:anID];
             break;
         case VSFileKindImage:
+            [self.renderCore deleteTextureFortimelineobjectID:anID];
+            break;
         case VSFileKindVideo:
             [self.renderCore deleteTextureFortimelineobjectID:anID];
+            [self.audioCore deleteTimelineobjectID:anID];
             break;
         case VSFileKindQuartzComposerPatch:
             [self.renderCore deleteQCPatchForTimelineObjectID:anID];
@@ -115,7 +129,19 @@
         default:
             break;
     }
+    
+//    [self printDebugLog];
 }
+
+- (void)printDebugLog{
+    NSLog(@"###############################################");
+    NSLog(@"##########D-E-B-U-G - L-O-G - C-O-R-E##########");
+    NSLog(@"###############################################");
+    [self.renderCore printDebugLog];
+    [self.audioCore printDebugLog];
+    NSLog(@"###############################################");
+}
+
 
 #pragma mark - RenderCoreDelegate impl.
 
@@ -134,6 +160,7 @@
 }
 
 - (void)stopPlaying{
+    self.isPlaying = NO;
     [self.audioCore stopPlaying];
 }
 

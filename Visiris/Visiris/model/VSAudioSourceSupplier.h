@@ -10,4 +10,11 @@
 
 @interface VSAudioSourceSupplier : VSSourceSupplier
 
+/**
+ * Converts the localTimestamp to the audioTimeStamp (handles Looping)
+ * @param localTimestamp localtimestamp of the Timelineobject
+ * @return the newTimestamp
+ */
+- (double)convertToAudioTimestamp:(double)localTimestamp;
+
 @end

@@ -30,6 +30,7 @@ typedef NS_ENUM(NSUInteger, VSOSCClientType)
 - (id)initWithOSCInPort:(OSCInPort *)oscInPort andType:(VSOSCClientType)type;
 
 - (void)startObserving;
+
 - (void)stopObserving;
 
 - (BOOL)isBinded;

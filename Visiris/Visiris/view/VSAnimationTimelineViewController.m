@@ -1,4 +1,4 @@
-//
+ //
 //  VSAnimationTimelineViewController.m
 //  Visiris
 //
@@ -103,26 +103,14 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     [self removeSelectedKeyFrames];
 }
 
-//#pragma mark - VSPlayHeadRulerMarkerDelegate Implementation
-//
-//-(BOOL) shouldMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView{
-//    self.timeline.playHead.scrubbing = YES;
-//    return YES;
-//}
-//
+#pragma mark - VSPlayHeadRulerMarkerDelegate Implementation
+
 -(CGFloat) willMovePlayHeadRulerMarker:(NSRulerMarker *)playheadMarker inContainingView:(NSView *)aView toLocation:(CGFloat)location{
     
     [self moveMainPlayheadAccordingToAnimationTimelinesPlayheadLocation:location];
     
     return location;
 }
-//
-//-(CGFloat) playHeadRulerMarker:(NSRulerMarker *)playheadMarker willJumpInContainingView:(NSView *)aView toLocation:(CGFloat)location{
-//    
-//    [self letPlayheadJumpOverDistance:location - [self currentPlayheadMarkerLocation]];
-//    
-//    return location;
-//}
 
 -(void) letPlayheadJumpOverDistance:(float) distance{
     
@@ -241,15 +229,16 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
             
             animationTrackViewController.delegate = self;
             
-            [self.animationTrackViewControllers setObject:animationTrackViewController forKeyedSubscript:[NSNumber numberWithInteger:parameter.ID]];
+            [self.animationTrackViewControllers setObject:animationTrackViewController
+                                        forKeyedSubscript:[NSNumber numberWithInteger:parameter.ID]];
             
             [animationTrackViewController.view setFrame:trackRect];
-            
-            
-            
+ 
             [animationTrackViewController.view setFrame:trackRect];
             
             [self.scrollView addTrackView:animationTrackViewController.view];
+            
+            [parameter updateCurrentValueForTimestamp:self.playhead.currentTimePosition];
         }
     }
     
@@ -284,6 +273,21 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     }
 }
 
+-(void) resetTimeline{
+    
+    [self.timelineObject removeObserver:self
+                             forKeyPath:@"duration"];
+    
+    for(VSAnimationTrackViewController *animationTrackViewController in [self.animationTrackViewControllers allValues]){
+        [animationTrackViewController.view removeFromSuperview];
+    }
+    
+    [self.animationTrackViewControllers removeAllObjects];
+    
+    self.timelineObject = nil;
+}
+
+
 
 #pragma mark - Private Methods
 
@@ -315,21 +319,6 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     for(VSAnimationTimelineViewController *animationTrackViewController in [self.animationTrackViewControllers allValues]){
         animationTrackViewController.pixelTimeRatio = self.pixelTimeRatio;
     }
-}
-
-/**
- * Removes all VSAnimationTrackViewControllers stored in animaitonTrackViewControllers
- */
--(void) resetTimeline{
-    
-    [self.timelineObject removeObserver:self
-                             forKeyPath:@"duration"];
-    
-    for(VSAnimationTrackViewController *animationTrackViewController in [self.animationTrackViewControllers allValues]){
-        [animationTrackViewController.view removeFromSuperview];
-    }
-    
-    [self.animationTrackViewControllers removeAllObjects];
 }
 
 /**

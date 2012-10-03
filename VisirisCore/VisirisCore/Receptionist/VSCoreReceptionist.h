@@ -49,7 +49,7 @@
  * @param theFrameSize The size the frame will be created for.
  * @param playMode The Mode of the Playhead
  */
-- (void)renderFrameAtTimestamp:(double)aTimestamp withHandovers:(NSArray *)theHandovers forSize:(NSSize)theFrameSize withPlayMode:(VSPlaybackMode)playMode;
+- (void)renderFrameAtTimestamp:(double)aTimestamp withHandovers:(NSArray *)theHandomvers forSize:(NSSize)theFrameSize withPlayMode:(VSPlaybackMode)playMode;
 
 
 - (void)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*)colorMode forTrack:(NSInteger)trackID withType:(VSFileKind )type withOutputSize:(NSSize)size withPath:(NSString *)path withObjectItemID:(NSInteger)objectItemID;
@@ -61,5 +61,10 @@
 - (NSOpenGLContext *)openGLContext;
 
 - (void)stopPlaying;
+
+/**
+ * Prints all Information from the Rendercore and Audiocore
+ */
+- (void)printDebugLog;
 
 @end

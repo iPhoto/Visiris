@@ -78,6 +78,7 @@
 
 - (void)stopPlaying{
     [self.audioPlayer pause];
+//    NSLog(@"rate: %f", [self.audioPlayer rate]);
 }
 
 - (void)setVolume:(float)volume{
@@ -90,6 +91,11 @@
 - (void)completeStop{
     //TODO is this neccessary
 //    NSLog(@"Audio complete Stop not working");
+}
+
+- (NSString *)description{
+    NSString *string = [NSString stringWithFormat:@"Player.hash: %ld", self.hash];
+    return string;
 }
 
 @end

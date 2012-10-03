@@ -47,11 +47,10 @@
 #pragma mark - Methods
 
 - (void)replaceContent:(VSImage *)theImage timeLineObjectId:(NSInteger) timeLineObjectId{
-    if (self.timeLineObjectId != timeLineObjectId ||
-        theImage.needsUpdate ) {
+    if ((self.timeLineObjectId != timeLineObjectId || theImage.needsUpdate) && theImage.data ) {
         [self bind];
         
-        //fuck you fucking two fuck lines
+        //fuck you fucking two fuck lines (spent a week for these)
         glPixelStorei(GL_UNPACK_ROW_LENGTH, self.size.width);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -63,7 +62,6 @@
 }
 
 -(void)bind{
-    
     glBindTexture(GL_TEXTURE_2D, self.texture);
 }
 
@@ -75,7 +73,5 @@
     //NSLog(@"deleteTexture: %d", _texture);
     glDeleteTextures(1, &_texture);
 }
-
-
 
 @end

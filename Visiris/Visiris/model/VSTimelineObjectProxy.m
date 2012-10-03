@@ -51,6 +51,10 @@
     return copy;
 }
 
+-(void) dealloc{
+
+}
+
 #pragma mark - Methods
 
 -(void) changeStartTime:(double)startTime andRegisterAtUndoManager:(NSUndoManager *)undoManager{

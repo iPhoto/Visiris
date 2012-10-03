@@ -99,7 +99,7 @@
 @interface VSTimelineObjectView : NSView
 
 /** Delegate that is called like definend in VSTimelineObjectViewDelegate Protocol */
-@property id<VSTimelineObjectViewDelegate> delegate;
+@property (weak) id<VSTimelineObjectViewDelegate> delegate;
 
 /** if YES, the VSTimelineObjectView is drawn as selected */
 @property BOOL selected;

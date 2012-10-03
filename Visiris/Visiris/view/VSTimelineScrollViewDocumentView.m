@@ -12,6 +12,7 @@
 
 #import "VSTimelineRulerView.h"
 #import "VSPlayheadMarker.h"
+#import "VSAnimationTimelineScrollViewDocumentView.h"
 
 #import "VSCoreServices.h"
 
@@ -56,7 +57,7 @@
  */
 - (void)initLayer {
     [self setWantsLayer:YES];
-    [self.layer setZPosition:250];
+    [self.layer setZPosition:20];
     self.layer.backgroundColor = [[NSColor darkGrayColor] CGColor];
 }
 
@@ -65,11 +66,31 @@
  */
 -(void) initGuideLine{
     
+    
+    
     self.guideLine = [[CALayer alloc] init];
     self.guideLine.backgroundColor = [[NSColor blueColor] CGColor];
-    [self.guideLine setZPosition:100];
+    [self.guideLine setZPosition:10];
     
     [self.layer addSublayer:self.guideLine];
+    
+    [self.layer removeAllAnimations];
+    [self.guideLine removeAllAnimations];
+    
+
+    self.guideLine.delegate = self;
+    
+    NSRect layerRect = self.frame;
+    layerRect.size.width = 1;
+layerRect.origin.x = 0;
+    layerRect.origin.y = 0;
+    
+[self.guideLine setFrame:NSIntegralRect(layerRect)];
+
+}
+
+-(void) runActionForKey:(NSString *)event object:(id)anObject arguments:(NSDictionary *)dict{
+    
 }
 
 #pragma mark - NSView
@@ -94,10 +115,18 @@
     layerRect.origin.x = round(location+self.scrollOffset.x);
     layerRect.origin.y = 0;
     
-    [CATransaction begin];
-    [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
-    [self.guideLine setFrame:NSIntegralRect(layerRect)];
-    [CATransaction commit];
+//    [CATransaction begin];
+//    [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+//    [self.guideLine setFrame:NSIntegralRect(layerRect)];
+//    [CATransaction commit];
+    
+    self.guideLine.position = (CGPoint) layerRect.origin;
+    
+    if([self isKindOfClass:[VSAnimationTimelineScrollViewDocumentView class]]){
+//        DDLogInfo(@"guideline layerrect:%@", NSStringFromRect(layerRect));
+    }
+    
+    
 }
 
 

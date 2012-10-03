@@ -9,21 +9,25 @@
 #import "VSFrameSourceSupplier.h"
 #import "VSProjectSettings.h"
 #import "VisirisCore/VSImage.h"
+#import "VSCoreServices.h"
 
 
 @implementation VSFrameSourceSupplier
-@synthesize vsImage = _vsImage;
 
+@synthesize vsImage = _vsImage;
+#pragma mark - Methods
 
 -(VSImage *) getFrameForTimestamp:(double)aTimestamp withPlayMode:(VSPlaybackMode)playMode{
-    NSLog(@"getFrameForTimestamp in FrameSourceSupplier is called - dunno why...");
+    DDLogInfo(@"ERROR - getFrameForTimestamp in FrameSourceSupplier is called - dunno why...");
     return nil;
 }
 
-//TODO: Dealloc not called yet
+/**
+ * Dealloc gets automatically called when the ReferenceCounter reaches zero. As soon it is called it frees the memory.
+ */
 - (void)dealloc{
     if (self.vsImage.data != NULL) {
-        free(self.vsImage.data);
+        //free(self.vsImage.data);
     }
 }
 

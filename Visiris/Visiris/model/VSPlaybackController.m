@@ -27,7 +27,7 @@
 
 @property VSTimeline* timeline;
 
-@property (weak) VSTimelineObject*selectedTimelineObject;
+@property (strong) VSTimelineObject*selectedTimelineObject;
 //todo
 @property (assign) double deltaTime;
 
@@ -40,15 +40,6 @@
 
 @implementation VSPlaybackController
 
-@synthesize preProcessor        = _preProcessor;
-@synthesize timeline            = _timeline;
-@synthesize currentTimestamp    = _currentTimestamp;
-@synthesize playbackTimer       = _playbackTimer;
-@synthesize playbackStartTime   = _playbackStartTime;
-@synthesize frameWasRender      = _frameWasRender;
-@synthesize playbackMode        = _playbackMode;
-@synthesize deltaTime           = _deltaTime;
-@synthesize counter             = _counter;
 
 #pragma mark - Init
 
@@ -172,7 +163,7 @@
     }
 }
 
-- (void)renderFramesForCurrentTimestamp{
+- (void)renderFramesForCurrentTimestamp:(NSSize)size{
     switch (self.playbackMode) {
         case VSPlaybackModePlaying:
             [self computeNewCurrentTimestamp];
@@ -185,12 +176,12 @@
             if (self.counter >= period) {
                 self.counter -= period;
                 
-                [self renderCurrentFrame];
+                [self renderCurrentFrame:size];
             }
             break;
         case VSPlaybackModeJumping:
         case VSPlaybackModeScrubbing:
-            [self renderCurrentFrame];
+            [self renderCurrentFrame:size];
             self.counter = 0.0;
             break;
         default:
@@ -210,7 +201,7 @@
 }
 
 -(void) play{
-   
+    
     [self.outputController startPlayback];
     self.playbackStartTime = CFAbsoluteTimeGetCurrent();
     
@@ -226,6 +217,16 @@
 }
 
 
+#pragma mark - VSPreProcessorDelegate Implementation
+
+-(void) removedTimelineObjectsfromRenderCore:(NSArray *)timelineObjects{
+    [self updateCurrentFrame];
+}
+
+-(void) addedTimelineObjectsToRenderCore:(NSArray *)timelineObjects{
+    [self updateCurrentFrame];
+}
+
 #pragma mark - Private Methods
 
 /**
@@ -235,11 +236,22 @@
  * @param notification NSNotification storing the unselected VSTimelineObject
  */
 -(void) timelineObjectsGotUnselected:(NSNotification *) notification{
-    for(VSParameter *parameter in [self.selectedTimelineObject visibleParameters]){
-        [parameter removeObserver:self forKeyPath:@"currentValue"];
+    if([[notification object] isKindOfClass:[NSArray class]]){
+        NSArray *unselectedTimelineObjects = notification.object;
+        
+        for(VSTimelineObject *unselectedTimelineObject in unselectedTimelineObjects){
+            [self removeObserversFromSelecteTimelineObject];
+        }
     }
     
     self.selectedTimelineObject = nil;
+    
+}
+
+-(void) removeObserversFromSelecteTimelineObject{
+    for(VSParameter *parameter in [self.selectedTimelineObject visibleParameters]){
+        [parameter removeObserver:self forKeyPath:@"currentValue"];
+    }
 }
 
 /**
@@ -249,33 +261,37 @@
  * @param notification NSNotification storing the selected VSTimelineObject
  */
 -(void) timelineObjectsGotSelected:(NSNotification *) notification{
+    if(self.selectedTimelineObject){
+        [self removeObserversFromSelecteTimelineObject];
+    }
+    
     if([[notification object] isKindOfClass:[NSArray class]]){
-        NSArray *selectedTimelineObjects = (NSArray*) [notification object];
         
-        if(selectedTimelineObjects && selectedTimelineObjects.count > 0){
-            if([[selectedTimelineObjects objectAtIndex:0] isKindOfClass:[VSTimelineObject class]]){
-                
-                self.selectedTimelineObject = (VSTimelineObject*) [selectedTimelineObjects objectAtIndex:0];
-                
-                for(VSParameter *parameter in [self.selectedTimelineObject visibleParameters]){
-                    
-                    [parameter addObserver:self
-                                forKeyPath:@"currentValue"
-                                   options:0
-                                   context:nil];
-                }
+        NSArray *selectedTimelineObjects = notification.object;
+        
+        VSTimelineObject *selectedTimelineObject = [selectedTimelineObjects objectAtIndex:0];
+        if([selectedTimelineObject isKindOfClass:[VSTimelineObject class]]){
+            
+            self.selectedTimelineObject = selectedTimelineObject;
+            
+            for(VSParameter *parameter in [self.selectedTimelineObject visibleParameters]){
+                [parameter addObserver:self
+                            forKeyPath:@"currentValue"
+                               options:0
+                               context:nil];
             }
         }
     }
+    
 }
 
 /**
  * Sets the current VSPlaybackMode and tells the preprocessor to the render the current frame
  */
--(void) renderCurrentFrame{
+- (void)renderCurrentFrame:(NSSize)size{
     
     if (self.preProcessor) {
-        [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:[VSProjectSettings sharedProjectSettings].frameSize withPlayMode:self.playbackMode];
+        [self.preProcessor processFrameAtTimestamp:self.timeline.playHead.currentTimePosition withFrameSize:size withPlayMode:self.playbackMode];
     }
     
     //if the render of the was started because the playhead was moved by clicking somewhere on the timeline, the rendering is turned off after the frame was rendered
@@ -297,7 +313,7 @@
     
     self.deltaTime = (currentTime - self.playbackStartTime)*1000.0;
     self.currentTimestamp += self.deltaTime;
-        
+    
     if(self.currentTimestamp > self.timeline.duration){
         self.currentTimestamp = 0;
     }

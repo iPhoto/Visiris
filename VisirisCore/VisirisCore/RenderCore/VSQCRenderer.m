@@ -28,7 +28,7 @@
 /** The Path of the Renderer on the Disk */
 @property (strong) NSString             *path;
 
-//todo
+/** NSNumber with int - OpenGLTexture */
 @property (strong) NSNumber              *texture;
 
 
@@ -98,13 +98,9 @@
     }
 }
 
-- (void)deleteRenderer{
-    [self.pBufferRenderer delete];
-}
 
 - (void)resize:(NSSize)size{
     self.size = size;
-    [self.pBufferRenderer delete];
     self.pBufferRenderer = [self createPBufferRenderer];
 }
 

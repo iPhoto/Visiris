@@ -57,6 +57,8 @@
         self.keyFrameViewControllers =[[NSMutableArray alloc]init];
         self.keyFrameConnectionPaths =[[NSMutableDictionary alloc] init];
         [self initKeyFrames];
+        [self.view setWantsLayer:YES];
+        
     }
     return self;
 }
@@ -338,7 +340,7 @@
     
     [self addKeyFrameConnectionPathsObject:keyFrameViewController];
     
-    
+    [self.view.layer addSublayer:keyFrameViewController.view.layer];
 }
 
 /**

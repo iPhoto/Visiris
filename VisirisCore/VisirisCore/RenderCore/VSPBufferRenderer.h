@@ -95,9 +95,4 @@
  */
 - (GLuint)textureName;
 
-/**
- * Deallocating the texture and destroy the GLcontext
- */
-- (void)delete;
-
 @end

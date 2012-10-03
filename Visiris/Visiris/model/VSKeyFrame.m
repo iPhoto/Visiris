@@ -24,6 +24,14 @@
     return self;
 }
 
+#pragma mark -NSCopying Implementation
+
+-(id) copyWithZone:(NSZone *)zone{
+    VSKeyFrame *copy = [[VSKeyFrame alloc] initWithValue:self.value forTimestamp:self.timestamp andID:self.ID];
+    
+    return copy;
+}
+
 #pragma mark - NSObject
 
 -(NSString*) description{
