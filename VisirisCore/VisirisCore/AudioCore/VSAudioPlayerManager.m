@@ -51,13 +51,15 @@
         NSMutableDictionary *trackPlayer = [self.playerCollectionToTrackID playerCollectionForTrackID:trackID];
         if (!trackPlayer) {
             
-            trackPlayer = [NSMutableDictionary dictionary];
-            [self.playerCollectionToTrackID setObject:trackPlayer forKey:[NSNumber numberWithInteger:trackID]];
             
             VSAudioPlayer *audioPlayer = [[VSAudioPlayer alloc] initWithFilePath:path];
             if (audioPlayer == nil) {
                 return;
             }
+            
+            trackPlayer = [NSMutableDictionary dictionary];
+            [self.playerCollectionToTrackID setObject:trackPlayer forKey:[NSNumber numberWithInteger:trackID]];
+
             
             [trackPlayer setObject:audioPlayer forKey:[NSNumber numberWithInteger:projectItemID]];
 
@@ -163,12 +165,21 @@
         for (id track in self.playerCollectionToTrackID) {
             NSMutableDictionary *trackDictionary = (NSMutableDictionary *)[self.playerCollectionToTrackID objectForKey:track];
             
+        
+            
+            id keyToDelete = nil;
+            
             for (id key in trackDictionary) {
                 
                 if (player == [trackDictionary objectForKey:key]) {
-                    [trackDictionary removeObjectForKey:key];
+                    keyToDelete = key;
                 }
             }
+            
+            if (keyToDelete) {
+                [trackDictionary removeObjectForKey:keyToDelete];
+            }
+            
     
             if(trackDictionary.count == 0){
                 trackToDelete = track;

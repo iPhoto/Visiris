@@ -17,7 +17,8 @@
 
 @interface VSCoreReceptionist()
 
-@property (strong) VSAudioCore   *audioCore;
+@property (strong) VSAudioCore      *audioCore;
+@property (assign) BOOL             isPlaying;
 
 @end
 
@@ -33,14 +34,15 @@
         self.renderCore = [[VSRenderCore alloc] initWithSize:size];
         self.audioCore  = [[VSAudioCore alloc] init];
         self.renderCore.delegate = self;
+        self.isPlaying = NO;
     }
     return self;
 }
 
 - (void)renderFrameAtTimestamp:(double)aTimestamp withHandovers:(NSArray *)theHandovers forSize:(NSSize)theFrameSize withPlayMode:(VSPlaybackMode)playMode
 {
-//    NSLog(@"size: %@:", NSStringFromSize(theFrameSize));
-//    NSLog(@"CoreReceptionist: play");
+    NSLog(@"renderFrameAtTimestamp");
+    self.isPlaying = YES;
     //return if Handovers is nil
     if (theHandovers == nil)
         return;
@@ -67,21 +69,25 @@
                         [audioArray addObject:coreHandover];
                 }
             }
-            else if ([coreHandover isKindOfClass:[VSAudioCoreHandover class]])
-            {
-                [audioArray addObject:coreHandover];
-            }
+            else
+                if ([coreHandover isKindOfClass:[VSAudioCoreHandover class]])
+                    [audioArray addObject:coreHandover];
         }
         
         if (frameArray.count > 0) {
-            [self.renderCore renderFrameOfCoreHandovers:frameArray forFrameSize:theFrameSize forTimestamp:aTimestamp];
+            if (self.isPlaying) {
+                [self.renderCore renderFrameOfCoreHandovers:frameArray forFrameSize:theFrameSize forTimestamp:aTimestamp];
+            }
         }
         
         if (audioArray.count > 0) {
             
             if (playMode == VSPlaybackModePlaying ||
                 playMode == VSPlaybackModeScrubbing) {
-                [self.audioCore playAudioOfHandovers:audioArray atTimeStamp:aTimestamp];
+                if (self.isPlaying) {
+                    [self.audioCore playAudioOfHandovers:audioArray atTimeStamp:aTimestamp];
+                }
+//                NSLog(@"play AudioArray");
             }else
                 if (playMode == VSPlaybackModeJumping ||
                 playMode == VSPlaybackModeNone) {
@@ -105,6 +111,7 @@
 
 - (void)removeTimelineobjectWithID:(NSInteger)anID andType:(VSFileKind)type{
     
+    NSLog(@"delete");
     switch (type) {
         case VSFileKindAudio:
             [self.audioCore deleteTimelineobjectID:anID];
@@ -153,7 +160,7 @@
 }
 
 - (void)stopPlaying{
-//    NSLog(@"CoreReceptionist: stop");
+    self.isPlaying = NO;
     [self.audioCore stopPlaying];
 }
 

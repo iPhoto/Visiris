@@ -54,8 +54,9 @@
             [handoverObjects addObject:coreHandover];
         }
     }
-    
-    [self.renderCoreReceptionist renderFrameAtTimestamp:aTimestamp withHandovers:handoverObjects forSize:aFrameSize withPlayMode:playMode];
+    if (handoverObjects.count > 0 ) {
+        [self.renderCoreReceptionist renderFrameAtTimestamp:aTimestamp withHandovers:handoverObjects forSize:aFrameSize withPlayMode:playMode];
+    }
 }
 
 #pragma mark - VSTimelineTimelineObjectsDelegate implementation
