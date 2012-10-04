@@ -22,7 +22,6 @@
     return self;
 }
 
-
 -(float) currentMappedParameterValue{
     float currentValue =fmodf(arc4random(), (self.deviceParameterRange.max - self.deviceParameterRange.min) ) + self.deviceParameterRange.min;
     
