@@ -60,14 +60,8 @@
             [handoverObjects addObject:coreHandover];
         }
     }
-    if (self.amountOfLastSentHandovers > 0 ) {
-        [self.renderCoreReceptionist renderFrameAtTimestamp:aTimestamp
-                                              withHandovers:handoverObjects
-                                                    forSize:aFrameSize
-                                               withPlayMode:playMode];
-    }
-    
-    self.amountOfLastSentHandovers = handoverObjects.count;
+
+    [self.renderCoreReceptionist renderFrameAtTimestamp:aTimestamp withHandovers:handoverObjects forSize:aFrameSize withPlayMode:playMode];
 }
 
 #pragma mark - VSTimelineTimelineObjectsDelegate implementation
@@ -77,10 +71,7 @@
     self.timelineObjectsToRemove = [[NSMutableArray alloc] init];
     
     for (VSTimelineObject *timelineObject in removedTimelineObjects){
-        
-        [self.timelineObjectsToRemove setObject:[NSNumber numberWithInt:timelineObject.sourceObject.projectItem.fileType.fileKind]
-                                         forKey:[NSNumber numberWithInteger:timelineObject.timelineObjectID]];
-        
+        [self.timelineObjectsToRemove addObject:[NSNumber numberWithInteger:timelineObject.timelineObjectID]];
     }
     
     if([self delegateRespondsToSelector:@selector(removedTimelineObjectsfromRenderCore:)]){

@@ -12,6 +12,9 @@
 
 @class VSAnimation;
 @class VSKeyFrame;
+@class VSDeviceParameter;
+@class VSDevice;
+@class VSDeviceParameterMapper;
 
 /**
  * Parameter of VSTimelineObjectSource
@@ -36,11 +39,7 @@
 /** NO if no ranges are given, YES otherwise. */
 @property BOOL hasRange;
 
-/** Minimal valid value of the parameter */
-@property float rangeMinValue;
-
-/** Maximal valid value of the parameter */
-@property float rangeMaxValue;
+@property VSRange range;
 
 /** If true, the value of the paramter can be edited */
 @property BOOL editable;
@@ -59,6 +58,12 @@
 
 /** the paramter's ID */
 @property (readonly) NSUInteger ID;
+
+@property BOOL connectedWithDeviceParameter;
+
+@property (weak) VSDeviceParameter *deviceParamterConnectedWith;
+
+@property (weak) VSDevice *deviceConnectedWith;
 
 #pragma mark - Init
 
@@ -171,5 +176,7 @@
  * @param keyFrameToRemove VSKeyFrame which will be removed from the parameter's animation
  */
 -(void) removeKeyFrame:(VSKeyFrame*) keyFrameToRemove;
+
+-(BOOL) connectWithDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device deviceParameterRange:(VSRange)deviceParameterRange andParameterRange:(VSRange)parameterRange;
 
 @end

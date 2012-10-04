@@ -10,30 +10,21 @@
 
 #import "VSAnimation.h"
 #import "VSKeyFrame.h"
+#import "VSDeviceParameterMapper.h"
+#import "VSDeviceParameter.h"
 
 #import "VSCoreServices.h"
 
+
 @interface VSParameter()
 
-
+@property VSDeviceParameterMapper *deviceParameterMapper;
 
 @end
 
 @implementation VSParameter
 
-@synthesize animation               = _animation;
-@synthesize type                    = _type;
-@synthesize dataType                = _dataType;
-@synthesize name                    = _name;
-@synthesize configuredDefaultValue  = _configuredDefaultValue;
-@synthesize orderNumber             = _orderNumber;
-@synthesize hasRange                = _hasRange;
-@synthesize editable                = _editable;
-@synthesize hidden                  = _hidden;
-@synthesize rangeMaxValue           = _rangeMaxValue;
-@synthesize rangeMinValue           = _rangeMinValue;
-@synthesize currentValue            = _currentValue;
-@synthesize ID                      = _ID;
+@synthesize currentValue = _currentValue;
 
 #pragma mark - Init
 
@@ -60,11 +51,7 @@
 }
 
 -(void) initRangesWithMin:(float) minRangeValue andMax:(float)maxRangeValue{
-    if(maxRangeValue > minRangeValue){
-        self.rangeMaxValue = maxRangeValue;
-        self.rangeMinValue = minRangeValue;
-        self.hasRange = YES;
-    }
+    self.range = VSMakeRange(minRangeValue, maxRangeValue);
 }
 
 -(void) initDefaultValueWith:(id) defaultValue{
@@ -76,7 +63,7 @@
                 break;
             case VSParameterDataTypeFloat:
                 if(self.hasRange){
-                    self.configuredDefaultValue = [NSNumber numberWithFloat:self.rangeMinValue];
+                    self.configuredDefaultValue = [NSNumber numberWithFloat:(self.range.max - self.range.min)/2];
                 }
                 else {
                     self.configuredDefaultValue = [NSNumber numberWithFloat:0];
@@ -107,8 +94,8 @@
                                                            orderNumber:self.orderNumber
                                                               editable:self.editable
                                                                 hidden:self.hidden
-                                                         rangeMinValue:self.rangeMinValue
-                                                         rangeMaxValue:self.rangeMaxValue];
+                                                         rangeMinValue:self.range.min
+                                                         rangeMaxValue:self.range.max];
     
     
     copy.animation = [self.animation copy];
@@ -122,6 +109,7 @@
 
 -(id) valueForTimestamp:(double)timestamp{
 
+    if(!self.connectedWithDeviceParameter){
     switch(self.dataType){
         case VSParameterDataTypeBool:{
             return [NSNumber numberWithBool:[self.animation copmuteBoolValueForTimestamp:timestamp]];
@@ -141,8 +129,42 @@
             break;
         }
     }
+    }
+    else{
+        switch(self.dataType){
+        case VSParameterDataTypeBool:{
+            return [NSNumber numberWithBool:[self currentBoolValueOfDeviceParamterMapper]];
+            break;
+        }
+        case VSParameterDataTypeFloat:{
+            return [NSNumber numberWithFloat:[self currentFloatValueOfDeviceParamterMapper]];
+            break;
+        }
+        case VSParameterDataTypeString:{
+            NSString *result = [self.animation computStringValueForTimestamp:timestamp];
+            return result;
+            break;
+        }
+        default:{
+            return [self.animation computStringValueForTimestamp:timestamp];
+            break;
+        }
+        }
+    }
 
     return nil;
+}
+
+-(float) currentFloatValueOfDeviceParamterMapper{
+   return [self.deviceParameterMapper currentMappedParameterValue];
+}
+
+-(BOOL) currentBoolValueOfDeviceParamterMapper{
+    
+}
+
+-(NSString*) currentStringValueOfDeviceParameterMapper{
+    
 }
 
 -(VSKeyFrame*) addKeyFrameWithValue:(id) aValue forTimestamp:(double)aTimestamp{
@@ -196,6 +218,21 @@
 
 -(void) removeKeyFrame:(VSKeyFrame *)keyFrameToRemove{
     [self.animation removeKeyFrame:keyFrameToRemove];
+}
+
+#pragma mark Devices
+
+-(BOOL) connectWithDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device deviceParameterRange:(VSRange)deviceParameterRange andParameterRange:(VSRange)parameterRange{
+    
+    if(![self.deviceParameterMapper.deviceParameter isEqual:deviceParameter]){
+        self.deviceParameterMapper = [[VSDeviceParameterMapper alloc] initWithDeviceParameter:deviceParameter
+                                                                                     ofDevice:device deviceParameterRange:deviceParameterRange
+                                                                            andParameterRange:parameterRange];
+    }
+    
+    self.connectedWithDeviceParameter = YES;
+    
+    return self.connectedWithDeviceParameter;
 }
 
 #pragma mark - Private Methods
@@ -253,12 +290,12 @@
     if(self.dataType == VSParameterDataTypeFloat && self.hasRange){
         NSNumber *number = value;
         
-        if([number floatValue] < self.rangeMinValue){
-            return [NSNumber numberWithFloat:self.rangeMinValue];
+        if([number floatValue] < self.range.min){
+            return [NSNumber numberWithFloat:self.range.min];
         }
         
-        if([number floatValue] > self.rangeMaxValue){
-            return [NSNumber numberWithFloat:self.rangeMaxValue];
+        if([number floatValue] > self.range.max){
+            return [NSNumber numberWithFloat:self.range.max];
         }
     }
     
@@ -311,5 +348,17 @@
     self.currentValue = self.animation.defaultValue;
 }
 
+-(VSDeviceParameter*) deviceParamterConnectedWith{
+    if(!self.connectedWithDeviceParameter)
+    {
+        return self.deviceParameterMapper.deviceParameter;
+    }
+    
+    return nil;
+}
+
+-(VSDevice*) deviceConnectedWith{
+    return self.deviceParameterMapper.device;
+}
 
 @end

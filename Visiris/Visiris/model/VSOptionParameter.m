@@ -59,8 +59,8 @@
                                                           orderNumber:superCopy.orderNumber
                                                              editable:superCopy.editable
                                                                hidden:superCopy.hidden
-                                                        rangeMinValue:superCopy.rangeMinValue
-                                                        rangeMaxValue:superCopy.rangeMaxValue];
+                                                        rangeMinValue:superCopy.range.min
+                                                        rangeMaxValue:superCopy.range.max];
     copy.animation = superCopy.animation;
     
     copy.options = [[NSMutableDictionary alloc] initWithDictionary:self.options copyItems:YES];

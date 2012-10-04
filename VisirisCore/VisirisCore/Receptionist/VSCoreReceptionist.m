@@ -55,7 +55,6 @@
         [self renderCore:self.renderCore didFinishRenderingTexture:0 forTimestamp:aTimestamp];
     }
     else {
-        NSLog(@"render");
         
         NSMutableArray *frameArray = [[NSMutableArray alloc] init];
         NSMutableArray *audioArray = [[NSMutableArray alloc] init];

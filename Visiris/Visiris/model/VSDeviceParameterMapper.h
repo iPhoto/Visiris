@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "VSCoreServices.h"
 
+@class VSDeviceParameter;
 @class VSDevice;
 
 /**
@@ -16,6 +17,13 @@
  */
 @interface VSDeviceParameterMapper : NSObject
 
-- (float)mapValue:(float)value fromRange:(VSRange)inRange toRange:(VSRange)outRange;
+@property VSDeviceParameter *deviceParameter;
+@property VSDevice *device;
+@property VSRange parameterRange;
+@property VSRange deviceParameterRange;
+
+-   (id) initWithDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device deviceParameterRange:(VSRange) deviceParameterRange andParameterRange:(VSRange) parameterRange;
+
+-(float) currentMappedParameterValue;
 
 @end
