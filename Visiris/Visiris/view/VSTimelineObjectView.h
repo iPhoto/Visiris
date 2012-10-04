@@ -96,7 +96,7 @@
  * View-Representation of an object on the timeline
  * 
  */
-@interface VSTimelineObjectView : NSView
+@interface VSTimelineObjectView : NSView<NSDraggingDestination>
 
 /** Delegate that is called like definend in VSTimelineObjectViewDelegate Protocol */
 @property (weak) id<VSTimelineObjectViewDelegate> delegate;

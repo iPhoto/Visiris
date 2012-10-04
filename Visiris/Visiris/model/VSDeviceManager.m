@@ -10,6 +10,7 @@
 
 #import "VSDeviceLoader.h"
 #import "VSDevice.h"
+#import "VSDeviceRepresentation.h"
 #import "VSDeviceParameter.h"
 
 #import "VSCoreServices.h"
@@ -49,6 +50,7 @@ static NSURL* devicesFolderURL;
 
 -(id) init{
     if(self = [super init]){
+        self.deviceRepresentations = [[NSMutableArray alloc] init];
         self.devices = [[NSMutableArray alloc]init];
         [self loadExisitingDevices];
     }
@@ -102,24 +104,21 @@ static NSURL* devicesFolderURL;
         [device addParametersObject:deviceParameter];
     }
     
-    [self addDevice:device];
+    [self addDevicesObject:device];
 
 }
 
 
 
-- (BOOL)addDevice:(VSDevice *)newDevice
-{
-    BOOL didAddDevice = NO;
-    
-    if (newDevice) {
-        [self.devices addObject:newDevice];
-        didAddDevice = YES;
+-(void) addDevicesObject:(VSDevice *)object{
+
+    if (object) {
+        [self.devices addObject:object];
+        
+        [self.deviceRepresentations addObject:[[VSDeviceRepresentation alloc] initWithDeviceToRepresent:object]];
     }else{
         DDLogError(@"Error adding new device: newDevice was nil - this will fail");
     }
-    
-    return didAddDevice;
 }
 
 -(VSDevice*)objectInDevicesAtIndex:(NSUInteger)index{
@@ -130,4 +129,13 @@ static NSURL* devicesFolderURL;
 {
     return _devices.count;
 }
+
+-(VSDeviceRepresentation*)objectInDeviceRepresentationsAtIndex:(NSUInteger)index{
+    return [self.deviceRepresentations objectAtIndex:index];
+}
+
+
+#pragma mark - Private Methods
+
+
 @end

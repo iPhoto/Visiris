@@ -12,4 +12,6 @@
 
 NSString* VSProjectItemPasteboardType = @"com.visiris.projectItem";
 
+NSString* VSDevicePasteboardType = @"com.visiris.device";
+
 

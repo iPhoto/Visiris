@@ -75,7 +75,8 @@ static int resizingAreaWidth = 10;
 }
 
 -(void) awakeFromNib{
-    [self  unregisterDraggedTypes];
+    
+    [self registerForDraggedTypes:[NSArray arrayWithObjects:VSDevicePasteboardType, nil]];
     
     [self initLayerStyle];
     
@@ -229,6 +230,25 @@ static int resizingAreaWidth = 10;
         [intersectionLayer removeFromSuperlayer];
     }
 }
+
+#pragma mark - VSDraggingDestination implementation
+
+-(NSDragOperation) draggingEntered:(id<NSDraggingInfo>)sender{
+    NSDragOperation currentDragOperation = NSDragOperationLink;
+    
+    return currentDragOperation;
+}
+
+-(BOOL) wantsPeriodicDraggingUpdates{
+    return NO;
+}
+
+
+
+-(BOOL) performDragOperation:(id<NSDraggingInfo>)sender{
+    return YES;
+}
+
 
 #pragma mark - Private Methods
 
