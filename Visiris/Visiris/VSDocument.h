@@ -14,6 +14,7 @@
 @class VSPlaybackController;
 @class VSExternalInputManager;
 @class VSDeviceManager;
+@class VSExternalInputManager;
 
 
 /**
@@ -37,7 +38,7 @@
 /** VSDeviceManager handles the devices and their representations */
 @property (strong) VSDeviceManager *deviceManager;
  
-
+@property (strong) VSExternalInputManager *externalInputManager;
 
 -(BOOL) addFileToProject:(NSString*) fileName;
 

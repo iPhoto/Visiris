@@ -34,6 +34,8 @@
 
 @implementation VSExternalInputManager
 
+#pragma mark - Init
+
 - (id)init
 {
     self = [super init];
@@ -51,6 +53,8 @@
     
     return self;
 }
+
+#pragma mark - Methods
 
 - (void)registerExternalInputManager
 {

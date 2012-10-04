@@ -30,6 +30,8 @@ static NSURL* devicesFolderURL;
 
 @synthesize devices = _devices;
 
+#pragma mark - Init
+
 +(void) initialize{
     NSString *applicationSupportFolder = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     
@@ -57,6 +59,78 @@ static NSURL* devicesFolderURL;
     
     return self;
 }
+
+
+#pragma mark - Methods
+
+-(void) addDevicesObject:(VSDevice *)object{
+    
+    if (object) {
+        [self.devices addObject:object];
+        object.delegate = self;
+        [self.deviceRepresentations addObject:[[VSDeviceRepresentation alloc] initWithDeviceToRepresent:object]];
+    }else{
+        DDLogError(@"Error adding new device: newDevice was nil - this will fail");
+    }
+}
+
+-(VSDevice*)objectInDevicesAtIndex:(NSUInteger)index{
+    return [self.devices objectAtIndex:index];
+}
+
+- (NSUInteger)numberOfDevices
+{
+    return _devices.count;
+}
+
+-(VSDeviceRepresentation*)objectInDeviceRepresentationsAtIndex:(NSUInteger)index{
+    return [self.deviceRepresentations objectAtIndex:index];
+}
+
+-(VSDevice*) deviceRepresentedBy:(VSDeviceRepresentation*) deviceRepresentation{
+    NSUInteger indexOfDevice = [self.devices indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj isKindOfClass:[VSDevice class]]){
+            if([((VSDevice*) obj).ID isEqualToString:deviceRepresentation.ID]){
+                return YES;
+            }
+        }
+        
+        return NO;
+    }];
+    
+    if(indexOfDevice != NSNotFound){
+        return [self.devices objectAtIndex:indexOfDevice];
+    }
+    else{
+        return nil;
+    }
+}
+
+#pragma mark - VSDeviceDelegate Implementation
+
+-(BOOL) registerDeviceParameter:(VSDeviceParameter *)deviceParameter ofDevice:(VSDevice *)device{
+    BOOL result = NO;
+    
+    if([self delegateRespondsToSelector:@selector(registerValue:forAddress:)]){
+        result = [self.deviceRegisitratingDelegate registerValue:device.currentValue forAddress:deviceParameter.oscPath];
+    }
+    
+    return result;
+}
+
+-(BOOL) unregisterDeviceParameter:(VSDeviceParameter *)deviceParameter ofDevice:(VSDevice *)device{
+    BOOL result = NO;
+    
+    if([self delegateRespondsToSelector:@selector(unregisterValue:forAddress:)]){
+        result = [self.deviceRegisitratingDelegate unregisterValue:device.currentValue forAddress:deviceParameter.oscPath];
+    }
+    
+    return result;
+}
+
+
+#pragma mark - Private Methods
+
 
 -(void) loadExisitingDevices{
     
@@ -108,53 +182,20 @@ static NSURL* devicesFolderURL;
     
 }
 
-
-
--(void) addDevicesObject:(VSDevice *)object{
-    
-    if (object) {
-        [self.devices addObject:object];
-        
-        [self.deviceRepresentations addObject:[[VSDeviceRepresentation alloc] initWithDeviceToRepresent:object]];
-    }else{
-        DDLogError(@"Error adding new device: newDevice was nil - this will fail");
-    }
-}
-
--(VSDevice*)objectInDevicesAtIndex:(NSUInteger)index{
-    return [self.devices objectAtIndex:index];
-}
-
-- (NSUInteger)numberOfDevices
-{
-    return _devices.count;
-}
-
--(VSDeviceRepresentation*)objectInDeviceRepresentationsAtIndex:(NSUInteger)index{
-    return [self.deviceRepresentations objectAtIndex:index];
-}
-
--(VSDevice*) deviceRepresentedBy:(VSDeviceRepresentation*) deviceRepresentation{
-    NSUInteger indexOfDevice = [self.devices indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-        if([obj isKindOfClass:[VSDevice class]]){
-            if([((VSDevice*) obj).ID isEqualToString:deviceRepresentation.ID]){
+/**
+ * Checks if the delegate of VSPlaybackControllerDelegate is able to respond to the given Selector
+ * @param selector Selector the delegate will be checked for if it is able respond to
+ * @return YES if the delegate is able to respond to the selector, NO otherweis
+ */
+-(BOOL) delegateRespondsToSelector:(SEL) selector{
+    if(self.deviceRegisitratingDelegate){
+        if([self.deviceRegisitratingDelegate conformsToProtocol:@protocol(VSDeviceParameterRegistrationDelegate)]){
+            if([self.deviceRegisitratingDelegate respondsToSelector:selector]){
                 return YES;
             }
         }
-        
-        return NO;
-    }];
-    
-    if(indexOfDevice != NSNotFound){
-        return [self.devices objectAtIndex:indexOfDevice];
     }
-    else{
-        return nil;
-    }
+    return NO;
 }
-
-
-#pragma mark - Private Methods
-
 
 @end

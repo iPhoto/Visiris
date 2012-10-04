@@ -11,6 +11,15 @@
 
 
 @class VSDeviceParameter;
+@class VSDevice;
+
+@protocol VSDeviceDelegate <NSObject>
+
+-(BOOL) registerDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device;
+
+-(BOOL) unregisterDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device;
+
+@end
 
 /**
  * A VSDevice represents an external Device like Kinect, Ardunio.
@@ -27,6 +36,10 @@
 
 -(NSUInteger) indexOfObjectInParameters:(VSDeviceParameter*) parameter;
 
+-(BOOL) activateParameter:(VSDeviceParameter*) deviceParameter;
+
+-(BOOL) deactivateParameter:(VSDeviceParameter*) deviceParameter;
+
 /** Stores the parameters defined for this device */
 @property (strong) NSMutableDictionary *parameters;
 
@@ -36,5 +49,9 @@
 @property (strong) NSString *name;
 
 @property NSString *ID;
+
+@property id<VSDeviceDelegate> delegate;
+
+@property id currentValue;
 
 @end

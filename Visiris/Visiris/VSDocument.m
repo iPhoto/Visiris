@@ -17,6 +17,7 @@
 #import "VSProjectSettings.h"
 #import "VSOutputController.h"
 #import "VSDeviceManager.h"
+#import "VSExternalInputManager.h"
 
 #import "VSCoreServices.h"
 
@@ -97,7 +98,10 @@
     
     [VSOutputController sharedOutputController].playbackController = self.playbackController;
     
+    self.externalInputManager = [[VSExternalInputManager alloc] init];
+    
     self.deviceManager = [[VSDeviceManager alloc] init];
+    self.deviceManager.deviceRegisitratingDelegate = self.externalInputManager;
 
 }
 

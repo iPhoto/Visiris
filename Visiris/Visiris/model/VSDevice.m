@@ -44,4 +44,45 @@
     return [[self.parameters allKeys] indexOfObject:parameter.oscPath];
 }
 
+-(BOOL) activateParameter:(VSDeviceParameter*) deviceParameter{
+    
+    BOOL result = false;
+    
+    if([[self.parameters allValues] containsObject:deviceParameter]){
+        if([self delegateRespondsToSelector:@selector(registerDeviceParameter:ofDevice:)]){
+            result = [self.delegate registerDeviceParameter:deviceParameter ofDevice:self];
+        }
+    }
+    return result;
+}
+
+-(BOOL) deactivateParameter:(VSDeviceParameter*) deviceParameter{
+    BOOL result = false;
+    
+    if([[self.parameters allValues] containsObject:deviceParameter]){
+        if([self delegateRespondsToSelector:@selector(unregisterDeviceParameter:ofDevice:)]){
+            result = [self.delegate unregisterDeviceParameter:deviceParameter ofDevice:self];
+        }
+    }
+    return result;
+}
+
+#pragma mark - Private Methods
+
+/**
+ * Checks if the delegate of VSPlaybackControllerDelegate is able to respond to the given Selector
+ * @param selector Selector the delegate will be checked for if it is able respond to
+ * @return YES if the delegate is able to respond to the selector, NO otherweis
+ */
+-(BOOL) delegateRespondsToSelector:(SEL) selector{
+    if(self.delegate){
+        if([self.delegate conformsToProtocol:@protocol(VSDeviceDelegate)]){
+            if([self.delegate respondsToSelector:selector]){
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
 @end
