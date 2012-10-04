@@ -52,6 +52,4 @@
 
 @property id<VSDeviceDelegate> delegate;
 
-@property id currentValue;
-
 @end
