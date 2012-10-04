@@ -234,7 +234,12 @@ static int resizingAreaWidth = 10;
 #pragma mark - VSDraggingDestination implementation
 
 -(NSDragOperation) draggingEntered:(id<NSDraggingInfo>)sender{
-    NSDragOperation currentDragOperation = NSDragOperationLink;
+    NSDragOperation currentDragOperation = NSDragOperationNone;
+    
+    if([self delegateImplementsSelector:@selector(draggingOperationWithDraggingInfo:hasEnteredTimelineObjectView:)]){
+        currentDragOperation = [self.delegate draggingOperationWithDraggingInfo:sender
+                                                   hasEnteredTimelineObjectView:self];
+    }
     
     return currentDragOperation;
 }
@@ -246,9 +251,22 @@ static int resizingAreaWidth = 10;
 
 
 -(BOOL) performDragOperation:(id<NSDraggingInfo>)sender{
-    return YES;
+    BOOL result = NO;
+    
+    if([self delegateImplementsSelector:@selector(draggingInfo:isDroppedOnTimelineObjectView:)]){
+        result = [self.delegate draggingInfo:sender
+               isDroppedOnTimelineObjectView:self];
+    }
+    
+    return result;
 }
 
+-(void) draggingExited:(id<NSDraggingInfo>)sender{
+    if([self delegateImplementsSelector:@selector(draggingOperationWithDraggingInfo:hasExitedTimelineObjectView:)]){
+        [self.delegate draggingOperationWithDraggingInfo:sender
+                             hasExitedTimelineObjectView:self];
+    }
+}
 
 #pragma mark - Private Methods
 

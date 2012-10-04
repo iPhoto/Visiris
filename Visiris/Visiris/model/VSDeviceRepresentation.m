@@ -81,7 +81,7 @@
     static NSArray* readableTypes = nil;
     
     if(!readableTypes){
-        readableTypes = [NSArray arrayWithObject:VSProjectItemPasteboardType];
+        readableTypes = [NSArray arrayWithObject:VSDevicePasteboardType];
     }
     
     return readableTypes;
@@ -89,7 +89,7 @@
 
 +(NSPasteboardReadingOptions) readingOptionsForType:(NSString *)type pasteboard:(NSPasteboard *)pasteboard{
     
-    if ([type isEqualToString:VSProjectItemPasteboardType]){
+    if ([type isEqualToString:VSDevicePasteboardType]){
         return NSPasteboardReadingAsKeyedArchive;
     }
     return NSPasteboardReadingAsData;

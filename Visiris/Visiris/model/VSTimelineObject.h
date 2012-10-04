@@ -13,6 +13,7 @@
 @class VSTimelineObjectSource;
 @class VSSourceSupplier;
 @class VSCoreHandover;
+@class VSDevice;
 
 /**
  * Representation of objects placed on the timeline.
@@ -29,6 +30,8 @@
 
 /** Duaration of the projectItem the timelineObject represents, the "real" length of file */
 @property (readonly) double sourceDuration;
+
+@property (readonly, strong) NSMutableArray* devices;
 
 /**
  * Inits a the object with the given sourceObject
@@ -79,5 +82,9 @@
 - (double)localTimestampOfGlobalTimestamp:(double)aGlobalTimestamp;
 
 -(double) globalTimestampOfLocalTimestamp:(double)aLocalTimestamp;
+
+-(void) addDevicesObject:(VSDevice *)object;
+
+-(NSArray*) devicesAtIndexes:(NSIndexSet *)indexes;
 
 @end

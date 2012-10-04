@@ -14,6 +14,7 @@
 #import "VSDeviceManager.h"
 #import "VSDevice.h"
 #import "VSDeviceRepresentation.h"
+#import "VSDocument.h"
 
 #import "VSCoreServices.h"
 
@@ -25,7 +26,7 @@
 
 /** VSExternalInputManager is initialized by VSDocument */
 @property (strong) VSExternalInputManager*              externalInputManager;
-@property (strong) VSDeviceManager*                     deviceManager;
+@property (weak) VSDeviceManager*                     deviceManager;
 
 @end
 
@@ -62,14 +63,18 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
         // Start searching for external input devices
         self.externalInputManager = [[VSExternalInputManager alloc] init];
         
-        // Create DeviceManager
-        self.deviceManager = [[VSDeviceManager alloc] init];
+       
         
     }
     
     return self;
 }
 
+
+-(void) awakeFromNib{
+    // Create DeviceManager
+    self.deviceManager =  ((VSDocument*)[[NSDocumentController sharedDocumentController] currentDocument]).deviceManager;
+}
 
 #pragma mark - Device Management
 - (IBAction)didPressAddDeviceButton:(NSButton *)addButton

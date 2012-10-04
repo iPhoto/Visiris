@@ -375,8 +375,7 @@ static NSString* defaultNib = @"VSTrackView";
 
 -(VSTimelineObjectViewController*) addTemporaryTimelineObject:(VSTimelineObjectProxy*) aProxyObject{
     
-    VSTimelineObjectViewController *newController = [[VSTimelineObjectViewController alloc] initWithDefaultNib];
-    newController.timelineObjectProxy = aProxyObject;
+    VSTimelineObjectViewController *newController = [[VSTimelineObjectViewController alloc] initWithDefaultNibAndTimelineObjectProxy:aProxyObject];
     
     newController.timelineObjectView.temporary = YES;
     
@@ -1138,13 +1137,12 @@ static NSString* defaultNib = @"VSTrackView";
  * @param aTimelineObject VSTimlineObject the newly added VSTimelineObjectView will represent.
  */
 -(void) addNewTimelineObject:(VSTimelineObject*) aTimelineObject{
-    VSTimelineObjectViewController* newController = [[VSTimelineObjectViewController alloc] initWithDefaultNib];
+    VSTimelineObjectViewController* newController = [[VSTimelineObjectViewController alloc] initWithDefaultNibAndTimelineObjectProxy:aTimelineObject];
     
     [newController changePixelTimeRatio:self.pixelTimeRatio];
     
     newController.delegate = self;
     
-    newController.timelineObjectProxy = aTimelineObject;
     
     [self.view addSubview:[newController view]];
     

@@ -59,7 +59,7 @@ static NSURL* devicesFolderURL;
 }
 
 -(void) loadExisitingDevices{
-
+    
     NSDirectoryEnumerator *dirEnum = [[NSFileManager defaultManager] enumeratorAtPath:devicesFolder];
     
     [dirEnum skipDescendants];
@@ -75,7 +75,7 @@ static NSURL* devicesFolderURL;
 
 -(void) loadDeviceFromXMLFile:(NSString*) filePath{
     NSError *error;
-
+    
     NSURL *xmlURL = [NSURL fileURLWithPath:filePath];
     
     NSXMLDocument *xmlDocument = [[NSXMLDocument alloc] initWithContentsOfURL: xmlURL options:0 error:&error];
@@ -83,7 +83,7 @@ static NSURL* devicesFolderURL;
     NSXMLElement *deviceNode = [xmlDocument rootElement];
     
     NSString *name = [[deviceNode attributeForName:@"name"] stringValue];
-
+    
     VSDevice *device = [[VSDevice alloc] initWithID:[VSMiscUtlis stringWithUUID] andName:name];
     
     NSArray *parameterNodes = [deviceNode elementsForName:@"parameter"];
@@ -105,13 +105,13 @@ static NSURL* devicesFolderURL;
     }
     
     [self addDevicesObject:device];
-
+    
 }
 
 
 
 -(void) addDevicesObject:(VSDevice *)object{
-
+    
     if (object) {
         [self.devices addObject:object];
         
@@ -132,6 +132,25 @@ static NSURL* devicesFolderURL;
 
 -(VSDeviceRepresentation*)objectInDeviceRepresentationsAtIndex:(NSUInteger)index{
     return [self.deviceRepresentations objectAtIndex:index];
+}
+
+-(VSDevice*) deviceRepresentedBy:(VSDeviceRepresentation*) deviceRepresentation{
+    NSUInteger indexOfDevice = [self.devices indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj isKindOfClass:[VSDevice class]]){
+            if([((VSDevice*) obj).ID isEqualToString:deviceRepresentation.ID]){
+                return YES;
+            }
+        }
+        
+        return NO;
+    }];
+    
+    if(indexOfDevice != NSNotFound){
+        return [self.devices objectAtIndex:indexOfDevice];
+    }
+    else{
+        return nil;
+    }
 }
 
 

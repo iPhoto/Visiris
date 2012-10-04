@@ -8,8 +8,6 @@
 
 #import "VSTimelineObject.h"
 
-#import "VSCoreServices.h"
-
 #import "VSProjectItem.h"
 #import "VSTimelineObjectSource.h"
 #import "VSFrameSourceSupplier.h"
@@ -23,14 +21,17 @@
 #import "VSVideoSourceSupplier.h"
 #import "VisirisCore/VSAudioCoreHandover.h"
 #import "VisirisCore/VSVideoCoreHandover.h"
+#import "VSDevice.h"
+
+#import "VSCoreServices.h"
+
+@interface VSTimelineObject()
+
+@end
 
 @implementation VSTimelineObject
 
-@synthesize sourceObject        = _sourceObject;
-@synthesize startTime           = _startTime;
-@synthesize duration            = _duration;
-@synthesize icon                = _icon;
-@synthesize supplier            = _supplier;
+@synthesize devices = _devices;
 
 
 #pragma mark - Init
@@ -38,6 +39,7 @@
     if(self=[super initWithName:sourceObject.projectItem.name atTime:-1 duration:sourceObject.projectItem.duration icon:icon]){
         self.sourceObject = sourceObject;
         self.timelineObjectID = objectID;
+        _devices = [[NSMutableArray alloc]init];
     }
     
     return self;
@@ -67,6 +69,8 @@
         copy.icon = superCopy.icon;
         copy.selected = superCopy.selected;
         copy.timelineObjectID = superCopy.timelineObjectID;
+        
+//        copy.devices = _devices;
     }
     
     return copy;
@@ -108,11 +112,11 @@
     else if ([self.supplier isKindOfClass:[VSQuartzComposerSourceSupplier class]]){
         coreHandover = [[VSQuartzComposerHandover alloc] initWithAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp]
                                                                forTimestamp:localTimestamp
-                                                                andFilePath:[(VSQuartzComposerSourceSupplier *)self.supplier getQuartzComposerPatchFilePath] 
+                                                                andFilePath:[(VSQuartzComposerSourceSupplier *)self.supplier getQuartzComposerPatchFilePath]
                                                                       forId:self.timelineObjectID];
     }
     else if ([self.supplier isKindOfClass:[VSAudioSourceSupplier class]]) {
-        coreHandover = [[VSAudioCoreHandover alloc] initWithAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp] 
+        coreHandover = [[VSAudioCoreHandover alloc] initWithAttributes:[self.supplier getAtrributesForTimestamp:localTimestamp]
                                                           forTimestamp:[(VSAudioSourceSupplier *)self.supplier convertToAudioTimestamp:localTimestamp]
                                                                  forId:self.timelineObjectID];
     }
@@ -140,7 +144,7 @@
     self.name = newName;
 }
 
-- (double)localTimestampOfGlobalTimestamp:(double)aGlobalTimestamp{   
+- (double)localTimestampOfGlobalTimestamp:(double)aGlobalTimestamp{
     if(aGlobalTimestamp < self.startTime || aGlobalTimestamp > self.endTime){
         return -1.0;
     }
@@ -152,10 +156,31 @@
     return aLocalTimestamp + self.startTime;
 }
 
+-(void) addDevicesObject:(VSDevice *)object{
+    if(object){
+        if(![self.devices containsObject:object]){
+            [self.devices addObject:object];
+        }
+    }
+    else{
+        DDLogError(@"Device to add was nil");
+    }
+}
+
+-(NSArray*) devicesAtIndexes:(NSIndexSet *)indexes{
+    return [self.devices objectsAtIndexes:indexes];
+}
+
 #pragma mark - Properties
 
 -(double) sourceDuration{
     return self.sourceObject.projectItem.duration;
+}
+
+-(NSMutableArray*) devices
+{
+    NSMutableArray *result= [self mutableArrayValueForKey:@"devices"];
+    return result;
 }
 
 @end

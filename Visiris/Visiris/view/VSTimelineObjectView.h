@@ -61,6 +61,11 @@
  */
 -(void) timelineObjectDidStopResizing:(VSTimelineObjectView*) timelineObjectView;
 
+-(NSDragOperation) draggingOperationWithDraggingInfo:(id<NSDraggingInfo>) draggingInfo hasEnteredTimelineObjectView:(VSTimelineObjectView*) timelineObjectView;
+
+-(void) draggingOperationWithDraggingInfo:(id<NSDraggingInfo>) draggingInfo hasExitedTimelineObjectView:(VSTimelineObjectView*) timelineObjectView;
+
+-(BOOL) draggingInfo:(id<NSDraggingInfo>) draggingInfo isDroppedOnTimelineObjectView:(VSTimelineObjectView*) timelineObjectView;
 
 @optional
 
@@ -83,11 +88,6 @@
 -(NSPoint) timelineObjectViewWillBeDragged:(VSTimelineObjectView*) timelineObjectView fromPosition:(NSPoint) oldPosition toPosition:(NSPoint) newPosition forMousePosition:(NSPoint) currentMousePosition;
 
 @end
-
-
-
-
-
 
 
 @class VSTimelineObject;

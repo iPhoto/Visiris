@@ -29,4 +29,6 @@
 
 - (NSUInteger)numberOfDevices;
 
+-(VSDevice*) deviceRepresentedBy:(VSDeviceRepresentation*) deviceRepresentation;
+
 @end

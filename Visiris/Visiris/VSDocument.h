@@ -13,6 +13,7 @@
 @class VSTimeline;
 @class VSPlaybackController;
 @class VSExternalInputManager;
+@class VSDeviceManager;
 
 
 /**
@@ -33,6 +34,8 @@
 @property (strong) VSTimeline* timeline;
 
 
+/** VSDeviceManager handles the devices and their representations */
+@property (strong) VSDeviceManager *deviceManager;
  
 
 
