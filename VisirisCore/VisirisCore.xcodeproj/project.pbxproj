@@ -40,7 +40,7 @@
 		274C70CE157E81DD0031F9B2 /* VSImageContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 274C70CC157E81DD0031F9B2 /* VSImageContext.h */; };
 		274C70CF157E81DD0031F9B2 /* VSImageContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 274C70CD157E81DD0031F9B2 /* VSImageContext.m */; };
 		274C70D1157E82EE0031F9B2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 274C70D0157E82EE0031F9B2 /* QuartzCore.framework */; };
-		27537F091615C54F00AB88FF /* VSReferenceCounting.h in Headers */ = {isa = PBXBuildFile; fileRef = 27537F071615C54F00AB88FF /* VSReferenceCounting.h */; };
+		27537F091615C54F00AB88FF /* VSReferenceCounting.h in Headers */ = {isa = PBXBuildFile; fileRef = 27537F071615C54F00AB88FF /* VSReferenceCounting.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		27537F0A1615C54F00AB88FF /* VSReferenceCounting.m in Sources */ = {isa = PBXBuildFile; fileRef = 27537F081615C54F00AB88FF /* VSReferenceCounting.m */; };
 		275D8D0F156EB42B0081AB80 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 275D8D0E156EB42B0081AB80 /* OpenGL.framework */; };
 		276151341577C7E4005177C5 /* VSRenderCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 276151321577C7E4005177C5 /* VSRenderCore.h */; settings = {ATTRIBUTES = (Public, ); }; };

@@ -10,7 +10,7 @@
 #import "VSExternalInputProtocol.h"
 
 
-@interface VSExternalInputManager : NSObject
+@interface VSExternalInputManager : NSObject <VSDeviceParameterRegistrationDelegate>
 
 
 #pragma mark - input manager handling
@@ -33,5 +33,9 @@
 // nsarray containing VSExternlaInputs
 - (NSArray *)availableInputs;
 
+
+// DeviceParameterRegistrationDelegate
+- (void)registerDeviceParameter:(id)parameter forAddress:(NSString *)parameter;
+- (void)unRegisterDeviceParameter:(id)parameter forAddress:(NSString *)parameter;
 
 @end

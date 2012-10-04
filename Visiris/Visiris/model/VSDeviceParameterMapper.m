@@ -17,6 +17,8 @@
         self.deviceParameter = deviceParameter;
         self.parameterRange = parameterRange;
         self.deviceParameterRange = deviceParameterRange;
+        
+
     }
     
     return self;

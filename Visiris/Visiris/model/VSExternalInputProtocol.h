@@ -13,9 +13,16 @@
 
 @required
 
+// managing input sniffer
 - (void)startObservingInputs;
 - (void)stopObservingInputs;
 
 - (NSArray *)availableInputs;
+
+
+// managing concrete inputs
+- (void)startInputForAddress:(NSString *)address;
+- (void)stopInputForAddress:(NSString *)address;
+
 
 @end

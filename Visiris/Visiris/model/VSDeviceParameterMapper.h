@@ -22,8 +22,8 @@
 @property VSRange parameterRange;
 @property VSRange deviceParameterRange;
 
--   (id) initWithDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device deviceParameterRange:(VSRange) deviceParameterRange andParameterRange:(VSRange) parameterRange;
+- (id)initWithDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device deviceParameterRange:(VSRange) deviceParameterRange andParameterRange:(VSRange) parameterRange;
 
--(float) currentMappedParameterValue;
+- (float)currentMappedParameterValue;
 
 @end

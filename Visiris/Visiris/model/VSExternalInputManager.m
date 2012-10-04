@@ -12,6 +12,9 @@
 #import "VSOSCInputManager.h"
 
 
+#import <VisirisCore/VSReferenceCounting.h>
+
+
 
 #import "VSCoreServices.h"
 
@@ -19,8 +22,12 @@
 
 @interface VSExternalInputManager ()
 
-@property (strong) NSMutableDictionary                          *availableInputManager;
-@property (strong) NSMutableDictionary                          *availableParameter;
+@property (strong) NSMutableDictionary                              *availableInputManager;
+@property (strong) NSMutableDictionary                              *availableParameter;
+
+@property (strong) NSMutableDictionary                              *currentActiveValues;
+
+@property (strong) VSReferenceCounting                              *activeValueReferenceCount;
 
 @end
 
@@ -33,6 +40,8 @@
     if (self) {
         
         self.availableInputManager = [[NSMutableDictionary alloc] init];
+        
+        self.activeValueReferenceCount = [[VSReferenceCounting alloc] init];
         
         [self registerExternalInputManager];
         
@@ -107,4 +116,23 @@
     
     return availableInputs;
 }
+
+// DeviceParameterRegistrationDelegate
+- (void)registerValue:(id)value forAddress:(NSString *)address
+{
+    [self.activeValueReferenceCount incrementReferenceOfKey:address];
+}
+
+
+- (void)unRegisterValue:(id)value forAddress:(NSString *)address
+{
+    BOOL isAddressStillActive = [self.activeValueReferenceCount decrementReferenceOfKey:address];
+    if (!isAddressStillActive) {
+    
+        [self.currentActiveValues removeObjectForKey:address];
+        
+        // delete input of specific inputManager
+    }
+}
+
 @end

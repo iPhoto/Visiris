@@ -200,6 +200,45 @@
     return array;
 }
 
+- (BOOL)startInputForAddress:(NSString *)address
+{
+    
+    BOOL isInputForAddressActive = NO;
+    // get the port from address
+    
+    if (address) {
+    
+        unsigned int mappedPort = 0;
+        mappedPort = [self portForAddress:address];
+        
+        if ( 0 != mappedPort ) {
+            
+            isInputForAddressActive = [self startOSCClientOnPort:mappedPort];
+        }
+    }
+    
+    return isInputForAddressActive;
+}
+
+
+- (BOOL)stopInputForAddress:(NSString *)address
+{
+    BOOL isInputForAddressStopped = NO;
+    
+    if (address) {
+        
+        unsigned int mappedPort = 0;
+        mappedPort = [self portForAddress:address];
+        
+        if ( 0 != mappedPort) {
+            
+            [self stopOSCClientOnPort:mappedPort];
+        }
+    }
+    
+    return isInputForAddressStopped;
+}
+
 
 #pragma mark - Updating OSC Ports
 
@@ -315,6 +354,23 @@
 - (void)receivedOSCMessage:(OSCMessage *)message
 {
     NSLog(@"did received message: %@", message);
+}
+
+
+#pragma mark - Internal Methods
+- (unsigned int)portForAddress:(NSString *)address
+{
+    unsigned int requestedPort = 0;
+    
+    for (VSOSCPort *port in self.activePorts) {
+        
+        if ([port.addresses containsObject:address]) {
+            requestedPort = port.port;
+            break;
+        }
+    }
+    
+    return requestedPort;
 }
 
 @end
