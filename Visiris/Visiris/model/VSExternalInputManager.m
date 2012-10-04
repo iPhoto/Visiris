@@ -124,26 +124,35 @@
 // DeviceParameterRegistrationDelegate
 - (BOOL)registerValue:(id)value forAddress:(NSString *)address atPort:(NSUInteger)port
 {
-    [self.activeValueReferenceCount incrementReferenceOfKey:address];
+    BOOL isValueForAddressOnPortRegistered = NO;
     
-    id<VSExternalInputProtocol> inputManager = [self.availableInputManager objectForKey:kVSInputManager_OSC];
-    [inputManager startInputForAddress:address atPort:port];
+    if (address) {
+        
+        [self.activeValueReferenceCount incrementReferenceOfKey:address];
+        
+        id<VSExternalInputProtocol> inputManager = [self.availableInputManager objectForKey:kVSInputManager_OSC];
+        isValueForAddressOnPortRegistered = [inputManager startInputForAddress:address atPort:(unsigned int)port];
+    }
     
-    return NO;
+    return isValueForAddressOnPortRegistered;
 }
 
 
 - (BOOL)unRegisterValue:(id)value forAddress:(NSString *)address atPort:(NSUInteger)port
 {
+    BOOL isValueForAddressOnPortUnregistered = NO;
+    
     BOOL isAddressStillActive = [self.activeValueReferenceCount decrementReferenceOfKey:address];
     if (!isAddressStillActive) {
     
         [self.currentActiveValues removeObjectForKey:address];
         
         // delete input of specific inputManager
+        id<VSExternalInputProtocol> inputManager = [self.availableInputManager objectForKey:kVSInputManager_OSC];
+        isValueForAddressOnPortUnregistered = [inputManager stopInputForAddress:address atPort:(unsigned int)port];
     }
     
-    return NO;
+    return isValueForAddressOnPortUnregistered;
 }
 
 

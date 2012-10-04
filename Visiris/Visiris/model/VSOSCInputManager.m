@@ -200,40 +200,43 @@
     return array;
 }
 
-- (BOOL)startInputForAddress:(NSString *)address
+- (BOOL)startInputForAddress:(NSString *)address atPort:(unsigned int)port
 {
     
     BOOL isInputForAddressActive = NO;
     // get the port from address
     
     if (address) {
-    
-        unsigned int mappedPort = 0;
-        mappedPort = [self portForAddress:address];
         
-        if ( 0 != mappedPort ) {
+        for (VSOSCClient *currentClient in self.availableInputPorts) {
             
-            isInputForAddressActive = [self startOSCClientOnPort:mappedPort];
+            if (currentClient.port == port) {
+
+                // stop sniffer port
+                [currentClient stopObserving];
+                
+                // re activate current sniffer
+                currentClient.port = [self getNextAvailableOSCPort];
+                [currentClient startObserving];
+                
+                break;
+            }
         }
+        
+        isInputForAddressActive = [self startOSCClientOnPort:port];
     }
     
     return isInputForAddressActive;
 }
 
 
-- (BOOL)stopInputForAddress:(NSString *)address
+- (BOOL)stopInputForAddress:(NSString *)address atPort:(unsigned int)port
 {
     BOOL isInputForAddressStopped = NO;
     
     if (address) {
         
-        unsigned int mappedPort = 0;
-        mappedPort = [self portForAddress:address];
-        
-        if ( 0 != mappedPort) {
-            
-            [self stopOSCClientOnPort:mappedPort];
-        }
+        [self stopOSCClientOnPort:port];
     }
     
     return isInputForAddressStopped;

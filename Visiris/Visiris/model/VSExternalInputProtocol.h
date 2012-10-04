@@ -21,8 +21,8 @@
 
 
 // managing concrete inputs
-- (void)startInputForAddress:(NSString *)address atPort:(unsigned int)port;
-- (void)stopInputForAddress:(NSString *)address atPort:(unsigned int)port;
+- (BOOL)startInputForAddress:(NSString *)address atPort:(unsigned int)port;
+- (BOOL)stopInputForAddress:(NSString *)address atPort:(unsigned int)port;
 
 
 @end
