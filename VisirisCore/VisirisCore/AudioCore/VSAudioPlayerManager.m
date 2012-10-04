@@ -91,7 +91,7 @@
     VSAudioPlayer *player = (VSAudioPlayer *)[self.playerToObjectID objectForKey:[NSNumber numberWithInteger:objectID]];
     
     if (player == nil) {
-        NSLog(@"shit happens");
+        NSLog(@"ERROR Audioplayer wants to play a nil object");
     }
     [player playAtTime:time];
     [player setVolume:volume]; 

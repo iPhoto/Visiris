@@ -20,6 +20,7 @@
 @property (strong) VSAudioCore          *audioCore;
 @property (assign) BOOL                 isPlaying;
 @property (strong) NSMutableDictionary  *fileTypeToObjectID;
+@property (strong) NSMutableArray       *willRemoveTimelineObjects;
 
 @end
 
@@ -35,6 +36,7 @@
         self.renderCore = [[VSRenderCore alloc] initWithSize:size];
         self.audioCore  = [[VSAudioCore alloc] init];
         self.fileTypeToObjectID = [[NSMutableDictionary alloc] init];
+        self.willRemoveTimelineObjects = [[NSMutableArray alloc] init];
         self.renderCore.delegate = self;
         self.isPlaying = NO;
     }
@@ -89,7 +91,6 @@
                 if (self.isPlaying) {
                     [self.audioCore playAudioOfHandovers:audioArray atTimeStamp:aTimestamp];
                 }
-//                NSLog(@"play AudioArray");
             }else
                 if (playMode == VSPlaybackModeJumping ||
                 playMode == VSPlaybackModeNone) {
@@ -97,6 +98,12 @@
             }
         }
     }
+    
+    //this is called at the and so no one is interrupting the playback
+    for (NSNumber *number in self.willRemoveTimelineObjects) {
+        [self removeTimelineobjectWithID:number.integerValue];
+    }
+    [self.willRemoveTimelineObjects removeAllObjects];
 }
 
 - (void)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path withObjectItemID:(NSInteger)objectItemID{
@@ -105,7 +112,7 @@
 
     [self.fileTypeToObjectID setObject:[NSNumber numberWithInt:type] forKey:[NSNumber numberWithInteger:objectItemID]];
 
-    [self printDebugLog];
+//    [self printDebugLog];
 }
 
 - (void)createNewAudioPlayerWithProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID forTrack:(NSInteger)trackId andFilePath:(NSString *)filepath{
@@ -118,7 +125,11 @@
         [self.fileTypeToObjectID setObject:[NSNumber numberWithInt:VSFileKindAudio] forKey:[NSNumber numberWithInteger:objectItemID]];
     }
     
-    [self printDebugLog];
+//    [self printDebugLog];
+}
+
+- (void)willRemoveTimelineobjectWithID:(NSInteger)anID{
+    [self.willRemoveTimelineObjects addObject:[NSNumber numberWithInteger:anID]];
 }
 
 - (void)removeTimelineobjectWithID:(NSInteger)anID{
@@ -147,7 +158,7 @@
     
     [self.fileTypeToObjectID removeObjectForKey:[NSNumber numberWithInteger:anID]];
 
-    [self printDebugLog];
+//    [self printDebugLog];
 }
 
 - (void)printDebugLog{

@@ -24,7 +24,7 @@
 
 @interface VSPreProcessor()
 
-@property NSMutableDictionary *timelineObjectsToRemove;
+@property NSMutableArray *timelineObjectsToRemove;
 
 @end
 
@@ -65,14 +65,10 @@
 
 -(void) timelineObjectsWillBeRemoved:(NSArray *)removedTimelineObjects{
     
-    self.timelineObjectsToRemove = [[NSMutableDictionary alloc] init];
+    self.timelineObjectsToRemove = [[NSMutableArray alloc] init];
     
     for (VSTimelineObject *timelineObject in removedTimelineObjects){
-        
-        [self.timelineObjectsToRemove setObject:[NSNumber numberWithInt:timelineObject.sourceObject.projectItem.fileType.fileKind]  forKey:[NSNumber numberWithInteger:timelineObject.timelineObjectID]];
-        
-//        [self.renderCoreReceptionist removeTimelineobjectWithID:timelineObject.timelineObjectID andType:timelineObject.sourceObject.projectItem.fileType.fileKind];
-        
+        [self.timelineObjectsToRemove addObject:[NSNumber numberWithInteger:timelineObject.timelineObjectID]];
     }
     
     if([self delegateRespondsToSelector:@selector(removedTimelineObjectsfromRenderCore:)]){
@@ -82,7 +78,7 @@
 
 -(void) timelineObjectsHaveBeenRemoved{
     for(id key in self.timelineObjectsToRemove){
-        [self.renderCoreReceptionist removeTimelineobjectWithID:[key integerValue]];
+        [self.renderCoreReceptionist willRemoveTimelineobjectWithID:[key integerValue]];
     }
 }
 

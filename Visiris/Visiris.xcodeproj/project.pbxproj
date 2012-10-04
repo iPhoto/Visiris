@@ -212,6 +212,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		27324B4B161D89EC003B629E /* VSRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSRange.h; sourceTree = "<group>"; };
 		2761513A1577C97A005177C5 /* aaa.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = aaa.jpg; sourceTree = "<group>"; };
 		27726EEB161381BB00C0AEEB /* VSExternalInputManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSExternalInputManager.h; sourceTree = "<group>"; };
 		27726EEC161381BB00C0AEEB /* VSExternalInputManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSExternalInputManager.m; sourceTree = "<group>"; };
@@ -1176,6 +1177,8 @@
 				A9D8275916188A91008985F7 /* VSDeviceParameter.m */,
 				5B98D1D9161CACFF002CDE1F /* VSDeviceLoader.h */,
 				5B98D1DA161CACFF002CDE1F /* VSDeviceLoader.m */,
+				5B35BF6D1577A573009911EC /* VSDeviceParameterMapper.h */,
+				5B35BF6E1577A573009911EC /* VSDeviceParameterMapper.m */,
 			);
 			name = device;
 			sourceTree = "<group>";
@@ -1183,8 +1186,6 @@
 		5B35C0BA1577B0E6009911EC /* parameter */ = {
 			isa = PBXGroup;
 			children = (
-				5B35BF6D1577A573009911EC /* VSDeviceParameterMapper.h */,
-				5B35BF6E1577A573009911EC /* VSDeviceParameterMapper.m */,
 				5B35BF771577A573009911EC /* VSParameter.h */,
 				5B35BF781577A573009911EC /* VSParameter.m */,
 				5BEF5AF915FE1F5E00F0FE8A /* VSOptionParameter.h */,
@@ -1295,6 +1296,7 @@
 		5BBFF52215BD33780050CB58 /* structs */ = {
 			isa = PBXGroup;
 			children = (
+				27324B4B161D89EC003B629E /* VSRange.h */,
 				5BBFF52615BD34020050CB58 /* VSDoubleFrame.h */,
 			);
 			name = structs;

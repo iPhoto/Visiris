@@ -22,6 +22,7 @@
 
 /* Structs */
 #import "VSDoubleFrame.h"
+#import "VSRange.h"
 
 /*Constants*/
 #import "VSImageConstants.h"
