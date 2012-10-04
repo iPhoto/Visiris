@@ -114,12 +114,12 @@
 
 #pragma mark - VSDeviceParameterRegistrationDelegate Implementation
 
--(BOOL) registerValue:(id)parameterCurrentValue forAddress:(NSString *)parameterAddress{
+-(BOOL) registerValue:(id)parameterCurrentValue forAddress:(NSString *)parameterAddress atPort:(NSUInteger)port{
     DDLogInfo(@"registeredValue: %@ forAddress: %@",parameterCurrentValue, parameterAddress);
     return YES;
 }
 
--(BOOL) unregisterValue:(id)parameterCurrentValue forAddress:(NSString *)parameterAddress{
+-(BOOL) unregisterValue:(id)parameterCurrentValue forAddress:(NSString *)parameterAddress atPort:(NSUInteger)port{
     DDLogInfo(@"unregisterValue: %@ forAddress: %@",parameterCurrentValue, parameterAddress);
     return YES;
 }

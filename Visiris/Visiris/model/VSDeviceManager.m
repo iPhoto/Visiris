@@ -111,8 +111,8 @@ static NSURL* devicesFolderURL;
 -(BOOL) registerDeviceParameter:(VSDeviceParameter *)deviceParameter ofDevice:(VSDevice *)device{
     BOOL result = NO;
     
-    if([self delegateRespondsToSelector:@selector(registerValue:forAddress:)]){
-        result = [self.deviceRegisitratingDelegate registerValue:device.currentValue forAddress:deviceParameter.oscPath];
+    if([self delegateRespondsToSelector:@selector(registerValue:forAddress:atPort:)]){
+        result = [self.deviceRegisitratingDelegate registerValue:device.currentValue forAddress:deviceParameter.oscPath atPort:deviceParameter.port];
     }
     
     return result;
@@ -121,8 +121,8 @@ static NSURL* devicesFolderURL;
 -(BOOL) unregisterDeviceParameter:(VSDeviceParameter *)deviceParameter ofDevice:(VSDevice *)device{
     BOOL result = NO;
     
-    if([self delegateRespondsToSelector:@selector(unregisterValue:forAddress:)]){
-        result = [self.deviceRegisitratingDelegate unregisterValue:device.currentValue forAddress:deviceParameter.oscPath];
+    if([self delegateRespondsToSelector:@selector(unregisterValue:forAddress:atPort:atPort:)]){
+        result = [self.deviceRegisitratingDelegate unregisterValue:device.currentValue forAddress:deviceParameter.oscPath atPort:deviceParameter.port];
     }
     
     return result;
@@ -169,9 +169,11 @@ static NSURL* devicesFolderURL;
         
         float fromValue = [[[parameterNode attributeForName:@"fromValue"] stringValue] floatValue];
         float toValue = [[[parameterNode attributeForName:@"toValue"] stringValue] floatValue];
+        NSUInteger port = [[[parameterNode attributeForName:@"port"] stringValue] integerValue];
         
         VSDeviceParameter *deviceParameter = [[VSDeviceParameter alloc] initWithName:name
                                                                              oscPath:oscPath
+                                                                              atPort:port
                                                                            fromValue:fromValue
                                                                              toValue:toValue];
         
