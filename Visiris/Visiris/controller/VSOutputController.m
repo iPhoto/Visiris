@@ -86,6 +86,8 @@ static VSOutputController* sharedOutputController = nil;
 
 -(void) unregisterOutput:(id<VSOpenGLOutputDelegate>)output{
     [self.registratedOutputs removeObject:output];
+    self.isFullScreen = NO;
+    [self calcRenderSize];
 }
 
 -(void) startPlayback{
@@ -169,20 +171,22 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     return CVDisplayLinkGetActualOutputVideoRefreshPeriod(self.displayLink);
 }
 
-- (void)toggleFullScreen{
-    self.isFullScreen = !self.isFullScreen;    
-    [self texture:self.lastTexture isReadyForTimestamp:self.lastTimestamp];
-    [self calcRenderSize];
-}
+//- (void)toggleFullScreen{
+//    self.isFullScreen = !self.isFullScreen;    
+////    [self texture:self.lastTexture isReadyForTimestamp:self.lastTimestamp];
+//    [self calcRenderSize];
+//}
 
 - (void)setFullScreenSize:(NSSize)fullScreenSize{
     _fullScreenSize = fullScreenSize;
+    self.isFullScreen = YES;
     [self calcRenderSize];
+//    [self texture:self.lastTexture isReadyForTimestamp:self.lastTimestamp];
 }
 
 - (void)setPreviewSize:(NSSize)previewSize{
     _previewSize = previewSize;
-    [self renderSize];
+    [self calcRenderSize];
 }
 
 - (void)calcRenderSize{
@@ -194,6 +198,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     if (self.renderSize.width > [[VSProjectSettings sharedProjectSettings] frameSize].width) {
         self.renderSize = [[VSProjectSettings sharedProjectSettings] frameSize];
     }
+    [self.playbackController updateCurrentFrame];
 }
 
 @end

@@ -57,9 +57,8 @@
             [handoverObjects addObject:coreHandover];
         }
     }
-    if (handoverObjects.count > 0 ) {
-        [self.renderCoreReceptionist renderFrameAtTimestamp:aTimestamp withHandovers:handoverObjects forSize:aFrameSize withPlayMode:playMode];
-    }
+
+    [self.renderCoreReceptionist renderFrameAtTimestamp:aTimestamp withHandovers:handoverObjects forSize:aFrameSize withPlayMode:playMode];
 }
 
 #pragma mark - VSTimelineTimelineObjectsDelegate implementation
@@ -83,7 +82,7 @@
 
 -(void) timelineObjectsHaveBeenRemoved{
     for(id key in self.timelineObjectsToRemove){
-        [self.renderCoreReceptionist removeTimelineobjectWithID:[key integerValue] andType:[[self.timelineObjectsToRemove objectForKey:key] intValue]];
+        [self.renderCoreReceptionist removeTimelineobjectWithID:[key integerValue]];
     }
 }
 
@@ -132,10 +131,6 @@
     return NO;
 }
 
-
-/**
- *
- */
 - (void)handleFrameTimelineObject:(VSTimelineObject *)timelineObject atTrack:(VSTrack *)track{
     
     NSSize dimensions = [VSFileUtils dimensionsOfFile:timelineObject.sourceObject.filePath];
@@ -150,7 +145,6 @@
                                           withOutputSize:outputSize
                                                 withPath:timelineObject.sourceObject.filePath
                                         withObjectItemID:objectItemID];
-    
 }
 
 /**

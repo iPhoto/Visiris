@@ -17,8 +17,9 @@
 
 @interface VSCoreReceptionist()
 
-@property (strong) VSAudioCore      *audioCore;
-@property (assign) BOOL             isPlaying;
+@property (strong) VSAudioCore          *audioCore;
+@property (assign) BOOL                 isPlaying;
+@property (strong) NSMutableDictionary  *fileTypeToObjectID;
 
 @end
 
@@ -33,6 +34,7 @@
     if(self = [super init]){
         self.renderCore = [[VSRenderCore alloc] initWithSize:size];
         self.audioCore  = [[VSAudioCore alloc] init];
+        self.fileTypeToObjectID = [[NSMutableDictionary alloc] init];
         self.renderCore.delegate = self;
         self.isPlaying = NO;
     }
@@ -51,6 +53,7 @@
         [self renderCore:self.renderCore didFinishRenderingTexture:0 forTimestamp:aTimestamp];
     }
     else {
+        NSLog(@"render");
         
         NSMutableArray *frameArray = [[NSMutableArray alloc] init];
         NSMutableArray *audioArray = [[NSMutableArray alloc] init];
@@ -99,19 +102,32 @@
 - (void)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path withObjectItemID:(NSInteger)objectItemID{
 
     [self.renderCore createNewTextureForSize:textureSize colorMode:colorMode forTrack:trackID withType:type withOutputSize:size withPath:path withObjectItemID:(NSInteger)objectItemID];
-//    [self printDebugLog];
+
+    [self.fileTypeToObjectID setObject:[NSNumber numberWithInt:type] forKey:[NSNumber numberWithInteger:objectItemID]];
+
+    [self printDebugLog];
 }
 
 - (void)createNewAudioPlayerWithProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID forTrack:(NSInteger)trackId andFilePath:(NSString *)filepath{
 
     [self.audioCore createAudioPlayerForProjectItemID:projectItemID withObjectItemID:objectItemID atTrack:trackId andFilePath:filepath];
-//    [self printDebugLog];
+    
+    NSNumber *temp = [self.fileTypeToObjectID objectForKey:[NSNumber numberWithInteger:objectItemID]];
+    
+    if (temp == nil) {
+        [self.fileTypeToObjectID setObject:[NSNumber numberWithInt:VSFileKindAudio] forKey:[NSNumber numberWithInteger:objectItemID]];
+    }
+    
+    [self printDebugLog];
 }
 
-- (void)removeTimelineobjectWithID:(NSInteger)anID andType:(VSFileKind)type{
+- (void)removeTimelineobjectWithID:(NSInteger)anID{
     
     NSLog(@"delete");
-    switch (type) {
+    
+    NSNumber *type = [self.fileTypeToObjectID objectForKey:[NSNumber numberWithInteger:anID]];
+
+    switch (type.intValue) {
         case VSFileKindAudio:
             [self.audioCore deleteTimelineobjectID:anID];
             break;
@@ -129,7 +145,9 @@
             break;
     }
     
-//    [self printDebugLog];
+    [self.fileTypeToObjectID removeObjectForKey:[NSNumber numberWithInteger:anID]];
+
+    [self printDebugLog];
 }
 
 - (void)printDebugLog{
@@ -138,6 +156,10 @@
     NSLog(@"###############################################");
     [self.renderCore printDebugLog];
     [self.audioCore printDebugLog];
+    NSLog(@"=====Preprocesser ID to Filetypemapping=====");
+    for (id objectID in self.fileTypeToObjectID) {
+        NSLog(@"objectID: %@, filetype: %@", objectID, [self.fileTypeToObjectID objectForKey:objectID]);
+    }
     NSLog(@"###############################################");
 }
 
