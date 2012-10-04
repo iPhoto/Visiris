@@ -26,6 +26,8 @@
 
 @property NSMutableDictionary *timelineObjectsToRemove;
 
+@property (assign) NSUInteger amountOfLastSentHandovers;
+
 @end
 
 
@@ -37,6 +39,7 @@
 -(id)initWithTimeline:(VSTimeline *)timeline{
     if(self = [super init]){
         self.timeline = timeline;
+        self.amountOfLastSentHandovers = 0;
         self.renderCoreReceptionist = [[VSCoreReceptionist alloc] initWithSize:[VSProjectSettings sharedProjectSettings].frameSize];
     }
     return self;
@@ -57,9 +60,14 @@
             [handoverObjects addObject:coreHandover];
         }
     }
-    if (handoverObjects.count > 0 ) {
-        [self.renderCoreReceptionist renderFrameAtTimestamp:aTimestamp withHandovers:handoverObjects forSize:aFrameSize withPlayMode:playMode];
+    if (self.amountOfLastSentHandovers > 0 ) {
+        [self.renderCoreReceptionist renderFrameAtTimestamp:aTimestamp
+                                              withHandovers:handoverObjects
+                                                    forSize:aFrameSize
+                                               withPlayMode:playMode];
     }
+    
+    self.amountOfLastSentHandovers = handoverObjects.count;
 }
 
 #pragma mark - VSTimelineTimelineObjectsDelegate implementation
@@ -70,9 +78,8 @@
     
     for (VSTimelineObject *timelineObject in removedTimelineObjects){
         
-        [self.timelineObjectsToRemove setObject:[NSNumber numberWithInt:timelineObject.sourceObject.projectItem.fileType.fileKind]  forKey:[NSNumber numberWithInteger:timelineObject.timelineObjectID]];
-        
-//        [self.renderCoreReceptionist removeTimelineobjectWithID:timelineObject.timelineObjectID andType:timelineObject.sourceObject.projectItem.fileType.fileKind];
+        [self.timelineObjectsToRemove setObject:[NSNumber numberWithInt:timelineObject.sourceObject.projectItem.fileType.fileKind]
+                                         forKey:[NSNumber numberWithInteger:timelineObject.timelineObjectID]];
         
     }
     

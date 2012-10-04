@@ -108,8 +108,6 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 
 - (void)deviceCreated:(VSDevice *)device
 {
-    
-    
     [self dismissSheetWindow];
     _isCurrentlyPresentingNewDeviceConfigurationPopover = NO;
     
