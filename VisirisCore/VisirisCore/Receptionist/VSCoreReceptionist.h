@@ -56,7 +56,7 @@
 
 - (void)createNewAudioPlayerWithProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID forTrack:(NSInteger)trackId andFilePath:(NSString *)filepath;
 
-- (void)removeTimelineobjectWithID:(NSInteger)anID andType:(VSFileKind)type;
+- (void)willRemoveTimelineobjectWithID:(NSInteger)anID;
 
 - (NSOpenGLContext *)openGLContext;
 

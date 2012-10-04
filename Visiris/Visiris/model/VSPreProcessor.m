@@ -24,7 +24,7 @@
 
 @interface VSPreProcessor()
 
-@property NSMutableDictionary *timelineObjectsToRemove;
+@property NSMutableArray *timelineObjectsToRemove;
 
 @property (assign) NSUInteger amountOfLastSentHandovers;
 
@@ -74,7 +74,7 @@
 
 -(void) timelineObjectsWillBeRemoved:(NSArray *)removedTimelineObjects{
     
-    self.timelineObjectsToRemove = [[NSMutableDictionary alloc] init];
+    self.timelineObjectsToRemove = [[NSMutableArray alloc] init];
     
     for (VSTimelineObject *timelineObject in removedTimelineObjects){
         
@@ -90,7 +90,7 @@
 
 -(void) timelineObjectsHaveBeenRemoved{
     for(id key in self.timelineObjectsToRemove){
-        [self.renderCoreReceptionist removeTimelineobjectWithID:[key integerValue] andType:[[self.timelineObjectsToRemove objectForKey:key] intValue]];
+        [self.renderCoreReceptionist willRemoveTimelineobjectWithID:[key integerValue]];
     }
 }
 
@@ -139,10 +139,6 @@
     return NO;
 }
 
-
-/**
- *
- */
 - (void)handleFrameTimelineObject:(VSTimelineObject *)timelineObject atTrack:(VSTrack *)track{
     
     NSSize dimensions = [VSFileUtils dimensionsOfFile:timelineObject.sourceObject.filePath];
@@ -157,7 +153,6 @@
                                           withOutputSize:outputSize
                                                 withPath:timelineObject.sourceObject.filePath
                                         withObjectItemID:objectItemID];
-    
 }
 
 /**

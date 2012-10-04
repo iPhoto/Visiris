@@ -10,16 +10,22 @@
 
 @implementation VSDeviceParameterMapper
 
-@synthesize device = _device;
-
-#pragma mark - Init
-
--(id) initWithDevice:(VSDevice *)aDevice{
-    if(self = [self init]){
-        self.device  =aDevice;
-    }
+- (float)mapValue:(float)value fromRange:(VSRange)inRange toRange:(VSRange)outRange{
     
-    return self;
+    float y, k, deltaY, deltaX, d, x;
+    
+    x = value - inRange.min;
+    
+    d = outRange.min;
+    
+    deltaY = outRange.max - outRange.min;
+    deltaX = inRange.max - inRange.min;
+    
+    k = deltaY/deltaX;
+    
+    y = k * x + d;
+    
+    return  y;
 }
 
 @end

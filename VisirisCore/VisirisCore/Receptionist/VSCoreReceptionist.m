@@ -17,8 +17,10 @@
 
 @interface VSCoreReceptionist()
 
-@property (strong) VSAudioCore      *audioCore;
-@property (assign) BOOL             isPlaying;
+@property (strong) VSAudioCore          *audioCore;
+@property (assign) BOOL                 isPlaying;
+@property (strong) NSMutableDictionary  *fileTypeToObjectID;
+@property (strong) NSMutableArray       *willRemoveTimelineObjects;
 
 @end
 
@@ -33,6 +35,8 @@
     if(self = [super init]){
         self.renderCore = [[VSRenderCore alloc] initWithSize:size];
         self.audioCore  = [[VSAudioCore alloc] init];
+        self.fileTypeToObjectID = [[NSMutableDictionary alloc] init];
+        self.willRemoveTimelineObjects = [[NSMutableArray alloc] init];
         self.renderCore.delegate = self;
         self.isPlaying = NO;
     }
@@ -51,6 +55,7 @@
         [self renderCore:self.renderCore didFinishRenderingTexture:0 forTimestamp:aTimestamp];
     }
     else {
+        NSLog(@"render");
         
         NSMutableArray *frameArray = [[NSMutableArray alloc] init];
         NSMutableArray *audioArray = [[NSMutableArray alloc] init];
@@ -86,7 +91,6 @@
                 if (self.isPlaying) {
                     [self.audioCore playAudioOfHandovers:audioArray atTimeStamp:aTimestamp];
                 }
-//                NSLog(@"play AudioArray");
             }else
                 if (playMode == VSPlaybackModeJumping ||
                 playMode == VSPlaybackModeNone) {
@@ -94,24 +98,47 @@
             }
         }
     }
+    
+    //this is called at the and so no one is interrupting the playback
+    for (NSNumber *number in self.willRemoveTimelineObjects) {
+        [self removeTimelineobjectWithID:number.integerValue];
+    }
+    [self.willRemoveTimelineObjects removeAllObjects];
 }
 
 - (void)createNewTextureForSize:(NSSize) textureSize colorMode:(NSString*) colorMode forTrack:(NSInteger)trackID withType:(VSFileKind)type withOutputSize:(NSSize)size withPath:(NSString *)path withObjectItemID:(NSInteger)objectItemID{
 
     [self.renderCore createNewTextureForSize:textureSize colorMode:colorMode forTrack:trackID withType:type withOutputSize:size withPath:path withObjectItemID:(NSInteger)objectItemID];
+
+    [self.fileTypeToObjectID setObject:[NSNumber numberWithInt:type] forKey:[NSNumber numberWithInteger:objectItemID]];
+
 //    [self printDebugLog];
 }
 
 - (void)createNewAudioPlayerWithProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID forTrack:(NSInteger)trackId andFilePath:(NSString *)filepath{
 
     [self.audioCore createAudioPlayerForProjectItemID:projectItemID withObjectItemID:objectItemID atTrack:trackId andFilePath:filepath];
+    
+    NSNumber *temp = [self.fileTypeToObjectID objectForKey:[NSNumber numberWithInteger:objectItemID]];
+    
+    if (temp == nil) {
+        [self.fileTypeToObjectID setObject:[NSNumber numberWithInt:VSFileKindAudio] forKey:[NSNumber numberWithInteger:objectItemID]];
+    }
+    
 //    [self printDebugLog];
 }
 
-- (void)removeTimelineobjectWithID:(NSInteger)anID andType:(VSFileKind)type{
+- (void)willRemoveTimelineobjectWithID:(NSInteger)anID{
+    [self.willRemoveTimelineObjects addObject:[NSNumber numberWithInteger:anID]];
+}
+
+- (void)removeTimelineobjectWithID:(NSInteger)anID{
     
     NSLog(@"delete");
-    switch (type) {
+    
+    NSNumber *type = [self.fileTypeToObjectID objectForKey:[NSNumber numberWithInteger:anID]];
+
+    switch (type.intValue) {
         case VSFileKindAudio:
             [self.audioCore deleteTimelineobjectID:anID];
             break;
@@ -129,6 +156,8 @@
             break;
     }
     
+    [self.fileTypeToObjectID removeObjectForKey:[NSNumber numberWithInteger:anID]];
+
 //    [self printDebugLog];
 }
 
@@ -138,6 +167,10 @@
     NSLog(@"###############################################");
     [self.renderCore printDebugLog];
     [self.audioCore printDebugLog];
+    NSLog(@"=====Preprocesser ID to Filetypemapping=====");
+    for (id objectID in self.fileTypeToObjectID) {
+        NSLog(@"objectID: %@, filetype: %@", objectID, [self.fileTypeToObjectID objectForKey:objectID]);
+    }
     NSLog(@"###############################################");
 }
 

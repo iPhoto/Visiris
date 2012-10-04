@@ -112,7 +112,7 @@
     }
     
     self.visible = !self.visible;
-    [[VSOutputController sharedOutputController] toggleFullScreen];
+//    [[VSOutputController sharedOutputController] toggleFullScreen];
 }
 
 
