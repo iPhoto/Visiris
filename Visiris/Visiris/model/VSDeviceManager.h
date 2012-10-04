@@ -11,8 +11,9 @@
 
 @protocol VSDeviceParameterRegistrationDelegate <NSObject>
 
-- (BOOL)registerValue:(id)parameterCurrentValue forAddress:(NSString*)parameterAddress;
-- (BOOL)unregisterValue:(id)parameterCurrentValue forAddress:(NSString*)parameterAddress;
+-(BOOL) registerValue:(id) parameterCurrentValue forAddress:(NSString*) parameterAddress atPort:(NSUInteger) port;
+
+-(BOOL) unregisterValue:(id) parameterCurrentValue forAddress:(NSString*) parameterAddress atPort:(NSUInteger) port;
 
 @end
 
