@@ -62,7 +62,6 @@
 
 - (void)deleteTimelineobjectID:(NSInteger)timelineobjectID{
 //    [self stopTimeLineObject:timelineobjectID];
-    NSLog(@"delete AUDIO");
     [self.audioPlayerManager deleteTimelineobjectID:timelineobjectID];
 }
 

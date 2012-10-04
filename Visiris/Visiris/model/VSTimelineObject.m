@@ -85,7 +85,7 @@
 - (VSCoreHandover *)handoverForTimestamp:(double)aTimestamp frameSize:(NSSize)aFrameSize withPlayMode:(VSPlaybackMode)mode{
     
     VSCoreHandover *coreHandover = nil;
-    
+        
     double localTimestamp = [self localTimestampOfGlobalTimestamp:aTimestamp];
     
     if ([self.supplier isKindOfClass:[VSFrameSourceSupplier class]] ) {

@@ -132,9 +132,7 @@
 }
 
 - (void)removeTimelineobjectWithID:(NSInteger)anID{
-    
-    NSLog(@"delete");
-    
+        
     NSNumber *type = [self.fileTypeToObjectID objectForKey:[NSNumber numberWithInteger:anID]];
 
     switch (type.intValue) {
