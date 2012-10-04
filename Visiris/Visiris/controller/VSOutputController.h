@@ -62,6 +62,4 @@
 
 -(void) connectWithOpenGLContext:(NSOpenGLContext*) openGLContext;
 
-- (void)toggleFullScreen;
-
 @end

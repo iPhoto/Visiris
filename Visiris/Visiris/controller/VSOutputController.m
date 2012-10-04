@@ -171,11 +171,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     return CVDisplayLinkGetActualOutputVideoRefreshPeriod(self.displayLink);
 }
 
-//- (void)toggleFullScreen{
-//    self.isFullScreen = !self.isFullScreen;    
-////    [self texture:self.lastTexture isReadyForTimestamp:self.lastTimestamp];
-//    [self calcRenderSize];
-//}
 
 - (void)setFullScreenSize:(NSSize)fullScreenSize{
     _fullScreenSize = fullScreenSize;
