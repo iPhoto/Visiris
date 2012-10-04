@@ -7,7 +7,7 @@
 //
 
 #import "VSDeviceParameterMapper.h"
-
+#import "VSDeviceParameter.h"
 #import "VSDevice.h"
 
 @implementation VSDeviceParameterMapper

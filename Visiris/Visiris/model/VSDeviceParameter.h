@@ -20,5 +20,6 @@
 
 @property (assign) NSUInteger port;
 
+@property (strong) id currentValue;
 
 @end
