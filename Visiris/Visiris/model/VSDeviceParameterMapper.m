@@ -8,6 +8,8 @@
 
 #import "VSDeviceParameterMapper.h"
 
+#import "VSDevice.h"
+
 @implementation VSDeviceParameterMapper
 
 -(id) initWithDeviceParameter:(VSDeviceParameter *)deviceParameter ofDevice:(VSDevice *)device deviceParameterRange:(VSRange)deviceParameterRange andParameterRange:(VSRange)parameterRange{
@@ -17,9 +19,15 @@
         self.deviceParameter = deviceParameter;
         self.parameterRange = parameterRange;
         self.deviceParameterRange = deviceParameterRange;
+        
+        [self.device activateParameter:self.deviceParameter];
     }
     
     return self;
+}
+
+-(void) dealloc{
+    [self.device deactivateParameter:self.deviceParameter];
 }
 
 -(float) currentMappedParameterValue{

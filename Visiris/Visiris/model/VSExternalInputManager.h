@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "VSExternalInputProtocol.h"
+#import "VSDeviceManager.h"
 
 
-@interface VSExternalInputManager : NSObject
+@interface VSExternalInputManager : NSObject<VSDeviceParameterRegistrationDelegate>
 
 
 #pragma mark - input manager handling

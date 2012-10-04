@@ -7,6 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VSDevice.h"
+
+@protocol VSDeviceParameterRegistrationDelegate <NSObject>
+
+-(BOOL) registerValue:(id) parameterCurrentValue forAddress:(NSString*) parameterAddress;
+
+-(BOOL) unregisterValue:(id) parameterCurrentValue forAddress:(NSString*) parameterAddress;
+
+@end
 
 
 @class VSDevice;
@@ -14,12 +23,14 @@
 /**
  * VSDeviceManager manages all VSDevices and provides them with values for their parameters
  */
-@interface VSDeviceManager : NSObject
+@interface VSDeviceManager : NSObject<VSDeviceDelegate>
 
 /** Stores the devices */
 @property (strong) NSMutableArray *devices;
 
 @property (strong) NSMutableArray *deviceRepresentations;
+
+@property (weak) id<VSDeviceParameterRegistrationDelegate> deviceRegisitratingDelegate;
 
 -(VSDeviceRepresentation*) objectInDeviceRepresentationsAtIndex:(NSUInteger)index;
 
@@ -27,7 +38,7 @@
 
 -(void) addDevicesObject:(VSDevice *)object;
 
-- (NSUInteger)numberOfDevices;
+-(NSUInteger)numberOfDevices;
 
 -(VSDevice*) deviceRepresentedBy:(VSDeviceRepresentation*) deviceRepresentation;
 

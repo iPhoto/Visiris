@@ -27,6 +27,8 @@
 
 @implementation VSExternalInputManager
 
+#pragma mark - Init
+
 - (id)init
 {
     self = [super init];
@@ -42,6 +44,8 @@
     
     return self;
 }
+
+#pragma mark - Methods
 
 - (void)registerExternalInputManager
 {
@@ -107,4 +111,18 @@
     
     return availableInputs;
 }
+
+#pragma mark - VSDeviceParameterRegistrationDelegate Implementation
+
+-(BOOL) registerValue:(id)parameterCurrentValue forAddress:(NSString *)parameterAddress{
+    DDLogInfo(@"registeredValue: %@ forAddress: %@",parameterCurrentValue, parameterAddress);
+    return YES;
+}
+
+-(BOOL) unregisterValue:(id)parameterCurrentValue forAddress:(NSString *)parameterAddress{
+    DDLogInfo(@"unregisterValue: %@ forAddress: %@",parameterCurrentValue, parameterAddress);
+    return YES;
+}
+
+
 @end
