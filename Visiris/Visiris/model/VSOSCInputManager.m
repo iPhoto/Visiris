@@ -15,6 +15,7 @@
 // VSOSC
 #import "VSOSCClient.h"
 #import "VSOSCPort.h"
+#import "VSOSCMessage.h"
 
 
 
@@ -65,7 +66,7 @@
         
         _oscManager = [[OSCManager alloc] init];
         
-        _observablePorts = NSMakeRange(4567, 4600);
+        _observablePorts = NSMakeRange(4250, 4300);
         
         /* TODO: Implement Preference Panel
         observablePorts.location = [[NSUserDefaults standardUserDefaults] integerForKey:kVSOSCInputManager_inputRangeStart];
@@ -145,7 +146,6 @@
         _portObserverTimer = [NSTimer scheduledTimerWithTimeInterval:kVSOSCInputManager_oscPortWalkthroughInterval target:self selector:@selector(observeNextInputs) userInfo:nil repeats:YES];
     }
     
-    // after we started to listen for open osc ports, we also start to observing if open ports are still available
     [self startActivePortObservation];
 }
 
@@ -338,7 +338,11 @@
 #pragma mark - VSOSCClientDelegate
 - (void)oscClient:(VSOSCClient *)client didReceivedMessage:(VSOSCMessage *)message
 {
-
+    if (self.delegate) {
+        if ([self.delegate respondsToSelector:@selector(inputManager:didReceivedValue:forAddress:atPort:)]) {
+            [self.delegate inputManager:self didReceivedValue:message.value forAddress:message.address atPort:message.port];
+        }
+    }
 }
 
 - (void)oscClient:(VSOSCClient *)client didDiscoveredActivePort:(VSOSCPort *)discoveredPort
@@ -354,10 +358,12 @@
 
 
 #pragma mark - OSCInPort Delegate
-- (void)receivedOSCMessage:(OSCMessage *)message
-{
-    NSLog(@"did received message: %@", message);
-}
+//- (void)receivedOSCMessage:(OSCMessage *)message
+//{
+//    NSLog(@"did received message: %@", message);
+//    
+//
+//}
 
 
 #pragma mark - Internal Methods

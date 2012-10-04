@@ -61,7 +61,7 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
         
         
         // Start searching for external input devices
-        self.externalInputManager = [[VSExternalInputManager alloc] init];
+//        self.externalInputManager = [[VSExternalInputManager alloc] init];
         
        
         

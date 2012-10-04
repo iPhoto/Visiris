@@ -10,6 +10,7 @@
 #import <VVOSC/VVOSC.h>
 
 #import "VSOSCPort.h"
+#import "VSOSCMessage.h"
 
 @interface VSOSCClient ()
 {
@@ -65,7 +66,8 @@
     switch (self.type) {
         case VSOSCClientActiveReceiver:
         {
-            [self signalDelegateThatClientDidReceivedMessage:nil];
+            id newValue = [self valueForOSCValue:message.value];
+            [self signalDelegateThatClientDidReceivedMessage:[VSOSCMessage messageWithValue:newValue forAddress:message.address atPort:self.port]];
         }
         break;
             
@@ -110,6 +112,36 @@
 - (VSOSCClientType)type
 {
     return _type;
+}
+
+- (id)valueForOSCValue:(OSCValue *)oscValue
+{
+    id newValue;
+    if (oscValue) {
+        
+        switch (oscValue.type) {
+            case OSCValString:
+                newValue = [oscValue stringValue];
+                break;
+                
+            case OSCValFloat:
+                newValue = [NSNumber numberWithFloat:[oscValue floatValue]];
+                break;
+                
+            case OSCValBool:
+                newValue = [NSNumber numberWithBool:[oscValue boolValue]];
+                break;
+                
+            case OSCValInt:
+                newValue = [NSNumber numberWithInt:[oscValue intValue]];
+                break;
+                
+            default:
+                break;
+        }
+    }
+    
+    return newValue;
 }
 
 @end

@@ -25,7 +25,7 @@
 
 
 // accessing parameter
-- (float)parameterForKey:(NSString *)key;
+//- (float)parameterForKey:(NSString *)key; ???
 
 #pragma mark - getting information from registered input manager
 - (void)startObservingInputs;
@@ -36,7 +36,10 @@
 
 
 // DeviceParameterRegistrationDelegate
-- (BOOL)registerValue:(id)parameterCurrentValue forAddress:(NSString*)parameterAddress;
-- (BOOL)unregisterValue:(id)parameterCurrentValue forAddress:(NSString*)parameterAddress;
+-(BOOL) registerValue:(id) parameterCurrentValue forAddress:(NSString*) parameterAddress atPort:(NSUInteger) port;
+-(BOOL) unregisterValue:(id) parameterCurrentValue forAddress:(NSString*) parameterAddress atPort:(NSUInteger) port;
+
+// ExternsInputManagerDelegate
+- (void)inputManager:(id<VSExternalInputProtocol>)inputManager didReceivedValue:(id)value forAddress:(NSString *)address atPort:(unsigned int)port;
 
 @end

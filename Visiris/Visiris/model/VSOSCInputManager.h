@@ -8,12 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import "VSExternalInputProtocol.h"
+#import "VSExternalInputManagerDelegate.h"
 #import "VSOSCClientPortListener.h"
 
 
 #define kVSInputManager_OSC @"kVSInputManager_OSC"
 
 @interface VSOSCInputManager : NSObject <VSExternalInputProtocol, VSOSCClientPortListener>
+
+@property (weak) id<VSExternalInputManagerDelegate>                     delegate;
 
 + (NSString *)identifier;
 

@@ -43,6 +43,7 @@
 
 /*Categories*/
 #import "NSImage+QuickLook.h"
+#import "NSString+VSOSCUniqueAddress.h"
 
 #import "TBXML.h"
 #import "TBXML+Compression.h"

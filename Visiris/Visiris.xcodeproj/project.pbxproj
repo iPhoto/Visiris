@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		27482037161E121500C13590 /* NSString+VSOSCUniqueAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = 27482036161E121500C13590 /* NSString+VSOSCUniqueAddress.m */; };
 		2761513B1577C97A005177C5 /* aaa.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2761513A1577C97A005177C5 /* aaa.jpg */; };
 		2795881715906D5000E24B57 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2795881615906D5000E24B57 /* CoreMedia.framework */; };
 		2795881A15906D7B00E24B57 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2795881915906D7B00E24B57 /* AVFoundation.framework */; };
@@ -216,6 +217,9 @@
 
 /* Begin PBXFileReference section */
 		27324B4B161D89EC003B629E /* VSRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSRange.h; sourceTree = "<group>"; };
+		27482033161E0E9A00C13590 /* VSExternalInputManagerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSExternalInputManagerDelegate.h; sourceTree = "<group>"; };
+		27482035161E121500C13590 /* NSString+VSOSCUniqueAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+VSOSCUniqueAddress.h"; path = "Visiris/model/NSString+VSOSCUniqueAddress.h"; sourceTree = SOURCE_ROOT; };
+		27482036161E121500C13590 /* NSString+VSOSCUniqueAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+VSOSCUniqueAddress.m"; path = "Visiris/model/NSString+VSOSCUniqueAddress.m"; sourceTree = SOURCE_ROOT; };
 		2761513A1577C97A005177C5 /* aaa.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = aaa.jpg; sourceTree = "<group>"; };
 		27726EEB161381BB00C0AEEB /* VSExternalInputManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSExternalInputManager.h; sourceTree = "<group>"; };
 		27726EEC161381BB00C0AEEB /* VSExternalInputManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSExternalInputManager.m; sourceTree = "<group>"; };
@@ -578,6 +582,7 @@
 				27726EEC161381BB00C0AEEB /* VSExternalInputManager.m */,
 				27726EE8161380A700C0AEEB /* osc */,
 				27CFB12516138E2100A19B7A /* VSExternalInputProtocol.h */,
+				27482033161E0E9A00C13590 /* VSExternalInputManagerDelegate.h */,
 			);
 			name = externalInput;
 			sourceTree = "<group>";
@@ -758,6 +763,8 @@
 		5B35BF3B1577A573009911EC /* categories */ = {
 			isa = PBXGroup;
 			children = (
+				27482035161E121500C13590 /* NSString+VSOSCUniqueAddress.h */,
+				27482036161E121500C13590 /* NSString+VSOSCUniqueAddress.m */,
 			);
 			path = categories;
 			sourceTree = "<group>";
@@ -1698,6 +1705,7 @@
 				5B0A9C04161CD67C00ABD27D /* VSMiscUtlis.m in Sources */,
 				5B4ABA70161D647300BE5248 /* VSDeviceRepresentation.m in Sources */,
 				5B4ABA84161DA3F500BE5248 /* VSDeviceParameterConnectionViewController.m in Sources */,
+				27482037161E121500C13590 /* NSString+VSOSCUniqueAddress.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

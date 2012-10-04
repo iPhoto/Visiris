@@ -7,11 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VSExternalInputManagerDelegate.h"
 
 
 @protocol VSExternalInputProtocol <NSObject>
 
 @required
+
+@property (weak)id<VSExternalInputManagerDelegate>              delegate;
 
 // managing input sniffer
 - (void)startObservingInputs;
