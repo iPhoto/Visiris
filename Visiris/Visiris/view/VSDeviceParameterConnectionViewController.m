@@ -39,6 +39,7 @@
     
     [self.deviceComboBox setUsesDataSource:YES];
     self.deviceComboBox.dataSource =self;
+    self.deviceComboBox.delegate = self;
 }
 
 - (IBAction)didClickToggleConnection:(NSButton *)sender {
@@ -46,8 +47,8 @@
     VSDeviceParameter *selectedParameter = [self.currentlySelectedDevice objectInParametersAtIndex:[self.deviceParameterComboBox indexOfSelectedItem]];
     
     [self.parameter connectWithDeviceParameter:selectedParameter ofDevice:self.currentlySelectedDevice
-                          deviceParameterRange:VSMakeRange(0, 100)
-                             andParameterRange:VSMakeRange(0, 10)];
+                          deviceParameterRange:VSMakeRange([self.deviceParameterMinValueTextField floatValue], [self.deviceParameterMaxValueTextField floatValue])
+                             andParameterRange:VSMakeRange([self.parameterMinValueTextField floatValue], [self.parameterMaxValueTextField floatValue])];
     
     [self setToggleButtonStringValue];
 }
@@ -71,6 +72,7 @@
     return self;
 }
 
+#pragma mark - NSComboBoxDataSource Implementation
 
 -(id) comboBox:(NSComboBox *)aComboBox objectValueForItemAtIndex:(NSInteger)index{
     id result = nil;
@@ -112,26 +114,44 @@
     return result;
 }
 
+#pragma mark - NSComboBoxDelegate Implementation
+
+-(void) comboBoxWillDismiss:(NSNotification *)notification{
+    if([notification.object isKindOfClass:[NSComboBox class]]){
+        NSComboBox *comboBox = ((NSComboBox*)notification.object);
+        
+        if([comboBox isEqual:self.deviceComboBox]){
+            self.currentlySelectedDevice = [self.availableDevices objectAtIndex:[comboBox indexOfSelectedItem]];
+            
+            [self.deviceParameterComboBox reloadData];
+            [self.deviceParameterComboBox selectItemAtIndex:0];
+        }
+    }
+}
+
 -(void) showConnectionDialogFor:(VSParameter*) parameter andAvailableDevices:(NSArray*) availableDevices{
     self.parameter = parameter;
     self.availableDevices = availableDevices;
     
-    
-    
+    NSUInteger selectedDeviceIndex = 0;
+    NSUInteger selectedDeviceParameterIndex = 0;
+    self.currentlySelectedDevice = [self.availableDevices objectAtIndex:0];
     
     if(self.parameter.connectedWithDeviceParameter){
         self.currentlySelectedDevice = self.parameter.deviceConnectedWith;
-        [self.deviceComboBox selectItemAtIndex:[self.availableDevices indexOfObject:self.currentlySelectedDevice]];
-        [self.deviceParameterComboBox selectItemAtIndex:[self.currentlySelectedDevice indexOfObjectInParameters:self.parameter.deviceParamterConnectedWith]];
-    }
-    else{
-        self.currentlySelectedDevice = [self.availableDevices objectAtIndex:0];
-        [self.deviceComboBox selectItemAtIndex:0];
-        [self.deviceParameterComboBox selectItemAtIndex:0];
+        selectedDeviceIndex = [self.availableDevices indexOfObject:self.currentlySelectedDevice];
+        selectedDeviceParameterIndex = [self.currentlySelectedDevice indexOfObjectInParameters:self.parameter.deviceParamterConnectedWith];
     }
     
     [self.deviceComboBox reloadData];
     [self.deviceParameterComboBox reloadData];
+    
+    [self.deviceComboBox selectItemAtIndex:selectedDeviceIndex];
+    [self.deviceParameterComboBox selectItemAtIndex:selectedDeviceParameterIndex];
+    
+    [self.deviceComboBox reloadData];
+    [self.deviceParameterComboBox reloadData];
+    
 }
 
 

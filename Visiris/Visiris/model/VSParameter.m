@@ -156,15 +156,15 @@
 }
 
 -(float) currentFloatValueOfDeviceParamterMapper{
-   return [self.deviceParameterMapper currentMappedParameterValue];
+    return [self.deviceParameterMapper currentMappedParameterFloatValue];
 }
 
 -(BOOL) currentBoolValueOfDeviceParamterMapper{
-    
+    return [self.deviceParameterMapper currentDeviceParameterBoolValue];
 }
 
 -(NSString*) currentStringValueOfDeviceParameterMapper{
-    
+    return [self.deviceParameterMapper currentStringValue];
 }
 
 -(VSKeyFrame*) addKeyFrameWithValue:(id) aValue forTimestamp:(double)aTimestamp{
@@ -349,7 +349,7 @@
 }
 
 -(VSDeviceParameter*) deviceParamterConnectedWith{
-    if(!self.connectedWithDeviceParameter)
+    if(self.connectedWithDeviceParameter)
     {
         return self.deviceParameterMapper.deviceParameter;
     }
@@ -358,7 +358,11 @@
 }
 
 -(VSDevice*) deviceConnectedWith{
-    return self.deviceParameterMapper.device;
+    if(self.connectedWithDeviceParameter)
+    {
+        return self.deviceParameterMapper.device;
+    }
+    return nil;
 }
 
 @end

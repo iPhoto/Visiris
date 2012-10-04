@@ -61,9 +61,9 @@
 
 @property BOOL connectedWithDeviceParameter;
 
-@property (weak) VSDeviceParameter *deviceParamterConnectedWith;
+@property (weak,readonly) VSDeviceParameter *deviceParamterConnectedWith;
 
-@property (weak) VSDevice *deviceConnectedWith;
+@property (weak,readonly) VSDevice *deviceConnectedWith;
 
 #pragma mark - Init
 

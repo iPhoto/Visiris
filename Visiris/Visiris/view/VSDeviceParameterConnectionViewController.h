@@ -11,7 +11,7 @@
 @class VSParameter;
 @class VSDevice;
 
-@interface VSDeviceParameterConnectionViewController : NSViewController<NSComboBoxDataSource>
+@interface VSDeviceParameterConnectionViewController : NSViewController<NSComboBoxDataSource, NSComboBoxDelegate>
 
 @property (strong) VSParameter *parameter;
 

@@ -127,7 +127,7 @@
     [self.activeValueReferenceCount incrementReferenceOfKey:address];
     
     id<VSExternalInputProtocol> inputManager = [self.availableInputManager objectForKey:kVSInputManager_OSC];
-    [inputManager startInputForAddress:address atPort:port];
+//    [inputManager startInputForAddress:address atPort:port];
     
     return NO;
 }

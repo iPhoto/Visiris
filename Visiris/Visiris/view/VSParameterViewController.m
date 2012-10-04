@@ -169,6 +169,10 @@ static NSString* defaultNib = @"VSParameterView";
     return YES;
 }
 
+#pragma mark - NSPopoverDelegate Implementation
+
+
+
 #pragma mark - NSComboBoxDelegate Implementation
 
 -(void) comboBoxWillDismiss:(NSNotification *)notification{

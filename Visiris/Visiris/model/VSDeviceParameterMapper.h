@@ -24,6 +24,10 @@
 
 - (id)initWithDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device deviceParameterRange:(VSRange) deviceParameterRange andParameterRange:(VSRange) parameterRange;
 
-- (float)currentMappedParameterValue;
+- (float)currentMappedParameterFloatValue;
+
+-(BOOL) currentDeviceParameterBoolValue;
+
+-(NSString*) currentStringValue;
 
 @end
