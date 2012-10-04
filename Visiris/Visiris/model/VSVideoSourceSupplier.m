@@ -220,12 +220,9 @@
             // Lock the image buffer
             CVPixelBufferLockBaseAddress(imageBuffer,0);
 
-            if (self.vsImage == nil) {
-                self.vsImage = [[VSImage alloc] init];
-            }
             
             self.vsImage.data = (char *)CVPixelBufferGetBaseAddress(imageBuffer);
-            self.vsImage.size = NSMakeSize(CVPixelBufferGetWidth(imageBuffer), CVPixelBufferGetHeight(imageBuffer));
+//            self.vsImage.size = NSMakeSize(CVPixelBufferGetWidth(imageBuffer), CVPixelBufferGetHeight(imageBuffer));
             
             // Unlock the image buffer
             CVPixelBufferUnlockBaseAddress(imageBuffer,0);
@@ -264,6 +261,11 @@
 - (double)convertToVideoTimestamp:(double)localTimestamp{
     localTimestamp = localTimestamp <= self.timelineObject.sourceDuration ? localTimestamp :  fmod(localTimestamp, self.timelineObject.sourceDuration);
     return localTimestamp;
+}
+
+- (void)dealloc{
+//    NSLog(@"free");
+    free(self.imageData);
 }
 
 @end

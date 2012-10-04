@@ -41,9 +41,7 @@
 //    NSLog(@"created");
 }
 
-- (void)playAudioOfHandovers:(NSArray *)handovers atTimeStamp:(double)timeStamp{
-    NSLog(@"audiocore play AUDIO");
-    
+- (void)playAudioOfHandovers:(NSArray *)handovers atTimeStamp:(double)timeStamp{    
     for (VSCoreHandover *coreHandover in handovers) {
         float volume = [[coreHandover.attributes objectForKey:VSParameterAudioVolume] floatValue];
                     
@@ -63,7 +61,6 @@
 
 - (void)deleteTimelineobjectID:(NSInteger)timelineobjectID{
 //    [self stopTimeLineObject:timelineobjectID];
-    NSLog(@"delete AUDIO");
     [self.audioPlayerManager deleteTimelineobjectID:timelineobjectID];
 }
 

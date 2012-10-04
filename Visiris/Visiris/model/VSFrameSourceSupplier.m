@@ -22,13 +22,6 @@
     return nil;
 }
 
-/**
- * Dealloc gets automatically called when the ReferenceCounter reaches zero. As soon it is called it frees the memory.
- */
-- (void)dealloc{
-    if (self.vsImage.data != NULL) {
-        //free(self.vsImage.data);
-    }
-}
+
 
 @end

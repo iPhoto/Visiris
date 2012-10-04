@@ -54,9 +54,7 @@
     if (theHandovers.count < 1) {
         [self renderCore:self.renderCore didFinishRenderingTexture:0 forTimestamp:aTimestamp];
     }
-    else {
-        NSLog(@"render");
-        
+    else {        
         NSMutableArray *frameArray = [[NSMutableArray alloc] init];
         NSMutableArray *audioArray = [[NSMutableArray alloc] init];
         
@@ -133,9 +131,7 @@
 }
 
 - (void)removeTimelineobjectWithID:(NSInteger)anID{
-    
-    NSLog(@"delete");
-    
+        
     NSNumber *type = [self.fileTypeToObjectID objectForKey:[NSNumber numberWithInteger:anID]];
 
     switch (type.intValue) {
