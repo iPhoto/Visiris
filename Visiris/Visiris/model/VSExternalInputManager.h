@@ -11,7 +11,7 @@
 #import "VSDeviceManager.h"
 
 
-@interface VSExternalInputManager : NSObject <VSDeviceParameterRegistrationDelegate>
+@interface VSExternalInputManager : NSObject<VSDeviceParameterRegistrationDelegate>
 
 
 #pragma mark - input manager handling
@@ -36,7 +36,7 @@
 
 
 // DeviceParameterRegistrationDelegate
-- (void)registerDeviceParameter:(id)parameter forAddress:(NSString *)parameter;
-- (void)unRegisterDeviceParameter:(id)parameter forAddress:(NSString *)parameter;
+- (BOOL)registerValue:(id)parameterCurrentValue forAddress:(NSString*)parameterAddress;
+- (BOOL)unregisterValue:(id)parameterCurrentValue forAddress:(NSString*)parameterAddress;
 
 @end

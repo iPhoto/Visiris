@@ -20,7 +20,7 @@
         self.parameterRange = parameterRange;
         self.deviceParameterRange = deviceParameterRange;
         
-
+        [self.device activateParameter:self.deviceParameter];
     }
     
     return self;

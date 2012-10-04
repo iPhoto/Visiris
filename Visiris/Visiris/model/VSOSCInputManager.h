@@ -25,8 +25,8 @@
 - (NSArray *)availableInputs;
 
 
-- (BOOL)startInputForAddress:(NSString *)address;
-- (BOOL)stopInputForAddress:(NSString *)address;
+- (BOOL)startInputForAddress:(NSString *)address atPort:(unsigned int)port;
+- (BOOL)stopInputForAddress:(NSString *)address atPort:(unsigned int)port;
 
 
 #pragma mark - VSOSCClient Management

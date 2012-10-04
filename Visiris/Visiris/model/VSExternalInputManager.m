@@ -125,6 +125,10 @@
 - (void)registerValue:(id)value forAddress:(NSString *)address
 {
     [self.activeValueReferenceCount incrementReferenceOfKey:address];
+    
+    id<VSExternalInputProtocol> inputManager = [self.availableInputManager objectForKey:kVSInputManager_OSC];
+    [inputManager startInputForAddress:address atPort:0];
+    
 }
 
 
@@ -138,5 +142,6 @@
         // delete input of specific inputManager
     }
 }
+
 
 @end
