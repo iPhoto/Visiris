@@ -209,8 +209,8 @@
     
     if(self.parameter){
         if(self.parameter.hasRange){
-            float range =  self.parameter.rangeMaxValue - self.parameter.rangeMinValue;
-            pixelPosition = self.keyFramesArea.size.height / range * (keyFrameViewController.keyFrame.floatValue-self.parameter.rangeMinValue);
+            float range =  self.parameter.range.max - self.parameter.range.min;
+            pixelPosition = self.keyFramesArea.size.height / range * (keyFrameViewController.keyFrame.floatValue-self.parameter.range.min);
         }
     }
     pixelPosition -= keyFrameViewController.view.frame.size.width / 2.0f;
@@ -220,8 +220,8 @@
 -(float) parameterValueOfPixelPosition:(float) pixelPosition forKeyFrame:(VSKeyFrameViewController *) keyFrameViewController{
     if(self.parameter){
         if(self.parameter.hasRange){
-            float range =  self.parameter.rangeMaxValue - self.parameter.rangeMinValue;
-            return range / self.keyFramesArea.size.height * (pixelPosition) + self.parameter.rangeMinValue;
+            float range =  self.parameter.range.max - self.parameter.range.min;
+            return range / self.keyFramesArea.size.height * (pixelPosition) + self.parameter.range.min;
         }
     }
     return keyFrameViewController.keyFrame.floatValue;

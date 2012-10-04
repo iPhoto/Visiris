@@ -11,3 +11,6 @@
 
 /** Pasteboard Type for VSProjectItems */
 extern NSString*  VSProjectItemPasteboardType;
+
+/** Pasteboard Type for VSDevices */
+extern NSString* VSDevicePasteboardType;

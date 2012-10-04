@@ -27,4 +27,21 @@
     [self.parameters  setObject:object forKey:object.oscPath];
 }
 
+-(VSDeviceParameter*)objectInParametersAtIndex:(NSUInteger)index{
+    
+    id objectAtIndex = [[self.parameters allValues] objectAtIndex:index];
+    
+    if(objectAtIndex){
+        if([objectAtIndex isKindOfClass:[VSDeviceParameter class]]){
+            return objectAtIndex;
+        }
+    }
+    
+    return nil;
+}
+
+-(NSUInteger) indexOfObjectInParameters:(VSDeviceParameter*) parameter{
+    return [[self.parameters allKeys] indexOfObject:parameter.oscPath];
+}
+
 @end

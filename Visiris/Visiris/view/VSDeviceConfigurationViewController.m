@@ -13,6 +13,8 @@
 #import "VSExternalInputManager.h"
 #import "VSDeviceManager.h"
 #import "VSDevice.h"
+#import "VSDeviceRepresentation.h"
+#import "VSDocument.h"
 
 #import "VSCoreServices.h"
 
@@ -24,7 +26,7 @@
 
 /** VSExternalInputManager is initialized by VSDocument */
 @property (strong) VSExternalInputManager*              externalInputManager;
-@property (strong) VSDeviceManager*                     deviceManager;
+@property (weak) VSDeviceManager*                     deviceManager;
 
 @end
 
@@ -61,8 +63,7 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
         // Start searching for external input devices
         self.externalInputManager = [[VSExternalInputManager alloc] init];
         
-        // Create DeviceManager
-        self.deviceManager = [[VSDeviceManager alloc] init];
+       
         
     }
     
@@ -70,13 +71,18 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 }
 
 
+-(void) awakeFromNib{
+    // Create DeviceManager
+    self.deviceManager =  ((VSDocument*)[[NSDocumentController sharedDocumentController] currentDocument]).deviceManager;
+}
+
 #pragma mark - Device Management
 - (IBAction)didPressAddDeviceButton:(NSButton *)addButton
 {
     if ( !_isCurrentlyPresentingNewDeviceConfigurationPopover ) {
         
         [self insertNewDeviceRowAndPresentDeviceConfigurationSheet];
-//        [self insertNewDeviceRowAndPresentDeviceConfigurationPopover];
+        //        [self insertNewDeviceRowAndPresentDeviceConfigurationPopover];
     }
 }
 
@@ -108,13 +114,11 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 
 - (void)deviceCreated:(VSDevice *)device
 {
-    
-    
     [self dismissSheetWindow];
     _isCurrentlyPresentingNewDeviceConfigurationPopover = NO;
     
     if (device) {
-        [self.deviceManager addDevice:device];
+        [self.deviceManager addDevicesObject:device];
         
         [self.deviceTableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:0] columnIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)]];
     }
@@ -133,7 +137,7 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 }
 
 
-#pragma mark - VSCreateDeviceViewControllerDelegate
+#pragma mark - VSCreateDeviceViewControllerDelegate Implementation
 - (void)didCancelDeviceCreation
 {
     [self cancelDeviceCreation];
@@ -147,28 +151,32 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
     }
 }
 
-#pragma mark - VSCreateDeviceViewControllerDataSource
+#pragma mark - VSCreateDeviceViewControllerDataSource Implementation
 - (NSArray *)availableInputParameter
 {
     return [self.externalInputManager availableInputs];
 }
 
 
-#pragma mark - NSTableViewDelegate
+#pragma mark - NSTableViewDelegate Implementation
+
+-(id<NSPasteboardWriting>) tableView:(NSTableView *)tableView pasteboardWriterForRow:(NSInteger)row{
+    return [self.deviceManager objectInDeviceRepresentationsAtIndex:row];
+}
 
 #pragma mark - NSTableViewDataSource
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
-    return self.deviceManager.devices.count;
+    return self.deviceManager.deviceRepresentations.count;
 }
 
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
     if([tableColumn.identifier isEqualToString:@"name"]){
-        return [self.deviceManager objectInDevicesAtIndex:row].name;
+        return [self.deviceManager objectInDeviceRepresentationsAtIndex:row].name;
     }
     else if([tableColumn.identifier isEqualToString:@"id"]){
-        return [self.deviceManager objectInDevicesAtIndex:row].ID;
+        return [self.deviceManager objectInDeviceRepresentationsAtIndex:row].ID;
     }
     else{
         return nil;

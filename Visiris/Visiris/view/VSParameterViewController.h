@@ -49,8 +49,8 @@
 
 
 
-
-
+@class VSDeviceParameterConnectionViewController;
+@class VSDevice;
 
 
 /**
@@ -58,7 +58,7 @@
  *
  * Displays controls to edit the parameter's default value depending on the type of the VSParameter the VSParameterViewController represents. 
  */
-@interface VSParameterViewController : NSViewController<NSTextFieldDelegate, NSComboBoxDelegate>
+@interface VSParameterViewController : NSViewController<NSTextFieldDelegate, NSComboBoxDelegate, NSPopoverDelegate>
 
 
 #pragma mark - Properties
@@ -86,6 +86,10 @@
 
 /** Currently selected keyFrame. */
 @property VSKeyFrame *selectedKeyframe;
+
+@property (weak) IBOutlet NSView *deviceConnectorsHolder;
+
+@property (strong) IBOutlet VSDeviceParameterConnectionViewController *deviceParameterConnectionPopoverViewController;
 
 #pragma mark - IBAction
 
@@ -171,6 +175,10 @@
  *
  * @param parameter VSParameter to show
  */
--(void) showParameter:(VSParameter*) parameter;
+-(void) showParameter:(VSParameter*) parameter andAvailableDevices:(NSArray*) availableDevices;
+
+-(void) addDeviceConnectorForDevice:(VSDevice*) device;
+
+-(void) removeDeviceconnectorForDevice:(VSDevice *) device;
 
 @end

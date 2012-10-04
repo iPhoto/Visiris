@@ -10,6 +10,7 @@
 
 
 @class VSDevice;
+@class VSDeviceRepresentation;
 /**
  * VSDeviceManager manages all VSDevices and provides them with values for their parameters
  */
@@ -18,10 +19,16 @@
 /** Stores the devices */
 @property (strong) NSMutableArray *devices;
 
+@property (strong) NSMutableArray *deviceRepresentations;
+
+-(VSDeviceRepresentation*) objectInDeviceRepresentationsAtIndex:(NSUInteger)index;
 
 -(VSDevice*)objectInDevicesAtIndex:(NSUInteger)index;
 
-- (BOOL)addDevice:(VSDevice *)newDevice;
+-(void) addDevicesObject:(VSDevice *)object;
+
 - (NSUInteger)numberOfDevices;
+
+-(VSDevice*) deviceRepresentedBy:(VSDeviceRepresentation*) deviceRepresentation;
 
 @end

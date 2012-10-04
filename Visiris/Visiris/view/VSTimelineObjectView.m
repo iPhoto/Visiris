@@ -75,7 +75,8 @@ static int resizingAreaWidth = 10;
 }
 
 -(void) awakeFromNib{
-    [self  unregisterDraggedTypes];
+    
+    [self registerForDraggedTypes:[NSArray arrayWithObjects:VSDevicePasteboardType, nil]];
     
     [self initLayerStyle];
     
@@ -227,6 +228,43 @@ static int resizingAreaWidth = 10;
 -(void) removeIntersectionLayer:(CALayer *)intersectionLayer{
     if(intersectionLayer.superlayer == self.layer){
         [intersectionLayer removeFromSuperlayer];
+    }
+}
+
+#pragma mark - VSDraggingDestination implementation
+
+-(NSDragOperation) draggingEntered:(id<NSDraggingInfo>)sender{
+    NSDragOperation currentDragOperation = NSDragOperationNone;
+    
+    if([self delegateImplementsSelector:@selector(draggingOperationWithDraggingInfo:hasEnteredTimelineObjectView:)]){
+        currentDragOperation = [self.delegate draggingOperationWithDraggingInfo:sender
+                                                   hasEnteredTimelineObjectView:self];
+    }
+    
+    return currentDragOperation;
+}
+
+-(BOOL) wantsPeriodicDraggingUpdates{
+    return NO;
+}
+
+
+
+-(BOOL) performDragOperation:(id<NSDraggingInfo>)sender{
+    BOOL result = NO;
+    
+    if([self delegateImplementsSelector:@selector(draggingInfo:isDroppedOnTimelineObjectView:)]){
+        result = [self.delegate draggingInfo:sender
+               isDroppedOnTimelineObjectView:self];
+    }
+    
+    return result;
+}
+
+-(void) draggingExited:(id<NSDraggingInfo>)sender{
+    if([self delegateImplementsSelector:@selector(draggingOperationWithDraggingInfo:hasExitedTimelineObjectView:)]){
+        [self.delegate draggingOperationWithDraggingInfo:sender
+                             hasExitedTimelineObjectView:self];
     }
 }
 

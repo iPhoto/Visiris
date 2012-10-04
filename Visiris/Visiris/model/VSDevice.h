@@ -21,6 +21,10 @@
 
 -(void) addParametersObject:(VSDeviceParameter *)object;
 
+-(VSDeviceParameter*)objectInParametersAtIndex:(NSUInteger)index;
+
+-(NSUInteger) indexOfObjectInParameters:(VSDeviceParameter*) parameter;
+
 /** Stores the parameters defined for this device */
 @property (strong) NSMutableDictionary *parameters;
 

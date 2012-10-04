@@ -10,6 +10,7 @@
 
 #import "VSDeviceLoader.h"
 #import "VSDevice.h"
+#import "VSDeviceRepresentation.h"
 #import "VSDeviceParameter.h"
 
 #import "VSCoreServices.h"
@@ -49,6 +50,7 @@ static NSURL* devicesFolderURL;
 
 -(id) init{
     if(self = [super init]){
+        self.deviceRepresentations = [[NSMutableArray alloc] init];
         self.devices = [[NSMutableArray alloc]init];
         [self loadExisitingDevices];
     }
@@ -57,7 +59,7 @@ static NSURL* devicesFolderURL;
 }
 
 -(void) loadExisitingDevices{
-
+    
     NSDirectoryEnumerator *dirEnum = [[NSFileManager defaultManager] enumeratorAtPath:devicesFolder];
     
     [dirEnum skipDescendants];
@@ -73,7 +75,7 @@ static NSURL* devicesFolderURL;
 
 -(void) loadDeviceFromXMLFile:(NSString*) filePath{
     NSError *error;
-
+    
     NSURL *xmlURL = [NSURL fileURLWithPath:filePath];
     
     NSXMLDocument *xmlDocument = [[NSXMLDocument alloc] initWithContentsOfURL: xmlURL options:0 error:&error];
@@ -81,7 +83,7 @@ static NSURL* devicesFolderURL;
     NSXMLElement *deviceNode = [xmlDocument rootElement];
     
     NSString *name = [[deviceNode attributeForName:@"name"] stringValue];
-
+    
     VSDevice *device = [[VSDevice alloc] initWithID:[VSMiscUtlis stringWithUUID] andName:name];
     
     NSArray *parameterNodes = [deviceNode elementsForName:@"parameter"];
@@ -102,24 +104,21 @@ static NSURL* devicesFolderURL;
         [device addParametersObject:deviceParameter];
     }
     
-    [self addDevice:device];
-
+    [self addDevicesObject:device];
+    
 }
 
 
 
-- (BOOL)addDevice:(VSDevice *)newDevice
-{
-    BOOL didAddDevice = NO;
+-(void) addDevicesObject:(VSDevice *)object{
     
-    if (newDevice) {
-        [self.devices addObject:newDevice];
-        didAddDevice = YES;
+    if (object) {
+        [self.devices addObject:object];
+        
+        [self.deviceRepresentations addObject:[[VSDeviceRepresentation alloc] initWithDeviceToRepresent:object]];
     }else{
         DDLogError(@"Error adding new device: newDevice was nil - this will fail");
     }
-    
-    return didAddDevice;
 }
 
 -(VSDevice*)objectInDevicesAtIndex:(NSUInteger)index{
@@ -130,4 +129,32 @@ static NSURL* devicesFolderURL;
 {
     return _devices.count;
 }
+
+-(VSDeviceRepresentation*)objectInDeviceRepresentationsAtIndex:(NSUInteger)index{
+    return [self.deviceRepresentations objectAtIndex:index];
+}
+
+-(VSDevice*) deviceRepresentedBy:(VSDeviceRepresentation*) deviceRepresentation{
+    NSUInteger indexOfDevice = [self.devices indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj isKindOfClass:[VSDevice class]]){
+            if([((VSDevice*) obj).ID isEqualToString:deviceRepresentation.ID]){
+                return YES;
+            }
+        }
+        
+        return NO;
+    }];
+    
+    if(indexOfDevice != NSNotFound){
+        return [self.devices objectAtIndex:indexOfDevice];
+    }
+    else{
+        return nil;
+    }
+}
+
+
+#pragma mark - Private Methods
+
+
 @end

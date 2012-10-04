@@ -155,6 +155,9 @@
 		5B35C0A21577A912009911EC /* VSPasteboaredConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C08D1577A912009911EC /* VSPasteboaredConstants.m */; };
 		5B35C0A31577A912009911EC /* VSTimelineConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C08F1577A912009911EC /* VSTimelineConstants.m */; };
 		5B35C0A51577A912009911EC /* VSLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0961577A912009911EC /* VSLogFormatter.m */; };
+		5B4ABA70161D647300BE5248 /* VSDeviceRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B4ABA6F161D647300BE5248 /* VSDeviceRepresentation.m */; };
+		5B4ABA84161DA3F500BE5248 /* VSDeviceParameterConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B4ABA82161DA3F500BE5248 /* VSDeviceParameterConnectionViewController.m */; };
+		5B4ABA85161DA3F500BE5248 /* VSDeviceParameterConnectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B4ABA83161DA3F500BE5248 /* VSDeviceParameterConnectionView.xib */; };
 		5B603FA9157F824A0045A1EA /* VSPlayHead.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B603FA8157F824A0045A1EA /* VSPlayHead.m */; };
 		5B60CC5B16135EE800557892 /* VSOutputController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B60CC5A16135EE800557892 /* VSOutputController.m */; };
 		5B70F71B15C2E650002B54ED /* VSPlayheadMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B70F71A15C2E650002B54ED /* VSPlayheadMarker.m */; };
@@ -268,10 +271,10 @@
 		5B35BF281577A49C009911EC /* VSDocument.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VSDocument.m; sourceTree = "<group>"; };
 		5B35BF2B1577A49C009911EC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/VSDocument.xib; sourceTree = "<group>"; };
 		5B35BF2E1577A49C009911EC /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		5B35BF361577A573009911EC /* VSProjectItemController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSProjectItemController.h; sourceTree = "<group>"; };
-		5B35BF371577A573009911EC /* VSProjectItemController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSProjectItemController.m; sourceTree = "<group>"; };
-		5B35BF381577A573009911EC /* VSProjectItemRepresentationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSProjectItemRepresentationController.h; sourceTree = "<group>"; };
-		5B35BF391577A573009911EC /* VSProjectItemRepresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSProjectItemRepresentationController.m; sourceTree = "<group>"; };
+		5B35BF361577A573009911EC /* VSProjectItemController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VSProjectItemController.h; path = ../controller/VSProjectItemController.h; sourceTree = "<group>"; };
+		5B35BF371577A573009911EC /* VSProjectItemController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VSProjectItemController.m; path = ../controller/VSProjectItemController.m; sourceTree = "<group>"; };
+		5B35BF381577A573009911EC /* VSProjectItemRepresentationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VSProjectItemRepresentationController.h; path = ../controller/VSProjectItemRepresentationController.h; sourceTree = "<group>"; };
+		5B35BF391577A573009911EC /* VSProjectItemRepresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VSProjectItemRepresentationController.m; path = ../controller/VSProjectItemRepresentationController.m; sourceTree = "<group>"; };
 		5B35BF631577A573009911EC /* VSAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAnimation.h; sourceTree = "<group>"; };
 		5B35BF641577A573009911EC /* VSAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAnimation.m; sourceTree = "<group>"; };
 		5B35BF651577A573009911EC /* VSAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAudioSource.h; sourceTree = "<group>"; };
@@ -448,6 +451,11 @@
 		5B35C0951577A912009911EC /* VSLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSLogFormatter.h; sourceTree = "<group>"; };
 		5B35C0961577A912009911EC /* VSLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLogFormatter.m; sourceTree = "<group>"; };
 		5B35C0A61577A926009911EC /* VSCoreServices.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSCoreServices.h; sourceTree = "<group>"; };
+		5B4ABA6E161D647300BE5248 /* VSDeviceRepresentation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDeviceRepresentation.h; sourceTree = "<group>"; };
+		5B4ABA6F161D647300BE5248 /* VSDeviceRepresentation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDeviceRepresentation.m; sourceTree = "<group>"; };
+		5B4ABA81161DA3F500BE5248 /* VSDeviceParameterConnectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDeviceParameterConnectionViewController.h; sourceTree = "<group>"; };
+		5B4ABA82161DA3F500BE5248 /* VSDeviceParameterConnectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDeviceParameterConnectionViewController.m; sourceTree = "<group>"; };
+		5B4ABA83161DA3F500BE5248 /* VSDeviceParameterConnectionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VSDeviceParameterConnectionView.xib; sourceTree = "<group>"; };
 		5B4D1E6515B7F67900158404 /* VSViewResizingDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSViewResizingDelegate.h; sourceTree = "<group>"; };
 		5B538B78159B12D20031363E /* VSQuartzCompositionUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSQuartzCompositionUtils.h; sourceTree = "<group>"; };
 		5B603FA7157F824A0045A1EA /* VSPlayHead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSPlayHead.h; sourceTree = "<group>"; };
@@ -727,10 +735,6 @@
 		5B35BF351577A573009911EC /* controller */ = {
 			isa = PBXGroup;
 			children = (
-				5B35BF361577A573009911EC /* VSProjectItemController.h */,
-				5B35BF371577A573009911EC /* VSProjectItemController.m */,
-				5B35BF381577A573009911EC /* VSProjectItemRepresentationController.h */,
-				5B35BF391577A573009911EC /* VSProjectItemRepresentationController.m */,
 				5B60CC5916135EE800557892 /* VSOutputController.h */,
 				5B60CC5A16135EE800557892 /* VSOutputController.m */,
 			);
@@ -1179,6 +1183,8 @@
 				5B98D1DA161CACFF002CDE1F /* VSDeviceLoader.m */,
 				5B35BF6D1577A573009911EC /* VSDeviceParameterMapper.h */,
 				5B35BF6E1577A573009911EC /* VSDeviceParameterMapper.m */,
+				5B4ABA6E161D647300BE5248 /* VSDeviceRepresentation.h */,
+				5B4ABA6F161D647300BE5248 /* VSDeviceRepresentation.m */,
 			);
 			name = device;
 			sourceTree = "<group>";
@@ -1217,6 +1223,10 @@
 		5B35C0BD1577B14E009911EC /* projectItem */ = {
 			isa = PBXGroup;
 			children = (
+				5B35BF361577A573009911EC /* VSProjectItemController.h */,
+				5B35BF371577A573009911EC /* VSProjectItemController.m */,
+				5B35BF381577A573009911EC /* VSProjectItemRepresentationController.h */,
+				5B35BF391577A573009911EC /* VSProjectItemRepresentationController.m */,
 				5B35BF811577A573009911EC /* VSProjectItem.h */,
 				5B35BF821577A573009911EC /* VSProjectItem.m */,
 				5B35BF831577A573009911EC /* VSProjectItemRepresentation.h */,
@@ -1254,6 +1264,16 @@
 				5B35BF981577A573009911EC /* VSTrack.m */,
 			);
 			name = track;
+			sourceTree = "<group>";
+		};
+		5B4ABA76161DA15700BE5248 /* parameterDeviceConnector */ = {
+			isa = PBXGroup;
+			children = (
+				5B4ABA81161DA3F500BE5248 /* VSDeviceParameterConnectionViewController.h */,
+				5B4ABA82161DA3F500BE5248 /* VSDeviceParameterConnectionViewController.m */,
+				5B4ABA83161DA3F500BE5248 /* VSDeviceParameterConnectionView.xib */,
+			);
+			name = parameterDeviceConnector;
 			sourceTree = "<group>";
 		};
 		5B4D1E6415B7F57D00158404 /* protocolls */ = {
@@ -1325,6 +1345,7 @@
 		5BD35BE015D95F31001A74E0 /* parameters */ = {
 			isa = PBXGroup;
 			children = (
+				5B4ABA76161DA15700BE5248 /* parameterDeviceConnector */,
 				5B35C0AF1577AF49009911EC /* parameter */,
 				5BD35BDB15D95F27001A74E0 /* VSTimelineObjectParametersViewController.h */,
 				5BD35BDC15D95F28001A74E0 /* VSTimelineObjectParametersViewController.m */,
@@ -1515,6 +1536,7 @@
 				5BD35BDF15D95F2C001A74E0 /* VSTimelineObjectParametersView.xib in Resources */,
 				A9838A44161792CD00DF110C /* VSDeviceConfigurationViewController.xib in Resources */,
 				A986A5FA161CC8430068F3CA /* VSCreateDeviceViewController.xib in Resources */,
+				5B4ABA85161DA3F500BE5248 /* VSDeviceParameterConnectionView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1674,6 +1696,8 @@
 				A986A5E2161CC2590068F3CA /* VSFullScreenHolderView.m in Sources */,
 				A986A5F9161CC8430068F3CA /* VSCreateDeviceViewController.m in Sources */,
 				5B0A9C04161CD67C00ABD27D /* VSMiscUtlis.m in Sources */,
+				5B4ABA70161D647300BE5248 /* VSDeviceRepresentation.m in Sources */,
+				5B4ABA84161DA3F500BE5248 /* VSDeviceParameterConnectionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

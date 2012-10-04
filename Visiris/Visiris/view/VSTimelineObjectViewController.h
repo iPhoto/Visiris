@@ -118,8 +118,7 @@
 @property (weak) id<VSTimelineObjectControllerDelegate> delegate;
 
 /** VSTimelineObjectProxy of the VSTimelineObject the VSTimelineObjectViewController represents*/
-@property (strong) VSTimelineObjectProxy* timelineObjectProxy;
-
+@property (weak, readonly) VSTimelineObjectProxy* timelineObjectProxy;
 
 /** Indicates wheter the VSTimelineObjectViewController's VSTimelineObjectProxy is only a temporary object on the track. */
 @property BOOL temporary;
@@ -136,9 +135,11 @@
 /** Stores the VSTimelineObjectViewController which's views intersecting the view of the VSTimelineObjectViewController as VSTimelineObjectIntersection */
 @property (strong,readonly) NSMutableDictionary *intersectedTimelineObjectViews;
 
+@property (readonly, weak) VSTimelineObject *timelineObject;
+
 #pragma mark - Init
 
--(id) initWithDefaultNib;
+-(id) initWithDefaultNibAndTimelineObjectProxy:(VSTimelineObjectProxy*) timelineObjectProxy;
 
 
 #pragma mark - Methods

@@ -58,7 +58,7 @@
 										<string key="NSFrameSize">{431, 309}</string>
 										<reference key="NSSuperview" ref="1045931783"/>
 										<reference key="NSWindow"/>
-										<reference key="NSNextKeyView" ref="775361367"/>
+										<reference key="NSNextKeyView" ref="681399062"/>
 										<string key="NSReuseIdentifierKey">_NS:13</string>
 										<bool key="NSEnabled">YES</bool>
 										<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
@@ -253,7 +253,7 @@
 						<string key="NSFrameSize">{433, 327}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="681399062"/>
+						<reference key="NSNextKeyView" ref="1045931783"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<int key="NSsFlags">133682</int>
 						<reference key="NSVScroller" ref="1071855587"/>

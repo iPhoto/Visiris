@@ -63,7 +63,56 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
     [((NSView*) self.scrollView.documentView) setAutoresizingMask:NSViewWidthSizable];
 }
 
+#pragma mark - NSViewController
 
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    //observes if new keyFrames have been added or have been removed
+    if([keyPath isEqualToString:@"devices"]){
+        NSInteger kind = [[change valueForKey:@"kind"] intValue];
+        
+        switch (kind) {
+            case NSKeyValueChangeInsertion:
+            {
+                if(![[change valueForKey:@"notificationIsPrior"] boolValue]){
+                    NSArray *newDevices = [self.timelineObject devicesAtIndexes:[change valueForKey:@"indexes"]];
+                    
+                    for(VSDevice *newDevice in newDevices){
+                        [self timelineObjectWasConnectedWithDevice:newDevice];
+                    }
+                }
+                break;
+            }
+            case NSKeyValueChangeRemoval:
+            {
+                if([[change valueForKey:@"notificationIsPrior"] boolValue]){
+                    if(![[change valueForKey:@"notificationIsPrior"] boolValue]){
+                        NSArray *newDevices = [self.timelineObject devicesAtIndexes:[change valueForKey:@"indexes"]];
+                        
+                        for(VSDevice *newDevice in newDevices){
+                            [self timelineObjectWasDisconnectedFromDevice:newDevice];
+                        }
+                    }
+                }
+                break;
+            }
+        }
+    }
+    
+}
+
+-(void) timelineObjectWasConnectedWithDevice:(VSDevice*) device{
+    for(VSParameterViewController *parameterViewController in [self.parameterViewControllers allValues]){
+        [parameterViewController addDeviceConnectorForDevice:device];
+    }
+    
+}
+
+-(void) timelineObjectWasDisconnectedFromDevice:(VSDevice*) device{
+    for(VSParameterViewController *parameterViewController in [self.parameterViewControllers allValues]){
+        [parameterViewController removeDeviceconnectorForDevice:device];
+    }
+    
+}
 
 #pragma mark - Methods
 
@@ -75,6 +124,13 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
     
     VSParameterViewController *lastParameterController;
     
+
+    [self.timelineObject addObserver:self
+                          forKeyPath:@"devices"
+                             options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionPrior
+                             context:nil];
+
+
     if(parameters && parameters.count){
         
         int i = 0;
@@ -87,7 +143,7 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
 
 
             parameteViewController.keyFrameDelegate = delegate;
-            [parameteViewController showParameter:parameter];
+            [parameteViewController showParameter:parameter andAvailableDevices:self.timelineObject.devices];
             
             [self.scrollView.documentView addSubview:parameteViewController.view];
 
@@ -162,6 +218,9 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
         
         [self.parameterViewControllers removeAllObjects];
     }
+    
+    [self.timelineObject removeObserver:self
+                             forKeyPath:@"devices"];
     
     self.timelineObject = nil;
 }

@@ -10,12 +10,7 @@
 #import "VSCoreServices.h"
 
 @implementation VSProjectItem
-@synthesize name=_name;
-@synthesize filePath=_filePath;
-@synthesize duration= _duration;
-@synthesize fileSize = _fileSize;
-@synthesize itemID = _itemID;
-@synthesize fileType = _fileType;
+
 
 -(id) initWithFile:(NSString *)file ofType:(VSFileType*) type name:(NSString *)name fileSize:(float)fileSize duration:(float)duration itemID:(NSInteger)itemID{
     if(self = [super init]){

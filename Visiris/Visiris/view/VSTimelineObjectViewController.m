@@ -11,12 +11,24 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "VSTimelineObjectProxy.h"
+#import "VSTimelineObjectView.h"
+#import "VStimelineObject.h"
 #import "VSTimelineObjectViewIntersection.h"
+#import "VSDeviceManager.h"
+#import "VSDocument.h"
+#import "VSDeviceRepresentation.h"
 
 #import "VSCoreServices.h"
 
 @interface VSTimelineObjectViewController()
+
 @property double pixelTimeRatio;
+
+@property (weak) VSDeviceManager *deviceManager;
+
+@property NSMutableArray *deviceIconLayers;
+
+@property (weak,readwrite) VSTimelineObjectProxy* timelineObjectProxy;
 
 @end
 
@@ -24,7 +36,11 @@
 @implementation VSTimelineObjectViewController
 
 #define VIEWS_HIGHLIGHTED_ZPOSITION 20
+#define DEVICE_ICON_ZPOSITION 30
 #define VIEWS_DEFAULT_ZPOSITION 10
+#define DEVICE_ICON_WIDTH 30
+#define DEVICE_ICON_HEIGHT 30
+
 
 @synthesize pixelTimeRatio                  = _pixelTimeRatio;
 @synthesize delegate                        = _delegate;
@@ -40,7 +56,7 @@
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
 static NSString* defaultNib = @"VSTimelinObjectView";
 
--(id) initWithDefaultNib{
+-(id) initWithDefaultNibAndTimelineObjectProxy:(VSTimelineObjectProxy *)timelineObjectProxy{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
         
         _intersectedTimelineObjectViews = [[NSMutableDictionary alloc] init];
@@ -49,7 +65,8 @@ static NSString* defaultNib = @"VSTimelinObjectView";
             self.timelineObjectView.delegate = self;
             self.inactive = NO;
         }
-        
+        self.deviceIconLayers = [[NSMutableArray alloc]init];
+        self.timelineObjectProxy = timelineObjectProxy;
         [self initTimelineObjectProxyObservers];
     }
     
@@ -57,8 +74,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 }
 
 -(void) awakeFromNib{
-    
-    
+    self.deviceManager = ((VSDocument*)[[NSDocumentController sharedDocumentController] currentDocument]).deviceManager;
 }
 
 -(void) initTimelineObjectProxyObservers{
@@ -77,6 +93,13 @@ static NSString* defaultNib = @"VSTimelinObjectView";
                                forKeyPath:@"startTime"
                                   options:0
                                   context:nil];
+    
+    if([self.timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
+        [self.timelineObjectProxy addObserver:self
+                                   forKeyPath:@"devices"
+                                      options:NSKeyValueObservingOptionNew |NSKeyValueObservingOptionPrior
+                                      context:nil];
+    }
 }
 
 #pragma mark - NSViewController
@@ -109,8 +132,39 @@ static NSString* defaultNib = @"VSTimelinObjectView";
         }
     }
     
-    if([keyPath isEqualToString:@"duration"] || [keyPath isEqualToString:@"startTime"]){
+    else if([keyPath isEqualToString:@"duration"] || [keyPath isEqualToString:@"startTime"]){
         [self setViewsFrameAccordingToTimelineObject];
+    }
+    
+    else if([keyPath isEqualToString:@"devices"]){
+        NSInteger kind = [[change valueForKey:@"kind"] intValue];
+        
+        switch (kind) {
+            case NSKeyValueChangeInsertion:
+            {
+                if(![[change valueForKey:@"notificationIsPrior"] boolValue]){
+                    NSIndexSet *indicesOfNewDevices = [change valueForKey:@"indexes"];
+                    
+                    NSArray *newDevices = [self.timelineObject devicesAtIndexes:indicesOfNewDevices];
+                    
+                    NSUInteger currentIndex = [indicesOfNewDevices firstIndex];
+                    
+                    for(VSDevice *newDevice in newDevices){
+
+                        [self newDeviceWasAdded:newDevice atIndex:currentIndex];
+                        
+                        currentIndex = [indicesOfNewDevices indexGreaterThanIndex:currentIndex];
+                    }
+                }
+                
+                break;
+            }
+            case NSKeyValueChangeRemoval:
+            {
+
+                break;
+            }
+        }
     }
 }
 
@@ -118,6 +172,11 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     [self.timelineObjectProxy removeObserver:self forKeyPath:@"selected"];
     [self.timelineObjectProxy removeObserver:self forKeyPath:@"duration"];
     [self.timelineObjectProxy removeObserver:self forKeyPath:@"startTime"];
+
+    if([self.timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
+        [self.timelineObjectProxy removeObserver:self
+                                      forKeyPath:@"devices"];
+    }
 }
 
 #pragma mark - VSTimelineObjectViewDelegate implementation
@@ -190,6 +249,49 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     if([self delegateRespondsToSelector:@selector(timelineObjectProxyWasResized:)]){
         [self.delegate timelineObjectProxyWasResized:self];
     }
+}
+
+-(BOOL) draggingInfo:(id<NSDraggingInfo>)draggingInfo isDroppedOnTimelineObjectView:(VSTimelineObjectView *)timelineObjectView{
+    BOOL result = NO;
+    
+    NSArray *clasesToReadFromPasteboard = [NSArray arrayWithObject:[VSDeviceRepresentation class]];
+    
+    if([[draggingInfo draggingPasteboard] canReadObjectForClasses:clasesToReadFromPasteboard options:nil]){
+        NSArray *draggedDeviceRepresentations = [NSMutableArray arrayWithArray:[[draggingInfo draggingPasteboard]
+                                                              readObjectsForClasses:clasesToReadFromPasteboard
+                                                              options:nil]];
+        
+        for(VSDeviceRepresentation *draggedDeviceRepresentation in draggedDeviceRepresentations){
+            VSDevice *deviceToAdd = [self.deviceManager deviceRepresentedBy:draggedDeviceRepresentation];
+            
+            [((VSTimelineObject*) self.timelineObjectProxy) addDevicesObject:deviceToAdd];
+        }
+        
+        result = YES;
+        
+        
+    }
+    
+   
+    return result;
+}
+
+-(NSDragOperation) draggingOperationWithDraggingInfo:(id<NSDraggingInfo>)draggingInfo hasEnteredTimelineObjectView:(VSTimelineObjectView *)timelineObjectView{
+    
+    NSDragOperation result = NSDragOperationNone;
+    
+    NSArray *clasesToReadFromPasteboard = [NSArray arrayWithObject:[VSDeviceRepresentation class]];
+    
+    if([[draggingInfo draggingPasteboard] canReadObjectForClasses:clasesToReadFromPasteboard options:nil]){
+        
+        result = NSDragOperationLink;
+    }
+    
+    return result;
+}
+
+-(void) draggingOperationWithDraggingInfo:(id<NSDraggingInfo>)draggingInfo hasExitedTimelineObjectView:(VSTimelineObjectView *)timelineObjectView{
+    
 }
 
 #pragma mark - Methods
@@ -268,7 +370,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 #pragma mark - Private Methods
 
 /**
- * Sets the frame of the view according to timelineObjectProxies startTime and duration. 
+ * Sets the frame of the view according to timelineObjectProxies startTime and duration.
  */
 -(void) setViewsFrameAccordingToTimelineObject{
     
@@ -300,6 +402,23 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     }
     
     return NO;
+}
+
+-(void) newDeviceWasAdded:(VSDevice*) newDevice atIndex:(NSUInteger) index{
+    CALayer *deviceLayer = [[CALayer alloc] init];
+    
+    NSRect layerRect = NSMakeRect(0, self.view.frame.origin.y, DEVICE_ICON_WIDTH, DEVICE_ICON_HEIGHT);
+    
+    if(self.deviceIconLayers.count){
+        layerRect.origin = NSMakePoint(((CALayer*)[self.deviceIconLayers objectAtIndex:0]).frame.origin.x, layerRect.origin.y);
+    }    
+    [deviceLayer setFrame:layerRect];
+    
+    deviceLayer.backgroundColor = [[NSColor greenColor] CGColor];
+    
+    [self.view.layer addSublayer:deviceLayer];
+    
+    [self.deviceIconLayers insertObject:deviceLayer atIndex:index];
 }
 
 #pragma mark - Propertes
@@ -364,30 +483,6 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     _inactive = inactive;
 }
 
--(void) setTimelineObjectProxy:(VSTimelineObjectProxy *)timelineObjectProxy{
-    //if the VSTimelineObjectProxy has been changed, the observers are removed and newly added als the selection state is updated
-    
-    if(timelineObjectProxy != _timelineObjectProxy){
-        
-        if(_timelineObjectProxy){
-            [_timelineObjectProxy removeObserver:self forKeyPath:@"selected"];
-            [_timelineObjectProxy removeObserver:self forKeyPath:@"duration"];
-            [_timelineObjectProxy removeObserver:self forKeyPath:@"startTime"];
-        }
-        
-        _timelineObjectProxy = timelineObjectProxy;
-        [self initTimelineObjectProxyObservers];
-        
-        if(self.timelineObjectView){  
-            self.timelineObjectView.selected = self.timelineObjectProxy.selected;
-        }
-        
-    }
-}
-
--(VSTimelineObjectProxy*) timelineObjectProxy{
-    return _timelineObjectProxy;
-}
 
 -(void) setViewsDoubleFrame:(VSDoubleFrame)viewsDoubleFrame{
     if(!VSEqualDoubleFrame(self.timelineObjectView.doubleFrame, viewsDoubleFrame)){
@@ -399,6 +494,13 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     return self.timelineObjectView.doubleFrame;
 }
 
-
+-(VSTimelineObject*) timelineObject{
+    if([self.timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
+        return (VSTimelineObject*) self.timelineObjectProxy;
+    }
+    else{
+        return nil;
+    }
+}
 
 @end

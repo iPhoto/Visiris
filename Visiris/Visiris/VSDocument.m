@@ -16,7 +16,7 @@
 #import "VSPlaybackController.h"
 #import "VSProjectSettings.h"
 #import "VSOutputController.h"
-
+#import "VSDeviceManager.h"
 
 #import "VSCoreServices.h"
 
@@ -30,11 +30,6 @@
 
 @implementation VSDocument
 
-@synthesize mainWindowController = _mainWindowController;
-@synthesize projectItemController = _projectItemController;
-@synthesize preProcessor = _preProcessor, postProcessor=_postProcessor;
-@synthesize playbackController = _playbackController;
-@synthesize timeline = _timeline;
 
 - (id)init
 {
@@ -101,6 +96,8 @@
     [[VSOutputController sharedOutputController] connectWithOpenGLContext:self.preProcessor.renderCoreReceptionist.openGLContext];
     
     [VSOutputController sharedOutputController].playbackController = self.playbackController;
+    
+    self.deviceManager = [[VSDeviceManager alloc] init];
 
 }
 

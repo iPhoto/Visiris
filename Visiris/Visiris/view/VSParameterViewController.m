@@ -13,6 +13,8 @@
 #import "VSOptionParameter.h"
 #import "VSAnimation.h"
 #import "VSKeyFrame.h"
+#import "VSDevice.h"
+#import "VSDeviceParameterConnectionViewController.h"
 
 #import "VSCoreServices.h"
 
@@ -20,10 +22,16 @@
 @interface VSParameterViewController ()
 
 /** VSParemteer the view displayes. */
-@property VSParameter *parameter;
+@property (weak) VSParameter *parameter;
 
 /** Background-color of the view */
-@property NSColor *color;
+@property (strong) NSColor *color;
+
+@property (strong) NSMutableDictionary *deviceConnectors;
+
+@property (strong) NSMutableDictionary *availableDevies;
+
+@property (strong) NSPopover *deviceParameterConnectingPopOver;
 
 @end
 
@@ -44,7 +52,8 @@ static NSString* defaultNib = @"VSParameterView";
 -(id) initWithDefaultNibAndBackgroundColor:(NSColor*) color{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
         self.color = color;
-        
+        self.deviceConnectors = [[NSMutableDictionary alloc] init];
+        self.availableDevies = [[NSMutableDictionary alloc]init];
         if([self.view isKindOfClass:[VSParameterView class]]){
             ((VSParameterView*) self.view).fillColor = self.color;
         }
@@ -87,7 +96,7 @@ static NSString* defaultNib = @"VSParameterView";
     [self.parameter removeObserver:self forKeyPath:@"currentValue"];
 }
 
--(void) showParameter:(VSParameter *)parameter{
+-(void) showParameter:(VSParameter *)parameter andAvailableDevices:(NSArray*) availableDevices{
     
     self.parameter = parameter;
     
@@ -101,6 +110,38 @@ static NSString* defaultNib = @"VSParameterView";
     else{
         [self showParameter];
     }
+    
+    for(VSDevice *device in availableDevices){
+        [self addDeviceConnectorForDevice:device];
+    }
+}
+
+#pragma mark - Devices
+
+-(void) addDeviceConnectorForDevice:(VSDevice*) device{
+    NSButton *deviceConnector = [[NSButton alloc]initWithFrame:NSMakeRect(0, 0, 20, self.deviceConnectorsHolder.frame.size.height)];
+    
+    deviceConnector.identifier = device.ID;
+    [deviceConnector setStringValue:device.name];
+    [deviceConnector setAction:@selector(toggleParameterDeviceConnection:)];
+    [deviceConnector setTarget:self];
+    
+    [self.deviceConnectorsHolder addSubview:deviceConnector];
+    
+    [self.deviceConnectors setObject:deviceConnector
+                              forKey:device.ID];
+    
+    [self.availableDevies setObject:device
+                             forKey:device.ID];
+}
+
+-(void) removeDeviceconnectorForDevice:(VSDevice *)device{
+    NSButton *buttonToRemove = [self.deviceConnectors objectForKey:device.ID];
+    
+    [buttonToRemove removeFromSuperview];
+    
+    [self.availableDevies removeObjectForKey:device.ID];
+    [self.deviceConnectors removeObjectForKey:device.ID];
 }
 
 #pragma mark - VSViewDelegate Implentation
@@ -171,6 +212,33 @@ static NSString* defaultNib = @"VSParameterView";
     }
 }
 
+- (IBAction)toggleParameterDeviceConnection:(id)sender {
+    if([sender isKindOfClass:[NSControl class]]){
+        NSString *deviceID =  ((NSControl*)sender).identifier;
+        
+        VSDevice *deviceToConnect = [self.availableDevies objectForKey:deviceID];
+        
+        if(deviceToConnect){
+            [self showDeviceParameterConnectionDialogForDevice:deviceToConnect
+                                                relativeToView:((NSView*)sender)];
+        }
+    }
+}
+
+-(void) showDeviceParameterConnectionDialogForDevice:(VSDevice*)device relativeToView:(NSView*)relativeToView{
+        self.deviceParameterConnectingPopOver  = [[NSPopover alloc] init];
+        
+    [self.deviceParameterConnectionPopoverViewController showConnectionDialogFor:self.parameter andAvailableDevices:[self.availableDevies allValues]];
+    
+    self.deviceParameterConnectingPopOver.contentViewController = self.deviceParameterConnectionPopoverViewController;
+    
+        self.deviceParameterConnectingPopOver.behavior = NSPopoverBehaviorTransient;
+        
+        // so we can be notified when the popover appears or closes
+        self.deviceParameterConnectingPopOver.delegate = self;
+    
+    [self.deviceParameterConnectingPopOver showRelativeToRect:relativeToView.frame ofView:relativeToView preferredEdge:NSMaxYEdge];
+}
 
 
 #pragma mark - Private Methods
@@ -500,8 +568,8 @@ static NSString* defaultNib = @"VSParameterView";
  * Inits the value slider
  */
 -(void) initValueSlider{
-    [self.horizontalSlider setMinValue:self.parameter.rangeMinValue];
-    [self.horizontalSlider setMaxValue:self.parameter.rangeMaxValue];
+    [self.horizontalSlider setMinValue:self.parameter.range.min];
+    [self.horizontalSlider setMaxValue:self.parameter.range.max];
     [self.horizontalSlider setFloatValue:self.parameter.currentFloatValue];
     
     [self.horizontalSlider setTarget:self];
@@ -521,4 +589,5 @@ static NSString* defaultNib = @"VSParameterView";
         return NSOffState;
     }
 }
+
 @end

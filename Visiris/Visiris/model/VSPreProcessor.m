@@ -26,6 +26,8 @@
 
 @property NSMutableArray *timelineObjectsToRemove;
 
+@property (assign) NSUInteger amountOfLastSentHandovers;
+
 @end
 
 
@@ -37,6 +39,7 @@
 -(id)initWithTimeline:(VSTimeline *)timeline{
     if(self = [super init]){
         self.timeline = timeline;
+        self.amountOfLastSentHandovers = 0;
         self.renderCoreReceptionist = [[VSCoreReceptionist alloc] initWithSize:[VSProjectSettings sharedProjectSettings].frameSize];
     }
     return self;
