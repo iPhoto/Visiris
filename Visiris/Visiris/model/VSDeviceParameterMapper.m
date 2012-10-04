@@ -31,9 +31,15 @@
 }
 
 -(float) currentMappedParameterValue{
-    float currentValue =fmodf(arc4random(), (self.deviceParameterRange.max - self.deviceParameterRange.min) ) + self.deviceParameterRange.min;
-    
-    return [self mapValue:currentValue fromRange:self.deviceParameterRange toRange:self.parameterRange];
+    return [self mapValue:[self.deviceParameter currentFloatValue] fromRange:self.deviceParameterRange toRange:self.parameterRange];
+}
+
+-(BOOL) currentDeviceParameterBoolValue{
+    return [self.deviceParameter currentBOOLValue];
+}
+
+-(NSString*) currentStringValue{
+    return [self.deviceParameter currentStringValue];
 }
 
 - (float)mapValue:(float)value fromRange:(VSRange)inRange toRange:(VSRange)outRange{

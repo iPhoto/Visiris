@@ -40,6 +40,7 @@
 #define VIEWS_DEFAULT_ZPOSITION 10
 #define DEVICE_ICON_WIDTH 30
 #define DEVICE_ICON_HEIGHT 30
+#define DEVICE_ICON_MARGIN 5
 
 
 @synthesize pixelTimeRatio                  = _pixelTimeRatio;
@@ -410,7 +411,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
     NSRect layerRect = NSMakeRect(0, self.view.frame.origin.y, DEVICE_ICON_WIDTH, DEVICE_ICON_HEIGHT);
     
     if(self.deviceIconLayers.count){
-        layerRect.origin = NSMakePoint(((CALayer*)[self.deviceIconLayers objectAtIndex:0]).frame.origin.x, layerRect.origin.y);
+        layerRect.origin = NSMakePoint(NSMaxX(((CALayer*)[self.deviceIconLayers objectAtIndex:0]).frame) +DEVICE_ICON_MARGIN, layerRect.origin.y);
     }    
     [deviceLayer setFrame:layerRect];
     

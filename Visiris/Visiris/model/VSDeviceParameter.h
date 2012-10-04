@@ -22,4 +22,10 @@
 
 @property (strong) id currentValue;
 
+@property (assign,readonly) float currentFloatValue;
+
+@property (assign,readonly) BOOL currentBOOLValue;
+
+@property (assign,readonly) NSString *currentStringValue;
+
 @end
