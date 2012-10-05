@@ -30,7 +30,7 @@
     [self.device deactivateParameter:self.deviceParameter];
 }
 
--(float) currentMappedParameterValue{
+-(float)currentMappedParameterFloatValue{
     return [self mapValue:[self.deviceParameter currentFloatValue] fromRange:self.deviceParameterRange toRange:self.parameterRange];
 }
 

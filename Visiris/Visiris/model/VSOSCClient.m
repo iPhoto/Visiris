@@ -89,7 +89,7 @@
     if (self.delegate) {
         if ([self.delegate respondsToSelector:@selector(oscClient:didReceivedMessage:)]) {
             [self.delegate oscClient:self didReceivedMessage:message];
-        }
+        }	
     }
 }
 

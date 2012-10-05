@@ -7,6 +7,8 @@
 //
 
 #import "VSDeviceParameter.h"
+#import "VSCoreServices.h"
+
 
 @implementation VSDeviceParameter
 
@@ -15,6 +17,7 @@
         self.name = name;
         self.oscPath = oscPath;
         self.port = port;
+        self.currentValue = [NSNumber numberWithFloat:0.0f];
     }
     
     return self;
@@ -44,6 +47,21 @@
     }
     
     return @"";
+}
+
+- (void)updateCurrentValue:(id)value
+{
+    DDLogInfo(@"%f", [value floatValue]);
+    self.currentValue = value;
+}
+
+- (NSInvocation *)invocationForNewValue
+{
+    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[self methodSignatureForSelector:@selector(updateCurrentValue:)]];
+    [invocation setTarget:self];
+    [invocation setSelector:@selector(updateCurrentValue:)];
+    
+    return invocation;
 }
 
 @end

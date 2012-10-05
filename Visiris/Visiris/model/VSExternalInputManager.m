@@ -45,6 +45,8 @@
         
         self.activeValueReferenceCount = [[VSReferenceCounting alloc] init];
         
+        self.currentActiveValues = [[NSMutableDictionary alloc] init];
+        
         [self registerExternalInputManager];
         
         // TODO: move next line to somewhere usefull (start observing inputs after window did finish loading and app is running in idle mode)
@@ -125,7 +127,7 @@
 }
 
 // DeviceParameterRegistrationDelegate
-- (BOOL)registerValue:(id)parameterCurrentValue forAddress:(NSString*)parameterAddress atPort:(NSUInteger)port
+- (BOOL)registerValue:(NSInvocation *)parameterInvocation forAddress:(NSString*)parameterAddress atPort:(NSUInteger)port
 {
     BOOL isValueForAddressOnPortRegistered = NO;
     
@@ -133,7 +135,7 @@
         
         [self.activeValueReferenceCount incrementReferenceOfKey:parameterAddress];
         
-        [self.currentActiveValues setObject:parameterCurrentValue forKey:[NSString stringFromAddress:parameterAddress atPort:(unsigned int)port]];
+        [self.currentActiveValues setObject:parameterInvocation forKey:[NSString stringFromAddress:parameterAddress atPort:(unsigned int)port]];
         
         id<VSExternalInputProtocol> inputManager = [self.availableInputManager objectForKey:kVSInputManager_OSC];
         isValueForAddressOnPortRegistered = [inputManager startInputForAddress:parameterAddress atPort:(unsigned int)port];
@@ -143,7 +145,7 @@
 }
 
 
-- (BOOL)unregisterValue:(id)parameterCurrentValue forAddress:(NSString*)parameterAddress atPort:(NSUInteger)port
+- (BOOL)unregisterValue:(NSInvocation *)parameterInvocation forAddress:(NSString*)parameterAddress atPort:(NSUInteger)port
 {
     BOOL isValueForAddressOnPortUnregistered = NO;
     
@@ -168,10 +170,10 @@
 {
     if (address && value && inputManager) {
         
-        id lastValue = [self.currentActiveValues objectForKey:[NSString stringFromAddress:address atPort:(unsigned int)port]];
-        lastValue = value;
-        
-        DDLogInfo(@"self.currentActiveValues: %@", self.currentActiveValues);
+        NSInvocation *invocation = [self.currentActiveValues objectForKey:[NSString stringFromAddress:address atPort:port]];
+
+        [invocation setArgument:&value atIndex:2];        
+        [invocation invoke];
     }
 }
 @end

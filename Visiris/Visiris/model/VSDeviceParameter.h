@@ -28,4 +28,6 @@
 
 @property (assign,readonly) NSString *currentStringValue;
 
+- (NSInvocation *)invocationForNewValue;
+
 @end

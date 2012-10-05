@@ -36,8 +36,8 @@
 
 
 // DeviceParameterRegistrationDelegate
--(BOOL) registerValue:(id) parameterCurrentValue forAddress:(NSString*) parameterAddress atPort:(NSUInteger) port;
--(BOOL) unregisterValue:(id) parameterCurrentValue forAddress:(NSString*) parameterAddress atPort:(NSUInteger) port;
+-(BOOL) registerValue:(NSInvocation *)parameterInvocation forAddress:(NSString*) parameterAddress atPort:(NSUInteger) port;
+-(BOOL) unregisterValue:(NSInvocation *)parameterInvocation forAddress:(NSString*) parameterAddress atPort:(NSUInteger) port;
 
 // ExternsInputManagerDelegate
 - (void)inputManager:(id<VSExternalInputProtocol>)inputManager didReceivedValue:(id)value forAddress:(NSString *)address atPort:(unsigned int)port;

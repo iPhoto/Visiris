@@ -112,7 +112,7 @@ static NSURL* devicesFolderURL;
     BOOL result = NO;
     
     if([self delegateRespondsToSelector:@selector(registerValue:forAddress:atPort:)]){
-        result = [self.deviceRegisitratingDelegate registerValue:deviceParameter.currentValue forAddress:deviceParameter.oscPath atPort:deviceParameter.port];
+        result = [self.deviceRegisitratingDelegate registerValue:[deviceParameter invocationForNewValue] forAddress:deviceParameter.oscPath atPort:deviceParameter.port];
     }
     
     return result;
@@ -122,7 +122,7 @@ static NSURL* devicesFolderURL;
     BOOL result = NO;
     
     if([self delegateRespondsToSelector:@selector(unregisterValue:forAddress:atPort:atPort:)]){
-        result = [self.deviceRegisitratingDelegate unregisterValue:deviceParameter.currentValue forAddress:deviceParameter.oscPath atPort:deviceParameter.port];
+        result = [self.deviceRegisitratingDelegate unregisterValue:[deviceParameter invocationForNewValue] forAddress:deviceParameter.oscPath atPort:deviceParameter.port];
     }
     
     return result;
