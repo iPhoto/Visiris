@@ -18,8 +18,6 @@
 #import "VSOSCMessage.h"
 
 
-
-
 #define kVSOSCInputManager_inputRangeStart @"kVSOSCInputManager_inputRangeStart"
 #define kVSOSCInputManager_inputRangeEnd @"kVSOSCInputManager_inputRangeEnd"
 
@@ -41,16 +39,15 @@
     
     dispatch_source_t                                   _oscPortUpdateTimer;
     dispatch_queue_t                                    _oscPortUpdateQueue;
-    
 }
 
 @property (strong) NSMutableArray                       *availableInputPorts;
 @property (strong) NSMutableDictionary                  *activePorts;
-
 @property (strong) NSMutableDictionary                  *activeOSCClients;
 
-
 @end
+
+
 
 @implementation VSOSCInputManager
 
@@ -111,7 +108,6 @@
     
     for (NSInteger i = 0; i < numberOfClientToCreate; i++) {
         
-
         OSCInPort *inPort = nil;
         
         while (!inPort) {
