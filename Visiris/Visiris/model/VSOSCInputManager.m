@@ -115,7 +115,6 @@
             currentPort = [self getNextAvailableOSCPort];
             
             inPort = [_oscManager createNewInputForPort:currentPort];
-                       
 
             if (inPort) {
                 [inPort stop];
@@ -148,7 +147,6 @@
 
 - (void)observeNextInputs
 {
-    
     // try to
     for (VSOSCClient *currentOSCClient in self.availableInputPorts) {
         
@@ -186,8 +184,6 @@
 
 - (NSArray *)availableInputs;
 {
-//    return [_activePorts allValues];
-    
     VSOSCPort *port = [VSOSCPort portWithPort:12345 address:@"/Visiris/Rocks" atTimestamp:[NSDate timeIntervalSinceReferenceDate]];
     [port addAddress:@"/Visiris/OSC/Rocks"];
     [port addAddress:@"/Visiris/MIDI/AHHH"];
@@ -301,17 +297,32 @@
 {
     BOOL oscClientStarted = NO;
     
-    OSCInPort *inPort = [_oscManager createNewInputForPort:port];
+    //edi
     
-    VSOSCClient *oscClient = [[VSOSCClient alloc] initWithOSCInPort:inPort andType:VSOSCClientActiveReceiver];
-    if (oscClient) {
-
+    VSOSCClient *tempClient = [self.activeOSCClients objectForKey:[NSNumber numberWithUnsignedInt:port]];
+    if (tempClient)
+    {
         oscClientStarted = YES;
-        [oscClient setPort:port];
-        [oscClient setDelegate:self];
-        
-        [self.activeOSCClients setObject:oscClient forKey:[NSNumber numberWithUnsignedInt:port]];
     }
+    else
+    {
+        OSCInPort *inPort = [_oscManager createNewInputForPort:port];
+
+        VSOSCClient *oscClient = [[VSOSCClient alloc] initWithOSCInPort:inPort andType:VSOSCClientActiveReceiver];
+        if (oscClient) {
+
+            oscClientStarted = YES;
+            [oscClient setPort:port];
+            [oscClient setDelegate:self];
+            
+            [self.activeOSCClients setObject:oscClient forKey:[NSNumber numberWithUnsignedInt:port]];
+        }
+    }
+    
+    
+    
+    [self printDebugLog];
+    
     
     return oscClientStarted;
 }
@@ -337,7 +348,7 @@
     if (self.delegate) {
         if ([self.delegate respondsToSelector:@selector(inputManager:didReceivedValue:forAddress:atPort:)]) {
             DDLogInfo(@"message: %@",message);
-            //[self.delegate inputManager:self didReceivedValue:message.value forAddress:message.address atPort:message.port];
+            [self.delegate inputManager:self didReceivedValue:message.value forAddress:message.address atPort:message.port];
         }
     }
 }
@@ -377,6 +388,15 @@
     }
     
     return requestedPort;
+}
+
+- (void)printDebugLog
+{
+    DDLogInfo(@"===PRINT DEBUG LOG===");
+    DDLogInfo(@"activeOSCClients");
+    for (id key in self.activeOSCClients) {
+        NSLog(@"key: %@, value: %@", key, [self.activeOSCClients objectForKey:key]);
+    }
 }
 
 @end
