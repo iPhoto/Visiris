@@ -11,17 +11,22 @@
 #import "VSParameter.h"
 #import "VSDevice.h"
 #import "VSDeviceParameter.h"
+#import "VSDeviceParameterMapper.h"
+
+#import "VSCoreServices.h"
 
 @interface VSDeviceParameterConnectionViewController ()
 
 @property (weak) VSDevice *currentlySelectedDevice;
 
+@property (weak) VSDeviceParameter *currentlySelectedDeviceParameter;
+
 @end
 
 @implementation VSDeviceParameterConnectionViewController
 
-@synthesize availableDevices = _availableDevices;
-@synthesize parameter   = _parameter;
+@synthesize currentlySelectedDeviceParameter    = _currentlySelectedDeviceParameter;
+@synthesize currentlySelectedDevice             = _currentlySelectedDevice;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -36,6 +41,7 @@
 -(void) awakeFromNib{
     [self.deviceParameterComboBox setUsesDataSource:YES];
     self.deviceParameterComboBox.dataSource = self;
+    self.deviceParameterComboBox.delegate = self;
     
     [self.deviceComboBox setUsesDataSource:YES];
     self.deviceComboBox.dataSource =self;
@@ -89,8 +95,6 @@
         }
     }
     
-    DDLogInfo(@"objectValueForItemAtIndex %@",result);
-    
     return result;
 }
 
@@ -104,27 +108,29 @@
     }
     else if([aComboBox isEqual:self.deviceComboBox]){
         if(self.availableDevices){
-            
             result = self.availableDevices.count;
-            DDLogInfo(@"numberOfItemsInComboBox for dev %@ %ld",aComboBox,result);
         }
     }
-    
-    DDLogInfo(@"numberOfItemsInComboBox for %@ %ld",aComboBox,result);
     return result;
 }
 
 #pragma mark - NSComboBoxDelegate Implementation
 
--(void) comboBoxWillDismiss:(NSNotification *)notification{
+-(void) comboBoxSelectionDidChange:(NSNotification *)notification{
+    
     if([notification.object isKindOfClass:[NSComboBox class]]){
         NSComboBox *comboBox = ((NSComboBox*)notification.object);
         
         if([comboBox isEqual:self.deviceComboBox]){
+            DDLogInfo(@"comboBoxSelectionDidChange deviceComboBox");
             self.currentlySelectedDevice = [self.availableDevices objectAtIndex:[comboBox indexOfSelectedItem]];
             
             [self.deviceParameterComboBox reloadData];
             [self.deviceParameterComboBox selectItemAtIndex:0];
+        }
+        else if([comboBox isEqual:self.deviceParameterComboBox]){
+            DDLogInfo(@"comboBoxSelectionDidChange deviceParameterComboBox");
+            self.currentlySelectedDeviceParameter = [self.currentlySelectedDevice objectInParametersAtIndex:[comboBox indexOfSelectedItem]];
         }
     }
 }
@@ -135,6 +141,7 @@
     
     NSUInteger selectedDeviceIndex = 0;
     NSUInteger selectedDeviceParameterIndex = 0;
+    
     self.currentlySelectedDevice = [self.availableDevices objectAtIndex:0];
     
     if(self.parameter.connectedWithDeviceParameter){
@@ -149,10 +156,60 @@
     [self.deviceComboBox selectItemAtIndex:selectedDeviceIndex];
     [self.deviceParameterComboBox selectItemAtIndex:selectedDeviceParameterIndex];
     
-    [self.deviceComboBox reloadData];
-    [self.deviceParameterComboBox reloadData];
-    
+    [self setRanges];
 }
 
+-(void) setRanges{
+    if(self.parameter.connectedWithDeviceParameter && [self.currentlySelectedDeviceParameter isEqual:self.parameter.deviceParamterConnectedWith] && [self.currentlySelectedDevice isEqual:self.parameter.deviceConnectedWith]){
+        if(self.parameter.deviceParameterMapper.hasRanges){
+            [self.parameterMinValueTextField setFloatValue:self.parameter.deviceParameterMapper.parameterRange.min];
+            [self.parameterMaxValueTextField setFloatValue:self.parameter.deviceParameterMapper.parameterRange.max];
+            
+            [self.deviceParameterMinValueTextField setFloatValue:self.parameter.deviceParameterMapper.deviceParameterRange.min];
+            [self.deviceParameterMaxValueTextField setFloatValue:self.parameter.deviceParameterMapper.deviceParameterRange.max];
+        }
+        else{
+            
+        }
+    }
+    else{
+        if(self.parameter.hasRange && self.currentlySelectedDeviceParameter.hasRange){
+            [self.parameterMinValueTextField setFloatValue:self.parameter.range.min];
+            [self.parameterMaxValueTextField setFloatValue:self.parameter.range.max];
+            
+            [self.deviceParameterMinValueTextField setFloatValue:self.currentlySelectedDeviceParameter.range.min];
+            [self.deviceParameterMaxValueTextField setFloatValue:self.currentlySelectedDeviceParameter.range.max];
+        }
+        else{
+            
+        }
+    }
+}
+
+#pragma mark - Properties
+
+-(void) setCurrentlySelectedDevice:(VSDevice *)currentlySelectedDevice{
+    if(![currentlySelectedDevice isEqualTo:_currentlySelectedDevice]){
+        _currentlySelectedDevice = currentlySelectedDevice;
+        
+        [self.deviceComboBox reloadData];
+        [self.deviceParameterComboBox reloadData];
+    }
+}
+
+-(VSDevice*) currentlySelectedDevice{
+    return _currentlySelectedDevice;
+}
+
+-(void) setCurrentlySelectedDeviceParameter:(VSDeviceParameter *)currentlySelectedDeviceParameter{
+    if(![currentlySelectedDeviceParameter isEqualTo:_currentlySelectedDeviceParameter]){
+        _currentlySelectedDeviceParameter = currentlySelectedDeviceParameter;
+        [self setRanges];
+    }
+}
+
+-(VSDeviceParameter*) currentlySelectedDeviceParameter{
+    return _currentlySelectedDeviceParameter;
+}
 
 @end

@@ -170,6 +170,7 @@ static NSString* defaultNib = @"VSTimelinObjectView";
 }
 
 -(void) dealloc{
+    DDLogInfo(@"dealloc");
     [self.timelineObjectProxy removeObserver:self forKeyPath:@"selected"];
     [self.timelineObjectProxy removeObserver:self forKeyPath:@"duration"];
     [self.timelineObjectProxy removeObserver:self forKeyPath:@"startTime"];
@@ -178,6 +179,8 @@ static NSString* defaultNib = @"VSTimelinObjectView";
         [self.timelineObjectProxy removeObserver:self
                                       forKeyPath:@"devices"];
     }
+    
+    self.timelineObjectProxy = nil;
 }
 
 #pragma mark - VSTimelineObjectViewDelegate implementation

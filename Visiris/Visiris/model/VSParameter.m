@@ -18,7 +18,6 @@
 
 @interface VSParameter()
 
-@property VSDeviceParameterMapper *deviceParameterMapper;
 
 @end
 
@@ -52,6 +51,7 @@
 
 -(void) initRangesWithMin:(float) minRangeValue andMax:(float)maxRangeValue{
     self.range = VSMakeRange(minRangeValue, maxRangeValue);
+    self.hasRange = YES;
 }
 
 -(void) initDefaultValueWith:(id) defaultValue{

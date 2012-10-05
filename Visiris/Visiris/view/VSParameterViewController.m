@@ -158,10 +158,10 @@ static NSString* defaultNib = @"VSParameterView";
     if(control == self.textField){
         if(self.textField.action){
             if([self respondsToSelector:control.action]){
-                #pragma clang diagnostic push
-                #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
                 [self performSelector:control.action withObject:control];
-                #pragma clang diagnostic pop
+#pragma clang diagnostic pop
             }
         }
     }
@@ -184,7 +184,7 @@ static NSString* defaultNib = @"VSParameterView";
 - (IBAction)textValueHasChanged:(id)sender {
     [self storeParameterValue];
 }
- 
+
 - (IBAction)boolValueHasChanged:(NSButton *)sender {
     [self storeParameterValue];
 }
@@ -230,18 +230,20 @@ static NSString* defaultNib = @"VSParameterView";
 }
 
 -(void) showDeviceParameterConnectionDialogForDevice:(VSDevice*)device relativeToView:(NSView*)relativeToView{
-        self.deviceParameterConnectingPopOver  = [[NSPopover alloc] init];
-        
-    [self.deviceParameterConnectionPopoverViewController showConnectionDialogFor:self.parameter andAvailableDevices:[self.availableDevies allValues]];
+    
+    self.deviceParameterConnectingPopOver  = [[NSPopover alloc] init];
     
     self.deviceParameterConnectingPopOver.contentViewController = self.deviceParameterConnectionPopoverViewController;
     
-        self.deviceParameterConnectingPopOver.behavior = NSPopoverBehaviorTransient;
-        
-        // so we can be notified when the popover appears or closes
-        self.deviceParameterConnectingPopOver.delegate = self;
+    self.deviceParameterConnectingPopOver.behavior = NSPopoverBehaviorTransient;
+    
+    // so we can be notified when the popover appears or closes
+    self.deviceParameterConnectingPopOver.delegate = self;
     
     [self.deviceParameterConnectingPopOver showRelativeToRect:relativeToView.frame ofView:relativeToView preferredEdge:NSMaxYEdge];
+    
+    [self.deviceParameterConnectionPopoverViewController showConnectionDialogFor:self.parameter
+                                                             andAvailableDevices:[self.availableDevies allValues]];
 }
 
 
