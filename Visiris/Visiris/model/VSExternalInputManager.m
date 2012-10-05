@@ -7,17 +7,9 @@
 //
 
 #import "VSExternalInputManager.h"
-
-// Visiris Input Manager
 #import "VSOSCInputManager.h"
-
-
 #import <VisirisCore/VSReferenceCounting.h>
-
-
-
 #import "VSCoreServices.h"
-
 
 
 @interface VSExternalInputManager ()

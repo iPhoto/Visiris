@@ -18,8 +18,6 @@
 #import "VSOSCMessage.h"
 
 
-
-
 #define kVSOSCInputManager_inputRangeStart @"kVSOSCInputManager_inputRangeStart"
 #define kVSOSCInputManager_inputRangeEnd @"kVSOSCInputManager_inputRangeEnd"
 
@@ -41,16 +39,15 @@
     
     dispatch_source_t                                   _oscPortUpdateTimer;
     dispatch_queue_t                                    _oscPortUpdateQueue;
-    
 }
 
 @property (strong) NSMutableArray                       *availableInputPorts;
 @property (strong) NSMutableDictionary                  *activePorts;
-
 @property (strong) NSMutableDictionary                  *activeOSCClients;
 
-
 @end
+
+
 
 @implementation VSOSCInputManager
 
@@ -111,7 +108,6 @@
     
     for (NSInteger i = 0; i < numberOfClientToCreate; i++) {
         
-
         OSCInPort *inPort = nil;
         
         while (!inPort) {
@@ -119,7 +115,6 @@
             currentPort = [self getNextAvailableOSCPort];
             
             inPort = [_oscManager createNewInputForPort:currentPort];
-                       
 
             if (inPort) {
                 [inPort stop];
@@ -152,7 +147,6 @@
 
 - (void)observeNextInputs
 {
-    
     // try to
     for (VSOSCClient *currentOSCClient in self.availableInputPorts) {
         
@@ -190,8 +184,6 @@
 
 - (NSArray *)availableInputs;
 {
-//    return [_activePorts allValues];
-    
     VSOSCPort *port = [VSOSCPort portWithPort:12345 address:@"/Visiris/Rocks" atTimestamp:[NSDate timeIntervalSinceReferenceDate]];
     [port addAddress:@"/Visiris/OSC/Rocks"];
     [port addAddress:@"/Visiris/MIDI/AHHH"];
@@ -305,17 +297,32 @@
 {
     BOOL oscClientStarted = NO;
     
-    OSCInPort *inPort = [_oscManager createNewInputForPort:port];
+    //edi
     
-    VSOSCClient *oscClient = [[VSOSCClient alloc] initWithOSCInPort:inPort andType:VSOSCClientActiveReceiver];
-    if (oscClient) {
-
+    VSOSCClient *tempClient = [self.activeOSCClients objectForKey:[NSNumber numberWithUnsignedInt:port]];
+    if (tempClient)
+    {
         oscClientStarted = YES;
-        [oscClient setPort:port];
-        [oscClient setDelegate:self];
-        
-        [self.activeOSCClients setObject:oscClient forKey:[NSNumber numberWithUnsignedInt:port]];
     }
+    else
+    {
+        OSCInPort *inPort = [_oscManager createNewInputForPort:port];
+
+        VSOSCClient *oscClient = [[VSOSCClient alloc] initWithOSCInPort:inPort andType:VSOSCClientActiveReceiver];
+        if (oscClient) {
+
+            oscClientStarted = YES;
+            [oscClient setPort:port];
+            [oscClient setDelegate:self];
+            
+            [self.activeOSCClients setObject:oscClient forKey:[NSNumber numberWithUnsignedInt:port]];
+        }
+    }
+    
+    
+    
+    [self printDebugLog];
+    
     
     return oscClientStarted;
 }
@@ -381,6 +388,15 @@
     }
     
     return requestedPort;
+}
+
+- (void)printDebugLog
+{
+    DDLogInfo(@"===PRINT DEBUG LOG===");
+    DDLogInfo(@"activeOSCClients");
+    for (id key in self.activeOSCClients) {
+        NSLog(@"key: %@, value: %@", key, [self.activeOSCClients objectForKey:key]);
+    }
 }
 
 @end
