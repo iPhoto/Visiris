@@ -181,4 +181,6 @@
 
 -(BOOL) connectWithDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device deviceParameterRange:(VSRange)deviceParameterRange andParameterRange:(VSRange)parameterRange;
 
+-(void) disconnectFromDevice;
+
 @end

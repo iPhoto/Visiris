@@ -33,6 +33,8 @@
 
 @property (strong) NSPopover *deviceParameterConnectingPopOver;
 
+@property (strong) NSMutableArray *parameterValueControls;
+
 @end
 
 
@@ -54,6 +56,9 @@ static NSString* defaultNib = @"VSParameterView";
         self.color = color;
         self.deviceConnectors = [[NSMutableDictionary alloc] init];
         self.availableDevies = [[NSMutableDictionary alloc]init];
+        self.parameterValueControls = [[NSMutableArray alloc] init];
+        
+        
         if([self.view isKindOfClass:[VSParameterView class]]){
             ((VSParameterView*) self.view).fillColor = self.color;
         }
@@ -74,9 +79,10 @@ static NSString* defaultNib = @"VSParameterView";
 
 -(void) awakeFromNib{
     
-    if([self.view isKindOfClass:[VSParameterView class]]){
-        //        ((VSParameterView*) self.view).viewDelegate = self;
-    }
+    [self.parameterValueControls addObject:self.nextKeyframeButton];
+    [self.parameterValueControls addObject:self.prevKeyframeButton];
+    [self.parameterValueControls addObject:self.setKeyframeButton];
+    
     [self.view setAutoresizingMask:NSViewWidthSizable];
 }
 
@@ -88,19 +94,34 @@ static NSString* defaultNib = @"VSParameterView";
     if([keyPath isEqualToString:@"currentValue"]){
         [self updateParameterValue];
     }
+    else if([keyPath isEqualToString:@"connectedWithDeviceParameter"]){
+        [self parametersConnectionToDeviceWasChangedTo:[[object valueForKey:keyPath]boolValue]];
+    }
 }
 
 #pragma mark - Methods
 
 -(void) removeObservers{
-    [self.parameter removeObserver:self forKeyPath:@"currentValue"];
+    [self.parameter removeObserver:self
+                        forKeyPath:@"currentValue"];
+    
+    [self.parameter removeObserver:self
+                        forKeyPath:@"connectedWithDeviceParameter"];
 }
 
 -(void) showParameter:(VSParameter *)parameter andAvailableDevices:(NSArray*) availableDevices{
     
     self.parameter = parameter;
     
-    [self.parameter addObserver:self forKeyPath:@"currentValue" options:0 context:nil];
+    [self.parameter addObserver:self
+                     forKeyPath:@"currentValue"
+                        options:0
+                        context:nil];
+    
+    [self.parameter addObserver:self
+                     forKeyPath:@"connectedWithDeviceParameter"
+                        options:0
+                        context:nil];
     
     [self.nameLabel setStringValue: NSLocalizedString(self.parameter.name, @"")];
     
@@ -234,13 +255,17 @@ static NSString* defaultNib = @"VSParameterView";
     self.deviceParameterConnectingPopOver  = [[NSPopover alloc] init];
     
     self.deviceParameterConnectingPopOver.contentViewController = self.deviceParameterConnectionPopoverViewController;
+
+    self.deviceParameterConnectionPopoverViewController.popover = self.deviceParameterConnectingPopOver;
     
     self.deviceParameterConnectingPopOver.behavior = NSPopoverBehaviorTransient;
     
     // so we can be notified when the popover appears or closes
     self.deviceParameterConnectingPopOver.delegate = self;
     
-    [self.deviceParameterConnectingPopOver showRelativeToRect:relativeToView.frame ofView:relativeToView preferredEdge:NSMaxYEdge];
+    [self.deviceParameterConnectingPopOver showRelativeToRect:relativeToView.frame
+                                                       ofView:relativeToView
+                                                preferredEdge:NSMaxYEdge];
     
     [self.deviceParameterConnectionPopoverViewController showConnectionDialogFor:self.parameter
                                                              andAvailableDevices:[self.availableDevies allValues]];
@@ -462,6 +487,8 @@ static NSString* defaultNib = @"VSParameterView";
     [self.comboBox setTranslatesAutoresizingMaskIntoConstraints:NO];
     
     [self.parameterHolder addConstraints:constraints];
+    
+    [self.parameterValueControls addObject:self.comboBox];
 }
 
 /**
@@ -493,6 +520,8 @@ static NSString* defaultNib = @"VSParameterView";
     [self.parameterHolder removeConstraints:self.parameterHolder.constraints];
     
     [self.parameterHolder addConstraints:constraints];
+    
+    [self.parameterValueControls addObject:self.textField];
 }
 
 /**
@@ -519,6 +548,8 @@ static NSString* defaultNib = @"VSParameterView";
     [self.checkBox setTarget:self];
     [self.checkBox setAction:@selector(boolValueHasChanged:)];
     
+    [self.parameterValueControls addObject:self.checkBox];
+    
 }
 
 /**
@@ -544,6 +575,8 @@ static NSString* defaultNib = @"VSParameterView";
         [self initValueSlider];
         
         [self setConstraintsForParameterWithRange];
+        
+        [self.parameterValueControls addObject:self.horizontalSlider];
     }
     
 }
@@ -593,6 +626,14 @@ static NSString* defaultNib = @"VSParameterView";
     }
     else {
         return NSOffState;
+    }
+}
+
+#pragma mark Devices
+
+-(void) parametersConnectionToDeviceWasChangedTo:(BOOL) state{
+    for(NSControl *control in self.parameterValueControls){
+        [control setEnabled:!state];
     }
 }
 

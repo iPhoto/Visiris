@@ -121,7 +121,7 @@ static NSURL* devicesFolderURL;
 -(BOOL) unregisterDeviceParameter:(VSDeviceParameter *)deviceParameter ofDevice:(VSDevice *)device{
     BOOL result = NO;
     
-    if([self delegateRespondsToSelector:@selector(unregisterValue:forAddress:atPort:atPort:)]){
+    if([self delegateRespondsToSelector:@selector(unregisterValue:forAddress:atPort:)]){
         result = [self.deviceRegisitratingDelegate unregisterValue:[deviceParameter invocationForNewValue] forAddress:deviceParameter.oscPath atPort:deviceParameter.port];
     }
     

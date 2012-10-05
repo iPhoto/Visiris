@@ -48,15 +48,45 @@
     self.deviceComboBox.delegate = self;
 }
 
+- (IBAction)rangeValueDidChange:(id)sender {
+    if(self.parameter.connectedWithDeviceParameter){
+        if([sender isKindOfClass:[NSTextField class]]){
+            NSTextField *textField = (NSTextField*) sender;
+            
+            if([textField.identifier hasPrefix:@"parameterRange"] ){
+                self.parameter.deviceParameterMapper.parameterRange = [self parameterRange];
+            }
+            else if([textField.identifier hasPrefix:@"deviceParameterRange"] ){
+                self.parameter.deviceParameterMapper.deviceParameterRange = [self deviceParameterRange];
+            }
+        }
+    }
+    
+}
+
 - (IBAction)didClickToggleConnection:(NSButton *)sender {
     
-    VSDeviceParameter *selectedParameter = [self.currentlySelectedDevice objectInParametersAtIndex:[self.deviceParameterComboBox indexOfSelectedItem]];
+    if(!self.parameter.connectedWithDeviceParameter){
+
+        [self.parameter connectWithDeviceParameter:self.currentlySelectedDeviceParameter
+                                          ofDevice:self.currentlySelectedDevice
+                              deviceParameterRange:[self deviceParameterRange]
+                                 andParameterRange:[self parameterRange]];
+    }
+    else{
+        [self.parameter disconnectFromDevice];
+    }
     
-    [self.parameter connectWithDeviceParameter:selectedParameter ofDevice:self.currentlySelectedDevice
-                          deviceParameterRange:VSMakeRange([self.deviceParameterMinValueTextField floatValue], [self.deviceParameterMaxValueTextField floatValue])
-                             andParameterRange:VSMakeRange([self.parameterMinValueTextField floatValue], [self.parameterMaxValueTextField floatValue])];
+    [self.popover close];
+}
+
+-(VSRange) deviceParameterRange{
+    return VSMakeRange([self.deviceParameterMinValueTextField floatValue], [self.deviceParameterMaxValueTextField floatValue]);
+}
+
+-(VSRange) parameterRange{
+    return VSMakeRange([self.parameterMinValueTextField floatValue], [self.parameterMaxValueTextField floatValue]);
     
-    [self setToggleButtonStringValue];
 }
 
 -(void) setToggleButtonStringValue{
@@ -101,7 +131,7 @@
 -(NSInteger) numberOfItemsInComboBox:(NSComboBox *)aComboBox{
     
     NSInteger result = 0;
-    if([aComboBox isEqual:self.deviceParameterComboBox]){        
+    if([aComboBox isEqual:self.deviceParameterComboBox]){
         if(self.currentlySelectedDevice){
             result = self.currentlySelectedDevice.parameters.count;
         }
@@ -157,6 +187,7 @@
     [self.deviceParameterComboBox selectItemAtIndex:selectedDeviceParameterIndex];
     
     [self setRanges];
+    [self setToggleButtonStringValue];
 }
 
 -(void) setRanges{

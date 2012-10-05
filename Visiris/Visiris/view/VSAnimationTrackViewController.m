@@ -118,6 +118,10 @@
 -(void) dealloc{
     [self.parameter.animation removeObserver:self
                                   forKeyPath:@"keyFrames"];
+    
+    [self.parameter.animation removeObserver:self
+                                  forKeyPath:@"connectedWithDeviceParameter"];
+    
 }
 
 #pragma mark - Methods
@@ -510,6 +514,11 @@
     [self.parameter.animation addObserver:self
                                forKeyPath:@"keyFrames"
                                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionPrior
+                                  context:nil];
+    
+    [self.parameter.animation addObserver:self
+                               forKeyPath:@"connectedWithDeviceParameter"
+                                  options:0
                                   context:nil];
 }
 

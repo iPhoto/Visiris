@@ -156,7 +156,9 @@
 }
 
 -(float) currentFloatValueOfDeviceParamterMapper{
-    return [self.deviceParameterMapper currentMappedParameterFloatValue];
+    float value =  [self.deviceParameterMapper currentMappedParameterFloatValue];
+    
+    return value;
 }
 
 -(BOOL) currentBoolValueOfDeviceParamterMapper{
@@ -229,10 +231,20 @@
                                                                                      ofDevice:device deviceParameterRange:deviceParameterRange
                                                                             andParameterRange:parameterRange];
     }
+    else{
+        self.deviceParameterMapper.parameterRange = parameterRange;
+        self.deviceParameterMapper.deviceParameterRange = deviceParameterRange;
+    }
     
-    self.connectedWithDeviceParameter = YES;
+    self.connectedWithDeviceParameter = [self.deviceParameterMapper activateDeviceParameter];
     
     return self.connectedWithDeviceParameter;
+}
+
+-(void) disconnectFromDevice{
+    [self.deviceParameterMapper deactivateDeviceParameter];
+    
+    self.connectedWithDeviceParameter = NO;
 }
 
 #pragma mark - Private Methods

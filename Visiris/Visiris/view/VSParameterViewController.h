@@ -86,6 +86,9 @@
 
 /** Currently selected keyFrame. */
 @property VSKeyFrame *selectedKeyframe;
+@property (weak) IBOutlet NSButton *nextKeyframeButton;
+@property (weak) IBOutlet NSButton *prevKeyframeButton;
+@property (weak) IBOutlet NSButton *setKeyframeButton;
 
 @property (weak) IBOutlet NSView *deviceConnectorsHolder;
 

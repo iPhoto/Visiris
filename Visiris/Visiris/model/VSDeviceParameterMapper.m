@@ -30,7 +30,6 @@
         self.device = device;
         self.deviceParameter = deviceParameter;
         self.hasRanges = NO;
-        [self.device activateParameter:self.deviceParameter];
     }
     
     return self;
@@ -46,6 +45,14 @@
 
 -(BOOL) currentDeviceParameterBoolValue{
     return [self.deviceParameter currentBOOLValue];
+}
+
+-(BOOL) activateDeviceParameter{
+    return [self.device activateParameter:self.deviceParameter];
+}
+
+-(BOOL) deactivateDeviceParameter{
+    return [self.device deactivateParameter:self.deviceParameter];
 }
 
 -(NSString*) currentStringValue{
@@ -66,7 +73,7 @@
     k = deltaY/deltaX;
     
     y = k * x + d;
-    
+    DDLogInfo(@"%f : %f,",value,y);
     return  y;
 }
 
