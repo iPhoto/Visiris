@@ -784,6 +784,38 @@
 					</object>
 					<int key="connectionID">129</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">rangeValueDidChange:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="1066349311"/>
+					</object>
+					<int key="connectionID">131</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">rangeValueDidChange:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="133351994"/>
+					</object>
+					<int key="connectionID">132</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">rangeValueDidChange:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="562680760"/>
+					</object>
+					<int key="connectionID">133</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">rangeValueDidChange:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="1019084332"/>
+					</object>
+					<int key="connectionID">134</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -1953,6 +1985,7 @@
 				<string key="56.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="NO" key="57.IBNSViewMetadataTranslatesAutoresizingMaskIntoConstraints"/>
 				<string key="57.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="57.userInterfaceItemIdentifier">parameterRangeMinimum</string>
 				<string key="58.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<integer value="1041" key="59.IBNumberFormatterBehaviorMetadataKey"/>
 				<boolean value="YES" key="59.IBNumberFormatterLocalizesFormatMetadataKey"/>
@@ -1975,6 +2008,7 @@
 				</array>
 				<boolean value="NO" key="75.IBNSViewMetadataTranslatesAutoresizingMaskIntoConstraints"/>
 				<string key="75.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="75.userInterfaceItemIdentifier">parameterRangeMaximum</string>
 				<string key="76.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<integer value="1041" key="77.IBNumberFormatterBehaviorMetadataKey"/>
 				<boolean value="YES" key="77.IBNumberFormatterLocalizesFormatMetadataKey"/>
@@ -1986,8 +2020,10 @@
 				<string key="83.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="NO" key="84.IBNSViewMetadataTranslatesAutoresizingMaskIntoConstraints"/>
 				<string key="84.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="84.userInterfaceItemIdentifier">deviceParameterRangeMinimum</string>
 				<boolean value="NO" key="85.IBNSViewMetadataTranslatesAutoresizingMaskIntoConstraints"/>
 				<string key="85.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
+				<string key="85.userInterfaceItemIdentifier">deviceParameterRangeMaximum</string>
 				<boolean value="NO" key="86.IBNSViewMetadataTranslatesAutoresizingMaskIntoConstraints"/>
 				<string key="86.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="NO" key="87.IBNSViewMetadataTranslatesAutoresizingMaskIntoConstraints"/>
@@ -2009,7 +2045,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">129</int>
+			<int key="maxID">134</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2024,17 +2060,20 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">VSDeviceParameterConnectionViewController</string>
 					<string key="superclassName">NSViewController</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">didClickToggleConnection:</string>
-						<string key="NS.object.0">NSButton</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">didClickToggleConnection:</string>
-						<object class="IBActionInfo" key="NS.object.0">
+					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="didClickToggleConnection:">NSButton</string>
+						<string key="rangeValueDidChange:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="didClickToggleConnection:">
 							<string key="name">didClickToggleConnection:</string>
 							<string key="candidateClassName">NSButton</string>
 						</object>
-					</object>
+						<object class="IBActionInfo" key="rangeValueDidChange:">
+							<string key="name">rangeValueDidChange:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="deviceComboBox">NSComboBox</string>
 						<string key="deviceNameLabel">NSTextField</string>

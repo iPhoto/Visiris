@@ -34,4 +34,8 @@
 
 -(NSString*) currentStringValue;
 
+-(BOOL) activateDeviceParameter;
+
+-(BOOL) deactivateDeviceParameter;
+
 @end

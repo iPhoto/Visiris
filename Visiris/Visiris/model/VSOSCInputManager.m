@@ -346,7 +346,7 @@
 {
     if (self.delegate) {
         if ([self.delegate respondsToSelector:@selector(inputManager:didReceivedValue:forAddress:atPort:)]) {
-            DDLogInfo(@"message: %@",message);
+
             [self.delegate inputManager:self didReceivedValue:message.value forAddress:message.address atPort:message.port];
         }
     }
