@@ -131,6 +131,8 @@
         
         id<VSExternalInputProtocol> inputManager = [self.availableInputManager objectForKey:kVSInputManager_OSC];
         isValueForAddressOnPortRegistered = [inputManager startInputForAddress:parameterAddress atPort:(unsigned int)port];
+        
+        DDLogInfo(@"availableParam: %@",self.currentActiveValues);
     }
     
     return isValueForAddressOnPortRegistered;
@@ -160,10 +162,12 @@
 #pragma mark VSExternalInputManagerDelegate
 - (void)inputManager:(id<VSExternalInputProtocol>)inputManager didReceivedValue:(id)value forAddress:(NSString *)address atPort:(unsigned int)port
 {
+    DDLogInfo(@"here");
     if (address && value && inputManager) {
         
         NSInvocation *invocation = [self.currentActiveValues objectForKey:[NSString stringFromAddress:address atPort:port]];
 
+        DDLogInfo(@"invo %@",invocation);
         [invocation setArgument:&value atIndex:2];        
         [invocation invoke];
     }

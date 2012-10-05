@@ -13,11 +13,20 @@
 @implementation VSDeviceParameter
 
 -(id) initWithName:(NSString *)name oscPath:(NSString *)oscPath atPort:(NSUInteger) port fromValue:(float)fromValue toValue:(float)toValue{
+    if(self = [self initWithName:name oscPath:oscPath atPort:port]){
+        self.range = VSMakeRange(fromValue, toValue);
+        self.hasRange = YES;
+    }
+    
+    return self;
+}
+
+-(id) initWithName:(NSString *)name oscPath:(NSString *)oscPath atPort:(NSUInteger)port{
     if(self = [super init]){
         self.name = name;
         self.oscPath = oscPath;
         self.port = port;
-        self.currentValue = [NSNumber numberWithFloat:0.0f];
+        self.hasRange = NO;
     }
     
     return self;
@@ -51,7 +60,7 @@
 
 - (void)updateCurrentValue:(id)value
 {
-    DDLogInfo(@"%f", [value floatValue]);
+    DDLogInfo(@"CurrentValue: %f", [value floatValue]);
     self.currentValue = value;
 }
 

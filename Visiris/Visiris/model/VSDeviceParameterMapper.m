@@ -14,12 +14,22 @@
 
 -(id) initWithDeviceParameter:(VSDeviceParameter *)deviceParameter ofDevice:(VSDevice *)device deviceParameterRange:(VSRange)deviceParameterRange andParameterRange:(VSRange)parameterRange{
     
-    if(self = [super init]){
-        self.device = device;
-        self.deviceParameter = deviceParameter;
+    if(self = [self initWithDeviceParameter:deviceParameter ofDevice:device]){
         self.parameterRange = parameterRange;
         self.deviceParameterRange = deviceParameterRange;
         
+        self.hasRanges = YES;
+    }
+    
+    return self;
+}
+
+-(id) initWithDeviceParameter:(VSDeviceParameter *)deviceParameter ofDevice:(VSDevice *)device{
+    
+    if(self = [super init]){
+        self.device = device;
+        self.deviceParameter = deviceParameter;
+        self.hasRanges = NO;
         [self.device activateParameter:self.deviceParameter];
     }
     

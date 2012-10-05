@@ -8,11 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
+#import "VSCoreServices.h"
+
 @interface VSDeviceParameter : NSObject
 
 -(id) initWithName:(NSString*) name oscPath:(NSString*) oscPath atPort:(NSUInteger) port fromValue:(float) fromValue toValue:(float) toValue;
 
-@property (assign) NSRange deviceValueMappingRange;
+-(id) initWithName:(NSString*) name oscPath:(NSString*) oscPath atPort:(NSUInteger) port;
+
+@property (assign) BOOL hasRange;
+
+@property (assign) VSRange range;
 
 @property (strong) NSString *name;
 

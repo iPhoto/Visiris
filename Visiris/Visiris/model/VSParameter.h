@@ -65,6 +65,8 @@
 
 @property (weak,readonly) VSDevice *deviceConnectedWith;
 
+@property VSDeviceParameterMapper *deviceParameterMapper;
+
 #pragma mark - Init
 
 

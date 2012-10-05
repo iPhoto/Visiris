@@ -17,12 +17,16 @@
  */
 @interface VSDeviceParameterMapper : NSObject
 
-@property VSDeviceParameter *deviceParameter;
-@property VSDevice *device;
-@property VSRange parameterRange;
-@property VSRange deviceParameterRange;
+@property (weak) VSDeviceParameter *deviceParameter;
+@property (weak) VSDevice *device;
+@property (assign) VSRange parameterRange;
+@property (assign) VSRange deviceParameterRange;
+@property (assign) BOOL hasRanges;
+
 
 - (id)initWithDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device deviceParameterRange:(VSRange) deviceParameterRange andParameterRange:(VSRange) parameterRange;
+
+- (id)initWithDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device;
 
 - (float)currentMappedParameterFloatValue;
 
