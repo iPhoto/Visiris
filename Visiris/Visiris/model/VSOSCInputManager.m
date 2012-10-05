@@ -319,8 +319,7 @@
         }
     }
     
-    
-    
+
     [self printDebugLog];
     
     
