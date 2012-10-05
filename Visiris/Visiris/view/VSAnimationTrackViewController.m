@@ -31,6 +31,10 @@
 /** VSKeyFrameViewControllers representing the keyFrames the VSAnimationTrackViewController is responsible for */
 @property NSMutableArray *keyFrameViewControllers;
 
+@property BOOL active;
+
+@property CALayer *inactiveOverlayLayer;
+
 @end
 
 
@@ -58,9 +62,17 @@
         self.keyFrameConnectionPaths =[[NSMutableDictionary alloc] init];
         [self initKeyFrames];
         [self.view setWantsLayer:YES];
-        
+        [self initOverlayFrameWithColor:trackColor];
     }
     return self;
+}
+
+-(void) initOverlayFrameWithColor:(NSColor*) color{
+    self.inactiveOverlayLayer = [[CALayer alloc]init];
+    self.inactiveOverlayLayer.frame = self.view.frame;
+    self.inactiveOverlayLayer.opacity = 0.8;
+    self.inactiveOverlayLayer.backgroundColor = [color CGColor];
+    [self.inactiveOverlayLayer setZPosition:100];
 }
 
 /**
@@ -111,6 +123,9 @@
             
             [self frameHasBeenChangedOfKeyFrameViewControllers:changedKeyFrame];
         }
+    }
+    else if([keyPath isEqualToString:@"connectedWithDeviceParameter"]){
+        [self parametersConnectionToDeviceWasChangedTo:[[object valueForKey:keyPath]boolValue]];
     }
 }
 
@@ -235,6 +250,10 @@
 #pragma mark - VSKeyFrameViewControllerDelegate Implementation
 
 -(BOOL) keyFrameViewControllerWantsToBeSelected:(VSKeyFrameViewController *)keyFrameViewController{
+    
+    if(!self.active)
+        return NO;
+    
     BOOL result = false;
     
     if([self delegateRespondsToSelector:@selector(keyFrameViewController:wantsToBeSelectedOnTrack:)]){
@@ -246,6 +265,10 @@
 }
 
 -(NSPoint) keyFrameViewControllersView:(VSKeyFrameViewController *)keyFrameViewController wantsToBeDraggeFrom:(NSPoint)fromPoint to:(NSPoint)toPoint{
+    
+    if(!self.active)
+        return fromPoint;
+    
     if((toPoint.x - keyFrameViewController.view.frame.size.width / 2.0f) < 0){
         toPoint.x = 0;
     }
@@ -489,6 +512,32 @@
     return NO;
 }
 
+#pragma mark Devices
+
+-(void) parametersConnectionToDeviceWasChangedTo:(BOOL) state{
+    if(!state){
+        [self activateTrack];
+    }
+    else{
+        [self deactivateTrack];
+    }
+}
+
+-(void) deactivateTrack{
+    if(self.active){
+        [self.view.layer addSublayer:self.inactiveOverlayLayer];
+        self.inactiveOverlayLayer.frame = self.view.frame;
+        
+    }
+    self.active = NO;
+}
+
+-(void) activateTrack{
+    if(!self.active){
+        [self.inactiveOverlayLayer removeFromSuperlayer];
+    }
+    self.active = YES;
+}
 
 
 #pragma mark - Properties
@@ -516,14 +565,17 @@
                                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionPrior
                                   context:nil];
     
-    [self.parameter.animation addObserver:self
+    [self.parameter addObserver:self
                                forKeyPath:@"connectedWithDeviceParameter"
                                   options:0
                                   context:nil];
+    
+    self.active = YES;
 }
 
 -(VSParameter*) parameter{
     return _parameter;
 }
+
 
 @end

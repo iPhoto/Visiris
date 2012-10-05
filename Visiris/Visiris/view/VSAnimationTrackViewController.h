@@ -65,6 +65,8 @@
 /** Delgate the VSAnimationTrackViewController talks to as definend in VSAnimationTrackViewControllerDelegate-Protocoll */
 @property id<VSAnimationTrackViewControllerDelegate> delegate;
 
+
+
 #pragma mark - Init
 
 /**
