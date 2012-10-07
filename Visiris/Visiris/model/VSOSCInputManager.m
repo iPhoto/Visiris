@@ -17,6 +17,8 @@
 #import "VSOSCPort.h"
 #import "VSOSCMessage.h"
 
+#import <VisirisCore/VSReferenceCounting.h>
+
 
 #define kVSOSCInputManager_inputRangeStart @"kVSOSCInputManager_inputRangeStart"
 #define kVSOSCInputManager_inputRangeEnd @"kVSOSCInputManager_inputRangeEnd"
@@ -44,6 +46,7 @@
 @property (strong) NSMutableArray                       *availableInputPorts;
 @property (strong) NSMutableDictionary                  *activePorts;
 @property (strong) NSMutableDictionary                  *activeOSCClients;
+@property (strong) VSReferenceCounting                  *referenceCountingPorts;
 
 @end
 
@@ -62,6 +65,7 @@
     if (self) {
         
         _oscManager = [[OSCManager alloc] init];
+        self.referenceCountingPorts = [[VSReferenceCounting alloc] init];
         
         _observablePorts = NSMakeRange(4250, 4300);
         

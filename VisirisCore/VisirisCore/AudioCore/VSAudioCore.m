@@ -41,7 +41,7 @@
 //    NSLog(@"created");
 }
 
-- (void)playAudioOfHandovers:(NSArray *)handovers atTimeStamp:(double)timeStamp{    
+- (void)playAudioOfHandovers:(NSArray *)handovers atTimeStamp:(double)timeStamp{
     for (VSCoreHandover *coreHandover in handovers) {
         float volume = [[coreHandover.attributes objectForKey:VSParameterAudioVolume] floatValue];
                     

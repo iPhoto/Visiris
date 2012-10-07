@@ -114,7 +114,6 @@
 }
 
 - (void)createNewAudioPlayerWithProjectItemID:(NSInteger)projectItemID withObjectItemID:(NSInteger)objectItemID forTrack:(NSInteger)trackId andFilePath:(NSString *)filepath{
-
     [self.audioCore createAudioPlayerForProjectItemID:projectItemID withObjectItemID:objectItemID atTrack:trackId andFilePath:filepath];
     
     NSNumber *temp = [self.fileTypeToObjectID objectForKey:[NSNumber numberWithInteger:objectItemID]];

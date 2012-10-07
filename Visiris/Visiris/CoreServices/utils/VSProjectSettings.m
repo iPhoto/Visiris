@@ -12,7 +12,7 @@
 
 #define DEFAULT_FRAME_RATE 60
 #define DEFAULT_FRAME_WIDTH 1280
-#define DEFAULT_FRAME_HEIGHT 1024
+#define DEFAULT_FRAME_HEIGHT 720
 
 @synthesize frameRate       = _frameRate;
 @synthesize frameSize       = _frameSize;
