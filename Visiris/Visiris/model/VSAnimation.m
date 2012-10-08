@@ -121,7 +121,9 @@
             VSKeyFrame *keyframe1 = (VSKeyFrame*)[self.keyFrames objectAtIndex:nexKeyFrameIndex-1];
             
             VSKeyFrame *keyframe2 = (VSKeyFrame*)[self.keyFrames objectAtIndex:nexKeyFrameIndex];
-            float result = ((keyframe2.floatValue - keyframe1.floatValue)  / (keyframe2.timestamp - keyframe1.timestamp) ) * (timestamp-keyframe1.timestamp) + keyframe1.floatValue;
+//            float result = ((keyframe2.floatValue - keyframe1.floatValue)  / (keyframe2.timestamp - keyframe1.timestamp) ) * (timestamp-keyframe1.timestamp) + keyframe1.floatValue;
+            
+            float result = [self linearFunction:timestamp fromKeyFrame:keyframe1 toKeyFrame:keyframe2];
             
             return result;
             
@@ -210,6 +212,27 @@
 
 -(void) insertKeyFrames:(NSArray *)array atIndexes:(NSIndexSet *)indexes{
     [self.keyFrames insertObjects:array atIndexes:indexes];
+}
+
+//todo edi
+- (double)linearFunction:(double)time fromKeyFrame:(VSKeyFrame *)startKeyFrame toKeyFrame:(VSKeyFrame *)endKeyFrame{    
+//    float result = ((keyframe2.floatValue - keyframe1.floatValue)  / (keyframe2.timestamp - keyframe1.timestamp) ) * (timestamp-keyframe1.timestamp) + keyframe1.floatValue;
+
+    
+    double y, k, deltaY, deltaX, d, x;
+    
+    x = time - startKeyFrame.timestamp;
+    
+    d = startKeyFrame.floatValue;
+    
+    deltaY = endKeyFrame.floatValue - startKeyFrame.floatValue;
+    deltaX = endKeyFrame.timestamp - startKeyFrame.timestamp;
+    
+    k = deltaY/deltaX;
+    
+    y = k * x + d;
+    
+    return  y;
 }
 
 @end
