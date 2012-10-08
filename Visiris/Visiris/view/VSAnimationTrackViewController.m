@@ -69,7 +69,6 @@
 
 -(void) initOverlayFrameWithColor:(NSColor*) color{
     self.inactiveOverlayLayer = [[CALayer alloc]init];
-    self.inactiveOverlayLayer.frame = self.view.frame;
     self.inactiveOverlayLayer.opacity = 0.8;
     self.inactiveOverlayLayer.backgroundColor = [color CGColor];
     [self.inactiveOverlayLayer setZPosition:100];
@@ -134,8 +133,8 @@
     [self.parameter.animation removeObserver:self
                                   forKeyPath:@"keyFrames"];
     
-    [self.parameter.animation removeObserver:self
-                                  forKeyPath:@"connectedWithDeviceParameter"];
+    [self.parameter removeObserver:self
+                        forKeyPath:@"connectedWithDeviceParameter"];
     
 }
 
@@ -196,6 +195,11 @@
 }
 
 -(VSKeyFrameViewController*) keyFrameViewControllerAtXPosition:(float) xPosition{
+
+    if(!self.active){
+        return nil;
+    }
+    
     for(VSKeyFrameViewController *keyFrameViewController in self.keyFrameViewControllers){
         NSPoint testPoint = NSMakePoint(xPosition, keyFrameViewController.keyFrameView.frame.origin.y);
         
@@ -224,6 +228,7 @@
 
 -(float) pixelPositonForKeyFramesValue:(VSKeyFrameViewController *)keyFrameViewController{
     
+    
     float pixelPosition = self.view.frame.size.height / 2.0f;
     
     if(self.parameter){
@@ -251,12 +256,10 @@
 
 -(BOOL) keyFrameViewControllerWantsToBeSelected:(VSKeyFrameViewController *)keyFrameViewController{
     
-    if(!self.active)
-        return NO;
     
-    BOOL result = false;
+    BOOL result = NO;
     
-    if([self delegateRespondsToSelector:@selector(keyFrameViewController:wantsToBeSelectedOnTrack:)]){
+    if(self.active && [self delegateRespondsToSelector:@selector(keyFrameViewController:wantsToBeSelectedOnTrack:)]){
         result = [self.delegate keyFrameViewController:keyFrameViewController
                               wantsToBeSelectedOnTrack:self];
     }
@@ -299,7 +302,7 @@
 
 /**
  * Called when the frame of one of VSKeyFrameViewController's views have been changed
- * 
+ *
  * @param keyFrameViewController VSKeyFrameViewController which's view's frame has been changed
  */
 -(void) frameHasBeenChangedOfKeyFrameViewControllers:(VSKeyFrameViewController*) keyFrameViewController{
@@ -397,7 +400,7 @@
         [connectionPath moveToPoint:[VSFrameUtils midPointOfFrame:object.view.frame]];
         
         // if there is one KeyFrame right of the newly added the path is lined to its midpoint
-        // othwise the path is lined to the end of the trackView 
+        // othwise the path is lined to the end of the trackView
         if(indexOfObject+1 < self.keyFrameViewControllers.count){
             VSKeyFrameViewController *nextController = [self.keyFrameViewControllers objectAtIndex:indexOfObject+1];
             
@@ -433,7 +436,7 @@
         }
         
         [self.keyFrameConnectionPaths setObject:connectionPath forKey:[NSNumber numberWithInteger:object.keyFrame.ID]];
-
+        
         //The changed paths are given to the view to be redrawn
         ((VSAnimationTrackView*)self.view).keyFrameConnectionPaths = [self.keyFrameConnectionPaths allValues];
         [self.view setNeedsDisplay:YES];
@@ -444,7 +447,7 @@
 }
 
 /**
- * Removes all connection-Paths from keyFrameConnectionPaths 
+ * Removes all connection-Paths from keyFrameConnectionPaths
  */
 -(void) clearKeyFrameConnectionPaths{
     [self.keyFrameConnectionPaths removeAllObjects];
@@ -525,11 +528,14 @@
 
 -(void) deactivateTrack{
     if(self.active){
-        [self.view.layer addSublayer:self.inactiveOverlayLayer];
-        self.inactiveOverlayLayer.frame = self.view.frame;
-        [self.inactiveOverlayLayer setPosition:CGPointMake(0, 0)];
-        DDLogInfo(@"%@",NSStringFromRect(self.view.frame));
         
+        [self unselectAllKeyFrames];
+        
+        [self.view.layer addSublayer:self.inactiveOverlayLayer];
+        
+        
+        self.inactiveOverlayLayer.frame = self.view.layer.frame;
+        self.inactiveOverlayLayer.position = CGPointMake(self.inactiveOverlayLayer.frame.size.width / 2.0, self.inactiveOverlayLayer.frame.size.height / 2.0);
     }
     self.active = NO;
 }
@@ -562,15 +568,15 @@
 -(void) setParameter:(VSParameter *)parameter{
     _parameter = parameter;
     
-    [self.parameter.animation addObserver:self
-                               forKeyPath:@"keyFrames"
-                                  options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionPrior
-                                  context:nil];
+    [_parameter.animation addObserver:self
+                           forKeyPath:@"keyFrames"
+                              options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionPrior
+                              context:nil];
     
-    [self.parameter addObserver:self
-                               forKeyPath:@"connectedWithDeviceParameter"
-                                  options:0
-                                  context:nil];
+    [_parameter addObserver:self
+                 forKeyPath:@"connectedWithDeviceParameter"
+                    options:0
+                    context:nil];
     
     self.active = YES;
 }

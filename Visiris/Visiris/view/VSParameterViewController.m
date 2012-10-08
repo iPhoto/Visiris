@@ -143,6 +143,7 @@ static NSString* defaultNib = @"VSParameterView";
     NSButton *deviceConnector = [[NSButton alloc]initWithFrame:NSMakeRect(0, 0, 20, self.deviceConnectorsHolder.frame.size.height)];
     
     deviceConnector.identifier = device.ID;
+    [deviceConnector setTitle:@"D"];
     [deviceConnector setStringValue:device.name];
     [deviceConnector setAction:@selector(toggleParameterDeviceConnection:)];
     [deviceConnector setTarget:self];

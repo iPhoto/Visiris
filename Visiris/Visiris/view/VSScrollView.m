@@ -43,18 +43,18 @@
 
 #pragma mark - Events
 
--(void) scrollWheel:(NSEvent *)theEvent{
-    
-    BOOL allowedToScroll = YES;
-    
-    if([self scrollingDelegateRespondsToSelector:@selector(scrollView:wantsToBeScrolledByScrollWheelEvent:)]){
-        allowedToScroll = [self.scrollingDelegate scrollView:self wantsToBeScrolledByScrollWheelEvent:theEvent];
-    }
-    
-    if(allowedToScroll){
-        [super scrollWheel:theEvent];
-    }
-}
+//-(void) scrollWheel:(NSEvent *)theEvent{
+//    
+//    BOOL allowedToScroll = YES;
+//    
+//    if([self scrollingDelegateRespondsToSelector:@selector(scrollView:wantsToBeScrolledByScrollWheelEvent:)]){
+//        allowedToScroll = [self.scrollingDelegate scrollView:self wantsToBeScrolledByScrollWheelEvent:theEvent];
+//    }
+//    
+//    if(allowedToScroll){
+//        [super scrollWheel:theEvent];
+//    }
+//}
 
 #pragma mark - Methods
 

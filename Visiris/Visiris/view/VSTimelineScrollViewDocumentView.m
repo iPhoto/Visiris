@@ -69,7 +69,7 @@
     
     
     self.guideLine = [[CALayer alloc] init];
-    self.guideLine.backgroundColor = [[NSColor blueColor] CGColor];
+    self.guideLine.backgroundColor = [[NSColor playheadGuiderColor] CGColor];
     [self.guideLine setZPosition:10];
     
     [self.layer addSublayer:self.guideLine];

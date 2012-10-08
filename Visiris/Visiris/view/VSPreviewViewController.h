@@ -27,6 +27,10 @@
 
 /** NSView wrapping VSPreviewOpenGLView */
 @property (weak) IBOutlet NSView *openGLViewHolder;
+
+@property (weak) IBOutlet NSSlider *frameRateSlider;
+
+
 - (IBAction)toggleFullScreen:(id)sender;
 
 /** Reference to the VSPlaybackController. Its called to start / stop the playback of the project */

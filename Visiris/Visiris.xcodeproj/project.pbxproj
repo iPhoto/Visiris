@@ -185,6 +185,7 @@
 		5BD35BE315D95F48001A74E0 /* VSTimelineObjectParametersView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BE215D95F48001A74E0 /* VSTimelineObjectParametersView.m */; };
 		5BD35BE715D96891001A74E0 /* VSAnimationTrackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BE515D96890001A74E0 /* VSAnimationTrackViewController.m */; };
 		5BD35BED15D96ADB001A74E0 /* VSAnimationTrackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BEC15D96ADB001A74E0 /* VSAnimationTrackView.m */; };
+		5BDCE906162295AE007F52A7 /* NSColor+VSColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDCE905162295AD007F52A7 /* NSColor+VSColor.m */; };
 		5BE5179A1614A1220096DFB3 /* VVBasics.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFB13F16139C1D00A19B7A /* VVBasics.framework */; };
 		5BE5179B1614A1220096DFB3 /* VVMIDI.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFB14016139C1D00A19B7A /* VVMIDI.framework */; };
 		5BE5179C1614A1220096DFB3 /* VVOSC.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 27CFB14116139C1D00A19B7A /* VVOSC.framework */; };
@@ -520,6 +521,8 @@
 		5BD35BE515D96890001A74E0 /* VSAnimationTrackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAnimationTrackViewController.m; sourceTree = "<group>"; };
 		5BD35BEB15D96ADB001A74E0 /* VSAnimationTrackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAnimationTrackView.h; sourceTree = "<group>"; };
 		5BD35BEC15D96ADB001A74E0 /* VSAnimationTrackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAnimationTrackView.m; sourceTree = "<group>"; };
+		5BDCE904162295AD007F52A7 /* NSColor+VSColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+VSColor.h"; sourceTree = "<group>"; };
+		5BDCE905162295AD007F52A7 /* NSColor+VSColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+VSColor.m"; sourceTree = "<group>"; };
 		5BEF5AF915FE1F5E00F0FE8A /* VSOptionParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSOptionParameter.h; sourceTree = "<group>"; };
 		5BEF5AFA15FE1F5E00F0FE8A /* VSOptionParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSOptionParameter.m; sourceTree = "<group>"; };
 		5BF875BE15B95E4200CEBBDD /* VSViewMouseEventsDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSViewMouseEventsDelegate.h; sourceTree = "<group>"; };
@@ -934,6 +937,8 @@
 				5B35C08D1577A912009911EC /* VSPasteboaredConstants.m */,
 				5B35C08E1577A912009911EC /* VSTimelineConstants.h */,
 				5B35C08F1577A912009911EC /* VSTimelineConstants.m */,
+				5BDCE904162295AD007F52A7 /* NSColor+VSColor.h */,
+				5BDCE905162295AD007F52A7 /* NSColor+VSColor.m */,
 			);
 			path = constants;
 			sourceTree = "<group>";
@@ -1706,6 +1711,7 @@
 				5B4ABA70161D647300BE5248 /* VSDeviceRepresentation.m in Sources */,
 				5B4ABA84161DA3F500BE5248 /* VSDeviceParameterConnectionViewController.m in Sources */,
 				27482037161E121500C13590 /* NSString+VSOSCUniqueAddress.m in Sources */,
+				5BDCE906162295AE007F52A7 /* NSColor+VSColor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

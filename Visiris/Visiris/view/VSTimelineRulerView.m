@@ -110,7 +110,7 @@
     self.paragrapheStyle.lineSpacing = self.timeCodeLineHeight;
     
     self.textAttributes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                           [NSColor blueColor], NSForegroundColorAttributeName,
+                           [NSColor timelineRulerContentColor], NSForegroundColorAttributeName,
                            [NSFont boldSystemFontOfSize:10], NSFontAttributeName,
                            self.paragrapheStyle, NSParagraphStyleAttributeName ,
                            nil];

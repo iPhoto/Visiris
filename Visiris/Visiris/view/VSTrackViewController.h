@@ -73,14 +73,6 @@
 -(void) didClickViewOfTrackViewController:(VSTrackViewController*) trackViewController;
 
 /**
- * Called when a timelineObjectProxy a VSTimelineObjectView represents got selected.
- *
- * @param trackViewController VSTrackViewController responsible for the VSTimelineObjectView which's VSTimelineObjectProxy got selected.
-  * @param timelineObjectProxy The VSTimelineObjectProxy a VSTimelineObjectView represents got selected.
- */
--(void) timelineObjectProxy:(VSTimelineObjectProxy *) timelineObjectProxy wasSelectedOnTrackViewController:(VSTrackViewController*) trackViewController;
-
-/**
  * Called when a timelineObjectProxy a VSTimelineObjectView represents got unselected.
  *
  * @param trackViewController VSTrackViewController responsible for the VSTimelineObjectView which's VSTimelineObjectProxy got unselected.
@@ -156,6 +148,15 @@
  * @param position Current mouse position
  */
 -(void) moveTimelineObjectTemporary:(VSTimelineObjectViewController*) timelineObject fromTrack:(VSTrackViewController*) fromTrack toTrackAtPosition:(NSPoint) position;
+
+
+/**
+ * Called when a timelineObjectProxy a VSTimelineObjectView represents got selected.
+ *
+ * @param trackViewController VSTrackViewController responsible for the VSTimelineObjectView which's VSTimelineObjectProxy got selected.
+ * @param timelineObjectProxy The VSTimelineObjectProxy a VSTimelineObjectView represents got selected.
+ */
+-(void) timelineObjectProxy:(VSTimelineObjectProxy *) timelineObjectProxy wasSelectedOnTrackViewController:(VSTrackViewController*) trackViewController;
 
 
 /**

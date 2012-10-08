@@ -242,12 +242,13 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     }
     
     if(scrollViewToScroll){
-        float deltaY = fromBounds.origin.y - toBounds.origin.y;
-        
-        NSPoint newBoundsOrigin = NSMakePoint(scrollViewToScroll.contentView.bounds.origin.x, scrollViewToScroll.contentView.bounds.origin.y - deltaY);
+        NSPoint newBoundsOrigin = NSMakePoint(scrollViewToScroll.contentView.bounds.origin.x, toBounds.origin.y);
         
         [scrollViewToScroll setBoundsOriginWithouthNotifiying:newBoundsOrigin];
+        
     }
+    
+
 }
 
 #pragma mark - Private Methods

@@ -31,7 +31,7 @@
     self = [super initWithScrollView:scrollView orientation:orientation];
     if (self) {
         self.trackLabels = [[NSMutableArray alloc] init];
-        self.ruleThickness = 40;
+        self.ruleThickness = 30;
         
         [self initTextStyle];
         
@@ -50,7 +50,7 @@
     self.paragrapheStyle.alignment =NSCenterTextAlignment;
     
     self.textAttributes = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                           [NSColor blueColor], NSForegroundColorAttributeName,
+                           [NSColor trackLabelFontColor],NSForegroundColorAttributeName,
                            [NSFont boldSystemFontOfSize:10], NSFontAttributeName,
                            self.paragrapheStyle, NSParagraphStyleAttributeName ,
                            nil];
@@ -79,7 +79,7 @@
  * @param trackLabel VSTrackLable to be drawn
  */
 -(void) drawLabel:(VSTrackLabel*) trackLabel{
-    [[NSColor lightGrayColor] setFill];
+    [[NSColor trackLabelBackgroundColor] setFill];
     
     NSRect drawRect = trackLabel.frame;
     drawRect.origin.y -= self.clientView.visibleRect.origin.y;

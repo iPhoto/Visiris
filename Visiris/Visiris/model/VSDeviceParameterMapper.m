@@ -73,7 +73,7 @@
     k = deltaY/deltaX;
     
     y = k * x + d;
-    DDLogInfo(@"%f : %f,",value,y);
+
     return  y;
 }
 

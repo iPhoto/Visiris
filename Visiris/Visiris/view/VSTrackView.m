@@ -34,7 +34,7 @@
     if (self) {
         [self registerForDraggedTypes:[NSArray arrayWithObjects:VSProjectItemPasteboardType, NSFilenamesPboardType, nil]];
         [self setWantsLayer:YES];
-        self.layer.backgroundColor = [[NSColor lightGrayColor] CGColor];
+        self.layer.backgroundColor = [[NSColor mainTimelineTrackBackgroundColor] CGColor];
     }
     
     return self;

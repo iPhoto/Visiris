@@ -32,6 +32,7 @@
 #import "VSAssortedConstants.h"
 #import "VisirisCore/VSParameterTypes.h"
 
+
 /*Enums*/
 #import "VisirisCore/VSFileKind.h" 
 #import "VSTrackType.h"
@@ -44,6 +45,7 @@
 /*Categories*/
 #import "NSImage+QuickLook.h"
 #import "NSString+VSOSCUniqueAddress.h"
+#import "NSColor+VSColor.h"
 
 #import "TBXML.h"
 #import "TBXML+Compression.h"

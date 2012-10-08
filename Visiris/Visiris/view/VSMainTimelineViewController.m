@@ -50,7 +50,6 @@
 
 @implementation VSMainTimelineViewController
 
-
 // Name of the nib that will be loaded when initWithDefaultNib is called
 static NSString* defaultNib = @"VSMainTimelineView";
 
