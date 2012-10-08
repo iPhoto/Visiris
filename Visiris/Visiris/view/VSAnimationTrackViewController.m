@@ -527,6 +527,8 @@
     if(self.active){
         [self.view.layer addSublayer:self.inactiveOverlayLayer];
         self.inactiveOverlayLayer.frame = self.view.frame;
+        [self.inactiveOverlayLayer setPosition:CGPointMake(0, 0)];
+        DDLogInfo(@"%@",NSStringFromRect(self.view.frame));
         
     }
     self.active = NO;
