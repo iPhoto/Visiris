@@ -28,6 +28,24 @@
 #pragma mark - Init
 
 -(id) initWithName:(NSString *)theName andID:(NSInteger) theID asType:(NSString *)aType forDataType:(VSParameterDataType)aDataType withDefaultValue:(id)theDefaultValue orderNumber:(NSInteger)aOrderNumber editable:(BOOL)editable hidden:(BOOL)hidden rangeMinValue:(float)minRangeValue rangeMaxValue:(float)maxRangeValue{
+    
+    self = [self initWithName:theName
+                        andID:theID
+                       asType:aType
+                  forDataType:aDataType
+             withDefaultValue:theDefaultValue
+                  orderNumber:aOrderNumber editable:editable
+                       hidden:hidden];
+    
+    if(self){
+        [self initRangesWithMin:minRangeValue andMax:maxRangeValue];
+
+        
+    }
+    return self;
+}
+
+-(id) initWithName:(NSString *)theName andID:(NSInteger) theID asType:(NSString *)aType forDataType:(VSParameterDataType)aDataType withDefaultValue:(id)theDefaultValue orderNumber:(NSInteger)aOrderNumber editable:(BOOL)editable hidden:(BOOL)hidden{
     if(self = [super init]){
         self.name = theName;
         _ID = theID;
@@ -37,7 +55,7 @@
         self.editable = editable;
         self.orderNumber = aOrderNumber;
         
-        [self initRangesWithMin:minRangeValue andMax:maxRangeValue];
+        self.hasRange = NO;
         
         [self initDefaultValueWith:theDefaultValue];
         
@@ -120,12 +138,12 @@
             break;
         }
         case VSParameterDataTypeString:{
-            NSString *result = [self.animation computStringValueForTimestamp:timestamp];
+            NSString *result = [self.animation computeStringValueForTimestamp:timestamp];
             return result;
             break;
         }
         default:{
-            return [self.animation computStringValueForTimestamp:timestamp];
+            return [self.animation computeStringValueForTimestamp:timestamp];
             break;
         }
     }
@@ -141,12 +159,12 @@
             break;
         }
         case VSParameterDataTypeString:{
-            NSString *result = [self.animation computStringValueForTimestamp:timestamp];
+            NSString *result = [self currentStringValueOfDeviceParameterMapper];
             return result;
             break;
         }
         default:{
-            return [self.animation computStringValueForTimestamp:timestamp];
+            return [self.animation computeStringValueForTimestamp:timestamp];
             break;
         }
         }

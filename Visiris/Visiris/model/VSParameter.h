@@ -87,6 +87,8 @@
  */
 -(id) initWithName:(NSString *) theName andID:(NSInteger) theID asType:(NSString*) aType forDataType:(VSParameterDataType) aDataType withDefaultValue:(id) theDefaultValue orderNumber:(NSInteger) aOrderNumber editable:(BOOL) editable hidden:(BOOL) hidden rangeMinValue:(float) minRangeValue rangeMaxValue:(float) maxRangeValue;
 
+-(id) initWithName:(NSString *)theName andID:(NSInteger) theID asType:(NSString *)aType forDataType:(VSParameterDataType)aDataType withDefaultValue:(id)theDefaultValue orderNumber:(NSInteger)aOrderNumber editable:(BOOL)editable hidden:(BOOL)hidden;
+
 
 #pragma mark - Methods
 /**

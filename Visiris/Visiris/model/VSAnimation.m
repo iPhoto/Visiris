@@ -129,7 +129,7 @@
     }
 }
 
--(NSString*) computStringValueForTimestamp:(double) timestamp{
+-(NSString*) computeStringValueForTimestamp:(double) timestamp{
     if(self.keyFrames.count == 0){
         return self.defaultValue;
     }

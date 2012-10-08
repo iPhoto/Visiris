@@ -43,7 +43,7 @@
  * @param timestamp Timestamp the value is computed for
  * @return The NSString-value for the given timestamp the animation has according to its keyFrames
  */
--(NSString*) computStringValueForTimestamp:(double) timestamp;
+-(NSString*) computeStringValueForTimestamp:(double) timestamp;
 
 /**
  * Computes the BOOL-value for the given timestamp of the animation according to its keyFrames
