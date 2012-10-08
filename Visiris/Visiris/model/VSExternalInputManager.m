@@ -19,7 +19,7 @@
 
 @property (strong) NSMutableDictionary                              *currentActiveValues;
 
-@property (strong) VSReferenceCounting                              *activeValueReferenceCount;
+//@property (strong) VSReferenceCounting                              *activeValueReferenceCount;
 
 @end
 
@@ -35,7 +35,7 @@
         
         self.availableInputManager = [[NSMutableDictionary alloc] init];
         
-        self.activeValueReferenceCount = [[VSReferenceCounting alloc] init];
+//        self.activeValueReferenceCount = [[VSReferenceCounting alloc] init];
         
         self.currentActiveValues = [[NSMutableDictionary alloc] init];
         
@@ -125,7 +125,7 @@
     
     if (parameterAddress) {
         
-        [self.activeValueReferenceCount incrementReferenceOfKey:parameterAddress];
+//        [self.activeValueReferenceCount incrementReferenceOfKey:parameterAddress];
         
         [self.currentActiveValues setObject:parameterInvocation forKey:[NSString stringFromAddress:parameterAddress atPort:(unsigned int)port]];
         
@@ -141,19 +141,20 @@
 
 - (BOOL)unregisterValue:(NSInvocation *)parameterInvocation forAddress:(NSString*)parameterAddress atPort:(NSUInteger)port
 {
+//    TODO reference counting funktioniert so noch nicht, und wird falsch nach hinten gegeben.....
     BOOL isValueForAddressOnPortUnregistered = NO;
     
     if (parameterAddress) {
         
-        BOOL isAddressStillActive = [self.activeValueReferenceCount decrementReferenceOfKey:parameterAddress];
-        if (!isAddressStillActive) {
-            
+//        BOOL isAddressStillActive = [self.activeValueReferenceCount decrementReferenceOfKey:parameterAddress];
+//        if (!isAddressStillActive) {
+        
             [self.currentActiveValues removeObjectForKey:[NSString stringFromAddress:parameterAddress atPort:(unsigned int)port]];
             
             // delete input of specific inputManager
             id<VSExternalInputProtocol> inputManager = [self.availableInputManager objectForKey:kVSInputManager_OSC];
             isValueForAddressOnPortUnregistered = [inputManager stopInputForAddress:parameterAddress atPort:(unsigned int)port];
-        }
+//        }
     }
     
     DDLogInfo(@"availableParam: %@",self.currentActiveValues);
