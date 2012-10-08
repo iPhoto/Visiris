@@ -60,7 +60,6 @@
 
 - (void)updateCurrentValue:(id)value
 {
-    DDLogInfo(@"CurrentValue: %f", [value floatValue]);
     self.currentValue = value;
 }
 

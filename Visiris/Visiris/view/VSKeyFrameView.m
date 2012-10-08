@@ -40,9 +40,10 @@
  * Inits the view's layer
  */
 -(void) initLayer{
-//    [self setWantsLayer:YES];
+    [self setWantsLayer:YES];
     self.layer = [[CALayer alloc] init];
     [self.layer setZPosition:1];
+    [self setLayerStyle];
 }
 
 #pragma mark - NSView

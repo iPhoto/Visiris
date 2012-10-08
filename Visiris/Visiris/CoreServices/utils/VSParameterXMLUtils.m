@@ -55,9 +55,13 @@
     float minimumValue = 0;
     float maximumValue = 0;
     
+    BOOL hasRange = NO;
+    
     if([parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_RANGE_FROM] && [parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_RANGE_TO]){
         maximumValue = [[[parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_RANGE_TO] stringValue] floatValue];
         minimumValue = [[[parameterElement attributeForName:PARAMETER_XML_ATTRIBUTE_RANGE_FROM] stringValue] floatValue];
+        
+        hasRange = YES;
     }
     
     BOOL hidden = NO;
@@ -91,20 +95,33 @@
     
     
     if([[parameterElement elementsForName:PARAMETER_XML_OPTION_NODE] count]){
-        VSOptionParameter *newOptionParameter = [[VSOptionParameter alloc] initWithName:name
-                                                                                  andID:orderNumber
-                                                                                 asType:type
-                                                                            forDataType:dataType
-                                                                       withDefaultValue:defaultValue
-                                                                            orderNumber:orderNumber
-                                                                               editable:editable
-                                                                                 hidden:hidden
-                                                                          rangeMinValue:minimumValue
-                                                                          rangeMaxValue:maximumValue];
+        VSOptionParameter *newOptionParameter = nil;
+        if(hasRange){
+            newOptionParameter = [[VSOptionParameter alloc] initWithName:name
+                                                                   andID:orderNumber
+                                                                  asType:type
+                                                             forDataType:dataType
+                                                        withDefaultValue:defaultValue
+                                                             orderNumber:orderNumber
+                                                                editable:editable
+                                                                  hidden:hidden
+                                                           rangeMinValue:minimumValue
+                                                           rangeMaxValue:maximumValue];
+        }
+        else{
+            newOptionParameter = [[VSOptionParameter alloc] initWithName:name
+                                                                   andID:orderNumber
+                                                                  asType:type
+                                                             forDataType:dataType
+                                                        withDefaultValue:defaultValue
+                                                             orderNumber:orderNumber
+                                                                editable:editable
+                                                                  hidden:hidden];
+        }
         
         
         for(NSXMLElement *element in [parameterElement elementsForName:PARAMETER_XML_OPTION_NODE]){
-
+            
             NSString *key;
             id value;
             
@@ -122,16 +139,29 @@
         return newOptionParameter;
     }
     else{
-        newParameter = [[VSParameter alloc] initWithName:name
-                                                   andID:orderNumber
-                                                  asType:type
-                                             forDataType:dataType
-                                        withDefaultValue:defaultValue
-                                             orderNumber:orderNumber
-                                                editable:editable
-                                                  hidden:hidden
-                                           rangeMinValue:minimumValue
-                                           rangeMaxValue:maximumValue];
+        
+        if(hasRange){
+            newParameter = [[VSParameter alloc] initWithName:name
+                                                       andID:orderNumber
+                                                      asType:type
+                                                 forDataType:dataType
+                                            withDefaultValue:defaultValue
+                                                 orderNumber:orderNumber
+                                                    editable:editable
+                                                      hidden:hidden
+                                               rangeMinValue:minimumValue
+                                               rangeMaxValue:maximumValue];
+        }
+        else{
+            newParameter = [[VSParameter alloc] initWithName:name
+                                                       andID:orderNumber
+                                                      asType:type
+                                                 forDataType:dataType
+                                            withDefaultValue:defaultValue
+                                                 orderNumber:orderNumber
+                                                    editable:editable
+                                                      hidden:hidden];
+        }
         
         return newParameter;
     }

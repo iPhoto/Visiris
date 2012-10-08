@@ -45,22 +45,57 @@
     return self;
 }
 
+-(id) initWithName:(NSString *)theName andID:(NSInteger)theID asType:(NSString *)aType forDataType:(VSParameterDataType)aDataType withDefaultValue:(id)theDefaultValue orderNumber:(NSInteger)aOrderNumber editable:(BOOL)editable hidden:(BOOL)hidden{
+    
+    self = [super initWithName:theName
+                         andID:theID
+                        asType:aType
+                   forDataType:aDataType
+              withDefaultValue:theDefaultValue
+                   orderNumber:aOrderNumber
+                      editable:editable
+                        hidden:hidden];
+    
+    if(self){
+        _options = [[NSMutableDictionary alloc] init];
+        if(!theDefaultValue){
+            self.configuredDefaultValue = nil;
+        }
+    }
+    
+    return self;
+}
+
 
 #pragma mark - VSCopying
 -(id) copyWithZone:(NSZone *)zone{
     
     VSParameter *superCopy = [super copyWithZone:zone];
     
-    VSOptionParameter *copy = [[VSOptionParameter alloc] initWithName:superCopy.name
-                                                                andID:superCopy.ID
-                                                               asType:superCopy.type
-                                                          forDataType:superCopy.dataType
-                                                     withDefaultValue:superCopy.defaultValue
-                                                          orderNumber:superCopy.orderNumber
-                                                             editable:superCopy.editable
-                                                               hidden:superCopy.hidden
-                                                        rangeMinValue:superCopy.range.min
-                                                        rangeMaxValue:superCopy.range.max];
+    VSOptionParameter *copy = nil;
+    
+    if(self.hasRange){
+        copy = [[VSOptionParameter alloc] initWithName:superCopy.name
+                                                 andID:superCopy.ID
+                                                asType:superCopy.type
+                                           forDataType:superCopy.dataType
+                                      withDefaultValue:superCopy.defaultValue
+                                           orderNumber:superCopy.orderNumber
+                                              editable:superCopy.editable
+                                                hidden:superCopy.hidden
+                                         rangeMinValue:superCopy.range.min
+                                         rangeMaxValue:superCopy.range.max];
+    }
+    else{
+        copy = [[VSOptionParameter alloc] initWithName:superCopy.name
+                                                 andID:superCopy.ID
+                                                asType:superCopy.type
+                                           forDataType:superCopy.dataType
+                                      withDefaultValue:superCopy.defaultValue
+                                           orderNumber:superCopy.orderNumber
+                                              editable:superCopy.editable
+                                                hidden:superCopy.hidden];
+    }
     copy.animation = superCopy.animation;
     
     copy.options = [[NSMutableDictionary alloc] initWithDictionary:self.options copyItems:YES];
