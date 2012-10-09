@@ -14,6 +14,8 @@
 
 - (BOOL)decrementReferenceOfKey:(id)object;
 
+- (BOOL)isObjectExisting:(id)object;
+
 - (void)printDebugLog;
 
 @end

@@ -45,8 +45,13 @@
 
 @property (strong) NSMutableArray                       *availableInputPorts;
 @property (strong) NSMutableDictionary                  *activePorts;
+
 @property (strong) NSMutableDictionary                  *activeOSCClients;
 @property (strong) VSReferenceCounting                  *referenceCountingPorts;
+
+//@property (strong) NSMutableDictionary                  *activeOSCAddresses;
+@property (strong) VSReferenceCounting                  *referencCountingAdresses;
+
 
 @end
 
@@ -66,6 +71,7 @@
         
         _oscManager = [[OSCManager alloc] init];
         self.referenceCountingPorts = [[VSReferenceCounting alloc] init];
+        self.referencCountingAdresses = [[VSReferenceCounting alloc] init];
         
         _observablePorts = NSMakeRange(4250, 4300);
         
@@ -198,7 +204,6 @@
 
 - (BOOL)startInputForAddress:(NSString *)address atPort:(unsigned int)port
 {
-    
     BOOL isInputForAddressActive = NO;
     // get the port from address
     
@@ -220,6 +225,10 @@
         }
         
         isInputForAddressActive = [self startOSCClientOnPort:port];
+        
+        //TODO WIRD ZWEIMAL GECALLT VON DER GUI - FALSCH
+        [self.referencCountingAdresses incrementReferenceOfKey:[NSString stringFromAddress:address atPort:port]];
+        [self.referenceCountingPorts incrementReferenceOfKey:[NSNumber numberWithUnsignedInt:port]];
     }
     
     return isInputForAddressActive;
@@ -230,9 +239,13 @@
 {
     BOOL isInputForAddressStopped = NO;
     
-    if (address) {
+    [self.referencCountingAdresses decrementReferenceOfKey:[NSString stringFromAddress:address atPort:port]];
+    
+    if (address && [self.referenceCountingPorts decrementReferenceOfKey:[NSNumber numberWithUnsignedInt:port]] == NO) {
         
         [self stopOSCClientOnPort:port];
+        isInputForAddressStopped = YES;
+        DDLogInfo(@"Stopped Port: %d",port);
     }
     
     return isInputForAddressStopped;
@@ -326,7 +339,6 @@
 
     [self printDebugLog];
     
-    
     return oscClientStarted;
 }
 
@@ -348,9 +360,10 @@
 #pragma mark - VSOSCClientDelegate
 - (void)oscClient:(VSOSCClient *)client didReceivedMessage:(VSOSCMessage *)message
 {
-    if (self.delegate) {
-        if ([self.delegate respondsToSelector:@selector(inputManager:didReceivedValue:forAddress:atPort:)]) {
-
+    if (self.delegate && [self.referencCountingAdresses isObjectExisting:[NSString stringFromAddress:message.address atPort:message.port]])
+    {
+        if ([self.delegate respondsToSelector:@selector(inputManager:didReceivedValue:forAddress:atPort:)])
+        {
             [self.delegate inputManager:self didReceivedValue:message.value forAddress:message.address atPort:message.port];
         }
     }
