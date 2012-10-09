@@ -2,7 +2,7 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1080</int>
-		<string key="IBDocument.SystemVersion">12C54</string>
+		<string key="IBDocument.SystemVersion">12C60</string>
 		<string key="IBDocument.InterfaceBuilderVersion">2843</string>
 		<string key="IBDocument.AppKitVersion">1187.34</string>
 		<string key="IBDocument.HIToolboxVersion">625.00</string>
@@ -49,11 +49,10 @@
 						<string key="NSFrame">{{278, 14}, {30, 22}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="88413110">
-							<int key="NSCellFlags">-1804599231</int>
+							<int key="NSCellFlags">-2075131840</int>
 							<int key="NSCellFlags2">272630784</int>
 							<string key="NSContents"/>
 							<object class="NSFont" key="NSSupport" id="629891187">
@@ -293,11 +292,19 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">takeIntegerValueFrom:</string>
-						<reference key="source" ref="820023024"/>
+						<string key="label">frameRateSliderHasChanged:</string>
+						<reference key="source" ref="1001"/>
 						<reference key="destination" ref="30503226"/>
 					</object>
-					<int key="connectionID">314</int>
+					<int key="connectionID">317</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">frameRateTextField</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="820023024"/>
+					</object>
+					<int key="connectionID">318</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -959,7 +966,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">316</int>
+			<int key="maxID">318</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1024,6 +1031,7 @@
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="frameRateSlider">NSSlider</string>
+						<string key="frameRateTextField">NSTextField</string>
 						<string key="openGLView">VSPreviewOpenGLView</string>
 						<string key="openGLViewHolder">NSView</string>
 					</dictionary>
@@ -1031,6 +1039,10 @@
 						<object class="IBToOneOutletInfo" key="frameRateSlider">
 							<string key="name">frameRateSlider</string>
 							<string key="candidateClassName">NSSlider</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="frameRateTextField">
+							<string key="name">frameRateTextField</string>
+							<string key="candidateClassName">NSTextField</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="openGLView">
 							<string key="name">openGLView</string>

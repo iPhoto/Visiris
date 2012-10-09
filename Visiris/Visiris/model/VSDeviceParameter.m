@@ -61,6 +61,10 @@
         return self.currentValue;
     }
     
+    if([self.currentValue respondsToSelector:@selector(stringValue)]){
+        return [self.currentValue stringValue];
+    }
+    
     return @"";
 }
 

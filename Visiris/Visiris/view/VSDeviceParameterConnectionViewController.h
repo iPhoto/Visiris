@@ -11,7 +11,7 @@
 @class VSParameter;
 @class VSDevice;
 
-@interface VSDeviceParameterConnectionViewController : NSViewController<NSComboBoxDataSource, NSComboBoxDelegate>
+@interface VSDeviceParameterConnectionViewController : NSViewController
 
 @property (strong) VSParameter *parameter;
 
@@ -24,14 +24,13 @@
 - (IBAction)didClickToggleConnection:(NSButton *)sender;
 @property (weak) IBOutlet NSPopUpButton *devicePopUpButton;
 @property (weak) IBOutlet NSPopUpButton *deviceParameterPopUpButton;
+@property (weak) IBOutlet NSBox *mappingHolderBox;
 - (IBAction)didChangeDevicePopUpButton:(NSPopUpButton*)sender;
 - (IBAction)didChangeDeviceParameterPopUpButton:(NSPopUpButton *)sender;
 
 
 @property (weak) IBOutlet NSTextField *deviceNameLabel;
-@property (weak) IBOutlet NSComboBox *deviceParameterComboBox;
 @property (weak) IBOutlet NSTextField *deviceParamterComboBoxLabel;
-@property (weak) IBOutlet NSComboBox *deviceComboBox;
 @property (weak) IBOutlet NSTextField *parameterMinValueTextField;
 @property (weak) IBOutlet NSTextField *parameterMaxValueTextField;
 @property (weak) IBOutlet NSTextField *deviceParameterMinValueTextField;

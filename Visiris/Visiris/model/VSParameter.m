@@ -45,7 +45,7 @@
         self.currentValue = [self.configuredDefaultValue copy];
         
         self.animation = [[VSAnimation alloc] initWithDefaultValue:[self.configuredDefaultValue copy]];
-
+        
     }
     return self;
 }
@@ -131,50 +131,50 @@
 #pragma mark - Methods
 
 -(id) valueForTimestamp:(double)timestamp{
-
+    
     if(!self.connectedWithDeviceParameter){
-    switch(self.dataType){
-        case VSParameterDataTypeBool:{
-            return [NSNumber numberWithBool:[self.animation copmuteBoolValueForTimestamp:timestamp]];
-            break;
+        switch(self.dataType){
+            case VSParameterDataTypeBool:{
+                return [NSNumber numberWithBool:[self.animation copmuteBoolValueForTimestamp:timestamp]];
+                break;
+            }
+            case VSParameterDataTypeFloat:{
+                return [NSNumber numberWithFloat:[self.animation computeFloatValueForTimestamp:timestamp]];
+                break;
+            }
+            case VSParameterDataTypeString:{
+                NSString *result = [self.animation computeStringValueForTimestamp:timestamp];
+                return result;
+                break;
+            }
+            default:{
+                return [self.animation computeStringValueForTimestamp:timestamp];
+                break;
+            }
         }
-        case VSParameterDataTypeFloat:{
-            return [NSNumber numberWithFloat:[self.animation computeFloatValueForTimestamp:timestamp]];
-            break;
-        }
-        case VSParameterDataTypeString:{
-            NSString *result = [self.animation computeStringValueForTimestamp:timestamp];
-            return result;
-            break;
-        }
-        default:{
-            return [self.animation computeStringValueForTimestamp:timestamp];
-            break;
-        }
-    }
     }
     else{
         switch(self.dataType){
-        case VSParameterDataTypeBool:{
-            return [NSNumber numberWithBool:[self currentBoolValueOfDeviceParamterMapper]];
-            break;
-        }
-        case VSParameterDataTypeFloat:{
-            return [NSNumber numberWithFloat:[self currentFloatValueOfDeviceParamterMapper]];
-            break;
-        }
-        case VSParameterDataTypeString:{
-            NSString *result = [self currentStringValueOfDeviceParameterMapper];
-            return result;
-            break;
-        }
-        default:{
-            return [self.animation computeStringValueForTimestamp:timestamp];
-            break;
-        }
+            case VSParameterDataTypeBool:{
+                return [NSNumber numberWithBool:[self currentBoolValueOfDeviceParamterMapper]];
+                break;
+            }
+            case VSParameterDataTypeFloat:{
+                return [NSNumber numberWithFloat:[self currentFloatValueOfDeviceParamterMapper]];
+                break;
+            }
+            case VSParameterDataTypeString:{
+                NSString *result = [self currentStringValueOfDeviceParameterMapper];
+                return result;
+                break;
+            }
+            default:{
+                return [self.animation computeStringValueForTimestamp:timestamp];
+                break;
+            }
         }
     }
-
+    
     return nil;
 }
 
@@ -311,9 +311,12 @@
     if([value isKindOfClass:[NSString class]]){
         return (NSString*) value;
     }
-    else {
-        return @"";
+    
+    if([self.value respondsToSelector:@selector(stringValue)]){
+        return [self.value stringValue];
     }
+    
+    return @"";
 }
 
 /**
