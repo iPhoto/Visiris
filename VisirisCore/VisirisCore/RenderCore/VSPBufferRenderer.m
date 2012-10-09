@@ -45,8 +45,6 @@
  
  */
 
-//#import <OpenGL/CGLMacro.h>
-
 #import "VSPBufferRenderer.h"
 
 @implementation VSPBufferRenderer

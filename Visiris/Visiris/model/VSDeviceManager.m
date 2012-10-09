@@ -12,6 +12,7 @@
 #import "VSDevice.h"
 #import "VSDeviceRepresentation.h"
 #import "VSDeviceParameter.h"
+#import "VSDeviceParameterUtils.h"
 
 #import "VSCoreServices.h"
 
@@ -167,17 +168,48 @@ static NSURL* devicesFolderURL;
         NSString *name= [[parameterNode attributeForName:@"name"] stringValue];
         NSString *oscPath= [[parameterNode attributeForName:@"oscPath"] stringValue];
         
-        float fromValue = [[[parameterNode attributeForName:@"fromValue"] stringValue] floatValue];
-        float toValue = [[[parameterNode attributeForName:@"toValue"] stringValue] floatValue];
+        BOOL hasRange = NO;
+        float fromValue, toValue = 0.0f;
+        
+        if([parameterNode attributeForName:@"fromValue"] && [parameterNode attributeForName:@"toValue"]){
+            fromValue = [[[parameterNode attributeForName:@"fromValue"] stringValue] floatValue];
+            toValue = [[[parameterNode attributeForName:@"toValue"] stringValue] floatValue];
+            
+            hasRange = YES;
+        }
         NSUInteger port = [[[parameterNode attributeForName:@"port"] stringValue] integerValue];
         
-        VSDeviceParameter *deviceParameter = [[VSDeviceParameter alloc] initWithName:name
-                                                                             oscPath:oscPath
-                                                                              atPort:port
-                                                                           fromValue:fromValue
-                                                                             toValue:toValue];
+        NSString *dataTypeName = [[parameterNode attributeForName:@"dataType"] stringValue];
         
-        [device addParametersObject:deviceParameter];
+        NSError *error;
+        
+        VSDeviceParameterDataype datatype = [VSDeviceParameterUtils deviceParameterDatatypeForString:dataTypeName andError:&error];
+        
+        if(!error){
+            VSDeviceParameter *deviceParameter = nil;
+            if(hasRange){
+                deviceParameter = [[VSDeviceParameter alloc] initWithName:name
+                                                                   ofType:datatype
+                                                                  oscPath:oscPath
+                                                                   atPort:port
+                                                                fromValue:fromValue
+                                                                  toValue:toValue];
+            }
+            else{
+                deviceParameter  = [[VSDeviceParameter alloc] initWithName:name
+                                                                    ofType:datatype
+                                                                   oscPath:oscPath
+                                                                    atPort:port];
+            }
+            
+            
+            [device addParametersObject:deviceParameter];
+        }
+        else{
+            DDLogError(@"%@",error);
+        }
+        
+        
     }
     
     [self addDevicesObject:device];

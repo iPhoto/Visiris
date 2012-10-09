@@ -19,6 +19,7 @@
 #import "VSQuartzCompositionUtils.h"
 #import "VSFrameUtils.h"
 #import "VSMiscUtlis.h"
+//#import "VSDeviceParameterUtils.h"
 
 /* Structs */
 #import "VSDoubleFrame.h"
@@ -47,7 +48,5 @@
 #import "NSString+VSOSCUniqueAddress.h"
 #import "NSColor+VSColor.h"
 
-#import "TBXML.h"
-#import "TBXML+Compression.h"
 
 #endif

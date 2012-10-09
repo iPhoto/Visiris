@@ -12,6 +12,7 @@
 #import "VSDevice.h"
 #import "VSDeviceParameter.h"
 #import "VSDeviceParameterMapper.h"
+#import "VSDeviceParameterUtils.h"
 
 #import "VSCoreServices.h"
 
@@ -115,7 +116,15 @@
     if([aComboBox isEqual:self.deviceParameterComboBox]){
         if(self.currentlySelectedDevice){
             if(self.currentlySelectedDevice.parameters.count > index){
-                result = [self.currentlySelectedDevice objectInParametersAtIndex:index].name;
+                
+                VSDeviceParameter *deviceParameter = [self.currentlySelectedDevice objectInParametersAtIndex:index];
+                
+                result = deviceParameter.name;
+                DDLogInfo(@"devicParam %@: %d", deviceParameter.name, deviceParameter.dataType);
+                if(![VSDeviceParameterUtils deviceParameterDataype:deviceParameter.dataType validForParameterType:self.parameter.dataType]){
+                    
+                    result = [NSString stringWithFormat:@"%@ - not valid",result];
+                }
             }
         }
     }
@@ -188,6 +197,14 @@
     
     [self setRanges];
     [self setToggleButtonStringValue];
+    
+    NSInteger i = 0;
+    
+    [self.devicePopUpButton removeAllItems];
+    
+    for(VSDevice *availableDevice in self.availableDevices){
+        [self.devicePopUpButton insertItemWithTitle:availableDevice.name atIndex:i++];
+    }
 }
 
 -(void) setRanges{
@@ -217,14 +234,37 @@
     }
 }
 
+-(void) reloadDeviceParameterPopUp{
+    [self.deviceParameterPopUpButton removeAllItems];
+    
+    [self.deviceParameterPopUpButton setAutoenablesItems:NO];
+    
+    NSUInteger indexToSelect = 0;
+    
+    for(NSUInteger i = 0; i < self.currentlySelectedDevice.parameters.count; i++){
+        VSDeviceParameter *deviceParameter = [self.currentlySelectedDevice objectInParametersAtIndex:i];
+        
+        [self.deviceParameterPopUpButton insertItemWithTitle:deviceParameter.name atIndex:i];
+        
+        if(![VSDeviceParameterUtils deviceParameterDataype:deviceParameter.dataType validForParameterType:self.parameter.dataType]){
+            [[self.deviceParameterPopUpButton itemAtIndex:i] setEnabled:NO];
+            
+            if(i == indexToSelect){
+                indexToSelect++;
+            }
+        }
+    }
+    
+    self.currentlySelectedDeviceParameter = [self.currentlySelectedDevice objectInParametersAtIndex:indexToSelect];
+}
+
 #pragma mark - Properties
 
 -(void) setCurrentlySelectedDevice:(VSDevice *)currentlySelectedDevice{
     if(![currentlySelectedDevice isEqualTo:_currentlySelectedDevice]){
         _currentlySelectedDevice = currentlySelectedDevice;
         
-        [self.deviceComboBox reloadData];
-        [self.deviceParameterComboBox reloadData];
+        [self reloadDeviceParameterPopUp];
     }
 }
 
@@ -243,4 +283,11 @@
     return _currentlySelectedDeviceParameter;
 }
 
+- (IBAction)didChangeDevicePopUpButton:(NSPopUpButton *)sender {
+    self.currentlySelectedDevice = [self.availableDevices objectAtIndex:[sender indexOfSelectedItem]];
+}
+
+- (IBAction)didChangeDeviceParameterPopUpButton:(NSPopUpButton *)sender {
+    self.currentlySelectedDeviceParameter = [self.currentlySelectedDevice objectInParametersAtIndex:[sender indexOfSelectedItem]];
+}
 @end

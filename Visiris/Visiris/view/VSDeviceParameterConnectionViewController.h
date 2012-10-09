@@ -22,6 +22,11 @@
 - (IBAction)rangeValueDidChange:(id)sender;
 
 - (IBAction)didClickToggleConnection:(NSButton *)sender;
+@property (weak) IBOutlet NSPopUpButton *devicePopUpButton;
+@property (weak) IBOutlet NSPopUpButton *deviceParameterPopUpButton;
+- (IBAction)didChangeDevicePopUpButton:(NSPopUpButton*)sender;
+- (IBAction)didChangeDeviceParameterPopUpButton:(NSPopUpButton *)sender;
+
 
 @property (weak) IBOutlet NSTextField *deviceNameLabel;
 @property (weak) IBOutlet NSComboBox *deviceParameterComboBox;

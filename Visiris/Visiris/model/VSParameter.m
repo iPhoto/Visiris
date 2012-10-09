@@ -29,18 +29,23 @@
 
 -(id) initWithName:(NSString *)theName andID:(NSInteger) theID asType:(NSString *)aType forDataType:(VSParameterDataType)aDataType withDefaultValue:(id)theDefaultValue orderNumber:(NSInteger)aOrderNumber editable:(BOOL)editable hidden:(BOOL)hidden rangeMinValue:(float)minRangeValue rangeMaxValue:(float)maxRangeValue{
     
-    self = [self initWithName:theName
-                        andID:theID
-                       asType:aType
-                  forDataType:aDataType
-             withDefaultValue:theDefaultValue
-                  orderNumber:aOrderNumber editable:editable
-                       hidden:hidden];
-    
-    if(self){
-        [self initRangesWithMin:minRangeValue andMax:maxRangeValue];
-
+    if(self = [super init]){
+        self.name = theName;
+        _ID = theID;
+        self.type = aType;
+        self.dataType = aDataType;
+        self.hidden = hidden;
+        self.editable = editable;
+        self.orderNumber = aOrderNumber;
         
+        [self initRangesWithMin:minRangeValue andMax:maxRangeValue];
+        
+        [self initDefaultValueWith:theDefaultValue];
+        
+        self.currentValue = [self.configuredDefaultValue copy];
+        
+        self.animation = [[VSAnimation alloc] initWithDefaultValue:[self.configuredDefaultValue copy]];
+
     }
     return self;
 }
