@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VSBaseAnimationCurve.h"
 
 /**
  * Keyframe of VSAnimation.
@@ -30,11 +31,14 @@
 /** Value of the keyFrame as float */
 @property float floatValue;
 
-/** Value of the keyFrame as BOOL */
+/** Value of the keyFrame as BOOL */ 
 @property BOOL boolValue;
 
 /** ID of the keyFrame. Unique for all keyFrames of one VSAnimation */
 @property NSUInteger ID;
+
+//todo edi
+@property (strong) VSBaseAnimationCurve     *animationCurve;
 
 #pragma mark - Init
 

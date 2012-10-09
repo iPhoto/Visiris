@@ -11,6 +11,7 @@
 #import "VSKeyFrame.h"
 
 #import "VSCoreServices.h"
+#import "VSBaseAnimationCurve.h"
 
 @interface VSAnimation()
 
@@ -121,9 +122,15 @@
             VSKeyFrame *keyframe1 = (VSKeyFrame*)[self.keyFrames objectAtIndex:nexKeyFrameIndex-1];
             
             VSKeyFrame *keyframe2 = (VSKeyFrame*)[self.keyFrames objectAtIndex:nexKeyFrameIndex];
-//            float result = ((keyframe2.floatValue - keyframe1.floatValue)  / (keyframe2.timestamp - keyframe1.timestamp) ) * (timestamp-keyframe1.timestamp) + keyframe1.floatValue;
+
+//            float result = [self easeOut:timestamp fromKeyFrame:keyframe1 toKeyFrame:keyframe2 withStrength:2.1];
             
-            float result = [self linearFunction:timestamp fromKeyFrame:keyframe1 toKeyFrame:keyframe2];
+            float result = [[keyframe1 animationCurve] valueForTime:timestamp
+                                                      withBeginTime:keyframe1.timestamp
+                                                          toEndTime:keyframe2.timestamp
+                                                     withStartValue:keyframe1.floatValue
+                                                         toEndValue:keyframe2.floatValue];
+            
             
             return result;
             
@@ -215,24 +222,82 @@
 }
 
 //todo edi
-- (double)linearFunction:(double)time fromKeyFrame:(VSKeyFrame *)startKeyFrame toKeyFrame:(VSKeyFrame *)endKeyFrame{    
-//    float result = ((keyframe2.floatValue - keyframe1.floatValue)  / (keyframe2.timestamp - keyframe1.timestamp) ) * (timestamp-keyframe1.timestamp) + keyframe1.floatValue;
-
-    
-    double y, k, deltaY, deltaX, d, x;
-    
-    x = time - startKeyFrame.timestamp;
-    
-    d = startKeyFrame.floatValue;
-    
-    deltaY = endKeyFrame.floatValue - startKeyFrame.floatValue;
-    deltaX = endKeyFrame.timestamp - startKeyFrame.timestamp;
-    
-    k = deltaY/deltaX;
-    
-    y = k * x + d;
-    
-    return  y;
-}
-
+//- (double)linear:(double)time fromKeyFrame:(VSKeyFrame *)startKeyFrame toKeyFrame:(VSKeyFrame *)endKeyFrame{
+//    
+//    double y, k, deltaY, deltaX, d, x;
+//    
+//    x = time - startKeyFrame.timestamp;
+//    
+//    d = startKeyFrame.floatValue;
+//    
+//    deltaY = endKeyFrame.floatValue - startKeyFrame.floatValue;
+//    deltaX = endKeyFrame.timestamp - startKeyFrame.timestamp;
+//    
+//    k = deltaY/deltaX;
+//    
+//    y = k * x + d;
+//    
+//    return  y;
+//}
+//
+//- (double)easeIn:(double)time fromKeyFrame:(VSKeyFrame *)startKeyFrame toKeyFrame:(VSKeyFrame *)endKeyFrame withStrength:(double)strength{
+//    
+//    double d, x, c;
+//    
+//    x = time - startKeyFrame.timestamp;
+//    
+//    d = startKeyFrame.floatValue;
+//
+//    //c change in value
+//    c = endKeyFrame.floatValue - startKeyFrame.floatValue;
+//
+//    x /= endKeyFrame.timestamp - startKeyFrame.timestamp;
+//    
+//    return c * pow(x,strength) + d;
+//}
+//
+//- (double)easeOut:(double)time fromKeyFrame:(VSKeyFrame *)startKeyFrame toKeyFrame:(VSKeyFrame *)endKeyFrame withStrength:(double)strength{
+//    
+//    double d, x, c;
+//    
+//    x = time - startKeyFrame.timestamp;
+//    
+//    d = startKeyFrame.floatValue;
+//    
+//    //c change in value
+//    c = endKeyFrame.floatValue - startKeyFrame.floatValue;
+//    
+//    x /= endKeyFrame.timestamp - startKeyFrame.timestamp;
+//    
+//    x--;
+//    
+//    return -c * (pow(fabs(x),strength) - 1) + d;
+//}
+//
+//- (double)easeInOut:(double)time fromKeyFrame:(VSKeyFrame *)startKeyFrame toKeyFrame:(VSKeyFrame *)endKeyFrame withStrength:(double)strength{
+//        
+//    double d, x, c, result;
+//    
+//    x = time - startKeyFrame.timestamp;
+//    
+//    d = startKeyFrame.floatValue;
+//    
+//    //c change in value
+//    c = endKeyFrame.floatValue - startKeyFrame.floatValue;
+//    
+//    x /= (endKeyFrame.timestamp - startKeyFrame.timestamp)/2.0;
+//    
+//    
+//    if (x < 1.0)
+//    {
+//        result = (c/2.0) * pow(x, strength) + d;
+//    }
+//    else
+//    {
+//        x -= 2;
+//        result = -(c/2.0) * (pow(fabs(x), strength) - 2) + d;
+//    }
+//    
+//    return result;
+//}
 @end

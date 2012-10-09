@@ -8,6 +8,11 @@
 
 #import "VSKeyFrame.h"
 
+#import "VSLinearAnimation.h"
+#import "VSEaseInAnimation.h"
+#import "VSEaseOutAnimation.h"
+#import "VSEaseInOutAnimation.h"
+
 @implementation VSKeyFrame
 @synthesize value = _value;
 @synthesize timestamp = _timestamp;
@@ -19,6 +24,7 @@
         self.value = aValue;
         self.timestamp = aTimestamp;
         self.ID = ID;
+        self.animationCurve = [[VSLinearAnimation alloc] init];
     }
     
     return self;
