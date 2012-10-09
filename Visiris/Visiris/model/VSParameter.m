@@ -29,17 +29,22 @@
 
 -(id) initWithName:(NSString *)theName andID:(NSInteger) theID asType:(NSString *)aType forDataType:(VSParameterDataType)aDataType withDefaultValue:(id)theDefaultValue orderNumber:(NSInteger)aOrderNumber editable:(BOOL)editable hidden:(BOOL)hidden rangeMinValue:(float)minRangeValue rangeMaxValue:(float)maxRangeValue{
     
-    self = [self initWithName:theName
-                        andID:theID
-                       asType:aType
-                  forDataType:aDataType
-             withDefaultValue:theDefaultValue
-                  orderNumber:aOrderNumber editable:editable
-                       hidden:hidden];
-    
-    if(self){
+    if(self = [super init]){
+        self.name = theName;
+        _ID = theID;
+        self.type = aType;
+        self.dataType = aDataType;
+        self.hidden = hidden;
+        self.editable = editable;
+        self.orderNumber = aOrderNumber;
+        
         [self initRangesWithMin:minRangeValue andMax:maxRangeValue];
-
+        
+        [self initDefaultValueWith:theDefaultValue];
+        
+        self.currentValue = [self.configuredDefaultValue copy];
+        
+        self.animation = [[VSAnimation alloc] initWithDefaultValue:[self.configuredDefaultValue copy]];
         
     }
     return self;
@@ -126,50 +131,50 @@
 #pragma mark - Methods
 
 -(id) valueForTimestamp:(double)timestamp{
-
+    
     if(!self.connectedWithDeviceParameter){
-    switch(self.dataType){
-        case VSParameterDataTypeBool:{
-            return [NSNumber numberWithBool:[self.animation copmuteBoolValueForTimestamp:timestamp]];
-            break;
+        switch(self.dataType){
+            case VSParameterDataTypeBool:{
+                return [NSNumber numberWithBool:[self.animation copmuteBoolValueForTimestamp:timestamp]];
+                break;
+            }
+            case VSParameterDataTypeFloat:{
+                return [NSNumber numberWithFloat:[self.animation computeFloatValueForTimestamp:timestamp]];
+                break;
+            }
+            case VSParameterDataTypeString:{
+                NSString *result = [self.animation computeStringValueForTimestamp:timestamp];
+                return result;
+                break;
+            }
+            default:{
+                return [self.animation computeStringValueForTimestamp:timestamp];
+                break;
+            }
         }
-        case VSParameterDataTypeFloat:{
-            return [NSNumber numberWithFloat:[self.animation computeFloatValueForTimestamp:timestamp]];
-            break;
-        }
-        case VSParameterDataTypeString:{
-            NSString *result = [self.animation computeStringValueForTimestamp:timestamp];
-            return result;
-            break;
-        }
-        default:{
-            return [self.animation computeStringValueForTimestamp:timestamp];
-            break;
-        }
-    }
     }
     else{
         switch(self.dataType){
-        case VSParameterDataTypeBool:{
-            return [NSNumber numberWithBool:[self currentBoolValueOfDeviceParamterMapper]];
-            break;
-        }
-        case VSParameterDataTypeFloat:{
-            return [NSNumber numberWithFloat:[self currentFloatValueOfDeviceParamterMapper]];
-            break;
-        }
-        case VSParameterDataTypeString:{
-            NSString *result = [self currentStringValueOfDeviceParameterMapper];
-            return result;
-            break;
-        }
-        default:{
-            return [self.animation computeStringValueForTimestamp:timestamp];
-            break;
-        }
+            case VSParameterDataTypeBool:{
+                return [NSNumber numberWithBool:[self currentBoolValueOfDeviceParamterMapper]];
+                break;
+            }
+            case VSParameterDataTypeFloat:{
+                return [NSNumber numberWithFloat:[self currentFloatValueOfDeviceParamterMapper]];
+                break;
+            }
+            case VSParameterDataTypeString:{
+                NSString *result = [self currentStringValueOfDeviceParameterMapper];
+                return result;
+                break;
+            }
+            default:{
+                return [self.animation computeStringValueForTimestamp:timestamp];
+                break;
+            }
         }
     }
-
+    
     return nil;
 }
 
@@ -306,9 +311,12 @@
     if([value isKindOfClass:[NSString class]]){
         return (NSString*) value;
     }
-    else {
-        return @"";
+    
+    if([self.value respondsToSelector:@selector(stringValue)]){
+        return [self.value stringValue];
     }
+    
+    return @"";
 }
 
 /**

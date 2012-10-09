@@ -7,13 +7,18 @@
 //
 
 #import "VSDeviceParameter.h"
+
+#import "VSDeviceParameterUtils.h"
+
 #import "VSCoreServices.h"
 
 
 @implementation VSDeviceParameter
 
--(id) initWithName:(NSString *)name oscPath:(NSString *)oscPath atPort:(NSUInteger) port fromValue:(float)fromValue toValue:(float)toValue{
-    if(self = [self initWithName:name oscPath:oscPath atPort:port]){
+@synthesize dataType = _dataType;
+
+-(id) initWithName:(NSString *)name ofType:(VSDeviceParameterDataype) dataType oscPath:(NSString *)oscPath atPort:(NSUInteger) port fromValue:(float)fromValue toValue:(float)toValue{
+    if(self = [self initWithName:name ofType:dataType oscPath:oscPath atPort:port]){
         self.range = VSMakeRange(fromValue, toValue);
         self.hasRange = YES;
     }
@@ -21,12 +26,13 @@
     return self;
 }
 
--(id) initWithName:(NSString *)name oscPath:(NSString *)oscPath atPort:(NSUInteger)port{
+-(id) initWithName:(NSString *)name ofType:(VSDeviceParameterDataype) dataType oscPath:(NSString *)oscPath atPort:(NSUInteger)port{
     if(self = [super init]){
         self.name = name;
         self.oscPath = oscPath;
         self.port = port;
         self.hasRange = NO;
+        _dataType = dataType;
     }
     
     return self;
@@ -55,6 +61,10 @@
         return self.currentValue;
     }
     
+    if([self.currentValue respondsToSelector:@selector(stringValue)]){
+        return [self.currentValue stringValue];
+    }
+    
     return @"";
 }
 
@@ -71,5 +81,6 @@
     
     return invocation;
 }
+
 
 @end

@@ -8,13 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+#import "VSDeviceParameterUtils.h"
+
 #import "VSCoreServices.h"
 
 @interface VSDeviceParameter : NSObject
 
--(id) initWithName:(NSString*) name oscPath:(NSString*) oscPath atPort:(NSUInteger) port fromValue:(float) fromValue toValue:(float) toValue;
+-(id) initWithName:(NSString*) name ofType:(VSDeviceParameterDataype) dataType oscPath:(NSString*) oscPath atPort:(NSUInteger) port fromValue:(float) fromValue toValue:(float) toValue;
 
--(id) initWithName:(NSString*) name oscPath:(NSString*) oscPath atPort:(NSUInteger) port;
+-(id) initWithName:(NSString*) name ofType:(VSDeviceParameterDataype) dataType oscPath:(NSString*) oscPath atPort:(NSUInteger) port;
 
 @property (assign) BOOL hasRange;
 
@@ -33,6 +35,8 @@
 @property (assign,readonly) BOOL currentBOOLValue;
 
 @property (assign,readonly) NSString *currentStringValue;
+
+@property (readonly) VSDeviceParameterDataype dataType;
 
 - (NSInvocation *)invocationForNewValue;
 

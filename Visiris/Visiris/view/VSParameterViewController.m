@@ -225,14 +225,14 @@ static NSString* defaultNib = @"VSParameterView";
 }
 
 - (IBAction)previousKeyFrame:(id)sender {
-    if([self keyFrameDelegateRespondsToSelector:@selector(parameterViewController:wantsToGoToPreviousFrameOfParameter:)]){
+    if([self keyFrameDelegateRespondsToSelector:@selector(parameterViewController:wantsPlayheadToGoToPreviousFrameOfParameter:)]){
         [self.keyFrameDelegate parameterViewController:self
            wantsPlayheadToGoToPreviousFrameOfParameter:self.parameter];
     }
 }
 
 - (IBAction)nextKeyFrame:(id)sender {
-    if([self keyFrameDelegateRespondsToSelector:@selector(parameterViewController:wantsToGoToNextKeyFrameOfParameter:)]){
+    if([self keyFrameDelegateRespondsToSelector:@selector(parameterViewController:wantsPlayheadToGoToNextKeyFrameOfParameter:)]){
         [self.keyFrameDelegate parameterViewController:self
             wantsPlayheadToGoToNextKeyFrameOfParameter:self.parameter];
     }

@@ -116,6 +116,9 @@ static NSString* defaultNib = @"VSPreviewView";
         if([self.view isKindOfClass:[VSPreviewView class]]){
             ((VSPreviewView*) self.view).frameResizingDelegate = self;
         }
+        
+        [self.frameRateSlider setFloatValue:[VSProjectSettings sharedProjectSettings].frameRate];
+        [self.frameRateTextField setFloatValue:[VSProjectSettings sharedProjectSettings].frameRate];
     }
 }
 
@@ -138,6 +141,7 @@ static NSString* defaultNib = @"VSPreviewView";
 
 - (IBAction)frameRateSliderHasChanged:(NSSlider *)sender {
     [VSProjectSettings sharedProjectSettings].frameRate = [sender integerValue];
+    [self.frameRateTextField setFloatValue:[VSProjectSettings sharedProjectSettings].frameRate];
 }
 
 

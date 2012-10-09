@@ -30,6 +30,7 @@
 
 @property (weak) IBOutlet NSSlider *frameRateSlider;
 
+@property (weak) IBOutlet NSTextField *frameRateTextField;
 
 - (IBAction)toggleFullScreen:(id)sender;
 

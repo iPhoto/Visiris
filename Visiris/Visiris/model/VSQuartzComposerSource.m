@@ -57,23 +57,43 @@
             NSValue *maxValid = [publicInputDictionary objectForKey:@"QCPortAttributeMaximumValueKey"];
             NSValue *minValid = [publicInputDictionary objectForKey:@"QCPortAttributeMinimumValueKey"];
             
+            bool hasRange = NO;
+            
             float minimumValue = 0;
             float maximumValue = 0;
             
             if([minValid isKindOfClass:[NSNumber class]] && [maxValid isKindOfClass:[NSNumber class]]){
                 minimumValue = [((NSNumber*) minValid) floatValue];
                 maximumValue = [((NSNumber*) maxValid) floatValue];
+                
+                hasRange = YES;
             }
             
-            VSParameter *newParameter = [[VSParameter alloc] initWithName:name andID:i
-                                                                   asType:name
-                                                              forDataType:parameterDataType
-                                                         withDefaultValue:defaultValue
-                                                              orderNumber:i
-                                                                 editable:YES
-                                                                   hidden:NO
-                                                            rangeMinValue:minimumValue
-                                                            rangeMaxValue:maximumValue];
+            VSParameter *newParameter = nil;
+            
+            if(hasRange){
+                
+                newParameter = [[VSParameter alloc] initWithName:name
+                                                           andID:i
+                                                          asType:name
+                                                     forDataType:parameterDataType
+                                                withDefaultValue:defaultValue
+                                                     orderNumber:i
+                                                        editable:YES
+                                                          hidden:NO
+                                                   rangeMinValue:minimumValue
+                                                   rangeMaxValue:maximumValue];
+            }
+            else{
+                newParameter = [[VSParameter alloc] initWithName:name
+                                                           andID:i
+                                                          asType:name
+                                                     forDataType:parameterDataType
+                                                withDefaultValue:defaultValue
+                                                     orderNumber:i
+                                                        editable:YES
+                                                          hidden:NO];
+            }
             
             if(newParameter){
                 [qcPublicInputParameters setValue:newParameter forKey:key];

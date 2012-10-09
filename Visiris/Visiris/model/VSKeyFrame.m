@@ -50,6 +50,11 @@
     if([self.value isKindOfClass:[NSString class]]){
         return (NSString*) self.value;
     }
+    
+    if([self.value respondsToSelector:@selector(stringValue)]){
+        return [self.value stringValue];
+    }
+    
     return @"";
 }
 
