@@ -82,9 +82,5 @@
     return invocation;
 }
 
--(VSDeviceParameterDataype) dataType{
-    DDLogInfo(@"get dtaType: %d",_dataType);
-    return _dataType;
-}
 
 @end
