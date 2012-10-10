@@ -20,6 +20,8 @@
 
 @property (assign) VSRange strengthRange;
 
+@property (assign) BOOL     usesStrength;
+
 - (double)valueForTime:(double)time withBeginTime:(double)beginTime toEndTime:(double)endTime withStartValue:(double)startValue toEndValue:(double)endVelue;
 
 @end

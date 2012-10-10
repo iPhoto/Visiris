@@ -20,6 +20,7 @@
 {
     if (self = [super init]) {
         _name = @"CircularEaseInTESTING";
+        self.usesStrength = NO;
     }
     
     return self;

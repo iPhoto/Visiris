@@ -20,11 +20,11 @@
 {
     if (self = [super init]) {
         _name = @"SineTESTING";
+        self.usesStrength = YES;
     }
     
     return self;
 }
-
 
 - (double)valueForTime:(double)time withBeginTime:(double)beginTime toEndTime:(double)endTime withStartValue:(double)startValue toEndValue:(double)endValue
 {

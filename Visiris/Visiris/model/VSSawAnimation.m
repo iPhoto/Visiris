@@ -20,6 +20,7 @@
 {
     if (self = [super init]) {
         _name = @"SawTESTING";
+        self.usesStrength = YES;
     }
     
     return self;

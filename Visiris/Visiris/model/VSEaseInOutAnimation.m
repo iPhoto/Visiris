@@ -20,6 +20,7 @@
 {
     if (self = [super init]) {
         _name = @"EaseInOut";
+        self.usesStrength = YES;
     }
     
     return self;

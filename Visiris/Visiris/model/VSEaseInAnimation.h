@@ -9,5 +9,5 @@
 #import "VSAnimationCurve.h"
 
 @interface VSEaseInAnimation : VSAnimationCurve
-+(void) initialize;
+
 @end

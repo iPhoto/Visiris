@@ -20,6 +20,7 @@
 {
     if (self = [super init]) {
         _name = @"BounceEaseOutTESTING";
+        self.usesStrength = NO;
     }
     
     return self;
