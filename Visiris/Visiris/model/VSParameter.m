@@ -253,13 +253,15 @@
         self.deviceParameterMapper = [[VSDeviceParameterMapper alloc] initWithDeviceParameter:deviceParameter
                                                                                      ofDevice:device deviceParameterRange:deviceParameterRange
                                                                             andParameterRange:parameterRange];
+    
+        self.connectedWithDeviceParameter = [self.deviceParameterMapper activateDeviceParameter];
     }
     else{
         self.deviceParameterMapper.parameterRange = parameterRange;
         self.deviceParameterMapper.deviceParameterRange = deviceParameterRange;
     }
     
-    self.connectedWithDeviceParameter = [self.deviceParameterMapper activateDeviceParameter];
+    
     
     return self.connectedWithDeviceParameter;
 }
