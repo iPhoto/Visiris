@@ -32,6 +32,10 @@
     
     int strength = (int)self.strength * 3;
     
+    if (strength % 2 == 0) {
+        strength--;
+    }
+    
     x = time - beginTime;
     
     d = startValue;
@@ -41,15 +45,11 @@
     
     k = deltaY/deltaX;
     
-    
     k *= strength;
     
     double normX = x / deltaX;
     
-    
-    
     double rest = fmod(normX, (1.0/(double)strength * 2.0));
-    
     
     if (rest - 1.0/(double)strength > 0.0)
     {
@@ -68,31 +68,7 @@
         y += d;
     }
     
-    
-
-    
-    
-//
-//    
-//    for (int i = 0; i < strength; i++)
-//    {
-//        if (i % 2 == 1)
-//        {
-//            y = k * x + d;
-//        }
-//        else
-//        {
-//            y = -k * x + endValue;
-//        }
-//        
-//    }
-    
-    
-    
-//    y = fmod(y,endValue);
-    
     return y;
-
 }
 
 
