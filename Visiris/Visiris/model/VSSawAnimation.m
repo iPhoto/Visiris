@@ -48,8 +48,31 @@
     
     
     
-//    rest = fmod(normX, strength);
-//    
+    double rest = fmod(normX, (1.0/(double)strength * 2.0));
+    
+    
+    if (rest - 1.0/(double)strength > 0.0)
+    {
+        y = -k * x;
+        
+        y = fmod(y, deltaY);
+        
+        y += endValue;
+    }
+    else
+    {
+        y = k * x;
+        
+        y = fmod(y, deltaY);
+
+        y += d;
+    }
+    
+    
+
+    
+    
+//
 //    
 //    for (int i = 0; i < strength; i++)
 //    {
