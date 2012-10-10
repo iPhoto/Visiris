@@ -33,20 +33,42 @@
     
 }
 
--(void) showPopUpForAnimationCurves:(NSArray*) animationCurves{
+-(void) showPopUpForAnimationCurves:(NSArray*) animationCurves andSelectAnimationCurve:(VSAnimationCurve*) selectedAnimationCurve{
     [self.aimationCurvesPopUpButton removeAllItems];
     
     self.animationCurves = animationCurves;
     
-    
+
     for(VSAnimationCurve *animationCurve in self.animationCurves){
         [self.aimationCurvesPopUpButton insertItemWithTitle:animationCurve.name atIndex:[self.animationCurves indexOfObject:animationCurve]];
     }
+    
+    NSUInteger indexOfSelected = [self.animationCurves indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj class] == [selectedAnimationCurve class]){
+            return YES;
+        }
+        
+        return NO;
+    }];
+    
+    [self.aimationCurvesPopUpButton selectItemAtIndex:indexOfSelected];
+    
+    self.currentStrength = selectedAnimationCurve.strength;
+    
+    self.currentlySelectedAnimationCurve = selectedAnimationCurve;
+
 }
 
 - (IBAction)didChangeAnimationCurvesPopUpWindow:(NSPopUpButton *)sender {
-    DDLogInfo(@"sel index: %d",[self.aimationCurvesPopUpButton indexOfSelectedItem]);
     self.currentlySelectedAnimationCurve = [self.animationCurves objectAtIndex:[self.aimationCurvesPopUpButton indexOfSelectedItem]];
-    DDLogInfo(@"cur sel: %@",self.currentlySelectedAnimationCurve);
+    
+    [self.strengthSlider setMinValue:self.currentlySelectedAnimationCurve.strengthRange.min];
+    [self.strengthSlider setMaxValue:self.currentlySelectedAnimationCurve.strengthRange.max];
+    
+    [self.strengthSlider setFloatValue:self.currentStrength];
+}
+
+- (IBAction)didChangeStrengthSlider:(NSSlider *)sender {
+    self.currentStrength = [sender floatValue];
 }
 @end

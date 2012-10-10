@@ -18,6 +18,7 @@
 {
     if (self = [super init]) {
         self.strength = 2.0;
+        self.strengthRange = VSMakeRange(1.0, 10.0);
     }
     
     return self;
