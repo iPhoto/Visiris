@@ -10,6 +10,7 @@
 
 #import "VSKeyFrameViewController.h"
 #import "VSViewResizingDelegate.h"
+#import "VSViewMouseEventsDelegate.h"
 
 @class VSAnimationTrackViewController;
 @class VSParameter;
@@ -42,6 +43,9 @@
  */
 -(NSPoint) keyFrameViewControllersView:(VSKeyFrameViewController*) keyFrameViewController wantsToBeDraggedFrom:(NSPoint) fromPoint to:(NSPoint) toPoint onTrack:(VSAnimationTrackViewController*) track;
 
+
+-(void) didClickRightKeyFrameConnectionOfKeyFrameViewController:(VSKeyFrameViewController*) keyFrameViewController atPosition:(NSPoint) position onTrack:(VSAnimationTrackViewController*) animationTrackViewController;
+
 @end
 
 
@@ -52,7 +56,7 @@
  *
  * Displays the animation's keyFrames and gives the user the possibilty to select, delete or move around the keyFrames
  */
-@interface VSAnimationTrackViewController : NSViewController<VSViewResizingDelegate, VSKeyFrameViewControllerDelegate>
+@interface VSAnimationTrackViewController : NSViewController<VSViewResizingDelegate, VSKeyFrameViewControllerDelegate, VSViewMouseEventsDelegate>
 
 #pragma mark - Properties
 

@@ -1,4 +1,4 @@
- //
+//
 //  VSAnimationTimelineViewController.m
 //  Visiris
 //
@@ -19,6 +19,8 @@
 #import "VSKeyFrameViewController.h"
 #import "VSParameter.h"
 #import "VSKeyFrame.h"
+#import "VSAnimationCurvePopupViewController.h"
+#import "VSAnimationCurveFactory.h"
 
 #import "VSCoreServices.h"
 
@@ -29,6 +31,10 @@
 
 /** Reference of the VSPlayhead of the VSTimeline stored in the current VSDocument */
 @property (readwrite, weak) VSPlayHead *playhead;
+
+@property (strong) NSPopover *animationCurvePopover;
+
+@property (weak) VSKeyFrameViewController *controllerOfCurrentlySelectedConnectionPath;
 
 @end
 
@@ -184,6 +190,54 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
         }
     }
     return result;
+}
+
+-(void) didClickRightKeyFrameConnectionOfKeyFrameViewController:(VSKeyFrameViewController *)keyFrameViewController atPosition:(NSPoint)position onTrack:(VSAnimationTrackViewController *)animationTrackViewController{
+    
+    NSRect relativeToRect = NSMakeRect(position.x, position.y, 1, 1);
+    
+    self.controllerOfCurrentlySelectedConnectionPath = keyFrameViewController;
+    
+    [self showAnimationCurvePopoverRelativeToRect:relativeToRect ofView:animationTrackViewController.view];
+}
+
+-(void) showAnimationCurvePopoverRelativeToRect:(NSRect) rect ofView:(NSView*) relativeToView{
+    
+    
+    self.animationCurvePopover = [[NSPopover alloc] init];
+    
+    self.animationCurvePopover.contentViewController = self.animationCurvePopupViewController;
+    
+    self.animationCurvePopover.delegate = self;
+    
+    self.animationCurvePopover.behavior = NSPopoverBehaviorTransient;
+    
+    [self.animationCurvePopover showRelativeToRect:rect
+                                            ofView:relativeToView
+                                     preferredEdge:NSMaxYEdge];
+    
+    [self.animationCurvePopupViewController showPopUpForAnimationCurves:[[VSAnimationCurveFactory registeredAnimationCurves] allValues]];
+    
+   
+}
+
+#pragma mark - NSPopoverDelegate Implementation
+
+-(void) popoverWillClose:(NSNotification *)notification{
+    
+    if([self.animationCurvePopupViewController.currentlySelectedAnimationCurve class] == [self.controllerOfCurrentlySelectedConnectionPath.keyFrame.animationCurve class]){
+        
+    }
+    else{
+        VSAnimationCurve *animationCurve = [VSAnimationCurveFactory createAnimationCurveOfClass:NSStringFromClass([self.animationCurvePopupViewController.currentlySelectedAnimationCurve class])];
+        
+        if(animationCurve){
+            self.controllerOfCurrentlySelectedConnectionPath.keyFrame.animationCurve =  animationCurve;
+        }
+        else{
+            DDLogError(@" animationCurve is null");
+        }
+    }
 }
 
 #pragma mark - Methods

@@ -11,7 +11,7 @@
 #import "VSKeyFrame.h"
 
 #import "VSCoreServices.h"
-#import "VSBaseAnimationCurve.h"
+#import "VSAnimationCurve.h"
 
 @interface VSAnimation()
 
@@ -122,8 +122,8 @@
             VSKeyFrame *keyframe1 = (VSKeyFrame*)[self.keyFrames objectAtIndex:nexKeyFrameIndex-1];
             
             VSKeyFrame *keyframe2 = (VSKeyFrame*)[self.keyFrames objectAtIndex:nexKeyFrameIndex];
-
-//            float result = [self easeOut:timestamp fromKeyFrame:keyframe1 toKeyFrame:keyframe2 withStrength:2.1];
+            
+            DDLogInfo(@"%@ - %@",keyframe1.animationCurve,keyframe2.animationCurve);
             
             float result = [[keyframe1 animationCurve] valueForTime:timestamp
                                                       withBeginTime:keyframe1.timestamp

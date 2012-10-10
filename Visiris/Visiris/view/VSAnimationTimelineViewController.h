@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 #import "VSTimelineViewController.h"
+#import "VSAnimationCurvePopupViewController.h"
 
 #import "VSAnimationTrackViewController.h"
 
@@ -68,7 +69,7 @@
  *
  * VSAnimationTimelineViewController holds one VSAnimationTrack for every animateable for the currently selected VSTimelineObject and is responsible for communicating between its VSAnimationTracks and their content and the VSTimelineObjectParametersViewController.
  */
-@interface VSAnimationTimelineViewController : VSTimelineViewController<VSAnimationTrackViewControllerDelegate>
+@interface VSAnimationTimelineViewController : VSTimelineViewController<VSAnimationTrackViewControllerDelegate, NSPopoverDelegate>
 
 #pragma mark - Properties
 
@@ -87,6 +88,7 @@
 /** Height of the VSAnimationTrackViews the VSAnimationTimelineViewController sets up for its VSTimelineObject */
 @property float trackHeight;
 
+@property (strong) IBOutlet VSAnimationCurvePopupViewController *animationCurvePopupViewController;
 #pragma mark - Init
 
 /**

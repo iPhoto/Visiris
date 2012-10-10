@@ -10,6 +10,23 @@
 
 @implementation VSEaseInAnimation
 
+@synthesize name    = _name;
+
++(void) load{
+   [VSAnimationCurveFactory registerAnimationCurveOfClass:NSStringFromClass([self class])]; 
+}
+
+
+- (id)init
+{
+    if (self = [super init]) {
+        _name = @"EaseIn";
+    }
+    
+    return self;
+}
+
+
 - (double)valueForTime:(double)time withBeginTime:(double)beginTime toEndTime:(double)endTime withStartValue:(double)startValue toEndValue:(double)endValue 
 {
     double d, x, c;

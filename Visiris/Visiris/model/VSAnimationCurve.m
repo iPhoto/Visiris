@@ -6,11 +6,13 @@
 //
 //
 
-#import "VSBaseAnimationCurve.h"
+#import "VSAnimationCurve.h"
 #import "VSCoreServices.h"
 
-@implementation VSBaseAnimationCurve
+@implementation VSAnimationCurve
 @synthesize strength = _strength;
+
+
 
 - (id)init
 {

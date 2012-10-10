@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "VSViewResizingDelegate.h"
+#import "VSViewMouseEventsDelegate.h"
 
 /**
  * Subclass of NSView representing the animation of one VSParameter
@@ -21,4 +22,7 @@
 
 /** Stores the connection between the keyframes of the track */
 @property (strong) NSArray *keyFrameConnectionPaths;
+
+@property id<VSViewMouseEventsDelegate> viewMouseDelegate;
+
 @end

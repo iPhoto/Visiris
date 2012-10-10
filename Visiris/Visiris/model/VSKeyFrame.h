@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "VSBaseAnimationCurve.h"
+#import "VSAnimationCurve.h"
 
 /**
  * Keyframe of VSAnimation.
@@ -38,7 +38,7 @@
 @property NSUInteger ID;
 
 //todo edi
-@property (strong) VSBaseAnimationCurve     *animationCurve;
+@property (strong) VSAnimationCurve     *animationCurve;
 
 #pragma mark - Init
 

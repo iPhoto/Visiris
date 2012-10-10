@@ -8,6 +8,7 @@
 
 #import "VSKeyFrame.h"
 
+#import "VSAnimationCurve.h"
 #import "VSLinearAnimation.h"
 #import "VSEaseInAnimation.h"
 #import "VSEaseOutAnimation.h"

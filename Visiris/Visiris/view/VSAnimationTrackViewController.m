@@ -63,6 +63,8 @@
         [self initKeyFrames];
         [self.view setWantsLayer:YES];
         [self initOverlayFrameWithColor:trackColor];
+        
+        self.animationTrackView.viewMouseDelegate = self;
     }
     return self;
 }
@@ -251,6 +253,35 @@
     return keyFrameViewController.keyFrame.floatValue;
 }
 
+#pragma mark - VSViewMouseEventsDelegate Implementation
+
+-(void) rightMouseDown:(NSEvent *)theEvent onView:(NSView *)view{
+    for(id key in self.keyFrameConnectionPaths){
+        
+        NSBezierPath *path = [self.keyFrameConnectionPaths objectForKey:key];
+        
+        NSPoint pointInView = [self.view convertPoint:[theEvent locationInWindow] fromView:nil];
+        if(NSPointInRect(pointInView, path.bounds)){
+            
+            if([key respondsToSelector:@selector(integerValue)]){
+                
+                NSInteger indexOfObject = [key integerValue];
+                
+                VSKeyFrameViewController *selectedKeyFrameViewController = [self.keyFrameViewControllers objectAtIndex:indexOfObject];
+                
+                if([self delegateRespondsToSelector:@selector(didClickRightKeyFrameConnectionOfKeyFrameViewController:atPosition:onTrack:)]){
+                    [self.delegate didClickRightKeyFrameConnectionOfKeyFrameViewController:selectedKeyFrameViewController
+                                                                                atPosition:pointInView
+                                                                                   onTrack:self];
+                     }
+            }
+            
+            
+        }
+        
+        DDLogInfo(@"p: %@ b: %@",NSStringFromPoint(pointInView), NSStringFromRect(path.bounds));
+    }
+}
 
 #pragma mark - VSKeyFrameViewControllerDelegate Implementation
 

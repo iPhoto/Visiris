@@ -8,9 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
-@interface VSBaseAnimationCurve : NSObject
+#import "VSAnimationCurveFactory.h"
+
+@interface VSAnimationCurve : NSObject
 
 @property (assign) double    strength;
+
+@property (strong, readonly) NSString *name;
+
 
 - (double)valueForTime:(double)time withBeginTime:(double)beginTime toEndTime:(double)endTime withStartValue:(double)startValue toEndValue:(double)endVelue;
 

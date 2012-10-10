@@ -6,8 +6,8 @@
 //
 //
 
-#import "VSBaseAnimationCurve.h"
+#import "VSAnimationCurve.h"
 
-@interface VSEaseInAnimation : VSBaseAnimationCurve
-
+@interface VSEaseInAnimation : VSAnimationCurve
++(void) initialize;
 @end

@@ -32,7 +32,7 @@
 		27CFB14216139C1D00A19B7A /* VVBasics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CFB13F16139C1D00A19B7A /* VVBasics.framework */; };
 		27CFB14316139C1D00A19B7A /* VVMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CFB14016139C1D00A19B7A /* VVMIDI.framework */; };
 		27CFB14416139C1D00A19B7A /* VVOSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CFB14116139C1D00A19B7A /* VVOSC.framework */; };
-		27D3DD711624459A003B695F /* VSBaseAnimationCurve.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D3DD701624459A003B695F /* VSBaseAnimationCurve.m */; };
+		27D3DD711624459A003B695F /* VSAnimationCurve.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D3DD701624459A003B695F /* VSAnimationCurve.m */; };
 		27D3DD74162445D0003B695F /* VSLinearAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D3DD73162445D0003B695F /* VSLinearAnimation.m */; };
 		27D3DD77162445EC003B695F /* VSEaseInAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D3DD76162445EC003B695F /* VSEaseInAnimation.m */; };
 		27D3DD7A162446AD003B695F /* VSEaseOutAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D3DD79162446AD003B695F /* VSEaseOutAnimation.m */; };
@@ -169,6 +169,9 @@
 		5B60CC5B16135EE800557892 /* VSOutputController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B60CC5A16135EE800557892 /* VSOutputController.m */; };
 		5B70F71B15C2E650002B54ED /* VSPlayheadMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B70F71A15C2E650002B54ED /* VSPlayheadMarker.m */; };
 		5B7BFFC71592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BFFC61592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m */; };
+		5B84D71E162470DB006DDC12 /* VSAnimationCurveFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B84D71D162470DB006DDC12 /* VSAnimationCurveFactory.m */; };
+		5B84D72116247C47006DDC12 /* VSAnimationCurvePopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B84D72016247C47006DDC12 /* VSAnimationCurvePopup.xib */; };
+		5B84D72416247C5A006DDC12 /* VSAnimationCurvePopupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B84D72316247C5A006DDC12 /* VSAnimationCurvePopupViewController.m */; };
 		5BAC770616034B9400DF3BB0 /* VSKeyFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAC770516034B9400DF3BB0 /* VSKeyFrameView.m */; };
 		5BAC770916034BA100DF3BB0 /* VSKeyFrameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAC770816034BA100DF3BB0 /* VSKeyFrameViewController.m */; };
 		5BBF2A0615FF42A0009D79C7 /* VSScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BBF2A0515FF42A0009D79C7 /* VSScrollView.m */; };
@@ -245,8 +248,8 @@
 		27CFB13F16139C1D00A19B7A /* VVBasics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVBasics.framework; path = Frameworks/VVBasics.framework; sourceTree = "<group>"; };
 		27CFB14016139C1D00A19B7A /* VVMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVMIDI.framework; path = Frameworks/VVMIDI.framework; sourceTree = "<group>"; };
 		27CFB14116139C1D00A19B7A /* VVOSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVOSC.framework; path = Frameworks/VVOSC.framework; sourceTree = "<group>"; };
-		27D3DD6F1624459A003B695F /* VSBaseAnimationCurve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSBaseAnimationCurve.h; sourceTree = "<group>"; };
-		27D3DD701624459A003B695F /* VSBaseAnimationCurve.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSBaseAnimationCurve.m; sourceTree = "<group>"; };
+		27D3DD6F1624459A003B695F /* VSAnimationCurve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAnimationCurve.h; sourceTree = "<group>"; };
+		27D3DD701624459A003B695F /* VSAnimationCurve.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAnimationCurve.m; sourceTree = "<group>"; };
 		27D3DD72162445D0003B695F /* VSLinearAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSLinearAnimation.h; sourceTree = "<group>"; };
 		27D3DD73162445D0003B695F /* VSLinearAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSLinearAnimation.m; sourceTree = "<group>"; };
 		27D3DD75162445EC003B695F /* VSEaseInAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSEaseInAnimation.h; sourceTree = "<group>"; };
@@ -487,6 +490,11 @@
 		5B70F71A15C2E650002B54ED /* VSPlayheadMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSPlayheadMarker.m; sourceTree = "<group>"; };
 		5B7BFFC51592143C00CEA1E8 /* VSTimelineObjectViewIntersection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineObjectViewIntersection.h; sourceTree = "<group>"; };
 		5B7BFFC61592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineObjectViewIntersection.m; sourceTree = "<group>"; };
+		5B84D71C162470DB006DDC12 /* VSAnimationCurveFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAnimationCurveFactory.h; sourceTree = "<group>"; };
+		5B84D71D162470DB006DDC12 /* VSAnimationCurveFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAnimationCurveFactory.m; sourceTree = "<group>"; };
+		5B84D72016247C47006DDC12 /* VSAnimationCurvePopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VSAnimationCurvePopup.xib; sourceTree = "<group>"; };
+		5B84D72216247C5A006DDC12 /* VSAnimationCurvePopupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAnimationCurvePopupViewController.h; sourceTree = "<group>"; };
+		5B84D72316247C5A006DDC12 /* VSAnimationCurvePopupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAnimationCurvePopupViewController.m; sourceTree = "<group>"; };
 		5B98D1CA161C8EF0002CDE1F /* VSFullScreenHolderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFullScreenHolderView.h; sourceTree = "<group>"; };
 		5B98D1CB161C8EF0002CDE1F /* VSFullScreenHolderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFullScreenHolderView.m; sourceTree = "<group>"; };
 		5B98D1D9161CACFF002CDE1F /* VSDeviceLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDeviceLoader.h; sourceTree = "<group>"; };
@@ -650,11 +658,11 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		27D3DD6D16244474003B695F /* AnimationCurve */ = {
+		27D3DD6D16244474003B695F /* animationCurve */ = {
 			isa = PBXGroup;
 			children = (
-				27D3DD6F1624459A003B695F /* VSBaseAnimationCurve.h */,
-				27D3DD701624459A003B695F /* VSBaseAnimationCurve.m */,
+				27D3DD6F1624459A003B695F /* VSAnimationCurve.h */,
+				27D3DD701624459A003B695F /* VSAnimationCurve.m */,
 				27D3DD72162445D0003B695F /* VSLinearAnimation.h */,
 				27D3DD73162445D0003B695F /* VSLinearAnimation.m */,
 				27D3DD75162445EC003B695F /* VSEaseInAnimation.h */,
@@ -663,8 +671,10 @@
 				27D3DD79162446AD003B695F /* VSEaseOutAnimation.m */,
 				27D3DD7B16244706003B695F /* VSEaseInOutAnimation.h */,
 				27D3DD7C16244706003B695F /* VSEaseInOutAnimation.m */,
+				5B84D71C162470DB006DDC12 /* VSAnimationCurveFactory.h */,
+				5B84D71D162470DB006DDC12 /* VSAnimationCurveFactory.m */,
 			);
-			name = AnimationCurve;
+			name = animationCurve;
 			sourceTree = "<group>";
 		};
 		5B0E366215876E6A00F15026 /* trackLabel */ = {
@@ -1177,7 +1187,7 @@
 		5B35C0B71577B08F009911EC /* animation */ = {
 			isa = PBXGroup;
 			children = (
-				27D3DD6D16244474003B695F /* AnimationCurve */,
+				27D3DD6D16244474003B695F /* animationCurve */,
 				5BD944C01611E65C00E94E36 /* keyFrames */,
 				5B35BF631577A573009911EC /* VSAnimation.h */,
 				5B35BF641577A573009911EC /* VSAnimation.m */,
@@ -1318,6 +1328,16 @@
 			name = protocolls;
 			sourceTree = "<group>";
 		};
+		5B84D71F16247C1F006DDC12 /* animationCurvePopover */ = {
+			isa = PBXGroup;
+			children = (
+				5B84D72016247C47006DDC12 /* VSAnimationCurvePopup.xib */,
+				5B84D72216247C5A006DDC12 /* VSAnimationCurvePopupViewController.h */,
+				5B84D72316247C5A006DDC12 /* VSAnimationCurvePopupViewController.m */,
+			);
+			name = animationCurvePopover;
+			sourceTree = "<group>";
+		};
 		5B9AD00F15C01ACA00A1D1C0 /* timeline */ = {
 			isa = PBXGroup;
 			children = (
@@ -1391,6 +1411,7 @@
 		5BD35BE915D96ABD001A74E0 /* timeline */ = {
 			isa = PBXGroup;
 			children = (
+				5B84D71F16247C1F006DDC12 /* animationCurvePopover */,
 				5BD35BC215D95943001A74E0 /* VSAnimationTimelineViewController.h */,
 				5BD35BC315D95943001A74E0 /* VSAnimationTimelineViewController.m */,
 				5BD35BC415D95943001A74E0 /* VSAnimationTimelineView.xib */,
@@ -1569,6 +1590,7 @@
 				A9838A44161792CD00DF110C /* VSDeviceConfigurationViewController.xib in Resources */,
 				A986A5FA161CC8430068F3CA /* VSCreateDeviceViewController.xib in Resources */,
 				5B4ABA85161DA3F500BE5248 /* VSDeviceParameterConnectionView.xib in Resources */,
+				5B84D72116247C47006DDC12 /* VSAnimationCurvePopup.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1732,12 +1754,14 @@
 				5B4ABA84161DA3F500BE5248 /* VSDeviceParameterConnectionViewController.m in Sources */,
 				27482037161E121500C13590 /* NSString+VSOSCUniqueAddress.m in Sources */,
 				5BDCE906162295AE007F52A7 /* NSColor+VSColor.m in Sources */,
-				27D3DD711624459A003B695F /* VSBaseAnimationCurve.m in Sources */,
+				27D3DD711624459A003B695F /* VSAnimationCurve.m in Sources */,
 				27D3DD74162445D0003B695F /* VSLinearAnimation.m in Sources */,
 				27D3DD77162445EC003B695F /* VSEaseInAnimation.m in Sources */,
 				27D3DD7A162446AD003B695F /* VSEaseOutAnimation.m in Sources */,
 				27D3DD7D16244706003B695F /* VSEaseInOutAnimation.m in Sources */,
 				27D3DD821624636F003B695F /* VSDeviceParameterUtils.m in Sources */,
+				5B84D71E162470DB006DDC12 /* VSAnimationCurveFactory.m in Sources */,
+				5B84D72416247C5A006DDC12 /* VSAnimationCurvePopupViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

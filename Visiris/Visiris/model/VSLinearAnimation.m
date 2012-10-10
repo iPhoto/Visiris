@@ -9,6 +9,20 @@
 #import "VSLinearAnimation.h"
 
 @implementation VSLinearAnimation
+@synthesize name    = _name;
+
+- (id)init
+{
+    if (self = [super init]) {
+        _name = @"Linear";
+    }
+    
+    return self;
+}
+
++(void) load{
+    [VSAnimationCurveFactory registerAnimationCurveOfClass:NSStringFromClass([self class])];
+}
 
 - (double)valueForTime:(double)time withBeginTime:(double)beginTime toEndTime:(double)endTime withStartValue:(double)startValue toEndValue:(double)endValue 
 {
