@@ -23,6 +23,14 @@
 /* Begin PBXBuildFile section */
 		27482037161E121500C13590 /* NSString+VSOSCUniqueAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = 27482036161E121500C13590 /* NSString+VSOSCUniqueAddress.m */; };
 		2761513B1577C97A005177C5 /* aaa.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2761513A1577C97A005177C5 /* aaa.jpg */; };
+		2776C4151625788A00E1672E /* VSSineEaseInAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2776C4141625788A00E1672E /* VSSineEaseInAnimation.m */; };
+		2776C4A716257C7E00E1672E /* VSExponentialEaseIn.m in Sources */ = {isa = PBXBuildFile; fileRef = 2776C4A616257C7E00E1672E /* VSExponentialEaseIn.m */; };
+		2776C4AA162580D200E1672E /* VSCircularEaseIn.m in Sources */ = {isa = PBXBuildFile; fileRef = 2776C4A9162580D100E1672E /* VSCircularEaseIn.m */; };
+		2776C4AD162582EC00E1672E /* VSSpringAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2776C4AC162582EC00E1672E /* VSSpringAnimation.m */; };
+		2776C4B0162585B600E1672E /* VSBounceEaseOutAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2776C4AF162585B500E1672E /* VSBounceEaseOutAnimation.m */; };
+		2776C4B3162588E100E1672E /* VSEaseInBackAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2776C4B2162588E000E1672E /* VSEaseInBackAnimation.m */; };
+		2776C4B916258E2C00E1672E /* VSElasticEaseInAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2776C4B816258E2B00E1672E /* VSElasticEaseInAnimation.m */; };
+		2776C4BC162593F800E1672E /* VSSawAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2776C4BB162593F700E1672E /* VSSawAnimation.m */; };
 		2795881715906D5000E24B57 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2795881615906D5000E24B57 /* CoreMedia.framework */; };
 		2795881A15906D7B00E24B57 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2795881915906D7B00E24B57 /* AVFoundation.framework */; };
 		2799F8E61599C8B800008489 /* VSQuartzCompositionUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2799F8E51599C8B800008489 /* VSQuartzCompositionUtils.m */; };
@@ -234,6 +242,22 @@
 		27726EEF161381DC00C0AEEB /* VSOSCInputManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSOSCInputManager.m; sourceTree = "<group>"; };
 		27726EF31613822000C0AEEB /* VSOSCClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSOSCClient.h; sourceTree = "<group>"; };
 		27726EF41613822000C0AEEB /* VSOSCClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSOSCClient.m; sourceTree = "<group>"; };
+		2776C4131625788A00E1672E /* VSSineEaseInAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSSineEaseInAnimation.h; sourceTree = "<group>"; };
+		2776C4141625788A00E1672E /* VSSineEaseInAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSSineEaseInAnimation.m; sourceTree = "<group>"; };
+		2776C4A516257C7D00E1672E /* VSExponentialEaseIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSExponentialEaseIn.h; sourceTree = "<group>"; };
+		2776C4A616257C7E00E1672E /* VSExponentialEaseIn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSExponentialEaseIn.m; sourceTree = "<group>"; };
+		2776C4A8162580D100E1672E /* VSCircularEaseIn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSCircularEaseIn.h; sourceTree = "<group>"; };
+		2776C4A9162580D100E1672E /* VSCircularEaseIn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSCircularEaseIn.m; sourceTree = "<group>"; };
+		2776C4AB162582EC00E1672E /* VSSpringAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSSpringAnimation.h; sourceTree = "<group>"; };
+		2776C4AC162582EC00E1672E /* VSSpringAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSSpringAnimation.m; sourceTree = "<group>"; };
+		2776C4AE162585B500E1672E /* VSBounceEaseOutAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSBounceEaseOutAnimation.h; sourceTree = "<group>"; };
+		2776C4AF162585B500E1672E /* VSBounceEaseOutAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSBounceEaseOutAnimation.m; sourceTree = "<group>"; };
+		2776C4B1162588E000E1672E /* VSEaseInBackAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSEaseInBackAnimation.h; sourceTree = "<group>"; };
+		2776C4B2162588E000E1672E /* VSEaseInBackAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSEaseInBackAnimation.m; sourceTree = "<group>"; };
+		2776C4B716258E2B00E1672E /* VSElasticEaseInAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSElasticEaseInAnimation.h; sourceTree = "<group>"; };
+		2776C4B816258E2B00E1672E /* VSElasticEaseInAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSElasticEaseInAnimation.m; sourceTree = "<group>"; };
+		2776C4BA162593F600E1672E /* VSSawAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSSawAnimation.h; sourceTree = "<group>"; };
+		2776C4BB162593F700E1672E /* VSSawAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSSawAnimation.m; sourceTree = "<group>"; };
 		2795881615906D5000E24B57 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		2795881915906D7B00E24B57 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		2799F8E51599C8B800008489 /* VSQuartzCompositionUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSQuartzCompositionUtils.m; sourceTree = "<group>"; };
@@ -671,6 +695,22 @@
 				27D3DD79162446AD003B695F /* VSEaseOutAnimation.m */,
 				27D3DD7B16244706003B695F /* VSEaseInOutAnimation.h */,
 				27D3DD7C16244706003B695F /* VSEaseInOutAnimation.m */,
+				2776C4131625788A00E1672E /* VSSineEaseInAnimation.h */,
+				2776C4141625788A00E1672E /* VSSineEaseInAnimation.m */,
+				2776C4A516257C7D00E1672E /* VSExponentialEaseIn.h */,
+				2776C4A616257C7E00E1672E /* VSExponentialEaseIn.m */,
+				2776C4A8162580D100E1672E /* VSCircularEaseIn.h */,
+				2776C4A9162580D100E1672E /* VSCircularEaseIn.m */,
+				2776C4AB162582EC00E1672E /* VSSpringAnimation.h */,
+				2776C4AC162582EC00E1672E /* VSSpringAnimation.m */,
+				2776C4AE162585B500E1672E /* VSBounceEaseOutAnimation.h */,
+				2776C4AF162585B500E1672E /* VSBounceEaseOutAnimation.m */,
+				2776C4B1162588E000E1672E /* VSEaseInBackAnimation.h */,
+				2776C4B2162588E000E1672E /* VSEaseInBackAnimation.m */,
+				2776C4B716258E2B00E1672E /* VSElasticEaseInAnimation.h */,
+				2776C4B816258E2B00E1672E /* VSElasticEaseInAnimation.m */,
+				2776C4BA162593F600E1672E /* VSSawAnimation.h */,
+				2776C4BB162593F700E1672E /* VSSawAnimation.m */,
 				5B84D71C162470DB006DDC12 /* VSAnimationCurveFactory.h */,
 				5B84D71D162470DB006DDC12 /* VSAnimationCurveFactory.m */,
 			);
@@ -1762,6 +1802,14 @@
 				27D3DD821624636F003B695F /* VSDeviceParameterUtils.m in Sources */,
 				5B84D71E162470DB006DDC12 /* VSAnimationCurveFactory.m in Sources */,
 				5B84D72416247C5A006DDC12 /* VSAnimationCurvePopupViewController.m in Sources */,
+				2776C4151625788A00E1672E /* VSSineEaseInAnimation.m in Sources */,
+				2776C4A716257C7E00E1672E /* VSExponentialEaseIn.m in Sources */,
+				2776C4AA162580D200E1672E /* VSCircularEaseIn.m in Sources */,
+				2776C4AD162582EC00E1672E /* VSSpringAnimation.m in Sources */,
+				2776C4B0162585B600E1672E /* VSBounceEaseOutAnimation.m in Sources */,
+				2776C4B3162588E100E1672E /* VSEaseInBackAnimation.m in Sources */,
+				2776C4B916258E2C00E1672E /* VSElasticEaseInAnimation.m in Sources */,
+				2776C4BC162593F800E1672E /* VSSawAnimation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
