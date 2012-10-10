@@ -39,14 +39,17 @@
  */
 -(float) pixelPositonForKeyFramesValue:(VSKeyFrameViewController *) keyFrameViewController;
 
+-(void) keyFrameViewController:(VSKeyFrameViewController *) keyFrameViewController updatedPathToNextKeyFrame:(NSBezierPath*) pathToNextKeyFrame;
+
 @end
 
 #import "VSViewMouseEventsDelegate.h"
+#import "VSViewResizingDelegate.h"
 
 /**
  * Representing a VSKeyFrame in the VSAnimationTimeline
  */
-@interface VSKeyFrameViewController : NSViewController<VSViewMouseEventsDelegate>
+@interface VSKeyFrameViewController : NSViewController<VSViewMouseEventsDelegate, VSViewResizingDelegate>
 
 /** VSKeyFrame the VSKeyFrameViewController is representing */
 @property (weak) VSKeyFrame *keyFrame;
@@ -63,6 +66,12 @@
 /** PixelTimeRatio of the VSAnimationTimeline the VSKeyFrameViewControllerDelegate is part of. Neccessary to position the keyFrame right on the x-Axis. */
 @property double pixelTimeRatio;
 
+@property (strong) NSBezierPath *pathToNextKeyFrameView;
+
+@property (weak) VSKeyFrameViewController *nextKeyFrameViewController;
+
+@property (weak) VSKeyFrameViewController *prevKeyFrameViewController;
+
 /**
  * Inits the keyFrame with the given values
  * @param keyFrame VSKeyFrame the VSKeyFrameViewController represents
@@ -73,5 +82,6 @@
  */
 - (id)initWithKeyFrame:(VSKeyFrame *)keyFrame withSize:(NSSize)size forPixelTimeRatio:(double)pixelTimeRatio andDelegate:(id<VSKeyFrameViewControllerDelegate>) delegate;
 
+-(void) updateConnectionPathToNextKeyFrame;
 
 @end

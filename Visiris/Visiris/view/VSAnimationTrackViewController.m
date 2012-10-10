@@ -26,9 +26,6 @@
 /** NSRect where the keyFrames can be positionend and dragged around */
 @property (readonly) NSRect keyFramesArea;
 
-/** Holding the paths drawn as connectors between to keyFrames. The ID of the VSKeyFrame the path starts from is used as key */
-@property NSMutableDictionary *keyFrameConnectionPaths;
-
 /** VSKeyFrameViewControllers representing the keyFrames the VSAnimationTrackViewController is responsible for */
 @property NSMutableArray *keyFrameViewControllers;
 
@@ -60,7 +57,7 @@
         self.parameter = parameter;
         self.pixelTimeRatio = pixelTimeRatio;
         self.keyFrameViewControllers =[[NSMutableArray alloc]init];
-        self.keyFrameConnectionPaths =[[NSMutableDictionary alloc] init];
+        
         [self initKeyFrames];
         [self.view setWantsLayer:YES];
         [self initOverlayFrameWithColor:trackColor];
@@ -198,7 +195,7 @@
 }
 
 -(VSKeyFrameViewController*) keyFrameViewControllerAtXPosition:(float) xPosition{
-
+    
     if(!self.active){
         return nil;
     }
@@ -244,6 +241,8 @@
     return pixelPosition;
 }
 
+
+
 -(float) parameterValueOfPixelPosition:(float) pixelPosition forKeyFrame:(VSKeyFrameViewController *) keyFrameViewController{
     if(self.parameter){
         if(self.parameter.hasRange){
@@ -257,34 +256,17 @@
 #pragma mark - VSViewMouseEventsDelegate Implementation
 
 -(void) rightMouseDown:(NSEvent *)theEvent onView:(NSView *)view{
-    for(id key in self.keyFrameConnectionPaths){
-        
-        NSBezierPath *path = [self.keyFrameConnectionPaths objectForKey:key];
-        
+    for (VSKeyFrameViewController *keyFrameViewController in self.keyFrameViewControllers){
         NSPoint pointInView = [self.view convertPoint:[theEvent locationInWindow] fromView:nil];
-        if(NSPointInRect(pointInView, path.bounds)){
+        
+        if(NSPointInRect(pointInView, keyFrameViewController.pathToNextKeyFrameView.bounds)){
             
-            if([key respondsToSelector:@selector(integerValue)]){
-                
-                NSInteger idOfKeyFrame = [key integerValue];
-                
-                NSUInteger indexOfObject =[self.keyFrameViewControllers indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-                    if([obj isKindOfClass:[VSKeyFrameViewController class]]){
-                        if(((VSKeyFrameViewController*)obj).keyFrame.ID == idOfKeyFrame){
-                            return YES;
-                        }
-                    }
-                    return NO;
-                }];
-                
-                VSKeyFrameViewController *selectedKeyFrameViewController = [self.keyFrameViewControllers objectAtIndex:indexOfObject];
-                
-                if([self delegateRespondsToSelector:@selector(didClickRightKeyFrameConnectionOfKeyFrameViewController:atPosition:onTrack:)]){
-                    [self.delegate didClickRightKeyFrameConnectionOfKeyFrameViewController:selectedKeyFrameViewController
-                                                                                atPosition:pointInView
-                                                                                   onTrack:self];
-                     }
+            if([self delegateRespondsToSelector:@selector(didClickRightKeyFrameConnectionOfKeyFrameViewController:atPosition:onTrack:)]){
+                [self.delegate didClickRightKeyFrameConnectionOfKeyFrameViewController:keyFrameViewController
+                                                                            atPosition:pointInView
+                                                                               onTrack:self];
             }
+            
         }
     }
 }
@@ -335,7 +317,46 @@
     return result;
 }
 
+-(void) keyFrameViewController:(VSKeyFrameViewController *)keyFrameViewController updatedPathToNextKeyFrame:(NSBezierPath *)pathToNextKeyFrame{
+    
+    
+    [self updateConnectionPaths];
+}
+
 #pragma mark - Private Methods
+
+-(void) updateConnectionPaths{
+    NSMutableArray *connections = [[NSMutableArray alloc] init];
+    if(self.keyFrameViewControllers.count)
+    {
+        
+        NSPoint midPoint = [VSFrameUtils midPointOfFrame:[self objectInKeyFrameViewControllersAtIndex:0].view.frame];
+        
+        NSBezierPath *firstPath = [[NSBezierPath alloc] init];
+        
+        [firstPath moveToPoint:midPoint];
+        [firstPath lineToPoint:NSMakePoint(self.view.frame.origin.x, midPoint.y)];
+        
+        [connections addObject:firstPath];
+        
+        
+        for(VSKeyFrameViewController *keyFrameViewControll in self.keyFrameViewControllers){
+            if(keyFrameViewControll.pathToNextKeyFrameView)
+                [connections addObject:keyFrameViewControll.pathToNextKeyFrameView];
+        }
+        
+        midPoint = [VSFrameUtils midPointOfFrame:[self objectInKeyFrameViewControllersAtIndex:self.keyFrameViewControllers.count-1].view.frame];
+        
+        NSBezierPath *lastPath = [[NSBezierPath alloc] init];
+        
+        [lastPath moveToPoint:midPoint];
+        [lastPath lineToPoint:NSMakePoint(NSMaxX(self.view.frame), midPoint.y)];
+        
+        [connections addObject:lastPath];
+    }
+    ((VSAnimationTrackView*)self.view).keyFrameConnectionPaths = connections;
+    [self.view setNeedsDisplay:YES];
+}
 
 /**
  * Called when the frame of one of VSKeyFrameViewController's views have been changed
@@ -353,12 +374,26 @@
         VSKeyFrameViewController *prevKeyFrameController = [self.keyFrameViewControllers objectAtIndex:indexOfObject-1];
         
         if(keyFrameViewController.keyFrame.timestamp < prevKeyFrameController.keyFrame.timestamp){
+            
+            
+            prevKeyFrameController.prevKeyFrameViewController.nextKeyFrameViewController = keyFrameViewController;
+            
+            keyFrameViewController.nextKeyFrameViewController.prevKeyFrameViewController = prevKeyFrameController;
+            
+            
+            prevKeyFrameController.nextKeyFrameViewController = keyFrameViewController.nextKeyFrameViewController;
+            
+            keyFrameViewController.nextKeyFrameViewController = prevKeyFrameController;
+            
+            keyFrameViewController.prevKeyFrameViewController = prevKeyFrameController.prevKeyFrameViewController;
+            
+            prevKeyFrameController.prevKeyFrameViewController = keyFrameViewController;
+            
             [self.keyFrameViewControllers exchangeObjectAtIndex:indexOfObject withObjectAtIndex:indexOfObject-1];
             
             alreadySwapped = YES;
         }
         
-        [self addKeyFrameConnectionPathsObject:prevKeyFrameController];
     }
     
     //checks if the new Value of the keyFrame is bigger than the one of the KeyFrame rigth to it if there is one. If Yes the keyFrame swapp positions and the connection-Path for the nextKeyFrameController is updated
@@ -366,14 +401,26 @@
         VSKeyFrameViewController *nextKeyFrameController = [self.keyFrameViewControllers objectAtIndex:indexOfObject+1];
         
         if(keyFrameViewController.keyFrame.timestamp > nextKeyFrameController.keyFrame.timestamp){
+            
+            keyFrameViewController.prevKeyFrameViewController.nextKeyFrameViewController = nextKeyFrameController;
+            
+            nextKeyFrameController.nextKeyFrameViewController.prevKeyFrameViewController = keyFrameViewController;
+            
+            
+            
+            nextKeyFrameController.prevKeyFrameViewController = keyFrameViewController.prevKeyFrameViewController;
+            
+            keyFrameViewController.nextKeyFrameViewController = nextKeyFrameController.nextKeyFrameViewController;
+            
+            keyFrameViewController.prevKeyFrameViewController = nextKeyFrameController;
+            
+            nextKeyFrameController.nextKeyFrameViewController = keyFrameViewController;
+            
             [self.keyFrameViewControllers exchangeObjectAtIndex:indexOfObject withObjectAtIndex:indexOfObject+1];
         }
         
-        [self addKeyFrameConnectionPathsObject:nextKeyFrameController];
+        
     }
-    
-    //udpates the keyFrameViewController connection-Path
-    [self addKeyFrameConnectionPathsObject:(VSKeyFrameViewController*)keyFrameViewController];
 }
 
 /**
@@ -405,7 +452,6 @@
                                 options:0
                                 context:nil];
     
-    [self addKeyFrameConnectionPathsObject:keyFrameViewController];
     
     [self.view.layer addSublayer:keyFrameViewController.view.layer];
 }
@@ -425,118 +471,34 @@
         
         return NSOrderedDescending;
     }];
-}
-
--(void) addKeyFrameConnectionPathsObject:(VSKeyFrameViewController *)object{
-    if(self.keyFrameViewControllers.count){
-
-        NSUInteger indexOfObject = [self.keyFrameViewControllers indexOfObject:object];
-
-        NSBezierPath *pathToTheRight = [[NSBezierPath alloc] init];
+    
+    NSUInteger indexOfObject = [self.keyFrameViewControllers indexOfObject:object];
+    
+    if(indexOfObject > 0){
+        VSKeyFrameViewController *prevKeyFrameViewController = [self objectInKeyFrameViewControllersAtIndex:indexOfObject-1];
         
-        // if there is one KeyFrame right of the newly added the path is lined to its midpoint
-        // othwise the path is lined to the end of the trackView
-        if(indexOfObject+1 < self.keyFrameViewControllers.count){
-            VSKeyFrameViewController *nextController = [self.keyFrameViewControllers objectAtIndex:indexOfObject+1];
-            
-            pathToTheRight = [self createKeyFrameConnectionFromKeyFrameViewController:object
-                                                             toKeyFrameViewController:nextController];
-            
-            
-            
-        }
-        else{
-            [pathToTheRight moveToPoint:[VSFrameUtils midPointOfFrame:object.view.frame]];
-            [pathToTheRight lineToPoint:NSMakePoint(NSMaxX(self.view.frame), [VSFrameUtils midPointOfFrame:object.view.frame].y)];
-        }
-        
-        [self.keyFrameConnectionPaths setObject:pathToTheRight
-                                         forKey:[NSNumber numberWithInteger:object.keyFrame.ID]];
-        
-        
-        NSBezierPath *pathToTheLeft = [[NSBezierPath alloc] init];
-        
-        //if there is an keyFrame left of the newly added one the path for stored for the keyFrames ID is linedTo the midPoint of the newly added one
-        //Otherwise the line for the path for the key -1 is set up from the left for the track's view to the midpoint of the newly added KeyFrame
-        if(indexOfObject> 0){
-            
-            
-            VSKeyFrameViewController *prevController = [self.keyFrameViewControllers objectAtIndex:indexOfObject-1];
-            
-            pathToTheLeft = [self createKeyFrameConnectionFromKeyFrameViewController:prevController
-                                                            toKeyFrameViewController:object];
-            
-            
-            [self.keyFrameConnectionPaths setObject:pathToTheLeft
-                                             forKey:[NSNumber numberWithInteger:prevController.keyFrame.ID]];
-        }
-        else
-        {
-            
-            [pathToTheLeft moveToPoint:NSMakePoint(self.view.frame.origin.x, [VSFrameUtils midPointOfFrame:object.view.frame].y)];
-            [pathToTheLeft lineToPoint:[VSFrameUtils midPointOfFrame:object.view.frame]];
-            
-            [self.keyFrameConnectionPaths setObject:pathToTheLeft forKey:[NSNumber numberWithInteger:-1]];
-        }
-        
-        
-        
-        //The changed paths are given to the view to be redrawn
-        ((VSAnimationTrackView*)self.view).keyFrameConnectionPaths = [self.keyFrameConnectionPaths allValues];
-        [self.view setNeedsDisplay:YES];
+        prevKeyFrameViewController.nextKeyFrameViewController = object;
+        object.prevKeyFrameViewController = prevKeyFrameViewController;
     }
     else{
-        [self clearKeyFrameConnectionPaths];
+        object.prevKeyFrameViewController = nil;
+    }
+    
+    if(indexOfObject+1 < self.keyFrameViewControllers.count){
+        VSKeyFrameViewController *nextKeyFrameViewController = [self objectInKeyFrameViewControllersAtIndex:indexOfObject+1];
+        
+        nextKeyFrameViewController.prevKeyFrameViewController = object;
+        object.nextKeyFrameViewController = nextKeyFrameViewController;
+    }
+    else{
+        object.nextKeyFrameViewController = nil;
     }
 }
 
-
--(NSBezierPath*) createKeyFrameConnectionFromKeyFrameViewController:(VSKeyFrameViewController *) fromKeyFrameViewController toKeyFrameViewController:(VSKeyFrameViewController *) toKeyFrameViewController{
-    
-    NSBezierPath *connectionPath = [[NSBezierPath alloc] init];
-    
-    [connectionPath moveToPoint:[VSFrameUtils midPointOfFrame:fromKeyFrameViewController.view.frame]];
-    
-    
-    float startXPosition = [VSFrameUtils midPointOfFrame:fromKeyFrameViewController.view.frame].x;
-    float endXPosition = [VSFrameUtils midPointOfFrame:toKeyFrameViewController.view.frame].x;
-    float startYPosition = [VSFrameUtils midPointOfFrame:fromKeyFrameViewController.view.frame].y;
-    float endYPosition = [VSFrameUtils midPointOfFrame:toKeyFrameViewController.view.frame].y;
-    
-    float xDistance = endXPosition - startXPosition;
-    int pixelDelta = 1;
-    int end = floor(xDistance / pixelDelta);
-    
-    
-    for(int i = 1; i < end; i++){
-        
-        float xPosition = startXPosition + i*pixelDelta;
-        
-        double yPosition = [fromKeyFrameViewController.keyFrame.animationCurve valueForTime:xPosition
-                                                                              withBeginTime:startXPosition
-                                                                                  toEndTime:endXPosition
-                                                                             withStartValue:startYPosition
-                                                                                 toEndValue:endYPosition];
-
-        [connectionPath lineToPoint: NSMakePoint(xPosition, yPosition)];
-    }
-    
-    [connectionPath lineToPoint: [VSFrameUtils midPointOfFrame:toKeyFrameViewController.view.frame]];
-    
-    
-    return connectionPath;
-        
+-(VSKeyFrameViewController*) objectInKeyFrameViewControllersAtIndex:(NSUInteger)index{
+    return [self.keyFrameViewControllers objectAtIndex:index];
 }
 
-/**
- * Removes all connection-Paths from keyFrameConnectionPaths
- */
--(void) clearKeyFrameConnectionPaths{
-    [self.keyFrameConnectionPaths removeAllObjects];
-    
-    ((VSAnimationTrackView*)self.view).keyFrameConnectionPaths = [self.keyFrameConnectionPaths allValues];
-    [self.view setNeedsDisplay:YES];
-}
 
 /**
  * Removes the VSKeyFrameViewControllers stored in the given NSArray by removing their views from their superviews und removing them from keyFrameViewControllers. Besides that the connection-paths are updated
@@ -556,29 +518,17 @@
     
     //iterates through the VSKeyFrameViewControllers to be removed. Removes them from its superView and removes their connections
     for(VSKeyFrameViewController *keyFrameViewController in [self.keyFrameViewControllers objectsAtIndexes:keyFramesToRemoveIndices]){
+        
+        keyFrameViewController.prevKeyFrameViewController.nextKeyFrameViewController = keyFrameViewController.nextKeyFrameViewController;
+        keyFrameViewController.nextKeyFrameViewController.prevKeyFrameViewController = keyFrameViewController.prevKeyFrameViewController;
+        
         [keyFrameViewController.view removeFromSuperview];
         [keyFrameViewController removeObserver:self forKeyPath:@"view.frame"];
-        [self.keyFrameConnectionPaths removeObjectForKey:[NSNumber numberWithInteger:keyFrameViewController.keyFrame.ID]];
     }
     
     [self.keyFrameViewControllers removeObjectsAtIndexes:keyFramesToRemoveIndices];
     
-    if(self.keyFrameViewControllers.count){
-        NSUInteger currIndex = [keyFramesToRemoveIndices firstIndex];
-        
-        while (currIndex != NSNotFound) {
-            if(currIndex > 0){
-                [self addKeyFrameConnectionPathsObject:[self.keyFrameViewControllers objectAtIndex:currIndex-1]];
-            }
-            else if(currIndex == 0){
-                [self addKeyFrameConnectionPathsObject:[self.keyFrameViewControllers objectAtIndex:0]];
-            }
-            currIndex = [keyFramesToRemoveIndices indexGreaterThanIndex:currIndex];
-        }
-    }
-    else{
-        [self clearKeyFrameConnectionPaths];
-    }
+    [self updateConnectionPaths];
 }
 
 /**

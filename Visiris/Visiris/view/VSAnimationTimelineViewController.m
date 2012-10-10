@@ -34,8 +34,6 @@
 
 @property (strong) NSPopover *animationCurvePopover;
 
-@property (weak) VSKeyFrameViewController *controllerOfCurrentlySelectedConnectionPath;
-
 @end
 
 
@@ -196,12 +194,10 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     
     NSRect relativeToRect = NSMakeRect(position.x, position.y, 1, 1);
     
-    self.controllerOfCurrentlySelectedConnectionPath = keyFrameViewController;
-    
-    [self showAnimationCurvePopoverRelativeToRect:relativeToRect ofView:animationTrackViewController.view];
+    [self showAnimationCurvePopoverForKeyFrame:keyFrameViewController.keyFrame relativeToRect:relativeToRect ofView:animationTrackViewController.view];
 }
 
--(void) showAnimationCurvePopoverRelativeToRect:(NSRect) rect ofView:(NSView*) relativeToView{
+-(void) showAnimationCurvePopoverForKeyFrame:(VSKeyFrame*) keyFrame relativeToRect:(NSRect) rect ofView:(NSView*) relativeToView{
     
     
     self.animationCurvePopover = [[NSPopover alloc] init];
@@ -216,7 +212,8 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
                                             ofView:relativeToView
                                      preferredEdge:NSMaxYEdge];
     
-    [self.animationCurvePopupViewController showPopUpForAnimationCurves:[[VSAnimationCurveFactory registeredAnimationCurves] allValues] andSelectAnimationCurve:self.controllerOfCurrentlySelectedConnectionPath.keyFrame.animationCurve];
+    [self.animationCurvePopupViewController showAnimationCurveSelectionPopUpForKeyFrame:keyFrame
+                                                                    withAnimationCurves:[[VSAnimationCurveFactory registeredAnimationCurves] allValues]];
     
    
 }
@@ -225,20 +222,7 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 
 -(void) popoverWillClose:(NSNotification *)notification{
     
-    if([self.animationCurvePopupViewController.currentlySelectedAnimationCurve class] == [self.controllerOfCurrentlySelectedConnectionPath.keyFrame.animationCurve class]){
-        self.controllerOfCurrentlySelectedConnectionPath.keyFrame.animationCurve.strength = self.animationCurvePopupViewController.currentStrength;
-    }
-    else{
-        VSAnimationCurve *animationCurve = [VSAnimationCurveFactory createAnimationCurveOfClass:NSStringFromClass([self.animationCurvePopupViewController.currentlySelectedAnimationCurve class])];
-        
-        if(animationCurve){
-            animationCurve.strength = self.animationCurvePopupViewController.currentStrength;
-            self.controllerOfCurrentlySelectedConnectionPath.keyFrame.animationCurve =  animationCurve;
-        }
-        else{
-            DDLogError(@" animationCurve is null");
-        }
-    }
+   
 }
 
 #pragma mark - Methods

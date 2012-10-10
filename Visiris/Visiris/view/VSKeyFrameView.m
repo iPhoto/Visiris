@@ -54,6 +54,17 @@
     NSRectFill(dirtyRect);
 }
 
+-(void) setFrame:(NSRect)frameRect{
+    NSRect fromFrame = self.frame;
+    
+    [super setFrame:frameRect];
+    
+    if([self resizingDelegateRespondsToSelector:@selector(frameOfView:wasSetFrom:to:)]){
+        [self.resizingDelegate frameOfView:self wasSetFrom:fromFrame to:self.frame];
+    }
+}
+
+
 -(BOOL) acceptsFirstMouse:(NSEvent *)theEvent{
     return YES;
 }
@@ -61,7 +72,7 @@
 #pragma mark - Event Handling
 
 -(void) mouseDown:(NSEvent *)theEvent{
-    if([self delegateRespondsToSelector:@selector(mouseDown:onView:)]){
+    if([self mouseDelegateRespondsToSelector:@selector(mouseDown:onView:)]){
         [self.mouseDelegate mouseDown:theEvent onView:self];
     }
     
@@ -75,7 +86,7 @@
     
     NSPoint newOrigin = NSMakePoint(newMousePosition.x-self.mouseDownOffset.x, newMousePosition.y-self.mouseDownOffset.y);
     
-    if([self delegateRespondsToSelector:@selector(view:wantsToBeDraggedFrom:to:)]){
+    if([self mouseDelegateRespondsToSelector:@selector(view:wantsToBeDraggedFrom:to:)]){
         newOrigin = [self.mouseDelegate view:self wantsToBeDraggedFrom:self.frame.origin to:newOrigin];
     }
     
@@ -90,10 +101,26 @@
  * @param selector Selector the delegate will be checked for if it is able respond to
  * @return YES if the delegate is able to respond to the selector, NO otherweis
  */
--(BOOL) delegateRespondsToSelector:(SEL) selector{
+-(BOOL) mouseDelegateRespondsToSelector:(SEL) selector{
     if(self.mouseDelegate){
         if([self.mouseDelegate conformsToProtocol:@protocol(VSViewMouseEventsDelegate)]){
             if([self.mouseDelegate respondsToSelector:selector]){
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
+/**
+ * Checks if the delegate of VSPlaybackControllerDelegate is able to respond to the given Selector
+ * @param selector Selector the delegate will be checked for if it is able respond to
+ * @return YES if the delegate is able to respond to the selector, NO otherweis
+ */
+-(BOOL) resizingDelegateRespondsToSelector:(SEL) selector{
+    if(self.resizingDelegate){
+        if([self.resizingDelegate conformsToProtocol:@protocol(VSViewResizingDelegate)]){
+            if([self.resizingDelegate respondsToSelector:selector]){
                 return YES;
             }
         }
