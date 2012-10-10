@@ -28,6 +28,10 @@
     
     NSRectFill(dirtyRect);
     
+    [[NSColor redColor] setFill];
+    
+    NSRectFill(self.toDRaw);
+    
     [[NSColor greenColor] setStroke];
     
     
@@ -35,6 +39,8 @@
         [connectionPath setLineWidth:2];
         [connectionPath stroke];
     }
+    
+
 }
 
 -(void) rightMouseDown:(NSEvent *)theEvent{

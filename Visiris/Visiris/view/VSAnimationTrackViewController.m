@@ -227,17 +227,16 @@
 }
 
 -(float) pixelPositonForKeyFramesValue:(VSKeyFrameViewController *)keyFrameViewController{
-    
-    
+
     float pixelPosition = self.view.frame.size.height / 2.0f;
     
     if(self.parameter){
         if(self.parameter.hasRange){
             float range =  self.parameter.range.max - self.parameter.range.min;
-            pixelPosition = self.keyFramesArea.size.height / range * (keyFrameViewController.keyFrame.floatValue-self.parameter.range.min);
+            pixelPosition = self.keyFramesArea.size.height / range * (keyFrameViewController.keyFrame.floatValue-self.parameter.range.min) - self.keyFramesArea.origin.y;
         }
     }
-    pixelPosition -= keyFrameViewController.view.frame.size.width / 2.0f;
+
     return pixelPosition;
 }
 
@@ -299,10 +298,10 @@
     }
     
     if((toPoint.y - keyFrameViewController.view.frame.size.height / 2.0f) < 0){
-        toPoint.y = keyFrameViewController.view.frame.size.height / 2.0f;
+        toPoint.y = keyFrameViewController.view.frame.size.height;
     }
     else if((toPoint.y + keyFrameViewController.view.frame.size.height / 2.0f) > self.keyFramesArea.size.height){
-        toPoint.y = self.keyFramesArea.size.height - keyFrameViewController.view.frame.size.height / 2.0f;
+        toPoint.y = self.keyFramesArea.size.height;
     }
     
     NSPoint result = toPoint;
@@ -583,7 +582,15 @@
 #pragma mark - Properties
 
 -(NSRect) keyFramesArea{
-    return self.view.frame;
+    NSRect keyFramesArea = self.view.frame;
+    keyFramesArea.size.height -= KEYFRAME_HEIGHT;
+    keyFramesArea.size.width -= KEYFRAME_WIDTH;
+    keyFramesArea.origin.x = KEYFRAME_WIDTH / 2.0;
+    keyFramesArea.origin.y = KEYFRAME_HEIGHT / 2.0;
+    
+    self.animationTrackView.toDRaw = keyFramesArea;
+    [self.view setNeedsDisplay:YES];
+    return keyFramesArea;
 }
 
 -(void) setPixelTimeRatio:(double)pixelTimeRatio{
