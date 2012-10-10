@@ -7,6 +7,7 @@
 //
 
 @class VSAnimationCurve;
+@class VSKeyFrame;
 
 #import <Cocoa/Cocoa.h>
 
@@ -17,7 +18,7 @@
 @property (weak) VSAnimationCurve *currentlySelectedAnimationCurve;
 @property (assign) float currentStrength;
 
--(void) showPopUpForAnimationCurves:(NSArray*) animationCurves andSelectAnimationCurve:(VSAnimationCurve*) selectedAnimationCurve;
+-(void) showAnimationCurveSelectionPopUpForKeyFrame:(VSKeyFrame*) selectedKeyFrame withAnimationCurves:(NSArray*) animationCurves;
 
 - (IBAction)didChangeAnimationCurvesPopUpWindow:(NSPopUpButton *)sender;
 - (IBAction)didChangeStrengthSlider:(NSSlider *)sender;
