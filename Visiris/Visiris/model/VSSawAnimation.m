@@ -48,21 +48,21 @@
     
     
     
-    rest = fmod(normX, strength);
-    
-    
-    for (int i = 0; i < strength; i++)
-    {
-        if (i % 2 == 1)
-        {
-            y = k * x + d;
-        }
-        else
-        {
-            y = -k * x + endValue;
-        }
-        
-    }
+//    rest = fmod(normX, strength);
+//    
+//    
+//    for (int i = 0; i < strength; i++)
+//    {
+//        if (i % 2 == 1)
+//        {
+//            y = k * x + d;
+//        }
+//        else
+//        {
+//            y = -k * x + endValue;
+//        }
+//        
+//    }
     
     
     
