@@ -61,6 +61,14 @@
     return YES;
 }
 
+- (BOOL)isObjectExisting:(id)object
+{
+    if([self.referenceCountingToIDObject objectForKey:object])
+        return YES;
+    else
+        return NO;
+}
+
 
 - (void)printDebugLog{
     for (id key in self.referenceCountingToIDObject) {
