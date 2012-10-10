@@ -89,6 +89,8 @@
         _lastAssignedPort = (unsigned int)_observablePorts.location;
         
         NSUInteger oscPortCount = _observablePorts.length - _observablePorts.location;
+        
+        //todo what is this for?
         _numberOfInputClients =  oscPortCount < kVSOSCInputManager_numberOfDefalutOSCListenPorts ? oscPortCount : kVSOSCInputManager_numberOfDefalutOSCListenPorts;
         
         _activePorts = [[NSMutableDictionary alloc] init];
@@ -226,7 +228,6 @@
         
         isInputForAddressActive = [self startOSCClientOnPort:port];
         
-        //TODO WIRD ZWEIMAL GECALLT VON DER GUI - FALSCH
         [self.referencCountingAdresses incrementReferenceOfKey:[NSString stringFromAddress:address atPort:port]];
         [self.referenceCountingPorts incrementReferenceOfKey:[NSNumber numberWithUnsignedInt:port]];
     }
@@ -257,8 +258,7 @@
 
 - (dispatch_source_t)oscPortDispatchTimerWithInterval:(uint64_t)interval onQueue:(dispatch_queue_t)dispatchQueue withBlock:(dispatch_block_t)block
 {
-    dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER,
-                                                     0, 0, dispatchQueue);
+    dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER,0, 0, dispatchQueue);
     if (timer)
     {
         dispatch_source_set_timer(timer, dispatch_walltime(NULL, 0), interval, 1ull*NSEC_PER_SEC);
@@ -314,9 +314,7 @@
 - (BOOL)startOSCClientOnPort:(unsigned int)port
 {
     BOOL oscClientStarted = NO;
-    
-    //edi
-    
+        
     VSOSCClient *tempClient = [self.activeOSCClients objectForKey:[NSNumber numberWithUnsignedInt:port]];
     if (tempClient)
     {
@@ -367,6 +365,9 @@
         {
             [self.delegate inputManager:self didReceivedValue:message.value forAddress:message.address atPort:message.port];
         }
+    }
+    else{
+        DDLogInfo(@"Message Rejected: %@", [NSString stringFromAddress:message.address atPort:message.port]);
     }
 }
 
