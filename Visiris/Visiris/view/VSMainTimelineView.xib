@@ -2,13 +2,13 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1080</int>
-		<string key="IBDocument.SystemVersion">12B19</string>
-		<string key="IBDocument.InterfaceBuilderVersion">2549</string>
-		<string key="IBDocument.AppKitVersion">1187</string>
-		<string key="IBDocument.HIToolboxVersion">624.00</string>
+		<string key="IBDocument.SystemVersion">12C60</string>
+		<string key="IBDocument.InterfaceBuilderVersion">2843</string>
+		<string key="IBDocument.AppKitVersion">1187.34</string>
+		<string key="IBDocument.HIToolboxVersion">625.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">2549</string>
+			<string key="NS.object.0">2843</string>
 		</object>
 		<array key="IBDocument.IntegratedClassDependencies">
 			<string>IBNSLayoutConstraint</string>
@@ -39,7 +39,7 @@
 				<string key="NSClassName">VSTimelineRulerView</string>
 			</object>
 			<object class="NSCustomView" id="1005">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="NSScrollView" id="161326648">
@@ -55,12 +55,14 @@
 										<int key="NSvFlags">274</int>
 										<string key="NSFrameSize">{565, 218}</string>
 										<reference key="NSSuperview" ref="930948418"/>
+										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="423675871"/>
 										<string key="NSReuseIdentifierKey">_NS:13</string>
 									</object>
 								</array>
 								<string key="NSFrame">{{1, 1}, {565, 217}}</string>
 								<reference key="NSSuperview" ref="161326648"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="254442832"/>
 								<string key="NSReuseIdentifierKey">_NS:11</string>
 								<reference key="NSDocView" ref="254442832"/>
@@ -80,6 +82,7 @@
 								<int key="NSvFlags">256</int>
 								<string key="NSFrame">{{566, 1}, {15, 217}}</string>
 								<reference key="NSSuperview" ref="161326648"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="924421202"/>
 								<string key="NSReuseIdentifierKey">_NS:15</string>
 								<bool key="NSEnabled">YES</bool>
@@ -94,6 +97,7 @@
 								<int key="NSvFlags">256</int>
 								<string key="NSFrame">{{1, 218}, {565, 15}}</string>
 								<reference key="NSSuperview" ref="161326648"/>
+								<reference key="NSWindow"/>
 								<string key="NSReuseIdentifierKey">_NS:26</string>
 								<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
 								<int key="NSsFlags">1</int>
@@ -104,9 +108,10 @@
 						</array>
 						<string key="NSFrameSize">{582, 234}</string>
 						<reference key="NSSuperview" ref="1005"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="930948418"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
-						<int key="NSsFlags">133234</int>
+						<int key="NSsFlags">153714</int>
 						<reference key="NSVScroller" ref="423675871"/>
 						<reference key="NSHScroller" ref="924421202"/>
 						<reference key="NSContentView" ref="930948418"/>
@@ -116,6 +121,8 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{582, 234}</string>
+				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<string key="NSClassName">VSMainTimelineView</string>
 			</object>
 		</array>
@@ -380,6 +387,14 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">VSScrollView</string>
+					<string key="superclassName">NSScrollView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/VSScrollView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">VSTimelineRulerView</string>
 					<string key="superclassName">NSRulerView</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -389,7 +404,7 @@
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">VSTimelineScrollView</string>
-					<string key="superclassName">NSScrollView</string>
+					<string key="superclassName">VSScrollView</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/VSTimelineScrollView.h</string>
@@ -406,6 +421,17 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">VSTimelineViewController</string>
 					<string key="superclassName">NSViewController</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">scrollView</string>
+						<string key="NS.object.0">VSTimelineScrollView</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">scrollView</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">scrollView</string>
+							<string key="candidateClassName">VSTimelineScrollView</string>
+						</object>
+					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/VSTimelineViewController.h</string>
