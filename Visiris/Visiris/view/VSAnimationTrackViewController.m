@@ -14,6 +14,7 @@
 #import "VSKeyFrame.h"
 #import "VSKeyFrameViewController.h"
 #import "VSKeyFrameView.h"
+#import "VSAnimationCurve.h"
 
 #import "VSCoreServices.h"
 
@@ -265,7 +266,16 @@
             
             if([key respondsToSelector:@selector(integerValue)]){
                 
-                NSInteger indexOfObject = [key integerValue];
+                NSInteger idOfKeyFrame = [key integerValue];
+                
+                NSUInteger indexOfObject =[self.keyFrameViewControllers indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+                    if([obj isKindOfClass:[VSKeyFrameViewController class]]){
+                        if(((VSKeyFrameViewController*)obj).keyFrame.ID == idOfKeyFrame){
+                            return YES;
+                        }
+                    }
+                    return NO;
+                }];
                 
                 VSKeyFrameViewController *selectedKeyFrameViewController = [self.keyFrameViewControllers objectAtIndex:indexOfObject];
                 
@@ -275,11 +285,7 @@
                                                                                    onTrack:self];
                      }
             }
-            
-            
         }
-        
-        DDLogInfo(@"p: %@ b: %@",NSStringFromPoint(pointInView), NSStringFromRect(path.bounds));
     }
 }
 
@@ -423,50 +429,57 @@
 
 -(void) addKeyFrameConnectionPathsObject:(VSKeyFrameViewController *)object{
     if(self.keyFrameViewControllers.count){
+
         NSUInteger indexOfObject = [self.keyFrameViewControllers indexOfObject:object];
-        
-        NSBezierPath *connectionPath = [[NSBezierPath alloc]init];
-        
-        //the connectionPath startsFrom the midPoint of the given object
-        [connectionPath moveToPoint:[VSFrameUtils midPointOfFrame:object.view.frame]];
+
+        NSBezierPath *pathToTheRight = [[NSBezierPath alloc] init];
         
         // if there is one KeyFrame right of the newly added the path is lined to its midpoint
         // othwise the path is lined to the end of the trackView
         if(indexOfObject+1 < self.keyFrameViewControllers.count){
             VSKeyFrameViewController *nextController = [self.keyFrameViewControllers objectAtIndex:indexOfObject+1];
             
-            [connectionPath lineToPoint: [VSFrameUtils midPointOfFrame:nextController.view.frame]];
+            pathToTheRight = [self createKeyFrameConnectionFromKeyFrameViewController:object
+                                                             toKeyFrameViewController:nextController];
+            
+            
+            
         }
         else{
-            [connectionPath lineToPoint:NSMakePoint(NSMaxX(self.view.frame), [VSFrameUtils midPointOfFrame:object.view.frame].y)];
+            [pathToTheRight moveToPoint:[VSFrameUtils midPointOfFrame:object.view.frame]];
+            [pathToTheRight lineToPoint:NSMakePoint(NSMaxX(self.view.frame), [VSFrameUtils midPointOfFrame:object.view.frame].y)];
         }
         
+        [self.keyFrameConnectionPaths setObject:pathToTheRight
+                                         forKey:[NSNumber numberWithInteger:object.keyFrame.ID]];
         
         
+        NSBezierPath *pathToTheLeft = [[NSBezierPath alloc] init];
         
         //if there is an keyFrame left of the newly added one the path for stored for the keyFrames ID is linedTo the midPoint of the newly added one
         //Otherwise the line for the path for the key -1 is set up from the left for the track's view to the midpoint of the newly added KeyFrame
         if(indexOfObject> 0){
-            NSBezierPath *pathToNewKeyFrame = [[NSBezierPath alloc] init];
+            
             
             VSKeyFrameViewController *prevController = [self.keyFrameViewControllers objectAtIndex:indexOfObject-1];
             
-            [pathToNewKeyFrame moveToPoint:[VSFrameUtils midPointOfFrame:prevController.view.frame]];
-            [pathToNewKeyFrame lineToPoint:[VSFrameUtils midPointOfFrame:object.view.frame]];
+            pathToTheLeft = [self createKeyFrameConnectionFromKeyFrameViewController:prevController
+                                                            toKeyFrameViewController:object];
             
-            [self.keyFrameConnectionPaths setObject:pathToNewKeyFrame forKey:[NSNumber numberWithInteger:prevController.keyFrame.ID]];
+            
+            [self.keyFrameConnectionPaths setObject:pathToTheLeft
+                                             forKey:[NSNumber numberWithInteger:prevController.keyFrame.ID]];
         }
         else
         {
-            NSBezierPath *pathToNewKeyFrame = [[NSBezierPath alloc] init];
             
-            [pathToNewKeyFrame moveToPoint:NSMakePoint(self.view.frame.origin.x, [VSFrameUtils midPointOfFrame:object.view.frame].y)];
-            [pathToNewKeyFrame lineToPoint:[VSFrameUtils midPointOfFrame:object.view.frame]];
+            [pathToTheLeft moveToPoint:NSMakePoint(self.view.frame.origin.x, [VSFrameUtils midPointOfFrame:object.view.frame].y)];
+            [pathToTheLeft lineToPoint:[VSFrameUtils midPointOfFrame:object.view.frame]];
             
-            [self.keyFrameConnectionPaths setObject:pathToNewKeyFrame forKey:[NSNumber numberWithInteger:-1]];
+            [self.keyFrameConnectionPaths setObject:pathToTheLeft forKey:[NSNumber numberWithInteger:-1]];
         }
         
-        [self.keyFrameConnectionPaths setObject:connectionPath forKey:[NSNumber numberWithInteger:object.keyFrame.ID]];
+        
         
         //The changed paths are given to the view to be redrawn
         ((VSAnimationTrackView*)self.view).keyFrameConnectionPaths = [self.keyFrameConnectionPaths allValues];
@@ -475,6 +488,44 @@
     else{
         [self clearKeyFrameConnectionPaths];
     }
+}
+
+
+-(NSBezierPath*) createKeyFrameConnectionFromKeyFrameViewController:(VSKeyFrameViewController *) fromKeyFrameViewController toKeyFrameViewController:(VSKeyFrameViewController *) toKeyFrameViewController{
+    
+    NSBezierPath *connectionPath = [[NSBezierPath alloc] init];
+    
+    [connectionPath moveToPoint:[VSFrameUtils midPointOfFrame:fromKeyFrameViewController.view.frame]];
+    
+    
+    float startXPosition = [VSFrameUtils midPointOfFrame:fromKeyFrameViewController.view.frame].x;
+    float endXPosition = [VSFrameUtils midPointOfFrame:toKeyFrameViewController.view.frame].x;
+    float startYPosition = [VSFrameUtils midPointOfFrame:fromKeyFrameViewController.view.frame].y;
+    float endYPosition = [VSFrameUtils midPointOfFrame:toKeyFrameViewController.view.frame].y;
+    
+    float xDistance = endXPosition - startXPosition;
+    int pixelDelta = 1;
+    int end = floor(xDistance / pixelDelta);
+    
+    
+    for(int i = 1; i < end; i++){
+        
+        float xPosition = startXPosition + i*pixelDelta;
+        
+        double yPosition = [fromKeyFrameViewController.keyFrame.animationCurve valueForTime:xPosition
+                                                                              withBeginTime:startXPosition
+                                                                                  toEndTime:endXPosition
+                                                                             withStartValue:startYPosition
+                                                                                 toEndValue:endYPosition];
+
+        [connectionPath lineToPoint: NSMakePoint(xPosition, yPosition)];
+    }
+    
+    [connectionPath lineToPoint: [VSFrameUtils midPointOfFrame:toKeyFrameViewController.view.frame]];
+    
+    
+    return connectionPath;
+        
 }
 
 /**

@@ -11,11 +11,15 @@
 #import <Cocoa/Cocoa.h>
 
 @interface VSAnimationCurvePopupViewController : NSViewController
+
 @property (weak) IBOutlet NSPopUpButton *aimationCurvesPopUpButton;
+@property (weak) IBOutlet NSSlider *strengthSlider;
+@property (weak) VSAnimationCurve *currentlySelectedAnimationCurve;
+@property (assign) float currentStrength;
+
+-(void) showPopUpForAnimationCurves:(NSArray*) animationCurves andSelectAnimationCurve:(VSAnimationCurve*) selectedAnimationCurve;
+
 - (IBAction)didChangeAnimationCurvesPopUpWindow:(NSPopUpButton *)sender;
-
--(void) showPopUpForAnimationCurves:(NSArray*) animationCurves;
-
-@property VSAnimationCurve *currentlySelectedAnimationCurve;
+- (IBAction)didChangeStrengthSlider:(NSSlider *)sender;
 
 @end

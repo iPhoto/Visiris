@@ -216,7 +216,7 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
                                             ofView:relativeToView
                                      preferredEdge:NSMaxYEdge];
     
-    [self.animationCurvePopupViewController showPopUpForAnimationCurves:[[VSAnimationCurveFactory registeredAnimationCurves] allValues]];
+    [self.animationCurvePopupViewController showPopUpForAnimationCurves:[[VSAnimationCurveFactory registeredAnimationCurves] allValues] andSelectAnimationCurve:self.controllerOfCurrentlySelectedConnectionPath.keyFrame.animationCurve];
     
    
 }
@@ -226,12 +226,13 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 -(void) popoverWillClose:(NSNotification *)notification{
     
     if([self.animationCurvePopupViewController.currentlySelectedAnimationCurve class] == [self.controllerOfCurrentlySelectedConnectionPath.keyFrame.animationCurve class]){
-        
+        self.controllerOfCurrentlySelectedConnectionPath.keyFrame.animationCurve.strength = self.animationCurvePopupViewController.currentStrength;
     }
     else{
         VSAnimationCurve *animationCurve = [VSAnimationCurveFactory createAnimationCurveOfClass:NSStringFromClass([self.animationCurvePopupViewController.currentlySelectedAnimationCurve class])];
         
         if(animationCurve){
+            animationCurve.strength = self.animationCurvePopupViewController.currentStrength;
             self.controllerOfCurrentlySelectedConnectionPath.keyFrame.animationCurve =  animationCurve;
         }
         else{

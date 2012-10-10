@@ -250,15 +250,26 @@
 -(BOOL) connectWithDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device deviceParameterRange:(VSRange)deviceParameterRange andParameterRange:(VSRange)parameterRange{
     
     if(![self.deviceParameterMapper.deviceParameter isEqual:deviceParameter]){
+        
+        [self.deviceParameterMapper deactivateDeviceParameter];
+        
         self.deviceParameterMapper = [[VSDeviceParameterMapper alloc] initWithDeviceParameter:deviceParameter
                                                                                      ofDevice:device deviceParameterRange:deviceParameterRange
                                                                             andParameterRange:parameterRange];
     
         self.connectedWithDeviceParameter = [self.deviceParameterMapper activateDeviceParameter];
+        
+        
+        
     }
     else{
+        
+        if(!self.connectedWithDeviceParameter){
+            self.connectedWithDeviceParameter = [self.deviceParameterMapper activateDeviceParameter];
+        }
         self.deviceParameterMapper.parameterRange = parameterRange;
         self.deviceParameterMapper.deviceParameterRange = deviceParameterRange;
+        self.connectedWithDeviceParameter = true;
     }
     
     

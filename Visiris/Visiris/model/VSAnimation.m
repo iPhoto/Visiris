@@ -123,8 +123,6 @@
             
             VSKeyFrame *keyframe2 = (VSKeyFrame*)[self.keyFrames objectAtIndex:nexKeyFrameIndex];
             
-            DDLogInfo(@"%@ - %@",keyframe1.animationCurve,keyframe2.animationCurve);
-            
             float result = [[keyframe1 animationCurve] valueForTime:timestamp
                                                       withBeginTime:keyframe1.timestamp
                                                           toEndTime:keyframe2.timestamp

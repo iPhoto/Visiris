@@ -32,17 +32,12 @@
     
     
     for(NSBezierPath *connectionPath in self.keyFrameConnectionPaths){
+        [connectionPath setLineWidth:2];
         [connectionPath stroke];
     }
 }
 
 -(void) rightMouseDown:(NSEvent *)theEvent{
-    if( [self viewMouseDelegateRespondsToSelector:@selector(rightMouseDown:)]){
-        [self.viewMouseDelegate rightMouseDown:theEvent onView:self];
-    }
-}
-
--(void) mouseDragged:(NSEvent *)theEvent{
     if( [self viewMouseDelegateRespondsToSelector:@selector(rightMouseDown:)]){
         [self.viewMouseDelegate rightMouseDown:theEvent onView:self];
     }

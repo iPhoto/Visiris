@@ -230,7 +230,7 @@
         [self.referencCountingAdresses incrementReferenceOfKey:[NSString stringFromAddress:address atPort:port]];
         [self.referenceCountingPorts incrementReferenceOfKey:[NSNumber numberWithUnsignedInt:port]];
     }
-    
+
     return isInputForAddressActive;
 }
 
@@ -246,6 +246,7 @@
         [self stopOSCClientOnPort:port];
         isInputForAddressStopped = YES;
         DDLogInfo(@"Stopped Port: %d",port);
+        
     }
     
     return isInputForAddressStopped;
