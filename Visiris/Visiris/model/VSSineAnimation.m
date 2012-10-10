@@ -34,15 +34,14 @@
     
     d = startValue;
     
+    int strength = (int)self.strength * 2 - 1;
+    
     //c change in value
     c = endValue - startValue;
     
     x /= endTime - beginTime;
-
-//    result = c * cos(x * pi) + d;
     
-    result = -c * cos(x * pi/2.0) + c + d;
-
+    result = -c * cos(x * pi * strength) / 2.0 + d + c/2;
     
     return result;
 }
