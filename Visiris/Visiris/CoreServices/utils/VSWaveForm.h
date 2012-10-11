@@ -7,10 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AVFoundation/AVAsset.h>
 
 @interface VSWaveForm : NSObject
 
-+ (NSImage *) renderPNGAudioPictogramForAssett:(AVURLAsset *)songAsset;
++ (NSImage *)WaveformOfFile:(NSString *)path;
 
 @end

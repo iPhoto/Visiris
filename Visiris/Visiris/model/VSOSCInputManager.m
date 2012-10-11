@@ -173,11 +173,11 @@
         }
         while (![currentOSCClient isBinded]);
         
-        NSLog(@"Start observing Port: %d",newPort);
+//        NSLog(@"Start observing Port: %d",newPort);
         
         [currentOSCClient startObserving];
     }
-    NSLog(@"active ports: %@", self.activePorts);
+//    [self printDebugLog];
 }
 
 - (unsigned int)getNextAvailableOSCPort

@@ -11,6 +11,15 @@
 
 @implementation VSWaveForm
 
++ (NSImage *)WaveformOfFile:(NSString *)path
+{
+    NSURL *url = [[NSURL alloc] initFileURLWithPath:path];
+    AVURLAsset *asset = [AVURLAsset URLAssetWithURL:url options:nil];
+    
+    return [self renderPNGAudioPictogramForAssett:asset];
+}
+
+
 + (NSImage *) renderPNGAudioPictogramForAssett:(AVURLAsset *)songAsset {
     
     NSError * error = nil;
