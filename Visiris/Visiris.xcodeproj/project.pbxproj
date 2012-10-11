@@ -31,6 +31,8 @@
 		2776C4B3162588E100E1672E /* VSEaseInBackAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2776C4B2162588E000E1672E /* VSEaseInBackAnimation.m */; };
 		2776C4B916258E2C00E1672E /* VSElasticEaseInAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2776C4B816258E2B00E1672E /* VSElasticEaseInAnimation.m */; };
 		2776C4BC162593F800E1672E /* VSSawAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2776C4BB162593F700E1672E /* VSSawAnimation.m */; };
+		2781578D1626EFB4008515DD /* VisirisCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2781578C1626EFB3008515DD /* VisirisCore.framework */; };
+		2781578E1626EFF6008515DD /* VisirisCore.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2781578C1626EFB3008515DD /* VisirisCore.framework */; };
 		279481D91625B60700341BEE /* VSSineAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 279481D81625B60700341BEE /* VSSineAnimation.m */; };
 		279481E41625EE5B00341BEE /* VSWaveForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 279481E31625EE5B00341BEE /* VSWaveForm.m */; };
 		2795881715906D5000E24B57 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2795881615906D5000E24B57 /* CoreMedia.framework */; };
@@ -60,7 +62,6 @@
 		5B0EFF99158A226C0000445C /* VSTimelineScrollViewDocumentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0EFF98158A226C0000445C /* VSTimelineScrollViewDocumentView.m */; };
 		5B12792A15C13A500026AAFD /* NSImage+QuickLook.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B12792815C13A500026AAFD /* NSImage+QuickLook.m */; };
 		5B12792C15C13CAD0026AAFD /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B12792B15C13CAD0026AAFD /* QuickLook.framework */; };
-		5B1DFEBE161ACA8900D7EB88 /* VisirisCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B1DFEBD161ACA8900D7EB88 /* VisirisCore.framework */; };
 		5B250992161088BE003B715F /* VSFrameUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B250991161088BE003B715F /* VSFrameUtils.m */; };
 		5B2A59D31578AF4E003938AB /* VSDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2A59D21578AF4E003938AB /* VSDocumentController.m */; };
 		5B35BF161577A49C009911EC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35BF151577A49C009911EC /* Cocoa.framework */; };
@@ -227,6 +228,7 @@
 				5BE5179A1614A1220096DFB3 /* VVBasics.framework in CopyFiles */,
 				5BE5179B1614A1220096DFB3 /* VVMIDI.framework in CopyFiles */,
 				5BE5179C1614A1220096DFB3 /* VVOSC.framework in CopyFiles */,
+				2781578E1626EFF6008515DD /* VisirisCore.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,6 +262,7 @@
 		2776C4B816258E2B00E1672E /* VSElasticEaseInAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSElasticEaseInAnimation.m; sourceTree = "<group>"; };
 		2776C4BA162593F600E1672E /* VSSawAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSSawAnimation.h; sourceTree = "<group>"; };
 		2776C4BB162593F700E1672E /* VSSawAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSSawAnimation.m; sourceTree = "<group>"; };
+		2781578C1626EFB3008515DD /* VisirisCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisirisCore.framework; path = "../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-fsjwpfcrmmjpcjdknhpgpwmronuy/Build/Products/Debug/VisirisCore.framework"; sourceTree = "<group>"; };
 		279481D71625B60600341BEE /* VSSineAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSSineAnimation.h; sourceTree = "<group>"; };
 		279481D81625B60700341BEE /* VSSineAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSSineAnimation.m; sourceTree = "<group>"; };
 		279481E21625EE5B00341BEE /* VSWaveForm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSWaveForm.h; sourceTree = "<group>"; };
@@ -303,7 +306,6 @@
 		5B12792815C13A500026AAFD /* NSImage+QuickLook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+QuickLook.m"; sourceTree = "<group>"; };
 		5B12792915C13A500026AAFD /* NSImage+QuickLook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+QuickLook.h"; sourceTree = "<group>"; };
 		5B12792B15C13CAD0026AAFD /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
-		5B1DFEBD161ACA8900D7EB88 /* VisirisCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisirisCore.framework; path = "../../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-eibgtyufaxcnihdtvmkbpcrlzeqh/Build/Products/Debug/VisirisCore.framework"; sourceTree = "<group>"; };
 		5B250990161088BE003B715F /* VSFrameUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFrameUtils.h; sourceTree = "<group>"; };
 		5B250991161088BE003B715F /* VSFrameUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFrameUtils.m; sourceTree = "<group>"; };
 		5B2A59D11578AF4E003938AB /* VSDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDocumentController.h; sourceTree = "<group>"; };
@@ -595,7 +597,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B1DFEBE161ACA8900D7EB88 /* VisirisCore.framework in Frameworks */,
+				2781578D1626EFB4008515DD /* VisirisCore.framework in Frameworks */,
 				5B12792C15C13CAD0026AAFD /* QuickLook.framework in Frameworks */,
 				2799F8E91599C96D00008489 /* Quartz.framework in Frameworks */,
 				2795881A15906D7B00E24B57 /* AVFoundation.framework in Frameworks */,
@@ -767,8 +769,8 @@
 		5B35BF141577A49C009911EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2781578C1626EFB3008515DD /* VisirisCore.framework */,
 				5B98D1DD161CC041002CDE1F /* libxml2.dylib */,
-				5B1DFEBD161ACA8900D7EB88 /* VisirisCore.framework */,
 				5B12792B15C13CAD0026AAFD /* QuickLook.framework */,
 				2799F8E81599C96D00008489 /* Quartz.framework */,
 				2795881915906D7B00E24B57 /* AVFoundation.framework */,
@@ -1920,6 +1922,7 @@
 					"\"$(SRCROOT)/External/Frameworks\"",
 					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-cdbzsbszlriaviebcmazsjojzrju/Build/Products/Debug\"",
 					"\"$(SRCROOT)/../../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-eibgtyufaxcnihdtvmkbpcrlzeqh/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-fsjwpfcrmmjpcjdknhpgpwmronuy/Build/Products/Debug\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Visiris/Visiris-Prefix.pch";
@@ -1947,6 +1950,7 @@
 					"\"$(SRCROOT)/External/Frameworks\"",
 					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-cdbzsbszlriaviebcmazsjojzrju/Build/Products/Debug\"",
 					"\"$(SRCROOT)/../../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-eibgtyufaxcnihdtvmkbpcrlzeqh/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-fsjwpfcrmmjpcjdknhpgpwmronuy/Build/Products/Debug\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Visiris/Visiris-Prefix.pch";

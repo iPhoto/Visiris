@@ -24,6 +24,9 @@
     
     NSError * error = nil;
     
+    //TODO you see it
+    return nil;
+    
     AVAssetReader * reader = [[AVAssetReader alloc] initWithAsset:songAsset error:&error];
     
     AVAssetTrack * songTrack = [songAsset.tracks objectAtIndex:0];
