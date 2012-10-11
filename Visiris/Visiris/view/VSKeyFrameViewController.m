@@ -106,6 +106,7 @@
 
 -(NSPoint) view:(NSView *)view wantsToBeDraggedFrom:(NSPoint)fromPoint to:(NSPoint)toPoint{
     NSPoint result = toPoint;
+    self.dragged = YES;
     if(view ==self.keyFrameView){
         if([self delegateRespondsToSelector:@selector(keyFrameViewControllersView:wantsToBeDraggeFrom:to:)]){
             result = [self.delegate keyFrameViewControllersView:self wantsToBeDraggeFrom:fromPoint to:toPoint];
@@ -114,6 +115,16 @@
     
     return result;
 }
+
+-(void) mouseUp:(NSEvent *)theEvent onView:(NSView *)view{
+    if([self delegateRespondsToSelector:@selector(keyFrameViewController:didStopDragginAtPosition:)]){
+        [self.delegate keyFrameViewController:self
+                     didStopDragginAtPosition:[theEvent locationInWindow]];
+    }
+    
+    self.dragged = NO;
+}
+
 
 #pragma mark - VSViewResizingDelegate Implementation
 

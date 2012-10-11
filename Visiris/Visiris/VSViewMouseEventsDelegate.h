@@ -39,6 +39,13 @@
 -(void) mouseDown:(NSEvent*) theEvent onView:(NSView*) view;
 
 /**
+ * Called when a mouseUp on an NSView happend
+ * @param theEvent NSEvent of the mouseUp-Event
+ * @param view NSView the mouse was released on
+ */
+-(void) mouseUp:(NSEvent*) theEvent onView:(NSView*) view;
+
+/**
  * Called when a rightMouseDown-Event on an NSView happend
  * @param theEvent NSEvent of the rightMouseDown-Event
  * @param view NSView the mouse was pressed down on

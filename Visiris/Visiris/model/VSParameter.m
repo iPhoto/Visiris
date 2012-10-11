@@ -256,7 +256,7 @@
         self.deviceParameterMapper = [[VSDeviceParameterMapper alloc] initWithDeviceParameter:deviceParameter
                                                                                      ofDevice:device deviceParameterRange:deviceParameterRange
                                                                             andParameterRange:parameterRange];
-    
+        
         self.connectedWithDeviceParameter = [self.deviceParameterMapper activateDeviceParameter];
         
         
@@ -321,12 +321,14 @@
  */
 -(NSString*) stringValueOf:(id) value{
     
-    if([value isKindOfClass:[NSString class]]){
-        return (NSString*) value;
-    }
-    
-    if([self.value respondsToSelector:@selector(stringValue)]){
-        return [self.value stringValue];
+    if(value){
+        if([value isKindOfClass:[NSString class]]){
+            return (NSString*) value;
+        }
+        
+        if([self.value respondsToSelector:@selector(stringValue)]){
+            return [self.value stringValue];
+        }
     }
     
     return @"";

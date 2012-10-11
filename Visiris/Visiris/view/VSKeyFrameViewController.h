@@ -41,6 +41,11 @@
 
 -(void) keyFrameViewController:(VSKeyFrameViewController *) keyFrameViewController updatedPathToNextKeyFrame:(NSBezierPath*) pathToNextKeyFrame;
 
+-(void) keyFrameViewController:(VSKeyFrameViewController *)keyFrameViewController didStopDragginAtPosition:(NSPoint)
+finalPoint;
+
+-(BOOL) keyFrameViewControllerWantsToBeUnselected:(VSKeyFrameViewController *)keyFrameViewController;
+
 @end
 
 #import "VSViewMouseEventsDelegate.h"
@@ -65,6 +70,8 @@
 
 /** PixelTimeRatio of the VSAnimationTimeline the VSKeyFrameViewControllerDelegate is part of. Neccessary to position the keyFrame right on the x-Axis. */
 @property double pixelTimeRatio;
+
+@property BOOL dragged;
 
 @property (strong) NSBezierPath *pathToNextKeyFrameView;
 

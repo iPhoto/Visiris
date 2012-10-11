@@ -25,6 +25,5 @@
 
 @property id<VSViewMouseEventsDelegate> viewMouseDelegate;
 
-@property NSRect toDRaw;
 
 @end

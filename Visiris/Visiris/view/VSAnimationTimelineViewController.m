@@ -197,6 +197,23 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     [self showAnimationCurvePopoverForKeyFrame:keyFrameViewController.keyFrame relativeToRect:relativeToRect ofView:animationTrackViewController.view];
 }
 
+-(BOOL) keyFrameViewController:(VSKeyFrameViewController *)keyFrameViewController wantsToBeUnselectedOnTrack:(VSAnimationTrackViewController *)track{
+    BOOL result = NO;
+    
+    NSPoint testPoint = NSMakePoint(keyFrameViewController.view.frame.origin.x, [self currentPlayheadMarkerLocation]);
+    
+    if(!NSPointInRect(testPoint, keyFrameViewController.view.frame)){
+        
+        if([self keyFrameSelectingDelegateRespondsToSelector:@selector(wantToUnselectKeyFrame:ofParamater:)]){
+            result = [self.keyFrameSelectingDelegate wantToUnselectKeyFrame:keyFrameViewController.keyFrame
+                                                       ofParamater:track.parameter];
+        }
+    }
+    
+    return result;
+    
+}
+
 -(void) showAnimationCurvePopoverForKeyFrame:(VSKeyFrame*) keyFrame relativeToRect:(NSRect) rect ofView:(NSView*) relativeToView{
     
     

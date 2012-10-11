@@ -233,7 +233,7 @@
     if(self.parameter){
         if(self.parameter.hasRange){
             float range =  self.parameter.range.max - self.parameter.range.min;
-            pixelPosition = self.keyFramesArea.size.height / range * (keyFrameViewController.keyFrame.floatValue-self.parameter.range.min) - self.keyFramesArea.origin.y;
+            pixelPosition = self.keyFramesArea.size.height / range * (keyFrameViewController.keyFrame.floatValue-self.parameter.range.min);
         }
     }
 
@@ -246,7 +246,7 @@
     if(self.parameter){
         if(self.parameter.hasRange){
             float range =  self.parameter.range.max - self.parameter.range.min;
-            return range / self.keyFramesArea.size.height * (pixelPosition) + self.parameter.range.min;
+            return range / (self.keyFramesArea.size.height) * (pixelPosition) + self.parameter.range.min;
         }
     }
     return keyFrameViewController.keyFrame.floatValue;
@@ -258,7 +258,11 @@
     for (VSKeyFrameViewController *keyFrameViewController in self.keyFrameViewControllers){
         NSPoint pointInView = [self.view convertPoint:[theEvent locationInWindow] fromView:nil];
         
-        if(NSPointInRect(pointInView, keyFrameViewController.pathToNextKeyFrameView.bounds)){
+        NSRect extendedBounds = keyFrameViewController.pathToNextKeyFrameView.bounds;
+        extendedBounds.size.height += 10;
+        extendedBounds.origin.y -= 5;
+        
+        if(NSPointInRect(pointInView, extendedBounds)){
             
             if([self delegateRespondsToSelector:@selector(didClickRightKeyFrameConnectionOfKeyFrameViewController:atPosition:onTrack:)]){
                 [self.delegate didClickRightKeyFrameConnectionOfKeyFrameViewController:keyFrameViewController
@@ -294,11 +298,11 @@
         toPoint.x = 0;
     }
     else if((toPoint.x + keyFrameViewController.view.frame.size.width / 2.0f) > self.keyFramesArea.size.width){
-        toPoint.x = self.keyFramesArea.size.width - keyFrameViewController.view.frame.size.width;
+        toPoint.x = self.keyFramesArea.size.width;
     }
     
-    if((toPoint.y - keyFrameViewController.view.frame.size.height / 2.0f) < 0){
-        toPoint.y = keyFrameViewController.view.frame.size.height;
+    if(toPoint.y < 0){
+        toPoint.y = 0;
     }
     else if((toPoint.y + keyFrameViewController.view.frame.size.height / 2.0f) > self.keyFramesArea.size.height){
         toPoint.y = self.keyFramesArea.size.height;
@@ -314,6 +318,16 @@
     }
     
     return result;
+}
+
+-(void) keyFrameViewController:(VSKeyFrameViewController *)keyFrameViewController didStopDragginAtPosition:(NSPoint)finalPoint{
+    
+    if(keyFrameViewController.dragged){
+        if([self delegateRespondsToSelector:@selector(keyFrameViewController:wantsToBeUnselectedOnTrack:)]){
+            [self.delegate keyFrameViewController:keyFrameViewController
+                       wantsToBeUnselectedOnTrack:self];
+        }
+    }
 }
 
 -(void) keyFrameViewController:(VSKeyFrameViewController *)keyFrameViewController updatedPathToNextKeyFrame:(NSBezierPath *)pathToNextKeyFrame{
@@ -588,8 +602,6 @@
     keyFramesArea.origin.x = KEYFRAME_WIDTH / 2.0;
     keyFramesArea.origin.y = KEYFRAME_HEIGHT / 2.0;
     
-    self.animationTrackView.toDRaw = keyFramesArea;
-    [self.view setNeedsDisplay:YES];
     return keyFramesArea;
 }
 

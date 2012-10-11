@@ -46,6 +46,8 @@
 
 -(void) didClickRightKeyFrameConnectionOfKeyFrameViewController:(VSKeyFrameViewController*) keyFrameViewController atPosition:(NSPoint) position onTrack:(VSAnimationTrackViewController*) animationTrackViewController;
 
+-(BOOL) keyFrameViewController:(VSKeyFrameViewController *)keyFrameViewController wantsToBeUnselectedOnTrack:(VSAnimationTrackViewController*) track;
+
 @end
 
 

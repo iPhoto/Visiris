@@ -413,7 +413,7 @@ static NSString* defaultNib = @"VSParameterView";
  */
 -(void) updateParameterValue{
     [self.nameLabel setStringValue: NSLocalizedString(self.parameter.name, @"")];
-    
+    DDLogInfo(@"updatinG: %@",self.parameter.currentStringValue);
     if([self.parameter isKindOfClass:[VSOptionParameter class]]){
         [self.comboBox selectItemWithObjectValue:((VSOptionParameter*)self.parameter).selectedKey];
     }

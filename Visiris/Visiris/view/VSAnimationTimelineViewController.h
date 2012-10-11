@@ -41,6 +41,8 @@
  */
 -(BOOL) wantToSelectKeyFrame:(VSKeyFrame*) keyFrame ofParamater:(VSParameter*) parameter;
 
+-(BOOL) wantToUnselectKeyFrame:(VSKeyFrame*) keyFrame ofParamater:(VSParameter*) parameter;
+
 /**
  * Called when the VSKeyFrameView representing the given VSKeyFrame is dragged around on its track
  *

@@ -212,6 +212,12 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     return YES;
 }
 
+-(BOOL) wantToUnselectKeyFrame:(VSKeyFrame *)keyFrame ofParamater:(VSParameter *)parameter{
+    [self.parametersViewController unselectAllSelectedKeyFrames];
+    
+    return YES;
+}
+
 -(BOOL) keyFrame:(VSKeyFrame *)keyFrame ofParameter:(VSParameter *)parameter willBeMovedFromTimestamp:(double)fromTimestamp toTimestamp:(double *)toTimestamp andFromValue:(id)fromValue toValue:(__autoreleasing id *)toValue{
     
     [parameter changeKeyFrames:keyFrame timestamp:*toTimestamp];

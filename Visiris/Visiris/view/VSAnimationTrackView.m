@@ -28,9 +28,6 @@
     
     NSRectFill(dirtyRect);
     
-    [[NSColor redColor] setFill];
-    
-    NSRectFill(self.toDRaw);
     
     [[NSColor greenColor] setStroke];
     

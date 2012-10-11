@@ -94,6 +94,12 @@
     
 }
 
+-(void) mouseUp:(NSEvent *)theEvent{
+    if([self mouseDelegateRespondsToSelector:@selector(mouseUp:onView:)]){
+        [self.mouseDelegate mouseUp:theEvent onView:self];
+    }
+}
+
 #pragma mark - Private Methods
 
 /**
