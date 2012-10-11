@@ -75,6 +75,9 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     else if ([keyPath isEqualToString:@"duration"]){
         [self computePixelTimeRatio];
     }
+    else if ([keyPath isEqualToString:@"startTime"]){
+        [self.scrollView movePlayHeadMarkerToLocation:[self pixelForGlobalTimestamp:self.playhead.currentTimePosition]];
+    }
 }
 
 #pragma mark - NSResponder
@@ -266,6 +269,11 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
                                  options:0
                                  context:nil];
         
+        [self.timelineObject addObserver:self
+                              forKeyPath:@"startTime"
+                                 options:0
+                                 context:nil];
+        
         NSArray *parameters = [self.timelineObject visibleParameters];
         
         
@@ -331,8 +339,7 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 
 -(void) resetTimeline{
     
-    [self.timelineObject removeObserver:self
-                             forKeyPath:@"duration"];
+    [self removeTimelineObjectOberservers];
     
     for(VSAnimationTrackViewController *animationTrackViewController in [self.animationTrackViewControllers allValues]){
         [animationTrackViewController.view removeFromSuperview];
@@ -346,6 +353,14 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 
 
 #pragma mark - Private Methods
+
+-(void) removeTimelineObjectOberservers{
+    [self.timelineObject removeObserver:self
+                             forKeyPath:@"duration"];
+    
+    [self.timelineObject removeObserver:self
+                             forKeyPath:@"startTime"];
+}
 
 /**
  * Checks if the delegate is able to respond to the given Selector

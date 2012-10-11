@@ -653,14 +653,19 @@ static NSString* defaultNib = @"VSTrackView";
         
         //if the draggingPasteboard stored in draggingInfo contains VSProjectItemRepresentation-Objects, they are read out and stored in draggedProjectItems
         if([[draggingInfo draggingPasteboard] canReadObjectForClasses:[NSArray arrayWithObject:[VSProjectItemRepresentation class]] options:nil]){
-            draggedProjectItems = [NSMutableArray arrayWithArray:[[draggingInfo draggingPasteboard] readObjectsForClasses:[NSArray arrayWithObject:[VSProjectItemRepresentation class]] options:nil]];
+            draggedProjectItems = [NSMutableArray arrayWithArray:[[draggingInfo draggingPasteboard]
+                                                                  readObjectsForClasses:[NSArray arrayWithObject:[VSProjectItemRepresentation class]]
+                                                                  options:nil]];
         }
         
         //if the draggingPasteboard stored in draggingInfo contains file-paths (NSFilenamesPboardType) the paths are read out. VSProjectItemRepresentation are created for every filePath and added to draggedProjectItems
         if([[[draggingInfo draggingPasteboard] types ] containsObject:NSFilenamesPboardType]){
             NSData *data = [[draggingInfo draggingPasteboard] dataForType:NSFilenamesPboardType];
             
-            NSArray *fileNames = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:0 format:kCFPropertyListImmutable errorDescription:nil];
+            NSArray *fileNames = [NSPropertyListSerialization propertyListFromData:data
+                                                                  mutabilityOption:0
+                                                                            format:kCFPropertyListImmutable
+                                                                  errorDescription:nil];
             
             for(NSString *fileName in fileNames){
                 VSProjectItem *tempProjectItem = [self.projectItemController createNewProjectItemFromFile:fileName];

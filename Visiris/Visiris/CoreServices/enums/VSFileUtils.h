@@ -27,7 +27,7 @@
  *  @param file the File the duration is tried to be read out.
  *  @return The duration of file or -1 if the duration couldn't be read out.
 */
-+(float) durationInMillisecondsOfFile:(NSString*)file;
++(double) durationInMillisecondsOfFile:(NSString*)file;
 
 /**
  * Returns the pixel width and height of the given file

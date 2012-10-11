@@ -215,7 +215,9 @@
         NSPoint currentBoundsOrigin = self.scrollView.contentView.bounds.origin;
         currentBoundsOrigin.x = newLocation;
         
-        [self.scrollView.contentView setBoundsOrigin:currentBoundsOrigin];
+//        [self.scrollView.contentView setBoundsOrigin:currentBoundsOrigin];
+//        DDLogInfo(@"moved to: %@",NSStringFromPoint(currentBoundsOrigin));
+        [self.scrollView.contentView scrollPoint:currentBoundsOrigin];
     }
 }
 
@@ -223,6 +225,7 @@
     CGFloat newLocation = [self pixelForTimestamp:self.playhead.currentTimePosition];
     
     [self.scrollView movePlayHeadMarkerToLocation:newLocation];
+    [self scrollIfNewLocationOfPlayheadIsOutsideOfVisibleRect: newLocation];
 }
 
 

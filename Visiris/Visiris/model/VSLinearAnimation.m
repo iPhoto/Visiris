@@ -15,7 +15,7 @@
 {
     if (self = [super init]) {
         _name = @"Linear";
-        self.usesStrength = NO;
+        self.hasStrength = NO;
     }
     
     return self;

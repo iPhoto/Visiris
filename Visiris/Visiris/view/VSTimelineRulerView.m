@@ -10,6 +10,8 @@
 
 #import "VSCoreServices.h"
 
+#import "VSMainTimelineScrollView.h"
+
 @interface VSTimelineRulerView ()
 
 #define RASTER_LINES_PER_PARTITION 10
@@ -119,6 +121,10 @@
 #pragma mark - NSRulerView
 
 -(void) drawHashMarksAndLabelsInRect:(NSRect)rect{
+    
+    if([self.scrollView isKindOfClass:[VSMainTimelineScrollView class]]){
+        DDLogInfo(@"drawHashMarksAndLabelsInRect:(NSRect)rect");
+    }
     
     if(self.scrollView.hasVerticalRuler){
         self.originOffset =  self.scrollView.verticalRulerView.ruleThickness;

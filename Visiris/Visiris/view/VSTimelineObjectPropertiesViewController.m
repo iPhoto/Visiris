@@ -88,7 +88,13 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     [self initParameterView];
     
     [self animationTimelineHolder];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(scrollerStyleDidChange:)
+                                                 name:NSPreferredScrollerStyleDidChangeNotification
+                                               object:nil];
 }
+
 
 /**
  * Instantiates a VSAnimationTimelineViewController, stores its view as subView of animationTimelineHolder and sets the view's properties
@@ -188,7 +194,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 #pragma mark - VSParameterViewKeyFrameDelegate Implementation
 
 -(VSKeyFrame*) addKeyFrameToParameter:(VSParameter *)parameter withValue:(id)value{
-     return [parameter addKeyFrameWithValue:value forTimestamp:self.animationTimelineViewController.playheadTimePosition];
+    return [parameter addKeyFrameWithValue:value forTimestamp:self.animationTimelineViewController.playheadTimePosition];
 }
 
 -(void) parameterViewController:(VSParameterViewController *)parameterView wantsPlayheadToGoToNextKeyFrameOfParameter:(VSParameter *)parameter{
@@ -255,7 +261,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
         
     }
     
-
+    
 }
 
 #pragma mark - Private Methods
@@ -272,15 +278,18 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 }
 
 /**
- * Tells the parametersViewController to show the parameters of the timelineObject 
+ * Tells the parametersViewController to show the parameters of the timelineObject
  */
 -(void) showParameters{
     [self.parametersViewController showParametersOfTimelineObject:self.timelineObject connectedWithDelegate:self];
-    NSSize newSize = [self.parametersViewController.scrollView.documentView frame].size;
     
-    newSize.height += self.animationTimelineViewController.scrollView.horizontalScroller.frame.size.height;
-    
-    [self.parametersViewController.scrollView.documentView setFrameSize:newSize];
+    if([NSScroller preferredScrollerStyle] == NSScrollerStyleLegacy){
+        NSSize newSize = [self.parametersViewController.scrollView.documentView frame].size;
+        
+        newSize.height += self.animationTimelineViewController.scrollView.horizontalScroller.frame.size.height;
+        
+        [self.parametersViewController.scrollView.documentView setFrameSize:newSize];
+    }
 }
 
 /**
@@ -288,6 +297,21 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
  */
 -(void) showAnimationTimeline{
     [self.animationTimelineViewController showTimelineForTimelineObject:self.timelineObject];
+}
+
+-(void) scrollerStyleDidChange:(NSNotification*) notification{
+    
+    NSSize newSize = [self.parametersViewController.scrollView.documentView frame].size;
+    
+    if([NSScroller preferredScrollerStyle] == NSScrollerStyleLegacy){
+        newSize.height += self.animationTimelineViewController.scrollView.horizontalScroller.frame.size.height;
+    }
+    else{
+        newSize.height -= self.animationTimelineViewController.scrollView.horizontalScroller.frame.size.height;
+    }
+    
+    [self.parametersViewController.scrollView.documentView setFrameSize:newSize];
+    
 }
 
 #pragma mark - Properties
@@ -306,10 +330,9 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
         _timelineObject = timelineObject;
         
         self.numberOfParameters = [timelineObject visibleParameters].count;
-
-        [self showParameters];
         
         [self showAnimationTimeline];
+        [self showParameters];
         
         [self.animationTimelineViewController.scrollView setBoundsOriginWithouthNotifiying:NSZeroPoint];
         [self.parametersViewController.scrollView setBoundsOriginWithouthNotifiying:NSZeroPoint];

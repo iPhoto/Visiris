@@ -17,6 +17,7 @@
 @property (weak) IBOutlet NSSlider *strengthSlider;
 @property (weak) VSAnimationCurve *currentlySelectedAnimationCurve;
 @property (assign) float currentStrength;
+@property (weak) IBOutlet NSBox *strengthBox;
 
 -(void) showAnimationCurveSelectionPopUpForKeyFrame:(VSKeyFrame*) selectedKeyFrame withAnimationCurves:(NSArray*) animationCurves;
 

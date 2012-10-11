@@ -8,6 +8,10 @@
 
 #import "VSFileUtils.h"
 
+#import "VSCoreServices.h"
+
+#import <QTKit/QTKit.h>
+
 @implementation VSFileUtils
 
 #pragma mark - Functions
@@ -28,18 +32,41 @@
     }
 }
 
-+(float) durationInMillisecondsOfFile:(NSString*)file{
++(double) durationInMillisecondsOfFile:(NSString*)file{
     
-    if(!file || ![[NSFileManager defaultManager] fileExistsAtPath:file])
-        return -1;
+    double result = -1.0f;
     
-    id duration = [[self metaDataOfFile:file] objectForKey:(id)kMDItemDurationSeconds];
-
-    if(duration)
-        return [duration doubleValue]*1000;
-    else {
-        return 0;
+    if(file || [[NSFileManager defaultManager] fileExistsAtPath:file])
+    {
+        
+        id duration = [[self metaDataOfFile:file] objectForKey:(id)kMDItemDurationSeconds];
+        
+        if(duration){
+            result = [duration doubleValue]*1000;
+        }
+        else {
+            if([QTMovie canInitWithFile:file]){
+                NSError *error;
+                
+                QTMovie *movie = [[QTMovie alloc] initWithFile:file error:&error];
+                
+                if(!error){
+                    QTTime duration = movie.duration;
+                    result = duration.timeValue;
+                    
+                    NSTimeInterval timeInterval;
+                    
+                    if(QTGetTimeInterval(duration, &timeInterval)){
+                        result = timeInterval*1000.0f;
+                    }
+                }
+                else{
+                    DDLogError(@"%@",error);
+                }
+            }
+        }
     }
+    return result;
 }
 
 +(NSSize) dimensionsOfFile:(NSString *)file{
@@ -70,7 +97,7 @@
     
     NSDictionary *exifData = (__bridge NSDictionary *)CGImageSourceCopyPropertiesAtIndex(source,0,NULL);
     
-
+    
     
     return exifData;
 }
@@ -92,9 +119,9 @@
     
     if(fileMetaData)
     {
-    NSDictionary *metadataDictionary = (__bridge NSDictionary*)MDItemCopyAttributes (fileMetaData, (__bridge CFArrayRef)[NSArray arrayWithObjects:(id)kMDItemDurationSeconds,(id)kMDItemPixelWidth,(id)kMDItemPixelHeight,(id)kCGImagePropertyExifColorSpace,nil]);
-    
-    return metadataDictionary;
+        NSDictionary *metadataDictionary = (__bridge NSDictionary*)MDItemCopyAttributes (fileMetaData, (__bridge CFArrayRef)[NSArray arrayWithObjects:(id)kMDItemDurationSeconds,(id)kMDItemPixelWidth,(id)kMDItemPixelHeight,(id)kCGImagePropertyExifColorSpace,nil]);
+        
+        return metadataDictionary;
     }
     
     return nil;

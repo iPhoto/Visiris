@@ -304,7 +304,7 @@
     if(toPoint.y < 0){
         toPoint.y = 0;
     }
-    else if((toPoint.y + keyFrameViewController.view.frame.size.height / 2.0f) > self.keyFramesArea.size.height){
+    else if((toPoint.y) > self.keyFramesArea.size.height){
         toPoint.y = self.keyFramesArea.size.height;
     }
     
