@@ -145,6 +145,23 @@
             
         }
     }
+    else if([keyPath isEqualToString:@"duration"]){
+        if(self.playbackMode == VSPlaybackModeNone){
+            self.playbackMode = VSPlaybackModeJumping;
+            
+            [self.outputController didStartScrubbingAtTimestamp:self.currentTimestamp];
+            
+        }
+    }
+    else if([keyPath isEqualToString:@"startTime"]){
+        if(self.playbackMode == VSPlaybackModeNone){
+            self.playbackMode = VSPlaybackModeJumping;
+            
+            [self.outputController didStartScrubbingAtTimestamp:self.currentTimestamp];
+            
+        }
+    }
+    
     
 }
 
@@ -239,6 +256,7 @@
     if([[notification object] isKindOfClass:[NSArray class]]){
         NSArray *unselectedTimelineObjects = notification.object;
         
+        
         for(VSTimelineObject *unselectedTimelineObject in unselectedTimelineObjects){
             [self removeObserversFromSelecteTimelineObject];
         }
@@ -252,6 +270,12 @@
     for(VSParameter *parameter in [self.selectedTimelineObject visibleParameters]){
         [parameter removeObserver:self forKeyPath:@"currentValue"];
     }
+    
+    [self.selectedTimelineObject removeObserver:self
+                                     forKeyPath:@"startTime"];
+    
+    [self.selectedTimelineObject removeObserver:self
+                                     forKeyPath:@"duration"];
 }
 
 /**
@@ -273,6 +297,16 @@
         if([selectedTimelineObject isKindOfClass:[VSTimelineObject class]]){
             
             self.selectedTimelineObject = selectedTimelineObject;
+            
+            [self.selectedTimelineObject addObserver:self
+                                          forKeyPath:@"startTime"
+                                             options:0
+                                             context:nil];
+            
+            [self.selectedTimelineObject addObserver:self
+                                          forKeyPath:@"duration"
+                                             options:0
+                                             context:nil];
             
             for(VSParameter *parameter in [self.selectedTimelineObject visibleParameters]){
                 [parameter addObserver:self
