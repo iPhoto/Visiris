@@ -189,6 +189,10 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     if ([keyPath isEqualToString:@"name"]) {
         [self.nameTextField setStringValue:[object valueForKey:keyPath]];
     }
+    else if([keyPath isEqualToString:@"startTime"]){
+        [self.animationTimelineViewController updatePlayheadPosition];
+        [self updateCurrentValueOfAllParameters];
+    }
 }
 
 #pragma mark - VSParameterViewKeyFrameDelegate Implementation
@@ -230,7 +234,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     [parameter changeKeyFrames:keyFrame timestamp:*toTimestamp];
     keyFrame.value = *toValue;
     
-    [parameter updateCurrentValueForTimestamp: [self.timelineObject localTimestampOfGlobalTimestamp:self.animationTimelineViewController.playhead.currentTimePosition]];
+    [self updateCurrentValueOfParameter:parameter];
     
     return YES;
 }
@@ -266,6 +270,15 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 
 #pragma mark - Private Methods
 
+-(void) updateCurrentValueOfParameter:(VSParameter*) parameter{
+    [parameter updateCurrentValueForTimestamp: [self.timelineObject localTimestampOfGlobalTimestamp:self.animationTimelineViewController.playhead.currentTimePosition]];
+}
+
+-(void) updateCurrentValueOfAllParameters{
+    for (VSParameter *parameter in self.timelineObject.visibleParameters){
+        [self updateCurrentValueOfParameter:parameter];
+    }
+}
 
 /**
  * Changes the paramters name
@@ -314,6 +327,11 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     
 }
 
+-(void) addTimelineObjectObservers{
+    [self.timelineObject removeObserver:self
+                             forKeyPath:@"startTime"];
+}
+
 #pragma mark - Properties
 
 -(void) setTimelineObject:(VSTimelineObject *)timelineObject{
@@ -328,6 +346,11 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
         }
         
         _timelineObject = timelineObject;
+        
+        [self.timelineObject addObserver:self
+                              forKeyPath:@"startTime"
+                                 options:0
+                                 context:nil];
         
         self.numberOfParameters = [timelineObject visibleParameters].count;
         

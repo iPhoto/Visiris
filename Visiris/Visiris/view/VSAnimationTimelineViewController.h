@@ -139,5 +139,9 @@
  */
 -(void) resetTimeline;
 
+/**
+ * Sets the location of the playHeadMarker for playhead's currentTimePosition. Called when the VSTimelineObject the VSAnimationTimelineViewController represents was moved.
+ */
+-(void) updatePlayheadPosition;
 
 @end
