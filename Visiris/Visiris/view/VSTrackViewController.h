@@ -176,6 +176,10 @@
 
 -(void) timelineObject:(VSTimelineObjectViewController*) timelineObjectViewController wasResizedOnTrack:(VSTrackViewController*) trackViewController;
 
+-(NSArray*) files:(NSArray*) filePaths haveEnteredTrack:(VSTrackViewController*) track;
+
+-(NSArray*) files:(NSArray*) filePaths haveBeenDroppedOnTrack:(VSTrackViewController*) track;
+
 @end
 
 

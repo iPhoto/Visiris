@@ -327,10 +327,6 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     
 }
 
--(void) addTimelineObjectObservers{
-    [self.timelineObject removeObserver:self
-                             forKeyPath:@"startTime"];
-}
 
 #pragma mark - Properties
 
@@ -339,7 +335,8 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
         
         
         if(_timelineObject){
-            //[self.timelineObject removeObserver:self forKeyPath:@"name"];
+            [self.timelineObject removeObserver:self
+                                     forKeyPath:@"startTime"];
             [self setTimelineObjectName:[self.nameTextField stringValue]];
             [self.parametersViewController resetParameters];
             

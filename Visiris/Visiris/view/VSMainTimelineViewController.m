@@ -18,6 +18,8 @@
 #import "VSTrackLabel.h"
 #import "VSMainTimelineScrollViewDocumentView.h"
 #import "VSProjectItemRepresentation.h"
+#import "VSProjectItemController.h"
+#import "VSProjectItemRepresentationController.h"
 
 #import "VSCoreServices.h"
 
@@ -39,6 +41,14 @@
 
 /** Virtual mousePosition which is changed while autoscrolling is active */
 @property NSPoint autoscrollMouseLocation;
+
+/** Instance of VSProjectItemController */
+@property VSProjectItemController *projectItemController;
+
+/** Instance of VSProjectItemRepresentationController */
+@property VSProjectItemRepresentationController *projectItemRepresentationController;
+
+@property NSMutableDictionary *temporaryCreatedProjectItems;
 
 @end
 
@@ -85,6 +95,12 @@ static NSString* defaultNib = @"VSMainTimelineView";
     if([self.view isKindOfClass:[VSMainTimelineView class]]){
         ((VSMainTimelineView*) self.view).mouseMoveDelegate = self;
     }
+    
+    self.projectItemController = [VSProjectItemController sharedManager];
+    
+    self.projectItemRepresentationController = [VSProjectItemRepresentationController sharedManager];
+    
+    self.temporaryCreatedProjectItems = [[NSMutableDictionary alloc] init];
     
     [super awakeFromNib];
     
@@ -318,21 +334,33 @@ static NSString* defaultNib = @"VSMainTimelineView";
     [self.view.undoManager endUndoGrouping];
 }
 
+-(NSArray*) files:(NSArray *)filePaths haveEnteredTrack:(VSTrackViewController *)track{
+    return [self createProjectItemRepresentationsForFiles:filePaths];
+}
+
+-(NSArray*) files:(NSArray *)filePaths haveBeenDroppedOnTrack:(VSTrackViewController *)track{
+    NSArray *result =  [self createProjectItemsForFiles:filePaths];
+    
+    [self.temporaryCreatedProjectItems removeAllObjects];
+    
+    
+    return result;
+}
 
 
 
 #pragma mark Removing
 
 -(void) timelineObjectProxies:(NSArray *)timelineObjectProxies wereRemovedFromTrack:(VSTrackViewController *)trackViewController{
-//    
-//    NSArray *selectedTimelineObjects = [timelineObjectProxies objectsAtIndexes:[timelineObjectProxies indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-//        if([obj isKindOfClass:[VSTimelineObjectProxy class]]){
-//            return ((VSTimelineObjectProxy*) obj).selected;
-//        }
-//        return NO;
-//    }]];
-////    
-////    [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectsGotUnselected object:selectedTimelineObjects];
+    //
+    //    NSArray *selectedTimelineObjects = [timelineObjectProxies objectsAtIndexes:[timelineObjectProxies indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+    //        if([obj isKindOfClass:[VSTimelineObjectProxy class]]){
+    //            return ((VSTimelineObjectProxy*) obj).selected;
+    //        }
+    //        return NO;
+    //    }]];
+    ////
+    ////    [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectsGotUnselected object:selectedTimelineObjects];
 }
 
 -(BOOL) removeTimelineObject:(VSTimelineObjectViewController *)timelineObjectViewController fromTrack:(VSTrackViewController *)track{
@@ -628,7 +656,9 @@ static NSString* defaultNib = @"VSMainTimelineView";
     
     double timePosition = [super timestampForPixelValue:position.x];
     
-    return [self.timeline createNewTimelineObjectProxyBasedOnProjectItemRepresentation:item positionedAtTime:timePosition withDuration: item.duration];
+    return [self.timeline createNewTimelineObjectProxyBasedOnProjectItemRepresentation:item
+                                                                      positionedAtTime:timePosition
+                                                                          withDuration:item.duration];
 }
 
 /**
@@ -641,6 +671,77 @@ static NSString* defaultNib = @"VSMainTimelineView";
 -(VSTimelineObjectProxy*) createTimelineObjectProxyBasedOnProjectItemPresentation:(VSProjectItemRepresentation*) baseProjectItem atStarttime:(double) startTime withDuration:(double) duration{
     
     return [self.timeline createNewTimelineObjectProxyBasedOnProjectItemRepresentation:baseProjectItem positionedAtTime:startTime withDuration:duration];
+}
+
+/**
+ * Creates a VSProjectItemRepresentation for all paths in the given array
+ *
+ * Looks through the currentTemporaryProjectItems if any of the files has an VSProjectItemRepresentation already created for it. If not it creates. Aftrewards the currentTemporaryProjectItems are removed and the VSProjectItemRepresentation for the given array of files is added - as key is used the filePath.
+ * @param filePaths NSArray storing the filePaths VSProjectItemRepresentation's are created for
+ * @return NSArray holding the VSProjectItemRepresentation's for the given filePaths
+ */
+-(NSArray*) createProjectItemRepresentationsForFiles:(NSArray*) filePaths{
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    
+    NSMutableDictionary *currentTemporaryProjectItems = [NSMutableDictionary dictionaryWithDictionary:self.temporaryCreatedProjectItems];
+    
+    [self.temporaryCreatedProjectItems removeAllObjects];
+    
+    for(NSString *fileName in filePaths){
+        
+        VSProjectItemRepresentation *tmpProjectItemRepresentation = [currentTemporaryProjectItems objectForKey:fileName];
+        
+        if(!tmpProjectItemRepresentation){
+            
+            VSProjectItem *tempProjectItem = [self.projectItemController createNewProjectItemFromFile:fileName];
+            
+            if(tempProjectItem){
+                tmpProjectItemRepresentation = [self.projectItemRepresentationController createPresentationOfProjectItem:tempProjectItem];
+            }
+        }
+        
+        if(tmpProjectItemRepresentation){
+            [result addObject:tmpProjectItemRepresentation];
+            [self.temporaryCreatedProjectItems setObject:tmpProjectItemRepresentation forKey:fileName];
+        }
+    }
+    
+    return result;
+}
+
+/**
+ * Creates a VSProjectItemRepresentation for all paths in the given array
+ *
+ * Looks through the currentTemporaryProjectItems if any of the files has an VSProjectItemRepresentation already created for it. If not it creates. Aftrewards the currentTemporaryProjectItems are removed and the VSProjectItemRepresentation for the given array of files is added - as key is used the filePath.
+ * @param filePaths NSArray storing the filePaths VSProjectItemRepresentation's are created for
+ * @return NSArray holding the VSProjectItemRepresentation's for the given filePaths
+ */
+-(NSArray*) createProjectItemsForFiles:(NSArray*) filePaths{
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    
+    NSMutableDictionary *currentTemporaryProjectItems = [NSMutableDictionary dictionaryWithDictionary:self.temporaryCreatedProjectItems];
+    
+    [self.temporaryCreatedProjectItems removeAllObjects];
+    
+    for(NSString *fileName in filePaths){
+        
+        VSProjectItemRepresentation *tmpProjectItemRepresentation = [currentTemporaryProjectItems objectForKey:fileName];
+        
+        VSProjectItem *tempProjectItem = nil;
+        
+        if(tmpProjectItemRepresentation){
+            tempProjectItem = [self.projectItemController addNewProjectForRepresentation:tmpProjectItemRepresentation];
+        }
+        else{
+            tempProjectItem = [self.projectItemController addsAndReturnsNewProjectItemFromFile:fileName];
+        }
+        
+        if(tempProjectItem){
+            [result addObject:tempProjectItem];
+        }
+    }
+    
+    return result;
 }
 
 
