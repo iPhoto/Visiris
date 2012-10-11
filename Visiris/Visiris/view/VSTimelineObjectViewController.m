@@ -71,10 +71,10 @@ static NSString* defaultNib = @"VSTimelinObjectView";
         self.timelineObjectProxy = timelineObjectProxy;
         [self initTimelineObjectProxyObservers];
         
-//        if(self.timelineObject.fileType.fileKind == VSFileKindVideo || self.timelineObject.fileType.fileKind == VSFileKindAudio){
-//            NSImage *testImage = [VSWaveForm WaveformOfFile:self.timelineObject.filePath];
-//            [self.waveFormTest setImage:testImage];
-//        }
+        if(self.timelineObject.fileType.fileKind == VSFileKindVideo || self.timelineObject.fileType.fileKind == VSFileKindAudio){
+            NSImage *testImage = [VSWaveForm WaveformOfFile:self.timelineObject.filePath];
+            [self.waveFormTest setImage:testImage];
+        }
     }
     
     return self;
