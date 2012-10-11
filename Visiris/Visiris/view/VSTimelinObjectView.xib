@@ -326,7 +326,7 @@
 						<reference key="object" ref="255209236"/>
 						<array class="NSMutableArray" key="children">
 							<reference ref="707936610"/>
-							<object class="IBNSLayoutConstraint" id="853297681">
+							<object class="IBNSLayoutConstraint" id="389281606">
 								<reference key="firstItem" ref="255209236"/>
 								<int key="firstAttribute">7</int>
 								<int key="relation">0</int>
@@ -353,7 +353,7 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">149</int>
-						<reference key="object" ref="853297681"/>
+						<reference key="object" ref="389281606"/>
 						<reference key="parent" ref="255209236"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -396,7 +396,7 @@
 				</array>
 				<string key="1.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<array class="NSMutableArray" key="102.IBNSViewMetadataConstraints">
-					<reference ref="853297681"/>
+					<reference ref="389281606"/>
 				</array>
 				<boolean value="NO" key="102.IBNSViewMetadataTranslatesAutoresizingMaskIntoConstraints"/>
 				<string key="102.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
