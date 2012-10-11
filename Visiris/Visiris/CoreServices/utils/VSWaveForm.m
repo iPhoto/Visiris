@@ -45,7 +45,7 @@
     AVAssetReaderTrackOutput* output = [[AVAssetReaderTrackOutput alloc] initWithTrack:songTrack outputSettings:outputSettingsDict];
     
     [reader addOutput:output];
-//    [output release];
+    //    [output release];
     
     UInt32 sampleRate,channelCount;
     
@@ -92,7 +92,7 @@
             totalBytes += length;
             
             
-//            NSAutoreleasePool *wader = [[NSAutoreleasePool alloc] init];
+            //            NSAutoreleasePool *wader = [[NSAutoreleasePool alloc] init];
             
             NSMutableData * data = [NSMutableData dataWithLength:length];
             CMBlockBufferCopyDataBytes(blockBufferRef, 0, length, data.mutableBytes);
@@ -151,7 +151,7 @@
             
             
             
-//            [wader drain];
+            //            [wader drain];
             
             
             CMSampleBufferInvalidate(sampleBufferRef);
@@ -161,7 +161,7 @@
     }
     
     
-//    NSData * finalData = nil;
+    //    NSData * finalData = nil;
     
     if (reader.status == AVAssetReaderStatusFailed || reader.status == AVAssetReaderStatusUnknown){
         // Something went wrong. return nil
@@ -174,22 +174,24 @@
     if (reader.status == AVAssetReaderStatusCompleted){
         
         NSLog(@"rendering output graphics using normalizeMax %d",normalizeMax);
-                
-        test = [self audioImageGraph:(SInt16 *)
-                         fullSongData.bytes 
-                                 normalizeMax:normalizeMax 
-                                  sampleCount:fullSongData.length / 4 
-                                 channelCount:2
-                                  imageHeight:100];
         
-//        finalData = imageToData(test);
+        test = [self audioImageGraph:(SInt16 *)
+                fullSongData.bytes
+                        normalizeMax:normalizeMax
+                         sampleCount:fullSongData.length / 4
+                        channelCount:2
+                         imageHeight:100];
+        
+        //        finalData = imageToData(test);
     }
     
-//    [fullSongData release];
-//    [reader release];
+    //    [fullSongData release];
+    //    [reader release];
     
     return test;
 }
+
+
 
 +(NSImage *) audioImageGraph:(SInt16 *) samples
                 normalizeMax:(SInt16) normalizeMax
@@ -199,11 +201,11 @@
     
     CGSize imageSize = CGSizeMake(sampleCount, imageHeight);
     
-//    NSGraphicsContext *graphicsContext = [[NSGraphicsContext alloc] init];
-//    UIGraphicsBeginImageContext(imageSize);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate( NULL, imageSize.width, imageSize.height, 8, imageSize.width * 4, colorSpace, kCGImageAlphaPremultipliedLast );
     
-//    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextRef context = ([[NSGraphicsContext currentContext] graphicsPort]);
+    
+    CGContextSetRenderingIntent(context, kCGRenderingIntentPerceptual);
     
     CGContextSetFillColorWithColor(context, [NSColor blackColor].CGColor);
     CGContextSetAlpha(context,1.0);
@@ -244,21 +246,9 @@
         }
     }
     
-    // Create new image
-    NSImage *img = [[NSImage alloc] initWithSize:imageSize];
-    [img lockFocus];
-    
-    
     CGContextFlush(context);
-    
-    [img unlockFocus];
-    
-//    NSImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    
-    // Tidy up
-//    UIGraphicsEndImageContext();
-    
-    return img;
+    CGImageRef imgRef = CGBitmapContextCreateImage(context);
+    return [[NSImage alloc]  initWithCGImage:imgRef size:NSMakeSize(imageSize.width, imageSize.height)];;
 }
 
 @end
