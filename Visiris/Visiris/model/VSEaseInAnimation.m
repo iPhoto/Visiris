@@ -21,7 +21,7 @@
 {
     if (self = [super init]) {
         _name = @"EaseIn";
-        self.usesStrength = YES;
+        self.hasStrength = YES;
     }
     
     return self;

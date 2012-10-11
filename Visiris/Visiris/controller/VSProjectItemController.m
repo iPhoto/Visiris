@@ -58,6 +58,23 @@ static VSProjectItemController* sharedProjectItemController = nil;
     return [self addsAndReturnsNewProjectItemFromFile:filePath] != nil;
 }
 
+-(VSProjectItem*) addNewProjectForRepresentation:(VSProjectItemRepresentation*) projectItemRepresentation{
+    VSProjectItem *newItem = [self projectItemForFile:projectItemRepresentation.filePath];
+    
+    if(!newItem){
+        newItem = [[VSProjectItem alloc] initWithFile:projectItemRepresentation.filePath
+                                                          ofType:projectItemRepresentation.fileType
+                                                            name:projectItemRepresentation.name
+                                                        fileSize:projectItemRepresentation.fileSize
+                                                        duration:projectItemRepresentation.duration
+                                                          itemID:projectItemRepresentation.itemID];
+    
+    [self.projectItems addObject:newItem];
+    }
+    
+    return newItem;
+}
+
 -(VSProjectItem*)addsAndReturnsNewProjectItemFromFile:(NSString *)filePath{
     
     VSProjectItem *newItem = [self projectItemForFile:filePath];
@@ -80,7 +97,10 @@ static VSProjectItemController* sharedProjectItemController = nil;
 
 -(VSProjectItem*) createNewProjectItemFromFile:(NSString *)filePath{
     
-    VSProjectItem *newItem = nil;
+    VSProjectItem *newItem = [self projectItemForFile:filePath];
+    
+    if(!newItem)
+    {
     
     //leaves the function and returns NO if the filePath is nil, th file doesn't exist or the file is not supported.
     if(!filePath || ![[NSFileManager defaultManager] fileExistsAtPath:filePath] || ![self isFileSupported:filePath])
@@ -112,6 +132,7 @@ static VSProjectItemController* sharedProjectItemController = nil;
                                          fileSize:fileSize
                                          duration:duration
                                            itemID:[self getNewProjectItemID]];
+    }
     
     return newItem;
     

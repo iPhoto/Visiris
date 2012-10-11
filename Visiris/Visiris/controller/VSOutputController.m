@@ -19,6 +19,7 @@
 @property (assign) NSSize               renderSize;
 @property (assign) GLuint               lastTexture;
 @property (assign) double               lastTimestamp;
+@property (strong) NSMutableArray       *outputsToBeRemoved;
 
 @end
 
@@ -84,7 +85,22 @@ static VSOutputController* sharedOutputController = nil;
     return self.openGLContext;
 }
 
+//TODO: not the best way to check if fullscreen is on
 -(void) unregisterOutput:(id<VSOpenGLOutputDelegate>)output{
+    
+    if(!CVDisplayLinkIsRunning(_displayLink)){
+        [self removeOutput:output];
+    }
+    else{
+        if(!self.outputsToBeRemoved){
+            self.outputsToBeRemoved = [[NSMutableArray alloc] init];
+        }
+    
+    [self.outputsToBeRemoved addObject:output];
+}
+}
+
+-(void) removeOutput:(id<VSOpenGLOutputDelegate>) output{
     [self.registratedOutputs removeObject:output];
     self.isFullScreen = NO;
     [self calcRenderSize];
@@ -130,6 +146,15 @@ static VSOutputController* sharedOutputController = nil;
     for(id<VSOpenGLOutputDelegate> openGlOutput in self.registratedOutputs){
         [openGlOutput showTexture:theTexture];
     }
+    
+    if(self.outputsToBeRemoved){
+        for(id<VSOpenGLOutputDelegate> output in self.outputsToBeRemoved){
+            [self removeOutput:output];
+        }
+
+[self.outputsToBeRemoved removeAllObjects];
+self.outputsToBeRemoved = nil;
+}
 }
 
 static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime, CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext)
@@ -176,7 +201,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
     _fullScreenSize = fullScreenSize;
     self.isFullScreen = YES;
     [self calcRenderSize];
-//    [self texture:self.lastTexture isReadyForTimestamp:self.lastTimestamp];
+    //    [self texture:self.lastTexture isReadyForTimestamp:self.lastTimestamp];
 }
 
 - (void)setPreviewSize:(NSSize)previewSize{

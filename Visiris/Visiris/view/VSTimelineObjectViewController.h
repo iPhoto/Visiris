@@ -118,7 +118,7 @@
 @property (weak) id<VSTimelineObjectControllerDelegate> delegate;
 
 /** VSTimelineObjectProxy of the VSTimelineObject the VSTimelineObjectViewController represents*/
-@property (weak, readonly) VSTimelineObjectProxy* timelineObjectProxy;
+@property (strong, readonly) VSTimelineObjectProxy* timelineObjectProxy;
 
 /** Indicates wheter the VSTimelineObjectViewController's VSTimelineObjectProxy is only a temporary object on the track. */
 @property BOOL temporary;
@@ -135,7 +135,7 @@
 /** Stores the VSTimelineObjectViewController which's views intersecting the view of the VSTimelineObjectViewController as VSTimelineObjectIntersection */
 @property (strong,readonly) NSMutableDictionary *intersectedTimelineObjectViews;
 
-@property (readonly, weak) VSTimelineObject *timelineObject;
+@property (readonly) VSTimelineObject *timelineObject;
 @property (weak) IBOutlet NSImageView *waveFormTest;
 
 #pragma mark - Init

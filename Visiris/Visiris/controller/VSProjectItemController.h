@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class VSProjectItem;
+@class VSProjectItemRepresentation;
 
 /**
  * Manages the VSProjectItems-Objects
@@ -62,5 +63,10 @@
  * @return A valid ProjectItem if one could be found for the given id, nil otherwise
 */
 -(VSProjectItem*) projectItemWithID:(NSInteger) id;
+
+/**
+ * Creates a new ProjectItem based on given projectItemRepresentation
+ */
+-(VSProjectItem*) addNewProjectForRepresentation:(VSProjectItemRepresentation*) projectItemRepresentation;
 
 @end

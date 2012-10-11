@@ -45,4 +45,5 @@
  */
 -(BOOL) addNewRepresentationOfProjectItem:(VSProjectItem*) projectItem;
 
+
 @end

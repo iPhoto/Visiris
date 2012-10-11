@@ -100,6 +100,8 @@
     if(_currentlySelectedAnimationCurve != currentlySelectedAnimationCurve){
         _currentlySelectedAnimationCurve = currentlySelectedAnimationCurve;
         [self changeKeyFramesAnimationCurve];
+        
+        [self.strengthBox setHidden:!_currentlySelectedAnimationCurve.hasStrength];
     }
 }
 

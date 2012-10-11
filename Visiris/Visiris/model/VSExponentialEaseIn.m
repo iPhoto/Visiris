@@ -20,7 +20,7 @@
 {
     if (self = [super init]) {
         _name = @"ExponentialEaseInTESTING";
-        self.usesStrength = NO;
+        self.hasStrength = NO;
     }
     
     return self;

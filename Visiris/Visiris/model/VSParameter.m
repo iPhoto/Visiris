@@ -201,7 +201,6 @@
 
 -(void) updateCurrentValueForTimestamp:(double) aTimestamp{
     [self setValue:[self valueForTimestamp:aTimestamp] forKey:@"currentValue"];
-    DDLogInfo(@"updCurVal: %f",self.currentFloatValue);
 }
 
 -(void) undoParametersDefaultValueChange:(id) oldValue atUndoManager:(NSUndoManager *)undoManager{

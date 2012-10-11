@@ -229,6 +229,7 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
 -(VSParameterViewController*) parameterViewControllRepresnetingParameter:(VSParameter*) parameter{
     VSParameterViewController *result = nil;
     
+    
     id object = [self.parameterViewControllers objectForKey:[NSNumber numberWithInteger:parameter.ID]];
     
     if(object && [object isKindOfClass:[VSParameterViewController class]]){

@@ -20,7 +20,7 @@
 {
     if (self = [super init]) {
         _name = @"SinusEaseInTESTING";
-        self.usesStrength = YES;
+        self.hasStrength = YES;
     }
     
     return self;

@@ -206,7 +206,7 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
         
         if([self keyFrameSelectingDelegateRespondsToSelector:@selector(wantToUnselectKeyFrame:ofParamater:)]){
             result = [self.keyFrameSelectingDelegate wantToUnselectKeyFrame:keyFrameViewController.keyFrame
-                                                       ofParamater:track.parameter];
+                                                                ofParamater:track.parameter];
         }
     }
     
@@ -232,14 +232,14 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     [self.animationCurvePopupViewController showAnimationCurveSelectionPopUpForKeyFrame:keyFrame
                                                                     withAnimationCurves:[[VSAnimationCurveFactory registeredAnimationCurves] allValues]];
     
-   
+    
 }
 
 #pragma mark - NSPopoverDelegate Implementation
 
 -(void) popoverWillClose:(NSNotification *)notification{
     
-   
+    
 }
 
 #pragma mark - Methods
@@ -289,7 +289,7 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
                                         forKeyedSubscript:[NSNumber numberWithInteger:parameter.ID]];
             
             [animationTrackViewController.view setFrame:trackRect];
- 
+            
             [animationTrackViewController.view setFrame:trackRect];
             
             [self.scrollView addTrackView:animationTrackViewController.view];
@@ -331,8 +331,7 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 
 -(void) resetTimeline{
     
-    [self.timelineObject removeObserver:self
-                             forKeyPath:@"duration"];
+    [self removeTimelineObjectOberservers];
     
     for(VSAnimationTrackViewController *animationTrackViewController in [self.animationTrackViewControllers allValues]){
         [animationTrackViewController.view removeFromSuperview];
@@ -343,9 +342,16 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     self.timelineObject = nil;
 }
 
-
+-(void) updatePlayheadPosition{
+    [self.scrollView movePlayHeadMarkerToLocation:[self pixelForGlobalTimestamp:self.playhead.currentTimePosition]];
+}
 
 #pragma mark - Private Methods
+
+-(void) removeTimelineObjectOberservers{
+    [self.timelineObject removeObserver:self
+                             forKeyPath:@"duration"];
+}
 
 /**
  * Checks if the delegate is able to respond to the given Selector
