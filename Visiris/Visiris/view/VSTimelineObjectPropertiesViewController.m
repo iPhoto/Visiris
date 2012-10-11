@@ -213,7 +213,8 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 }
 
 -(BOOL) wantToUnselectKeyFrame:(VSKeyFrame *)keyFrame ofParamater:(VSParameter *)parameter{
-    [self.parametersViewController unselectAllSelectedKeyFrames];
+    
+    [self.parametersViewController unselectKeyFrame:keyFrame ofParameter:parameter];
     
     return YES;
 }
@@ -223,7 +224,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     [parameter changeKeyFrames:keyFrame timestamp:*toTimestamp];
     keyFrame.value = *toValue;
     
-    [parameter updateCurrentValueForTimestamp:self.animationTimelineViewController.playhead.currentTimePosition];
+    [parameter updateCurrentValueForTimestamp: [self.timelineObject localTimestampOfGlobalTimestamp:self.animationTimelineViewController.playhead.currentTimePosition]];
     
     return YES;
 }

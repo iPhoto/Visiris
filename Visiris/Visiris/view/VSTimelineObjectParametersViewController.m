@@ -14,6 +14,7 @@
 #import "VSScrollView.h"
 #import "VSDocument.h"
 #import "VSTimelineObject.h"
+#import "VSKeyFrame.h"
 
 #import "VSCoreServices.h"
 
@@ -225,9 +226,34 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
     self.timelineObject = nil;
 }
 
+-(VSParameterViewController*) parameterViewControllRepresnetingParameter:(VSParameter*) parameter{
+    VSParameterViewController *result = nil;
+    
+    id object = [self.parameterViewControllers objectForKey:[NSNumber numberWithInteger:parameter.ID]];
+    
+    if(object && [object isKindOfClass:[VSParameterViewController class]]){
+        result = object;
+    }
+    
+    return result;
+}
+
+-(void) unselectKeyFrame:(VSKeyFrame *)keyFrame ofParameter:(VSParameter *)parameter{
+    VSParameterViewController *viewControllerOfParameter = [self parameterViewControllRepresnetingParameter:parameter];
+    
+    if(viewControllerOfParameter){
+        if([viewControllerOfParameter.selectedKeyframe isEqual:keyFrame]){
+            viewControllerOfParameter.selectedKeyframe = nil;
+        }
+    }
+}
 
 -(void) selectKeyFrame:(VSKeyFrame*) keyFrame ofParameter:(VSParameter*) parameter{
-    ((VSParameterViewController*)[self.parameterViewControllers objectForKey:[NSNumber numberWithInteger:parameter.ID]]).selectedKeyframe = keyFrame;
+    VSParameterViewController *viewControllerOfParameter = [self parameterViewControllRepresnetingParameter:parameter];
+    
+    if(viewControllerOfParameter){
+        viewControllerOfParameter.selectedKeyframe = keyFrame;
+    }
 }
 
 -(void) unselectAllSelectedKeyFrames{
@@ -235,5 +261,5 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
         parameterViewController.selectedKeyframe = nil;
     }
 }
-
+     
 @end

@@ -65,6 +65,13 @@
 -(void) selectKeyFrame:(VSKeyFrame*) keyFrame ofParameter:(VSParameter*) parameter;
 
 /**
+ * Sets the VSKeyFrameViewController representing the given keyFrame of the given parameter as unselected
+ * @param keyFrame The VSKeyFrameViewController representing the keyFrame is set as selectd
+ * @param parameter Parameter holindg the keyframe
+ */
+-(void) unselectKeyFrame:(VSKeyFrame*) keyFrame ofParameter:(VSParameter*) parameter;
+
+/**
  * Sets the selected-flag of all currently selected to NO
  */
 -(void) unselectAllSelectedKeyFrames;

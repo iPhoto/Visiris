@@ -413,7 +413,9 @@ static NSString* defaultNib = @"VSParameterView";
  */
 -(void) updateParameterValue{
     [self.nameLabel setStringValue: NSLocalizedString(self.parameter.name, @"")];
-    DDLogInfo(@"updatinG: %@",self.parameter.currentStringValue);
+
+    DDLogInfo(@"selected keyFrame: %@", self.selectedKeyframe);
+    
     if([self.parameter isKindOfClass:[VSOptionParameter class]]){
         [self.comboBox selectItemWithObjectValue:((VSOptionParameter*)self.parameter).selectedKey];
     }
@@ -425,6 +427,7 @@ static NSString* defaultNib = @"VSParameterView";
             case VSParameterDataTypeFloat:
                 [self.horizontalSlider setFloatValue:self.parameter.currentFloatValue];
                 [self.textField setFloatValue:self.parameter.currentFloatValue];
+                DDLogInfo(@"curVale: %f",self.parameter.currentFloatValue);
                 break;
             case VSParameterDataTypeString:
                 [self.textField setStringValue:self.parameter.currentStringValue];

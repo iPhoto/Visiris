@@ -308,6 +308,10 @@
         toPoint.y = self.keyFramesArea.size.height;
     }
     
+    
+    toPoint.x += keyFrameViewController.view.frame.size.width /2.0f;
+    
+    
     NSPoint result = toPoint;
     
     if([self delegateRespondsToSelector:@selector(keyFrameViewControllersView:wantsToBeDraggedFrom:to:onTrack:)]){
@@ -317,16 +321,25 @@
                                                     onTrack:self];
     }
     
+    
+    result.x -= keyFrameViewController.view.frame.size.width /2.0f;
+    
     return result;
 }
 
 -(void) keyFrameViewController:(VSKeyFrameViewController *)keyFrameViewController didStopDragginAtPosition:(NSPoint)finalPoint{
     
+    BOOL allowedToBeUnselected = NO;
+    
     if(keyFrameViewController.dragged){
         if([self delegateRespondsToSelector:@selector(keyFrameViewController:wantsToBeUnselectedOnTrack:)]){
-            [self.delegate keyFrameViewController:keyFrameViewController
+            allowedToBeUnselected = [self.delegate keyFrameViewController:keyFrameViewController
                        wantsToBeUnselectedOnTrack:self];
         }
+    }
+    
+    if(allowedToBeUnselected){
+        keyFrameViewController.selected = NO;
     }
 }
 

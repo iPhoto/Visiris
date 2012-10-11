@@ -65,10 +65,16 @@ static NSString* defaultNib = @"VSTimelinObjectView";
             self.timelineObjectView = (VSTimelineObjectView*) self.view;
             self.timelineObjectView.delegate = self;
             self.inactive = NO;
+            
         }
         self.deviceIconLayers = [[NSMutableArray alloc]init];
         self.timelineObjectProxy = timelineObjectProxy;
         [self initTimelineObjectProxyObservers];
+        
+//        if(self.timelineObject.fileType.fileKind == VSFileKindVideo || self.timelineObject.fileType.fileKind == VSFileKindAudio){
+//            NSImage *testImage = [VSWaveForm WaveformOfFile:self.timelineObject.filePath];
+//            [self.waveFormTest setImage:testImage];
+//        }
     }
     
     return self;

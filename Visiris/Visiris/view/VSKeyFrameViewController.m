@@ -112,7 +112,6 @@
             result = [self.delegate keyFrameViewControllersView:self wantsToBeDraggeFrom:fromPoint to:toPoint];
         }
     }
-    
     return result;
 }
 

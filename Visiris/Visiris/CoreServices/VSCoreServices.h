@@ -10,6 +10,12 @@
 #define Visiris_VSCoreServices_h
 
 
+/*Enums*/
+#import "VisirisCore/VSFileKind.h"
+#import "VSTrackType.h"
+#import "VSParameterDataType.h"
+#import "VisirisCore/VSPlaybackMode.h"
+
 /*Utility Classes*/
 #import "VSFileImageCreator.h"
 #import "VSFileUtils.h"
@@ -20,6 +26,7 @@
 #import "VSFrameUtils.h"
 #import "VSMiscUtlis.h"
 #import "VSWaveForm.h"
+#import "VSFileType.h"
 //#import "VSDeviceParameterUtils.h"
 
 /* Structs */
@@ -35,11 +42,7 @@
 #import "VisirisCore/VSParameterTypes.h"
 
 
-/*Enums*/
-#import "VisirisCore/VSFileKind.h" 
-#import "VSTrackType.h"
-#import "VSParameterDataType.h"
-#import "VisirisCore/VSPlaybackMode.h"
+
 
 /*Logging*/
 #import "VSLog.h"

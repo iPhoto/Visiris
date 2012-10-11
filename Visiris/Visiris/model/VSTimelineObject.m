@@ -183,4 +183,12 @@
     return result;
 }
 
+-(VSFileType*) fileType{
+    return self.sourceObject.projectItem.fileType;
+}
+
+-(NSString*) filePath{
+    return self.sourceObject.filePath;
+}
+
 @end

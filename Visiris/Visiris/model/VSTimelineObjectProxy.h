@@ -34,6 +34,7 @@
 @property NSUInteger timelineObjectID;
 
 
+
 @property (readonly) NSString *startTimeString;
 
 #pragma mark- Init

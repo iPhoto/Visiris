@@ -10,10 +10,13 @@
 #import "VSTimelineObjectProxy.h"
 #import "VisirisCore/VSPlaybackMode.h"
 
+#import "VSCoreServices.h"
+
 @class VSTimelineObjectSource;
 @class VSSourceSupplier;
 @class VSCoreHandover;
 @class VSDevice;
+
 
 /**
  * Representation of objects placed on the timeline.
@@ -32,6 +35,10 @@
 @property (readonly) double sourceDuration;
 
 @property (readonly, strong) NSMutableArray* devices;
+
+@property (weak,readonly) VSFileType *fileType;
+
+@property (weak, readonly) NSString *filePath;
 
 /**
  * Inits a the object with the given sourceObject
@@ -86,5 +93,7 @@
 -(void) addDevicesObject:(VSDevice *)object;
 
 -(NSArray*) devicesAtIndexes:(NSIndexSet *)indexes;
+
+
 
 @end

@@ -136,6 +136,7 @@
 @property (strong,readonly) NSMutableDictionary *intersectedTimelineObjectViews;
 
 @property (readonly, weak) VSTimelineObject *timelineObject;
+@property (weak) IBOutlet NSImageView *waveFormTest;
 
 #pragma mark - Init
 
