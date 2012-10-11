@@ -38,4 +38,13 @@
     }
 }
 
+- (void)printDebugLog
+{
+    NSLog(@"===PRINT DEBUG LOG OSCPORT===");
+    NSLog(@"addresses");
+    for (NSString *address in self.addresses) {
+        NSLog(@"Adress: %@", address);
+    }
+}
+
 @end

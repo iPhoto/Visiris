@@ -27,4 +27,7 @@
 
 - (void)addAddress:(NSString *)address;
 
+- (void)printDebugLog;
+
+
 @end

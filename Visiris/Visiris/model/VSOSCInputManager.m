@@ -173,11 +173,11 @@
         }
         while (![currentOSCClient isBinded]);
         
-//        NSLog(@"Start observing Port: %d",newPort);
+        NSLog(@"Start observing Port: %d",newPort);
         
         [currentOSCClient startObserving];
     }
-//    [self printDebugLog];
+    [self printDebugLog];
 }
 
 - (unsigned int)getNextAvailableOSCPort
@@ -419,7 +419,8 @@
     NSLog(@"===PRINT DEBUG LOG===");
     NSLog(@"activeOSCClients");
     for (id key in self.activeOSCClients) {
-        NSLog(@"key: %@, value: %@", key, [self.activeOSCClients objectForKey:key]);
+        NSLog(@"key: %@", key);
+        [(VSOSCPort *)[self.activeOSCClients objectForKey:key] printDebugLog];
     }
 }
 
