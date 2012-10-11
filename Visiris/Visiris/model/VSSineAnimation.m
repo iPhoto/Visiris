@@ -1,14 +1,14 @@
 //
-//  VSCircularEaseIn.m
+//  VSSineAnimation.m
 //  Visiris
 //
 //  Created by Edwin Guggenbichler on 10/10/12.
 //
 //
 
-#import "VSCircularEaseIn.h"
+#import "VSSineAnimation.h"
 
-@implementation VSCircularEaseIn
+@implementation VSSineAnimation
 
 @synthesize name    = _name;
 
@@ -19,31 +19,29 @@
 - (id)init
 {
     if (self = [super init]) {
-        _name = @"CircularEaseInTESTING";
-        self.usesStrength = NO;
+        _name = @"SineTESTING";
+        self.usesStrength = YES;
     }
     
     return self;
 }
 
-
 - (double)valueForTime:(double)time withBeginTime:(double)beginTime toEndTime:(double)endTime withStartValue:(double)startValue toEndValue:(double)endValue
 {
-//	t /= d;
-//	return -c * (Math.sqrt(1 - t*t) - 1) + b;
-    
     double d, x, c, result;
     
     x = time - beginTime;
     
-    x /= (endTime - beginTime);
-    
     d = startValue;
+    
+    int strength = (int)self.strength * 2 - 1;
     
     //c change in value
     c = endValue - startValue;
     
-    result = -c * (sqrt(1 - x * x) - 1 ) + d;
+    x /= endTime - beginTime;
+    
+    result = -c * cos(x * pi * strength) / 2.0 + d + c/2;
     
     return result;
 }

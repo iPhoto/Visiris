@@ -79,7 +79,10 @@
         self.isReadingVideo = YES;
         
         if ([self.asset tracksWithMediaType:AVMediaTypeAudio].count > 0)
+        {
             self.hasAudio = YES;
+//            NSImage *blubb = [VSWaveForm renderPNGAudioPictogramForAssett:self.asset];
+        }
         else
             self.hasAudio = NO;
     }

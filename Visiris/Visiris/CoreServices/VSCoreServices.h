@@ -19,6 +19,7 @@
 #import "VSQuartzCompositionUtils.h"
 #import "VSFrameUtils.h"
 #import "VSMiscUtlis.h"
+#import "VSWaveForm.h"
 //#import "VSDeviceParameterUtils.h"
 
 /* Structs */

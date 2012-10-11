@@ -31,6 +31,8 @@
 		2776C4B3162588E100E1672E /* VSEaseInBackAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2776C4B2162588E000E1672E /* VSEaseInBackAnimation.m */; };
 		2776C4B916258E2C00E1672E /* VSElasticEaseInAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2776C4B816258E2B00E1672E /* VSElasticEaseInAnimation.m */; };
 		2776C4BC162593F800E1672E /* VSSawAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2776C4BB162593F700E1672E /* VSSawAnimation.m */; };
+		279481D91625B60700341BEE /* VSSineAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 279481D81625B60700341BEE /* VSSineAnimation.m */; };
+		279481E41625EE5B00341BEE /* VSWaveForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 279481E31625EE5B00341BEE /* VSWaveForm.m */; };
 		2795881715906D5000E24B57 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2795881615906D5000E24B57 /* CoreMedia.framework */; };
 		2795881A15906D7B00E24B57 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2795881915906D7B00E24B57 /* AVFoundation.framework */; };
 		2799F8E61599C8B800008489 /* VSQuartzCompositionUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2799F8E51599C8B800008489 /* VSQuartzCompositionUtils.m */; };
@@ -258,6 +260,10 @@
 		2776C4B816258E2B00E1672E /* VSElasticEaseInAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSElasticEaseInAnimation.m; sourceTree = "<group>"; };
 		2776C4BA162593F600E1672E /* VSSawAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSSawAnimation.h; sourceTree = "<group>"; };
 		2776C4BB162593F700E1672E /* VSSawAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSSawAnimation.m; sourceTree = "<group>"; };
+		279481D71625B60600341BEE /* VSSineAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSSineAnimation.h; sourceTree = "<group>"; };
+		279481D81625B60700341BEE /* VSSineAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSSineAnimation.m; sourceTree = "<group>"; };
+		279481E21625EE5B00341BEE /* VSWaveForm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSWaveForm.h; sourceTree = "<group>"; };
+		279481E31625EE5B00341BEE /* VSWaveForm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSWaveForm.m; sourceTree = "<group>"; };
 		2795881615906D5000E24B57 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		2795881915906D7B00E24B57 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		2799F8E51599C8B800008489 /* VSQuartzCompositionUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSQuartzCompositionUtils.m; sourceTree = "<group>"; };
@@ -711,6 +717,8 @@
 				2776C4B816258E2B00E1672E /* VSElasticEaseInAnimation.m */,
 				2776C4BA162593F600E1672E /* VSSawAnimation.h */,
 				2776C4BB162593F700E1672E /* VSSawAnimation.m */,
+				279481D71625B60600341BEE /* VSSineAnimation.h */,
+				279481D81625B60700341BEE /* VSSineAnimation.m */,
 				5B84D71C162470DB006DDC12 /* VSAnimationCurveFactory.h */,
 				5B84D71D162470DB006DDC12 /* VSAnimationCurveFactory.m */,
 			);
@@ -989,6 +997,8 @@
 				5B98D1E4161CC54E002CDE1F /* VSMiscUtlis.m */,
 				5B60297716240F1E0015BA19 /* VSDeviceParameterUtils.h */,
 				5B60297816240F1E0015BA19 /* VSDeviceParameterUtils.m */,
+				279481E21625EE5B00341BEE /* VSWaveForm.h */,
+				279481E31625EE5B00341BEE /* VSWaveForm.m */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -1810,6 +1820,8 @@
 				2776C4B3162588E100E1672E /* VSEaseInBackAnimation.m in Sources */,
 				2776C4B916258E2C00E1672E /* VSElasticEaseInAnimation.m in Sources */,
 				2776C4BC162593F800E1672E /* VSSawAnimation.m in Sources */,
+				279481D91625B60700341BEE /* VSSineAnimation.m in Sources */,
+				279481E41625EE5B00341BEE /* VSWaveForm.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

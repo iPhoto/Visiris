@@ -89,17 +89,18 @@
     if (self.delegate) {
         if ([self.delegate respondsToSelector:@selector(oscClient:didReceivedMessage:)]) {
             [self.delegate oscClient:self didReceivedMessage:message];
-        }	
+        }
     }
 }
 
 - (void)signalDelegateThatClientDiscoveredActivePortWithAddress:(NSString *)address
 {
-    
-    if (address) {
-                
-        if (self.delegate) {
-            if ([self.delegate respondsToSelector:@selector(oscClient:didDiscoveredActivePort:)]) {
+    if (address)
+    {
+        if (self.delegate)
+        {
+            if ([self.delegate respondsToSelector:@selector(oscClient:didDiscoveredActivePort:)])
+            {
                 [self.delegate oscClient:self didDiscoveredActivePort:[VSOSCPort portWithPort:_port address:address atTimestamp:[NSDate timeIntervalSinceReferenceDate]]];
             }
         }
