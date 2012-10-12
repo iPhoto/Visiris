@@ -125,6 +125,10 @@
     
     copy.currentValue = copy.animation.defaultValue;
     
+    copy.deviceParameterMapper = [self.deviceParameterMapper copy];
+    
+    copy.connectedWithDeviceParameter = self.connectedWithDeviceParameter;
+    
     return copy;
 }
 

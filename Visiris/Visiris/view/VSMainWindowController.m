@@ -107,6 +107,7 @@ static NSString* defaultNib = @"MainWindow";
     
 }
 
+
 /**
  * Inits the splitViews of the window with different Views according to their positions.
  */

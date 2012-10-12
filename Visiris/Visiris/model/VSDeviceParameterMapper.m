@@ -35,6 +35,21 @@
     return self;
 }
 
+-(id) copyWithZone:(NSZone *)zone{
+    VSDeviceParameterMapper *copy;
+    
+    if(self.hasRanges){
+        copy = [[VSDeviceParameterMapper allocWithZone:zone] initWithDeviceParameter:self.deviceParameter
+                                                                            ofDevice:self.device];
+    }
+    else{
+        copy = [[VSDeviceParameterMapper allocWithZone:zone] initWithDeviceParameter:self.deviceParameter
+                                                                            ofDevice:self.device  deviceParameterRange:self.deviceParameterRange andParameterRange:self.parameterRange];
+    }
+    
+    return copy;
+}
+
 -(void) dealloc{
     [self.device deactivateParameter:self.deviceParameter];
 }
@@ -73,7 +88,7 @@
     k = deltaY/deltaX;
     
     y = k * x + d;
-
+    
     return  y;
 }
 

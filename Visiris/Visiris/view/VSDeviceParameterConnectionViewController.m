@@ -120,7 +120,8 @@
     [self.devicePopUpButton removeAllItems];
     
     for(VSDevice *availableDevice in self.availableDevices){
-        [self.devicePopUpButton insertItemWithTitle:availableDevice.name atIndex:i++];
+        if(availableDevice.parameters.count)
+            [self.devicePopUpButton insertItemWithTitle:availableDevice.name atIndex:i++];
     }
 }
 
@@ -166,7 +167,7 @@
         }
     }
     else{
-    
+        
         if(![self.mappingHolderBox isHidden]){
             NSSize newSize = self.popover.contentSize;
             newSize.height -= self.mappingHolderBox.frame.size.height;

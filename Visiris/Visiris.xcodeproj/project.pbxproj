@@ -60,6 +60,7 @@
 		5B0EFF99158A226C0000445C /* VSTimelineScrollViewDocumentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B0EFF98158A226C0000445C /* VSTimelineScrollViewDocumentView.m */; };
 		5B12792A15C13A500026AAFD /* NSImage+QuickLook.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B12792815C13A500026AAFD /* NSImage+QuickLook.m */; };
 		5B12792C15C13CAD0026AAFD /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B12792B15C13CAD0026AAFD /* QuickLook.framework */; };
+		5B1994C01627368C006E9D9E /* VSMainWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B1994BF1627368C006E9D9E /* VSMainWindow.m */; };
 		5B1DFEBE161ACA8900D7EB88 /* VisirisCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B1DFEBD161ACA8900D7EB88 /* VisirisCore.framework */; };
 		5B250992161088BE003B715F /* VSFrameUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B250991161088BE003B715F /* VSFrameUtils.m */; };
 		5B2A59D31578AF4E003938AB /* VSDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2A59D21578AF4E003938AB /* VSDocumentController.m */; };
@@ -126,7 +127,7 @@
 		5B35C0191577A573009911EC /* VSTimelineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BFC81577A573009911EC /* VSTimelineView.m */; };
 		5B35C01A1577A573009911EC /* VSMainTimelineView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B35BFC91577A573009911EC /* VSMainTimelineView.xib */; };
 		5B35C01B1577A573009911EC /* VSMainTimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BFCB1577A573009911EC /* VSMainTimelineViewController.m */; };
-		5B35C01C1577A573009911EC /* VSTimelinObjectView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B35BFCC1577A573009911EC /* VSTimelinObjectView.xib */; };
+		5B35C01C1577A573009911EC /* VSTimelineObjectView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B35BFCC1577A573009911EC /* VSTimelineObjectView.xib */; };
 		5B35C01D1577A573009911EC /* VSTrackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BFCE1577A573009911EC /* VSTrackView.m */; };
 		5B35C01E1577A573009911EC /* VSTrackView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B35BFCF1577A573009911EC /* VSTrackView.xib */; };
 		5B35C01F1577A573009911EC /* VSTrackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BFD11577A573009911EC /* VSTrackViewController.m */; };
@@ -303,6 +304,8 @@
 		5B12792815C13A500026AAFD /* NSImage+QuickLook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+QuickLook.m"; sourceTree = "<group>"; };
 		5B12792915C13A500026AAFD /* NSImage+QuickLook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+QuickLook.h"; sourceTree = "<group>"; };
 		5B12792B15C13CAD0026AAFD /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
+		5B1994BE1627368C006E9D9E /* VSMainWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSMainWindow.h; sourceTree = "<group>"; };
+		5B1994BF1627368C006E9D9E /* VSMainWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSMainWindow.m; sourceTree = "<group>"; };
 		5B1DFEBD161ACA8900D7EB88 /* VisirisCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisirisCore.framework; path = "../../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-eibgtyufaxcnihdtvmkbpcrlzeqh/Build/Products/Debug/VisirisCore.framework"; sourceTree = "<group>"; };
 		5B250990161088BE003B715F /* VSFrameUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFrameUtils.h; sourceTree = "<group>"; };
 		5B250991161088BE003B715F /* VSFrameUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFrameUtils.m; sourceTree = "<group>"; };
@@ -425,7 +428,7 @@
 		5B35BFC91577A573009911EC /* VSMainTimelineView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VSMainTimelineView.xib; sourceTree = "<group>"; };
 		5B35BFCA1577A573009911EC /* VSMainTimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSMainTimelineViewController.h; sourceTree = "<group>"; };
 		5B35BFCB1577A573009911EC /* VSMainTimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSMainTimelineViewController.m; sourceTree = "<group>"; };
-		5B35BFCC1577A573009911EC /* VSTimelinObjectView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VSTimelinObjectView.xib; sourceTree = "<group>"; };
+		5B35BFCC1577A573009911EC /* VSTimelineObjectView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VSTimelineObjectView.xib; sourceTree = "<group>"; };
 		5B35BFCD1577A573009911EC /* VSTrackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTrackView.h; sourceTree = "<group>"; };
 		5B35BFCE1577A573009911EC /* VSTrackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTrackView.m; sourceTree = "<group>"; };
 		5B35BFCF1577A573009911EC /* VSTrackView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VSTrackView.xib; sourceTree = "<group>"; };
@@ -1045,7 +1048,7 @@
 		5B35C0A81577AEA8009911EC /* timelineObject */ = {
 			isa = PBXGroup;
 			children = (
-				5B35BFCC1577A573009911EC /* VSTimelinObjectView.xib */,
+				5B35BFCC1577A573009911EC /* VSTimelineObjectView.xib */,
 				5B35BFC11577A573009911EC /* VSTimelineObjectView.h */,
 				5B35BFC21577A573009911EC /* VSTimelineObjectView.m */,
 				5B35BFC31577A573009911EC /* VSTimelineObjectViewController.h */,
@@ -1111,6 +1114,8 @@
 				5B35BF9F1577A573009911EC /* MainWindow.xib */,
 				5B35BFA51577A573009911EC /* VSMainWindowController.h */,
 				5B35BFA61577A573009911EC /* VSMainWindowController.m */,
+				5B1994BE1627368C006E9D9E /* VSMainWindow.h */,
+				5B1994BF1627368C006E9D9E /* VSMainWindow.m */,
 			);
 			name = mainWindow;
 			sourceTree = "<group>";
@@ -1617,7 +1622,7 @@
 				5B35C0111577A573009911EC /* VSPropertiesView.xib in Resources */,
 				5B35C0141577A573009911EC /* VSTimelineObjectPropertiesView.xib in Resources */,
 				5B35C01A1577A573009911EC /* VSMainTimelineView.xib in Resources */,
-				5B35C01C1577A573009911EC /* VSTimelinObjectView.xib in Resources */,
+				5B35C01C1577A573009911EC /* VSTimelineObjectView.xib in Resources */,
 				5B35C01E1577A573009911EC /* VSTrackView.xib in Resources */,
 				5B35C04F1577A58D009911EC /* Benchmark iMac.csv in Resources */,
 				5B35C0501577A58D009911EC /* Benchmark iPad.csv in Resources */,
@@ -1822,6 +1827,7 @@
 				2776C4BC162593F800E1672E /* VSSawAnimation.m in Sources */,
 				279481D91625B60700341BEE /* VSSineAnimation.m in Sources */,
 				279481E41625EE5B00341BEE /* VSWaveForm.m in Sources */,
+				5B1994C01627368C006E9D9E /* VSMainWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

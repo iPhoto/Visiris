@@ -27,19 +27,29 @@
 
 @interface VSTimelineObject()
 
+
+
 @end
 
 @implementation VSTimelineObject
 
 @synthesize devices = _devices;
 
-
-#pragma mark - Init
 -(id) initWithSourceObject:(VSTimelineObjectSource*) sourceObject icon:(NSImage *)icon objectID:(NSInteger)objectID{
     if(self=[super initWithName:sourceObject.projectItem.name atTime:-1 duration:sourceObject.projectItem.duration icon:icon]){
         self.sourceObject = sourceObject;
         self.timelineObjectID = objectID;
         _devices = [[NSMutableArray alloc]init];
+    }
+    
+    return self;
+}
+
+-(id) initWithSourceObject:(VSTimelineObjectSource*) sourceObject icon:(NSImage *)icon objectID:(NSInteger)objectID andDevices:(NSMutableArray*) devices{
+    if(self=[super initWithName:sourceObject.projectItem.name atTime:-1 duration:sourceObject.projectItem.duration icon:icon]){
+        self.sourceObject = sourceObject;
+        self.timelineObjectID = objectID;
+        _devices = devices;
     }
     
     return self;
@@ -54,23 +64,21 @@
 #pragma mark - NSCopying Implementation
 
 -(id) copyWithZone:(NSZone *)zone{
-    VSTimelineObjectProxy *superCopy = [super copyWithZone:zone];
+//    VSTimelineObjectProxy *superCopy = [super copyWithZone:zone];
     
-    VSTimelineObject *copy = [[VSTimelineObject allocWithZone:zone] init];
+    VSTimelineObject *copy = [[VSTimelineObject alloc] initWithSourceObject:self.sourceObject
+                                                                       icon:self.icon objectID:self.timelineObjectID
+                                                                 andDevices:self.devices];
     
-    if(superCopy){
+    if(copy){
         
-        copy.sourceObject = [self.sourceObject copy];
         copy.supplier = [[[self.supplier class] alloc] initWithTimelineObject:copy];
         
-        copy.startTime = superCopy.startTime;
-        copy.duration = superCopy.duration;
-        copy.name = superCopy.name;
-        copy.icon = superCopy.icon;
-        copy.selected = superCopy.selected;
-        copy.timelineObjectID = superCopy.timelineObjectID;
+        copy.startTime = self.startTime;
+        copy.duration = self.duration;
+        copy.selected = self.selected;
         
-//        copy.devices = _devices;
+
     }
     
     return copy;
@@ -157,6 +165,11 @@
 }
 
 -(void) addDevicesObject:(VSDevice *)object{
+    
+    if(!self.devices){
+        _devices = [[NSMutableArray alloc] init];
+    }
+    
     if(object){
         if(![self.devices containsObject:object]){
             [self.devices addObject:object];
@@ -182,6 +195,7 @@
     NSMutableArray *result= [self mutableArrayValueForKey:@"devices"];
     return result;
 }
+
 
 -(VSFileType*) fileType{
     return self.sourceObject.projectItem.fileType;
