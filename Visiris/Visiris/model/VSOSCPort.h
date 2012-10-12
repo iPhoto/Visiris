@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+
+@class VSOSCAddress;
+
 /**
  * Simple OSC Port
  */
@@ -23,11 +26,9 @@
 @property (assign) double                               lastMessageReceivedTimestamp;
 
 
-+ (VSOSCPort *)portWithPort:(unsigned int)port address:(NSString *)address atTimestamp:(double)timestamp;
++ (VSOSCPort *)portWithPort:(unsigned int)port address:(VSOSCAddress *)address atTimestamp:(double)timestamp;
 
-- (void)addAddress:(NSString *)address;
-
-- (void)printDebugLog;
+- (void)addAddress:(VSOSCAddress *)address;
 
 
 @end

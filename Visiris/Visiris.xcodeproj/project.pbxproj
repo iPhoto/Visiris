@@ -33,6 +33,7 @@
 		2776C4BC162593F800E1672E /* VSSawAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2776C4BB162593F700E1672E /* VSSawAnimation.m */; };
 		2781578D1626EFB4008515DD /* VisirisCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2781578C1626EFB3008515DD /* VisirisCore.framework */; };
 		2781578E1626EFF6008515DD /* VisirisCore.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2781578C1626EFB3008515DD /* VisirisCore.framework */; };
+		2781579216274438008515DD /* VSOSCAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = 2781579116274438008515DD /* VSOSCAddress.m */; };
 		279481D91625B60700341BEE /* VSSineAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 279481D81625B60700341BEE /* VSSineAnimation.m */; };
 		279481E41625EE5B00341BEE /* VSWaveForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 279481E31625EE5B00341BEE /* VSWaveForm.m */; };
 		2795881715906D5000E24B57 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2795881615906D5000E24B57 /* CoreMedia.framework */; };
@@ -263,6 +264,8 @@
 		2776C4BA162593F600E1672E /* VSSawAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSSawAnimation.h; sourceTree = "<group>"; };
 		2776C4BB162593F700E1672E /* VSSawAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSSawAnimation.m; sourceTree = "<group>"; };
 		2781578C1626EFB3008515DD /* VisirisCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisirisCore.framework; path = "../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-fsjwpfcrmmjpcjdknhpgpwmronuy/Build/Products/Debug/VisirisCore.framework"; sourceTree = "<group>"; };
+		2781579016274438008515DD /* VSOSCAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSOSCAddress.h; sourceTree = "<group>"; };
+		2781579116274438008515DD /* VSOSCAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSOSCAddress.m; sourceTree = "<group>"; };
 		279481D71625B60600341BEE /* VSSineAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSSineAnimation.h; sourceTree = "<group>"; };
 		279481D81625B60700341BEE /* VSSineAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSSineAnimation.m; sourceTree = "<group>"; };
 		279481E21625EE5B00341BEE /* VSWaveForm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSWaveForm.h; sourceTree = "<group>"; };
@@ -649,6 +652,7 @@
 		27726EF2161381FC00C0AEEB /* oscClient */ = {
 			isa = PBXGroup;
 			children = (
+				2781578F1627411E008515DD /* oscAddress */,
 				A9818DE01615029B005321A2 /* oscPort */,
 				A9818DDC1614FC4B005321A2 /* oscMessage */,
 				A9818DDA1614F758005321A2 /* VSOSCClientPortListener.h */,
@@ -656,6 +660,15 @@
 				27726EF41613822000C0AEEB /* VSOSCClient.m */,
 			);
 			name = oscClient;
+			sourceTree = "<group>";
+		};
+		2781578F1627411E008515DD /* oscAddress */ = {
+			isa = PBXGroup;
+			children = (
+				2781579016274438008515DD /* VSOSCAddress.h */,
+				2781579116274438008515DD /* VSOSCAddress.m */,
+			);
+			name = oscAddress;
 			sourceTree = "<group>";
 		};
 		27C5EB9F161340A400A441D4 /* fullScreen */ = {
@@ -1824,6 +1837,7 @@
 				2776C4BC162593F800E1672E /* VSSawAnimation.m in Sources */,
 				279481D91625B60700341BEE /* VSSineAnimation.m in Sources */,
 				279481E41625EE5B00341BEE /* VSWaveForm.m in Sources */,
+				2781579216274438008515DD /* VSOSCAddress.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

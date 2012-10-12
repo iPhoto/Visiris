@@ -11,6 +11,7 @@
 
 #import "VSOSCPort.h"
 #import "VSOSCMessage.h"
+#import "VSOSCAddress.h"
 
 @interface VSOSCClient ()
 {
@@ -101,7 +102,7 @@
         {
             if ([self.delegate respondsToSelector:@selector(oscClient:didDiscoveredActivePort:)])
             {
-                [self.delegate oscClient:self didDiscoveredActivePort:[VSOSCPort portWithPort:_port address:address atTimestamp:[NSDate timeIntervalSinceReferenceDate]]];
+                [self.delegate oscClient:self didDiscoveredActivePort:[VSOSCPort portWithPort:_port address:[VSOSCAddress addressWithAddress:address timeStamp:[NSDate timeIntervalSinceReferenceDate]] atTimestamp:[NSDate timeIntervalSinceReferenceDate]]];
             }
         }
     }

@@ -7,21 +7,22 @@
 //
 
 #import "VSOSCPort.h"
+#import "VSOSCAddress.h"
 
 @implementation VSOSCPort
 
 
-+ (VSOSCPort *)portWithPort:(unsigned int)port address:(NSString *)address atTimestamp:(double)timestamp
++ (VSOSCPort *)portWithPort:(unsigned int)port address:(VSOSCAddress *)address atTimestamp:(double)timestamp
 {
     return [[VSOSCPort alloc] initWithPort:port address:address atTimestamp:timestamp];
 }
 
 
-- (id)initWithPort:(unsigned int)port address:(NSString *)address atTimestamp:(double)timestamp
+- (id)initWithPort:(unsigned int)port address:(VSOSCAddress *)address atTimestamp:(double)timestamp
 {
     self = [super init];
-    if (self) {
-        
+    if (self)
+    {
         self.port = port;
         self.addresses = [NSMutableArray arrayWithObject:address];
         self.lastMessageReceivedTimestamp = timestamp;
@@ -31,19 +32,16 @@
 }
 
 
-- (void)addAddress:(NSString *)address
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"Port: %d with addresses: %@", self.port, self.addresses];
+}
+
+
+- (void)addAddress:(VSOSCAddress *)address
 {
     if (address) {
         [self.addresses addObject:address];
-    }
-}
-
-- (void)printDebugLog
-{
-    NSLog(@"===PRINT DEBUG LOG OSCPORT===");
-    NSLog(@"addresses");
-    for (NSString *address in self.addresses) {
-        NSLog(@"Adress: %@", address);
     }
 }
 
