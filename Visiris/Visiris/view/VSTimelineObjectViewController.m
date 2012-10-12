@@ -28,7 +28,7 @@
 
 @property NSMutableArray *deviceIconLayers;
 
-@property (weak,readwrite) VSTimelineObjectProxy* timelineObjectProxy;
+@property (strong,readwrite) VSTimelineObjectProxy* timelineObjectProxy;
 
 @end
 
@@ -55,7 +55,7 @@
 
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
-static NSString* defaultNib = @"VSTimelinObjectView";
+static NSString* defaultNib = @"VSTimelineObjectView";
 
 -(id) initWithDefaultNibAndTimelineObjectProxy:(VSTimelineObjectProxy *)timelineObjectProxy{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
@@ -70,6 +70,12 @@ static NSString* defaultNib = @"VSTimelinObjectView";
         self.deviceIconLayers = [[NSMutableArray alloc]init];
         self.timelineObjectProxy = timelineObjectProxy;
         [self initTimelineObjectProxyObservers];
+        
+        if(self.timelineObject){
+            for (VSDevice* device in self.timelineObject.devices){
+                [self newDeviceWasAdded:device atIndex:[self.timelineObject.devices indexOfObject:device]];
+            }
+        }
         
 //        if(self.timelineObject.fileType.fileKind == VSFileKindVideo || self.timelineObject.fileType.fileKind == VSFileKindAudio){
 //            NSImage *testImage = [VSWaveForm WaveformOfFile:self.timelineObject.filePath];

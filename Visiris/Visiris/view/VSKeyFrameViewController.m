@@ -128,7 +128,9 @@
 #pragma mark - VSViewResizingDelegate Implementation
 
 -(void) frameOfView:(NSView *)view wasSetFrom:(NSRect)oldRect to:(NSRect)newRect{
-    [self updateConnectionPathToNextKeyFrame];
+    if(!NSEqualRects(oldRect, newRect)){
+        [self updateConnectionPathToNextKeyFrame];
+    }
 }
 
 #pragma mark - Private Methods
@@ -136,8 +138,6 @@
 -(void) updateConnectionPathToNextKeyFrame{
     
     if(self.nextKeyFrameViewController){
-        
-        
         self.pathToNextKeyFrameView = [[NSBezierPath alloc] init];
         
         [self.pathToNextKeyFrameView moveToPoint:[VSFrameUtils midPointOfFrame:self.view.frame]];

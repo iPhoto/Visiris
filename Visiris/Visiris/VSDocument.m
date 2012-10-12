@@ -71,12 +71,12 @@
     self.timeline = [[VSTimeline alloc] initWithDuration:VSTimelineDefaultDuration];
     
     //** Adding 2 new VisualTracks to the timeline
-    for(int i = 0; i<5; i++){
-        [self.timeline addNewTrackNamed:[NSString stringWithFormat:@"track%d",i] ofType:VISUAL_TRACK];
+    for(int i = 0; i<6; i++){
+        [self.timeline addNewTrackNamed:[NSString stringWithFormat:@"%d",i] ofType:VISUAL_TRACK];
     }
     
     //** Adding 1 new Audrio-Track to the timeline */
-    [self.timeline addNewTrackNamed:[NSString stringWithFormat:@"Audio Track"] ofType:AUDIO_TRACK];
+//    [self.timeline addNewTrackNamed:[NSString stringWithFormat:@"%d",i] ofType:AUDIO_TRACK];
     
     self.preProcessor = [[VSPreProcessor alloc] initWithTimeline:self.timeline];
     

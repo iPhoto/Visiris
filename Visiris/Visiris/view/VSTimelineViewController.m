@@ -73,6 +73,7 @@
     }
 }
 
+
 #pragma mark - VSTimelineScrollViewZoomingDelegate
 
 -(void) timelineScrollView:(VSTimelineScrollView *)scrollView wasZoomedAtPosition:(NSPoint)position{
@@ -217,7 +218,7 @@
         
 //        [self.scrollView.contentView setBoundsOrigin:currentBoundsOrigin];
 //        DDLogInfo(@"moved to: %@",NSStringFromPoint(currentBoundsOrigin));
-        [self.scrollView.contentView scrollPoint:currentBoundsOrigin];
+        //[self.scrollView.contentView scrollPoint:currentBoundsOrigin];
     }
 }
 

@@ -23,6 +23,7 @@
     return self;
 }
 
+
 -(void) addParametersObject:(VSDeviceParameter *)object{
     [self.parameters  setObject:object forKey:object.oscPath];
 }

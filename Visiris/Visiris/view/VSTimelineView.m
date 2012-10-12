@@ -60,8 +60,12 @@
 -(void) keyDown:(NSEvent *)theEvent{
     if([self keyDownDelegateRespondsToSelector:@selector(view:didReceiveKeyDownEvent:)]){
         [self.keyDownDelegate view:self didReceiveKeyDownEvent:theEvent];
+        
     }
     [self.nextResponder keyDown:theEvent];
+}
+-(void) noResponderFor:(SEL)eventSelector{
+    
 }
 
 -(void) mouseDragged:(NSEvent *)theEvent{
@@ -83,9 +87,9 @@
     
     //If the width of the frame has changed, the delegate's viewDidResizeFromWidth is called
     if(!NSEqualRects(oldFrame, self.frame)){
-            if([self viewResizingDelegateRespondsToSelector:@selector(frameOfView:wasSetFrom:to:)]){
-                    [self.resizingDelegate frameOfView:self wasSetFrom:oldFrame to:self.frame];
-            }
+        if([self viewResizingDelegateRespondsToSelector:@selector(frameOfView:wasSetFrom:to:)]){
+            [self.resizingDelegate frameOfView:self wasSetFrom:oldFrame to:self.frame];
+        }
     }
     
     if([self.trackingAreas containsObject:self.trackingArea]){
@@ -94,7 +98,7 @@
     self.trackingArea = [[NSTrackingArea alloc] initWithRect:self.frame options:(NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingActiveAlways ) owner:self userInfo:nil];
     [self addTrackingArea:self.trackingArea];
     
-//    DDLogInfo(@"tracking Area of %@: %@",NSStringFromClass([self class]), NSStringFromRect(self.trackingArea.rect));
+    //    DDLogInfo(@"tracking Area of %@: %@",NSStringFromClass([self class]), NSStringFromRect(self.trackingArea.rect));
 }
 
 #pragma mark - Private Methods

@@ -47,6 +47,7 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{181, 77}, {230, 34}}</string>
 						<reference key="NSSuperview" ref="1005"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="954411467"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<string key="NSClassName">NSView</string>
@@ -56,6 +57,7 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{327, 22}, {39, 32}}</string>
 						<reference key="NSSuperview" ref="1005"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="146135337"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="NSEnabled">YES</bool>
@@ -70,7 +72,7 @@
 							</object>
 							<string key="NSCellIdentifier">_NS:9</string>
 							<reference key="NSControlView" ref="954411467"/>
-							<int key="NSButtonFlags">-2033958912</int>
+							<int key="NSButtonFlags">-2033434624</int>
 							<int key="NSButtonFlags2">129</int>
 							<object class="NSCustomResource" key="NSNormalImage">
 								<string key="NSClassName">NSImage</string>
@@ -88,6 +90,8 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{378, 22}, {39, 32}}</string>
 						<reference key="NSSuperview" ref="1005"/>
+						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="591766242">
@@ -97,7 +101,7 @@
 							<reference key="NSSupport" ref="201249260"/>
 							<string key="NSCellIdentifier">_NS:9</string>
 							<reference key="NSControlView" ref="739631969"/>
-							<int key="NSButtonFlags">-2033958912</int>
+							<int key="NSButtonFlags">-2033434624</int>
 							<int key="NSButtonFlags2">129</int>
 							<object class="NSCustomResource" key="NSNormalImage">
 								<string key="NSClassName">NSImage</string>
@@ -115,6 +119,7 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{356, 22}, {32, 32}}</string>
 						<reference key="NSSuperview" ref="1005"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="739631969"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="NSEnabled">YES</bool>
@@ -125,7 +130,7 @@
 							<reference key="NSSupport" ref="201249260"/>
 							<string key="NSCellIdentifier">_NS:9</string>
 							<reference key="NSControlView" ref="146135337"/>
-							<int key="NSButtonFlags">-2033958912</int>
+							<int key="NSButtonFlags">-2033434624</int>
 							<int key="NSButtonFlags2">129</int>
 							<object class="NSCustomResource" key="NSNormalImage">
 								<string key="NSClassName">NSImage</string>
@@ -144,6 +149,7 @@
 						<array class="NSMutableArray" key="NSSubviews"/>
 						<string key="NSFrameSize">{331, 78}</string>
 						<reference key="NSSuperview" ref="1005"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="1031496920"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<string key="NSClassName">NSView</string>
@@ -153,6 +159,7 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{17, 86}, {159, 17}}</string>
 						<reference key="NSSuperview" ref="1005"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="181787034"/>
 						<string key="NSReuseIdentifierKey">_NS:1505</string>
 						<bool key="NSEnabled">YES</bool>
@@ -187,6 +194,7 @@
 				</array>
 				<string key="NSFrameSize">{421, 123}</string>
 				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="264380951"/>
 				<string key="NSClassName">VSParameterView</string>
 			</object>
@@ -793,21 +801,6 @@
 						<string key="objectName">Popover View Controller</string>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">636</int>
-						<reference key="object" ref="146973313"/>
-						<reference key="parent" ref="954411467"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">637</int>
-						<reference key="object" ref="641211070"/>
-						<reference key="parent" ref="1005"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">639</int>
-						<reference key="object" ref="297505344"/>
-						<reference key="parent" ref="1005"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">640</int>
 						<reference key="object" ref="255788191"/>
 						<reference key="parent" ref="739631969"/>
@@ -828,11 +821,6 @@
 						<reference key="parent" ref="1005"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">638</int>
-						<reference key="object" ref="711729682"/>
-						<reference key="parent" ref="1005"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">633</int>
 						<reference key="object" ref="774731542"/>
 						<reference key="parent" ref="1005"/>
@@ -841,6 +829,26 @@
 						<int key="objectID">549</int>
 						<reference key="object" ref="808481141"/>
 						<reference key="parent" ref="146135337"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">637</int>
+						<reference key="object" ref="641211070"/>
+						<reference key="parent" ref="1005"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">638</int>
+						<reference key="object" ref="711729682"/>
+						<reference key="parent" ref="1005"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">636</int>
+						<reference key="object" ref="146973313"/>
+						<reference key="parent" ref="954411467"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">639</int>
+						<reference key="object" ref="297505344"/>
+						<reference key="parent" ref="1005"/>
 					</object>
 				</array>
 			</object>
@@ -929,9 +937,205 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">651</int>
+			<int key="maxID">656</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes"/>
+		<object class="IBClassDescriber" key="IBDocument.Classes">
+			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
+				<object class="IBPartialClassDescription">
+					<string key="className">NSLayoutConstraint</string>
+					<string key="superclassName">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/NSLayoutConstraint.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">VSDeviceParameterConnectionViewController</string>
+					<string key="superclassName">NSViewController</string>
+					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="didChangeDeviceParameterPopUpButton:">NSPopUpButton</string>
+						<string key="didChangeDevicePopUpButton:">NSPopUpButton</string>
+						<string key="didClickToggleConnection:">NSButton</string>
+						<string key="rangeValueDidChange:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="didChangeDeviceParameterPopUpButton:">
+							<string key="name">didChangeDeviceParameterPopUpButton:</string>
+							<string key="candidateClassName">NSPopUpButton</string>
+						</object>
+						<object class="IBActionInfo" key="didChangeDevicePopUpButton:">
+							<string key="name">didChangeDevicePopUpButton:</string>
+							<string key="candidateClassName">NSPopUpButton</string>
+						</object>
+						<object class="IBActionInfo" key="didClickToggleConnection:">
+							<string key="name">didClickToggleConnection:</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBActionInfo" key="rangeValueDidChange:">
+							<string key="name">rangeValueDidChange:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="deviceNameLabel">NSTextField</string>
+						<string key="deviceParameterMaxValueTextField">NSTextField</string>
+						<string key="deviceParameterMinValueTextField">NSTextField</string>
+						<string key="deviceParameterPopUpButton">NSPopUpButton</string>
+						<string key="deviceParamterComboBoxLabel">NSTextField</string>
+						<string key="devicePopUpButton">NSPopUpButton</string>
+						<string key="mappingHolderBox">NSBox</string>
+						<string key="parameterMaxValueTextField">NSTextField</string>
+						<string key="parameterMinValueTextField">NSTextField</string>
+						<string key="toogleConnection">NSButton</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="deviceNameLabel">
+							<string key="name">deviceNameLabel</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="deviceParameterMaxValueTextField">
+							<string key="name">deviceParameterMaxValueTextField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="deviceParameterMinValueTextField">
+							<string key="name">deviceParameterMinValueTextField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="deviceParameterPopUpButton">
+							<string key="name">deviceParameterPopUpButton</string>
+							<string key="candidateClassName">NSPopUpButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="deviceParamterComboBoxLabel">
+							<string key="name">deviceParamterComboBoxLabel</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="devicePopUpButton">
+							<string key="name">devicePopUpButton</string>
+							<string key="candidateClassName">NSPopUpButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="mappingHolderBox">
+							<string key="name">mappingHolderBox</string>
+							<string key="candidateClassName">NSBox</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="parameterMaxValueTextField">
+							<string key="name">parameterMaxValueTextField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="parameterMinValueTextField">
+							<string key="name">parameterMinValueTextField</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="toogleConnection">
+							<string key="name">toogleConnection</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/VSDeviceParameterConnectionViewController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">VSParameterView</string>
+					<string key="superclassName">NSView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/VSParameterView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">VSParameterViewController</string>
+					<string key="superclassName">NSViewController</string>
+					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="boolValueHasChanged:">NSButton</string>
+						<string key="keyFrameButton:">id</string>
+						<string key="nextKeyFrame:">id</string>
+						<string key="previousKeyFrame:">id</string>
+						<string key="sliderValueHasChanged:">NSSlider</string>
+						<string key="textValueHasChanged:">id</string>
+						<string key="toggleParameterDeviceConnection:">id</string>
+						<string key="valueSliderTextHasChanged:">NSTextField</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="boolValueHasChanged:">
+							<string key="name">boolValueHasChanged:</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBActionInfo" key="keyFrameButton:">
+							<string key="name">keyFrameButton:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="nextKeyFrame:">
+							<string key="name">nextKeyFrame:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="previousKeyFrame:">
+							<string key="name">previousKeyFrame:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="sliderValueHasChanged:">
+							<string key="name">sliderValueHasChanged:</string>
+							<string key="candidateClassName">NSSlider</string>
+						</object>
+						<object class="IBActionInfo" key="textValueHasChanged:">
+							<string key="name">textValueHasChanged:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="toggleParameterDeviceConnection:">
+							<string key="name">toggleParameterDeviceConnection:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="valueSliderTextHasChanged:">
+							<string key="name">valueSliderTextHasChanged:</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="deviceConnectorsHolder">NSView</string>
+						<string key="deviceParameterConnectionPopoverViewController">VSDeviceParameterConnectionViewController</string>
+						<string key="nameLabel">NSTextField</string>
+						<string key="nextKeyframeButton">NSButton</string>
+						<string key="parameterHolder">NSView</string>
+						<string key="prevKeyframeButton">NSButton</string>
+						<string key="setKeyframeButton">NSButton</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="deviceConnectorsHolder">
+							<string key="name">deviceConnectorsHolder</string>
+							<string key="candidateClassName">NSView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="deviceParameterConnectionPopoverViewController">
+							<string key="name">deviceParameterConnectionPopoverViewController</string>
+							<string key="candidateClassName">VSDeviceParameterConnectionViewController</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="nameLabel">
+							<string key="name">nameLabel</string>
+							<string key="candidateClassName">NSTextField</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="nextKeyframeButton">
+							<string key="name">nextKeyframeButton</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="parameterHolder">
+							<string key="name">parameterHolder</string>
+							<string key="candidateClassName">NSView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="prevKeyframeButton">
+							<string key="name">prevKeyframeButton</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="setKeyframeButton">
+							<string key="name">setKeyframeButton</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/VSParameterViewController.h</string>
+					</object>
+				</object>
+			</array>
+		</object>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
