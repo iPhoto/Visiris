@@ -121,7 +121,18 @@
 #pragma mark - VSViewKeyDownDelegate implementation
 
 -(void) view:(NSView *)view didReceiveKeyDownEvent:(NSEvent *)theEvent{
-    [self interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
+    if(theEvent){
+        unichar keyCode = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];
+        
+        switch (keyCode) {
+            case 32:
+                [[NSNotificationCenter defaultCenter] postNotificationName:VSPlayKeyWasPressed object:nil];
+                break;
+            default:
+                [self interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
+                break;
+        }
+    }
 }
 
 -(void) cancelOperation:(id)sender{

@@ -62,10 +62,7 @@
         [self.keyDownDelegate view:self didReceiveKeyDownEvent:theEvent];
         
     }
-    [self.nextResponder keyDown:theEvent];
-}
--(void) noResponderFor:(SEL)eventSelector{
-    
+
 }
 
 -(void) mouseDragged:(NSEvent *)theEvent{
