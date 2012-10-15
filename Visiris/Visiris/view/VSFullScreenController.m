@@ -13,13 +13,14 @@
 #import "VSProjectSettings.h"
 #import "VSFullScreenHolderView.h"
 #import "VSCoreServices.h"
+#import "VSFullScreenWindow.h"
 
 #import "VSFullScreenOpenGLView.h"
 
 @interface VSFullScreenController()
 @property (strong) VSFullScreenOpenGLView *fullScreenView ;
 @property (strong) VSFullScreenHolderView *holder;
-@property (strong) NSWindow *fullScreenWindow;
+@property (strong) VSFullScreenWindow *fullScreenWindow;
 @property (weak) NSOpenGLContext *openGLContext;
 @property BOOL visible;
 
@@ -62,7 +63,7 @@
         
         NSRect secondDisplayRect = [screen frame];
         
-        self.fullScreenWindow = [[NSWindow alloc] initWithContentRect:secondDisplayRect
+        self.fullScreenWindow = [[VSFullScreenWindow alloc] initWithContentRect:secondDisplayRect
                                                             styleMask:NSBorderlessWindowMask
                                                               backing:NSBackingStoreBuffered
                                                                 defer:YES];
@@ -77,6 +78,7 @@
         
         NSRect openglViewRect = NSMakeRect(0, 0, secondDisplayRect.size.width, secondDisplayRect.size.height);
         self.holder = [[VSFullScreenHolderView alloc] initWithFrame:openglViewRect];
+        self.holder.keyDownDelegate = self;
         self.fullScreenView = [[VSFullScreenOpenGLView alloc] initWithFrame:openglViewRect];
         [self.fullScreenView setOpenGLWithSharedContext:self.openGLContext];
         [self.fullScreenWindow setContentView: self.holder];
@@ -92,6 +94,8 @@
         [self.fullScreenView setFrame:openglViewRect];
 
         [VSOutputController sharedOutputController].fullScreenSize = openglViewRect.size;
+        
+        self.visible = YES;
     }
 }
 
@@ -100,6 +104,8 @@
     
     [self.fullScreenWindow orderOut:self.fullScreenWindow];
     [self.fullScreenWindow setReleasedWhenClosed:YES];
+    
+    self.visible = NO;
 }
 
 -(void) toggleFullScreenForScreen:(NSInteger) screenID{    
@@ -109,19 +115,17 @@
     else{
         [self showFullscreenOnScreen:screenID];
     }
-    
-    self.visible = !self.visible;
 }
 
-- (void)keyDown:(NSEvent *)theEvent
-{
-    NSLog(@"blubb");
+
+#pragma mark - VSViewKeyDownDelegate implementation
+
+-(void) view:(NSView *)view didReceiveKeyDownEvent:(NSEvent *)theEvent{
+    [self interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
 }
 
-- (BOOL)acceptsFirstResponder
-{
-    return YES;
+-(void) cancelOperation:(id)sender{
+    [self hideFullscreen];
 }
-
 
 @end

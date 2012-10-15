@@ -181,6 +181,7 @@
 		5B60CC5B16135EE800557892 /* VSOutputController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B60CC5A16135EE800557892 /* VSOutputController.m */; };
 		5B70F71B15C2E650002B54ED /* VSPlayheadMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B70F71A15C2E650002B54ED /* VSPlayheadMarker.m */; };
 		5B7BFFC71592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BFFC61592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m */; };
+		5B82DB6E162C5A0B0077308A /* VSFullScreenWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B82DB6D162C5A0B0077308A /* VSFullScreenWindow.m */; };
 		5B84D71E162470DB006DDC12 /* VSAnimationCurveFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B84D71D162470DB006DDC12 /* VSAnimationCurveFactory.m */; };
 		5B84D72116247C47006DDC12 /* VSAnimationCurvePopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B84D72016247C47006DDC12 /* VSAnimationCurvePopup.xib */; };
 		5B84D72416247C5A006DDC12 /* VSAnimationCurvePopupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B84D72316247C5A006DDC12 /* VSAnimationCurvePopupViewController.m */; };
@@ -526,6 +527,8 @@
 		5B70F71A15C2E650002B54ED /* VSPlayheadMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSPlayheadMarker.m; sourceTree = "<group>"; };
 		5B7BFFC51592143C00CEA1E8 /* VSTimelineObjectViewIntersection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineObjectViewIntersection.h; sourceTree = "<group>"; };
 		5B7BFFC61592143C00CEA1E8 /* VSTimelineObjectViewIntersection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineObjectViewIntersection.m; sourceTree = "<group>"; };
+		5B82DB6C162C5A0B0077308A /* VSFullScreenWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFullScreenWindow.h; sourceTree = "<group>"; };
+		5B82DB6D162C5A0B0077308A /* VSFullScreenWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFullScreenWindow.m; sourceTree = "<group>"; };
 		5B84D71C162470DB006DDC12 /* VSAnimationCurveFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAnimationCurveFactory.h; sourceTree = "<group>"; };
 		5B84D71D162470DB006DDC12 /* VSAnimationCurveFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAnimationCurveFactory.m; sourceTree = "<group>"; };
 		5B84D72016247C47006DDC12 /* VSAnimationCurvePopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VSAnimationCurvePopup.xib; sourceTree = "<group>"; };
@@ -681,6 +684,8 @@
 				27EEDA371612F6490075EE42 /* VSFullScreenController.m */,
 				5B98D1CA161C8EF0002CDE1F /* VSFullScreenHolderView.h */,
 				5B98D1CB161C8EF0002CDE1F /* VSFullScreenHolderView.m */,
+				5B82DB6C162C5A0B0077308A /* VSFullScreenWindow.h */,
+				5B82DB6D162C5A0B0077308A /* VSFullScreenWindow.m */,
 			);
 			name = fullScreen;
 			sourceTree = "<group>";
@@ -1842,6 +1847,7 @@
 				279481E41625EE5B00341BEE /* VSWaveForm.m in Sources */,
 				5B1994C01627368C006E9D9E /* VSMainWindow.m in Sources */,
 				2781579216274438008515DD /* VSOSCAddress.m in Sources */,
+				5B82DB6E162C5A0B0077308A /* VSFullScreenWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

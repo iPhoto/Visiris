@@ -8,6 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "VSViewKeyDownDelegate.h"
+
 @interface VSFullScreenHolderView : NSView
+
+@property (strong) id<VSViewKeyDownDelegate> keyDownDelegate;
 
 @end
