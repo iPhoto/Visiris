@@ -59,7 +59,7 @@ static NSString* defaultNib = @"VSParameterView";
         self.deviceConnectors = [[NSMutableDictionary alloc] init];
         self.availableDevies = [[NSMutableDictionary alloc]init];
         self.parameterValueControls = [[NSMutableArray alloc] init];
-        
+        self.currentlyEditing = NO;
         
         if([self.view isKindOfClass:[VSParameterView class]]){
             ((VSParameterView*) self.view).fillColor = self.color;
@@ -141,8 +141,6 @@ static NSString* defaultNib = @"VSParameterView";
     if(parameter.connectedWithDeviceParameter){
         [self parametersConnectionToDeviceWasChangedTo:YES];
     }
-    
-    self.currentlyEditing = NO;
 }
 
 #pragma mark - Devices
@@ -199,24 +197,6 @@ static NSString* defaultNib = @"VSParameterView";
     return YES;
 }
 
-
-- (void)textView:(NSTextView *)aTextView clickedOnCell:(id < NSTextAttachmentCell >)cell inRect:(NSRect)cellFrame atIndex:(NSUInteger)charIndex{
-    
-}
-
--(BOOL) control:(NSControl *)control textShouldBeginEditing:(NSText *)fieldEditor{
-    self.currentlyEditing = YES;
-    return YES;
-}
-
--(void) controlTextDidBeginEditing:(NSNotification *)obj{
-    self.currentlyEditing = YES;
-}
-
--(void) controlTextDidEndEditing:(NSNotification *)obj{
-    self.currentlyEditing = NO;
-}
-
 #pragma mark - NSPopoverDelegate Implementation
 
 
@@ -224,8 +204,9 @@ static NSString* defaultNib = @"VSParameterView";
 #pragma mark - NSComboBoxDelegate Implementation
 
 -(void) comboBoxWillDismiss:(NSNotification *)notification{
-    self.currentlyEditing = NO;
+    
     [self storeParameterValue];
+    self.currentlyEditing = NO;
 }
 
 -(void) comboBoxWillPopUp:(NSNotification *)notification{
@@ -247,7 +228,14 @@ static NSString* defaultNib = @"VSParameterView";
 }
 
 - (IBAction)sliderValueHasChanged:(NSSlider *)sender {
+    NSEvent *event = [[NSApplication sharedApplication] currentEvent];
+    
+    self.currentlyEditing = YES;
     [self.textField setFloatValue:sender.floatValue];
+    
+    if(event.type == NSLeftMouseUp){
+        self.currentlyEditing = NO;
+    }
     [self storeParameterValue];
 }
 
@@ -305,6 +293,22 @@ static NSString* defaultNib = @"VSParameterView";
 
 
 #pragma mark - Private Methods
+
+-(BOOL) parameterCurrentlyEdited{
+    if(self.textField){
+        return self.currentlyEditing;// || [self textFieldHasFocus:self.textField];
+    }
+    else{
+        return self.currentlyEditing;
+    }
+}
+
+-(BOOL) textFieldHasFocus:(NSTextField*)textField{
+    if([(id) self.view.window.firstResponder respondsToSelector:@selector(delegate)] && [(id) self.view.window.firstResponder delegate] == textField){
+        return YES;
+    }
+    return NO;
+}
 
 /**
  * Checks if the delegate is able to respond to the given Selector
@@ -446,7 +450,7 @@ static NSString* defaultNib = @"VSParameterView";
     [self.nameLabel setStringValue: NSLocalizedString(self.parameter.name, @"")];
     
     
-    if(!self.currentlyEditing){
+    if(![self parameterCurrentlyEdited]){
         
         if([self.parameter isKindOfClass:[VSOptionParameter class]]){
             [self.comboBox selectItemWithObjectValue:((VSOptionParameter*)self.parameter).selectedKey];
