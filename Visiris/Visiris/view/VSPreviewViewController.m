@@ -215,6 +215,14 @@ static NSString* defaultNib = @"VSPreviewView";
 
 
 - (IBAction)toggleFullScreen:(id)sender {
-    [self.fullScreenController toggleFullScreenForScreen:[VSFullScreenController numberOfScreensAvailable]-1];
+
+    
+    NSInteger screenID  = [VSFullScreenController numberOfScreensAvailable]-1;
+    
+    if([VSFullScreenController numberOfScreensAvailable] > 1 && screenID == [VSFullScreenController mainScreen]){
+        screenID  = [VSFullScreenController numberOfScreensAvailable]-2;
+    }
+
+    [self.fullScreenController toggleFullScreenForScreen:screenID];
 }
 @end
