@@ -45,5 +45,6 @@
  */
 -(BOOL) addNewRepresentationOfProjectItem:(VSProjectItem*) projectItem;
 
+-(NSArray*) representationsForFiles:(NSArray*) filePaths;
 
 @end

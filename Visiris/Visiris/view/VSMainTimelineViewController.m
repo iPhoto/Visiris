@@ -681,32 +681,34 @@ static NSString* defaultNib = @"VSMainTimelineView";
  * @return NSArray holding the VSProjectItemRepresentation's for the given filePaths
  */
 -(NSArray*) createProjectItemRepresentationsForFiles:(NSArray*) filePaths{
-    NSMutableArray *result = [[NSMutableArray alloc] init];
     
-    NSMutableDictionary *currentTemporaryProjectItems = [NSMutableDictionary dictionaryWithDictionary:self.temporaryCreatedProjectItems];
+    return [self.projectItemRepresentationController representationsForFiles:filePaths];
+//    NSMutableArray *result = [[NSMutableArray alloc] init];
+//    
+//    NSMutableDictionary *currentTemporaryProjectItems = [NSMutableDictionary dictionaryWithDictionary:self.temporaryCreatedProjectItems];
+//    
+//    [self.temporaryCreatedProjectItems removeAllObjects];
+//    
+//    for(NSString *fileName in filePaths){
+//        
+//        VSProjectItemRepresentation *tmpProjectItemRepresentation = [currentTemporaryProjectItems objectForKey:fileName];
+//        
+//        if(!tmpProjectItemRepresentation){
+//            
+//            VSProjectItem *tempProjectItem = [self.projectItemController createNewProjectItemFromFile:fileName];
+//            
+//            if(tempProjectItem){
+//                tmpProjectItemRepresentation = [self.projectItemRepresentationController createPresentationOfProjectItem:tempProjectItem];
+//            }
+//        }
+//        
+//        if(tmpProjectItemRepresentation){
+//            [result addObject:tmpProjectItemRepresentation];
+//            [self.temporaryCreatedProjectItems setObject:tmpProjectItemRepresentation forKey:fileName];
+//        }
+//    }
     
-    [self.temporaryCreatedProjectItems removeAllObjects];
-    
-    for(NSString *fileName in filePaths){
-        
-        VSProjectItemRepresentation *tmpProjectItemRepresentation = [currentTemporaryProjectItems objectForKey:fileName];
-        
-        if(!tmpProjectItemRepresentation){
-            
-            VSProjectItem *tempProjectItem = [self.projectItemController createNewProjectItemFromFile:fileName];
-            
-            if(tempProjectItem){
-                tmpProjectItemRepresentation = [self.projectItemRepresentationController createPresentationOfProjectItem:tempProjectItem];
-            }
-        }
-        
-        if(tmpProjectItemRepresentation){
-            [result addObject:tmpProjectItemRepresentation];
-            [self.temporaryCreatedProjectItems setObject:tmpProjectItemRepresentation forKey:fileName];
-        }
-    }
-    
-    return result;
+//    return result;
 }
 
 /**

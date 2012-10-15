@@ -35,6 +35,8 @@
 
 @property (strong) NSMutableArray *parameterValueControls;
 
+@property (assign) bool currentlyEditing;
+
 @end
 
 
@@ -139,6 +141,8 @@ static NSString* defaultNib = @"VSParameterView";
     if(parameter.connectedWithDeviceParameter){
         [self parametersConnectionToDeviceWasChangedTo:YES];
     }
+    
+    self.currentlyEditing = NO;
 }
 
 #pragma mark - Devices
@@ -195,6 +199,24 @@ static NSString* defaultNib = @"VSParameterView";
     return YES;
 }
 
+
+- (void)textView:(NSTextView *)aTextView clickedOnCell:(id < NSTextAttachmentCell >)cell inRect:(NSRect)cellFrame atIndex:(NSUInteger)charIndex{
+    
+}
+
+-(BOOL) control:(NSControl *)control textShouldBeginEditing:(NSText *)fieldEditor{
+    self.currentlyEditing = YES;
+    return YES;
+}
+
+-(void) controlTextDidBeginEditing:(NSNotification *)obj{
+    self.currentlyEditing = YES;
+}
+
+-(void) controlTextDidEndEditing:(NSNotification *)obj{
+    self.currentlyEditing = NO;
+}
+
 #pragma mark - NSPopoverDelegate Implementation
 
 
@@ -202,7 +224,12 @@ static NSString* defaultNib = @"VSParameterView";
 #pragma mark - NSComboBoxDelegate Implementation
 
 -(void) comboBoxWillDismiss:(NSNotification *)notification{
+    self.currentlyEditing = NO;
     [self storeParameterValue];
+}
+
+-(void) comboBoxWillPopUp:(NSNotification *)notification{
+    self.currentlyEditing = YES;
 }
 
 #pragma mark - IBActions
@@ -260,7 +287,7 @@ static NSString* defaultNib = @"VSParameterView";
     self.deviceParameterConnectingPopOver  = [[NSPopover alloc] init];
     
     self.deviceParameterConnectingPopOver.contentViewController = self.deviceParameterConnectionPopoverViewController;
-
+    
     self.deviceParameterConnectionPopoverViewController.popover = self.deviceParameterConnectingPopOver;
     
     self.deviceParameterConnectingPopOver.behavior = NSPopoverBehaviorTransient;
@@ -418,24 +445,28 @@ static NSString* defaultNib = @"VSParameterView";
 -(void) updateParameterValue{
     [self.nameLabel setStringValue: NSLocalizedString(self.parameter.name, @"")];
     
-    if([self.parameter isKindOfClass:[VSOptionParameter class]]){
-        [self.comboBox selectItemWithObjectValue:((VSOptionParameter*)self.parameter).selectedKey];
-    }
-    else{
-        switch (self.parameter.dataType) {
-            case VSParameterDataTypeBool:
-                [self.checkBox setState:[self buttonStateOfBooleanValue:self.parameter.currentBoolValue]];
-                break;
-            case VSParameterDataTypeFloat:
-                [self.horizontalSlider setFloatValue:self.parameter.currentFloatValue];
-                [self.textField setFloatValue:self.parameter.currentFloatValue];
-                break;
-            case VSParameterDataTypeString:
-                [self.textField setStringValue:self.parameter.currentStringValue];
-                break;
-            default:
-                [self.textField setStringValue:self.parameter.currentStringValue];
-                break;
+    
+    if(!self.currentlyEditing){
+        
+        if([self.parameter isKindOfClass:[VSOptionParameter class]]){
+            [self.comboBox selectItemWithObjectValue:((VSOptionParameter*)self.parameter).selectedKey];
+        }
+        else{
+            switch (self.parameter.dataType) {
+                case VSParameterDataTypeBool:
+                    [self.checkBox setState:[self buttonStateOfBooleanValue:self.parameter.currentBoolValue]];
+                    break;
+                case VSParameterDataTypeFloat:
+                    [self.horizontalSlider setFloatValue:self.parameter.currentFloatValue];
+                    [self.textField setFloatValue:self.parameter.currentFloatValue];
+                    break;
+                case VSParameterDataTypeString:
+                    [self.textField setStringValue:self.parameter.currentStringValue];
+                    break;
+                default:
+                    [self.textField setStringValue:self.parameter.currentStringValue];
+                    break;
+            }
         }
     }
 }

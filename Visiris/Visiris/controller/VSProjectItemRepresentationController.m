@@ -16,6 +16,8 @@
 
 @property VSProjectItemController *projectItemController;
 
+@property NSMutableDictionary *temporaryCreatedProjectItems;
+
 @end
 
 @implementation VSProjectItemRepresentationController
@@ -31,6 +33,7 @@ static VSProjectItemRepresentationController* sharedProjectItemController = nil;
     if(self = [super init]){
         self.projectItemController = [VSProjectItemController sharedManager];
         _projectItemRepresentations = [NSMutableArray arrayWithCapacity:0];
+        self.temporaryCreatedProjectItems = [[NSMutableDictionary alloc] init];
         
         [self initObservers];
         
@@ -111,6 +114,41 @@ static VSProjectItemRepresentationController* sharedProjectItemController = nil;
     else {
         return NO;
     }
+}
+
+-(NSArray*) representationsForFiles:(NSArray*) filePaths{
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    
+    NSMutableDictionary *currentTemporaryProjectItems = [NSMutableDictionary dictionaryWithDictionary:self.temporaryCreatedProjectItems];
+    
+    [self.temporaryCreatedProjectItems removeAllObjects];
+    
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+
+    for(NSString *fileName in filePaths){
+        
+
+            VSProjectItemRepresentation *tmpProjectItemRepresentation = [currentTemporaryProjectItems objectForKey:fileName];
+            
+            if(!tmpProjectItemRepresentation){
+                
+                VSProjectItem *tempProjectItem = [self.projectItemController createNewProjectItemFromFile:fileName];
+                
+                if(tempProjectItem){
+                    tmpProjectItemRepresentation = [self createPresentationOfProjectItem:tempProjectItem];
+                }
+            }
+            
+            if(tmpProjectItemRepresentation){
+                [result addObject:tmpProjectItemRepresentation];
+                [self.temporaryCreatedProjectItems setObject:tmpProjectItemRepresentation forKey:fileName];
+            }
+            
+
+        
+    }
+    
+    return result;
 }
 
 
