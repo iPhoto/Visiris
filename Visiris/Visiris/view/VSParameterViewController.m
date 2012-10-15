@@ -135,6 +135,10 @@ static NSString* defaultNib = @"VSParameterView";
     for(VSDevice *device in availableDevices){
         [self addDeviceConnectorForDevice:device];
     }
+    
+    if(parameter.connectedWithDeviceParameter){
+        [self parametersConnectionToDeviceWasChangedTo:YES];
+    }
 }
 
 #pragma mark - Devices
