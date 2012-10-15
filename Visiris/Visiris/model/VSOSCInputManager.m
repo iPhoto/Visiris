@@ -103,8 +103,13 @@
 
 - (void)dealloc
 {
-    dispatch_release(_oscPortUpdateTimer);
-    dispatch_release(_oscPortUpdateQueue);
+    if (_oscPortUpdateTimer) {
+        dispatch_release(_oscPortUpdateTimer);
+    }
+    
+    if (_oscPortUpdateQueue) {
+        dispatch_release(_oscPortUpdateQueue);
+    }
 }
 
 - (NSString *)description

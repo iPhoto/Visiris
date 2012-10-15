@@ -10,7 +10,7 @@
 
 #import "VSOutputController.h"
 
-@interface VSFullScreenController : NSViewController<VSOpenGLOutputDelegate>
+@interface VSFullScreenController : NSResponder<VSOpenGLOutputDelegate>
 
 - (id)init;
 

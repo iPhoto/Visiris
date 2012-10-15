@@ -10,15 +10,5 @@
 
 @implementation VSFullScreenOpenGLView
 
-- (void)keyDown:(NSEvent *)theEvent
-{
-    NSLog(@"blubb");
-}
-
-- (BOOL)acceptsFirstResponder
-{
-    return YES;
-}
-
 @end
 
