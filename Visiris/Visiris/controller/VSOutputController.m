@@ -55,6 +55,18 @@ static VSOutputController* sharedOutputController = nil;
         self.renderSize         = [[VSProjectSettings sharedProjectSettings] frameSize];
         self.lastTexture        = 0;
         self.lastTimestamp      = 0.0;
+        
+        NSOpenGLPixelFormatAttribute attribs[] =
+        {
+            kCGLPFAAccelerated,
+            kCGLPFANoRecovery,
+            kCGLPFADoubleBuffer,
+            kCGLPFAColorSize, 24,
+            kCGLPFADepthSize, 16,
+            0
+        };
+        
+        self.pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attribs];
     }
     
     return self;
@@ -152,9 +164,9 @@ static VSOutputController* sharedOutputController = nil;
             [self removeOutput:output];
         }
 
-[self.outputsToBeRemoved removeAllObjects];
-self.outputsToBeRemoved = nil;
-}
+        [self.outputsToBeRemoved removeAllObjects];
+        self.outputsToBeRemoved = nil;
+    }
 }
 
 static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime, CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext)
@@ -164,20 +176,7 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 }
 
 - (void) setupDisplayLink{
-    
-    NSOpenGLPixelFormatAttribute attribs[] =
-    {
-		kCGLPFAAccelerated,
-		kCGLPFANoRecovery,
-		kCGLPFADoubleBuffer,
-		kCGLPFAColorSize, 24,
-		kCGLPFADepthSize, 16,
-		0
-    };
-	
-    self.pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attribs];
-    
-    
+
 	// Create a display link capable of being used with all active displays
 	CVDisplayLinkCreateWithActiveCGDisplays(&_displayLink);
 	
@@ -195,7 +194,6 @@ static CVReturn MyDisplayLinkCallback(CVDisplayLinkRef displayLink, const CVTime
 - (double)refreshPeriod{
     return CVDisplayLinkGetActualOutputVideoRefreshPeriod(self.displayLink);
 }
-
 
 - (void)setFullScreenSize:(NSSize)fullScreenSize{
     _fullScreenSize = fullScreenSize;

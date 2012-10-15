@@ -100,10 +100,9 @@
     
     [self.fullScreenWindow orderOut:self.fullScreenWindow];
     [self.fullScreenWindow setReleasedWhenClosed:YES];
-//    [self.fullScreenWindow close];
 }
 
--(void) toggleFullScreenForScreen:(NSUInteger) screenID{    
+-(void) toggleFullScreenForScreen:(NSInteger) screenID{    
     if(self.visible){
         [self hideFullscreen];
     }
@@ -112,8 +111,8 @@
     }
     
     self.visible = !self.visible;
-//    [[VSOutputController sharedOutputController] toggleFullScreen];
 }
+
 
 
 @end
