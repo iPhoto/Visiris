@@ -42,7 +42,7 @@
         [self registerExternalInputManager];
         
         // TODO: move next line to somewhere usefull (start observing inputs after window did finish loading and app is running in idle mode)
-        [self startObservingInputs];
+//        [self startObservingInputs];
     }
     
     return self;

@@ -14,6 +14,10 @@
 
 - (id)init;
 
--(void) toggleFullScreenForScreen:(NSUInteger) screenID;
+-(void) toggleFullScreenForScreen:(NSInteger) screenID;
+
++ (NSInteger)numberOfScreensAvailable;
+
++ (NSInteger)mainScreen;
 
 @end
