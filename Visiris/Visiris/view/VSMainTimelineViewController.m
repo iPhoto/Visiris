@@ -217,23 +217,6 @@ static NSString* defaultNib = @"VSMainTimelineView";
 }
 
 
-#pragma mark - VSViewKeyDownDelegate
-
--(void) view:(NSView *)view didReceiveKeyDownEvent:(NSEvent *)theEvent{
-    if(theEvent){
-        unichar keyCode = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];
-        [self interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
-        switch (keyCode) {
-            case 32:
-                [[NSNotificationCenter defaultCenter] postNotificationName:VSPlayKeyWasPressed object:nil];
-                break;
-            default:
-                break;
-        }
-    }
-}
-
-
 #pragma mark- VSTrackViewControlerDelegate implementation
 
 

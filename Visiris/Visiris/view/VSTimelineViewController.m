@@ -62,16 +62,21 @@
 -(void) view:(NSView *)view didReceiveKeyDownEvent:(NSEvent *)theEvent{
     if(theEvent){
         unichar keyCode = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];
-        [self interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
+        
         switch (keyCode) {
             case 32:
                 [[NSNotificationCenter defaultCenter] postNotificationName:VSPlayKeyWasPressed object:nil];
                 break;
             default:
+                [self interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
                 break;
         }
     }
+
 }
+
+
+
 
 
 #pragma mark - VSTimelineScrollViewZoomingDelegate
@@ -117,6 +122,7 @@
         [self computePixelTimeRatio];
     }
 }
+
 
 #pragma mark - VSPlayHeadRulerMarkerDelegate Implementation
 
@@ -215,10 +221,7 @@
         
         NSPoint currentBoundsOrigin = self.scrollView.contentView.bounds.origin;
         currentBoundsOrigin.x = newLocation;
-        
-//        [self.scrollView.contentView setBoundsOrigin:currentBoundsOrigin];
-//        DDLogInfo(@"moved to: %@",NSStringFromPoint(currentBoundsOrigin));
-        //[self.scrollView.contentView scrollPoint:currentBoundsOrigin];
+
     }
 }
 
