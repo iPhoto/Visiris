@@ -237,9 +237,10 @@
 }
 
 -(void) setValue:(id)value forKeyFrame:(VSKeyFrame *)keyFrame{
-    keyFrame.value = value;
+    keyFrame.value = [self changeIfNotInRange:value];;
     self.currentValue = keyFrame.value;
 }
+
 
 -(void) changeKeyFrames:(VSKeyFrame *)keyFrame timestamp:(double)newTimestamp{
     [self.animation changeKeyFrames:keyFrame timestamp:newTimestamp];

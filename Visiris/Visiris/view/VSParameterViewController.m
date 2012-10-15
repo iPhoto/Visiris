@@ -35,6 +35,8 @@
 
 @property (strong) NSMutableArray *parameterValueControls;
 
+@property (assign) bool currentlyEditing;
+
 @end
 
 
@@ -57,7 +59,7 @@ static NSString* defaultNib = @"VSParameterView";
         self.deviceConnectors = [[NSMutableDictionary alloc] init];
         self.availableDevies = [[NSMutableDictionary alloc]init];
         self.parameterValueControls = [[NSMutableArray alloc] init];
-        
+        self.currentlyEditing = NO;
         
         if([self.view isKindOfClass:[VSParameterView class]]){
             ((VSParameterView*) self.view).fillColor = self.color;
@@ -202,7 +204,13 @@ static NSString* defaultNib = @"VSParameterView";
 #pragma mark - NSComboBoxDelegate Implementation
 
 -(void) comboBoxWillDismiss:(NSNotification *)notification{
+    
     [self storeParameterValue];
+    self.currentlyEditing = NO;
+}
+
+-(void) comboBoxWillPopUp:(NSNotification *)notification{
+    self.currentlyEditing = YES;
 }
 
 #pragma mark - IBActions
@@ -220,7 +228,14 @@ static NSString* defaultNib = @"VSParameterView";
 }
 
 - (IBAction)sliderValueHasChanged:(NSSlider *)sender {
+    NSEvent *event = [[NSApplication sharedApplication] currentEvent];
+    
+    self.currentlyEditing = YES;
     [self.textField setFloatValue:sender.floatValue];
+    
+    if(event.type == NSLeftMouseUp){
+        self.currentlyEditing = NO;
+    }
     [self storeParameterValue];
 }
 
@@ -260,7 +275,7 @@ static NSString* defaultNib = @"VSParameterView";
     self.deviceParameterConnectingPopOver  = [[NSPopover alloc] init];
     
     self.deviceParameterConnectingPopOver.contentViewController = self.deviceParameterConnectionPopoverViewController;
-
+    
     self.deviceParameterConnectionPopoverViewController.popover = self.deviceParameterConnectingPopOver;
     
     self.deviceParameterConnectingPopOver.behavior = NSPopoverBehaviorTransient;
@@ -278,6 +293,22 @@ static NSString* defaultNib = @"VSParameterView";
 
 
 #pragma mark - Private Methods
+
+-(BOOL) parameterCurrentlyEdited{
+    if(self.textField){
+        return self.currentlyEditing;// || [self textFieldHasFocus:self.textField];
+    }
+    else{
+        return self.currentlyEditing;
+    }
+}
+
+-(BOOL) textFieldHasFocus:(NSTextField*)textField{
+    if([(id) self.view.window.firstResponder respondsToSelector:@selector(delegate)] && [(id) self.view.window.firstResponder delegate] == textField){
+        return YES;
+    }
+    return NO;
+}
 
 /**
  * Checks if the delegate is able to respond to the given Selector
@@ -418,24 +449,28 @@ static NSString* defaultNib = @"VSParameterView";
 -(void) updateParameterValue{
     [self.nameLabel setStringValue: NSLocalizedString(self.parameter.name, @"")];
     
-    if([self.parameter isKindOfClass:[VSOptionParameter class]]){
-        [self.comboBox selectItemWithObjectValue:((VSOptionParameter*)self.parameter).selectedKey];
-    }
-    else{
-        switch (self.parameter.dataType) {
-            case VSParameterDataTypeBool:
-                [self.checkBox setState:[self buttonStateOfBooleanValue:self.parameter.currentBoolValue]];
-                break;
-            case VSParameterDataTypeFloat:
-                [self.horizontalSlider setFloatValue:self.parameter.currentFloatValue];
-                [self.textField setFloatValue:self.parameter.currentFloatValue];
-                break;
-            case VSParameterDataTypeString:
-                [self.textField setStringValue:self.parameter.currentStringValue];
-                break;
-            default:
-                [self.textField setStringValue:self.parameter.currentStringValue];
-                break;
+    
+    if(![self parameterCurrentlyEdited]){
+        
+        if([self.parameter isKindOfClass:[VSOptionParameter class]]){
+            [self.comboBox selectItemWithObjectValue:((VSOptionParameter*)self.parameter).selectedKey];
+        }
+        else{
+            switch (self.parameter.dataType) {
+                case VSParameterDataTypeBool:
+                    [self.checkBox setState:[self buttonStateOfBooleanValue:self.parameter.currentBoolValue]];
+                    break;
+                case VSParameterDataTypeFloat:
+                    [self.horizontalSlider setFloatValue:self.parameter.currentFloatValue];
+                    [self.textField setFloatValue:self.parameter.currentFloatValue];
+                    break;
+                case VSParameterDataTypeString:
+                    [self.textField setStringValue:self.parameter.currentStringValue];
+                    break;
+                default:
+                    [self.textField setStringValue:self.parameter.currentStringValue];
+                    break;
+            }
         }
     }
 }

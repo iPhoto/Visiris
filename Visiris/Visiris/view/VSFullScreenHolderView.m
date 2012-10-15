@@ -20,12 +20,12 @@
     return self;
 }
 
-//- (void)drawRect:(NSRect)dirtyRect
-//{
-//    [super drawRect:dirtyRect];
-//    [[NSColor purpleColor] setFill];
-//    
-//    NSRectFill(dirtyRect);
-//}
+- (void)drawRect:(NSRect)dirtyRect
+{
+    [super drawRect:dirtyRect];
+    [[NSColor blackColor] setFill];
+    
+    NSRectFill(dirtyRect);
+}
 
 @end
