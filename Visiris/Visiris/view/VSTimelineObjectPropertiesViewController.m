@@ -218,7 +218,6 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 }
 
 -(BOOL) wantToSelectKeyFrame:(VSKeyFrame*) keyFrame ofParamater:(VSParameter *)parameter{
-    self.animationTimelineViewController.playhead.currentTimePosition = [self.timelineObject globalTimestampOfLocalTimestamp:keyFrame.timestamp];
     return YES;
 }
 

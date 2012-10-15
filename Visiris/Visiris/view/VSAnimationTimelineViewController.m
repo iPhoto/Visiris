@@ -127,12 +127,16 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     
     [self scrollIfNewLocationOfPlayheadIsOutsideOfVisibleRect:newPixelPosition];
     
-    self.playhead.currentTimePosition = newTimePosition;
+    [self letPlayheadJumpToTimeposition:newTimePosition];
+}
+
+
+-(void) letPlayheadJumpToTimeposition:(float) timestamp{
+    self.playhead.currentTimePosition = timestamp;
     
     self.playhead.jumping = YES;
     self.playhead.jumping = NO;
 }
-
 
 #pragma mark - VSAnimationTrackViewController
 
@@ -146,9 +150,12 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     }
     
     if(result){
+        
         for(VSAnimationTrackViewController *animationTrackViewController in [self.animationTrackViewControllers allValues]){
             [animationTrackViewController unselectAllKeyFrames];
         }
+        
+        [self letPlayheadJumpToTimeposition: [self.timelineObject globalTimestampOfLocalTimestamp:keyFrameViewController.keyFrame.timestamp]];
     }
     
     return result;
