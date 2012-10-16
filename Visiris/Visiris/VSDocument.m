@@ -31,6 +31,7 @@
 
 @implementation VSDocument
 
+#pragma mark - Init
 
 - (id)init
 {
@@ -105,6 +106,7 @@
 
 }
 
+#pragma mark - NSDocument
 
 + (BOOL)autosavesInPlace
 {
@@ -134,6 +136,8 @@
     DDLogError(@"%@",url);
     return YES;
 }
+
+#pragma mark - Methods
 
 -(BOOL) addFileToProject:(NSString*) fileName{
     return [self.projectItemController addNewProjectItemFromFile:fileName];

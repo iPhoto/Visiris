@@ -122,8 +122,6 @@ static VSProjectItemRepresentationController* sharedProjectItemController = nil;
     NSMutableDictionary *currentTemporaryProjectItems = [NSMutableDictionary dictionaryWithDictionary:self.temporaryCreatedProjectItems];
     
     [self.temporaryCreatedProjectItems removeAllObjects];
-    
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
 
     for(NSString *fileName in filePaths){
         
