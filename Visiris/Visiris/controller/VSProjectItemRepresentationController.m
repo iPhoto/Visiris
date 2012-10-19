@@ -103,7 +103,7 @@
     NSMutableDictionary *currentTemporaryProjectItems = [NSMutableDictionary dictionaryWithDictionary:self.temporaryCreatedProjectItems];
     
     [self.temporaryCreatedProjectItems removeAllObjects];
-
+    
     for(NSString *fileName in filePaths){
         
 
