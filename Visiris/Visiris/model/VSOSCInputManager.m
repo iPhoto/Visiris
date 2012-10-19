@@ -16,7 +16,9 @@
 #import "VSOSCClient.h"
 #import "VSOSCPort.h"
 #import "VSOSCMessage.h"
-#import "VSOSCAddress.h"
+#import "VSOSCInput.h"
+
+#import "VSExternalInput.h"
 
 #import <VisirisCore/VSReferenceCounting.h>
 
@@ -187,11 +189,11 @@
         }
         while (![currentOSCClient isBinded]);
         
-        NSLog(@"Start observing Port: %d",newPort);
+//        NSLog(@"Start observing Port: %d",newPort);
         
         [currentOSCClient startObserving];
     }
-    [self printDebugLog];
+//    [self printDebugLog];
 }
 
 - (unsigned int)getNextAvailableOSCPort
@@ -209,7 +211,14 @@
 {
     /* define return format of available input ports with addresses */
     
-    return nil;
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    
+    for (VSOSCPort *port in [self.discoveredPorts allValues])
+    {
+        [array addObjectsFromArray:port.addresses];
+    }
+    
+    return array;
 }
 
 - (BOOL)startInputForAddress:(NSString *)address atPort:(unsigned int)port
@@ -303,7 +312,7 @@
             
             
             NSMutableArray *outdatedAddress = [NSMutableArray array];
-            for (VSOSCAddress *address in currentPort.addresses) {
+            for (VSOSCInput *address in currentPort.addresses) {
                 NSTimeInterval difference = now - address.lastReceivedAddressTimestamp;
                 if ( difference > kVSOSC_unusedPortLifetime ) {
                     [outdatedAddress addObject:address];
@@ -313,11 +322,14 @@
             [currentPort.addresses removeObjectsInArray:outdatedAddress];
 
             if ( 0 == currentPort.addresses.count ) {
-                [outdatedPorts addObject:currentPort];
+                [outdatedPorts addObject:[NSNumber numberWithUnsignedInt:currentPort.port]];
             }
         }
         
-        [refSelf.discoveredPorts removeObjectsForKeys:outdatedPorts];
+//        refSelf.discoveredPorts removeObjectsForKeys:<#(NSArray *)#>
+        if (outdatedPorts.count > 0) {
+            [refSelf.discoveredPorts removeObjectsForKeys:outdatedPorts];
+        }
 //        NSLog(@"active ports: %@", refSelf.activePorts);
     };
 }
@@ -399,12 +411,22 @@
     else
     {
         port.lastMessageReceivedTimestamp = discoveredPort.lastMessageReceivedTimestamp;
+           
+        VSOSCInput *address = [discoveredPort.addresses objectAtIndex:0];
+                
+        BOOL containsAddress = NO;
         
+        for (VSOSCInput *tempAddress in port.addresses)
+        {
+            if ([tempAddress.address isEqualToString:address.address])
+            {
+                tempAddress.lastReceivedAddressTimestamp = address.lastReceivedAddressTimestamp;
+                containsAddress = YES;
+            }
+        }
         
-        VSOSCAddress *address = [discoveredPort.addresses objectAtIndex:0];        
-        
-        if ( ![port.addresses containsObject:address] ) {
-            
+        if (containsAddress == NO)
+        {
             [port addAddress:address];
         }
     }
@@ -439,17 +461,24 @@
 - (void)printDebugLog
 {
     NSLog(@"===PRINT DEBUG LOG===");
-    NSLog(@"activeOSCClients");
-    for (id key in self.activeOSCClients) {
-        NSLog(@"key: %@, value: %@", key, [self.activeOSCClients objectForKey:key]);
+    
+    if ([self.activeOSCClients count] > 0) {
+        NSLog(@"+++Active OSCClients");
+        for (id key in self.activeOSCClients) {
+            NSLog(@"key: %@, value: %@", key, [self.activeOSCClients objectForKey:key]);
+        }
     }
     
-    NSLog(@"availablePorts");
     
-    for (VSOSCPort *port in [self.discoveredPorts allValues]) {
-//        NSLog(@"key: %@, value: %@", key, [self.activeOSCClients objectForKey:key]);
-        NSLog(@"Port: %@",port);
+    if ([self.discoveredPorts count] > 0) {
+        NSLog(@"+++Discovered Ports");
+        
+        for (VSOSCPort *port in [self.discoveredPorts allValues]) {
+            NSLog(@"%@",port);
+        }
     }
+    
+    NSLog(@"====================");
 }
 
 @end

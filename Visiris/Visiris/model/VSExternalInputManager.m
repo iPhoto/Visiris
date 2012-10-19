@@ -19,8 +19,6 @@
 
 @property (strong) NSMutableDictionary                              *currentActiveValues;
 
-//@property (strong) VSReferenceCounting                              *activeValueReferenceCount;
-
 @end
 
 
@@ -35,18 +33,18 @@
         
         self.availableInputManager = [[NSMutableDictionary alloc] init];
         
-//        self.activeValueReferenceCount = [[VSReferenceCounting alloc] init];
         
         self.currentActiveValues = [[NSMutableDictionary alloc] init];
         
         [self registerExternalInputManager];
         
         // TODO: move next line to somewhere usefull (start observing inputs after window did finish loading and app is running in idle mode)
-//        [self startObservingInputs];
+        [self startObservingInputs];
     }
     
     return self;
 }
+
 
 #pragma mark - Methods
 
@@ -124,9 +122,7 @@
     BOOL isValueForAddressOnPortRegistered = NO;
     
     if (parameterAddress) {
-        
-//        [self.activeValueReferenceCount incrementReferenceOfKey:parameterAddress];
-        
+                
         [self.currentActiveValues setObject:parameterInvocation forKey:[NSString stringFromAddress:parameterAddress atPort:(unsigned int)port]];
         
         id<VSExternalInputProtocol> inputManager = [self.availableInputManager objectForKey:kVSInputManager_OSC];
@@ -146,15 +142,12 @@
     
     if (parameterAddress) {
         
-//        BOOL isAddressStillActive = [self.activeValueReferenceCount decrementReferenceOfKey:parameterAddress];
-//        if (!isAddressStillActive) {
         
             [self.currentActiveValues removeObjectForKey:[NSString stringFromAddress:parameterAddress atPort:(unsigned int)port]];
             
             // delete input of specific inputManager
             id<VSExternalInputProtocol> inputManager = [self.availableInputManager objectForKey:kVSInputManager_OSC];
             isValueForAddressOnPortUnregistered = [inputManager stopInputForAddress:parameterAddress atPort:(unsigned int)port];
-//        }
     }
     
     DDLogInfo(@"availableParam: %@",self.currentActiveValues);

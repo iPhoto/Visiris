@@ -7,18 +7,18 @@
 //
 
 #import "VSOSCPort.h"
-#import "VSOSCAddress.h"
+#import "VSOSCInput.h"
 
 @implementation VSOSCPort
 
 
-+ (VSOSCPort *)portWithPort:(unsigned int)port address:(VSOSCAddress *)address atTimestamp:(double)timestamp
++ (VSOSCPort *)portWithPort:(unsigned int)port address:(VSOSCInput *)address atTimestamp:(double)timestamp
 {
     return [[VSOSCPort alloc] initWithPort:port address:address atTimestamp:timestamp];
 }
 
 
-- (id)initWithPort:(unsigned int)port address:(VSOSCAddress *)address atTimestamp:(double)timestamp
+- (id)initWithPort:(unsigned int)port address:(VSOSCInput *)address atTimestamp:(double)timestamp
 {
     self = [super init];
     if (self)
@@ -38,7 +38,7 @@
 }
 
 
-- (void)addAddress:(VSOSCAddress *)address
+- (void)addAddress:(VSOSCInput *)address
 {
     if (address) {
         [self.addresses addObject:address];

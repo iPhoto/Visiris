@@ -123,8 +123,6 @@ static VSProjectItemRepresentationController* sharedProjectItemController = nil;
     
     [self.temporaryCreatedProjectItems removeAllObjects];
     
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-
     for(NSString *fileName in filePaths){
         
 

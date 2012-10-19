@@ -12,12 +12,17 @@
 #import "VSOSCClientPortListener.h"
 
 
-typedef NS_ENUM(NSUInteger, VSOSCClientType)
+//typedef NS_ENUM(NSUInteger, VSOSCClientType)
+//{
+//    VSOSCClientPortSniffer,
+//    VSOSCClientActiveReceiver
+//};
+
+typedef enum
 {
     VSOSCClientPortSniffer,
     VSOSCClientActiveReceiver
-};
-
+}VSOSCClientType;
 
 @class VSOSCInputManager;
 @interface VSOSCClient : NSObject

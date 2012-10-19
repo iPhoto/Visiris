@@ -293,7 +293,7 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
             animationTrackViewController.delegate = self;
             
             [self.animationTrackViewControllers setObject:animationTrackViewController
-                                        forKeyedSubscript:[NSNumber numberWithInteger:parameter.ID]];
+                                        forKey:[NSNumber numberWithInteger:parameter.ID]];
             
             [animationTrackViewController.view setFrame:trackRect];
             

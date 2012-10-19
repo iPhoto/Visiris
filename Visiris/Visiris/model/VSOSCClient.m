@@ -11,7 +11,9 @@
 
 #import "VSOSCPort.h"
 #import "VSOSCMessage.h"
-#import "VSOSCAddress.h"
+#import "VSOSCInput.h"
+#import "VSDeviceType.h"
+
 
 @interface VSOSCClient ()
 {
@@ -74,7 +76,7 @@
             
         case VSOSCClientPortSniffer:
         {
-            [self signalDelegateThatClientDiscoveredActivePortWithAddress:message.address];
+            [self signalDelegateThatClientDiscoveredActivePortWithMessage:message];
         }
         break;
             
@@ -94,15 +96,22 @@
     }
 }
 
-- (void)signalDelegateThatClientDiscoveredActivePortWithAddress:(NSString *)address
+- (void)signalDelegateThatClientDiscoveredActivePortWithMessage:(OSCMessage *)message
 {
-    if (address)
+    if (message)
     {
         if (self.delegate)
         {
             if ([self.delegate respondsToSelector:@selector(oscClient:didDiscoveredActivePort:)])
             {
-                [self.delegate oscClient:self didDiscoveredActivePort:[VSOSCPort portWithPort:_port address:[VSOSCAddress addressWithAddress:address timeStamp:[NSDate timeIntervalSinceReferenceDate]] atTimestamp:[NSDate timeIntervalSinceReferenceDate]]];
+                [self.delegate oscClient:self
+                 didDiscoveredActivePort:[VSOSCPort portWithPort:_port
+                                                         address:[VSOSCInput inputWithAddress:message.address
+                                                                                    timeStamp:[NSDate timeIntervalSinceReferenceDate]
+                                                                                     withPort:self.port
+                                                                                   deviceType:VSOSCDEVICE
+                                                                             andParameterType:message.messageType]
+                                                     atTimestamp:[NSDate timeIntervalSinceReferenceDate]]];
             }
         }
     }

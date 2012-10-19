@@ -51,6 +51,6 @@
 #import "NSImage+QuickLook.h"
 #import "NSString+VSOSCUniqueAddress.h"
 #import "NSColor+VSColor.h"
-
+#import "NSColor+CGColorSupport.h"
 
 #endif

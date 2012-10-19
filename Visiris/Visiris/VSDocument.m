@@ -102,7 +102,7 @@
     
     self.deviceManager = [[VSDeviceManager alloc] init];
     self.deviceManager.deviceRegisitratingDelegate = self.externalInputManager;
-
+    self.deviceManager.externalInputManager = self.externalInputManager;
 }
 
 

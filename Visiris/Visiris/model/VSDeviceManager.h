@@ -17,9 +17,12 @@
 
 @end
 
+#import "VSExternalInputManager.h"
+
 
 @class VSDevice;
 @class VSDeviceRepresentation;
+@class VSExternalInputManager;
 /**
  * VSDeviceManager manages all VSDevices and provides them with values for their parameters
  */
@@ -32,6 +35,8 @@
 
 @property (weak) id<VSDeviceParameterRegistrationDelegate> deviceRegisitratingDelegate;
 
+@property (weak) VSExternalInputManager *externalInputManager;
+
 -(VSDeviceRepresentation*) objectInDeviceRepresentationsAtIndex:(NSUInteger)index;
 
 -(VSDevice*)objectInDevicesAtIndex:(NSUInteger)index;
@@ -41,5 +46,7 @@
 -(NSUInteger)numberOfDevices;
 
 -(VSDevice*) deviceRepresentedBy:(VSDeviceRepresentation*) deviceRepresentation;
+
+- (NSArray *)availableInputs;
 
 @end

@@ -1,0 +1,61 @@
+//
+//  VSOSCAddress.m
+//  Visiris
+//
+//  Created by Edwin Guggenbichler on 10/11/12.
+//
+//
+
+#import "VSOSCInput.h"
+
+@implementation VSOSCInput
+
+@synthesize identifier = _identifier;
+@synthesize parameterType   = _parameterType;
+
++ (VSOSCInput *)inputWithAddress:(NSString *)address timeStamp:(NSTimeInterval)timeStamp withPort:(unsigned short)port deviceType:(VSDeviceType)deviceType andParameterType:(OSCValueType)parameterType
+{
+    return [[VSOSCInput alloc] initWithAddress:address timeStamp:timeStamp withPort:port deviceType:(VSDeviceType)deviceType andParameterType:parameterType];
+}
+
+- (id)initWithAddress:(NSString *)address timeStamp:(NSTimeInterval)timeStamp withPort:(unsigned short)port deviceType:(VSDeviceType)deviceType andParameterType:(OSCValueType)parameterType
+{
+    self = [super init];
+    if (self) {
+        self.address = address;
+        self.lastReceivedAddressTimestamp = timeStamp;
+        self.port = port;
+        self.deviceType = deviceType;
+        self.oscParameterType = parameterType;
+    }
+    
+    return self;
+}
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"OSCAddress: %@ with timeStamp: %f", self.address, self.lastReceivedAddressTimestamp];
+}
+
+- (void)setIdentifier:(NSString *)identifier
+{
+    _identifier = identifier;
+}
+
+- (NSString *)identifier
+{
+    return [NSString stringFromAddress:self.address atPort:self.port];
+}
+
+- (void)setParameterType:(NSString *)parameterType
+{
+    _parameterType = parameterType;
+}
+
+- (NSString *)parameterType
+{
+    return [VSDeviceParameterUtils nameForOSCType:self.oscParameterType];
+}
+
+
+@end

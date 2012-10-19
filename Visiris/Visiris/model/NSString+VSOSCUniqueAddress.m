@@ -12,7 +12,7 @@
 
 + (NSString *)stringFromAddress:(NSString *)address atPort:(unsigned int)port
 {
-    return [NSString stringWithFormat:@"%i-%@", port, address];
+    return [NSString stringWithFormat:@"%@:%i", address, port];
 }
 
 @end

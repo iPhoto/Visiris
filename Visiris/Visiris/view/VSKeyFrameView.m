@@ -9,6 +9,7 @@
 #import "VSKeyFrameView.h"
 
 #import <QuartzCore/QuartzCore.h>
+#import "VSCoreServices.h"
 
 @interface VSKeyFrameView()
 

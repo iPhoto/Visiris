@@ -38,8 +38,6 @@ static NSURL* devicesFolderURL;
     
     NSString *visirisFolderName = [[NSBundle mainBundle] objectForInfoDictionaryKey: (NSString*) kCFBundleNameKey];
     
-    
-    
     devicesFolder = [NSString stringWithFormat:@"%@/%@/devices",applicationSupportFolder,visirisFolderName];
     devicesFolderURL = [NSURL fileURLWithPath:devicesFolder];
     NSError *error;
@@ -231,5 +229,11 @@ static NSURL* devicesFolderURL;
     }
     return NO;
 }
+
+- (NSArray *)availableInputs
+{
+    return [self.externalInputManager availableInputs];
+}
+
 
 @end
