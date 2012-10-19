@@ -42,7 +42,7 @@
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder{
-
+    
 }
 
 - (double)valueForTime:(double)time withBeginTime:(double)beginTime toEndTime:(double)endTime withStartValue:(double)startValue toEndValue:(double)endValue

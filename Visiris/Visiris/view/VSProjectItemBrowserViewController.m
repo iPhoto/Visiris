@@ -41,17 +41,15 @@
 @implementation VSProjectItemBrowserViewController
 
 
-@synthesize tvwProjectItmes = _tvwProjectItmes;
-@synthesize projectItemRepresentationController = _projectItemRepresentationController;
-@synthesize projectItemController = _projectItemController;
-
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
 static NSString* defaultNib = @"VSProjectItemBrowserView";
 
 #pragma mark - Init
 
--(id) initWithDefaultNib{
+-(id) initWithDefaultNibProjectItemController:(VSProjectItemController*) projectItemController andProjectItemRepresentationController:(VSProjectItemRepresentationController *)projectItemRepresentationController{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
+        self.projectItemController = projectItemController;
+        self.projectItemRepresentationController = projectItemRepresentationController;
     }
     
     return self;
@@ -61,11 +59,7 @@ static NSString* defaultNib = @"VSProjectItemBrowserView";
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.projectItemRepresentationController = [VSProjectItemRepresentationController sharedManager];
-        
         [self.projectItemRepresentationController addObserver:self forKeyPath:@"projectItemRepresentations" options:0 context:nil];
-        
-        self.projectItemController =[VSProjectItemController sharedManager];
     }
     return self;
 }

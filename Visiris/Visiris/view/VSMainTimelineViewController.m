@@ -75,9 +75,11 @@ static NSString* defaultNib = @"VSMainTimelineView";
     return self;
 }
 
--(id) initWithDefaultNibAccordingForTimeline:(VSTimeline*)timeline{
+-(id) initWithDefaultNibAccordingForTimeline:(VSTimeline*)timeline projectItemController:(VSProjectItemController*) projectItemController andProjectionItemRepresentationController:(VSProjectItemRepresentationController*) projectItemRepresentationController{
     if(self = [self initWithDefaultNib]){
         self.timeline = timeline;
+        self.projectItemController = projectItemController;
+        self.projectItemRepresentationController = projectItemRepresentationController;
     }
     return self;
 }
@@ -96,10 +98,6 @@ static NSString* defaultNib = @"VSMainTimelineView";
     if([self.view isKindOfClass:[VSMainTimelineView class]]){
         ((VSMainTimelineView*) self.view).mouseMoveDelegate = self;
     }
-    
-    self.projectItemController = [VSProjectItemController sharedManager];
-    
-    self.projectItemRepresentationController = [VSProjectItemRepresentationController sharedManager];
     
     self.temporaryCreatedProjectItems = [[NSMutableDictionary alloc] init];
     

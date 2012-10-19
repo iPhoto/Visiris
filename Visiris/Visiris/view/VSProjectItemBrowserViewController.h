@@ -8,6 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class VSProjectItemController;
+@class VSProjectItemRepresentationController;
+
 /**
  * Responsible for Displaying the files available in the current Visirs-Project.
  *
@@ -23,6 +26,6 @@
 /**
  * Inits the controller with the .nib-File stored in defaultNib (VSBrowserView)
  */
--(id) initWithDefaultNib;
+-(id) initWithDefaultNibProjectItemController:(VSProjectItemController*) projectItemController andProjectItemRepresentationController:(VSProjectItemRepresentationController *)projectItemRepresentationController;
 
 @end

@@ -8,9 +8,12 @@
 
 #import "VSBrowserViewController.h"
 
-// ContentViews
 #import "VSProjectItemBrowserViewController.h"
 #import "VSDeviceConfigurationViewController.h"
+#import "VSProjectItemController.h"
+#import "VSProjectItemRepresentationController.h"
+
+#import "VSCoreServices.h"
 
 
 @interface VSBrowserViewController ()
@@ -22,6 +25,12 @@
 
 /** List of all ViewControllers which views are displayed as subivews of the browserView */
 @property (strong) NSMutableDictionary *subViewControllers;
+
+@property (weak) VSProjectItemController *projectItemController;
+
+@property (weak) VSProjectItemRepresentationController *projectItemRepresentationController;
+
+
 @end
 
 @implementation VSBrowserViewController
@@ -36,9 +45,10 @@ static NSString* defaultNib = @"VSBrowserView";
 
 #pragma mark - Init
 
--(id) initWithDefaultNib{
+-(id) initWithDefaultNibProjectItemController:(VSProjectItemController *)projectItemController andProjectItemRepresentationController:(VSProjectItemRepresentationController *)projectItemRepresentationController{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
-        
+        self.projectItemRepresentationController = projectItemRepresentationController;
+        self.projectItemController = projectItemController;
     }
     
     return self;
@@ -85,12 +95,15 @@ static NSString* defaultNib = @"VSBrowserView";
     self.subViewControllers = [[NSMutableDictionary alloc] initWithCapacity:3];
     
     // project item browser
-    self.projectItemBrowserViewController = [[VSProjectItemBrowserViewController alloc] initWithDefaultNib];
-    [self.subViewControllers setObject:self.projectItemBrowserViewController forKey:[NSNumber numberWithInt:0]];
+    self.projectItemBrowserViewController = [[VSProjectItemBrowserViewController alloc] initWithDefaultNibProjectItemController:self.projectItemController andProjectItemRepresentationController:self.projectItemRepresentationController];
+    
+    [self.subViewControllers setObject:self.projectItemBrowserViewController
+                                forKey:[NSNumber numberWithInt:0]];
     
     // device configuration editor
     self.deviceConfigurationViewController = [[VSDeviceConfigurationViewController alloc] initWithDefaultNib];
-    [self.subViewControllers setObject:self.deviceConfigurationViewController forKey:[NSNumber numberWithInt:2]];
+    [self.subViewControllers setObject:self.deviceConfigurationViewController
+                                forKey:[NSNumber numberWithInt:2]];
     
     
 }

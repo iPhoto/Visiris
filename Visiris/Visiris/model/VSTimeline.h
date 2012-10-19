@@ -41,6 +41,8 @@
 @end
 
 
+@class VSProjectItemController;
+
 /**
  * Timeline Model Object
  *
@@ -62,13 +64,18 @@
 /** PlayHead of the timeline. */
 @property (strong) VSPlayHead *playHead;
 
+/** Reference of the Singleton of VSProjectItemController. Used to get the ProjectItem corresponding to its VSProjectItem representation */
+@property VSProjectItemController *projectItemController;
+
 #pragma mark - Init
 
 /**
  * Inits a new timeline with the given duration.
  * @param duration Duration the timeline will be init with.
  */
--(id) initWithDuration:(float) duration;
+-(id) initWithDuration:(float) duration andProjectItemController:(VSProjectItemController*) projectItemController;
+
+-(id) initWithProjectItemController:(VSProjectItemController*) projectItemController;
 
 /**
  * Adds a new track to the timeline and inits it with the given values

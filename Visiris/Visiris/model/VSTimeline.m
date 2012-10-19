@@ -30,8 +30,7 @@
 /** Reference of the Singleton of the timeline object factory. The Factory creates new TimelineObject according to the information stored in their corresponding ProjectItems */
 @property VSTimelineObjectFactory* timelineObjectFactory;
 
-/** Reference of the Singleton of VSProjectItemController. Used to get the ProjectItem corresponding to its VSProjectItem representation */
-@property VSProjectItemController *projectItemController;
+
 
 /** Stores the last assigned track id*/
 @property NSInteger lastTrackID;
@@ -54,9 +53,21 @@
 #define kTimelineObjectsDelegate @"TimelineObjectsDelegate"
 #define kPlayHead @"PlayHead"
 
--(id) initWithDuration:(float) duration{
-    if(self = [self init]){
+-(id) initWithDuration:(float) duration andProjectItemController:(VSProjectItemController *)projectItemController{
+    if(self = [self initWithProjectItemController:projectItemController]){
         self.duration = duration;
+    }
+    
+    return self;
+}
+
+-(id) initWithProjectItemController:(VSProjectItemController*) projectItemController{
+    if(self = [self init]){
+        self.timelineObjectFactory = [VSTimelineObjectFactory sharedFactory];
+        self.projectItemController = projectItemController;
+        self.tracks = [[NSMutableArray alloc] init];
+        
+        [self initPlayHead];
     }
     
     return self;
@@ -65,10 +76,6 @@
 -(id) init{
     if(self = [super init]){
         self.timelineObjectFactory = [VSTimelineObjectFactory sharedFactory];
-        self.projectItemController = [VSProjectItemController sharedManager];
-        self.tracks = [[NSMutableArray alloc] init];
-        
-        [self initPlayHead];
     }
     
     return self;

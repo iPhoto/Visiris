@@ -16,6 +16,8 @@
 @class VSDeviceManager;
 @class VSExternalInputManager;
 @class VSOutputController;
+@class VSProjectItemController;
+@class VSProjectItemRepresentationController;
 
 
 
@@ -42,6 +44,9 @@
 @property (strong) VSDeviceManager *deviceManager;
  
 @property (strong) VSExternalInputManager *externalInputManager;
+
+@property (strong) VSProjectItemController *projectItemController;
+@property (strong) VSProjectItemRepresentationController *projectItemRepresentationController;
 
 -(BOOL) addFileToProject:(NSString*) fileName;
 

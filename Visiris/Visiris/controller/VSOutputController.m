@@ -28,10 +28,6 @@
 @synthesize fullScreenSize  = _fullScreenSize;
 @synthesize previewSize     = _previewSize;
 
-static VSOutputController* sharedOutputController = nil;
-
-
-
 #pragma mark - Init
 
 -(id) initWithOpenGLContext:(NSOpenGLContext*) openGLContext{

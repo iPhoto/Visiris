@@ -77,9 +77,16 @@
 #pragma mark - Methods
 
 -(BOOL) addTimelineObject:(VSTimelineObject *)timelineObject{
-    DDLogInfo(@"observers: %@",self.observationInfo);
-    [self.timelineObjects addObject:timelineObject];
-    return YES;
+    if(!timelineObject){
+        DDLogError(@"TimelineObject is null");
+        return NO;
+    }
+    else{
+        
+        DDLogInfo(@"observers: %@",self.observationInfo);
+        [self.timelineObjects addObject:timelineObject];
+        return YES;
+    }
 }
 
 -(void) addTimelineObjectsObject:(NSArray *)object{

@@ -19,6 +19,8 @@
 @class VSTimelineRulerView;
 @class VSMainTimelineScrollViewDocumentView;
 @class VSMainTimelineScrollView;
+@class VSProjectItemController;
+@class VSProjectItemRepresentationController;
 
 /**
  * Subclass of NSViewController responsible for displaying a VSTimeline.
@@ -49,6 +51,6 @@
  * @param timeline The VSTimeline the VSTimelineViewController represents
  * @return self
  */
--(id) initWithDefaultNibAccordingForTimeline:(VSTimeline*)timeline;
+-(id) initWithDefaultNibAccordingForTimeline:(VSTimeline*)timeline projectItemController:(VSProjectItemController*) projectItemController andProjectionItemRepresentationController:(VSProjectItemRepresentationController*) projectItemRepresentationController;
 
 @end

@@ -25,13 +25,11 @@
 @synthesize projectItemRepresentations =_projectItemRepresentations;
 @synthesize projectItemController = _projectItemController;
 
-static VSProjectItemRepresentationController* sharedProjectItemController = nil;
-
 #pragma mark- Init
 
--(id) init{
+-(id) initForProjectItemController:(VSProjectItemController*) projectItemController{
     if(self = [super init]){
-        self.projectItemController = [VSProjectItemController sharedManager];
+        self.projectItemController = projectItemController;
         _projectItemRepresentations = [NSMutableArray arrayWithCapacity:0];
         self.temporaryCreatedProjectItems = [[NSMutableDictionary alloc] init];
         
@@ -66,23 +64,6 @@ static VSProjectItemRepresentationController* sharedProjectItemController = nil;
         }
     }
 }
-
-
-
-#pragma mark- Functions
-
-+(VSProjectItemRepresentationController*)sharedManager{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        
-        sharedProjectItemController = [[VSProjectItemRepresentationController alloc] init];
-        
-    });
-    
-    return sharedProjectItemController;
-}
-
-
 
 
 #pragma mark - Methods

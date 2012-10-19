@@ -8,6 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class VSProjectItemController;
+@class VSProjectItemRepresentationController;
+
+
 /**
  * Controls the browserView and all its subViews e.g.: ProjectItem-Browser, Files-Browser, Element-Browser 
  */
@@ -33,6 +37,6 @@
 /**
  * Inits the controller with the .nib-File stored in defaultNib (VSBrowserView)
  */
--(id) initWithDefaultNib;
+-(id) initWithDefaultNibProjectItemController:(VSProjectItemController*) projectItemController andProjectItemRepresentationController:(VSProjectItemRepresentationController*) projectItemRepresentationController;
 
 @end

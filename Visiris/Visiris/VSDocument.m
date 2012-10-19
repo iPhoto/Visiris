@@ -10,6 +10,7 @@
 
 #import "VSMainWindowController.h"
 #import "VSProjectItemController.h"
+#import "VSProjectItemRepresentationController.h"
 #import "VSTimeline.h"
 #import "VSTrack.h"
 #import "VSTimelineObject.h"
@@ -26,7 +27,7 @@
 @interface VSDocument()
 
 @property (strong) VSMainWindowController *mainWindowController;
-@property VSProjectItemController *projectItemController;
+
 
 
 @end
@@ -41,7 +42,8 @@
 {
     self = [super init];
     if (self) {
-        self.projectItemController = [VSProjectItemController sharedManager];
+        self.projectItemController = [[VSProjectItemController alloc] init];
+        self.projectItemRepresentationController = [[VSProjectItemRepresentationController alloc]initForProjectItemController:self.projectItemController];
     }
     return self;
 }
@@ -55,7 +57,8 @@
             //TODO: where to create the timeline?
             
             //** Creates a new timeline an sets its duratio to the DefaultDuration */
-            self.timeline = [[VSTimeline alloc] initWithDuration:VSTimelineDefaultDuration];
+            self.timeline = [[VSTimeline alloc] initWithDuration:VSTimelineDefaultDuration
+                                        andProjectItemController:self.projectItemController];
             
             //** Adding 2 new VisualTracks to the timeline
             for(int i = 0; i<6; i++){
@@ -90,6 +93,7 @@
  * Does the base initialisation of the application.
  */
 -(void) initVisiris{
+    
     
     self.preProcessor = [[VSPreProcessor alloc] initWithTimeline:self.timeline];
     
@@ -166,9 +170,9 @@
 
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError
 {
-
+    
     BOOL result = NO;
-
+    
     // we only recognize one data type.  It is a programming error to call this method with any other typeName
     assert([typeName isEqualToString:VSVisirsUTI]);
     
@@ -179,12 +183,17 @@
                                                                         errorDescription:&errorString];
     
     if (documentDictionary) {
-
+        
         
         self.timeline = [NSKeyedUnarchiver unarchiveObjectWithData:[documentDictionary objectForKey:kTimeline]];
-
         
-        [self initVisiris];
+        if(self.timeline){
+            self.projectItemController = [[VSProjectItemController alloc] init];
+            self.projectItemRepresentationController = [[VSProjectItemRepresentationController alloc]initForProjectItemController:self.projectItemController];
+            self.timeline.projectItemController = self.projectItemController;
+            
+            [self initVisiris];
+        }
         
         result = YES;
     } else {
