@@ -296,7 +296,7 @@ static NSString* defaultNib = @"VSParameterView";
 
 -(BOOL) parameterCurrentlyEdited{
     if(self.textField){
-        return self.currentlyEditing;// || [self textFieldHasFocus:self.textField];
+        return self.currentlyEditing || [self textFieldHasFocus:self.textField];
     }
     else{
         return self.currentlyEditing;
