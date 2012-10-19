@@ -10,8 +10,11 @@
 
 #import "VSTimelineScrollView.h"
 #import "VSPlayHead.h"
+#import "VSDocumentController.h"
+#import "VSDocument.h"
 
 #import "VSCoreServices.h"
+
 
 @interface VSTimelineViewController ()
 
@@ -45,7 +48,7 @@
 }
 
 -(void) dealloc{
-//    DDLogInfo(@"dealloc");
+    //    DDLogInfo(@"dealloc");
 }
 
 /**
@@ -65,14 +68,21 @@
         
         switch (keyCode) {
             case 32:
-                [[NSNotificationCenter defaultCenter] postNotificationName:VSPlayKeyWasPressed object:nil];
+            {
+                NSDictionary *userInfo = [NSDictionary dictionaryWithObject: [VSDocumentController documentOfView:self.view]
+                                                                     forKey:VSSendersDocumentKeyInUserInfoDictionary];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:VSPlayKeyWasPressed
+                                                                    object:nil
+                                                                  userInfo:userInfo];
                 break;
+            }
             default:
                 [self interpretKeyEvents:[NSArray arrayWithObject:theEvent]];
                 break;
         }
     }
-
+    
 }
 
 
@@ -221,7 +231,7 @@
         
         NSPoint currentBoundsOrigin = self.scrollView.contentView.bounds.origin;
         currentBoundsOrigin.x = newLocation;
-
+        
     }
 }
 

@@ -14,7 +14,7 @@
 @property (strong) NSOpenGLPixelFormat      *pixelFormat;
 @property (assign) GLuint                   texture;
 
-- (void)setOpenGLWithSharedContext:(NSOpenGLContext *)openGLContext;
+- (void)setOpenGLWithSharedContext:(NSOpenGLContext *)openGLContext andPixelFrom:(NSOpenGLPixelFormat*) pixelFormat;
 - (void)drawView;
 
 @end

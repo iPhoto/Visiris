@@ -22,16 +22,23 @@
 #import "VisirisCore/VSAudioCoreHandover.h"
 #import "VisirisCore/VSVideoCoreHandover.h"
 #import "VSDevice.h"
+#import "VSTimelineObjectFactory.h"
 
 #import "VSCoreServices.h"
 
 @interface VSTimelineObject()
 
 
-
 @end
 
 @implementation VSTimelineObject
+
+
+#define kSourceObject @"SourceObject"
+#define kSupplier @"Supplier"
+#define kDevices @"Devices"
+#define kProjectItem @"ProjectItem"
+#define kParameters @"Parameters"
 
 @synthesize devices = _devices;
 
@@ -55,16 +62,62 @@
     return self;
 }
 
-- (void)dealloc
-{
-    DDLogInfo(@"dealloc");
+#pragma mark - NSCoding Implementation
+
+-(void) encodeWithCoder:(NSCoder *)aCoder{
+    [super encodeWithCoder:aCoder];
+    [aCoder encodeObject:self.sourceObject.projectItem forKey:kProjectItem];
+    [aCoder encodeObject:self.sourceObject.parameters forKey:kParameters];
 }
 
+-(id) initWithCoder:(NSCoder *)aDecoder{
+    VSTimelineObjectProxy *base =  [super initWithCoder:aDecoder];
+    
+    VSProjectItem *projectItem = [aDecoder decodeObjectForKey:kProjectItem];
+    
+    self = [[VSTimelineObjectFactory sharedFactory] createTimelineObjectForProjectItem:projectItem];
+    
+    if(self)
+    {
+        self.startTime = base.startTime;
+        self.duration = [VSFileUtils durationInMillisecondsOfFile:self.filePath];
+        self.name = base.name;
+        self.icon = [VSFileImageCreator createIconForTimelineObject:self.filePath];
+        NSDictionary *parameters = [NSDictionary dictionaryWithDictionary:[aDecoder decodeObjectForKey:kParameters]];
+        
+        for(id key in parameters){
+            id object = [parameters objectForKey:key];
+            
+            if([object isKindOfClass:[VSParameter class]]){
+                VSParameter *archivedParameter = (VSParameter*) object;
+                VSParameter *parameter = [self.sourceObject.parameters objectForKey:key];
+
+                parameter.animation = archivedParameter.animation;
+                parameter.defaultValue = archivedParameter.defaultValue;
+            }
+            else if([object isKindOfClass:[NSDictionary class]]){
+                NSDictionary *archivedParameters = (NSDictionary*) parameters;
+                NSDictionary *storedParameters = [self.sourceObject.parameters objectForKey:key];
+                
+                for(id key in storedParameters){
+                    VSParameter *archivedParameter =[archivedParameters objectForKey:key];
+                    VSParameter *parameter = [storedParameters objectForKey:key];
+                    
+                    parameter.animation = archivedParameter.animation;
+                    parameter.defaultValue = archivedParameter.defaultValue;
+                }
+            }
+            
+        }
+    }
+    
+    return self;
+}
 
 #pragma mark - NSCopying Implementation
 
 -(id) copyWithZone:(NSZone *)zone{
-//    VSTimelineObjectProxy *superCopy = [super copyWithZone:zone];
+    //    VSTimelineObjectProxy *superCopy = [super copyWithZone:zone];
     
     VSTimelineObject *copy = [[VSTimelineObject alloc] initWithSourceObject:self.sourceObject
                                                                        icon:self.icon objectID:self.timelineObjectID
@@ -78,7 +131,7 @@
         copy.duration = self.duration;
         copy.selected = self.selected;
         
-
+        
     }
     
     return copy;
@@ -93,7 +146,7 @@
 - (VSCoreHandover *)handoverForTimestamp:(double)aTimestamp frameSize:(NSSize)aFrameSize withPlayMode:(VSPlaybackMode)mode{
     
     VSCoreHandover *coreHandover = nil;
-        
+    
     double localTimestamp = [self localTimestampOfGlobalTimestamp:aTimestamp];
     
     if ([self.supplier isKindOfClass:[VSFrameSourceSupplier class]] ) {
@@ -149,7 +202,7 @@
 
 -(void) changeName:(NSString *)newName andRegisterAt:(NSUndoManager *)undoManager{
     [[undoManager prepareWithInvocationTarget:self] changeName:self.name andRegisterAt:undoManager];
-  //  self.name = newName;
+    //  self.name = newName;
 }
 
 - (double)localTimestampOfGlobalTimestamp:(double)aGlobalTimestamp{

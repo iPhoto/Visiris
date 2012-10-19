@@ -15,6 +15,8 @@
 @class VSExternalInputManager;
 @class VSDeviceManager;
 @class VSExternalInputManager;
+@class VSOutputController;
+
 
 
 /**
@@ -34,6 +36,7 @@
 /** VSTimeline is initialized by VSMainWindowController */
 @property (strong) VSTimeline* timeline;
 
+@property (strong) VSOutputController *outputController;
 
 /** VSDeviceManager handles the devices and their representations */
 @property (strong) VSDeviceManager *deviceManager;

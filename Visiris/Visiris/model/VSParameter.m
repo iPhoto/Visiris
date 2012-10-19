@@ -18,10 +18,27 @@
 
 @interface VSParameter()
 
+@property (assign,readwrite) NSUInteger ID;
 
 @end
 
 @implementation VSParameter
+
+#define kType @"Type"
+#define kName @"Name"
+#define kConfiguredDefaultValue @"ConfiguredDefaultValue"
+#define kOrderNumber @"OrderNumber"
+#define kHasRange @"HasRange"
+#define kRange @"Range"
+#define kEditable @"Editable"
+#define kHidden @"Hidden"
+#define kDefaultValue @"DefaultValue"
+#define kID @"ID"
+#define kConnectedWithDeviceParameter @"ConnectedWithDeviceParameter"
+#define kDeviceConnectedWith @"kDeviceConnectedWith"
+#define kDevices @"Devices"
+#define kDeviceParameterMapper @"DeviceParameterMapper"
+#define kAnimation @"Animation"
 
 @synthesize currentValue = _currentValue;
 
@@ -105,6 +122,25 @@
 
 #pragma mark - NSObject
 
+#pragma mark - NSCoding Implementation
+-(void) encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeObject:self.defaultValue forKey:kDefaultValue];
+    [aCoder encodeObject:self.animation forKey:kAnimation];
+    [aCoder encodeInteger:self.ID forKey:kID];
+    
+}
+
+-(id) initWithCoder:(NSCoder *)aDecoder{
+    self = [self init];
+    
+    if(self){
+        self.ID = [aDecoder decodeIntegerForKey:kID];
+        self.defaultValue = [aDecoder decodeObjectForKey:kDefaultValue];
+        self.animation = [aDecoder decodeObjectForKey:kAnimation];
+    }
+    
+    return self;
+}
 
 #pragma mark - NSCopying
 -(id) copyWithZone:(NSZone *)zone{

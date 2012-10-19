@@ -16,7 +16,7 @@
  *
  * Every VSParameter has its own VSAnimation object. As soon as an VSTimelineObject is added a animation for every parameter is created and a keyframe with the default-value is set.
  */
-@interface VSAnimation : NSObject<NSCopying>
+@interface VSAnimation : NSObject<NSCopying, NSCoding>
 
 /** List of all VSKeyFrames of the animation */
 @property (strong,readonly) NSMutableArray *keyFrames;

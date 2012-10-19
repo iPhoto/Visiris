@@ -15,6 +15,12 @@
 #import "VSEaseInOutAnimation.h"
 
 @implementation VSKeyFrame
+
+#define kTimestamp @"Timestamp"
+#define kValue @"Value"
+#define kID @"ID"
+#define kAnimationCurve @"AnimationCurve"
+
 @synthesize value = _value;
 @synthesize timestamp = _timestamp;
 
@@ -39,10 +45,31 @@
     return copy;
 }
 
+
 #pragma mark - NSObject
 
 -(NSString*) description{
     return [NSString stringWithFormat:@"Timestamp: %f, Value: %@",self.timestamp, self.value];
+}
+
+#pragma mark - NSCoding
+
+- (void) encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeObject:self.value forKey:kValue];
+    [aCoder encodeObject:self.animationCurve forKey:kAnimationCurve];
+    [aCoder encodeInteger:self.ID forKey:kID];
+    [aCoder encodeDouble:self.timestamp forKey:kTimestamp];
+}
+
+-(id) initWithCoder:(NSCoder *)aDecoder{
+    
+    id value = [aDecoder decodeObjectForKey:kValue];
+    double timestamp = [aDecoder decodeFloatForKey:kTimestamp];
+    NSUInteger ID = [aDecoder decodeIntegerForKey:kID];
+    
+    self = [self initWithValue:value forTimestamp:timestamp andID:ID];
+    
+    return self;
 }
 
 #pragma mark - Properties

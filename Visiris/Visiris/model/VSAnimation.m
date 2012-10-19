@@ -1,4 +1,4 @@
- //
+//
 //  VSAnimation.m
 //  VisirisUI
 //
@@ -21,9 +21,11 @@
 
 @implementation VSAnimation
 
-/** Timestamp of the default KeyFrame */
 
-@synthesize deviceParameterMapper   = _deviceParameterMapper;
+#define kKeyFrames @"KeyFrames"
+#define kDeviceParamteMapper @"DeviceParamterMapper"
+#define kDefaultValue @"DefaultValue"
+
 @synthesize keyFrames               = _keyFrames;
 
 #pragma mark - Init
@@ -43,6 +45,26 @@
     }
     
     return self;
+}
+
+#pragma mark - NSCoding Implementation
+
+-(void) encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeObject:self.keyFrames forKey:kKeyFrames];
+    [aCoder encodeObject:self.deviceParameterMapper forKey:kDeviceParamteMapper];
+    [aCoder encodeObject:self.defaultValue forKey:kDefaultValue];
+}
+
+-(id) initWithCoder:(NSCoder *)aDecoder{
+    id defaultValue = [aDecoder decodeObjectForKey:kDefaultValue];
+    NSMutableArray *keyFrames = [aDecoder decodeObjectForKey:kKeyFrames];
+    
+    if(self = [self initWithDefaultValue:defaultValue andKeyFrames:keyFrames]){
+
+    }
+    
+    return self;
+    
 }
 
 
@@ -65,7 +87,7 @@
     VSKeyFrame* newKeyFrame = [[VSKeyFrame alloc] initWithValue:aValue forTimestamp:aTimestamp andID:[self nextKeyFrameID]];
     
     [self.keyFrames addObject:newKeyFrame];
-
+    
     [self.keyFrames sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         if([obj1 timestamp] > [obj2 timestamp]){
             return NSOrderedDescending;
@@ -73,7 +95,7 @@
         return NSOrderedAscending;
     }];
     
-
+    
     
     return newKeyFrame;
 }
@@ -221,71 +243,71 @@
 
 //todo edi
 //- (double)linear:(double)time fromKeyFrame:(VSKeyFrame *)startKeyFrame toKeyFrame:(VSKeyFrame *)endKeyFrame{
-//    
+//
 //    double y, k, deltaY, deltaX, d, x;
-//    
+//
 //    x = time - startKeyFrame.timestamp;
-//    
+//
 //    d = startKeyFrame.floatValue;
-//    
+//
 //    deltaY = endKeyFrame.floatValue - startKeyFrame.floatValue;
 //    deltaX = endKeyFrame.timestamp - startKeyFrame.timestamp;
-//    
+//
 //    k = deltaY/deltaX;
-//    
+//
 //    y = k * x + d;
-//    
+//
 //    return  y;
 //}
 //
 //- (double)easeIn:(double)time fromKeyFrame:(VSKeyFrame *)startKeyFrame toKeyFrame:(VSKeyFrame *)endKeyFrame withStrength:(double)strength{
-//    
+//
 //    double d, x, c;
-//    
+//
 //    x = time - startKeyFrame.timestamp;
-//    
+//
 //    d = startKeyFrame.floatValue;
 //
 //    //c change in value
 //    c = endKeyFrame.floatValue - startKeyFrame.floatValue;
 //
 //    x /= endKeyFrame.timestamp - startKeyFrame.timestamp;
-//    
+//
 //    return c * pow(x,strength) + d;
 //}
 //
 //- (double)easeOut:(double)time fromKeyFrame:(VSKeyFrame *)startKeyFrame toKeyFrame:(VSKeyFrame *)endKeyFrame withStrength:(double)strength{
-//    
+//
 //    double d, x, c;
-//    
+//
 //    x = time - startKeyFrame.timestamp;
-//    
+//
 //    d = startKeyFrame.floatValue;
-//    
+//
 //    //c change in value
 //    c = endKeyFrame.floatValue - startKeyFrame.floatValue;
-//    
+//
 //    x /= endKeyFrame.timestamp - startKeyFrame.timestamp;
-//    
+//
 //    x--;
-//    
+//
 //    return -c * (pow(fabs(x),strength) - 1) + d;
 //}
 //
 //- (double)easeInOut:(double)time fromKeyFrame:(VSKeyFrame *)startKeyFrame toKeyFrame:(VSKeyFrame *)endKeyFrame withStrength:(double)strength{
-//        
+//
 //    double d, x, c, result;
-//    
+//
 //    x = time - startKeyFrame.timestamp;
-//    
+//
 //    d = startKeyFrame.floatValue;
-//    
+//
 //    //c change in value
 //    c = endKeyFrame.floatValue - startKeyFrame.floatValue;
-//    
+//
 //    x /= (endKeyFrame.timestamp - startKeyFrame.timestamp)/2.0;
-//    
-//    
+//
+//
 //    if (x < 1.0)
 //    {
 //        result = (c/2.0) * pow(x, strength) + d;
@@ -295,7 +317,7 @@
 //        x -= 2;
 //        result = -(c/2.0) * (pow(fabs(x), strength) - 2) + d;
 //    }
-//    
+//
 //    return result;
 //}
 @end

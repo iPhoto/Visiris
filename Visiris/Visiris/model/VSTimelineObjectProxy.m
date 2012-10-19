@@ -11,12 +11,13 @@
 #import "VSCoreServices.h"
 
 @implementation VSTimelineObjectProxy
-@synthesize startTime           = _startTime;
-@synthesize duration            = _duration;
-@synthesize name                = _name;
-@synthesize icon                = _icon;
-@synthesize selected            = _selected;
-@synthesize timelineObjectID    = _timelineObjectID;
+
+#define kStartTime @"StartTime"
+#define kDuration @"Duration"
+#define kName @"Name"
+#define kIcon @"Icon"
+#define kSelected @"Selected"
+#define kTimelineObjectID @"TimelineObjectID"
 
 #pragma mark- Init
 
@@ -32,6 +33,24 @@
     return self;
 }
 
+#pragma mark - NSCoding Implementation
+
+-(void) encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeDouble:self.startTime forKey:kStartTime];
+    [aCoder encodeDouble:self.duration forKey:kDuration];
+    [aCoder encodeObject:self.name forKey:kName];
+    [aCoder encodeObject:self.icon forKey:kIcon];
+}
+
+-(id) initWithCoder:(NSCoder *)aDecoder{
+    if(self = [self init]){
+        self.startTime = [aDecoder decodeDoubleForKey:kStartTime];
+        self.duration = [aDecoder decodeDoubleForKey:kDuration];
+        self.name = [[aDecoder decodeObjectForKey:kName] copy];
+        self.icon = [[aDecoder decodeObjectForKey:kIcon] copy];
+    }
+    return self;
+}
 
 #pragma mark - NSCopying Implementation
 
@@ -52,7 +71,7 @@
 }
 
 -(void) dealloc{
-
+    
 }
 
 #pragma mark - Methods

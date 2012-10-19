@@ -13,7 +13,7 @@
  *
  * !!!!!Please add more here !!!!!
  */
-@interface VSTimelineObjectProxy : NSObject<NSCopying>
+@interface VSTimelineObjectProxy : NSObject<NSCopying, NSCoding>
 
 /** Timeposition of the Object on the timeline */
 @property double startTime;

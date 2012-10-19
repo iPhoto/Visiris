@@ -16,6 +16,9 @@
 
 @implementation VSTimelineObjectSource
 
+#define kProjectItem @"ProjectItem"
+#define kParameters @"Parameters"
+
 @synthesize projectItem=_projectItem;
 @synthesize parameters=_parameters;
 
@@ -46,6 +49,21 @@
 
 -(float) fileSize{
     return self.projectItem.fileSize;
+}
+
+#pragma mark - NSCoding Implementation
+
+-(void) encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeObject:self.projectItem forKey:kProjectItem];
+//    [aCoder encodeObject:self.parameters forKey:kParameters];
+}
+
+-(id) initWithCoder:(NSCoder *)aDecoder{
+    if(self = [self init]){
+        self.projectItem = [aDecoder decodeObjectForKey:kProjectItem];
+    }
+    
+    return self;
 }
 
 

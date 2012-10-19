@@ -46,7 +46,7 @@
  *
  * Represents the Timeline of Visiris. Stores a several number of tracks where new TimelinObjects can be added. 
  */
-@interface VSTimeline : NSObject
+@interface VSTimeline : NSObject<NSCoding>
 
 #pragma mark - Properties
 

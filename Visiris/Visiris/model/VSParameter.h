@@ -19,7 +19,7 @@
 /**
  * Parameter of VSTimelineObjectSource
  */
-@interface VSParameter : NSObject<NSCopying>
+@interface VSParameter : NSObject<NSCopying, NSCoding>
 
 /** Type of the parameter like defined in VSParameterTypes.h */
 @property NSString *type;

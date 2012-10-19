@@ -34,10 +34,7 @@
 
 @property (strong) NSOpenGLContext *openGLContext;
 
-
-
-
-
+@property (strong) VSOutputController *outputController;
 
 
 @end
@@ -61,10 +58,11 @@ static NSString* defaultNib = @"VSPreviewView";
 #pragma mark - Init
 
 
--(id) initWithDefaultNib{
+-(id) initWithDefaultNibAndOutputController:(VSOutputController*) outputController{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
-        self.openGLContext = [[VSOutputController sharedOutputController] registerAsOutput:self];
-        self.fullScreenController = [[VSFullScreenController alloc] init];
+        self.outputController = outputController;
+        self.openGLContext = [self.outputController registerAsOutput:self];
+        self.fullScreenController = [[VSFullScreenController alloc] initWithOutputController:self.outputController];
     }
     
     return self;
@@ -97,7 +95,7 @@ static NSString* defaultNib = @"VSPreviewView";
  * Inits the openGLView and sets its autoresizing behaviour
  */
 - (void)initOpenGLView{
-    [self.openGLView setOpenGLWithSharedContext:self.openGLContext];
+    [self.openGLView setOpenGLWithSharedContext:self.openGLContext andPixelFrom:self.outputController.pixelFormat];
     [self.openGLView setAutoresizingMask:NSViewNotSizable];
 }
 
@@ -172,7 +170,7 @@ static NSString* defaultNib = @"VSPreviewView";
     
 
     openGLViewRect = [VSFrameUtils maxProportionalRectinRect:openGLViewRect inSuperView:superViewsRect];
-    [VSOutputController sharedOutputController].previewSize = openGLViewRect.size;
+    self.outputController.previewSize = openGLViewRect.size;
     
     [self.openGLView setFrameProportionally:NSIntegralRect(openGLViewRect)];
     

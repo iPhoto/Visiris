@@ -10,6 +10,12 @@
 #import "VSCoreServices.h"
 
 @implementation VSAnimationCurve
+
+#define kStrength @"Strength"
+#define kName @"Name"
+#define kStrengthRange @"StrengthRange"
+#define kHasStrength @"HasStrength"
+
 @synthesize strength = _strength;
 
 
@@ -23,6 +29,20 @@
     }
     
     return self;
+}
+
+#pragma mark - NSCoding
+
+-(void) encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeDouble:self.strength forKey:kStrength];
+    [aCoder encodeObject:self.name forKey:kName];
+    [aCoder encodeBool:self.hasStrength forKey:kHasStrength];
+    
+    VSRangeEncode(aCoder, self.strengthRange, kStrengthRange);
+}
+
+-(id) initWithCoder:(NSCoder *)aDecoder{
+
 }
 
 - (double)valueForTime:(double)time withBeginTime:(double)beginTime toEndTime:(double)endTime withStartValue:(double)startValue toEndValue:(double)endValue

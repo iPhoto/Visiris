@@ -46,7 +46,7 @@
  * @param theOpenGLContext NSOpenGLContext to be displayed in openGLView
  * @return Returns self
  */
--(id) initWithDefaultNib;
+-(id) initWithDefaultNibAndOutputController:(VSOutputController*) outputController;
 
 
 #pragma mark - IBAction

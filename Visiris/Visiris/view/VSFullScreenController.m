@@ -23,13 +23,13 @@
 @property (strong) VSFullScreenWindow *fullScreenWindow;
 @property (weak) NSOpenGLContext *openGLContext;
 @property BOOL visible;
+@property (strong) VSOutputController *outputController;
 
 @end
 
 
 @implementation VSFullScreenController
-@synthesize fullScreenView =    _fullScreenView;
-@synthesize fullScreenWindow =  _fullScreenWindow;
+
 
 + (NSInteger)numberOfScreensAvailable{
     return [NSScreen screens].count;
@@ -39,9 +39,9 @@
     return [[NSScreen screens] indexOfObject:[NSScreen mainScreen]];
 }
 
-- (id)init{
+- (id)initWithOutputController:(VSOutputController *)outputController{
     if (self = [super init]) {
-        
+        self.outputController = outputController;
         self.visible = false;
     }
     return self;
@@ -57,7 +57,7 @@
 -(void) showFullscreenOnScreen:(NSUInteger) screenID{
     if (screenID < [NSScreen screens].count) {
         
-        self.openGLContext = [[VSOutputController sharedOutputController] registerAsOutput:self];
+        self.openGLContext = [self.outputController registerAsOutput:self];
         
         NSScreen *screen = [[NSScreen screens] objectAtIndex:screenID];
         
@@ -80,7 +80,7 @@
         self.holder = [[VSFullScreenHolderView alloc] initWithFrame:openglViewRect];
         self.holder.keyDownDelegate = self;
         self.fullScreenView = [[VSFullScreenOpenGLView alloc] initWithFrame:openglViewRect];
-        [self.fullScreenView setOpenGLWithSharedContext:self.openGLContext];
+        [self.fullScreenView setOpenGLWithSharedContext:self.openGLContext andPixelFrom:self.outputController.pixelFormat];
         [self.fullScreenWindow setContentView: self.holder];
         [self.fullScreenWindow makeKeyAndOrderFront:self];
         
@@ -93,14 +93,14 @@
         
         [self.fullScreenView setFrame:openglViewRect];
 
-        [VSOutputController sharedOutputController].fullScreenSize = openglViewRect.size;
+        self.outputController.fullScreenSize = openglViewRect.size;
         
         self.visible = YES;
     }
 }
 
 -(void) hideFullscreen{
-    [[VSOutputController sharedOutputController] unregisterOutput:self];
+    [self.outputController unregisterOutput:self];
     
     [self.fullScreenWindow orderOut:self.fullScreenWindow];
     [self.fullScreenWindow setReleasedWhenClosed:YES];

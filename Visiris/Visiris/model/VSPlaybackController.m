@@ -14,6 +14,7 @@
 #import "VSProjectSettings.h"
 #import "VSTimelineObject.h"
 #import "VSParameter.h"
+#import "VSDocument.h"
 
 @interface VSPlaybackController()
 
@@ -36,6 +37,8 @@
 
 @property (weak) VSOutputController *outputController;
 
+@property (weak) VSDocument *document;
+
 @end
 
 @implementation VSPlaybackController
@@ -43,7 +46,7 @@
 
 #pragma mark - Init
 
--(id) initWithPreProcessor:(VSPreProcessor *)preProcessor timeline:(VSTimeline *)timeline{
+-(id) initWithPreProcessor:(VSPreProcessor *)preProcessor andOutputController:(VSOutputController*) outputController forTimeline:(VSTimeline *)timeline ofDocument:(VSDocument*) document{
     if(self = [super init]){
         self.preProcessor = preProcessor;
         self.timeline = timeline;
@@ -54,8 +57,8 @@
         
         self.counter = 0.0;
         self.deltaTime = 0.0;
-        
-        self.outputController = [VSOutputController sharedOutputController];
+        self.document = document;
+        self.outputController = outputController;
     }
     
     return self;
@@ -98,11 +101,13 @@
  * @param theNotification NSNotification send from the notification
  */
 -(void) playKeyWasPressed:(NSNotification*) theNotification{
-    if(self.playbackMode != VSPlaybackModePlaying){
-        [self play];
-    }
-    else {
-        [self stop];
+    if ([[theNotification.userInfo objectForKey:VSSendersDocumentKeyInUserInfoDictionary] isEqualTo:self.document]){
+        if(self.playbackMode != VSPlaybackModePlaying){
+            [self play];
+        }
+        else {
+            [self stop];
+        }
     }
 }
 
@@ -253,16 +258,18 @@
  * @param notification NSNotification storing the unselected VSTimelineObject
  */
 -(void) timelineObjectsGotUnselected:(NSNotification *) notification{
-    if([[notification object] isKindOfClass:[NSArray class]]){
-        NSArray *unselectedTimelineObjects = notification.object;
-        
-        
-        for(VSTimelineObject *unselectedTimelineObject in unselectedTimelineObjects){
-            [self removeObserversFromSelecteTimelineObject];
+    if ([[notification.userInfo objectForKey:VSSendersDocumentKeyInUserInfoDictionary] isEqualTo:self.document]){
+        if([[notification object] isKindOfClass:[NSArray class]]){
+            NSArray *unselectedTimelineObjects = notification.object;
+            
+            
+            for(VSTimelineObject *unselectedTimelineObject in unselectedTimelineObjects){
+                [self removeObserversFromSelecteTimelineObject];
+            }
         }
+        
+        self.selectedTimelineObject = nil;
     }
-    
-    self.selectedTimelineObject = nil;
     
 }
 
@@ -285,34 +292,36 @@
  * @param notification NSNotification storing the selected VSTimelineObject
  */
 -(void) timelineObjectsGotSelected:(NSNotification *) notification{
-    if(self.selectedTimelineObject){
-        [self removeObserversFromSelecteTimelineObject];
-    }
-    
-    if([[notification object] isKindOfClass:[NSArray class]]){
+    if ([[notification.userInfo objectForKey:VSSendersDocumentKeyInUserInfoDictionary] isEqualTo:self.document]){
+        if(self.selectedTimelineObject){
+            [self removeObserversFromSelecteTimelineObject];
+        }
         
-        NSArray *selectedTimelineObjects = notification.object;
-        
-        VSTimelineObject *selectedTimelineObject = [selectedTimelineObjects objectAtIndex:0];
-        if([selectedTimelineObject isKindOfClass:[VSTimelineObject class]]){
+        if([[notification object] isKindOfClass:[NSArray class]]){
             
-            self.selectedTimelineObject = selectedTimelineObject;
+            NSArray *selectedTimelineObjects = notification.object;
             
-            [self.selectedTimelineObject addObserver:self
-                                          forKeyPath:@"startTime"
-                                             options:0
-                                             context:nil];
-            
-            [self.selectedTimelineObject addObserver:self
-                                          forKeyPath:@"duration"
-                                             options:0
-                                             context:nil];
-            
-            for(VSParameter *parameter in [self.selectedTimelineObject visibleParameters]){
-                [parameter addObserver:self
-                            forKeyPath:@"currentValue"
-                               options:0
-                               context:nil];
+            VSTimelineObject *selectedTimelineObject = [selectedTimelineObjects objectAtIndex:0];
+            if([selectedTimelineObject isKindOfClass:[VSTimelineObject class]]){
+                
+                self.selectedTimelineObject = selectedTimelineObject;
+                
+                [self.selectedTimelineObject addObserver:self
+                                              forKeyPath:@"startTime"
+                                                 options:0
+                                                 context:nil];
+                
+                [self.selectedTimelineObject addObserver:self
+                                              forKeyPath:@"duration"
+                                                 options:0
+                                                 context:nil];
+                
+                for(VSParameter *parameter in [self.selectedTimelineObject visibleParameters]){
+                    [parameter addObserver:self
+                                forKeyPath:@"currentValue"
+                                   options:0
+                                   context:nil];
+                }
             }
         }
     }

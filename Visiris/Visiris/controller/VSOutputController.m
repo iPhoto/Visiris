@@ -31,23 +31,10 @@
 static VSOutputController* sharedOutputController = nil;
 
 
-#pragma mark- Functions
-
-+(VSOutputController*)sharedOutputController{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        
-        sharedOutputController = [[VSOutputController alloc] init];
-        
-    });
-    
-    return sharedOutputController;
-}
-
 
 #pragma mark - Init
 
--(id) init{
+-(id) initWithOpenGLContext:(NSOpenGLContext*) openGLContext{
     if(self = [super init]){
         [self setupDisplayLink];
         self.registratedOutputs = [[NSMutableArray alloc] init];
@@ -55,7 +42,7 @@ static VSOutputController* sharedOutputController = nil;
         self.renderSize         = [[VSProjectSettings sharedProjectSettings] frameSize];
         self.lastTexture        = 0;
         self.lastTimestamp      = 0.0;
-        
+        self.openGLContext = openGLContext;
         NSOpenGLPixelFormatAttribute attribs[] =
         {
             kCGLPFAAccelerated,
@@ -71,11 +58,6 @@ static VSOutputController* sharedOutputController = nil;
     
     return self;
 }
-
--(void) connectWithOpenGLContext:(NSOpenGLContext*) openGLContext{
-    self.openGLContext = openGLContext;
-}
-
 
 #pragma mark - Methods
 

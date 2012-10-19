@@ -47,7 +47,7 @@
 
 
 #pragma mark - Methods
-#
+
 - (void)processFrameAtTimestamp:(double)aTimestamp withFrameSize:(NSSize)aFrameSize withPlayMode:(VSPlaybackMode)playMode
 {
     NSArray *currentTimeLineObjects = [self.timeline timelineObjectsForTimestamp:aTimestamp];

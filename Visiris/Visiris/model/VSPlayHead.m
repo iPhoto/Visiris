@@ -10,5 +10,13 @@
 
 @implementation VSPlayHead
 
+@synthesize jumping = _jumping;
+-(BOOL) jumping{
+    return _jumping;
+}
+
+-(void) setJumping:(BOOL)jumping{
+    _jumping = jumping;
+}
 
 @end

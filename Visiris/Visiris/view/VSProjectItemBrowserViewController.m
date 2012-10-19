@@ -14,6 +14,7 @@
 #import "ImageAndTextCell.h"
 #import "VSProjectItem.h"
 #import "VSProjectItemController.h"
+#import "VSDocumentController.h"
 
 #import "VSCoreServices.h"
 
@@ -148,11 +149,21 @@ static NSString* defaultNib = @"VSProjectItemBrowserView";
     if(selectedRowIndexes.count > 0){
         NSArray *selectedProjectItemRepresentations = [self.projectItemRepresentationController.projectItemRepresentations objectsAtIndexes:selectedRowIndexes];
         
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObject: [VSDocumentController documentOfView:self.view]
+                                                             forKey:VSSendersDocumentKeyInUserInfoDictionary];
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:VSProjectItemRepresentationGotSelected object:selectedProjectItemRepresentations];
+        [[NSNotificationCenter defaultCenter] postNotificationName:VSProjectItemRepresentationGotSelected
+                                                            object:selectedProjectItemRepresentations
+                                                          userInfo:userInfo];
     }
     else {
-        [[NSNotificationCenter defaultCenter] postNotificationName:VSProjectItemRepresentationGotUnselected object:nil];
+        
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObject: [VSDocumentController documentOfView:self.view]
+                                                             forKey:VSSendersDocumentKeyInUserInfoDictionary];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:VSProjectItemRepresentationGotUnselected
+                                                            object:nil
+                                                          userInfo:userInfo];
     }
 }
 

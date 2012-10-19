@@ -14,19 +14,10 @@
 
 @implementation VSPreviewOpenGLView
 
-- (id)initWithFrame:(NSRect)frame{
-    self = [super initWithFrame:frame];
-    if (self) {
-        [[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(reshape)
-													 name:NSViewGlobalFrameDidChangeNotification
-												   object:self];
-    }
-    return self;
-}
 
 -(void) setFrameProportionally:(NSRect) frameRect{
     [super setFrame:frameRect];
+    [self reshape];
 }
 
 -(void) viewDidMoveToWindow{
@@ -36,6 +27,7 @@
 }
 
 - (void)setFrame:(NSRect)frameRect{
+    [self reshape];
     //DEAR EDI, LET THIS DRIN
 }
 

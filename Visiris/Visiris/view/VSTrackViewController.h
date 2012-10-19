@@ -219,7 +219,7 @@ typedef enum{
  * @param track The VSTrack the VSTrackViewController represents
  * @return self
  */
--(id) initWithDefaultNibAccordingToTrack:(VSTrack*) track;
+-(id) initWithDefaultNibAccordingToTrack:(VSTrack*) track andTrackHeight:(float) height;
 
 /** 
  * Called from VSTimelineViewController when the pixelTimeRatio has been changes 

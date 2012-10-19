@@ -17,7 +17,7 @@
  *
  * Files the user has add do Visiris are stored as VSProject Item. All ProjectItems available in a Visiris Project are accessable through the VSProjectItemBrowser.
  */
-@interface VSProjectItem : NSObject
+@interface VSProjectItem : NSObject<NSCoding>
 
 /** Name of the ProjectItem, by default the file name without extension */
 @property (strong) NSString* name;

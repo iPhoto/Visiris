@@ -9,6 +9,7 @@
 #import "VSDocumentController.h"
 
 #import "VSDocument.h"
+#import "VSMainWindowController.h"
 
 #import "VSCoreServices.h"
 
@@ -28,33 +29,16 @@
     [DDLog addLogger:[DDASLLogger sharedInstance]];
 }
 
--(void) openDocumentWithContentsOfURL:(NSURL *)url display:(BOOL)displayDocument completionHandler:(void (^)(NSDocument *, BOOL, NSError *))completionHandler{
-    NSString *fileName = [url path];
-    
-    if([[NSFileManager defaultManager] fileExistsAtPath:fileName]){
-        NSString *type =[[NSWorkspace sharedWorkspace] typeOfFile:fileName error:nil];
-        DDLogError(@"Check if the file is an visirs file");
-        if([type isEqualToString:@"visirs"]){
-            [super openDocumentWithContentsOfURL:url display:displayDocument completionHandler:completionHandler];
-        }
-        else {
-            if([self.currentDocument isKindOfClass:[VSDocument class]]){
-                [((VSDocument*) self.currentDocument) addFileToProject:fileName];
-            }
-        }
-    }
-}
-
--(BOOL) application:(NSApplication *)sender openFile:(NSString *)filename{
-    if([[NSFileManager defaultManager] fileExistsAtPath:filename]){
-
-        DDLogError(@"Check if the file is an visirs file");
-        if([self.currentDocument isKindOfClass:[VSDocument class]]){
-            return [((VSDocument*) self.currentDocument) addFileToProject:filename];
++(id) documentOfView:(NSView*) view{
+    if([view.window.delegate isKindOfClass:[VSMainWindowController class]]){
+        id document = ((VSMainWindowController*) view.window.delegate).document;
+        
+        if([document isKindOfClass:[VSDocument class]]){
+            return document;
         }
     }
     
-    return NO;
+    return nil;
 }
 
 

@@ -11,6 +11,8 @@
 #import "VSMainWindowController.h"
 #import "VSProjectItemController.h"
 #import "VSTimeline.h"
+#import "VSTrack.h"
+#import "VSTimelineObject.h"
 #import "VSPostProcessor.h"
 #import "VSPreProcessor.h"
 #import "VSPlaybackController.h"
@@ -31,6 +33,8 @@
 
 @implementation VSDocument
 
+#define kTimeline @"Timeline"
+
 #pragma mark - Init
 
 - (id)init
@@ -38,10 +42,33 @@
     self = [super init];
     if (self) {
         self.projectItemController = [VSProjectItemController sharedManager];
-        
-        
-        [self initVisiris];
     }
+    return self;
+}
+
+
+-(id) initWithType:(NSString *)typeName error:(NSError *__autoreleasing *)outError{
+    if(self = [self init]){
+        if([typeName isEqualToString:VSVisirsUTI]){
+            //    [[VSProjectSettings sharedProjectSettings] setFrameSize:NSMakeSize(640, 480)];
+            
+            //TODO: where to create the timeline?
+            
+            //** Creates a new timeline an sets its duratio to the DefaultDuration */
+            self.timeline = [[VSTimeline alloc] initWithDuration:VSTimelineDefaultDuration];
+            
+            //** Adding 2 new VisualTracks to the timeline
+            for(int i = 0; i<6; i++){
+                [self.timeline addNewTrackNamed:[NSString stringWithFormat:@"%d",i] ofType:VISUAL_TRACK];
+            }
+            
+            //** Adding 1 new Audrio-Track to the timeline */
+            //    [self.timeline addNewTrackNamed:[NSString stringWithFormat:@"%d",i] ofType:AUDIO_TRACK];
+            
+            [self initVisiris];
+        }
+    }
+    
     return self;
 }
 
@@ -50,7 +77,7 @@
 {
     [super windowControllerDidLoadNib:aController];
     // Add any code here that needs to be executed once the windowController has loaded the document's window.
-
+    
 }
 
 -(void) makeWindowControllers{
@@ -64,29 +91,23 @@
  */
 -(void) initVisiris{
     
-//    [[VSProjectSettings sharedProjectSettings] setFrameSize:NSMakeSize(640, 480)];
-    
-    //TODO: where to create the timeline?
-    
-    //** Creates a new timeline an sets its duratio to the DefaultDuration */
-    self.timeline = [[VSTimeline alloc] initWithDuration:VSTimelineDefaultDuration];
-    
-    //** Adding 2 new VisualTracks to the timeline
-    for(int i = 0; i<6; i++){
-        [self.timeline addNewTrackNamed:[NSString stringWithFormat:@"%d",i] ofType:VISUAL_TRACK];
-    }
-    
-    //** Adding 1 new Audrio-Track to the timeline */
-//    [self.timeline addNewTrackNamed:[NSString stringWithFormat:@"%d",i] ofType:AUDIO_TRACK];
-    
     self.preProcessor = [[VSPreProcessor alloc] initWithTimeline:self.timeline];
+    
+    
+    self.outputController = [[VSOutputController alloc] initWithOpenGLContext:self.preProcessor.renderCoreReceptionist.openGLContext];
+    
+    
     
     
     self.postProcessor = [[VSPostProcessor alloc] initWithPlaybackController:self.playbackController];
     
     self.preProcessor.renderCoreReceptionist.delegate = self.postProcessor;
     
-    self.playbackController = [[VSPlaybackController alloc] initWithPreProcessor:self.preProcessor timeline:self.timeline];
+    self.playbackController = [[VSPlaybackController alloc] initWithPreProcessor:self.preProcessor
+                                                             andOutputController:self.outputController
+                                                                     forTimeline:self.timeline ofDocument:self];
+    
+    self.outputController.playbackController = self.playbackController;
     
     self.postProcessor = [[VSPostProcessor alloc] initWithPlaybackController:self.playbackController];
     
@@ -95,46 +116,95 @@
     
     self.timeline.timelineObjectsDelegate = self.preProcessor;
     
-    [[VSOutputController sharedOutputController] connectWithOpenGLContext:self.preProcessor.renderCoreReceptionist.openGLContext];
-    
-    [VSOutputController sharedOutputController].playbackController = self.playbackController;
     
     self.externalInputManager = [[VSExternalInputManager alloc] init];
     
     self.deviceManager = [[VSDeviceManager alloc] init];
     self.deviceManager.deviceRegisitratingDelegate = self.externalInputManager;
-
+    
 }
 
 #pragma mark - NSDocument
 
 + (BOOL)autosavesInPlace
 {
-    return NO;
+    return YES;
 }
 
 - (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError
 {
-    // Insert code here to write your document to data of the specified type. If outError != NULL, ensure that you create and set an appropriate error when returning nil.
-    // You can also choose to override -fileWrapperOfType:error:, -writeToURL:ofType:error:, or -writeToURL:ofType:forSaveOperation:originalContentsURL:error: instead.
-    NSException *exception = [NSException exceptionWithName:@"UnimplementedMethod" reason:[NSString stringWithFormat:@"%@ is unimplemented", NSStringFromSelector(_cmd)] userInfo:nil];
-    @throw exception;
+    if([typeName isEqualToString:VSVisirsUTI]){
+        NSData *data;
+        NSMutableDictionary *doc = [[NSMutableDictionary alloc] init];
+        NSString *errorString;
+        
+        [doc setObject:[NSKeyedArchiver archivedDataWithRootObject:self.timeline]
+                forKey:kTimeline];
+        
+        data = [NSPropertyListSerialization dataFromPropertyList:doc
+                                                          format:NSPropertyListXMLFormat_v1_0
+                                                errorDescription:&errorString];
+        
+        if (!data) {
+            if (!outError) {
+                NSLog(@"dataFromPropertyList failed with %@", errorString);
+            }
+            else {
+                NSDictionary *errorUserInfo = [NSDictionary dictionaryWithObjectsAndKeys:@"Visirs document couldn't be written", NSLocalizedDescriptionKey, (errorString ? errorString : @"An unknown error occured."), NSLocalizedFailureReasonErrorKey, nil];
+                
+                // In this simple example we know that no one's going to be paying attention to the domain and code that we use here.
+                *outError = [NSError errorWithDomain:@"visirisErrorDomain" code:-1 userInfo:errorUserInfo];
+            }
+            
+        }
+        return data;
+    } else {
+        if (outError) *outError = [NSError errorWithDomain:@"visirisErrorDomain" code:-1 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"Unsupported data type: %@", typeName] forKey:NSLocalizedFailureReasonErrorKey]];
+    }
     return nil;
 }
 
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError
 {
-    // Insert code here to read your document from the given data of the specified type. If outError != NULL, ensure that you create and set an appropriate error when returning NO.
-    // You can also choose to override -readFromFileWrapper:ofType:error: or -readFromURL:ofType:error: instead.
-    // If you override either of these, you should also override -isEntireFileLoaded to return NO if the contents are lazily loaded.
-    NSException *exception = [NSException exceptionWithName:@"UnimplementedMethod" reason:[NSString stringWithFormat:@"%@ is unimplemented", NSStringFromSelector(_cmd)] userInfo:nil];
-    @throw exception;
-    return YES;
+
+    BOOL result = NO;
+
+    // we only recognize one data type.  It is a programming error to call this method with any other typeName
+    assert([typeName isEqualToString:VSVisirsUTI]);
+    
+    NSString *errorString;
+    NSDictionary *documentDictionary = [NSPropertyListSerialization propertyListFromData:data
+                                                                        mutabilityOption:NSPropertyListImmutable
+                                                                                  format:NULL
+                                                                        errorDescription:&errorString];
+    
+    if (documentDictionary) {
+
+        
+        self.timeline = [NSKeyedUnarchiver unarchiveObjectWithData:[documentDictionary objectForKey:kTimeline]];
+
+        
+        [self initVisiris];
+        
+        result = YES;
+    } else {
+        if (!outError) {
+            NSLog(@"propertyListFromData failed with %@", errorString);
+        } else {
+            NSDictionary *errorUserInfo = [NSDictionary dictionaryWithObjectsAndKeys: @"iSpend document couldn't be read", NSLocalizedDescriptionKey, (errorString ? errorString : @"An unknown error occured."), NSLocalizedFailureReasonErrorKey, nil];
+            
+            *outError = [NSError errorWithDomain:@"iSpendErrorDomain" code:-1 userInfo:errorUserInfo];
+        }
+        result = NO;
+    }
+    // we don't want any of the operations involved in loading the new document to mark it as dirty, nor should they be undo-able, so clear the undo stack
+    [[self undoManager] removeAllActions];
+    return result;
 }
 
 -(BOOL) readFromURL:(NSURL *)url ofType:(NSString *)type{
     DDLogError(@"%@",url);
-    return YES;
+    return NO;
 }
 
 #pragma mark - Methods

@@ -15,7 +15,7 @@
  Represents a file-type supported by Visirs. Holds its name, the fileType as UTI, the string of the class VSTimelineObjectFactory will create for a TimelineObject of this VSFileType. Additionaly the kind of the File
  
  */
-@interface VSFileType : NSObject
+@interface VSFileType : NSObject<NSCoding>
 
 #pragma mark- Properties
 /** Name of the VSFileType. Usually its extension. E.g. PNG, MOV,... */

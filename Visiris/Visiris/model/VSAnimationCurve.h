@@ -12,15 +12,15 @@
 
 #import "VSAnimationCurveFactory.h"
 
-@interface VSAnimationCurve : NSObject
+@interface VSAnimationCurve : NSObject<NSCoding>
 
-@property (assign) double    strength;
+@property (assign) double strength;
 
 @property (strong, readonly) NSString *name;
 
 @property (assign) VSRange strengthRange;
 
-@property (assign) BOOL     hasStrength;
+@property (assign) BOOL hasStrength;
 
 - (double)valueForTime:(double)time withBeginTime:(double)beginTime toEndTime:(double)endTime withStartValue:(double)startValue toEndValue:(double)endVelue;
 
