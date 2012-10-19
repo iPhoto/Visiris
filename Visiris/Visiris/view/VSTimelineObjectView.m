@@ -8,7 +8,6 @@
 
 #import "VSTimelineObjectView.h"
 
-
 @interface VSTimelineObjectView ()
 
 #define RESIZING_FROM_LEFT 0

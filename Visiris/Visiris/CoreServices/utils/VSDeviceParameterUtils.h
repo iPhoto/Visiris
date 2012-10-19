@@ -34,4 +34,6 @@ typedef enum {
 
 +(VSDeviceParameterDataype) deviceParameterDatatypeForString:(NSString*) stringName andError:(NSError**) error;
 
++ (NSString *) nameForOSCType:(OSCValueType)type;
+
 @end

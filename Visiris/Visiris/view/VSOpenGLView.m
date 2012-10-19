@@ -9,6 +9,7 @@
 #import "VSOpenGLView.h"
 
 #import "VSOutputController.h"
+#import <OpenGL/glu.h>
 
 @interface VSOpenGLView()
 

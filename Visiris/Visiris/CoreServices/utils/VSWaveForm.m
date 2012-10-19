@@ -8,6 +8,7 @@
 
 #import "VSWaveForm.h"
 #import <AVFoundation/AVFoundation.h>
+#import "VSCoreServices.h"
 
 @implementation VSWaveForm
 

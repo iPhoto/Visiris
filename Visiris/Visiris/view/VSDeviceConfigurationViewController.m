@@ -17,6 +17,7 @@
 #import "VSDocument.h"
 
 #import "VSCoreServices.h"
+#import "VSExternalInput.h"
 
 @interface VSDeviceConfigurationViewController ()
 {
@@ -25,7 +26,7 @@
 }
 
 /** VSExternalInputManager is initialized by VSDocument */
-@property (strong) VSExternalInputManager*              externalInputManager;
+//@property (strong) VSExternalInputManager*              externalInputManager;
 @property (weak) VSDeviceManager*                     deviceManager;
 
 @end
@@ -79,6 +80,15 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 #pragma mark - Device Management
 - (IBAction)didPressAddDeviceButton:(NSButton *)addButton
 {
+    
+    NSLog(@"Available Inputs");
+    
+    for (VSExternalInput *input in [self.deviceManager availableInputs]) {
+        NSLog(@"Identifier: %@", input.identifier);
+    }
+    
+    return;
+    
     if ( !_isCurrentlyPresentingNewDeviceConfigurationPopover ) {
         
         [self insertNewDeviceRowAndPresentDeviceConfigurationSheet];
@@ -154,7 +164,7 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 #pragma mark - VSCreateDeviceViewControllerDataSource Implementation
 - (NSArray *)availableInputParameter
 {
-    return [self.externalInputManager availableInputs];
+    return [self.deviceManager availableInputs];
 }
 
 

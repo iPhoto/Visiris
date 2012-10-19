@@ -1,8 +1,8 @@
 //
-//  VSExternalInput.m
+//  VSInput.m
 //  Visiris
 //
-//  Created by Edwin Guggenbichler on 9/26/12.
+//  Created by Edwin Guggenbichler on 10/16/12.
 //
 //
 
@@ -10,8 +10,9 @@
 
 @implementation VSExternalInput
 
-
-
-
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"blubb geht ned idiot"];
+}
 
 @end

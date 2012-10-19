@@ -42,7 +42,10 @@
     
     x--;
     
-    return -c * (pow(fabs(x),self.strength) - 1) + d;
+
+    double result = -c * (pow(fabs(x),self.strength) - 1) + d;
+    
+    return result;
 }
 
 @end

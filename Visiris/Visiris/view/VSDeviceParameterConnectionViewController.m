@@ -59,7 +59,7 @@
     }
     
     [self.popover close];
-}
+}  
 
 -(void) connectParameterWithDevice{
     [self.parameter connectWithDeviceParameter:self.currentlySelectedDeviceParameter

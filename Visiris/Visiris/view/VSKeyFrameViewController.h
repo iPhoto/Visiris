@@ -75,9 +75,9 @@ finalPoint;
 
 @property (strong) NSBezierPath *pathToNextKeyFrameView;
 
-@property (weak) VSKeyFrameViewController *nextKeyFrameViewController;
+@property (strong) VSKeyFrameViewController *nextKeyFrameViewController;
 
-@property (weak) VSKeyFrameViewController *prevKeyFrameViewController;
+@property (strong) VSKeyFrameViewController *prevKeyFrameViewController;
 
 /**
  * Inits the keyFrame with the given values
