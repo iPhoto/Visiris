@@ -158,7 +158,27 @@ static NSMutableDictionary *deviceParameterTypeOfString;
 }
 
 + (NSString *) nameForOSCType:(OSCValueType)type{
-    return [NSString stringWithFormat:@"nameForOSCType not working yet"];
+    
+    NSString *string;
+    
+    switch (type) {
+        case OSCValInt:     string = [NSString stringWithFormat:@"OSCValInt"];      break;
+        case OSCValFloat:   string = [NSString stringWithFormat:@"OSCValFloat"];    break;
+        case OSCValString:  string = [NSString stringWithFormat:@"OSCValString"];   break;
+        case OSCValTimeTag: string = [NSString stringWithFormat:@"OSCValTimeTag"];  break;
+        case OSCVal64Int:   string = [NSString stringWithFormat:@"OSCVal64Int"];    break;
+        case OSCValDouble:  string = [NSString stringWithFormat:@"OSCValDouble"];   break;
+        case OSCValChar:    string = [NSString stringWithFormat:@"OSCValChar"];     break;
+        case OSCValColor:   string = [NSString stringWithFormat:@"OSCValColor"];    break;
+        case OSCValMIDI:    string = [NSString stringWithFormat:@"OSCValMIDI"];     break;
+        case OSCValBool:    string = [NSString stringWithFormat:@"OSCValBool"];     break;
+        case OSCValNil:     string = [NSString stringWithFormat:@"OSCValNil"];      break;
+        case OSCValInfinity:string = [NSString stringWithFormat:@"OSCValInfinity"]; break;
+        case OSCValBlob:    string = [NSString stringWithFormat:@"OSCValBlob"];     break;
+        default:            string = [NSString stringWithFormat:@"ERROR: OSCValueType not detected"]; break;
+    }
+        
+    return string;
 }
 
 @end
