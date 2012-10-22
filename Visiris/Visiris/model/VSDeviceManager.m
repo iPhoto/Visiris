@@ -42,7 +42,10 @@ static NSURL* devicesFolderURL;
     devicesFolderURL = [NSURL fileURLWithPath:devicesFolder];
     NSError *error;
     
-    [[NSFileManager defaultManager] createDirectoryAtPath:devicesFolder withIntermediateDirectories:YES attributes:nil error:&error];
+    [[NSFileManager defaultManager] createDirectoryAtPath:devicesFolder
+                              withIntermediateDirectories:YES
+                                               attributes:nil
+                                                    error:&error];
     
     if(error){
         DDLogInfo(@"%@",error);

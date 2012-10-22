@@ -12,6 +12,8 @@
 
 @protocol VSExternalInputProtocol <NSObject>
 
+
+
 @required
 
 @property (weak)id<VSExternalInputManagerDelegate>              delegate;

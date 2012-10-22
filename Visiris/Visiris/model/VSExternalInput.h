@@ -18,5 +18,5 @@
 @property (assign) VSRange                  range;
 @property (readonly, strong) NSString       *parameterType;
 @property (assign) VSDeviceType             deviceType;
-
+@property (strong, readonly) NSString                 *deviceTypeName;
 @end

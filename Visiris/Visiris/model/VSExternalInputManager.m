@@ -7,6 +7,7 @@
 //
 
 #import "VSExternalInputManager.h"
+#import "VSExternalInputProtocol.h"
 #import "VSOSCInputManager.h"
 #import <VisirisCore/VSReferenceCounting.h>
 #import "VSCoreServices.h"
@@ -33,8 +34,8 @@
         
         self.availableInputManager = [[NSMutableDictionary alloc] init];
         
-        
         self.currentActiveValues = [[NSMutableDictionary alloc] init];
+        
         
         [self registerExternalInputManager];
         
@@ -90,7 +91,6 @@
 - (void)startObservingInputs
 {
     for (id<VSExternalInputProtocol> inputManager in [self.availableInputManager allValues]) {
-        
         [inputManager startObservingInputs];
     }
 }
@@ -155,6 +155,7 @@
     return isValueForAddressOnPortUnregistered;
 }
 
+
 #pragma mark VSExternalInputManagerDelegate
 - (void)inputManager:(id<VSExternalInputProtocol>)inputManager didReceivedValue:(id)value forAddress:(NSString *)address atPort:(unsigned int)port
 {
@@ -166,4 +167,13 @@
         [invocation invoke];
     }
 }
+
+-(void) didAddExternalInputs:(NSArray*) fromInputManager:(id<VSExternalInputProtocol>) manager{
+    
+}
+
+-(BOOL) willRemoveExternalInputs:(NSArray*) fromInputManager:(id<VSExternalInputProtocol>) manager{
+    return YES;
+}
+
 @end

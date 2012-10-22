@@ -15,4 +15,12 @@
 
 - (void)inputManager:(id<VSExternalInputProtocol>)inputManager didReceivedValue:(id)value forAddress:(NSString *)address atPort:(unsigned int)port;
 
+-(BOOL) willRemoveExternalInputs:(NSArray*) fromInputManager:(id<VSExternalInputProtocol>) manager;
+
+-(void) didRemoveExternalInputs:(NSArray*) fromInputManager:(id<VSExternalInputProtocol>) manager;
+
+-(BOOL) willAddExternalInputs:(NSArray*) fromInputManager:(id<VSExternalInputProtocol>) manager;
+
+-(void) didAddExternalInputs:(NSArray*) fromInputManager:(id<VSExternalInputProtocol>) manager;
+
 @end
