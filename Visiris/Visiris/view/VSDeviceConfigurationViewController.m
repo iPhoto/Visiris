@@ -84,7 +84,7 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
     NSLog(@"Available Inputs");
     
     for (VSExternalInput *input in [self.deviceManager availableInputs]) {
-        NSLog(@"Identifier: %@", input.identifier);
+        NSLog(@"ParameterType: %@   Identifier: %@", input.parameterType, input.identifier);
     }
     
     return;

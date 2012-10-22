@@ -158,7 +158,7 @@ static NSMutableDictionary *deviceParameterTypeOfString;
 }
 
 + (NSString *) nameForOSCType:(OSCValueType)type{
-    return [NSString stringWithFormat:@"blubb"];
+    return [NSString stringWithFormat:@"nameForOSCType not working yet"];
 }
 
 @end
