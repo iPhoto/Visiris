@@ -326,11 +326,9 @@
             }
         }
         
-//        refSelf.discoveredPorts removeObjectsForKeys:<#(NSArray *)#>
         if (outdatedPorts.count > 0) {
             [refSelf.discoveredPorts removeObjectsForKeys:outdatedPorts];
         }
-//        NSLog(@"active ports: %@", refSelf.activePorts);
     };
 }
 

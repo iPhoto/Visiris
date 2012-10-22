@@ -37,19 +37,9 @@
     return [NSString stringWithFormat:@"OSCAddress: %@ with timeStamp: %f", self.address, self.lastReceivedAddressTimestamp];
 }
 
-- (void)setIdentifier:(NSString *)identifier
-{
-    _identifier = identifier;
-}
-
 - (NSString *)identifier
 {
     return [NSString stringFromAddress:self.address atPort:self.port];
-}
-
-- (void)setParameterType:(NSString *)parameterType
-{
-    _parameterType = parameterType;
 }
 
 - (NSString *)parameterType
