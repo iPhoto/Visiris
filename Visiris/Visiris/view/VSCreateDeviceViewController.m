@@ -75,10 +75,13 @@
     _parameterCount++;
     
     [self.parameterTableView beginUpdates];
-    [self.parameterTableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:_parameterCount-1] withAnimation:NSTableViewAnimationSlideUp | NSTableViewAnimationEffectFade];
+    [self.parameterTableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:_parameterCount-1]
+                                   withAnimation:NSTableViewAnimationSlideUp | NSTableViewAnimationEffectFade];
     [self.parameterTableView endUpdates];
 }
 
+
+#pragma mark - NSTableViewDataSource
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
