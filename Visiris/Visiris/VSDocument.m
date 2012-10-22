@@ -44,6 +44,8 @@
     if (self) {
         self.projectItemController = [[VSProjectItemController alloc] init];
         self.projectItemRepresentationController = [[VSProjectItemRepresentationController alloc]initForProjectItemController:self.projectItemController];
+        
+        self.externalInputManager = [[VSExternalInputManager alloc] init];
     }
     return self;
 }
@@ -121,10 +123,9 @@
     self.timeline.timelineObjectsDelegate = self.preProcessor;
     
     
-    self.externalInputManager = [[VSExternalInputManager alloc] init];
-    
     self.deviceManager = [[VSDeviceManager alloc] init];
     self.deviceManager.deviceRegisitratingDelegate = self.externalInputManager;
+    self.deviceManager.externalInputManager = self.externalInputManager;
     
 }
 

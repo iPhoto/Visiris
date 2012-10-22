@@ -57,5 +57,8 @@
     return [VSDeviceParameterUtils nameForOSCType:self.oscParameterType];
 }
 
+- (NSString*) deviceTypeName{
+    return @"not implemented yet";
+}
 
 @end

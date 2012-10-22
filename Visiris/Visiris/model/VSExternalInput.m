@@ -10,9 +10,5 @@
 
 @implementation VSExternalInput
 
-- (NSString *)description
-{
-    return [NSString stringWithFormat:@"blubb geht ned idiot"];
-}
 
 @end

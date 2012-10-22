@@ -59,13 +59,7 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
         
         self.createDeviceViewController = [[VSCreateDeviceViewController alloc] initWithNibName:@"VSCreateDeviceViewController" bundle:nil];
         self.createDeviceViewController.delegate = self;
-        
-        
-        // Start searching for external input devices
-//        self.externalInputManager = [[VSExternalInputManager alloc] init];
-        
-       
-        
+        self.createDeviceViewController.dataSource = self;
     }
     
     return self;
@@ -87,20 +81,16 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
         NSLog(@"ParameterType: %@   Identifier: %@", input.parameterType, input.identifier);
     }
     
-    return;
-    
     if ( !_isCurrentlyPresentingNewDeviceConfigurationPopover ) {
         
         [self insertNewDeviceRowAndPresentDeviceConfigurationSheet];
-        //        [self insertNewDeviceRowAndPresentDeviceConfigurationPopover];
     }
 }
 
 - (void)insertNewDeviceRowAndPresentDeviceConfigurationSheet
 {
-    [self insertNewDeviceRow];
+  //  [self insertNewDeviceRow];
     
-    /* WTF?????!!! */
     if ( ![[[self.createDeviceViewController.createDeviceWindow contentView] subviews] containsObject:self.createDeviceViewController.view] ) {
     }
     

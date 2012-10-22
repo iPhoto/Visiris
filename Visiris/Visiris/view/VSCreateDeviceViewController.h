@@ -36,9 +36,6 @@
 
 @property (strong) IBOutlet NSWindow                                        *createDeviceWindow;
 
-// Bindings
-@property (strong) NSArray                                                  *availableParameter;
-
 
 @property (weak) id<VSCreateDeviceViewControllerDataSource>                 dataSource;
 @property (weak) id<VSCreateDeviceViewControllerDelegate>                   delegate;

@@ -28,7 +28,7 @@
 
 #define kVSOSCInputManager_numberOfDefalutOSCListenPorts 5
 #define kVSOSCInputManager_oscPortWalkthroughInterval 1.0f
-#define kVSOSC_unusedPortLifetime 10
+#define kVSOSC_unusedPortLifetime 10000
 
 @interface VSOSCInputManager ()
 {
@@ -75,7 +75,7 @@
         self.referenceCountingPorts = [[VSReferenceCounting alloc] init];
         self.referencCountingAdresses = [[VSReferenceCounting alloc] init];
         
-        _observablePorts = NSMakeRange(4250, 4260);
+        _observablePorts = NSMakeRange(12340,12350);
         
         /* TODO: Implement Preference Panel
         observablePorts.location = [[NSUserDefaults standardUserDefaults] integerForKey:kVSOSCInputManager_inputRangeStart];
@@ -97,7 +97,8 @@
         _discoveredPorts = [[NSMutableDictionary alloc] init];
         
         self.snifferClients = [[NSMutableArray alloc] initWithCapacity:_numberOfInputClients];
-     //   [self createInputObserver:_numberOfInputClients];
+        [self createInputObserver:_numberOfInputClients];
+        
     }
     
     return self;
@@ -136,7 +137,8 @@
             {
                 [inPort stop];
                 
-                VSOSCClient *client = [[VSOSCClient alloc] initWithOSCInPort:inPort andType:VSOSCClientPortSniffer];
+                VSOSCClient *client = [[VSOSCClient alloc] initWithOSCInPort:inPort
+                                                                     andType:VSOSCClientPortSniffer];
                 client.delegate = self;
                 client.port = [inPort port];
                 [self.snifferClients addObject:client];
@@ -319,6 +321,7 @@
                 }
             }
             
+            // inform delegate about removing inputs
             [currentPort.addresses removeObjectsInArray:outdatedAddress];
 
             if ( 0 == currentPort.addresses.count ) {
@@ -326,11 +329,9 @@
             }
         }
         
-//        refSelf.discoveredPorts removeObjectsForKeys:<#(NSArray *)#>
         if (outdatedPorts.count > 0) {
             [refSelf.discoveredPorts removeObjectsForKeys:outdatedPorts];
         }
-//        NSLog(@"active ports: %@", refSelf.activePorts);
     };
 }
 
@@ -404,9 +405,12 @@
 - (void)oscClient:(VSOSCClient *)client didDiscoveredActivePort:(VSOSCPort *)discoveredPort
 {
     VSOSCPort *port = [self.discoveredPorts objectForKey:[NSNumber numberWithUnsignedInt:discoveredPort.port]];
+    
     if (!port)
     {
         [self.discoveredPorts setObject:discoveredPort forKey:[NSNumber numberWithUnsignedInt:discoveredPort.port]];
+        
+        //inform delegate about alle addresses added
     }
     else
     {
@@ -427,6 +431,7 @@
         
         if (containsAddress == NO)
         {
+            //inform delegate about new address
             [port addAddress:address];
         }
     }
