@@ -23,7 +23,7 @@
  * 
  * A VSTimelineObject stores the ProjectItem that it's representing. Also the position and the duration of the object on the timeline are stored in the object
  */
-@interface VSTimelineObject : VSTimelineObjectProxy<NSCopying>
+@interface VSTimelineObject : VSTimelineObjectProxy<NSCopying, NSCoding>
 
 /** Object the TimelineObject is representing */ 
 @property (strong) VSTimelineObjectSource* sourceObject;

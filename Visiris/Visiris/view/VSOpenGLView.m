@@ -22,9 +22,9 @@
 @synthesize pixelFormat     = _pixelFormat;
 @synthesize texture         = _texture;
 
-- (void)setOpenGLWithSharedContext:(NSOpenGLContext *)openGLContext{
+- (void)setOpenGLWithSharedContext:(NSOpenGLContext *)openGLContext andPixelFrom:(NSOpenGLPixelFormat*) pixelFormat{
     
-    self.pixelFormat = [[VSOutputController sharedOutputController] pixelFormat];
+    self.pixelFormat = pixelFormat;
     
 	// NSOpenGLView does not handle context sharing, so we draw to a custom NSView instead
 	self.openGLContext = [[NSOpenGLContext alloc] initWithFormat:self.pixelFormat shareContext:openGLContext];

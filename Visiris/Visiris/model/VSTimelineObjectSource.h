@@ -12,10 +12,10 @@
 /**
  * Source a TimelineObjectRepresents
  */
-@interface VSTimelineObjectSource : NSObject<NSCopying>
+@interface VSTimelineObjectSource : NSObject<NSCopying, NSCoding>
 
 /** ProjectItem the source represents */
-@property (weak) VSProjectItem* projectItem;
+@property (strong) VSProjectItem* projectItem;
 
 /** NSDictionary containing theparameters, the type - Property of VSParameter is used as Key. */
 @property (strong) NSDictionary *parameters;

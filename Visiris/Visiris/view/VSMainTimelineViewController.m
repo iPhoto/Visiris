@@ -20,6 +20,7 @@
 #import "VSProjectItemRepresentation.h"
 #import "VSProjectItemController.h"
 #import "VSProjectItemRepresentationController.h"
+#import "VSDocumentController.h"
 
 #import "VSCoreServices.h"
 
@@ -67,16 +68,18 @@ static NSString* defaultNib = @"VSMainTimelineView";
 
 -(id) initWithDefaultNib{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
-        self.trackViewControllers = [[NSMutableArray alloc] initWithCapacity:0];
+        self.trackViewControllers = [[NSMutableArray alloc] init];
         
     }
     
     return self;
 }
 
--(id) initWithDefaultNibAccordingForTimeline:(VSTimeline*)timeline{
+-(id) initWithDefaultNibAccordingForTimeline:(VSTimeline*)timeline projectItemController:(VSProjectItemController*) projectItemController andProjectionItemRepresentationController:(VSProjectItemRepresentationController*) projectItemRepresentationController{
     if(self = [self initWithDefaultNib]){
         self.timeline = timeline;
+        self.projectItemController = projectItemController;
+        self.projectItemRepresentationController = projectItemRepresentationController;
     }
     return self;
 }
@@ -95,10 +98,6 @@ static NSString* defaultNib = @"VSMainTimelineView";
     if([self.view isKindOfClass:[VSMainTimelineView class]]){
         ((VSMainTimelineView*) self.view).mouseMoveDelegate = self;
     }
-    
-    self.projectItemController = [VSProjectItemController sharedManager];
-    
-    self.projectItemRepresentationController = [VSProjectItemRepresentationController sharedManager];
     
     self.temporaryCreatedProjectItems = [[NSMutableDictionary alloc] init];
     
@@ -281,7 +280,14 @@ static NSString* defaultNib = @"VSMainTimelineView";
 
 
 -(void) unselectTimelineObjects:(NSArray*) timelineObjectsToUnselect{
-    [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectsGotUnselected object: timelineObjectsToUnselect];
+    
+    NSDictionary *userInfo = [NSDictionary dictionaryWithObject: [VSDocumentController documentOfView:self.view]
+                                                         forKey:VSSendersDocumentKeyInUserInfoDictionary];
+    
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectsGotUnselected
+                                                        object:timelineObjectsToUnselect
+                                                      userInfo:userInfo];
 }
 
 
@@ -666,32 +672,32 @@ static NSString* defaultNib = @"VSMainTimelineView";
 -(NSArray*) createProjectItemRepresentationsForFiles:(NSArray*) filePaths{
     
     return [self.projectItemRepresentationController representationsForFiles:filePaths];
-//    NSMutableArray *result = [[NSMutableArray alloc] init];
-//    
-//    NSMutableDictionary *currentTemporaryProjectItems = [NSMutableDictionary dictionaryWithDictionary:self.temporaryCreatedProjectItems];
-//    
-//    [self.temporaryCreatedProjectItems removeAllObjects];
-//    
-//    for(NSString *fileName in filePaths){
-//        
-//        VSProjectItemRepresentation *tmpProjectItemRepresentation = [currentTemporaryProjectItems objectForKey:fileName];
-//        
-//        if(!tmpProjectItemRepresentation){
-//            
-//            VSProjectItem *tempProjectItem = [self.projectItemController createNewProjectItemFromFile:fileName];
-//            
-//            if(tempProjectItem){
-//                tmpProjectItemRepresentation = [self.projectItemRepresentationController createPresentationOfProjectItem:tempProjectItem];
-//            }
-//        }
-//        
-//        if(tmpProjectItemRepresentation){
-//            [result addObject:tmpProjectItemRepresentation];
-//            [self.temporaryCreatedProjectItems setObject:tmpProjectItemRepresentation forKey:fileName];
-//        }
-//    }
+    //    NSMutableArray *result = [[NSMutableArray alloc] init];
+    //
+    //    NSMutableDictionary *currentTemporaryProjectItems = [NSMutableDictionary dictionaryWithDictionary:self.temporaryCreatedProjectItems];
+    //
+    //    [self.temporaryCreatedProjectItems removeAllObjects];
+    //
+    //    for(NSString *fileName in filePaths){
+    //
+    //        VSProjectItemRepresentation *tmpProjectItemRepresentation = [currentTemporaryProjectItems objectForKey:fileName];
+    //
+    //        if(!tmpProjectItemRepresentation){
+    //
+    //            VSProjectItem *tempProjectItem = [self.projectItemController createNewProjectItemFromFile:fileName];
+    //
+    //            if(tempProjectItem){
+    //                tmpProjectItemRepresentation = [self.projectItemRepresentationController createPresentationOfProjectItem:tempProjectItem];
+    //            }
+    //        }
+    //
+    //        if(tmpProjectItemRepresentation){
+    //            [result addObject:tmpProjectItemRepresentation];
+    //            [self.temporaryCreatedProjectItems setObject:tmpProjectItemRepresentation forKey:fileName];
+    //        }
+    //    }
     
-//    return result;
+    //    return result;
 }
 
 /**
@@ -761,7 +767,15 @@ static NSString* defaultNib = @"VSMainTimelineView";
         
         if(timelineObjectProxy.selected){
             [((VSTimelineObject*) timelineObjectProxy) setSelectedAndRegisterUndo:self.view.undoManager];
-            [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectsGotSelected object:[NSArray arrayWithObject:timelineObjectProxy]];
+            
+            NSDictionary *userInfo = [NSDictionary dictionaryWithObject: [VSDocumentController documentOfView:self.view]
+                                                                 forKey:VSSendersDocumentKeyInUserInfoDictionary];
+            
+            
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectsGotSelected
+                                                                object:[NSArray arrayWithObject:timelineObjectProxy]
+                                                              userInfo:userInfo];
         }
         
         [self.view.undoManager endUndoGrouping];
@@ -1058,16 +1072,16 @@ static NSString* defaultNib = @"VSMainTimelineView";
  */
 -(void) createTrack:(VSTrack*) track{
     
-    VSTrackViewController* newTrackViewController = [[VSTrackViewController alloc]initWithDefaultNibAccordingToTrack:track];
-    
-    // The VSTimelineViewControlller acts as the delegate of the VSTrackViewController
-    newTrackViewController.delegate = self;
-    newTrackViewController.pixelTimeRatio = self.pixelTimeRatio;
-    
-    [self.scrollView addTrackView:newTrackViewController.view];
-    
     //Size and position of the track
     int width = self.scrollView.visibleTrackViewsHolderWidth;
+    
+   
+    
+    VSTrackViewController* newTrackViewController = [[VSTrackViewController alloc]initWithDefaultNibAccordingToTrack:track andTrackHeight:VSTrackViewHeight];
+    
+    //set the autoresizing masks
+    [[newTrackViewController view] setAutoresizingMask:NSViewWidthSizable];
+    [[newTrackViewController view] setAutoresizesSubviews:YES];
     
     NSInteger yPosition = (VSTrackViewHeight+VSTrackViewMargin) * ([self.trackViewControllers count]);
     
@@ -1075,10 +1089,12 @@ static NSString* defaultNib = @"VSMainTimelineView";
     
     [[newTrackViewController view] setFrame:(newFrame)];
     
-    //set the autoresizing masks
-    [[newTrackViewController view] setAutoresizingMask:NSViewWidthSizable];
-    [[newTrackViewController view] setAutoresizesSubviews:NO];
+    // The VSTimelineViewControlller acts as the delegate of the VSTrackViewController
+    newTrackViewController.delegate = self;
+    newTrackViewController.pixelTimeRatio = self.pixelTimeRatio;
     
+    [self.scrollView addTrackView:newTrackViewController.view];
+
     [self.trackViewControllers addObject:newTrackViewController];
     
     [self addNewTrackLabelForTrack:newTrackViewController];

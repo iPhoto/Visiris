@@ -12,6 +12,7 @@
 #import "VSTimelineObjectPropertiesViewController.h"
 #import "VSProjectItemRepresentation.h"
 #import "VSTimelineObject.h"
+#import "VSDocumentController.h"
 
 #import "VSCoreServices.h"
 
@@ -55,7 +56,7 @@ static NSString* defaultNib = @"VSPropertiesView";
 #pragma mark - NSViewController
 
 -(void) awakeFromNib{
-
+    
     [self.view setAutoresizingMask:NSViewHeightSizable | NSViewWidthSizable];
     [self.view setAutoresizesSubviews:YES];
     
@@ -66,23 +67,34 @@ static NSString* defaultNib = @"VSPropertiesView";
     //inits the two properties subviews
     self.projectItemPropertiesViewController = [[VSProjectItemPropertiesViewController alloc] initWithDefaultNib];
     self.timelineObjectPropertiesViewController = [[VSTimelineObjectPropertiesViewController alloc] initWithDefaultNib];
-
+    
     
     [self initObservers];
 }
 
 -(void) initObservers{
     //Adding Observer for Project Items got selected
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(projectItemsRepresentationsGotSelected:) name:VSProjectItemRepresentationGotSelected object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(projectItemsRepresentationsGotSelected:)
+                                                 name:VSProjectItemRepresentationGotSelected object:nil];
     
     //Adding Observer for Project Items got unselected
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(projectItemsRepresentationsGotUnselected:) name:VSProjectItemRepresentationGotUnselected object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(projectItemsRepresentationsGotUnselected:)
+                                                 name:VSProjectItemRepresentationGotUnselected
+                                               object:nil];
     
     //Adding Observer for TimelineObjects got selected
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectsGotSelected:) name:VSTimelineObjectsGotSelected object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(timelineObjectsGotSelected:)
+                                                 name:VSTimelineObjectsGotSelected
+                                               object:nil];
     
     //Adding Observer for TimelineObjects got unselected
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(timelineObjectsGotUnselected:) name:VSTimelineObjectsGotUnselected object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(timelineObjectsGotUnselected:)
+                                                 name:VSTimelineObjectsGotUnselected
+                                               object:nil];
 }
 
 #pragma mark - Private Methods
@@ -94,12 +106,14 @@ static NSString* defaultNib = @"VSPropertiesView";
  * @param notification Holding the selected VSProjectItemRepresentation
  */
 -(void) projectItemsRepresentationsGotSelected:(NSNotification *) notification{
-    if([notification.object isKindOfClass:[NSArray class] ]){
-        
-        if([[((NSArray*) notification.object) objectAtIndex:0] isKindOfClass:[VSProjectItemRepresentation class]]){
-            VSProjectItemRepresentation *selectedProjectItemRepresentation = ((VSProjectItemRepresentation*) [((NSArray*) notification.object) objectAtIndex:0]);
-            [self showSubview:self.projectItemPropertiesViewController.view];
-            self.projectItemPropertiesViewController.projectItemRepresentation = selectedProjectItemRepresentation;
+    if ([[notification.userInfo objectForKey:VSSendersDocumentKeyInUserInfoDictionary] isEqualTo:[VSDocumentController documentOfView:self.view]]){
+        if([notification.object isKindOfClass:[NSArray class] ]){
+            
+            if([[((NSArray*) notification.object) objectAtIndex:0] isKindOfClass:[VSProjectItemRepresentation class]]){
+                VSProjectItemRepresentation *selectedProjectItemRepresentation = ((VSProjectItemRepresentation*) [((NSArray*) notification.object) objectAtIndex:0]);
+                [self showSubview:self.projectItemPropertiesViewController.view];
+                self.projectItemPropertiesViewController.projectItemRepresentation = selectedProjectItemRepresentation;
+            }
         }
     }
 }
@@ -111,7 +125,7 @@ static NSString* defaultNib = @"VSPropertiesView";
  * @param notification NSNotification storing the VSProjectItemRepresentations got unselected.
  */
 -(void) projectItemsRepresentationsGotUnselected:(NSNotification *) notification{
-    DDLogInfo(@"projectItemsRepresentationsGotUnselected: %@  NOT IMPLEMENTED YET", notification);    
+    DDLogInfo(@"projectItemsRepresentationsGotUnselected: %@  NOT IMPLEMENTED YET", notification);
 }
 
 /**
@@ -121,15 +135,16 @@ static NSString* defaultNib = @"VSPropertiesView";
  * @param notification Holding the selected VSTimelineObject
  */
 -(void) timelineObjectsGotSelected:(NSNotification *) notification{
-
-    if([[notification object] isKindOfClass:[NSArray class]]){
-        NSArray *selectedTimelineObjects = (NSArray*) [notification object];
-        
-        if(selectedTimelineObjects && selectedTimelineObjects.count > 0){
-            if([[selectedTimelineObjects objectAtIndex:0] isKindOfClass:[VSTimelineObject class]]){
-                VSTimelineObject *timelineObject = (VSTimelineObject*) [selectedTimelineObjects objectAtIndex:0];
-            [self showSubview:self.timelineObjectPropertiesViewController.view];
-            self.timelineObjectPropertiesViewController.timelineObject = timelineObject;
+    if ([[notification.userInfo objectForKey:VSSendersDocumentKeyInUserInfoDictionary] isEqualTo:[VSDocumentController documentOfView:self.view]]){
+        if([[notification object] isKindOfClass:[NSArray class]]){
+            NSArray *selectedTimelineObjects = (NSArray*) [notification object];
+            
+            if(selectedTimelineObjects && selectedTimelineObjects.count > 0){
+                if([[selectedTimelineObjects objectAtIndex:0] isKindOfClass:[VSTimelineObject class]]){
+                    VSTimelineObject *timelineObject = (VSTimelineObject*) [selectedTimelineObjects objectAtIndex:0];
+                    [self showSubview:self.timelineObjectPropertiesViewController.view];
+                    self.timelineObjectPropertiesViewController.timelineObject = timelineObject;
+                }
             }
         }
     }
@@ -142,10 +157,12 @@ static NSString* defaultNib = @"VSPropertiesView";
  * @param notification NSNotification storing the selected VSTimelineObject
  */
 -(void) timelineObjectsGotUnselected:(NSNotification *) notification{
-    if(self.view.subviews.count > 0){
-        if([[self.view subviews] objectAtIndex:0] == self.timelineObjectPropertiesViewController.view){
-            [self.timelineObjectPropertiesViewController willBeHidden];
-            [self.timelineObjectPropertiesViewController.view removeFromSuperview];
+    if ([[notification.userInfo objectForKey:VSSendersDocumentKeyInUserInfoDictionary] isEqualTo:[VSDocumentController documentOfView:self.view]]){
+        if(self.view.subviews.count > 0){
+            if([[self.view subviews] objectAtIndex:0] == self.timelineObjectPropertiesViewController.view){
+                [self.timelineObjectPropertiesViewController willBeHidden];
+                [self.timelineObjectPropertiesViewController.view removeFromSuperview];
+            }
         }
     }
 }

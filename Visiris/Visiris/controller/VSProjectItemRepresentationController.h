@@ -10,6 +10,7 @@
 
 @class VSProjectItemRepresentation;
 @class VSProjectItem;
+@class VSProjectItemController;
 
 /**
  * Manages all ProjectItemRepresentations.
@@ -21,12 +22,10 @@
 /** Stores the representations for all VSProjectItmes in the project */
 @property (strong, readonly) NSMutableArray  *projectItemRepresentations;
 
-#pragma mark- Functions
-/**
- * Returns the singleton Instance
- * @return Reference on the Singleton Instance
- */
-+(VSProjectItemRepresentationController*)sharedManager;
+
+#pragma mark - Init
+
+-(id) initForProjectItemController:(VSProjectItemController*) projectItemController;
 
 
 #pragma mark- Methods

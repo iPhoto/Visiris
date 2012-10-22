@@ -87,6 +87,7 @@ static NSString* defaultNib = @"VSTimelineObjectView";
 }
 
 -(void) awakeFromNib{
+    [self.view setAutoresizingMask:NSViewHeightSizable];
     self.deviceManager = ((VSDocument*)[[NSDocumentController sharedDocumentController] currentDocument]).deviceManager;
 }
 

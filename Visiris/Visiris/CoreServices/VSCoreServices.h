@@ -40,6 +40,7 @@
 #import "VSNotificationConstants.h"
 #import "VSAssortedConstants.h"
 #import "VisirisCore/VSParameterTypes.h"
+#import "VSVisirsConstants.h"
 
 
 

@@ -27,6 +27,7 @@
 /** NSMutableArray storing all VSTimelineObjectViewControllers of the VSTimelineObjectViews which's VSTimelineObjects were dragged onto the VSTrackView but not dropped yet. Neccessary to give the user a preview where the newly added VSTimelineObject will be placed on the timeline */
 @property (strong) NSMutableArray *temporaryTimelineObjectViewControllers;
 
+@property (assign) float height;
 @end
 
 // Size of the area objects can be snapped to other objects on the timelien
@@ -40,15 +41,22 @@ static NSString* defaultNib = @"VSTrackView";
 
 #pragma mark - Init
 
--(id) initWithDefaultNibAccordingToTrack:(VSTrack*) track{
+-(id) initWithDefaultNibAccordingToTrack:(VSTrack*) track andTrackHeight:(float)height{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
-        
+        [self.view setAutoresizesSubviews:YES];
         self.track = track;
-
+        self.height = height;
         [self initObservers];
+        [self initTimelineObjects];
     }
     
     return self;
+}
+
+-(void) initTimelineObjects{
+    for(VSTimelineObject *timelineObject in self.track.timelineObjects){
+        [self addNewTimelineObject:timelineObject];
+    }
 }
 
 
@@ -65,7 +73,10 @@ static NSString* defaultNib = @"VSTrackView";
 
 -(void) initObservers{
     if(self.track){
-        [self.track addObserver:self forKeyPath:@"timelineObjects" options:NSKeyValueObservingOptionPrior |NSKeyValueObservingOptionNew context:nil];
+        [self.track addObserver:self
+                     forKeyPath:@"timelineObjects"
+                        options:NSKeyValueObservingOptionPrior |NSKeyValueObservingOptionNew
+                        context:nil];
     }
 }
 
@@ -76,6 +87,8 @@ static NSString* defaultNib = @"VSTrackView";
         
         ((VSTrackView*) self.view).controllerDelegate = self;
     }
+    
+    
 }
 
 #pragma mark - NSViewController
@@ -1102,9 +1115,11 @@ IntersectedByTimelineObjectViews:[NSArray arrayWithObject:timelineObjectViewCont
     newFrame.x =  [self pixelForTimestamp:timelineObjectViewController.timelineObjectProxy.startTime];
     newFrame.y = 0;
     newFrame.width = [self pixelForTimestamp:timelineObjectViewController.timelineObjectProxy.duration];
-    newFrame.height = self.view.frame.size.height;
+    newFrame.height = self.height;
+
     
     [timelineObjectViewController setViewsDoubleFrame:newFrame];
+    
 }
 
 /**
@@ -1122,7 +1137,10 @@ IntersectedByTimelineObjectViews:[NSArray arrayWithObject:timelineObjectViewCont
  * @return Pixelposition for the given Timestamp
  */
 -(double) pixelForTimestamp:(double) timestamp{
-    return timestamp / self.pixelTimeRatio;
+    if(self.pixelTimeRatio > 0)
+        return timestamp / self.pixelTimeRatio;
+    else
+        return 0;
 }
 
 
@@ -1136,11 +1154,11 @@ IntersectedByTimelineObjectViews:[NSArray arrayWithObject:timelineObjectViewCont
  */
 -(void) addNewTimelineObject:(VSTimelineObject*) aTimelineObject{
     VSTimelineObjectViewController* newController = [[VSTimelineObjectViewController alloc] initWithDefaultNibAndTimelineObjectProxy:aTimelineObject];
-    
+    [newController.view setAutoresizingMask:NSViewHeightSizable];
+    [newController.view setAutoresizesSubviews:YES];
     [newController changePixelTimeRatio:self.pixelTimeRatio];
     
     newController.delegate = self;
-    
     
     [self.view addSubview:[newController view]];
     
@@ -1151,6 +1169,7 @@ IntersectedByTimelineObjectViews:[NSArray arrayWithObject:timelineObjectViewCont
     [self.view.layer addSublayer:newController.view.layer];
     
     [self.view setNeedsDisplayInRect:self.view.visibleRect];
+
     
     if(aTimelineObject.selected){
         if([self delegateRespondsToSelector:@selector(timelineObjectProxy:willBeSelectedOnTrackViewController:exclusively:)]){

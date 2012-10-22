@@ -15,7 +15,7 @@
 /**
  * The VSDeviceParameterMapper is the connector between parameter and device
  */
-@interface VSDeviceParameterMapper : NSObject<NSCopying>
+@interface VSDeviceParameterMapper : NSObject<NSCopying, NSCoding>
 
 @property (weak) VSDeviceParameter *deviceParameter;
 @property (weak) VSDevice *device;

@@ -17,7 +17,6 @@
  */
 @interface VSPreviewOpenGLView : VSOpenGLView
 
-- (id)initWithFrame:(NSRect)frameRect;
 - (void)setFrameProportionally:(NSRect) frameRect;
 
 @end

@@ -38,5 +38,29 @@ NS_INLINE NSString* NSStringFromVSRange(VSRange range){
     return [NSString stringWithFormat:@"(min: %f max %f)",range.min, range.max];
 }
 
+NS_INLINE void VSRangeEncode(NSCoder *aCoder, VSRange range, NSString *key){
+    [aCoder encodeObject:[NSData dataWithBytes:&range length:sizeof(range)] forKey:key];
+
+}
+
+NS_INLINE VSRange VSRangeDecode(NSCoder *aDecoder, NSString* key, NSError **error){
+    NSData *data = [aDecoder decodeObjectForKey:key];
+    
+    if(data){
+        VSRange range;
+
+
+        [data getBytes:&range length:sizeof(range)];
+        return range;
+    }
+    else{
+        *error = [NSError errorWithDomain:[NSString stringWithFormat:@"Object for %@ wasn't a valid NSValue",key]
+                                    code:0
+                                userInfo:nil];
+        
+        return VSMakeRange(0, 0);
+    }
+}
+
 
 #endif

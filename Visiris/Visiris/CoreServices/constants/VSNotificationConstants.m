@@ -17,3 +17,5 @@ NSString *VSTimelineObjectsGotUnselected = @"VSTimelineObjectotUnselected";
 NSString *VSTimelineObjectPropertiesDidTurnInactive = @"VSTimelineObjectPropertiesDidTurnInactive";
 
 NSString *VSPlayKeyWasPressed = @"VSPlayShortCutWasPressed";
+
+NSString *VSSendersDocumentKeyInUserInfoDictionary = @"VSSendersDocumentKeyInUserInfoDictionary";

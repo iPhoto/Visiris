@@ -9,21 +9,36 @@
 #import "VSTrack.h"
 #import "VSTimelineObject.h"
 
+@interface VSTrack()
+
+
+@end
 
 @implementation VSTrack
+
+#define kTimelineObjects @"TimelineObjects"
+#define kName @"Name"
+#define kType @"Type"
+#define kTrackID @"TrackID"
+
 @synthesize timelineObjects = _timelineObjects;
-@synthesize name            = _name;
-@synthesize type            = _type;
-@synthesize trackID         = _trackID;
 
 #pragma mark - Init
 
 -(id) initWithName:(NSString*) name trackID:(NSInteger)trackID type:(VSTrackType)type{
-    if(self = [super init]){
+    if(self = [self init]){
         self.name = name;
         self.type = type;
         self.trackID = trackID;
-        _timelineObjects = [NSMutableArray arrayWithCapacity:0];
+        
+    }
+    
+    return self;
+}
+
+-(id) init{
+    if(self = [super init]){
+        _timelineObjects = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -34,15 +49,49 @@
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
 }
 
+#pragma mark - NSCoding Implementation
 
+-(void) encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeObject:_timelineObjects forKey:kTimelineObjects];
+    [aCoder encodeObject:self.name forKey:kName];
+    [aCoder encodeInteger:self.trackID forKey:kTrackID];
+    [aCoder encodeInteger:self.type forKey:kType];
+}
+
+-(id) initWithCoder:(NSCoder *)aDecoder{
+    
+    if( self = [self init]){
+        NSArray *storedTimelineObjects = [aDecoder decodeObjectForKey:kTimelineObjects];
+        if(storedTimelineObjects.count)
+        {
+            [self.timelineObjects addObjectsFromArray:storedTimelineObjects];
+        }
+        self.name = [aDecoder decodeObjectForKey:kName];
+        self.trackID = [aDecoder decodeIntegerForKey:kTrackID];
+        self.type = [aDecoder decodeIntegerForKey:kType];
+    }
+    
+    return self;
+}
 
 #pragma mark - Methods
 
 -(BOOL) addTimelineObject:(VSTimelineObject *)timelineObject{
-    [self.timelineObjects addObject:timelineObject];
-    return YES;
+    if(!timelineObject){
+        DDLogError(@"TimelineObject is null");
+        return NO;
+    }
+    else{
+        
+        DDLogInfo(@"observers: %@",self.observationInfo);
+        [self.timelineObjects addObject:timelineObject];
+        return YES;
+    }
 }
 
+-(void) addTimelineObjectsObject:(NSArray *)object{
+    [self.timelineObjects addObjectsFromArray:object];
+}
 
 -(BOOL) removeTimelineObject:(VSTimelineObject *)aTimelineObject{
     if([self.timelineObjects containsObject:aTimelineObject]){
@@ -74,7 +123,7 @@
     
     
     if(result){
-//        [undoManager registerUndoWithTarget:self selector:@selector(addTimelineObject:) object:aTimelineObject];
+        //        [undoManager registerUndoWithTarget:self selector:@selector(addTimelineObject:) object:aTimelineObject];
     }
     
     return result;
@@ -92,7 +141,7 @@
     BOOL result = [self addTimelineObject:timelineObject];
     
     if(result){
-//        [undoManager registerUndoWithTarget:self selector:@selector(removeTimelineObject:) object:timelineObject];
+        //        [undoManager registerUndoWithTarget:self selector:@selector(removeTimelineObject:) object:timelineObject];
     }
     
     return result;

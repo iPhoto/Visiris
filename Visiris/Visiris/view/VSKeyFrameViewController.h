@@ -44,7 +44,7 @@
 -(void) keyFrameViewController:(VSKeyFrameViewController *)keyFrameViewController didStopDragginAtPosition:(NSPoint)
 finalPoint;
 
--(BOOL) keyFrameViewControllerWantsToBeUnselected:(VSKeyFrameViewController *)keyFrameViewController;
+//-(BOOL) keyFrameViewControllerWantsToBeUnselected:(VSKeyFrameViewController *)keyFrameViewController;
 
 @end
 

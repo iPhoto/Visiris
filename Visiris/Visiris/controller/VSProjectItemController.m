@@ -38,19 +38,6 @@ static VSProjectItemController* sharedProjectItemController = nil;
 }
 
 
-#pragma mark- Functions
-
-+(VSProjectItemController*)sharedManager{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        
-        sharedProjectItemController = [[VSProjectItemController alloc] init];
-        
-    });
-    
-    return sharedProjectItemController;
-}
-
 #pragma mark- Methods
 
 

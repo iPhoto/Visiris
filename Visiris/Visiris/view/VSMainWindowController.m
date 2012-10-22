@@ -31,6 +31,7 @@
 /** Responsible for the browser view which is shown at the top center of the window. */
 @property (strong) VSPropertiesViewController *propertiesViewController;
 
+@property (weak, readonly) VSDocument *visirsDocument;
 
 @end
 
@@ -94,12 +95,15 @@ static NSString* defaultNib = @"MainWindow";
  */
 -(void) initMainWindowAccordingToDocument{
     
-    self.timelineViewController = [[VSMainTimelineViewController alloc] initWithDefaultNibAccordingForTimeline:((VSDocument*) self.document).timeline];
+    
+    self.timelineViewController = [[VSMainTimelineViewController alloc] initWithDefaultNibAccordingForTimeline:((VSDocument*) self.document).timeline
+                                                                                         projectItemController:self.visirsDocument.projectItemController
+                                                                     andProjectionItemRepresentationController:self.visirsDocument.projectItemRepresentationController];
     
     [self loadView:timelineViewController.view intoSplitView:self.mainSplitView replacingViewAtPosition:1];
     
     
-    self.previewViewController = [[VSPreviewViewController alloc] initWithDefaultNib];
+    self.previewViewController = [[VSPreviewViewController alloc] initWithDefaultNibAndOutputController:((VSDocument*) self.document).outputController];
     
     [self loadView:self.previewViewController.view intoSplitView:self.topSplitView replacingViewAtPosition:2];
     
@@ -113,7 +117,8 @@ static NSString* defaultNib = @"MainWindow";
  */
 -(void) initSplitViews{
     
-    self.browserViewController = [[VSBrowserViewController alloc] initWithDefaultNib];
+    self.browserViewController = [[VSBrowserViewController alloc] initWithDefaultNibProjectItemController:self.visirsDocument.projectItemController andProjectItemRepresentationController:self.visirsDocument.projectItemRepresentationController];
+    
     [self loadView:browserViewController.view intoSplitView:self.topSplitView replacingViewAtPosition:0];
     
     //Adding the VSPropertiesView to the top center
@@ -174,6 +179,14 @@ static NSString* defaultNib = @"MainWindow";
     }
     
     return proposedMaximumPosition;
+}
+                                   
+-(VSDocument*) visirsDocument{
+    if([self.document isKindOfClass:[VSDocument class]]){
+        return self.document;
+    }
+    
+    return nil;
 }
 
 @end

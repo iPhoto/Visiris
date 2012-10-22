@@ -16,6 +16,7 @@
 
 @class VSPreProcessor;
 @class VSTimeline;
+@class VSDocument;
 
 /**
  * VSPlaybackController start and controls playing of the Visiris Project. It tells the VSPreProcessor to process data for an specific-frame
@@ -44,7 +45,7 @@
  * @param timeline The VSTimline is called when the current timestamp has changed.
  * @return self
  */
--(id) initWithPreProcessor:(VSPreProcessor*) preProcessor timeline:(VSTimeline*) timeline;
+-(id) initWithPreProcessor:(VSPreProcessor *)preProcessor andOutputController:(VSOutputController*) outputController forTimeline:(VSTimeline *)timeline ofDocument:(VSDocument*) document;
 
 /**
  * Starts the playback

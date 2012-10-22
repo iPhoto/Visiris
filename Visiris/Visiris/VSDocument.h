@@ -15,6 +15,10 @@
 @class VSExternalInputManager;
 @class VSDeviceManager;
 @class VSExternalInputManager;
+@class VSOutputController;
+@class VSProjectItemController;
+@class VSProjectItemRepresentationController;
+
 
 
 /**
@@ -34,11 +38,15 @@
 /** VSTimeline is initialized by VSMainWindowController */
 @property (strong) VSTimeline* timeline;
 
+@property (strong) VSOutputController *outputController;
 
 /** VSDeviceManager handles the devices and their representations */
 @property (strong) VSDeviceManager *deviceManager;
  
 @property (strong) VSExternalInputManager *externalInputManager;
+
+@property (strong) VSProjectItemController *projectItemController;
+@property (strong) VSProjectItemRepresentationController *projectItemRepresentationController;
 
 -(BOOL) addFileToProject:(NSString*) fileName;
 

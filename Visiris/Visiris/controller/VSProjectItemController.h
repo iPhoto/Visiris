@@ -24,16 +24,6 @@
 /** Holds the projectItmes the controller is responsible */
 @property (strong, readonly)    NSMutableArray  *projectItems;
 
-
-#pragma mark- Functions
-/**
- * Returns the singleton Instance
- * @return Reference on the Singleton Instance
-*/
-+(VSProjectItemController*)sharedManager;
-
-
-
 #pragma Methods
 
 /**

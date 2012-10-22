@@ -16,7 +16,7 @@
  *
  * A track manages the TimelineObjects placed on it.
  */
-@interface VSTrack : NSObject
+@interface VSTrack : NSObject<NSCoding>
 
 /** Array of all TimelineObjects placed on the timeline */
 @property (strong, readonly) NSMutableArray* timelineObjects;

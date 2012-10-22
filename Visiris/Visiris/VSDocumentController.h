@@ -8,6 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class VSDocument;
+
 @interface VSDocumentController : NSDocumentController<NSApplicationDelegate>
+
++(id) documentOfView:(NSView*) view;
 
 @end

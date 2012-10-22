@@ -26,10 +26,9 @@
 @property (nonatomic, assign) NSSize    fullScreenSize;
 @property (nonatomic, assign) NSSize    previewSize;
 
-#pragma mark - Functions
+#pragma mark - Init
 
-+(VSOutputController*)sharedOutputController;
-
+-(id) initWithOpenGLContext:(NSOpenGLContext*) openGLContext;
 
 #pragma mark - Methods
 
@@ -60,6 +59,5 @@
 
 -(void) unregisterOutput:(id<VSOpenGLOutputDelegate>) output;
 
--(void) connectWithOpenGLContext:(NSOpenGLContext*) openGLContext;
 
 @end

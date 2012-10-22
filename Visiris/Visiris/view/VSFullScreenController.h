@@ -14,7 +14,7 @@
 
 @interface VSFullScreenController : NSResponder<VSOpenGLOutputDelegate, VSViewKeyDownDelegate>
 
-- (id)init;
+- (id)initWithOutputController:(VSOutputController*) outputController;
 
 -(void) toggleFullScreenForScreen:(NSInteger) screenID;
 

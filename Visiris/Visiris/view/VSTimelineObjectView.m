@@ -114,7 +114,14 @@ static int resizingAreaWidth = 10;
 }
 
 -(void) setFrame:(NSRect)frameRect{
-    [super setFrame:NSRectFromVSDoubleFrame(self.doubleFrame)];
+    NSRect visibleRect = NSRectFromVSDoubleFrame(self.doubleFrame);
+    visibleRect.size.height = frameRect.size.height;
+    [super setFrame:visibleRect];
+}
+
+-(void) setFrameSize:(NSSize)newSize{
+    newSize.height = NSRectFromVSDoubleFrame(self.doubleFrame).size.height;
+    [super setFrameSize:newSize];
 }
 
 -(BOOL) acceptsFirstResponder{
@@ -411,7 +418,7 @@ static int resizingAreaWidth = 10;
  * For this purpose it calls setFrame with an NSZeroRect
  */
 -(void) updateFrame{
-    [self setFrame:NSZeroRect];
+    [self setFrame:NSRectFromVSDoubleFrame(self.doubleFrame)];
 }
 
 /**
@@ -506,7 +513,7 @@ static int resizingAreaWidth = 10;
     if(!VSEqualDoubleFrame(_doubleFrame, doubleFrame)){
         _doubleFrame = doubleFrame;
         
-        [self updateFrame];
+       [self updateFrame];
     }
 }
 

@@ -97,7 +97,7 @@
         _discoveredPorts = [[NSMutableDictionary alloc] init];
         
         self.snifferClients = [[NSMutableArray alloc] initWithCapacity:_numberOfInputClients];
-        [self createInputObserver:_numberOfInputClients];
+     //   [self createInputObserver:_numberOfInputClients];
     }
     
     return self;

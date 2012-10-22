@@ -23,3 +23,6 @@ extern NSString *VSTimelineObjectPropertiesDidTurnInactive;
 
 /** Name of the Notification sent when the key combination for starting the playback pressed */
 extern NSString *VSPlayKeyWasPressed;
+
+/** Key in the userInfo Dictionary of notifications holding the document it is sent from*/
+extern NSString *VSSendersDocumentKeyInUserInfoDictionary;

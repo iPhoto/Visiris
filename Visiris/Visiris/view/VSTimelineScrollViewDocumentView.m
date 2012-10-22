@@ -49,7 +49,10 @@
  * Inits the observers of the view
  */
 - (void)initObservers {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(boundsDidChange:) name:NSViewBoundsDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(boundsDidChange:)
+                                                 name:NSViewBoundsDidChangeNotification
+                                               object:nil];
 }
 
 /**

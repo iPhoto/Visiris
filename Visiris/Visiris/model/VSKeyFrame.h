@@ -14,7 +14,7 @@
  *
  * A Keyframe describes a value for an parameter at a specific timestamp
  */
-@interface VSKeyFrame : NSObject<NSCopying>
+@interface VSKeyFrame : NSObject<NSCopying, NSCoding>
 
 
 #pragma mark - Properties

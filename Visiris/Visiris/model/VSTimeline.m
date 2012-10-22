@@ -30,8 +30,7 @@
 /** Reference of the Singleton of the timeline object factory. The Factory creates new TimelineObject according to the information stored in their corresponding ProjectItems */
 @property VSTimelineObjectFactory* timelineObjectFactory;
 
-/** Reference of the Singleton of VSProjectItemController. Used to get the ProjectItem corresponding to its VSProjectItem representation */
-@property VSProjectItemController *projectItemController;
+
 
 /** Stores the last assigned track id*/
 @property NSInteger lastTrackID;
@@ -45,19 +44,30 @@
 
 @implementation VSTimeline
 
-@synthesize tracks                  = _tracks;
-@synthesize timelineObjectFactory   = _timelineObjectFactory;
-@synthesize projectItemController   = _projectItemController;
-@synthesize duration                = _duration;
-@synthesize timelineObjectsDelegate = _timelineObjectsDelegate;
-@synthesize playHead                = _playHead;
-@synthesize lastTrackID             = _lastTrackID;
+@synthesize timelineObjectsDelegate     = _timelineObjectsDelegate;
 
 #pragma mark- Init
 
--(id) initWithDuration:(float) duration{
-    if(self = [self init]){
+#define kDuration @"Duration"
+#define kTracks @"Tracks"
+#define kTimelineObjectsDelegate @"TimelineObjectsDelegate"
+#define kPlayHead @"PlayHead"
+
+-(id) initWithDuration:(float) duration andProjectItemController:(VSProjectItemController *)projectItemController{
+    if(self = [self initWithProjectItemController:projectItemController]){
         self.duration = duration;
+    }
+    
+    return self;
+}
+
+-(id) initWithProjectItemController:(VSProjectItemController*) projectItemController{
+    if(self = [self init]){
+        self.timelineObjectFactory = [VSTimelineObjectFactory sharedFactory];
+        self.projectItemController = projectItemController;
+        self.tracks = [[NSMutableArray alloc] init];
+        
+        [self initPlayHead];
     }
     
     return self;
@@ -66,10 +76,6 @@
 -(id) init{
     if(self = [super init]){
         self.timelineObjectFactory = [VSTimelineObjectFactory sharedFactory];
-        self.projectItemController = [VSProjectItemController sharedManager];
-        self.tracks = [[NSMutableArray alloc] init];
-        
-        [self initPlayHead];
     }
     
     return self;
@@ -97,7 +103,7 @@
             switch (kind) {
                 case NSKeyValueChangeInsertion:
                 {
-                    if(![[change valueForKey:@"notificationIsPrior"] boolValue]){ 
+                    if(![[change valueForKey:@"notificationIsPrior"] boolValue]){
                         NSArray *allTimelineObjects = [affectedTrack valueForKey:keyPath];
                         NSArray *newTimelineObjects = [allTimelineObjects objectsAtIndexes:[change  objectForKey:@"indexes"]];
                         
@@ -109,7 +115,7 @@
                 }
                 case NSKeyValueChangeRemoval:
                 {
-                    if([[change valueForKey:@"notificationIsPrior"] boolValue]){ 
+                    if([[change valueForKey:@"notificationIsPrior"] boolValue]){
                         NSArray *allTimelineObjects = [affectedTrack valueForKey:keyPath];
                         NSArray *removedTimelineObjects = [allTimelineObjects objectsAtIndexes:[change  objectForKey:@"indexes"]];
                         
@@ -132,17 +138,58 @@
     }
 }
 
+#pragma mark - NSCoding Implementation
+
+-(void) encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeDouble:self.duration forKey:kDuration];
+    [aCoder encodeObject:self.tracks forKey:kTracks];
+}
+
+-(id) initWithCoder:(NSCoder *)aDecoder{
+    
+    if(self = [self init]){
+        self.duration = [aDecoder decodeDoubleForKey:kDuration];
+        
+        self.tracks =  [aDecoder decodeObjectForKey:kTracks];
+        
+        for(VSTrack * track in self.tracks){
+            [track addObserver:self forKeyPath:@"timelineObjects"
+                          options:NSKeyValueObservingOptionPrior | NSKeyValueObservingOptionNew
+                          context:nil];
+            
+            if(track.trackID > self.lastTrackID){
+                self.lastTrackID = track.trackID;
+            }
+        }
+    }
+    return self;
+}
+
+
 #pragma mark - Methods
 
 #pragma mark Tracks
 
 -(BOOL) addNewTrackNamed:(NSString *)name ofType:(VSTrackType)type{
     VSTrack* newTrack = [[VSTrack alloc] initWithName:name trackID:[self nextAvailableTrackID] type:type];
-    
-    [newTrack addObserver:self forKeyPath:@"timelineObjects" options:NSKeyValueObservingOptionPrior |NSKeyValueObservingOptionNew context:nil];
-    
+
     [self.tracks addObject:newTrack];
+    
+    [self addedTrack:self.tracks.lastObject];
     return YES;
+}
+
+-(void) addedTrack:(VSTrack*) newTrack{
+    DDLogInfo(@"observing now %@",newTrack);
+    [newTrack addObserver:self forKeyPath:@"timelineObjects"
+                  options:NSKeyValueObservingOptionPrior | NSKeyValueObservingOptionNew
+                  context:nil];
+    
+    if(newTrack.timelineObjects){
+        if([self timelineObjectsDelegateImplementsSelector:@selector(timelineObjects:haveBeenAddedToTrack:)]){
+            [self.timelineObjectsDelegate timelineObjects:newTrack.timelineObjects haveBeenAddedToTrack:newTrack];
+        }
+    }
 }
 
 #pragma mark Add TimelineObjects
@@ -189,7 +236,7 @@
 }
 
 -(VSTimelineObject*) copyTimelineObject:(VSTimelineObject *)baseTimelineObject toTrack:(VSTrack *)track atPosition:(double)position withDuration:(double)duration andRegisterUndoOperation:(NSUndoManager *)undoManager{
-
+    
     VSTimelineObject *copiedTimelineObject = [self.timelineObjectFactory createCopyOfTimelineObject:baseTimelineObject atStartTime:position withDuration:duration];
     
     // Adds the new object to the given track */
@@ -328,5 +375,26 @@
     return ++self.lastTrackID;
 }
 
+-(void) timelineObjectsDelegateDidRegister{
+    for(VSTrack *track in self.tracks){
+        if(track.timelineObjects.count){
+            if([self timelineObjectsDelegateImplementsSelector:@selector(timelineObjects:haveBeenAddedToTrack:)]){
+                [self.timelineObjectsDelegate timelineObjects:track.timelineObjects haveBeenAddedToTrack:track];
+            }
+        }
+    }
+}
+
+#pragma mark - Properties
+
+-(id<VSTimelineTimelineObjectsDelegate>) timelineObjectsDelegate{
+    return _timelineObjectsDelegate;
+}
+
+-(void) setTimelineObjectsDelegate:(id<VSTimelineTimelineObjectsDelegate>)timelineObjectsDelegate{
+    _timelineObjectsDelegate = timelineObjectsDelegate;
+    
+    [self timelineObjectsDelegateDidRegister];
+}
 
 @end
