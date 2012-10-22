@@ -13,6 +13,8 @@
 #import "VSDeviceRepresentation.h"
 #import "VSDeviceParameter.h"
 #import "VSDeviceParameterUtils.h"
+#import "VSExternalInput.h"
+#import "VSExternalInputRepresentation.h"
 
 #import "VSCoreServices.h"
 
@@ -108,13 +110,32 @@ static NSURL* devicesFolderURL;
     }
 }
 
+-(BOOL) createDeviceWithName:(NSString *)deviceName andParameters:(NSArray *)parameters{
+    VSDevice *newDevice = [[VSDevice alloc] initWithID:[VSMiscUtlis stringWithUUID] andName:deviceName];
+    
+    for(VSExternalInputRepresentation *representation in parameters){
+        VSDeviceParameter *deviceParameter = [[VSDeviceParameter alloc] initWithName:representation.name
+                                                                              ofType:representation.externalInput.deviceParameterDataType
+                                                                          identifier:representation.identifier
+                                                                           fromValue:representation.range.min
+                                                                             toValue:representation.range.max];
+        
+        [newDevice addParametersObject:deviceParameter];
+    }
+    
+    [self addDevicesObject:newDevice];
+    
+    return YES;
+}
+
 #pragma mark - VSDeviceDelegate Implementation
 
 -(BOOL) registerDeviceParameter:(VSDeviceParameter *)deviceParameter ofDevice:(VSDevice *)device{
     BOOL result = NO;
     
-    if([self delegateRespondsToSelector:@selector(registerValue:forAddress:atPort:)]){
-        result = [self.deviceRegisitratingDelegate registerValue:[deviceParameter invocationForNewValue] forAddress:deviceParameter.oscPath atPort:deviceParameter.port];
+    if([self delegateRespondsToSelector:@selector(registerValue:forIdentifier:)]){
+        result = [self.deviceRegisitratingDelegate registerValue:[deviceParameter invocationForNewValue]
+                                                   forIdentifier:deviceParameter.identifier];
     }
     
     return result;
@@ -123,8 +144,9 @@ static NSURL* devicesFolderURL;
 -(BOOL) unregisterDeviceParameter:(VSDeviceParameter *)deviceParameter ofDevice:(VSDevice *)device{
     BOOL result = NO;
     
-    if([self delegateRespondsToSelector:@selector(unregisterValue:forAddress:atPort:)]){
-        result = [self.deviceRegisitratingDelegate unregisterValue:[deviceParameter invocationForNewValue] forAddress:deviceParameter.oscPath atPort:deviceParameter.port];
+    if([self delegateRespondsToSelector:@selector(unregisterValue:forIdentifier:)]){
+        result = [self.deviceRegisitratingDelegate unregisterValue:[deviceParameter invocationForNewValue]
+                                                     forIdentifier:deviceParameter.identifier];
     }
     
     return result;
@@ -186,21 +208,21 @@ static NSURL* devicesFolderURL;
         
         VSDeviceParameterDataype datatype = [VSDeviceParameterUtils deviceParameterDatatypeForString:dataTypeName andError:&error];
         
+        NSString *identifier = [NSString stringWithFormat:@"%@:%ld",oscPath,port];
+        
         if(!error){
             VSDeviceParameter *deviceParameter = nil;
             if(hasRange){
                 deviceParameter = [[VSDeviceParameter alloc] initWithName:name
                                                                    ofType:datatype
-                                                                  oscPath:oscPath
-                                                                   atPort:port
+                                                               identifier:identifier
                                                                 fromValue:fromValue
                                                                   toValue:toValue];
             }
             else{
                 deviceParameter  = [[VSDeviceParameter alloc] initWithName:name
                                                                     ofType:datatype
-                                                                   oscPath:oscPath
-                                                                    atPort:port];
+                                                                identifier:identifier];
             }
             
             
@@ -238,5 +260,13 @@ static NSURL* devicesFolderURL;
     return [self.externalInputManager availableInputs];
 }
 
+-(NSArray *)availableInputRepresentation{
+    NSMutableArray *inputRepresentations = [[NSMutableArray alloc] init];
+    for (VSExternalInput *input in self.availableInputs){
+        [inputRepresentations addObject:[[VSExternalInputRepresentation alloc] initWithExternalInput:input]];
+    }
+    
+    return inputRepresentations;
+}
 
 @end

@@ -78,7 +78,7 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
     NSLog(@"Available Inputs");
     
     for (VSExternalInput *input in [self.deviceManager availableInputs]) {
-        NSLog(@"ParameterType: %@   Identifier: %@", input.parameterType, input.identifier);
+        NSLog(@"ParameterType: %@   Identifier: %@", input.parameterTypeName, input.identifier);
     }
     
     if ( !_isCurrentlyPresentingNewDeviceConfigurationPopover ) {
@@ -94,7 +94,11 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
     if ( ![[[self.createDeviceViewController.createDeviceWindow contentView] subviews] containsObject:self.createDeviceViewController.view] ) {
     }
     
-    [[NSApplication sharedApplication] beginSheet:self.createDeviceViewController.createDeviceWindow modalForWindow:[NSApp keyWindow] modalDelegate:self didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:) contextInfo:nil];
+    [[NSApplication sharedApplication] beginSheet:self.createDeviceViewController.createDeviceWindow
+                                   modalForWindow:[NSApp keyWindow]
+                                    modalDelegate:self
+                                   didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
+                                      contextInfo:nil];
 }
 
 - (void)sheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
@@ -120,7 +124,8 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
     if (device) {
         [self.deviceManager addDevicesObject:device];
         
-        [self.deviceTableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:0] columnIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)]];
+        [self.deviceTableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:0]
+                                        columnIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)]];
     }
 }
 
@@ -144,17 +149,21 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 }
 
 
-- (void)didCreatedDevice:(VSDevice *)device
-{
-    if (device) {
-        [self deviceCreated:device];
+- (BOOL) createDeviceWithName:(NSString *)deviceName andParameters:(NSArray *)parameters{
+    BOOL result = [self.deviceManager createDeviceWithName:deviceName andParameters:parameters];
+    
+    if(result){
+        [self.deviceTableView reloadData];
+        [[NSApplication sharedApplication] endSheet:self.createDeviceViewController.createDeviceWindow];
     }
+    
+    return result;
 }
 
 #pragma mark - VSCreateDeviceViewControllerDataSource Implementation
 - (NSArray *)availableInputParameter
 {
-    return [self.deviceManager availableInputs];
+    return self.deviceManager.availableInputRepresentation;
 }
 
 

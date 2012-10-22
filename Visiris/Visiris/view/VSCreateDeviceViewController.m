@@ -11,16 +11,14 @@
 #import "VSCoreServices.h"
 #import "VSOSCPort.h"
 #import "VSDevice.h"
-#import "VSExternalInput.h"
+#import "VSExternalInputRepresentation.h"
 
 
 @interface VSCreateDeviceViewController ()
 
 @property (strong) NSArray *availableParameter;
 
-@property (strong) NSMutableArray *selectedStates;
-
-@property (strong) NSMutableArray *ranges;
+@property (strong) NSMutableArray *selectionStates;
 
 @end
 
@@ -30,6 +28,10 @@
 #define iValue @"value"
 #define iParameterType @"parameterType"
 #define iDeviceTypeName @"deviceTypeName"
+#define iSelected @"selected"
+#define iName @"name"
+#define iMin @"rangeFrom"
+#define iMax @"rangeTo"
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -49,6 +51,13 @@
     
     
     self.availableParameter = [self availableInputParameterFromDataSource];
+    
+    self.selectionStates = [[NSMutableArray alloc] init];
+    
+    for(NSUInteger i = 0; i< self.availableInputParameterFromDataSource.count; i++){
+        [self.selectionStates addObject:[NSNumber numberWithBool:NO]];
+    }
+    
     [self.parameterTableView reloadData];
     if (!self.availableParameter) {
         DDLogError(@"DataSource did not deliver a valid input parameter array");
@@ -69,18 +78,33 @@
 
 - (IBAction)didPressCreateDeviceButton:(NSButton *)button
 {
-    [self signalDelegateThatDeviceWasCreated:[[VSDevice alloc] init]];
+    NSIndexSet *selectedParametIndizes = [self.selectionStates indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj respondsToSelector:@selector(boolValue)]){
+            return [obj boolValue];
+        }
+        return NO;
+    }];
+    
+    NSArray *selectedParamters = [self.availableParameter objectsAtIndexes:selectedParametIndizes];
+
+    BOOL result = NO;
+    if([self delegateRespondsToSelector:@selector(createDeviceWithName:andParameters:)]){
+        result = [self.delegate createDeviceWithName:[self.parameterNameTextField stringValue]
+                              andParameters:selectedParamters];
+    }
+    
+
 }
 
 #pragma mark - Parameter creation
 - (void)addNewParameter
 {
-//    _parameterCount++;
-//    
-//    [self.parameterTableView beginUpdates];
-//    [self.parameterTableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:_parameterCount-1]
-//                                   withAnimation:NSTableViewAnimationSlideUp | NSTableViewAnimationEffectFade];
-//    [self.parameterTableView endUpdates];
+    //    _parameterCount++;
+    //
+    //    [self.parameterTableView beginUpdates];
+    //    [self.parameterTableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:_parameterCount-1]
+    //                                   withAnimation:NSTableViewAnimationSlideUp | NSTableViewAnimationEffectFade];
+    //    [self.parameterTableView endUpdates];
 }
 
 
@@ -93,8 +117,7 @@
 
 - (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-    DDLogInfo(@"column: %@", [tableColumn identifier]);
-    VSExternalInput *input = [self.availableParameter objectAtIndex:row];
+    VSExternalInputRepresentation *input = [self.availableParameter objectAtIndex:row];
     
     if ([[tableColumn identifier] isEqualToString:iIdentifier]) {
         return input.identifier;
@@ -110,21 +133,50 @@
             return @"invalid";
         }
     }
+    else if ([[tableColumn identifier] isEqualToString:iSelected]) {
+        return [self.selectionStates objectAtIndex:row];
+    }
     else if ([[tableColumn identifier] isEqualToString:iParameterType]) {
-        return input.parameterType;
+        return input.parameterDataType;
     }
     else if ([[tableColumn identifier] isEqualToString:iDeviceTypeName]) {
-        return input.deviceTypeName;
+        return input.deviceType;
+    }
+    else if ([[tableColumn identifier] isEqualToString:iName]) {
+        return input.name;
+    }
+    else if ([[tableColumn identifier] isEqualToString:iMin]) {
+        return [NSNumber numberWithFloat: input.range.min];
+    }
+    else if ([[tableColumn identifier] isEqualToString:iMax]) {
+        return [NSNumber numberWithFloat: input.range.max];
     }
     
-    return @"Parameter";
+    return @"empty";
 }
 
-#pragma mark - NSTableViewDelegate Implementation
-
--(BOOL) tableView:(NSTableView *)tableView shouldEditTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row{
-    return YES;
+-(void) tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row{
+    if([[tableColumn identifier] isEqualToString:iSelected]){
+        [self.selectionStates replaceObjectAtIndex:row withObject:object];
+    }
+    else if([[tableColumn identifier] isEqualToString:iName]){
+        VSExternalInputRepresentation *input = [self.availableParameter objectAtIndex:row];
+        
+        input.name = object;
+    }
+    else if([[tableColumn identifier] isEqualToString:iMin]){
+        VSExternalInputRepresentation *input = [self.availableParameter objectAtIndex:row];
+        VSRange newRange = VSMakeRange([object floatValue], input.range.max);
+        input.range = newRange;
+    }
+    else if([[tableColumn identifier] isEqualToString:iMax]){
+        VSExternalInputRepresentation *input = [self.availableParameter objectAtIndex:row];
+        VSRange newRange = VSMakeRange(input.range.min, [object floatValue]);
+        input.range = newRange;
+    }
+    
 }
+
 
 // adding address to parameter
 - (IBAction)didSelectInputAddressForParameter:(id)sender
@@ -144,6 +196,8 @@
         }
     }
     
+    
+    
     return availableInputParameter;
 }
 
@@ -157,15 +211,19 @@
     }
 }
 
-- (void)signalDelegateThatDeviceWasCreated:(VSDevice *)newDevice
-{
-    if (newDevice) {
-        if (self.delegate) {
-            if ([self.delegate respondsToSelector:@selector(didCreatedDevice:)]) {
-                [self.delegate didCreatedDevice:newDevice];
+/**
+ * Checks if the delegate of VSPlaybackControllerDelegate is able to respond to the given Selector
+ * @param selector Selector the delegate will be checked for if it is able respond to
+ * @return YES if the delegate is able to respond to the selector, NO otherweis
+ */
+-(BOOL) delegateRespondsToSelector:(SEL) selector{
+    if(self.delegate){
+        if([self.delegate conformsToProtocol:@protocol(VSCreateDeviceViewControllerDelegate)]){
+            if([self.delegate respondsToSelector:selector]){
+                return YES;
             }
         }
     }
+    return NO;
 }
-
 @end

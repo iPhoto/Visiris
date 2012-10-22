@@ -45,7 +45,7 @@
         self.projectItemController = [[VSProjectItemController alloc] init];
         self.projectItemRepresentationController = [[VSProjectItemRepresentationController alloc]initForProjectItemController:self.projectItemController];
         
-        self.externalInputManager = [[VSExternalInputManager alloc] init];
+        self.externalInputManager = [VSExternalInputManager sharedExternalInputManager];
     }
     return self;
 }

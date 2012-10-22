@@ -11,7 +11,7 @@
 @implementation VSOSCInput
 
 @synthesize identifier = _identifier;
-@synthesize parameterType   = _parameterType;
+@synthesize parameterTypeName   = _parameterType;
 
 + (VSOSCInput *)inputWithAddress:(NSString *)address timeStamp:(NSTimeInterval)timeStamp withPort:(unsigned short)port deviceType:(VSDeviceType)deviceType andParameterType:(OSCValueType)parameterType
 {
@@ -42,13 +42,17 @@
     return [NSString stringFromAddress:self.address atPort:self.port];
 }
 
-- (NSString *)parameterType
+- (NSString *)parameterTypeName
 {
     return [VSDeviceParameterUtils nameForOSCType:self.oscParameterType];
 }
 
 - (NSString*) deviceTypeName{
     return @"not implemented yet";
+}
+
+-(VSDeviceParameterDataype) deviceParameterDataType{
+    [VSDeviceParameterUtils deviceParameterDatatypeForOSCParameterValueType:self.oscParameterType];
 }
 
 @end

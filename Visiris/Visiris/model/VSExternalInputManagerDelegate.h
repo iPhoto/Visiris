@@ -13,7 +13,7 @@
 
 @protocol VSExternalInputManagerDelegate <NSObject>
 
-- (void)inputManager:(id<VSExternalInputProtocol>)inputManager didReceivedValue:(id)value forAddress:(NSString *)address atPort:(unsigned int)port;
+- (void)inputManager:(id<VSExternalInputProtocol>)inputManager didReceivedValue:(id)value forIdentifier:(NSString*) identifier;
 
 -(BOOL) willRemoveExternalInputs:(NSArray*) fromInputManager:(id<VSExternalInputProtocol>) manager;
 

@@ -14,9 +14,9 @@
 
 @interface VSDeviceParameter : NSObject
 
--(id) initWithName:(NSString*) name ofType:(VSDeviceParameterDataype) dataType oscPath:(NSString*) oscPath atPort:(NSUInteger) port fromValue:(float) fromValue toValue:(float) toValue;
+-(id) initWithName:(NSString*) name ofType:(VSDeviceParameterDataype) dataType identifier:(NSString*) identifier  fromValue:(float) fromValue toValue:(float) toValue;
 
--(id) initWithName:(NSString*) name ofType:(VSDeviceParameterDataype) dataType oscPath:(NSString*) oscPath atPort:(NSUInteger) port;
+-(id) initWithName:(NSString*) name ofType:(VSDeviceParameterDataype) dataType identifier:(NSString*) identifier;
 
 @property (assign) BOOL hasRange;
 
@@ -24,9 +24,11 @@
 
 @property (strong) NSString *name;
 
-@property (strong) NSString *oscPath;
+//@property (strong) NSString *oscPath;
+//
+//@property (assign) NSUInteger port;
 
-@property (assign) NSUInteger port;
+@property (strong) NSString *identifier;
 
 @property (strong) id currentValue;
 

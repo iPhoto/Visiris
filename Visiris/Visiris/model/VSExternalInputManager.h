@@ -13,6 +13,7 @@
 
 @interface VSExternalInputManager : NSObject<VSDeviceParameterRegistrationDelegate>
 
++(VSExternalInputManager*)sharedExternalInputManager;
 
 #pragma mark - input manager handling
 - (void)registerExternalInputManager;
@@ -36,8 +37,8 @@
 
 
 // DeviceParameterRegistrationDelegate
--(BOOL) registerValue:(NSInvocation *)parameterInvocation forAddress:(NSString*) parameterAddress atPort:(NSUInteger) port;
--(BOOL) unregisterValue:(NSInvocation *)parameterInvocation forAddress:(NSString*) parameterAddress atPort:(NSUInteger) port;
+-(BOOL) registerValue:(NSInvocation *)parameterInvocation forIdentifier:(NSString *)identifier;
+-(BOOL) unregisterValue:(NSInvocation *)parameterInvocation forIdentifier:(NSString *)identifier;
 
 // ExternsInputManagerDelegate
 - (void)inputManager:(id<VSExternalInputProtocol>)inputManager didReceivedValue:(id)value forAddress:(NSString *)address atPort:(unsigned int)port;
