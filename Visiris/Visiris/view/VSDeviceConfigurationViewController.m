@@ -74,7 +74,6 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 #pragma mark - Device Management
 - (IBAction)didPressAddDeviceButton:(NSButton *)addButton
 {
-    
     NSLog(@"Available Inputs");
     
     for (VSExternalInput *input in [self.deviceManager availableInputs]) {
