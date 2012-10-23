@@ -18,8 +18,6 @@
 
 @property (strong) NSArray *availableParameter;
 
-@property (strong) NSMutableArray *selectionStates;
-
 @end
 
 @implementation VSCreateDeviceViewController
@@ -50,18 +48,7 @@
     [super awakeFromNib];
     
     
-    self.availableParameter = [self availableInputParameterFromDataSource];
-    
-    self.selectionStates = [[NSMutableArray alloc] init];
-    
-    for(NSUInteger i = 0; i< self.availableInputParameterFromDataSource.count; i++){
-        [self.selectionStates addObject:[NSNumber numberWithBool:NO]];
-    }
-    
-    [self.parameterTableView reloadData];
-    if (!self.availableParameter) {
-        DDLogError(@"DataSource did not deliver a valid input parameter array");
-    }
+    [self updateDataSource];
 }
 
 
@@ -78,9 +65,9 @@
 
 - (IBAction)didPressCreateDeviceButton:(NSButton *)button
 {
-    NSIndexSet *selectedParametIndizes = [self.selectionStates indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-        if([obj respondsToSelector:@selector(boolValue)]){
-            return [obj boolValue];
+    NSIndexSet *selectedParametIndizes = [self.availableParameter indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj isKindOfClass:[VSExternalInputRepresentation class]]){
+            return ((VSExternalInputRepresentation*) obj).selected;
         }
         return NO;
     }];
@@ -134,7 +121,7 @@
         }
     }
     else if ([[tableColumn identifier] isEqualToString:iSelected]) {
-        return [self.selectionStates objectAtIndex:row];
+        return [NSNumber numberWithBool:input.selected];
     }
     else if ([[tableColumn identifier] isEqualToString:iParameterType]) {
         return input.parameterDataType;
@@ -156,21 +143,24 @@
 }
 
 -(void) tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row{
+    
+    VSExternalInputRepresentation *input = [self.availableParameter objectAtIndex:row];
+    
     if([[tableColumn identifier] isEqualToString:iSelected]){
-        [self.selectionStates replaceObjectAtIndex:row withObject:object];
+        if([object respondsToSelector:@selector(boolValue)]){
+            input.selected = [object boolValue];
+        }
     }
     else if([[tableColumn identifier] isEqualToString:iName]){
-        VSExternalInputRepresentation *input = [self.availableParameter objectAtIndex:row];
+        
         
         input.name = object;
     }
     else if([[tableColumn identifier] isEqualToString:iMin]){
-        VSExternalInputRepresentation *input = [self.availableParameter objectAtIndex:row];
         VSRange newRange = VSMakeRange([object floatValue], input.range.max);
         input.range = newRange;
     }
     else if([[tableColumn identifier] isEqualToString:iMax]){
-        VSExternalInputRepresentation *input = [self.availableParameter objectAtIndex:row];
         VSRange newRange = VSMakeRange(input.range.min, [object floatValue]);
         input.range = newRange;
     }
@@ -184,6 +174,15 @@
     NSLog(@"add the address and update ui");
 }
 
+-(void) updateDataSource{
+    self.availableParameter = [self availableInputParameterFromDataSource];
+    
+    [self.parameterTableView reloadData];
+    
+    if (!self.availableParameter) {
+        DDLogError(@"DataSource did not deliver a valid input parameter array");
+    }
+}
 
 #pragma mark - DataSource Communication
 - (NSArray *)availableInputParameterFromDataSource
@@ -210,6 +209,15 @@
         }
     }
 }
+
+#pragma mark - Methods
+
+-(void) dataSourceWasChanged{
+    [self updateDataSource];
+    [self.parameterTableView reloadData];
+}
+
+#pragma mark - Private Methods
 
 /**
  * Checks if the delegate of VSPlaybackControllerDelegate is able to respond to the given Selector

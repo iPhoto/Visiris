@@ -15,8 +15,8 @@
 -(id) initWithExternalInput:(VSExternalInput*) externalInput;
 
 @property (strong) NSString *name;
-@property (assign) VSRange                  range;
-
+@property (assign) VSRange range;
+@property (assign) BOOL selected;
 @property (strong, readonly) VSExternalInput *externalInput;
 
 -(NSString*) identifier;

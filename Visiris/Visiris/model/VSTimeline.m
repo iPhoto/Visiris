@@ -161,6 +161,8 @@
                 self.lastTrackID = track.trackID;
             }
         }
+        
+        [self initPlayHead];
     }
     return self;
 }

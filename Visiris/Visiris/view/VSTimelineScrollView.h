@@ -131,10 +131,10 @@
 @property (readonly) float visibleTrackViewsHolderWidth;
 
 /** Delegate the class communicates with as defined in VSTimelineScrollViewZoomingDelegate */
-@property (weak) id<VSTimelineScrollViewZoomingDelegate> zoomingDelegate;
+@property (strong) id<VSTimelineScrollViewZoomingDelegate> zoomingDelegate;
 
 /** Delegate VSTrackHolderView communicates like defined in VSPlayHeadRulerMarkerDelegate*/
-@property (weak) id<VSPlayHeadRulerMarkerDelegate> playheadMarkerDelegate;
+@property (strong) id<VSPlayHeadRulerMarkerDelegate> playheadMarkerDelegate;
 
 /** Current width of the trackHolder. Properties area usually overriden by the Childclasses of VSTimelineScrollView. */
 @property float trackHolderWidth;

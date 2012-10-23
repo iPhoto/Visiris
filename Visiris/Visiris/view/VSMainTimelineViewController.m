@@ -281,13 +281,15 @@ static NSString* defaultNib = @"VSMainTimelineView";
 
 -(void) unselectTimelineObjects:(NSArray*) timelineObjectsToUnselect{
     
-    NSDictionary *userInfo = [NSDictionary dictionaryWithObject: [VSDocumentController documentOfView:self.view]
-                                                         forKey:VSSendersDocumentKeyInUserInfoDictionary];
-    
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectsGotUnselected
-                                                        object:timelineObjectsToUnselect
-                                                      userInfo:userInfo];
+    if(timelineObjectsToUnselect.count){
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObject: [VSDocumentController documentOfView:self.view]
+                                                             forKey:VSSendersDocumentKeyInUserInfoDictionary];
+        
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectsGotUnselected
+                                                            object:timelineObjectsToUnselect
+                                                          userInfo:userInfo];
+    }
 }
 
 
@@ -1075,7 +1077,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
     //Size and position of the track
     int width = self.scrollView.visibleTrackViewsHolderWidth;
     
-   
+    
     
     VSTrackViewController* newTrackViewController = [[VSTrackViewController alloc]initWithDefaultNibAccordingToTrack:track andTrackHeight:VSTrackViewHeight];
     
@@ -1094,7 +1096,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
     newTrackViewController.pixelTimeRatio = self.pixelTimeRatio;
     
     [self.scrollView addTrackView:newTrackViewController.view];
-
+    
     [self.trackViewControllers addObject:newTrackViewController];
     
     [self addNewTrackLabelForTrack:newTrackViewController];

@@ -9,6 +9,7 @@
 #import "VSExternalInputManager.h"
 #import "VSExternalInputProtocol.h"
 #import "VSOSCInputManager.h"
+#import "VSExternalInputManagerDelegate.h"
 #import <VisirisCore/VSReferenceCounting.h>
 #import "VSCoreServices.h"
 
@@ -25,6 +26,7 @@
 
 @implementation VSExternalInputManager
 
+@synthesize availableInputs = _availableInputs;
 
 static VSExternalInputManager* sharedExternalInputManager = nil;
 
@@ -52,6 +54,7 @@ static VSExternalInputManager* sharedExternalInputManager = nil;
         
         self.currentActiveValues = [[NSMutableDictionary alloc] init];
         
+        _availableInputs = [[NSMutableArray alloc] init];
         
         [self registerExternalInputManager];
         
@@ -121,17 +124,6 @@ static VSExternalInputManager* sharedExternalInputManager = nil;
 }
 
 
-- (NSArray *)availableInputs
-{
-    NSMutableArray *availableInputs = [NSMutableArray array];
-    
-    for (id<VSExternalInputProtocol> inputManager in [self.availableInputManager allValues]) {
-        [availableInputs addObjectsFromArray:[inputManager availableInputs]];
-    }
-    
-    return availableInputs;
-}
-
 // DeviceParameterRegistrationDelegate
 - (BOOL)registerValue:(NSInvocation *)parameterInvocation forIdentifier:(NSString *)identifier{
     BOOL isValueForAddressOnPortRegistered = NO;
@@ -183,7 +175,7 @@ static VSExternalInputManager* sharedExternalInputManager = nil;
 
 
 #pragma mark VSExternalInputManagerDelegate
-- (void)inputManager:(id<VSExternalInputProtocol>)inputManager didReceivedValue:(id)value forIdentifier:(NSString *)identifier{
+-(void) inputManager:(id<VSExternalInputProtocol>)inputManager didReceivedValue:(id)value forIdentifier:(NSString *)identifier{
     if (identifier && inputManager) {
         
         NSInvocation *invocation = [self.currentActiveValues objectForKey:identifier];
@@ -193,12 +185,18 @@ static VSExternalInputManager* sharedExternalInputManager = nil;
     }
 }
 
--(void) didAddExternalInputs:(NSArray*) fromInputManager:(id<VSExternalInputProtocol>) manager{
-    
+-(void) inputManager:(id<VSExternalInputProtocol>)inputManager startedReceivingExternalInputs:(NSArray *)externalInputs{
+    [self.availableInputs addObjectsFromArray:externalInputs];
 }
 
--(BOOL) willRemoveExternalInputs:(NSArray*) fromInputManager:(id<VSExternalInputProtocol>) manager{
-    return YES;
+-(void) inputManager:(id<VSExternalInputProtocol>)inputManager stoppedReceivingExternalInputs:(NSArray *)externalInputs{
+    [self.availableInputs removeObjectsInArray:externalInputs];
+}
+
+#pragma mark - Properties
+
+-(NSMutableArray*) availableInputs{
+     return [self mutableArrayValueForKey:@"availableInputs"];
 }
 
 @end

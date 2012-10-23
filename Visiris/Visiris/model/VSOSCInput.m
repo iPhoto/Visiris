@@ -52,7 +52,7 @@
 }
 
 -(VSDeviceParameterDataype) deviceParameterDataType{
-    [VSDeviceParameterUtils deviceParameterDatatypeForOSCParameterValueType:self.oscParameterType];
+    return [VSDeviceParameterUtils deviceParameterDatatypeForOSCParameterValueType:self.oscParameterType];
 }
 
 @end

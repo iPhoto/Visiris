@@ -38,8 +38,8 @@
 @property (strong) IBOutlet NSWindow                                        *createDeviceWindow;
 
 
-@property (weak) id<VSCreateDeviceViewControllerDataSource>                 dataSource;
-@property (weak) id<VSCreateDeviceViewControllerDelegate>                   delegate;
+@property (strong) id<VSCreateDeviceViewControllerDataSource>                 dataSource;
+@property (strong) id<VSCreateDeviceViewControllerDelegate>                   delegate;
 
 
 
@@ -53,5 +53,9 @@
 
 // parameter creation
 - (IBAction)didSelectInputAddressForParameter:(id)sender;
+
+#pragma mark -Methods
+
+-(void) dataSourceWasChanged;
 
 @end

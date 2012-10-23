@@ -130,8 +130,6 @@
         copy.startTime = self.startTime;
         copy.duration = self.duration;
         copy.selected = self.selected;
-        
-        
     }
     
     return copy;
