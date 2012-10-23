@@ -21,9 +21,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		270AA7CF16358CDE00E96D44 /* VVBasics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 270AA7CC16358CDE00E96D44 /* VVBasics.framework */; };
-		270AA7D016358CDE00E96D44 /* VVMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 270AA7CD16358CDE00E96D44 /* VVMIDI.framework */; };
-		270AA7D116358CDE00E96D44 /* VVOSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 270AA7CE16358CDE00E96D44 /* VVOSC.framework */; };
 		2737AE2D1630453900E19624 /* NSColor+CGColorSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 2737AE2C1630453900E19624 /* NSColor+CGColorSupport.m */; };
 		27482037161E121500C13590 /* NSString+VSOSCUniqueAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = 27482036161E121500C13590 /* NSString+VSOSCUniqueAddress.m */; };
 		2761513B1577C97A005177C5 /* aaa.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2761513A1577C97A005177C5 /* aaa.jpg */; };
@@ -42,20 +39,18 @@
 		2795881A15906D7B00E24B57 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2795881915906D7B00E24B57 /* AVFoundation.framework */; };
 		2799F8E61599C8B800008489 /* VSQuartzCompositionUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2799F8E51599C8B800008489 /* VSQuartzCompositionUtils.m */; };
 		2799F8E91599C96D00008489 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2799F8E81599C96D00008489 /* Quartz.framework */; };
-		27A258481636809D000406A9 /* VSCreateDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27A258461636809D000406A9 /* VSCreateDeviceViewController.m */; };
-		27A258491636809D000406A9 /* VSCreateDeviceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 27A258471636809D000406A9 /* VSCreateDeviceViewController.xib */; };
 		27C16BA5162D8A5D009FA405 /* VSExternalInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C16BA4162D8A5D009FA405 /* VSExternalInput.m */; };
 		27C5EB9A1613381C00A441D4 /* VSOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C5EB991613381C00A441D4 /* VSOpenGLView.m */; };
 		27C5EB9E1613408900A441D4 /* VSFullScreenOpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C5EB9D1613408900A441D4 /* VSFullScreenOpenGLView.m */; };
+		27CFB14216139C1D00A19B7A /* VVBasics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CFB13F16139C1D00A19B7A /* VVBasics.framework */; };
+		27CFB14316139C1D00A19B7A /* VVMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CFB14016139C1D00A19B7A /* VVMIDI.framework */; };
+		27CFB14416139C1D00A19B7A /* VVOSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27CFB14116139C1D00A19B7A /* VVOSC.framework */; };
 		27D3DD711624459A003B695F /* VSAnimationCurve.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D3DD701624459A003B695F /* VSAnimationCurve.m */; };
 		27D3DD74162445D0003B695F /* VSLinearAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D3DD73162445D0003B695F /* VSLinearAnimation.m */; };
 		27D3DD77162445EC003B695F /* VSEaseInAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D3DD76162445EC003B695F /* VSEaseInAnimation.m */; };
 		27D3DD7A162446AD003B695F /* VSEaseOutAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D3DD79162446AD003B695F /* VSEaseOutAnimation.m */; };
 		27D3DD7D16244706003B695F /* VSEaseInOutAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 27D3DD7C16244706003B695F /* VSEaseInOutAnimation.m */; };
 		27D3DD821624636F003B695F /* VSDeviceParameterUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B60297816240F1E0015BA19 /* VSDeviceParameterUtils.m */; };
-		27ECD6D516358CF9002BFC94 /* VVBasics.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 270AA7CC16358CDE00E96D44 /* VVBasics.framework */; };
-		27ECD6D616358CF9002BFC94 /* VVMIDI.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 270AA7CD16358CDE00E96D44 /* VVMIDI.framework */; };
-		27ECD6D716358CF9002BFC94 /* VVOSC.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 270AA7CE16358CDE00E96D44 /* VVOSC.framework */; };
 		27EEDA381612F6490075EE42 /* VSFullScreenController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27EEDA371612F6490075EE42 /* VSFullScreenController.m */; };
 		27F7D11916145A0B00EAAF40 /* VSExternalInputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EEC161381BB00C0AEEB /* VSExternalInputManager.m */; };
 		27F7D11B16145A3D00EAAF40 /* VSOSCInputManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 27726EEF161381DC00C0AEEB /* VSOSCInputManager.m */; };
@@ -71,14 +66,6 @@
 		5B1994C01627368C006E9D9E /* VSMainWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B1994BF1627368C006E9D9E /* VSMainWindow.m */; };
 		5B250992161088BE003B715F /* VSFrameUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B250991161088BE003B715F /* VSFrameUtils.m */; };
 		5B2A59D31578AF4E003938AB /* VSDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2A59D21578AF4E003938AB /* VSDocumentController.m */; };
-		5B2C92C31636EA3400D2B61F /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2C92B41636EA3400D2B61F /* DDAbstractDatabaseLogger.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		5B2C92C41636EA3400D2B61F /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2C92B61636EA3400D2B61F /* DDASLLogger.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		5B2C92C51636EA3400D2B61F /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2C92B81636EA3400D2B61F /* DDFileLogger.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		5B2C92C61636EA3400D2B61F /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2C92BA1636EA3400D2B61F /* DDLog.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		5B2C92C71636EA3400D2B61F /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2C92BC1636EA3400D2B61F /* DDTTYLogger.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		5B2C92C81636EA3400D2B61F /* ContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2C92BF1636EA3400D2B61F /* ContextFilterLogFormatter.m */; };
-		5B2C92C91636EA3400D2B61F /* DispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2C92C11636EA3400D2B61F /* DispatchQueueLogFormatter.m */; };
-		5B2C92CA1636EA3400D2B61F /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5B2C92C21636EA3400D2B61F /* README.txt */; };
 		5B35BF161577A49C009911EC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35BF151577A49C009911EC /* Cocoa.framework */; };
 		5B35BF201577A49C009911EC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5B35BF1E1577A49C009911EC /* InfoPlist.strings */; };
 		5B35BF221577A49C009911EC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF211577A49C009911EC /* main.m */; };
@@ -147,6 +134,14 @@
 		5B35C01E1577A573009911EC /* VSTrackView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B35BFCF1577A573009911EC /* VSTrackView.xib */; };
 		5B35C01F1577A573009911EC /* VSTrackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BFD11577A573009911EC /* VSTrackViewController.m */; };
 		5B35C0591577A58D009911EC /* ImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0351577A58D009911EC /* ImageAndTextCell.m */; };
+		5B35C05A1577A58D009911EC /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0381577A58D009911EC /* DDAbstractDatabaseLogger.m */; };
+		5B35C05B1577A58D009911EC /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C03A1577A58D009911EC /* DDASLLogger.m */; };
+		5B35C05C1577A58D009911EC /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C03C1577A58D009911EC /* DDFileLogger.m */; };
+		5B35C05D1577A58D009911EC /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C03E1577A58D009911EC /* DDLog.m */; };
+		5B35C05E1577A58D009911EC /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0401577A58D009911EC /* DDTTYLogger.m */; };
+		5B35C05F1577A58D009911EC /* ContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0431577A58D009911EC /* ContextFilterLogFormatter.m */; };
+		5B35C0601577A58D009911EC /* DispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0451577A58D009911EC /* DispatchQueueLogFormatter.m */; };
+		5B35C0611577A58D009911EC /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5B35C0461577A58D009911EC /* README.txt */; };
 		5B35C0621577A58D009911EC /* AudioSourceParameterDefinition.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5B35C0481577A58D009911EC /* AudioSourceParameterDefinition.xml */; };
 		5B35C0631577A58D009911EC /* ImageSourceParameterDefinition.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5B35C0491577A58D009911EC /* ImageSourceParameterDefinition.xml */; };
 		5B35C0641577A58D009911EC /* QuartzComposerSourceParameterDefinition.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5B35C04A1577A58D009911EC /* QuartzComposerSourceParameterDefinition.xml */; };
@@ -172,6 +167,7 @@
 		5B4ABA84161DA3F500BE5248 /* VSDeviceParameterConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B4ABA82161DA3F500BE5248 /* VSDeviceParameterConnectionViewController.m */; };
 		5B4ABA85161DA3F500BE5248 /* VSDeviceParameterConnectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B4ABA83161DA3F500BE5248 /* VSDeviceParameterConnectionView.xib */; };
 		5B4EB1AD162D3DA8002104DB /* VSVisirsConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B4EB1AC162D3DA8002104DB /* VSVisirsConstants.m */; };
+		5B54D7781631867300896323 /* VisirisCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B54D7771631867300896323 /* VisirisCore.framework */; };
 		5B603FA9157F824A0045A1EA /* VSPlayHead.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B603FA8157F824A0045A1EA /* VSPlayHead.m */; };
 		5B60CC5B16135EE800557892 /* VSOutputController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B60CC5A16135EE800557892 /* VSOutputController.m */; };
 		5B70F71B15C2E650002B54ED /* VSPlayheadMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B70F71A15C2E650002B54ED /* VSPlayheadMarker.m */; };
@@ -201,6 +197,9 @@
 		5BD35BE715D96891001A74E0 /* VSAnimationTrackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BE515D96890001A74E0 /* VSAnimationTrackViewController.m */; };
 		5BD35BED15D96ADB001A74E0 /* VSAnimationTrackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BEC15D96ADB001A74E0 /* VSAnimationTrackView.m */; };
 		5BDCE906162295AE007F52A7 /* NSColor+VSColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDCE905162295AD007F52A7 /* NSColor+VSColor.m */; };
+		5BE5179A1614A1220096DFB3 /* VVBasics.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 27CFB13F16139C1D00A19B7A /* VVBasics.framework */; };
+		5BE5179B1614A1220096DFB3 /* VVMIDI.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 27CFB14016139C1D00A19B7A /* VVMIDI.framework */; };
+		5BE5179C1614A1220096DFB3 /* VVOSC.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 27CFB14116139C1D00A19B7A /* VVOSC.framework */; };
 		5BEF5AFB15FE1F5E00F0FE8A /* VSOptionParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BEF5AFA15FE1F5E00F0FE8A /* VSOptionParameter.m */; };
 		5BFB871115DA2F8C00D405AF /* VSTimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BFB871015DA2F8C00D405AF /* VSTimelineViewController.m */; };
 		A9818DDF1614FC67005321A2 /* VSOSCMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = A9818DDE1614FC67005321A2 /* VSOSCMessage.m */; };
@@ -208,9 +207,9 @@
 		A9838A43161792CD00DF110C /* VSDeviceConfigurationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9838A41161792CD00DF110C /* VSDeviceConfigurationViewController.m */; };
 		A9838A44161792CD00DF110C /* VSDeviceConfigurationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9838A42161792CD00DF110C /* VSDeviceConfigurationViewController.xib */; };
 		A986A5E2161CC2590068F3CA /* VSFullScreenHolderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B98D1CB161C8EF0002CDE1F /* VSFullScreenHolderView.m */; };
+		A986A5F9161CC8430068F3CA /* VSCreateDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A986A5F7161CC8430068F3CA /* VSCreateDeviceViewController.m */; };
+		A986A5FA161CC8430068F3CA /* VSCreateDeviceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A986A5F8161CC8430068F3CA /* VSCreateDeviceViewController.xib */; };
 		A9D8275A16188A91008985F7 /* VSDeviceParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D8275916188A91008985F7 /* VSDeviceParameter.m */; };
-		DD971C6716368AA8008FC0E6 /* VisirisCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD971C6616368AA8008FC0E6 /* VisirisCore.framework */; };
-		DD971C6816368ABE008FC0E6 /* VisirisCore.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = DD971C6616368AA8008FC0E6 /* VisirisCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -231,9 +230,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		270AA7CC16358CDE00E96D44 /* VVBasics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVBasics.framework; path = Frameworks/VVBasics.framework; sourceTree = "<group>"; };
-		270AA7CD16358CDE00E96D44 /* VVMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVMIDI.framework; path = Frameworks/VVMIDI.framework; sourceTree = "<group>"; };
-		270AA7CE16358CDE00E96D44 /* VVOSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVOSC.framework; path = Frameworks/VVOSC.framework; sourceTree = "<group>"; };
 		27324B4B161D89EC003B629E /* VSRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSRange.h; sourceTree = "<group>"; };
 		2737AE2B1630453900E19624 /* NSColor+CGColorSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSColor+CGColorSupport.h"; path = "Visiris/model/NSColor+CGColorSupport.h"; sourceTree = SOURCE_ROOT; };
 		2737AE2C1630453900E19624 /* NSColor+CGColorSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSColor+CGColorSupport.m"; path = "Visiris/model/NSColor+CGColorSupport.m"; sourceTree = SOURCE_ROOT; };
@@ -274,9 +270,6 @@
 		2795881915906D7B00E24B57 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		2799F8E51599C8B800008489 /* VSQuartzCompositionUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSQuartzCompositionUtils.m; sourceTree = "<group>"; };
 		2799F8E81599C96D00008489 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
-		27A258451636809D000406A9 /* VSCreateDeviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSCreateDeviceViewController.h; sourceTree = "<group>"; };
-		27A258461636809D000406A9 /* VSCreateDeviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSCreateDeviceViewController.m; sourceTree = "<group>"; };
-		27A258471636809D000406A9 /* VSCreateDeviceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VSCreateDeviceViewController.xib; sourceTree = "<group>"; };
 		27C16BA3162D8A5D009FA405 /* VSExternalInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSExternalInput.h; sourceTree = "<group>"; };
 		27C16BA4162D8A5D009FA405 /* VSExternalInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSExternalInput.m; sourceTree = "<group>"; };
 		27C5EB981613381C00A441D4 /* VSOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSOpenGLView.h; sourceTree = "<group>"; };
@@ -284,6 +277,9 @@
 		27C5EB9C1613408800A441D4 /* VSFullScreenOpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFullScreenOpenGLView.h; sourceTree = "<group>"; };
 		27C5EB9D1613408900A441D4 /* VSFullScreenOpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFullScreenOpenGLView.m; sourceTree = "<group>"; };
 		27CFB12516138E2100A19B7A /* VSExternalInputProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSExternalInputProtocol.h; sourceTree = "<group>"; };
+		27CFB13F16139C1D00A19B7A /* VVBasics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVBasics.framework; path = Frameworks/VVBasics.framework; sourceTree = "<group>"; };
+		27CFB14016139C1D00A19B7A /* VVMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVMIDI.framework; path = Frameworks/VVMIDI.framework; sourceTree = "<group>"; };
+		27CFB14116139C1D00A19B7A /* VVOSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVOSC.framework; path = Frameworks/VVOSC.framework; sourceTree = "<group>"; };
 		27D3DD6F1624459A003B695F /* VSAnimationCurve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAnimationCurve.h; sourceTree = "<group>"; };
 		27D3DD701624459A003B695F /* VSAnimationCurve.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAnimationCurve.m; sourceTree = "<group>"; };
 		27D3DD72162445D0003B695F /* VSLinearAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSLinearAnimation.h; sourceTree = "<group>"; };
@@ -315,21 +311,6 @@
 		5B250991161088BE003B715F /* VSFrameUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFrameUtils.m; sourceTree = "<group>"; };
 		5B2A59D11578AF4E003938AB /* VSDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDocumentController.h; sourceTree = "<group>"; };
 		5B2A59D21578AF4E003938AB /* VSDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDocumentController.m; sourceTree = "<group>"; };
-		5B2C92B31636EA3400D2B61F /* DDAbstractDatabaseLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDAbstractDatabaseLogger.h; sourceTree = "<group>"; };
-		5B2C92B41636EA3400D2B61F /* DDAbstractDatabaseLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDAbstractDatabaseLogger.m; sourceTree = "<group>"; };
-		5B2C92B51636EA3400D2B61F /* DDASLLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDASLLogger.h; sourceTree = "<group>"; };
-		5B2C92B61636EA3400D2B61F /* DDASLLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDASLLogger.m; sourceTree = "<group>"; };
-		5B2C92B71636EA3400D2B61F /* DDFileLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDFileLogger.h; sourceTree = "<group>"; };
-		5B2C92B81636EA3400D2B61F /* DDFileLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDFileLogger.m; sourceTree = "<group>"; };
-		5B2C92B91636EA3400D2B61F /* DDLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDLog.h; sourceTree = "<group>"; };
-		5B2C92BA1636EA3400D2B61F /* DDLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDLog.m; sourceTree = "<group>"; };
-		5B2C92BB1636EA3400D2B61F /* DDTTYLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTTYLogger.h; sourceTree = "<group>"; };
-		5B2C92BC1636EA3400D2B61F /* DDTTYLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTTYLogger.m; sourceTree = "<group>"; };
-		5B2C92BE1636EA3400D2B61F /* ContextFilterLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContextFilterLogFormatter.h; sourceTree = "<group>"; };
-		5B2C92BF1636EA3400D2B61F /* ContextFilterLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContextFilterLogFormatter.m; sourceTree = "<group>"; };
-		5B2C92C01636EA3400D2B61F /* DispatchQueueLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DispatchQueueLogFormatter.h; sourceTree = "<group>"; };
-		5B2C92C11636EA3400D2B61F /* DispatchQueueLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DispatchQueueLogFormatter.m; sourceTree = "<group>"; };
-		5B2C92C21636EA3400D2B61F /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		5B35BF111577A49C009911EC /* Visiris.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Visiris.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B35BF151577A49C009911EC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		5B35BF181577A49C009911EC /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -455,6 +436,21 @@
 		5B35BFD11577A573009911EC /* VSTrackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTrackViewController.m; sourceTree = "<group>"; };
 		5B35C0341577A58D009911EC /* ImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAndTextCell.h; sourceTree = "<group>"; };
 		5B35C0351577A58D009911EC /* ImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageAndTextCell.m; sourceTree = "<group>"; };
+		5B35C0371577A58D009911EC /* DDAbstractDatabaseLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDAbstractDatabaseLogger.h; sourceTree = "<group>"; };
+		5B35C0381577A58D009911EC /* DDAbstractDatabaseLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDAbstractDatabaseLogger.m; sourceTree = "<group>"; };
+		5B35C0391577A58D009911EC /* DDASLLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDASLLogger.h; sourceTree = "<group>"; };
+		5B35C03A1577A58D009911EC /* DDASLLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDASLLogger.m; sourceTree = "<group>"; };
+		5B35C03B1577A58D009911EC /* DDFileLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDFileLogger.h; sourceTree = "<group>"; };
+		5B35C03C1577A58D009911EC /* DDFileLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDFileLogger.m; sourceTree = "<group>"; };
+		5B35C03D1577A58D009911EC /* DDLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDLog.h; sourceTree = "<group>"; };
+		5B35C03E1577A58D009911EC /* DDLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDLog.m; sourceTree = "<group>"; };
+		5B35C03F1577A58D009911EC /* DDTTYLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTTYLogger.h; sourceTree = "<group>"; };
+		5B35C0401577A58D009911EC /* DDTTYLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTTYLogger.m; sourceTree = "<group>"; };
+		5B35C0421577A58D009911EC /* ContextFilterLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContextFilterLogFormatter.h; sourceTree = "<group>"; };
+		5B35C0431577A58D009911EC /* ContextFilterLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContextFilterLogFormatter.m; sourceTree = "<group>"; };
+		5B35C0441577A58D009911EC /* DispatchQueueLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DispatchQueueLogFormatter.h; sourceTree = "<group>"; };
+		5B35C0451577A58D009911EC /* DispatchQueueLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DispatchQueueLogFormatter.m; sourceTree = "<group>"; };
+		5B35C0461577A58D009911EC /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		5B35C0481577A58D009911EC /* AudioSourceParameterDefinition.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AudioSourceParameterDefinition.xml; sourceTree = "<group>"; };
 		5B35C0491577A58D009911EC /* ImageSourceParameterDefinition.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ImageSourceParameterDefinition.xml; sourceTree = "<group>"; };
 		5B35C04A1577A58D009911EC /* QuartzComposerSourceParameterDefinition.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = QuartzComposerSourceParameterDefinition.xml; sourceTree = "<group>"; };
@@ -503,6 +499,7 @@
 		5B4EB1AB162D3DA8002104DB /* VSVisirsConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSVisirsConstants.h; sourceTree = "<group>"; };
 		5B4EB1AC162D3DA8002104DB /* VSVisirsConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSVisirsConstants.m; sourceTree = "<group>"; };
 		5B538B78159B12D20031363E /* VSQuartzCompositionUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSQuartzCompositionUtils.h; sourceTree = "<group>"; };
+		5B54D7771631867300896323 /* VisirisCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisirisCore.framework; path = "../../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-eibgtyufaxcnihdtvmkbpcrlzeqh/Build/Products/Debug/VisirisCore.framework"; sourceTree = "<group>"; };
 		5B60297716240F1E0015BA19 /* VSDeviceParameterUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDeviceParameterUtils.h; sourceTree = "<group>"; };
 		5B60297816240F1E0015BA19 /* VSDeviceParameterUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDeviceParameterUtils.m; sourceTree = "<group>"; };
 		5B603FA7157F824A0045A1EA /* VSPlayHead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSPlayHead.h; sourceTree = "<group>"; };
@@ -578,9 +575,11 @@
 		A9838A40161792CD00DF110C /* VSDeviceConfigurationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDeviceConfigurationViewController.h; sourceTree = "<group>"; };
 		A9838A41161792CD00DF110C /* VSDeviceConfigurationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDeviceConfigurationViewController.m; sourceTree = "<group>"; };
 		A9838A42161792CD00DF110C /* VSDeviceConfigurationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VSDeviceConfigurationViewController.xib; sourceTree = "<group>"; };
+		A986A5F6161CC8430068F3CA /* VSCreateDeviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSCreateDeviceViewController.h; sourceTree = "<group>"; };
+		A986A5F7161CC8430068F3CA /* VSCreateDeviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSCreateDeviceViewController.m; sourceTree = "<group>"; };
+		A986A5F8161CC8430068F3CA /* VSCreateDeviceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VSCreateDeviceViewController.xib; sourceTree = "<group>"; };
 		A9D8275816188A91008985F7 /* VSDeviceParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDeviceParameter.h; sourceTree = "<group>"; };
 		A9D8275916188A91008985F7 /* VSDeviceParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDeviceParameter.m; sourceTree = "<group>"; };
-		DD971C6616368AA8008FC0E6 /* VisirisCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisirisCore.framework; path = "../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-fmqntzfqsgbluwcgbaaujycwvbon/Build/Products/Debug/VisirisCore.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -588,7 +587,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DD971C6716368AA8008FC0E6 /* VisirisCore.framework in Frameworks */,
+				5B54D7781631867300896323 /* VisirisCore.framework in Frameworks */,
 				5B12792C15C13CAD0026AAFD /* QuickLook.framework in Frameworks */,
 				2799F8E91599C96D00008489 /* Quartz.framework in Frameworks */,
 				2795881A15906D7B00E24B57 /* AVFoundation.framework in Frameworks */,
@@ -597,9 +596,9 @@
 				5B35C06D1577A62D009911EC /* QuartzCore.framework in Frameworks */,
 				5B35C06B1577A5EC009911EC /* OpenGL.framework in Frameworks */,
 				5B35BF161577A49C009911EC /* Cocoa.framework in Frameworks */,
-				270AA7CF16358CDE00E96D44 /* VVBasics.framework in Frameworks */,
-				270AA7D016358CDE00E96D44 /* VVMIDI.framework in Frameworks */,
-				270AA7D116358CDE00E96D44 /* VVOSC.framework in Frameworks */,
+				27CFB14216139C1D00A19B7A /* VVBasics.framework in Frameworks */,
+				27CFB14316139C1D00A19B7A /* VVMIDI.framework in Frameworks */,
+				27CFB14416139C1D00A19B7A /* VVOSC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -688,9 +687,9 @@
 		27CFB13E16139BDF00A19B7A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				270AA7CC16358CDE00E96D44 /* VVBasics.framework */,
-				270AA7CD16358CDE00E96D44 /* VVMIDI.framework */,
-				270AA7CE16358CDE00E96D44 /* VVOSC.framework */,
+				27CFB13F16139C1D00A19B7A /* VVBasics.framework */,
+				27CFB14016139C1D00A19B7A /* VVMIDI.framework */,
+				27CFB14116139C1D00A19B7A /* VVOSC.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -752,36 +751,6 @@
 			name = images;
 			sourceTree = "<group>";
 		};
-		5B2C92B21636EA3400D2B61F /* Lumberjack */ = {
-			isa = PBXGroup;
-			children = (
-				5B2C92B31636EA3400D2B61F /* DDAbstractDatabaseLogger.h */,
-				5B2C92B41636EA3400D2B61F /* DDAbstractDatabaseLogger.m */,
-				5B2C92B51636EA3400D2B61F /* DDASLLogger.h */,
-				5B2C92B61636EA3400D2B61F /* DDASLLogger.m */,
-				5B2C92B71636EA3400D2B61F /* DDFileLogger.h */,
-				5B2C92B81636EA3400D2B61F /* DDFileLogger.m */,
-				5B2C92B91636EA3400D2B61F /* DDLog.h */,
-				5B2C92BA1636EA3400D2B61F /* DDLog.m */,
-				5B2C92BB1636EA3400D2B61F /* DDTTYLogger.h */,
-				5B2C92BC1636EA3400D2B61F /* DDTTYLogger.m */,
-				5B2C92BD1636EA3400D2B61F /* Extensions */,
-			);
-			path = Lumberjack;
-			sourceTree = "<group>";
-		};
-		5B2C92BD1636EA3400D2B61F /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				5B2C92BE1636EA3400D2B61F /* ContextFilterLogFormatter.h */,
-				5B2C92BF1636EA3400D2B61F /* ContextFilterLogFormatter.m */,
-				5B2C92C01636EA3400D2B61F /* DispatchQueueLogFormatter.h */,
-				5B2C92C11636EA3400D2B61F /* DispatchQueueLogFormatter.m */,
-				5B2C92C21636EA3400D2B61F /* README.txt */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
 		5B35BF061577A49C009911EC = {
 			isa = PBXGroup;
 			children = (
@@ -804,7 +773,7 @@
 		5B35BF141577A49C009911EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				DD971C6616368AA8008FC0E6 /* VisirisCore.framework */,
+				5B54D7771631867300896323 /* VisirisCore.framework */,
 				5B12792B15C13CAD0026AAFD /* QuickLook.framework */,
 				2799F8E81599C96D00008489 /* Quartz.framework */,
 				2795881915906D7B00E24B57 /* AVFoundation.framework */,
@@ -916,14 +885,44 @@
 		5B35C0201577A58D009911EC /* External */ = {
 			isa = PBXGroup;
 			children = (
-				5B2C92B21636EA3400D2B61F /* Lumberjack */,
 				27CFB13E16139BDF00A19B7A /* Frameworks */,
 				5B12792815C13A500026AAFD /* NSImage+QuickLook.m */,
 				5B12792915C13A500026AAFD /* NSImage+QuickLook.h */,
 				5B35C0341577A58D009911EC /* ImageAndTextCell.h */,
 				5B35C0351577A58D009911EC /* ImageAndTextCell.m */,
+				5B35C0361577A58D009911EC /* Lumberjack */,
 			);
 			path = External;
+			sourceTree = "<group>";
+		};
+		5B35C0361577A58D009911EC /* Lumberjack */ = {
+			isa = PBXGroup;
+			children = (
+				5B35C0371577A58D009911EC /* DDAbstractDatabaseLogger.h */,
+				5B35C0381577A58D009911EC /* DDAbstractDatabaseLogger.m */,
+				5B35C0391577A58D009911EC /* DDASLLogger.h */,
+				5B35C03A1577A58D009911EC /* DDASLLogger.m */,
+				5B35C03B1577A58D009911EC /* DDFileLogger.h */,
+				5B35C03C1577A58D009911EC /* DDFileLogger.m */,
+				5B35C03D1577A58D009911EC /* DDLog.h */,
+				5B35C03E1577A58D009911EC /* DDLog.m */,
+				5B35C03F1577A58D009911EC /* DDTTYLogger.h */,
+				5B35C0401577A58D009911EC /* DDTTYLogger.m */,
+				5B35C0411577A58D009911EC /* Extensions */,
+			);
+			path = Lumberjack;
+			sourceTree = "<group>";
+		};
+		5B35C0411577A58D009911EC /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				5B35C0421577A58D009911EC /* ContextFilterLogFormatter.h */,
+				5B35C0431577A58D009911EC /* ContextFilterLogFormatter.m */,
+				5B35C0441577A58D009911EC /* DispatchQueueLogFormatter.h */,
+				5B35C0451577A58D009911EC /* DispatchQueueLogFormatter.m */,
+				5B35C0461577A58D009911EC /* README.txt */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		5B35C0471577A58D009911EC /* Resources */ = {
@@ -1523,9 +1522,9 @@
 		A9838A5E1617B2C200DF110C /* CreateDevice */ = {
 			isa = PBXGroup;
 			children = (
-				27A258451636809D000406A9 /* VSCreateDeviceViewController.h */,
-				27A258461636809D000406A9 /* VSCreateDeviceViewController.m */,
-				27A258471636809D000406A9 /* VSCreateDeviceViewController.xib */,
+				A986A5F6161CC8430068F3CA /* VSCreateDeviceViewController.h */,
+				A986A5F7161CC8430068F3CA /* VSCreateDeviceViewController.m */,
+				A986A5F8161CC8430068F3CA /* VSCreateDeviceViewController.xib */,
 			);
 			name = CreateDevice;
 			sourceTree = "<group>";
@@ -1599,6 +1598,7 @@
 				5B35C01A1577A573009911EC /* VSMainTimelineView.xib in Resources */,
 				5B35C01C1577A573009911EC /* VSTimelineObjectView.xib in Resources */,
 				5B35C01E1577A573009911EC /* VSTrackView.xib in Resources */,
+				5B35C0611577A58D009911EC /* README.txt in Resources */,
 				5B35C0621577A58D009911EC /* AudioSourceParameterDefinition.xml in Resources */,
 				5B35C0631577A58D009911EC /* ImageSourceParameterDefinition.xml in Resources */,
 				5B35C0641577A58D009911EC /* QuartzComposerSourceParameterDefinition.xml in Resources */,
@@ -1608,9 +1608,9 @@
 				5BD35BC615D95943001A74E0 /* VSAnimationTimelineView.xib in Resources */,
 				5BD35BDF15D95F2C001A74E0 /* VSTimelineObjectParametersView.xib in Resources */,
 				A9838A44161792CD00DF110C /* VSDeviceConfigurationViewController.xib in Resources */,
+				A986A5FA161CC8430068F3CA /* VSCreateDeviceViewController.xib in Resources */,
 				5B4ABA85161DA3F500BE5248 /* VSDeviceParameterConnectionView.xib in Resources */,
 				5B84D72116247C47006DDC12 /* VSAnimationCurvePopup.xib in Resources */,
-				5B2C92CA1636EA3400D2B61F /* README.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1702,6 +1702,13 @@
 				5B35C01D1577A573009911EC /* VSTrackView.m in Sources */,
 				5B35C01F1577A573009911EC /* VSTrackViewController.m in Sources */,
 				5B35C0591577A58D009911EC /* ImageAndTextCell.m in Sources */,
+				5B35C05A1577A58D009911EC /* DDAbstractDatabaseLogger.m in Sources */,
+				5B35C05B1577A58D009911EC /* DDASLLogger.m in Sources */,
+				5B35C05C1577A58D009911EC /* DDFileLogger.m in Sources */,
+				5B35C05D1577A58D009911EC /* DDLog.m in Sources */,
+				5B35C05E1577A58D009911EC /* DDTTYLogger.m in Sources */,
+				5B35C05F1577A58D009911EC /* ContextFilterLogFormatter.m in Sources */,
+				5B35C0601577A58D009911EC /* DispatchQueueLogFormatter.m in Sources */,
 				5B35C0971577A912009911EC /* VSFileType.m in Sources */,
 				5B35C0981577A912009911EC /* VSFileUtils.m in Sources */,
 				5B35C09A1577A912009911EC /* VSFileImageCreator.m in Sources */,
@@ -1757,6 +1764,7 @@
 				A9838A43161792CD00DF110C /* VSDeviceConfigurationViewController.m in Sources */,
 				A9D8275A16188A91008985F7 /* VSDeviceParameter.m in Sources */,
 				A986A5E2161CC2590068F3CA /* VSFullScreenHolderView.m in Sources */,
+				A986A5F9161CC8430068F3CA /* VSCreateDeviceViewController.m in Sources */,
 				5B0A9C04161CD67C00ABD27D /* VSMiscUtlis.m in Sources */,
 				5B4ABA70161D647300BE5248 /* VSDeviceRepresentation.m in Sources */,
 				5B4ABA84161DA3F500BE5248 /* VSDeviceParameterConnectionViewController.m in Sources */,
@@ -1787,13 +1795,6 @@
 				2737AE2D1630453900E19624 /* NSColor+CGColorSupport.m in Sources */,
 				5B4EB1AD162D3DA8002104DB /* VSVisirsConstants.m in Sources */,
 				5B4042CA1635682E0013978B /* VSExternalInputRepresentation.m in Sources */,
-				5B2C92C31636EA3400D2B61F /* DDAbstractDatabaseLogger.m in Sources */,
-				5B2C92C41636EA3400D2B61F /* DDASLLogger.m in Sources */,
-				5B2C92C51636EA3400D2B61F /* DDFileLogger.m in Sources */,
-				5B2C92C61636EA3400D2B61F /* DDLog.m in Sources */,
-				5B2C92C71636EA3400D2B61F /* DDTTYLogger.m in Sources */,
-				5B2C92C81636EA3400D2B61F /* ContextFilterLogFormatter.m in Sources */,
-				5B2C92C91636EA3400D2B61F /* DispatchQueueLogFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1858,7 +1859,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx10.8;
 			};
 			name = Debug;
 		};
@@ -1879,7 +1880,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx10.8;
 			};
 			name = Release;
 		};
@@ -1891,21 +1892,20 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/External/Frameworks\"",
-					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-fsjwpfcrmmjpcjdknhpgpwmronuy/Build/Products/Debug\"",
-					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-fmqntzfqsgbluwcgbaaujycwvbon/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-eibgtyufaxcnihdtvmkbpcrlzeqh/Build/Products/Debug\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Visiris/Visiris-Prefix.pch";
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "Visiris/Visiris-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/External\"",
 				);
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1918,21 +1918,20 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/External/Frameworks\"",
-					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-fsjwpfcrmmjpcjdknhpgpwmronuy/Build/Products/Debug\"",
-					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-fmqntzfqsgbluwcgbaaujycwvbon/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-eibgtyufaxcnihdtvmkbpcrlzeqh/Build/Products/Debug\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Visiris/Visiris-Prefix.pch";
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "Visiris/Visiris-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/External\"",
 				);
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
