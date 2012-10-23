@@ -47,7 +47,12 @@ static NSString* defaultNib = @"VSPropertiesView";
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Initialization code here.
+        //inits the two properties subviews
+        self.projectItemPropertiesViewController = [[VSProjectItemPropertiesViewController alloc] initWithDefaultNib];
+        self.timelineObjectPropertiesViewController = [[VSTimelineObjectPropertiesViewController alloc] initWithDefaultNib];
+        
+        
+        [self initObservers];
     }
     
     return self;
@@ -64,12 +69,7 @@ static NSString* defaultNib = @"VSPropertiesView";
     [self.view setAutoresizesSubviews:YES];
     
     
-    //inits the two properties subviews
-    self.projectItemPropertiesViewController = [[VSProjectItemPropertiesViewController alloc] initWithDefaultNib];
-    self.timelineObjectPropertiesViewController = [[VSTimelineObjectPropertiesViewController alloc] initWithDefaultNib];
     
-    
-    [self initObservers];
 }
 
 -(void) initObservers{
