@@ -9,6 +9,7 @@
 #import "VSQCManager.h"
 #import "VSQCRenderer.h"
 #import "VSReferenceCounting.h"
+#import <OpenGL/glu.h>
 
 @interface VSQCManager()
 
