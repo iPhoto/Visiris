@@ -17,13 +17,29 @@
 
 @property (strong) NSMutableDictionary                              *availableInputManager;
 @property (strong) NSMutableDictionary                              *availableParameter;
-
 @property (strong) NSMutableDictionary                              *currentActiveValues;
+
 
 @end
 
 
 @implementation VSExternalInputManager
+
+
+static VSExternalInputManager* sharedExternalInputManager = nil;
+
+#pragma mark- Functions
+
++(VSExternalInputManager*)sharedExternalInputManager{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        sharedExternalInputManager = [[VSExternalInputManager alloc] init];
+        
+    });
+    
+    return sharedExternalInputManager;
+}
 
 #pragma mark - Init
 
@@ -99,7 +115,7 @@
 - (void)stopObservingInputs
 {
     for (id<VSExternalInputProtocol> inputManager in [self.availableInputManager allValues]) {
-
+        
         [inputManager stopObservingInputs];
     }
 }
@@ -108,7 +124,7 @@
 - (NSArray *)availableInputs
 {
     NSMutableArray *availableInputs = [NSMutableArray array];
-
+    
     for (id<VSExternalInputProtocol> inputManager in [self.availableInputManager allValues]) {
         [availableInputs addObjectsFromArray:[inputManager availableInputs]];
     }
@@ -117,37 +133,47 @@
 }
 
 // DeviceParameterRegistrationDelegate
-- (BOOL)registerValue:(NSInvocation *)parameterInvocation forAddress:(NSString*)parameterAddress atPort:(NSUInteger)port
-{
+- (BOOL)registerValue:(NSInvocation *)parameterInvocation forIdentifier:(NSString *)identifier{
     BOOL isValueForAddressOnPortRegistered = NO;
     
-    if (parameterAddress) {
-                
-        [self.currentActiveValues setObject:parameterInvocation forKey:[NSString stringFromAddress:parameterAddress atPort:(unsigned int)port]];
+    if (identifier) {
+        
+        [self.currentActiveValues setObject:parameterInvocation forKey:identifier];
+        
+        NSArray *components = [identifier componentsSeparatedByString:@":"];
+        
+        NSString *parameterAddress = [components objectAtIndex:0];
+        NSUInteger port = [[components objectAtIndex:1] integerValue];
         
         id<VSExternalInputProtocol> inputManager = [self.availableInputManager objectForKey:kVSInputManager_OSC];
         isValueForAddressOnPortRegistered = [inputManager startInputForAddress:parameterAddress atPort:(unsigned int)port];
         
-       
+        
     }
-     DDLogInfo(@"availableParam: %@",self.currentActiveValues);
+    DDLogInfo(@"availableParam: %@",self.currentActiveValues);
     return isValueForAddressOnPortRegistered;
 }
 
 
-- (BOOL)unregisterValue:(NSInvocation *)parameterInvocation forAddress:(NSString*)parameterAddress atPort:(NSUInteger)port
-{
-//    TODO reference counting funktioniert so noch nicht, und wird falsch nach hinten gegeben.....
+- (BOOL)unregisterValue:(NSInvocation *)parameterInvocation forIdentifier:(NSString *)identifier{
+    //    TODO reference counting funktioniert so noch nicht, und wird falsch nach hinten gegeben.....
     BOOL isValueForAddressOnPortUnregistered = NO;
     
-    if (parameterAddress) {
+    if (identifier) {
         
         
-            [self.currentActiveValues removeObjectForKey:[NSString stringFromAddress:parameterAddress atPort:(unsigned int)port]];
-            
-            // delete input of specific inputManager
-            id<VSExternalInputProtocol> inputManager = [self.availableInputManager objectForKey:kVSInputManager_OSC];
-            isValueForAddressOnPortUnregistered = [inputManager stopInputForAddress:parameterAddress atPort:(unsigned int)port];
+        [self.currentActiveValues removeObjectForKey:identifier];
+        
+        // delete input of specific inputManager
+        id<VSExternalInputProtocol> inputManager = [self.availableInputManager objectForKey:kVSInputManager_OSC];
+        
+        NSArray *components = [identifier componentsSeparatedByString:@":"];
+        
+        NSString *parameterAddress = [components objectAtIndex:0];
+        NSUInteger port = [[components objectAtIndex:1] integerValue];
+        
+        
+        isValueForAddressOnPortUnregistered = [inputManager stopInputForAddress:parameterAddress atPort:(unsigned int)port];
     }
     
     DDLogInfo(@"availableParam: %@",self.currentActiveValues);
@@ -157,13 +183,12 @@
 
 
 #pragma mark VSExternalInputManagerDelegate
-- (void)inputManager:(id<VSExternalInputProtocol>)inputManager didReceivedValue:(id)value forAddress:(NSString *)address atPort:(unsigned int)port
-{
-    if (address && value && inputManager) {
+- (void)inputManager:(id<VSExternalInputProtocol>)inputManager didReceivedValue:(id)value forIdentifier:(NSString *)identifier{
+    if (identifier && inputManager) {
         
-        NSInvocation *invocation = [self.currentActiveValues objectForKey:[NSString stringFromAddress:address atPort:port]];
-
-        [invocation setArgument:&value atIndex:2];        
+        NSInvocation *invocation = [self.currentActiveValues objectForKey:identifier];
+        
+        [invocation setArgument:&value atIndex:2];
         [invocation invoke];
     }
 }

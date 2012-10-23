@@ -44,7 +44,6 @@
     return self;
 }
 
-
 /**
  * Inits the observers of the view
  */

@@ -25,8 +25,9 @@
 
 
 -(void) addParametersObject:(VSDeviceParameter *)object{
-    [self.parameters  setObject:object forKey:object.oscPath];
+    [self.parameters  setObject:object forKey:object.identifier];
 }
+
 
 -(VSDeviceParameter*)objectInParametersAtIndex:(NSUInteger)index{
     
@@ -42,7 +43,7 @@
 }
 
 -(NSUInteger) indexOfObjectInParameters:(VSDeviceParameter*) parameter{
-    return [[self.parameters allKeys] indexOfObject:parameter.oscPath];
+    return [[self.parameters allKeys] indexOfObject:parameter.identifier];
 }
 
 -(BOOL) activateParameter:(VSDeviceParameter*) deviceParameter{

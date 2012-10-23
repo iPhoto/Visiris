@@ -392,13 +392,12 @@
 {
     if (self.delegate && [self.referencCountingAdresses isObjectExisting:[NSString stringFromAddress:message.address atPort:message.port]])
     {
-        if ([self.delegate respondsToSelector:@selector(inputManager:didReceivedValue:forAddress:atPort:)])
-        {
-            [self.delegate inputManager:self didReceivedValue:message.value forAddress:message.address atPort:message.port];
+        if ([self.delegate respondsToSelector:@selector(inputManager:didReceivedValue:forIdentifier:)]){
+            [self.delegate inputManager:self didReceivedValue:message.value forIdentifier:[NSString stringFromAddress:message.address atPort:message.port]];
         }
     }
     else{
-        DDLogInfo(@"Message Rejected: %@", [NSString stringFromAddress:message.address atPort:message.port]);
+        //DDLogInfo(@"Message Rejected: %@", [NSString stringFromAddress:message.address atPort:message.port]);
     }
 }
 

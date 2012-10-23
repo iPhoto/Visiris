@@ -20,7 +20,7 @@
 @protocol VSCreateDeviceViewControllerDelegate <NSObject>
 
 - (void)didCancelDeviceCreation;
-- (void)didCreatedDevice:(VSDevice *)device;
+- (BOOL) createDeviceWithName:(NSString*) deviceName andParameters:(NSArray*) parameters;
 
 @end
 
@@ -30,6 +30,7 @@
 @property (weak) IBOutlet NSBox                                             *parameterBox;
 @property (weak) IBOutlet NSButton                                          *addParameterButton;
 @property (weak) IBOutlet NSTableView                                       *parameterTableView;
+@property (weak) IBOutlet NSTextField *parameterNameTextField;
 
 @property (weak) IBOutlet NSButton                                          *cancelDeviceCreationButton;
 @property (weak) IBOutlet NSButton                                          *createDeviceButton;

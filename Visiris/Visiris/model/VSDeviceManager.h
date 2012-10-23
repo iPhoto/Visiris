@@ -11,9 +11,9 @@
 
 @protocol VSDeviceParameterRegistrationDelegate <NSObject>
 
--(BOOL) registerValue:(NSInvocation *)parameterInvocation forAddress:(NSString*) parameterAddress atPort:(NSUInteger) port;
+-(BOOL) registerValue:(NSInvocation *)parameterInvocation forIdentifier:(NSString*) identifier;
 
--(BOOL) unregisterValue:(NSInvocation *)parameterInvocation forAddress:(NSString*) parameterAddress atPort:(NSUInteger) port;
+-(BOOL) unregisterValue:(NSInvocation *)parameterInvocation forIdentifier:(NSString*) identifier;
 
 @end
 
@@ -49,4 +49,7 @@
 
 - (NSArray *)availableInputs;
 
+-(NSArray *) availableInputRepresentation;
+
+-(BOOL) createDeviceWithName:(NSString*) deviceName andParameters:(NSArray*) parameters;
 @end

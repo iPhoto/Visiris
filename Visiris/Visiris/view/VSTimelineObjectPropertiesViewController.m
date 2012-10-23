@@ -259,7 +259,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     
     if(scrollViewToScroll){
         NSPoint newBoundsOrigin = NSMakePoint(scrollViewToScroll.contentView.bounds.origin.x, toBounds.origin.y);
-        
+        DDLogInfo(@"newBoundsOrig: %@", NSStringFromPoint(newBoundsOrigin));
         [scrollViewToScroll setBoundsOriginWithouthNotifiying:newBoundsOrigin];
         
     }

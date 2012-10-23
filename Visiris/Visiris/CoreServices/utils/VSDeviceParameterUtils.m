@@ -157,6 +157,16 @@ static NSMutableDictionary *deviceParameterTypeOfString;
     }
 }
 
++ (VSDeviceParameterDataype) deviceParameterDatatypeForOSCParameterValueType:(OSCValueType) oscValueType{
+    id dataType = [genericDeviceDataTypeForVSDeviceParameterDataype objectForKey:[NSNumber numberWithInt:oscValueType]];
+    
+    if(dataType && [dataType isKindOfClass:[NSNumber class]]){
+        return [dataType intValue];
+    }
+    
+    return -1;
+}
+
 + (NSString *) nameForOSCType:(OSCValueType)type{
     
     NSString *string;
