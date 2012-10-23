@@ -21,8 +21,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		270AA7C116358C2200E96D44 /* VisirisCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 270AA7C016358C2200E96D44 /* VisirisCore.framework */; };
-		270AA7C216358C2D00E96D44 /* VisirisCore.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 270AA7C016358C2200E96D44 /* VisirisCore.framework */; };
 		270AA7CF16358CDE00E96D44 /* VVBasics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 270AA7CC16358CDE00E96D44 /* VVBasics.framework */; };
 		270AA7D016358CDE00E96D44 /* VVMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 270AA7CD16358CDE00E96D44 /* VVMIDI.framework */; };
 		270AA7D116358CDE00E96D44 /* VVOSC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 270AA7CE16358CDE00E96D44 /* VVOSC.framework */; };
@@ -223,6 +221,8 @@
 		A9838A44161792CD00DF110C /* VSDeviceConfigurationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9838A42161792CD00DF110C /* VSDeviceConfigurationViewController.xib */; };
 		A986A5E2161CC2590068F3CA /* VSFullScreenHolderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B98D1CB161C8EF0002CDE1F /* VSFullScreenHolderView.m */; };
 		A9D8275A16188A91008985F7 /* VSDeviceParameter.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D8275916188A91008985F7 /* VSDeviceParameter.m */; };
+		DD971C6716368AA8008FC0E6 /* VisirisCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD971C6616368AA8008FC0E6 /* VisirisCore.framework */; };
+		DD971C6816368ABE008FC0E6 /* VisirisCore.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = DD971C6616368AA8008FC0E6 /* VisirisCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -232,10 +232,10 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				DD971C6816368ABE008FC0E6 /* VisirisCore.framework in Copy Files */,
 				27ECD6D516358CF9002BFC94 /* VVBasics.framework in Copy Files */,
 				27ECD6D616358CF9002BFC94 /* VVMIDI.framework in Copy Files */,
 				27ECD6D716358CF9002BFC94 /* VVOSC.framework in Copy Files */,
-				270AA7C216358C2D00E96D44 /* VisirisCore.framework in Copy Files */,
 			);
 			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -243,7 +243,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		270AA7C016358C2200E96D44 /* VisirisCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisirisCore.framework; path = "../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-fsjwpfcrmmjpcjdknhpgpwmronuy/Build/Products/Debug/VisirisCore.framework"; sourceTree = "<group>"; };
 		270AA7CC16358CDE00E96D44 /* VVBasics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVBasics.framework; path = Frameworks/VVBasics.framework; sourceTree = "<group>"; };
 		270AA7CD16358CDE00E96D44 /* VVMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVMIDI.framework; path = Frameworks/VVMIDI.framework; sourceTree = "<group>"; };
 		270AA7CE16358CDE00E96D44 /* VVOSC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VVOSC.framework; path = Frameworks/VVOSC.framework; sourceTree = "<group>"; };
@@ -610,6 +609,7 @@
 		A9838A42161792CD00DF110C /* VSDeviceConfigurationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VSDeviceConfigurationViewController.xib; sourceTree = "<group>"; };
 		A9D8275816188A91008985F7 /* VSDeviceParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDeviceParameter.h; sourceTree = "<group>"; };
 		A9D8275916188A91008985F7 /* VSDeviceParameter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDeviceParameter.m; sourceTree = "<group>"; };
+		DD971C6616368AA8008FC0E6 /* VisirisCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisirisCore.framework; path = "../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-fmqntzfqsgbluwcgbaaujycwvbon/Build/Products/Debug/VisirisCore.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -617,7 +617,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				270AA7C116358C2200E96D44 /* VisirisCore.framework in Frameworks */,
+				DD971C6716368AA8008FC0E6 /* VisirisCore.framework in Frameworks */,
 				5B12792C15C13CAD0026AAFD /* QuickLook.framework in Frameworks */,
 				2799F8E91599C96D00008489 /* Quartz.framework in Frameworks */,
 				2795881A15906D7B00E24B57 /* AVFoundation.framework in Frameworks */,
@@ -803,7 +803,7 @@
 		5B35BF141577A49C009911EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				270AA7C016358C2200E96D44 /* VisirisCore.framework */,
+				DD971C6616368AA8008FC0E6 /* VisirisCore.framework */,
 				5B12792B15C13CAD0026AAFD /* QuickLook.framework */,
 				2799F8E81599C96D00008489 /* Quartz.framework */,
 				2795881915906D7B00E24B57 /* AVFoundation.framework */,
@@ -1967,6 +1967,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/External/Frameworks\"",
 					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-fsjwpfcrmmjpcjdknhpgpwmronuy/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-fmqntzfqsgbluwcgbaaujycwvbon/Build/Products/Debug\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Visiris/Visiris-Prefix.pch";
@@ -1992,6 +1993,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/External/Frameworks\"",
 					"\"$(SRCROOT)/../../../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-fsjwpfcrmmjpcjdknhpgpwmronuy/Build/Products/Debug\"",
+					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/VisirisWorkspace-fmqntzfqsgbluwcgbaaujycwvbon/Build/Products/Debug\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Visiris/Visiris-Prefix.pch";
