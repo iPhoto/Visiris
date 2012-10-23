@@ -265,7 +265,7 @@ static NSURL* devicesFolderURL;
     for(NSXMLElement *parameterNode in parameterNodes){
         
         NSString *name= [[parameterNode attributeForName:@"name"] stringValue];
-        NSString *oscPath= [[parameterNode attributeForName:@"oscPath"] stringValue];
+        NSString *identifier= [[parameterNode attributeForName:@"identifier"] stringValue];
         
         BOOL hasRange = NO;
         float fromValue, toValue = 0.0f;
@@ -276,7 +276,6 @@ static NSURL* devicesFolderURL;
             
             hasRange = YES;
         }
-        NSUInteger port = [[[parameterNode attributeForName:@"port"] stringValue] integerValue];
         
         NSString *dataTypeName = [[parameterNode attributeForName:@"dataType"] stringValue];
         
@@ -284,7 +283,6 @@ static NSURL* devicesFolderURL;
         
         VSDeviceParameterDataype datatype = [VSDeviceParameterUtils deviceParameterDatatypeForString:dataTypeName andError:&error];
         
-        NSString *identifier = [NSString stringWithFormat:@"%@:%ld",oscPath,port];
         
         if(!error){
             VSDeviceParameter *deviceParameter = nil;
