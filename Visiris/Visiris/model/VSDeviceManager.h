@@ -35,6 +35,8 @@
 
 @property (weak) id<VSDeviceParameterRegistrationDelegate> deviceRegisitratingDelegate;
 
+@property (strong,readonly) NSMutableArray *availableInputsRepresentation;
+
 @property (weak) VSExternalInputManager *externalInputManager;
 
 -(VSDeviceRepresentation*) objectInDeviceRepresentationsAtIndex:(NSUInteger)index;
@@ -46,10 +48,6 @@
 -(NSUInteger)numberOfDevices;
 
 -(VSDevice*) deviceRepresentedBy:(VSDeviceRepresentation*) deviceRepresentation;
-
-- (NSArray *)availableInputs;
-
--(NSArray *) availableInputRepresentation;
 
 -(BOOL) createDeviceWithName:(NSString*) deviceName andParameters:(NSArray*) parameters;
 @end

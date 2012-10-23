@@ -11,11 +11,14 @@
 #import "VSDeviceManager.h"
 
 
-@interface VSExternalInputManager : NSObject<VSDeviceParameterRegistrationDelegate>
+@interface VSExternalInputManager : NSObject<VSDeviceParameterRegistrationDelegate, VSExternalInputManagerDelegate>
 
 +(VSExternalInputManager*)sharedExternalInputManager;
 
 #pragma mark - input manager handling
+
+@property (strong, readonly) NSMutableArray *availableInputs;
+
 - (void)registerExternalInputManager;
 
 // registering new input manager
@@ -32,15 +35,11 @@
 - (void)startObservingInputs;
 - (void)stopObservingInputs;
 
-// nsarray containing VSExternlaInputs
-- (NSArray *)availableInputs;
 
 
 // DeviceParameterRegistrationDelegate
 -(BOOL) registerValue:(NSInvocation *)parameterInvocation forIdentifier:(NSString *)identifier;
 -(BOOL) unregisterValue:(NSInvocation *)parameterInvocation forIdentifier:(NSString *)identifier;
 
-// ExternsInputManagerDelegate
-- (void)inputManager:(id<VSExternalInputProtocol>)inputManager didReceivedValue:(id)value forAddress:(NSString *)address atPort:(unsigned int)port;
 
 @end

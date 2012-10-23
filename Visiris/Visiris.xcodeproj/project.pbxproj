@@ -66,6 +66,14 @@
 		5B1994C01627368C006E9D9E /* VSMainWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B1994BF1627368C006E9D9E /* VSMainWindow.m */; };
 		5B250992161088BE003B715F /* VSFrameUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B250991161088BE003B715F /* VSFrameUtils.m */; };
 		5B2A59D31578AF4E003938AB /* VSDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2A59D21578AF4E003938AB /* VSDocumentController.m */; };
+		5B2C92C31636EA3400D2B61F /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2C92B41636EA3400D2B61F /* DDAbstractDatabaseLogger.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		5B2C92C41636EA3400D2B61F /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2C92B61636EA3400D2B61F /* DDASLLogger.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		5B2C92C51636EA3400D2B61F /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2C92B81636EA3400D2B61F /* DDFileLogger.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		5B2C92C61636EA3400D2B61F /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2C92BA1636EA3400D2B61F /* DDLog.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		5B2C92C71636EA3400D2B61F /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2C92BC1636EA3400D2B61F /* DDTTYLogger.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		5B2C92C81636EA3400D2B61F /* ContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2C92BF1636EA3400D2B61F /* ContextFilterLogFormatter.m */; };
+		5B2C92C91636EA3400D2B61F /* DispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2C92C11636EA3400D2B61F /* DispatchQueueLogFormatter.m */; };
+		5B2C92CA1636EA3400D2B61F /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5B2C92C21636EA3400D2B61F /* README.txt */; };
 		5B35BF161577A49C009911EC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35BF151577A49C009911EC /* Cocoa.framework */; };
 		5B35BF201577A49C009911EC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5B35BF1E1577A49C009911EC /* InfoPlist.strings */; };
 		5B35BF221577A49C009911EC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BF211577A49C009911EC /* main.m */; };
@@ -133,28 +141,7 @@
 		5B35C01D1577A573009911EC /* VSTrackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BFCE1577A573009911EC /* VSTrackView.m */; };
 		5B35C01E1577A573009911EC /* VSTrackView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B35BFCF1577A573009911EC /* VSTrackView.xib */; };
 		5B35C01F1577A573009911EC /* VSTrackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35BFD11577A573009911EC /* VSTrackViewController.m */; };
-		5B35C04C1577A58D009911EC /* BaseNSLogging.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0231577A58D009911EC /* BaseNSLogging.m */; };
-		5B35C04D1577A58D009911EC /* DynamicLogging.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0251577A58D009911EC /* DynamicLogging.m */; };
-		5B35C04E1577A58D009911EC /* PerformanceTesting.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0271577A58D009911EC /* PerformanceTesting.m */; };
-		5B35C04F1577A58D009911EC /* Benchmark iMac.csv in Resources */ = {isa = PBXBuildFile; fileRef = 5B35C0291577A58D009911EC /* Benchmark iMac.csv */; };
-		5B35C0501577A58D009911EC /* Benchmark iPad.csv in Resources */ = {isa = PBXBuildFile; fileRef = 5B35C02A1577A58D009911EC /* Benchmark iPad.csv */; };
-		5B35C0511577A58D009911EC /* Benchmark iPhone 3GS.csv in Resources */ = {isa = PBXBuildFile; fileRef = 5B35C02B1577A58D009911EC /* Benchmark iPhone 3GS.csv */; };
-		5B35C0521577A58D009911EC /* Benchmark iPodTouch3 GCD.csv in Resources */ = {isa = PBXBuildFile; fileRef = 5B35C02C1577A58D009911EC /* Benchmark iPodTouch3 GCD.csv */; };
-		5B35C0531577A58D009911EC /* Benchmark PowerMac.csv in Resources */ = {isa = PBXBuildFile; fileRef = 5B35C02D1577A58D009911EC /* Benchmark PowerMac.csv */; };
-		5B35C0541577A58D009911EC /* Lumberjack Benchmark (iMac).ograph in Resources */ = {isa = PBXBuildFile; fileRef = 5B35C02E1577A58D009911EC /* Lumberjack Benchmark (iMac).ograph */; };
-		5B35C0551577A58D009911EC /* Lumberjack Benchmark (iPad).ograph in Resources */ = {isa = PBXBuildFile; fileRef = 5B35C02F1577A58D009911EC /* Lumberjack Benchmark (iPad).ograph */; };
-		5B35C0561577A58D009911EC /* Lumberjack Benchmark (iPhone 3GS).ograph in Resources */ = {isa = PBXBuildFile; fileRef = 5B35C0301577A58D009911EC /* Lumberjack Benchmark (iPhone 3GS).ograph */; };
-		5B35C0571577A58D009911EC /* Lumberjack Benchmark (PowerMac).ograph in Resources */ = {isa = PBXBuildFile; fileRef = 5B35C0311577A58D009911EC /* Lumberjack Benchmark (PowerMac).ograph */; };
-		5B35C0581577A58D009911EC /* StaticLogging.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0331577A58D009911EC /* StaticLogging.m */; };
 		5B35C0591577A58D009911EC /* ImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0351577A58D009911EC /* ImageAndTextCell.m */; };
-		5B35C05A1577A58D009911EC /* DDAbstractDatabaseLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0381577A58D009911EC /* DDAbstractDatabaseLogger.m */; };
-		5B35C05B1577A58D009911EC /* DDASLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C03A1577A58D009911EC /* DDASLLogger.m */; };
-		5B35C05C1577A58D009911EC /* DDFileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C03C1577A58D009911EC /* DDFileLogger.m */; };
-		5B35C05D1577A58D009911EC /* DDLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C03E1577A58D009911EC /* DDLog.m */; };
-		5B35C05E1577A58D009911EC /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0401577A58D009911EC /* DDTTYLogger.m */; };
-		5B35C05F1577A58D009911EC /* ContextFilterLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0431577A58D009911EC /* ContextFilterLogFormatter.m */; };
-		5B35C0601577A58D009911EC /* DispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B35C0451577A58D009911EC /* DispatchQueueLogFormatter.m */; };
-		5B35C0611577A58D009911EC /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 5B35C0461577A58D009911EC /* README.txt */; };
 		5B35C0621577A58D009911EC /* AudioSourceParameterDefinition.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5B35C0481577A58D009911EC /* AudioSourceParameterDefinition.xml */; };
 		5B35C0631577A58D009911EC /* ImageSourceParameterDefinition.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5B35C0491577A58D009911EC /* ImageSourceParameterDefinition.xml */; };
 		5B35C0641577A58D009911EC /* QuartzComposerSourceParameterDefinition.xml in Resources */ = {isa = PBXBuildFile; fileRef = 5B35C04A1577A58D009911EC /* QuartzComposerSourceParameterDefinition.xml */; };
@@ -192,6 +179,7 @@
 		5BAC770616034B9400DF3BB0 /* VSKeyFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAC770516034B9400DF3BB0 /* VSKeyFrameView.m */; };
 		5BAC770916034BA100DF3BB0 /* VSKeyFrameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAC770816034BA100DF3BB0 /* VSKeyFrameViewController.m */; };
 		5BBF2A0615FF42A0009D79C7 /* VSScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BBF2A0515FF42A0009D79C7 /* VSScrollView.m */; };
+		5BC7F5421636E5E4008A12ED /* VisirisCore.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 5B54D7771631867300896323 /* VisirisCore.framework */; };
 		5BCDF1DC15D50291002AA5BD /* VSTimelineObjectPropertiesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BCDF1DB15D50291002AA5BD /* VSTimelineObjectPropertiesView.m */; };
 		5BD35BBA15D90B3D001A74E0 /* VSTestFlippedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BB915D90B3D001A74E0 /* VSTestFlippedView.m */; };
 		5BD35BC515D95943001A74E0 /* VSAnimationTimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD35BC315D95943001A74E0 /* VSAnimationTimelineViewController.m */; };
@@ -232,6 +220,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				5BE5179A1614A1220096DFB3 /* VVBasics.framework in Copy Files */,
+				5BC7F5421636E5E4008A12ED /* VisirisCore.framework in Copy Files */,
 				5BE5179B1614A1220096DFB3 /* VVMIDI.framework in Copy Files */,
 				5BE5179C1614A1220096DFB3 /* VVOSC.framework in Copy Files */,
 			);
@@ -322,6 +311,21 @@
 		5B250991161088BE003B715F /* VSFrameUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFrameUtils.m; sourceTree = "<group>"; };
 		5B2A59D11578AF4E003938AB /* VSDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDocumentController.h; sourceTree = "<group>"; };
 		5B2A59D21578AF4E003938AB /* VSDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDocumentController.m; sourceTree = "<group>"; };
+		5B2C92B31636EA3400D2B61F /* DDAbstractDatabaseLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDAbstractDatabaseLogger.h; sourceTree = "<group>"; };
+		5B2C92B41636EA3400D2B61F /* DDAbstractDatabaseLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDAbstractDatabaseLogger.m; sourceTree = "<group>"; };
+		5B2C92B51636EA3400D2B61F /* DDASLLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDASLLogger.h; sourceTree = "<group>"; };
+		5B2C92B61636EA3400D2B61F /* DDASLLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDASLLogger.m; sourceTree = "<group>"; };
+		5B2C92B71636EA3400D2B61F /* DDFileLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDFileLogger.h; sourceTree = "<group>"; };
+		5B2C92B81636EA3400D2B61F /* DDFileLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDFileLogger.m; sourceTree = "<group>"; };
+		5B2C92B91636EA3400D2B61F /* DDLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDLog.h; sourceTree = "<group>"; };
+		5B2C92BA1636EA3400D2B61F /* DDLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDLog.m; sourceTree = "<group>"; };
+		5B2C92BB1636EA3400D2B61F /* DDTTYLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTTYLogger.h; sourceTree = "<group>"; };
+		5B2C92BC1636EA3400D2B61F /* DDTTYLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTTYLogger.m; sourceTree = "<group>"; };
+		5B2C92BE1636EA3400D2B61F /* ContextFilterLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContextFilterLogFormatter.h; sourceTree = "<group>"; };
+		5B2C92BF1636EA3400D2B61F /* ContextFilterLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContextFilterLogFormatter.m; sourceTree = "<group>"; };
+		5B2C92C01636EA3400D2B61F /* DispatchQueueLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DispatchQueueLogFormatter.h; sourceTree = "<group>"; };
+		5B2C92C11636EA3400D2B61F /* DispatchQueueLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DispatchQueueLogFormatter.m; sourceTree = "<group>"; };
+		5B2C92C21636EA3400D2B61F /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		5B35BF111577A49C009911EC /* Visiris.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Visiris.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B35BF151577A49C009911EC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		5B35BF181577A49C009911EC /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -445,40 +449,8 @@
 		5B35BFCF1577A573009911EC /* VSTrackView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VSTrackView.xib; sourceTree = "<group>"; };
 		5B35BFD01577A573009911EC /* VSTrackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTrackViewController.h; sourceTree = "<group>"; };
 		5B35BFD11577A573009911EC /* VSTrackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTrackViewController.m; sourceTree = "<group>"; };
-		5B35C0221577A58D009911EC /* BaseNSLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseNSLogging.h; sourceTree = "<group>"; };
-		5B35C0231577A58D009911EC /* BaseNSLogging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseNSLogging.m; sourceTree = "<group>"; };
-		5B35C0241577A58D009911EC /* DynamicLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DynamicLogging.h; sourceTree = "<group>"; };
-		5B35C0251577A58D009911EC /* DynamicLogging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DynamicLogging.m; sourceTree = "<group>"; };
-		5B35C0261577A58D009911EC /* PerformanceTesting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PerformanceTesting.h; sourceTree = "<group>"; };
-		5B35C0271577A58D009911EC /* PerformanceTesting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PerformanceTesting.m; sourceTree = "<group>"; };
-		5B35C0291577A58D009911EC /* Benchmark iMac.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Benchmark iMac.csv"; sourceTree = "<group>"; };
-		5B35C02A1577A58D009911EC /* Benchmark iPad.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Benchmark iPad.csv"; sourceTree = "<group>"; };
-		5B35C02B1577A58D009911EC /* Benchmark iPhone 3GS.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Benchmark iPhone 3GS.csv"; sourceTree = "<group>"; };
-		5B35C02C1577A58D009911EC /* Benchmark iPodTouch3 GCD.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Benchmark iPodTouch3 GCD.csv"; sourceTree = "<group>"; };
-		5B35C02D1577A58D009911EC /* Benchmark PowerMac.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Benchmark PowerMac.csv"; sourceTree = "<group>"; };
-		5B35C02E1577A58D009911EC /* Lumberjack Benchmark (iMac).ograph */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lumberjack Benchmark (iMac).ograph"; sourceTree = "<group>"; };
-		5B35C02F1577A58D009911EC /* Lumberjack Benchmark (iPad).ograph */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lumberjack Benchmark (iPad).ograph"; sourceTree = "<group>"; };
-		5B35C0301577A58D009911EC /* Lumberjack Benchmark (iPhone 3GS).ograph */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lumberjack Benchmark (iPhone 3GS).ograph"; sourceTree = "<group>"; };
-		5B35C0311577A58D009911EC /* Lumberjack Benchmark (PowerMac).ograph */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lumberjack Benchmark (PowerMac).ograph"; sourceTree = "<group>"; };
-		5B35C0321577A58D009911EC /* StaticLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticLogging.h; sourceTree = "<group>"; };
-		5B35C0331577A58D009911EC /* StaticLogging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StaticLogging.m; sourceTree = "<group>"; };
 		5B35C0341577A58D009911EC /* ImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAndTextCell.h; sourceTree = "<group>"; };
 		5B35C0351577A58D009911EC /* ImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageAndTextCell.m; sourceTree = "<group>"; };
-		5B35C0371577A58D009911EC /* DDAbstractDatabaseLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDAbstractDatabaseLogger.h; sourceTree = "<group>"; };
-		5B35C0381577A58D009911EC /* DDAbstractDatabaseLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDAbstractDatabaseLogger.m; sourceTree = "<group>"; };
-		5B35C0391577A58D009911EC /* DDASLLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDASLLogger.h; sourceTree = "<group>"; };
-		5B35C03A1577A58D009911EC /* DDASLLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDASLLogger.m; sourceTree = "<group>"; };
-		5B35C03B1577A58D009911EC /* DDFileLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDFileLogger.h; sourceTree = "<group>"; };
-		5B35C03C1577A58D009911EC /* DDFileLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDFileLogger.m; sourceTree = "<group>"; };
-		5B35C03D1577A58D009911EC /* DDLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDLog.h; sourceTree = "<group>"; };
-		5B35C03E1577A58D009911EC /* DDLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDLog.m; sourceTree = "<group>"; };
-		5B35C03F1577A58D009911EC /* DDTTYLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDTTYLogger.h; sourceTree = "<group>"; };
-		5B35C0401577A58D009911EC /* DDTTYLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDTTYLogger.m; sourceTree = "<group>"; };
-		5B35C0421577A58D009911EC /* ContextFilterLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContextFilterLogFormatter.h; sourceTree = "<group>"; };
-		5B35C0431577A58D009911EC /* ContextFilterLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContextFilterLogFormatter.m; sourceTree = "<group>"; };
-		5B35C0441577A58D009911EC /* DispatchQueueLogFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DispatchQueueLogFormatter.h; sourceTree = "<group>"; };
-		5B35C0451577A58D009911EC /* DispatchQueueLogFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DispatchQueueLogFormatter.m; sourceTree = "<group>"; };
-		5B35C0461577A58D009911EC /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		5B35C0481577A58D009911EC /* AudioSourceParameterDefinition.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = AudioSourceParameterDefinition.xml; sourceTree = "<group>"; };
 		5B35C0491577A58D009911EC /* ImageSourceParameterDefinition.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ImageSourceParameterDefinition.xml; sourceTree = "<group>"; };
 		5B35C04A1577A58D009911EC /* QuartzComposerSourceParameterDefinition.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = QuartzComposerSourceParameterDefinition.xml; sourceTree = "<group>"; };
@@ -779,6 +751,36 @@
 			name = images;
 			sourceTree = "<group>";
 		};
+		5B2C92B21636EA3400D2B61F /* Lumberjack */ = {
+			isa = PBXGroup;
+			children = (
+				5B2C92B31636EA3400D2B61F /* DDAbstractDatabaseLogger.h */,
+				5B2C92B41636EA3400D2B61F /* DDAbstractDatabaseLogger.m */,
+				5B2C92B51636EA3400D2B61F /* DDASLLogger.h */,
+				5B2C92B61636EA3400D2B61F /* DDASLLogger.m */,
+				5B2C92B71636EA3400D2B61F /* DDFileLogger.h */,
+				5B2C92B81636EA3400D2B61F /* DDFileLogger.m */,
+				5B2C92B91636EA3400D2B61F /* DDLog.h */,
+				5B2C92BA1636EA3400D2B61F /* DDLog.m */,
+				5B2C92BB1636EA3400D2B61F /* DDTTYLogger.h */,
+				5B2C92BC1636EA3400D2B61F /* DDTTYLogger.m */,
+				5B2C92BD1636EA3400D2B61F /* Extensions */,
+			);
+			path = Lumberjack;
+			sourceTree = "<group>";
+		};
+		5B2C92BD1636EA3400D2B61F /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				5B2C92BE1636EA3400D2B61F /* ContextFilterLogFormatter.h */,
+				5B2C92BF1636EA3400D2B61F /* ContextFilterLogFormatter.m */,
+				5B2C92C01636EA3400D2B61F /* DispatchQueueLogFormatter.h */,
+				5B2C92C11636EA3400D2B61F /* DispatchQueueLogFormatter.m */,
+				5B2C92C21636EA3400D2B61F /* README.txt */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		5B35BF061577A49C009911EC = {
 			isa = PBXGroup;
 			children = (
@@ -913,77 +915,14 @@
 		5B35C0201577A58D009911EC /* External */ = {
 			isa = PBXGroup;
 			children = (
+				5B2C92B21636EA3400D2B61F /* Lumberjack */,
 				27CFB13E16139BDF00A19B7A /* Frameworks */,
 				5B12792815C13A500026AAFD /* NSImage+QuickLook.m */,
 				5B12792915C13A500026AAFD /* NSImage+QuickLook.h */,
-				5B35C0211577A58D009911EC /* Benchmarking */,
 				5B35C0341577A58D009911EC /* ImageAndTextCell.h */,
 				5B35C0351577A58D009911EC /* ImageAndTextCell.m */,
-				5B35C0361577A58D009911EC /* Lumberjack */,
 			);
 			path = External;
-			sourceTree = "<group>";
-		};
-		5B35C0211577A58D009911EC /* Benchmarking */ = {
-			isa = PBXGroup;
-			children = (
-				5B35C0221577A58D009911EC /* BaseNSLogging.h */,
-				5B35C0231577A58D009911EC /* BaseNSLogging.m */,
-				5B35C0241577A58D009911EC /* DynamicLogging.h */,
-				5B35C0251577A58D009911EC /* DynamicLogging.m */,
-				5B35C0261577A58D009911EC /* PerformanceTesting.h */,
-				5B35C0271577A58D009911EC /* PerformanceTesting.m */,
-				5B35C0281577A58D009911EC /* Results */,
-				5B35C0321577A58D009911EC /* StaticLogging.h */,
-				5B35C0331577A58D009911EC /* StaticLogging.m */,
-			);
-			path = Benchmarking;
-			sourceTree = "<group>";
-		};
-		5B35C0281577A58D009911EC /* Results */ = {
-			isa = PBXGroup;
-			children = (
-				5B35C0291577A58D009911EC /* Benchmark iMac.csv */,
-				5B35C02A1577A58D009911EC /* Benchmark iPad.csv */,
-				5B35C02B1577A58D009911EC /* Benchmark iPhone 3GS.csv */,
-				5B35C02C1577A58D009911EC /* Benchmark iPodTouch3 GCD.csv */,
-				5B35C02D1577A58D009911EC /* Benchmark PowerMac.csv */,
-				5B35C02E1577A58D009911EC /* Lumberjack Benchmark (iMac).ograph */,
-				5B35C02F1577A58D009911EC /* Lumberjack Benchmark (iPad).ograph */,
-				5B35C0301577A58D009911EC /* Lumberjack Benchmark (iPhone 3GS).ograph */,
-				5B35C0311577A58D009911EC /* Lumberjack Benchmark (PowerMac).ograph */,
-			);
-			path = Results;
-			sourceTree = "<group>";
-		};
-		5B35C0361577A58D009911EC /* Lumberjack */ = {
-			isa = PBXGroup;
-			children = (
-				5B35C0371577A58D009911EC /* DDAbstractDatabaseLogger.h */,
-				5B35C0381577A58D009911EC /* DDAbstractDatabaseLogger.m */,
-				5B35C0391577A58D009911EC /* DDASLLogger.h */,
-				5B35C03A1577A58D009911EC /* DDASLLogger.m */,
-				5B35C03B1577A58D009911EC /* DDFileLogger.h */,
-				5B35C03C1577A58D009911EC /* DDFileLogger.m */,
-				5B35C03D1577A58D009911EC /* DDLog.h */,
-				5B35C03E1577A58D009911EC /* DDLog.m */,
-				5B35C03F1577A58D009911EC /* DDTTYLogger.h */,
-				5B35C0401577A58D009911EC /* DDTTYLogger.m */,
-				5B35C0411577A58D009911EC /* Extensions */,
-			);
-			path = Lumberjack;
-			sourceTree = "<group>";
-		};
-		5B35C0411577A58D009911EC /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				5B35C0421577A58D009911EC /* ContextFilterLogFormatter.h */,
-				5B35C0431577A58D009911EC /* ContextFilterLogFormatter.m */,
-				5B35C0441577A58D009911EC /* DispatchQueueLogFormatter.h */,
-				5B35C0451577A58D009911EC /* DispatchQueueLogFormatter.m */,
-				5B35C0461577A58D009911EC /* README.txt */,
-			);
-			path = Extensions;
 			sourceTree = "<group>";
 		};
 		5B35C0471577A58D009911EC /* Resources */ = {
@@ -1659,16 +1598,6 @@
 				5B35C01A1577A573009911EC /* VSMainTimelineView.xib in Resources */,
 				5B35C01C1577A573009911EC /* VSTimelineObjectView.xib in Resources */,
 				5B35C01E1577A573009911EC /* VSTrackView.xib in Resources */,
-				5B35C04F1577A58D009911EC /* Benchmark iMac.csv in Resources */,
-				5B35C0501577A58D009911EC /* Benchmark iPad.csv in Resources */,
-				5B35C0511577A58D009911EC /* Benchmark iPhone 3GS.csv in Resources */,
-				5B35C0521577A58D009911EC /* Benchmark iPodTouch3 GCD.csv in Resources */,
-				5B35C0531577A58D009911EC /* Benchmark PowerMac.csv in Resources */,
-				5B35C0541577A58D009911EC /* Lumberjack Benchmark (iMac).ograph in Resources */,
-				5B35C0551577A58D009911EC /* Lumberjack Benchmark (iPad).ograph in Resources */,
-				5B35C0561577A58D009911EC /* Lumberjack Benchmark (iPhone 3GS).ograph in Resources */,
-				5B35C0571577A58D009911EC /* Lumberjack Benchmark (PowerMac).ograph in Resources */,
-				5B35C0611577A58D009911EC /* README.txt in Resources */,
 				5B35C0621577A58D009911EC /* AudioSourceParameterDefinition.xml in Resources */,
 				5B35C0631577A58D009911EC /* ImageSourceParameterDefinition.xml in Resources */,
 				5B35C0641577A58D009911EC /* QuartzComposerSourceParameterDefinition.xml in Resources */,
@@ -1681,6 +1610,7 @@
 				A986A5FA161CC8430068F3CA /* VSCreateDeviceViewController.xib in Resources */,
 				5B4ABA85161DA3F500BE5248 /* VSDeviceParameterConnectionView.xib in Resources */,
 				5B84D72116247C47006DDC12 /* VSAnimationCurvePopup.xib in Resources */,
+				5B2C92CA1636EA3400D2B61F /* README.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1771,18 +1701,7 @@
 				5B35C01B1577A573009911EC /* VSMainTimelineViewController.m in Sources */,
 				5B35C01D1577A573009911EC /* VSTrackView.m in Sources */,
 				5B35C01F1577A573009911EC /* VSTrackViewController.m in Sources */,
-				5B35C04C1577A58D009911EC /* BaseNSLogging.m in Sources */,
-				5B35C04D1577A58D009911EC /* DynamicLogging.m in Sources */,
-				5B35C04E1577A58D009911EC /* PerformanceTesting.m in Sources */,
-				5B35C0581577A58D009911EC /* StaticLogging.m in Sources */,
 				5B35C0591577A58D009911EC /* ImageAndTextCell.m in Sources */,
-				5B35C05A1577A58D009911EC /* DDAbstractDatabaseLogger.m in Sources */,
-				5B35C05B1577A58D009911EC /* DDASLLogger.m in Sources */,
-				5B35C05C1577A58D009911EC /* DDFileLogger.m in Sources */,
-				5B35C05D1577A58D009911EC /* DDLog.m in Sources */,
-				5B35C05E1577A58D009911EC /* DDTTYLogger.m in Sources */,
-				5B35C05F1577A58D009911EC /* ContextFilterLogFormatter.m in Sources */,
-				5B35C0601577A58D009911EC /* DispatchQueueLogFormatter.m in Sources */,
 				5B35C0971577A912009911EC /* VSFileType.m in Sources */,
 				5B35C0981577A912009911EC /* VSFileUtils.m in Sources */,
 				5B35C09A1577A912009911EC /* VSFileImageCreator.m in Sources */,
@@ -1869,6 +1788,13 @@
 				2737AE2D1630453900E19624 /* NSColor+CGColorSupport.m in Sources */,
 				5B4EB1AD162D3DA8002104DB /* VSVisirsConstants.m in Sources */,
 				5B4042CA1635682E0013978B /* VSExternalInputRepresentation.m in Sources */,
+				5B2C92C31636EA3400D2B61F /* DDAbstractDatabaseLogger.m in Sources */,
+				5B2C92C41636EA3400D2B61F /* DDASLLogger.m in Sources */,
+				5B2C92C51636EA3400D2B61F /* DDFileLogger.m in Sources */,
+				5B2C92C61636EA3400D2B61F /* DDLog.m in Sources */,
+				5B2C92C71636EA3400D2B61F /* DDTTYLogger.m in Sources */,
+				5B2C92C81636EA3400D2B61F /* ContextFilterLogFormatter.m in Sources */,
+				5B2C92C91636EA3400D2B61F /* DispatchQueueLogFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1933,7 +1859,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -1953,13 +1879,15 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				SDKROOT = macosx10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};
 		5B35BF331577A49C009911EC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1985,6 +1913,7 @@
 		5B35BF341577A49C009911EC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

@@ -54,4 +54,8 @@
 // parameter creation
 - (IBAction)didSelectInputAddressForParameter:(id)sender;
 
+#pragma mark -Methods
+
+-(void) dataSourceWasChanged;
+
 @end

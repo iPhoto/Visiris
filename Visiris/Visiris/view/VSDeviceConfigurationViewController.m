@@ -15,19 +15,22 @@
 #import "VSDevice.h"
 #import "VSDeviceRepresentation.h"
 #import "VSDocument.h"
+#import "VSExternalInput.h"
+#import "VSExternalInputRepresentation.h"
 
 #import "VSCoreServices.h"
-#import "VSExternalInput.h"
+
 
 @interface VSDeviceConfigurationViewController ()
 {
-    int                                                 _numberOfDevices;
-    BOOL                                                _isCurrentlyPresentingNewDeviceConfigurationPopover;
+    int _numberOfDevices;
+    BOOL _isCurrentlyPresentingNewDeviceConfigurationPopover;
 }
 
 /** VSExternalInputManager is initialized by VSDocument */
-//@property (strong) VSExternalInputManager*              externalInputManager;
-@property (weak) VSDeviceManager*                     deviceManager;
+@property (strong) VSDeviceManager* deviceManager;
+
+@property (strong) NSMutableArray *externalInputRepresentation;
 
 @end
 
@@ -41,7 +44,7 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 {
     self = [self initWithNibName:defaultNib bundle:nil];
     if (self) {
-        
+        self.externalInputRepresentation = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -60,6 +63,8 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
         self.createDeviceViewController = [[VSCreateDeviceViewController alloc] initWithNibName:@"VSCreateDeviceViewController" bundle:nil];
         self.createDeviceViewController.delegate = self;
         self.createDeviceViewController.dataSource = self;
+        
+        
     }
     
     return self;
@@ -69,17 +74,46 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 -(void) awakeFromNib{
     // Create DeviceManager
     self.deviceManager =  ((VSDocument*)[[NSDocumentController sharedDocumentController] currentDocument]).deviceManager;
+    
+    [self.deviceManager addObserver:self forKeyPath:@"availableInputsRepresentation"
+                            options:NSKeyValueObservingOptionPrior | NSKeyValueObservingOptionNew
+                            context:nil];
+}
+
+#pragma mark - NSObject
+
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if([keyPath isEqualToString:@"availableInputsRepresentation"]){
+        
+        if(_isCurrentlyPresentingNewDeviceConfigurationPopover)
+        {
+            if(![[change valueForKey:@"notificationIsPrior"] boolValue]){
+                NSInteger kind = [[change valueForKey:@"kind"] intValue];
+                
+                switch (kind) {
+                        
+                    case NSKeyValueChangeInsertion:
+                    {
+                        [self.createDeviceViewController dataSourceWasChanged];
+                         break;
+                    }                       
+                        
+                    case NSKeyValueChangeRemoval:
+                    {
+                        [self.createDeviceViewController dataSourceWasChanged];
+                        break;
+                    }
+                }
+                
+                
+            }
+        }
+    }
 }
 
 #pragma mark - Device Management
 - (IBAction)didPressAddDeviceButton:(NSButton *)addButton
 {
-    
-    NSLog(@"Available Inputs");
-    
-    for (VSExternalInput *input in [self.deviceManager availableInputs]) {
-        NSLog(@"ParameterType: %@   Identifier: %@", input.parameterTypeName, input.identifier);
-    }
     
     if ( !_isCurrentlyPresentingNewDeviceConfigurationPopover ) {
         
@@ -89,7 +123,7 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 
 - (void)insertNewDeviceRowAndPresentDeviceConfigurationSheet
 {
-  //  [self insertNewDeviceRow];
+    //  [self insertNewDeviceRow];
     
     if ( ![[[self.createDeviceViewController.createDeviceWindow contentView] subviews] containsObject:self.createDeviceViewController.view] ) {
     }
@@ -99,6 +133,8 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
                                     modalDelegate:self
                                    didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
                                       contextInfo:nil];
+    
+    _isCurrentlyPresentingNewDeviceConfigurationPopover = YES;
 }
 
 - (void)sheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
@@ -163,7 +199,7 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 #pragma mark - VSCreateDeviceViewControllerDataSource Implementation
 - (NSArray *)availableInputParameter
 {
-    return self.deviceManager.availableInputRepresentation;
+    return self.deviceManager.availableInputsRepresentation;
 }
 
 
@@ -191,5 +227,6 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
         return nil;
     }
 }
+
 
 @end

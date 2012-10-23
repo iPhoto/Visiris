@@ -18,6 +18,8 @@
 
 @property (weak) id<VSExternalInputManagerDelegate>                     delegate;
 
+@property (strong,readonly) NSMutableArray *externalInputRepresentations;
+
 + (NSString *)identifier;
 
 #pragma mark - Available OSC ports observation
@@ -25,7 +27,7 @@
 - (void)startObservingInputs;
 - (void)stopObservingInputs;
 
-- (NSArray *)availableInputs;
+
 
 
 - (BOOL)startInputForAddress:(NSString *)address atPort:(unsigned int)port;

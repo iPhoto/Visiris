@@ -22,6 +22,7 @@
 
 @property VSDeviceLoader *deviceLoader;
 
+
 @end
 
 
@@ -31,7 +32,8 @@ static NSString *devicesFolder;
 
 static NSURL* devicesFolderURL;
 
-@synthesize devices = _devices;
+@synthesize devices             = _devices;
+@synthesize availableInputsRepresentation     = _availableInputsRepresentation;
 
 #pragma mark - Init
 
@@ -58,14 +60,88 @@ static NSURL* devicesFolderURL;
     if(self = [super init]){
         self.deviceRepresentations = [[NSMutableArray alloc] init];
         self.devices = [[NSMutableArray alloc]init];
+        _availableInputsRepresentation = [[NSMutableArray alloc] init];
+        self.externalInputManager = [VSExternalInputManager sharedExternalInputManager];
+        
+        for(VSExternalInput *input in self.externalInputManager.availableInputs){
+            [self addRepresentationOfExternalInput:input];
+        }
+        
+        [self.externalInputManager addObserver:self forKeyPath:@"availableInputs"
+                                       options:NSKeyValueObservingOptionPrior | NSKeyValueObservingOptionNew
+                                       context:nil];
+        
         [self loadExisitingDevices];
     }
     
     return self;
 }
 
+#pragma mark - NSObject
+
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    if([keyPath isEqualToString:@"availableInputs"]){
+        
+        NSInteger kind = [[change valueForKey:@"kind"] intValue];
+        
+        switch (kind) {
+            case NSKeyValueChangeInsertion:
+            {
+                if(![[change valueForKey:@"notificationIsPrior"] boolValue]){
+                    NSArray *newAvailableInputs = [self.externalInputManager.availableInputs objectsAtIndexes:[change  objectForKey:@"indexes"]];
+                    
+                    for(VSExternalInput *newInput in newAvailableInputs){
+                        [self addRepresentationOfExternalInput:newInput];
+                    }
+                }
+                break;
+            }
+            case NSKeyValueChangeRemoval:
+            {
+//                if([[change valueForKey:@"notificationIsPrior"] boolValue]){
+//                    NSArray *removedInputs = [self.externalInputManager.availableInputs objectsAtIndexes:[change  objectForKey:@"indexes"]];
+//                    
+//                    for(VSExternalInput *removedInput in removedInputs){
+//                        [self removeRepresentaionOfExternalInput:removedInput];
+//                    }
+//                    
+//                }
+//                else{
+//                    
+//                }
+                break;
+            }
+            default:
+                break;
+        }
+    }
+}
+
 
 #pragma mark - Methods
+
+#pragma mark - Private Methods
+
+-(void) addRepresentationOfExternalInput:(VSExternalInput*) externalInput{
+    VSExternalInputRepresentation *newRepresentation = [[VSExternalInputRepresentation alloc] initWithExternalInput:externalInput];
+    
+    [self.availableInputsRepresentation addObject:newRepresentation];
+}
+
+-(void) removeRepresentaionOfExternalInput:(VSExternalInput*) externalInput{
+    NSUInteger indexOfObjectToRemove = [_availableInputsRepresentation indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj isKindOfClass:[VSExternalInputRepresentation class]]){
+            if([((VSExternalInputRepresentation*)obj).externalInput isEqual:externalInput]){
+                return YES;
+            }
+        }
+        return NO;
+    }];
+    
+    if(indexOfObjectToRemove != NSNotFound){
+        [self.availableInputsRepresentation removeObjectAtIndex:indexOfObjectToRemove];
+    }
+}
 
 -(void) addDevicesObject:(VSDevice *)object{
     
@@ -128,6 +204,7 @@ static NSURL* devicesFolderURL;
     return YES;
 }
 
+
 #pragma mark - VSDeviceDelegate Implementation
 
 -(BOOL) registerDeviceParameter:(VSDeviceParameter *)deviceParameter ofDevice:(VSDevice *)device{
@@ -157,7 +234,6 @@ static NSURL* devicesFolderURL;
 
 
 -(void) loadExisitingDevices{
-    
     NSDirectoryEnumerator *dirEnum = [[NSFileManager defaultManager] enumeratorAtPath:devicesFolder];
     
     [dirEnum skipDescendants];
@@ -255,18 +331,8 @@ static NSURL* devicesFolderURL;
     return NO;
 }
 
-- (NSArray *)availableInputs
-{
-    return [self.externalInputManager availableInputs];
-}
-
--(NSArray *)availableInputRepresentation{
-    NSMutableArray *inputRepresentations = [[NSMutableArray alloc] init];
-    for (VSExternalInput *input in self.availableInputs){
-        [inputRepresentations addObject:[[VSExternalInputRepresentation alloc] initWithExternalInput:input]];
-    }
-    
-    return inputRepresentations;
+- (NSMutableArray *)availableInputsRepresentation{
+    return [self mutableArrayValueForKey:@"availableInputsRepresentation"];
 }
 
 @end

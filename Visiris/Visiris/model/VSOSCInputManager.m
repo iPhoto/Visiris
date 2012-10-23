@@ -17,8 +17,8 @@
 #import "VSOSCPort.h"
 #import "VSOSCMessage.h"
 #import "VSOSCInput.h"
-
 #import "VSExternalInput.h"
+#import "VSExternalInputRepresentation.h"
 
 #import <VisirisCore/VSReferenceCounting.h>
 
@@ -28,7 +28,7 @@
 
 #define kVSOSCInputManager_numberOfDefalutOSCListenPorts 5
 #define kVSOSCInputManager_oscPortWalkthroughInterval 1.0f
-#define kVSOSC_unusedPortLifetime 10000
+#define kVSOSC_unusedPortLifetime 5
 
 @interface VSOSCInputManager ()
 {
@@ -61,6 +61,8 @@
 
 @implementation VSOSCInputManager
 
+@synthesize externalInputRepresentations = _externalInputRepresentations;
+
 + (NSString *)identifier
 {
     return kVSInputManager_OSC;
@@ -78,9 +80,9 @@
         _observablePorts = NSMakeRange(12340,12350);
         
         /* TODO: Implement Preference Panel
-        observablePorts.location = [[NSUserDefaults standardUserDefaults] integerForKey:kVSOSCInputManager_inputRangeStart];
-        observablePorts.length = [[NSUserDefaults standardUserDefaults] integerForKey:kVSOSCInputManager_inputRangeEnd];
-        */
+         observablePorts.location = [[NSUserDefaults standardUserDefaults] integerForKey:kVSOSCInputManager_inputRangeStart];
+         observablePorts.length = [[NSUserDefaults standardUserDefaults] integerForKey:kVSOSCInputManager_inputRangeEnd];
+         */
         
         _activeOSCClients = [[NSMutableDictionary alloc] init];
         
@@ -122,7 +124,7 @@
 
 #pragma mark - AvailableOSCPortObserverCreation
 - (void)createInputObserver:(NSInteger)numberOfClientToCreate
-{    
+{
     for (NSInteger i = 0; i < numberOfClientToCreate; i++)
     {
         OSCInPort *inPort = nil;
@@ -131,7 +133,7 @@
         {
             unsigned int currentPort = [self getNextAvailableOSCPort];
             inPort = [_oscManager createNewInputForPort:currentPort];
-        
+            
             //todo startet hier schon das erste observing?
             if (inPort)
             {
@@ -142,7 +144,7 @@
                 client.delegate = self;
                 client.port = [inPort port];
                 [self.snifferClients addObject:client];
-
+                
                 break;
             }
         }
@@ -191,11 +193,11 @@
         }
         while (![currentOSCClient isBinded]);
         
-//        NSLog(@"Start observing Port: %d",newPort);
+        //        NSLog(@"Start observing Port: %d",newPort);
         
         [currentOSCClient startObserving];
     }
-//    [self printDebugLog];
+    //    [self printDebugLog];
 }
 
 - (unsigned int)getNextAvailableOSCPort
@@ -233,7 +235,7 @@
         for (VSOSCClient *currentClient in self.snifferClients) {
             
             if (currentClient.port == port) {
-
+                
                 // stop sniffer port
                 [currentClient stopObserving];
                 
@@ -250,7 +252,7 @@
         [self.referencCountingAdresses incrementReferenceOfKey:[NSString stringFromAddress:address atPort:port]];
         [self.referenceCountingPorts incrementReferenceOfKey:[NSNumber numberWithUnsignedInt:port]];
     }
-
+    
     return isInputForAddressActive;
 }
 
@@ -321,11 +323,17 @@
                 }
             }
             
-            // inform delegate about removing inputs
-            [currentPort.addresses removeObjectsInArray:outdatedAddress];
-
-            if ( 0 == currentPort.addresses.count ) {
-                [outdatedPorts addObject:[NSNumber numberWithUnsignedInt:currentPort.port]];
+            if(outdatedAddress.count){
+                
+                if([self delegateRespondsToSelector:@selector(inputManager:stoppedReceivingExternalInputs:)]){
+                    [self.delegate inputManager:self stoppedReceivingExternalInputs:outdatedAddress];
+                }
+                
+                [currentPort.addresses removeObjectsInArray:outdatedAddress];
+                
+                if (!currentPort.addresses.count ) {
+                    [outdatedPorts addObject:[NSNumber numberWithUnsignedInt:currentPort.port]];
+                }
             }
         }
         
@@ -345,7 +353,7 @@
 - (BOOL)startOSCClientOnPort:(unsigned int)port
 {
     BOOL oscClientStarted = NO;
-        
+    
     VSOSCClient *tempClient = [self.activeOSCClients objectForKey:[NSNumber numberWithUnsignedInt:port]];
     if (tempClient)
     {
@@ -354,10 +362,10 @@
     else
     {
         OSCInPort *inPort = [_oscManager createNewInputForPort:port];
-
+        
         VSOSCClient *oscClient = [[VSOSCClient alloc] initWithOSCInPort:inPort andType:VSOSCClientActiveReceiver];
         if (oscClient) {
-
+            
             oscClientStarted = YES;
             [oscClient setPort:port];
             [oscClient setDelegate:self];
@@ -366,7 +374,7 @@
         }
     }
     
-
+    
     [self printDebugLog];
     
     return oscClientStarted;
@@ -409,14 +417,17 @@
     {
         [self.discoveredPorts setObject:discoveredPort forKey:[NSNumber numberWithUnsignedInt:discoveredPort.port]];
         
-        //inform delegate about alle addresses added
+        if([self delegateRespondsToSelector:@selector(inputManager:startedReceivingExternalInputs:)]){
+            [self.delegate inputManager:self startedReceivingExternalInputs:discoveredPort.addresses];
+        }
+        
     }
     else
     {
         port.lastMessageReceivedTimestamp = discoveredPort.lastMessageReceivedTimestamp;
-           
+        
         VSOSCInput *address = [discoveredPort.addresses objectAtIndex:0];
-                
+        
         BOOL containsAddress = NO;
         
         for (VSOSCInput *tempAddress in port.addresses)
@@ -430,7 +441,9 @@
         
         if (containsAddress == NO)
         {
-            //inform delegate about new address
+            if([self delegateRespondsToSelector:@selector(inputManager:startedReceivingExternalInputs:)]){
+                [self.delegate inputManager:self startedReceivingExternalInputs:discoveredPort.addresses];
+            }
             [port addAddress:address];
         }
     }
@@ -441,12 +454,12 @@
 //- (void)receivedOSCMessage:(OSCMessage *)message
 //{
 //    NSLog(@"did received message: %@", message);
-//    
+//
 //
 //}
 
 
-#pragma mark - Internal Methods
+#pragma mark - Private Methods
 - (unsigned int)portForAddress:(NSString *)address
 {
     unsigned int requestedPort = 0;
@@ -461,6 +474,13 @@
     
     return requestedPort;
 }
+
+-(void) addRepresentationOfExternalInput:(VSExternalInput*) externalInput{
+    VSExternalInputRepresentation *newRepresentation = [[VSExternalInputRepresentation alloc] initWithExternalInput:externalInput];
+    
+    [self.externalInputRepresentations addObject:newRepresentation];
+}
+
 
 - (void)printDebugLog
 {
@@ -483,6 +503,28 @@
     }
     
     NSLog(@"====================");
+}
+
+/**
+ * Checks if the delegate of VSExternalInputManagerDelegate is able to respond to the given Selector
+ * @param selector Selector the delegate will be checked for if it is able respond to
+ * @return YES if the delegate is able to respond to the selector, NO otherweis
+ */
+-(BOOL) delegateRespondsToSelector:(SEL) selector{
+    if(self.delegate){
+        if([self.delegate conformsToProtocol:@protocol(VSExternalInputManagerDelegate)]){
+            if([self.delegate respondsToSelector:selector]){
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
+#pragma mark -Properties
+
+-(NSMutableArray*) externalInputRepresentations{
+    return [self mutableArrayValueForKey:@"externalInputRepresentations"];
 }
 
 @end

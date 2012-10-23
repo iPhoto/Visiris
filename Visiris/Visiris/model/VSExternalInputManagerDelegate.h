@@ -11,16 +11,15 @@
 
 @protocol VSExternalInputProtocol;
 
+
 @protocol VSExternalInputManagerDelegate <NSObject>
 
 - (void)inputManager:(id<VSExternalInputProtocol>)inputManager didReceivedValue:(id)value forIdentifier:(NSString*) identifier;
 
--(BOOL) willRemoveExternalInputs:(NSArray*) fromInputManager:(id<VSExternalInputProtocol>) manager;
 
--(void) didRemoveExternalInputs:(NSArray*) fromInputManager:(id<VSExternalInputProtocol>) manager;
+-(void) inputManager:(id<VSExternalInputProtocol>)inputManager  stoppedReceivingExternalInputs:(NSArray*) externalInputs;
 
--(BOOL) willAddExternalInputs:(NSArray*) fromInputManager:(id<VSExternalInputProtocol>) manager;
+-(void) inputManager:(id<VSExternalInputProtocol>)inputManager  startedReceivingExternalInputs:(NSArray*) externalInputs;
 
--(void) didAddExternalInputs:(NSArray*) fromInputManager:(id<VSExternalInputProtocol>) manager;
 
 @end

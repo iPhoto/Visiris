@@ -24,6 +24,7 @@
         _externalInput = externalInput;
         self.name = @"Name";
         self.range = externalInput.range;
+        self.selected = NO;
     }
     
     return self;

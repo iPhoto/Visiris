@@ -110,7 +110,7 @@
                                                                                     timeStamp:[NSDate timeIntervalSinceReferenceDate]
                                                                                      withPort:self.port
                                                                                    deviceType:VSOSCDEVICE
-                                                                             andParameterType:message.messageType]
+                                                                             andParameterType:message.value.type]
                                                      atTimestamp:[NSDate timeIntervalSinceReferenceDate]]];
             }
         }
