@@ -38,4 +38,8 @@ typedef enum {
 
 + (VSDeviceParameterDataype) deviceParameterDatatypeForOSCParameterValueType:(OSCValueType) oscValueType;
 
++ (NSString *)stringForDeviceParameterDataType:(VSDeviceParameterDataype)dataType;
+
++ (BOOL)isDeviceParameterDatatypeSupportingRanges:(VSDeviceParameterDataype)dataType;
+
 @end

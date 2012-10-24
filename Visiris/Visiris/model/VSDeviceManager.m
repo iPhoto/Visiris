@@ -216,7 +216,7 @@ static NSURL* devicesFolderURL;
         NSXMLElement *element = [NSXMLElement elementWithName:@"parameter"];
         [element addAttribute:[NSXMLNode attributeWithName:@"name" stringValue:representation.name]];
         [element addAttribute:[NSXMLNode attributeWithName:@"identifier" stringValue:representation.identifier]];
-        [element addAttribute:[NSXMLNode attributeWithName:@"dataType" stringValue:representation.externalInput.parameterTypeName]];
+        [element addAttribute:[NSXMLNode attributeWithName:@"dataType" stringValue:[VSDeviceParameterUtils stringForDeviceParameterDataType:representation.externalInput.deviceParameterDataType]]];
         [root addChild:element];
     }
 

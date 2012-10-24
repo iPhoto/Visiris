@@ -13,11 +13,13 @@
 
 @interface VSExternalInput : NSObject
 
-@property (readonly, strong) NSString       *identifier;
-@property (assign) id                       value;
-@property (assign) VSRange                  range;
-@property (readonly, strong) NSString       *parameterTypeName;
-@property (assign) VSDeviceType             deviceType;
-@property (strong, readonly) NSString       *deviceTypeName;
-@property VSDeviceParameterDataype          deviceParameterDataType;
+@property (readonly, strong) NSString                   *identifier;
+@property (assign) id                                   value;
+@property (assign) VSRange                              range;
+@property (assign) BOOL                                 hasRange;
+@property (readonly, strong) NSString                   *parameterTypeName;
+@property (assign) VSDeviceType                         deviceType;
+@property (strong, readonly) NSString                   *deviceTypeName;
+@property (assign) VSDeviceParameterDataype             deviceParameterDataType;
+
 @end

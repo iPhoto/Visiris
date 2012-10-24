@@ -17,6 +17,6 @@
 @property (assign) unsigned short                           port;
 @property (assign) OSCValueType                             oscParameterType;
 
-+ (VSOSCInput *)inputWithAddress:(NSString *)address timeStamp:(NSTimeInterval)timeInterval withPort:(unsigned short)port deviceType:(VSDeviceType)deviceType andParameterType:(OSCValueType)parameterType;
++ (VSOSCInput *)inputWithAddress:(NSString *)address timeStamp:(NSTimeInterval)timeInterval withPort:(unsigned short)port deviceType:(VSDeviceType)deviceType andParameterType:(OSCValueType)parameterType andValue:(id)value;
 
 @end

@@ -13,12 +13,12 @@
 @synthesize identifier = _identifier;
 @synthesize parameterTypeName   = _parameterType;
 
-+ (VSOSCInput *)inputWithAddress:(NSString *)address timeStamp:(NSTimeInterval)timeStamp withPort:(unsigned short)port deviceType:(VSDeviceType)deviceType andParameterType:(OSCValueType)parameterType
++ (VSOSCInput *)inputWithAddress:(NSString *)address timeStamp:(NSTimeInterval)timeStamp withPort:(unsigned short)port deviceType:(VSDeviceType)deviceType andParameterType:(OSCValueType)parameterType andValue:(id)value;
 {
-    return [[VSOSCInput alloc] initWithAddress:address timeStamp:timeStamp withPort:port deviceType:(VSDeviceType)deviceType andParameterType:parameterType];
+    return [[VSOSCInput alloc] initWithAddress:address timeStamp:timeStamp withPort:port deviceType:(VSDeviceType)deviceType andParameterType:parameterType andValue:value];
 }
 
-- (id)initWithAddress:(NSString *)address timeStamp:(NSTimeInterval)timeStamp withPort:(unsigned short)port deviceType:(VSDeviceType)deviceType andParameterType:(OSCValueType)parameterType
+- (id)initWithAddress:(NSString *)address timeStamp:(NSTimeInterval)timeStamp withPort:(unsigned short)port deviceType:(VSDeviceType)deviceType andParameterType:(OSCValueType)parameterType andValue:(id)value
 {
     self = [super init];
     if (self) {
@@ -27,6 +27,7 @@
         self.port = port;
         self.deviceType = deviceType;
         self.oscParameterType = parameterType;
+        self.hasRange = [VSDeviceParameterUtils isDeviceParameterDatatypeSupportingRanges:self.deviceParameterDataType];
     }
     
     return self;
