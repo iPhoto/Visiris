@@ -184,6 +184,62 @@ static NSURL* devicesFolderURL;
     
     [self addDevicesObject:newDevice];
     
+    
+    NSXMLElement *root = (NSXMLElement *)[NSXMLNode elementWithName:@"device"];
+    NSXMLDocument *xmlDoc = [[NSXMLDocument alloc] initWithRootElement:root];
+    
+
+    [root addAttribute:[NSXMLNode attributeWithName:@"name" stringValue:deviceName]];
+    
+    
+
+    
+    for(VSExternalInputRepresentation *representation in parameters){
+        
+        NSXMLElement *element = [NSXMLElement elementWithName:@"parameter"];
+        [element addAttribute:[NSXMLNode attributeWithName:@"name" stringValue:representation.name]];
+        [element addAttribute:[NSXMLNode attributeWithName:@"identifier" stringValue:representation.identifier]];
+        [element addAttribute:[NSXMLNode attributeWithName:@"dataType" stringValue:[VSDeviceParameterUtils stringForDeviceParameterDataType:representation.externalInput.deviceParameterDataType]]];
+        [root addChild:element];
+    }
+
+    
+    
+    
+
+    
+//    NSXMLNode *node = [NSXMLNode commentWithStringValue:@"Hello world!"];
+//    NSXMLElement *element = [NSXMLElement commentWithStringValue:@"Hello world!"];
+//    
+//
+//    NSXMLNode *node = [[NSXMLNode alloc] initWithKind:NSXMLAttributeKind];
+//    
+//    [node setName:@"attributeName"];    
+//    
+//    [element addAttribute:node];
+    
+    
+//    NSXMLElement *element = [NSXMLElement attributeWithName:@"attributename" stringValue:@"stringvalue"];
+//    [root addChild:element];
+    
+    
+//    [root addChild:element];
+
+    
+    
+    [xmlDoc setVersion:@"1.0"];
+    [xmlDoc setCharacterEncoding:@"UTF-8"];
+
+    
+    
+    NSData *xmlData = [xmlDoc XMLDataWithOptions:NSXMLNodePrettyPrint];
+    
+    NSString  *path = [NSString stringWithFormat:@"%@/%@.xml",devicesFolder,deviceName];
+                
+    if (![xmlData writeToFile:path atomically:YES]) {
+        DDLogError(@"Could not write document out...");
+    }    
+    
     return YES;
 }
 

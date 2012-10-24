@@ -157,6 +157,19 @@ static NSMutableDictionary *deviceParameterTypeOfString;
     }
 }
 
++ (NSString *)stringForDeviceParameterDataType:(VSDeviceParameterDataype)dataType
+{
+    NSString *result = nil;
+    
+    for (NSString *string in [deviceParameterTypeOfString allKeys]) {
+        if (dataType == [self deviceParameterDatatypeForString:string andError:nil]) {
+            result = string;
+        }
+    }
+    
+    return result;
+}
+
 + (VSDeviceParameterDataype) deviceParameterDatatypeForOSCParameterValueType:(OSCValueType) oscValueType{
     id dataType = [genericDeviceDataTypeForVSDeviceParameterDataype objectForKey:[NSNumber numberWithInt:oscValueType]];
     
@@ -167,7 +180,7 @@ static NSMutableDictionary *deviceParameterTypeOfString;
     return -1;
 }
 
-+ (NSString *) nameForOSCType:(OSCValueType)type{
++ (NSString *)nameForOSCType:(OSCValueType)type{
     
     NSString *string;
     
@@ -189,6 +202,21 @@ static NSMutableDictionary *deviceParameterTypeOfString;
     }
         
     return string;
+}
+
++ (BOOL)isDeviceParameterDatatypeSupportingRanges:(VSDeviceParameterDataype)dataType
+{
+    BOOL result = NO;
+    
+    if (dataType == VSDeviceParameterDataypeOSC64Int ||
+        dataType == VSDeviceParameterDataypeOSCDouble ||
+        dataType == VSDeviceParameterDataypeOSCFloat ||
+        dataType == VSDeviceParameterDataypeOSCInt)
+    {
+        result = YES;
+    }
+    
+    return result;
 }
 
 @end

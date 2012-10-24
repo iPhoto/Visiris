@@ -104,13 +104,16 @@
         {
             if ([self.delegate respondsToSelector:@selector(oscClient:didDiscoveredActivePort:)])
             {
+                id newValue = [self valueForOSCValue:message.value];
+                
                 [self.delegate oscClient:self
                  didDiscoveredActivePort:[VSOSCPort portWithPort:_port
                                                          address:[VSOSCInput inputWithAddress:message.address
                                                                                     timeStamp:[NSDate timeIntervalSinceReferenceDate]
                                                                                      withPort:self.port
                                                                                    deviceType:VSOSCDEVICE
-                                                                             andParameterType:message.value.type]
+                                                                             andParameterType:message.value.type
+                                                                                     andValue:newValue]
                                                      atTimestamp:[NSDate timeIntervalSinceReferenceDate]]];
             }
         }
@@ -130,6 +133,7 @@
     id newValue;
     if (oscValue) {
         
+        //todo da fehlt noch viel
         switch (oscValue.type) {
             case OSCValString:
                 newValue = [oscValue stringValue];
