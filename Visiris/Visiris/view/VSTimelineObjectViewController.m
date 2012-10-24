@@ -88,7 +88,6 @@ static NSString* defaultNib = @"VSTimelineObjectView";
 
 -(void) awakeFromNib{
     [self.view setAutoresizingMask:NSViewHeightSizable];
-    self.deviceManager = ((VSDocument*)[[NSDocumentController sharedDocumentController] currentDocument]).deviceManager;
 }
 
 -(void) initTimelineObjectProxyObservers{
@@ -277,10 +276,12 @@ static NSString* defaultNib = @"VSTimelineObjectView";
                                                               readObjectsForClasses:clasesToReadFromPasteboard
                                                               options:nil]];
         
-        for(VSDeviceRepresentation *draggedDeviceRepresentation in draggedDeviceRepresentations){
-            VSDevice *deviceToAdd = [self.deviceManager deviceRepresentedBy:draggedDeviceRepresentation];
-            
-            [((VSTimelineObject*) self.timelineObjectProxy) addDevicesObject:deviceToAdd];
+        
+        
+        if(draggedDeviceRepresentations.count){
+            if([self delegateRespondsToSelector:@selector(devices:wereDroppedOnTimlineObject:)]){
+                [self.delegate devices:draggedDeviceRepresentations wereDroppedOnTimlineObject:self];
+            }
         }
         
         result = YES;

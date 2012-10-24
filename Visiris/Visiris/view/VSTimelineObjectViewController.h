@@ -21,6 +21,10 @@
 
 @required
 
+-(void) devices:(NSArray*) devices wereDroppedOnTimlineObject:(VSTimelineObjectViewController*) timlineObjectViewController;
+
+-(void) devices:(NSArray*) devices wereRemovedOnTimlineObject:(VSTimelineObjectViewController*) timlineObjectViewController;
+
 /**
  * Called when a VSTimelineObjectView was selected by the user on the timeline
  * @param timelineObjectProxy VSTimelineObjectProxy the clicked VSTimelineObjectView represents

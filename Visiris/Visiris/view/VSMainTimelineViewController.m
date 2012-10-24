@@ -21,6 +21,7 @@
 #import "VSProjectItemController.h"
 #import "VSProjectItemRepresentationController.h"
 #import "VSDocumentController.h"
+#import "VSDeviceManager.h"
 
 #import "VSCoreServices.h"
 
@@ -75,11 +76,12 @@ static NSString* defaultNib = @"VSMainTimelineView";
     return self;
 }
 
--(id) initWithDefaultNibAccordingForTimeline:(VSTimeline*)timeline projectItemController:(VSProjectItemController*) projectItemController andProjectionItemRepresentationController:(VSProjectItemRepresentationController*) projectItemRepresentationController{
+-(id) initWithDefaultNibAccordingForTimeline:(VSTimeline*)timeline projectItemController:(VSProjectItemController*) projectItemController projectionItemRepresentationController:(VSProjectItemRepresentationController *)projectItemRepresentationController andDeviceManager:(VSDeviceManager *)deviceManager{
     if(self = [self initWithDefaultNib]){
         self.timeline = timeline;
         self.projectItemController = projectItemController;
         self.projectItemRepresentationController = projectItemRepresentationController;
+        self.deviceManager = deviceManager;
     }
     return self;
 }
@@ -562,6 +564,17 @@ static NSString* defaultNib = @"VSMainTimelineView";
 }
 
 
+#pragma mark Devices
+
+-(void) addDevices:(NSArray *)devices toTimelineObject:(VSTimelineObject *)timelineObject onTrack:(VSTrackViewController *)trackViewController{
+    for(VSDeviceRepresentation *representation in devices){
+        VSDevice *newDevice = [self.deviceManager deviceRepresentedBy:representation];
+        
+        if(newDevice){
+            [timelineObject addDevicesObject:newDevice];
+        }
+    }
+}
 
 
 

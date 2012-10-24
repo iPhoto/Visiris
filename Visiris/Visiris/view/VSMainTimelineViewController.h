@@ -21,6 +21,8 @@
 @class VSMainTimelineScrollView;
 @class VSProjectItemController;
 @class VSProjectItemRepresentationController;
+@class VSDeviceManager;
+@class VSDeviceRepresentation;
 
 /**
  * Subclass of NSViewController responsible for displaying a VSTimeline.
@@ -39,6 +41,9 @@
 /** Ratio between the duration of the timeline and the pixel length of tracksHolderdocumentView */
 @property double pixelTimeRatio;
 
+/** Reference on the DeviceManager */
+@property (strong) VSDeviceManager* deviceManager;
+
 #pragma mark - Init
 
 /**
@@ -51,6 +56,6 @@
  * @param timeline The VSTimeline the VSTimelineViewController represents
  * @return self
  */
--(id) initWithDefaultNibAccordingForTimeline:(VSTimeline*)timeline projectItemController:(VSProjectItemController*) projectItemController andProjectionItemRepresentationController:(VSProjectItemRepresentationController*) projectItemRepresentationController;
+-(id) initWithDefaultNibAccordingForTimeline:(VSTimeline*)timeline projectItemController:(VSProjectItemController*) projectItemController projectionItemRepresentationController:(VSProjectItemRepresentationController*) projectItemRepresentationController andDeviceManager:(VSDeviceManager*) deviceManager;
 
 @end

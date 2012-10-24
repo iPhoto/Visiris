@@ -122,7 +122,6 @@
     
     self.timeline.timelineObjectsDelegate = self.preProcessor;
     
-    
     self.deviceManager = [[VSDeviceManager alloc] init];
     self.deviceManager.deviceRegisitratingDelegate = self.externalInputManager;
     
@@ -188,14 +187,11 @@
         self.timeline = [NSKeyedUnarchiver unarchiveObjectWithData:[documentDictionary objectForKey:kTimeline]];
         
         if(self.timeline){
-            self.projectItemController = [[VSProjectItemController alloc] init];
-            self.projectItemRepresentationController = [[VSProjectItemRepresentationController alloc]initForProjectItemController:self.projectItemController];
             self.timeline.projectItemController = self.projectItemController;
-            
             [self initVisiris];
+            result = YES;
         }
         
-        result = YES;
     } else {
         if (!outError) {
             NSLog(@"propertyListFromData failed with %@", errorString);
@@ -206,8 +202,7 @@
         }
         result = NO;
     }
-    // we don't want any of the operations involved in loading the new document to mark it as dirty, nor should they be undo-able, so clear the undo stack
-    [[self undoManager] removeAllActions];
+    
     return result;
 }
 

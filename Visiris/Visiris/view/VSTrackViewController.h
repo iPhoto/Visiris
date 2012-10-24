@@ -27,6 +27,8 @@
 @protocol VSTrackViewControllerDelegate <NSObject>
 
 
+-(void) addDevices:(NSArray*) devices toTimelineObject:(VSTimelineObject*) timelineObject onTrack:(VSTrackViewController*) trackViewController;
+
 /** 
  * Called when a new ProjectItem was added to the TrackView
  *
