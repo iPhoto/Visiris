@@ -118,15 +118,8 @@
         return input.identifier;
     }
     else if ([[tableColumn identifier] isEqualToString:iValue]) {
-        if([input.value isKindOfClass:[NSString class]]){
-            return input.value;
-        }
-        else if([input.value respondsToSelector:@selector(stringValue)]){
-            return [input.value stringValue];
-        }
-        else{
-            return @"invalid";
-        }
+        if([input.value isKindOfClass:[NSNumber class]] || [input.value isKindOfClass:[NSString class]])
+        return input.value;
     }
     else if ([[tableColumn identifier] isEqualToString:iSelected]) {
         return [NSNumber numberWithBool:input.selected];
@@ -141,7 +134,8 @@
         return input.name;
     }
     else if ([[tableColumn identifier] isEqualToString:iMin]) {
-        return [NSNumber numberWithFloat: input.range.min];
+        if(input.hasRange)
+            return [NSNumber numberWithFloat: input.range.min];
     }
     else if ([[tableColumn identifier] isEqualToString:iMax]) {
         return [NSNumber numberWithFloat: input.range.max];

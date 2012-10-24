@@ -26,6 +26,7 @@
         self.name = @"Name";
         self.range = externalInput.range;
         self.selected = NO;
+        DDLogInfo(@"val: %@",self.externalInput.value);
     }
     
     return self;
@@ -51,6 +52,7 @@
 }
 
 -(id) value{
+    DDLogInfo(@"val: %@",self.externalInput.value);
     return self.externalInput.value;
 }
 
@@ -62,5 +64,8 @@
     return self.externalInput.deviceTypeName;
 }
 
+-(BOOL) hasRange{
+    return self.externalInput.hasRange;
+}
 
 @end

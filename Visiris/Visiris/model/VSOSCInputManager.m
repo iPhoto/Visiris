@@ -435,6 +435,7 @@
             if ([tempAddress.address isEqualToString:address.address])
             {
                 tempAddress.lastReceivedAddressTimestamp = address.lastReceivedAddressTimestamp;
+                tempAddress.value = address.value;
                 containsAddress = YES;
             }
         }

@@ -21,7 +21,7 @@
 @property (strong) NSString                         *address;
 
 /** The Value can be NSNumber, NSString or NSBool */
-@property (assign) id                               value;
+@property (strong) id                               value;
 
 
 /**

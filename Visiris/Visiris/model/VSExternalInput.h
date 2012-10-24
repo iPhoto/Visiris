@@ -14,7 +14,7 @@
 @interface VSExternalInput : NSObject
 
 @property (readonly, strong) NSString                   *identifier;
-@property (assign) id                                   value;
+@property (strong) id                                   value;
 @property (assign) VSRange                              range;
 @property (assign) BOOL                                 hasRange;
 @property (readonly, strong) NSString                   *parameterTypeName;

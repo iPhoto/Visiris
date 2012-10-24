@@ -30,4 +30,6 @@
 
 -(void) reset;
 
+-(BOOL) hasRange;
+
 @end
