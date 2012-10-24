@@ -28,6 +28,7 @@
         self.deviceType = deviceType;
         self.oscParameterType = parameterType;
         self.hasRange = [VSDeviceParameterUtils isDeviceParameterDatatypeSupportingRanges:self.deviceParameterDataType];
+        self.value = value;
     }
     
     return self;
