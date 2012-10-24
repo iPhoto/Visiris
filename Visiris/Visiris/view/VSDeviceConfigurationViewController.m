@@ -23,8 +23,7 @@
 
 @interface VSDeviceConfigurationViewController ()
 {
-    int _numberOfDevices;
-    BOOL _isCurrentlyPresentingNewDeviceConfigurationPopover;
+    BOOL _isCurrentlyPresentingNewDeviceConfigurationSheet;
 }
 
 /** VSExternalInputManager is initialized by VSDocument */
@@ -54,10 +53,8 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Initialization code here.
-        _numberOfDevices = 0;
         
-        _isCurrentlyPresentingNewDeviceConfigurationPopover = NO;
+        _isCurrentlyPresentingNewDeviceConfigurationSheet = NO;
         
         
         self.createDeviceViewController = [[VSCreateDeviceViewController alloc] initWithNibName:@"VSCreateDeviceViewController" bundle:nil];
@@ -85,7 +82,7 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     if([keyPath isEqualToString:@"availableInputsRepresentation"]){
         
-        if(_isCurrentlyPresentingNewDeviceConfigurationPopover)
+        if(_isCurrentlyPresentingNewDeviceConfigurationSheet)
         {
             if(![[change valueForKey:@"notificationIsPrior"] boolValue]){
                 NSInteger kind = [[change valueForKey:@"kind"] intValue];
@@ -95,8 +92,8 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
                     case NSKeyValueChangeInsertion:
                     {
                         [self.createDeviceViewController dataSourceWasChanged];
-                         break;
-                    }                       
+                        break;
+                    }
                         
                     case NSKeyValueChangeRemoval:
                     {
@@ -115,60 +112,45 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
 - (IBAction)didPressAddDeviceButton:(NSButton *)addButton
 {
     
-    if ( !_isCurrentlyPresentingNewDeviceConfigurationPopover ) {
+    if ( !_isCurrentlyPresentingNewDeviceConfigurationSheet ) {
         
-        [self insertNewDeviceRowAndPresentDeviceConfigurationSheet];
+        [self showDeviceCreatingSheet];
     }
 }
 
-- (void)insertNewDeviceRowAndPresentDeviceConfigurationSheet
+- (void)showDeviceCreatingSheet
 {
-    //  [self insertNewDeviceRow];
-    
-    if ( ![[[self.createDeviceViewController.createDeviceWindow contentView] subviews] containsObject:self.createDeviceViewController.view] ) {
+    if(!_isCurrentlyPresentingNewDeviceConfigurationSheet){
+        if ( ![[[self.createDeviceViewController.createDeviceWindow contentView] subviews] containsObject:self.createDeviceViewController.view] ) {
+        }
+        
+        [self.createDeviceViewController reset];
+        [self.deviceManager resetAvailableInputsRepresentation];
+        
+        [[NSApplication sharedApplication] beginSheet:self.createDeviceViewController.createDeviceWindow
+                                       modalForWindow:[NSApp keyWindow]
+                                        modalDelegate:self
+                                       didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
+                                          contextInfo:nil];
+        
+        
+        
+        
+        _isCurrentlyPresentingNewDeviceConfigurationSheet = YES;
     }
-    
-    [[NSApplication sharedApplication] beginSheet:self.createDeviceViewController.createDeviceWindow
-                                   modalForWindow:[NSApp keyWindow]
-                                    modalDelegate:self
-                                   didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
-                                      contextInfo:nil];
-    
-    _isCurrentlyPresentingNewDeviceConfigurationPopover = YES;
 }
 
 - (void)sheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
     [sheet orderOut:self];
+    _isCurrentlyPresentingNewDeviceConfigurationSheet = NO;
 }
 
-
-- (void)insertNewDeviceRow
-{
-    _numberOfDevices++;
-    [self.deviceTableView beginUpdates];
-    [self.deviceTableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:0] withAnimation:NSTableViewAnimationSlideDown];
-    [self.deviceTableView endUpdates];
-}
-
-
-- (void)deviceCreated:(VSDevice *)device
-{
-    [self dismissSheetWindow];
-    _isCurrentlyPresentingNewDeviceConfigurationPopover = NO;
-    
-    if (device) {
-        [self.deviceManager addDevicesObject:device];
-        
-        [self.deviceTableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:0]
-                                        columnIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)]];
-    }
-}
 
 - (void)cancelDeviceCreation
 {
     [self dismissSheetWindow];
-    _isCurrentlyPresentingNewDeviceConfigurationPopover = NO;
+    _isCurrentlyPresentingNewDeviceConfigurationSheet = NO;
 }
 
 
@@ -190,7 +172,7 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
     
     if(result){
         [self.deviceTableView reloadData];
-        [[NSApplication sharedApplication] endSheet:self.createDeviceViewController.createDeviceWindow];
+        [self dismissSheetWindow];
     }
     
     return result;

@@ -12,6 +12,7 @@
 
 @interface VSExternalInputRepresentation: NSObject
 
+
 -(id) initWithExternalInput:(VSExternalInput*) externalInput;
 
 @property (strong) NSString *name;
@@ -26,5 +27,7 @@
 -(NSString*) parameterDataType;
 
 -(NSString*) deviceType;
+
+-(void) reset;
 
 @end

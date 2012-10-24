@@ -39,6 +39,7 @@
     return self;
 }
 
+
 -(void) awakeFromNib{
 }
 
@@ -48,6 +49,40 @@
     }
     
 }
+
+#pragma mark - Methods
+
+-(void) showConnectionDialogFor:(VSParameter*) parameter andAvailableDevices:(NSArray*) availableDevices{
+    self.parameter = parameter;
+    self.availableDevices = availableDevices;
+    
+    NSUInteger selectedDeviceIndex = 0;
+    NSUInteger selectedDeviceParameterIndex = 0;
+    
+    self.currentlySelectedDevice = [self.availableDevices objectAtIndex:0];
+    
+    if(self.parameter.connectedWithDeviceParameter){
+        self.currentlySelectedDevice = self.parameter.deviceConnectedWith;
+        selectedDeviceIndex = [self.availableDevices indexOfObject:self.currentlySelectedDevice];
+        selectedDeviceParameterIndex = [self.currentlySelectedDevice indexOfObjectInParameters:self.parameter.deviceParamterConnectedWith];
+    }
+    
+    [self setRanges];
+    [self setToggleButtonStringValue];
+    
+    NSInteger i = 0;
+    
+    [self.devicePopUpButton removeAllItems];
+    
+    
+    for(VSDevice *availableDevice in self.availableDevices){
+        [self.devicePopUpButton insertItemWithTitle:[NSString stringWithFormat:@"%ld",i] atIndex:i];
+        [[self.devicePopUpButton itemAtIndex:i] setTitle:availableDevice.name];
+        i++;
+    }
+}
+
+#pragma mark - IBAction
 
 - (IBAction)didClickToggleConnection:(NSButton *)sender {
     
@@ -59,7 +94,25 @@
     }
     
     [self.popover close];
-}  
+}
+
+- (IBAction)didChangeDevicePopUpButton:(NSPopUpButton *)sender {
+    self.currentlySelectedDevice = [self.availableDevices objectAtIndex:[sender indexOfSelectedItem]];
+    
+    if(self.parameter.connectedWithDeviceParameter){
+        [self connectParameterWithDevice];
+    }
+}
+
+- (IBAction)didChangeDeviceParameterPopUpButton:(NSPopUpButton *)sender {
+    self.currentlySelectedDeviceParameter = [self.currentlySelectedDevice objectInParametersAtIndex:[sender indexOfSelectedItem]];
+    
+    if(self.parameter.connectedWithDeviceParameter){
+        [self connectParameterWithDevice];
+    }
+}
+
+#pragma mark - Private Methods
 
 -(void) connectParameterWithDevice{
     [self.parameter connectWithDeviceParameter:self.currentlySelectedDeviceParameter
@@ -84,44 +137,6 @@
     else
     {
         [self.toogleConnection setTitle:NSLocalizedString(@"Connect Device", @"toogleConnection Button Caption")];
-    }
-}
-
--(id) initWithDevice:(VSDevice*) device andParameter:(VSParameter*) parameter{
-    if(self = [super init]){
-        self.currentlySelectedDevice = device;
-        self.parameter = parameter;
-    }
-    
-    return self;
-}
-
-
--(void) showConnectionDialogFor:(VSParameter*) parameter andAvailableDevices:(NSArray*) availableDevices{
-    self.parameter = parameter;
-    self.availableDevices = availableDevices;
-    
-    NSUInteger selectedDeviceIndex = 0;
-    NSUInteger selectedDeviceParameterIndex = 0;
-    
-    self.currentlySelectedDevice = [self.availableDevices objectAtIndex:0];
-    
-    if(self.parameter.connectedWithDeviceParameter){
-        self.currentlySelectedDevice = self.parameter.deviceConnectedWith;
-        selectedDeviceIndex = [self.availableDevices indexOfObject:self.currentlySelectedDevice];
-        selectedDeviceParameterIndex = [self.currentlySelectedDevice indexOfObjectInParameters:self.parameter.deviceParamterConnectedWith];
-    }
-    
-    [self setRanges];
-    [self setToggleButtonStringValue];
-    
-    NSInteger i = 0;
-    
-    [self.devicePopUpButton removeAllItems];
-    
-    for(VSDevice *availableDevice in self.availableDevices){
-        if(availableDevice.parameters.count)
-            [self.devicePopUpButton insertItemWithTitle:availableDevice.name atIndex:i++];
     }
 }
 
@@ -189,7 +204,9 @@
     for(NSUInteger i = 0; i < self.currentlySelectedDevice.parameters.count; i++){
         VSDeviceParameter *deviceParameter = [self.currentlySelectedDevice objectInParametersAtIndex:i];
         
-        [self.deviceParameterPopUpButton insertItemWithTitle:deviceParameter.name atIndex:i];
+        [self.deviceParameterPopUpButton insertItemWithTitle:[NSString stringWithFormat:@"%ld",i] atIndex:i];
+        [[self.deviceParameterPopUpButton itemAtIndex:i] setTitle:deviceParameter.name];
+        
         
         if(![VSDeviceParameterUtils deviceParameterDataype:deviceParameter.dataType validForParameterType:self.parameter.dataType]){
             [[self.deviceParameterPopUpButton itemAtIndex:i] setEnabled:NO];
@@ -200,7 +217,9 @@
         }
     }
     
-    [self.deviceParameterPopUpButton selectItemAtIndex:indexToSelect];
+    if(indexToSelect < self.deviceParameterPopUpButton.itemArray.count){
+        [self.deviceParameterPopUpButton selectItemAtIndex:indexToSelect];
+    }
     self.currentlySelectedDeviceParameter = [self.currentlySelectedDevice objectInParametersAtIndex:indexToSelect];
 }
 
@@ -228,21 +247,5 @@
 
 -(VSDeviceParameter*) currentlySelectedDeviceParameter{
     return _currentlySelectedDeviceParameter;
-}
-
-- (IBAction)didChangeDevicePopUpButton:(NSPopUpButton *)sender {
-    self.currentlySelectedDevice = [self.availableDevices objectAtIndex:[sender indexOfSelectedItem]];
-    
-    if(self.parameter.connectedWithDeviceParameter){
-        [self connectParameterWithDevice];
-    }
-}
-
-- (IBAction)didChangeDeviceParameterPopUpButton:(NSPopUpButton *)sender {
-    self.currentlySelectedDeviceParameter = [self.currentlySelectedDevice objectInParametersAtIndex:[sender indexOfSelectedItem]];
-    
-    if(self.parameter.connectedWithDeviceParameter){
-        [self connectParameterWithDevice];
-    }
 }
 @end

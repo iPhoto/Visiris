@@ -17,6 +17,7 @@
 
 @implementation VSExternalInputRepresentation
 
+
 @synthesize range                   = _range;
 
 -(id) initWithExternalInput:(VSExternalInput*) externalInput{
@@ -28,6 +29,12 @@
     }
     
     return self;
+}
+
+-(void) reset{
+    self.name = @"Name";
+    self.range = self.externalInput.range;
+    self.selected = NO;
 }
 
 

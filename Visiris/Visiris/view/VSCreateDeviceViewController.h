@@ -30,7 +30,7 @@
 @property (weak) IBOutlet NSBox                                             *parameterBox;
 @property (weak) IBOutlet NSButton                                          *addParameterButton;
 @property (weak) IBOutlet NSTableView                                       *parameterTableView;
-@property (weak) IBOutlet NSTextField *parameterNameTextField;
+@property (weak) IBOutlet NSTextField *deviceNameTextField;
 
 @property (weak) IBOutlet NSButton                                          *cancelDeviceCreationButton;
 @property (weak) IBOutlet NSButton                                          *createDeviceButton;
@@ -57,5 +57,7 @@
 #pragma mark -Methods
 
 -(void) dataSourceWasChanged;
+
+-(void) reset;
 
 @end
