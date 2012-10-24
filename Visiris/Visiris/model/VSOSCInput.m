@@ -7,6 +7,7 @@
 //
 
 #import "VSOSCInput.h"
+#import "VSCoreServices.h"
 
 @implementation VSOSCInput
 

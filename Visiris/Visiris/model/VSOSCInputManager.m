@@ -417,6 +417,15 @@
     {
         [self.discoveredPorts setObject:discoveredPort forKey:[NSNumber numberWithUnsignedInt:discoveredPort.port]];
         
+        
+        VSOSCInput *tempInput = [discoveredPort.addresses objectAtIndex:0];
+        if ([tempInput hasRange]) {
+            if ([tempInput.value respondsToSelector:@selector(floatValue)])
+            {
+                tempInput.range = VSMakeRange([tempInput.value floatValue], [tempInput.value floatValue]);
+            }
+        }
+        
         if([self delegateRespondsToSelector:@selector(inputManager:startedReceivingExternalInputs:)]){
             [self.delegate inputManager:self startedReceivingExternalInputs:discoveredPort.addresses];
         }
@@ -430,18 +439,28 @@
         
         BOOL containsAddress = NO;
         
-        for (VSOSCInput *tempAddress in port.addresses)
+        for (VSOSCInput *tempInput in port.addresses)
         {
-            if ([tempAddress.address isEqualToString:address.address])
+            if ([tempInput.address isEqualToString:address.address])
             {
-                tempAddress.lastReceivedAddressTimestamp = address.lastReceivedAddressTimestamp;
+                tempInput.lastReceivedAddressTimestamp = address.lastReceivedAddressTimestamp;
+                
+                
+                if ([tempInput hasRange]) {
+                    if ([tempInput.value respondsToSelector:@selector(floatValue)])
+                    {
+                        
+                    }
+                }
+                
                 containsAddress = YES;
             }
         }
         
         if (containsAddress == NO)
         {
-            if([self delegateRespondsToSelector:@selector(inputManager:startedReceivingExternalInputs:)]){
+            if([self delegateRespondsToSelector:@selector(inputManager:startedReceivingExternalInputs:)])
+            {
                 [self.delegate inputManager:self startedReceivingExternalInputs:discoveredPort.addresses];
             }
             [port addAddress:address];
