@@ -182,7 +182,6 @@
 }
 
 -(void) addedTrack:(VSTrack*) newTrack{
-    DDLogInfo(@"observing now %@",newTrack);
     [newTrack addObserver:self forKeyPath:@"timelineObjects"
                   options:NSKeyValueObservingOptionPrior | NSKeyValueObservingOptionNew
                   context:nil];

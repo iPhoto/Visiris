@@ -65,7 +65,7 @@ static NSString* defaultNib = @"MainWindow";
 }
 
 - (void)windowDidLoad
-{   
+{
     [super windowDidLoad];
     
     [self.window setAcceptsMouseMovedEvents:YES];
@@ -97,8 +97,8 @@ static NSString* defaultNib = @"MainWindow";
     
     
     self.timelineViewController = [[VSMainTimelineViewController alloc] initWithDefaultNibAccordingForTimeline:((VSDocument*) self.document).timeline
-                                                                                         projectItemController:self.visirsDocument.projectItemController
-                                                                     andProjectionItemRepresentationController:self.visirsDocument.projectItemRepresentationController];
+                                                                                         projectItemController:self.visirsDocument.projectItemController projectionItemRepresentationController:self.visirsDocument.projectItemRepresentationController andDeviceManager:self.visirsDocument.deviceManager];
+    
     
     [self loadView:timelineViewController.view intoSplitView:self.mainSplitView replacingViewAtPosition:1];
     
@@ -151,7 +151,7 @@ static NSString* defaultNib = @"MainWindow";
 #pragma mark - NSSplitViewDelegate Implementation
 
 -(CGFloat) splitView:(NSSplitView *)splitView constrainMinCoordinate:(CGFloat)proposedMinimumPosition ofSubviewAt:(NSInteger)dividerIndex{
-//    DDLogInfo(@"proposedMinimumPosition: %f for dividerIndex : %ld",proposedMinimumPosition,dividerIndex);
+    //    DDLogInfo(@"proposedMinimumPosition: %f for dividerIndex : %ld",proposedMinimumPosition,dividerIndex);
     if(splitView == self.topSplitView){
         switch (dividerIndex) {
             case 0:
@@ -161,12 +161,12 @@ static NSString* defaultNib = @"MainWindow";
                 return proposedMinimumPosition + 200;
                 break;
         }
-    }   
+    }
     return proposedMinimumPosition;
 }
 
 -(CGFloat) splitView:(NSSplitView *)splitView constrainMaxCoordinate:(CGFloat)proposedMaximumPosition ofSubviewAt:(NSInteger)dividerIndex{
-//    DDLogInfo(@"proposedMaximumPosition: %f for dividerIndex : %ld",proposedMaximumPosition,dividerIndex);
+    //    DDLogInfo(@"proposedMaximumPosition: %f for dividerIndex : %ld",proposedMaximumPosition,dividerIndex);
     if(splitView == self.topSplitView){
         switch (dividerIndex) {
             case 0:
@@ -180,7 +180,7 @@ static NSString* defaultNib = @"MainWindow";
     
     return proposedMaximumPosition;
 }
-                                   
+
 -(VSDocument*) visirsDocument{
     if([self.document isKindOfClass:[VSDocument class]]){
         return self.document;

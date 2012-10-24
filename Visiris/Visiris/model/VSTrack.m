@@ -82,8 +82,6 @@
         return NO;
     }
     else{
-        
-        DDLogInfo(@"observers: %@",self.observationInfo);
         [self.timelineObjects addObject:timelineObject];
         return YES;
     }

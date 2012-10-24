@@ -64,6 +64,8 @@
     return self;
 }
 
+
+
 - (void)initObservers {
     [self.timeline.playHead addObserver:self
                              forKeyPath:@"scrubbing"
@@ -110,6 +112,8 @@
         }
     }
 }
+
+#pragma mark - NSObject
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     if([keyPath isEqualToString:@"jumping"]){
@@ -168,6 +172,11 @@
     }
     
     
+}
+
+-(void) dealloc{
+    [self removeObserves];
+
 }
 
 #pragma mark - Methods
@@ -250,6 +259,14 @@
 }
 
 #pragma mark - Private Methods
+
+-(void) removeObserves{
+    [self.timeline.playHead removeObserver:self forKeyPath:@"scrubbing"];
+    [self.timeline.playHead removeObserver:self forKeyPath:@"jumping"];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+}
 
 /**
  * Called when a VSTimelineObjectsGotUnselected-Notification was received.

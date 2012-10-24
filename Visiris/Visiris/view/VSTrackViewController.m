@@ -934,7 +934,19 @@ IntersectedByTimelineObjectViews:[NSArray arrayWithObject:timelineObjectViewCont
 }
 
 
+#pragma mark Devices
 
+-(void) devices:(NSArray *)devices wereRemovedOnTimlineObject:(VSTimelineObjectViewController *)timlineObjectViewController{
+    DDLogError(@"not implemented");
+}
+
+-(void) devices:(NSArray *)devices wereDroppedOnTimlineObject:(VSTimelineObjectViewController *)timlineObjectViewController{
+    if([self delegateRespondsToSelector:@selector(addDevices:toTimelineObject:onTrack:)]){
+        [self.delegate addDevices:devices
+                 toTimelineObject:timlineObjectViewController.timelineObject
+                          onTrack:self];
+    }
+}
 
 
 #pragma mark- Private Methods
