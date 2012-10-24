@@ -51,6 +51,7 @@
     [self updateDataSource];
 }
 
+#pragma mark - IBAction
 
 - (IBAction)didPressAddParameterButton:(NSButton *)button
 {
@@ -65,6 +66,13 @@
 
 - (IBAction)didPressCreateDeviceButton:(NSButton *)button
 {
+   NSInteger editedColumn = [self.parameterTableView editedColumn];
+    
+    if(editedColumn != -1){
+        NSInteger editedRow = [self.parameterTableView editedRow];
+
+    }
+    [self.parameterTableView abortEditing];
     NSIndexSet *selectedParametIndizes = [self.availableParameter indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
         if([obj isKindOfClass:[VSExternalInputRepresentation class]]){
             return ((VSExternalInputRepresentation*) obj).selected;
@@ -76,7 +84,7 @@
 
     BOOL result = NO;
     if([self delegateRespondsToSelector:@selector(createDeviceWithName:andParameters:)]){
-        result = [self.delegate createDeviceWithName:[self.parameterNameTextField stringValue]
+        result = [self.delegate createDeviceWithName:[self.deviceNameTextField stringValue]
                               andParameters:selectedParamters];
     }
     
@@ -110,15 +118,8 @@
         return input.identifier;
     }
     else if ([[tableColumn identifier] isEqualToString:iValue]) {
-        if([input.value isKindOfClass:[NSString class]]){
-            return input.value;
-        }
-        else if([input.value respondsToSelector:@selector(stringValue)]){
-            return [input.value stringValue];
-        }
-        else{
-            return @"invalid";
-        }
+        if([input.value isKindOfClass:[NSNumber class]] || [input.value isKindOfClass:[NSString class]])
+        return input.value;
     }
     else if ([[tableColumn identifier] isEqualToString:iSelected]) {
         return [NSNumber numberWithBool:input.selected];
@@ -133,7 +134,8 @@
         return input.name;
     }
     else if ([[tableColumn identifier] isEqualToString:iMin]) {
-        return [NSNumber numberWithFloat: input.range.min];
+        if(input.hasRange)
+            return [NSNumber numberWithFloat: input.range.min];
     }
     else if ([[tableColumn identifier] isEqualToString:iMax]) {
         return [NSNumber numberWithFloat: input.range.max];
@@ -215,6 +217,11 @@
 -(void) dataSourceWasChanged{
     [self updateDataSource];
     [self.parameterTableView reloadData];
+}
+
+-(void) reset{
+    [self.deviceNameTextField setStringValue:@""];
+    [self updateDataSource];
 }
 
 #pragma mark - Private Methods

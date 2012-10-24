@@ -98,17 +98,17 @@ static NSURL* devicesFolderURL;
             }
             case NSKeyValueChangeRemoval:
             {
-//                if([[change valueForKey:@"notificationIsPrior"] boolValue]){
-//                    NSArray *removedInputs = [self.externalInputManager.availableInputs objectsAtIndexes:[change  objectForKey:@"indexes"]];
-//                    
-//                    for(VSExternalInput *removedInput in removedInputs){
-//                        [self removeRepresentaionOfExternalInput:removedInput];
-//                    }
-//                    
-//                }
-//                else{
-//                    
-//                }
+                //                if([[change valueForKey:@"notificationIsPrior"] boolValue]){
+                //                    NSArray *removedInputs = [self.externalInputManager.availableInputs objectsAtIndexes:[change  objectForKey:@"indexes"]];
+                //
+                //                    for(VSExternalInput *removedInput in removedInputs){
+                //                        [self removeRepresentaionOfExternalInput:removedInput];
+                //                    }
+                //
+                //                }
+                //                else{
+                //
+                //                }
                 break;
             }
             default:
@@ -120,26 +120,9 @@ static NSURL* devicesFolderURL;
 
 #pragma mark - Methods
 
-#pragma mark - Private Methods
-
--(void) addRepresentationOfExternalInput:(VSExternalInput*) externalInput{
-    VSExternalInputRepresentation *newRepresentation = [[VSExternalInputRepresentation alloc] initWithExternalInput:externalInput];
-    
-    [self.availableInputsRepresentation addObject:newRepresentation];
-}
-
--(void) removeRepresentaionOfExternalInput:(VSExternalInput*) externalInput{
-    NSUInteger indexOfObjectToRemove = [_availableInputsRepresentation indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-        if([obj isKindOfClass:[VSExternalInputRepresentation class]]){
-            if([((VSExternalInputRepresentation*)obj).externalInput isEqual:externalInput]){
-                return YES;
-            }
-        }
-        return NO;
-    }];
-    
-    if(indexOfObjectToRemove != NSNotFound){
-        [self.availableInputsRepresentation removeObjectAtIndex:indexOfObjectToRemove];
+-(void) resetAvailableInputsRepresentation{
+    for(VSExternalInputRepresentation *representation in self.availableInputsRepresentation){
+        [representation reset];
     }
 }
 
@@ -384,6 +367,43 @@ static NSURL* devicesFolderURL;
     }
     return NO;
 }
+
+-(void) addRepresentationOfExternalInput:(VSExternalInput*) externalInput{
+    
+    NSUInteger indexOfInputWithSameIdentifier = [self.availableInputsRepresentation indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj isKindOfClass:[VSExternalInputRepresentation class]]){
+            if([((VSExternalInputRepresentation *)obj).identifier isEqualToString:externalInput.identifier]){
+                return YES;
+            }
+        }
+        
+        return NO;
+    }];
+    
+    if(indexOfInputWithSameIdentifier == NSNotFound){
+        
+        VSExternalInputRepresentation *newRepresentation = [[VSExternalInputRepresentation alloc] initWithExternalInput:externalInput];
+        
+        [self.availableInputsRepresentation addObject:newRepresentation];
+    }
+}
+
+-(void) removeRepresentaionOfExternalInput:(VSExternalInput*) externalInput{
+    NSUInteger indexOfObjectToRemove = [_availableInputsRepresentation indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj isKindOfClass:[VSExternalInputRepresentation class]]){
+            if([((VSExternalInputRepresentation*)obj).externalInput isEqual:externalInput]){
+                return YES;
+            }
+        }
+        return NO;
+    }];
+    
+    if(indexOfObjectToRemove != NSNotFound){
+        [self.availableInputsRepresentation removeObjectAtIndex:indexOfObjectToRemove];
+    }
+}
+
+#pragma mark - Properties
 
 - (NSMutableArray *)availableInputsRepresentation{
     return [self mutableArrayValueForKey:@"availableInputsRepresentation"];

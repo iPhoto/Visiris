@@ -17,6 +17,7 @@
 
 @implementation VSExternalInputRepresentation
 
+
 @synthesize range                   = _range;
 
 -(id) initWithExternalInput:(VSExternalInput*) externalInput{
@@ -25,9 +26,16 @@
         self.name = @"Name";
         self.range = externalInput.range;
         self.selected = NO;
+        DDLogInfo(@"val: %@",self.externalInput.value);
     }
     
     return self;
+}
+
+-(void) reset{
+    self.name = @"Name";
+    self.range = self.externalInput.range;
+    self.selected = NO;
 }
 
 
@@ -44,6 +52,7 @@
 }
 
 -(id) value{
+    DDLogInfo(@"val: %@",self.externalInput.value);
     return self.externalInput.value;
 }
 
@@ -55,5 +64,8 @@
     return self.externalInput.deviceTypeName;
 }
 
+-(BOOL) hasRange{
+    return self.externalInput.hasRange;
+}
 
 @end

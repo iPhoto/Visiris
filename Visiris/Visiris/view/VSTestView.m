@@ -29,4 +29,12 @@
     return NO;
 }
 
+-(void) viewDidUnhide{
+    
+}
+
+-(void) viewDidHide{
+    
+}
+
 @end

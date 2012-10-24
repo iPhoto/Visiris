@@ -50,4 +50,7 @@
 -(VSDevice*) deviceRepresentedBy:(VSDeviceRepresentation*) deviceRepresentation;
 
 -(BOOL) createDeviceWithName:(NSString*) deviceName andParameters:(NSArray*) parameters;
+
+-(void) resetAvailableInputsRepresentation;
+
 @end
