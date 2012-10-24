@@ -137,6 +137,9 @@
         self.ID = [aDecoder decodeIntegerForKey:kID];
         self.defaultValue = [aDecoder decodeObjectForKey:kDefaultValue];
         self.animation = [aDecoder decodeObjectForKey:kAnimation];
+        if(!self.animation){
+            self.animation = [[VSAnimation alloc] initWithDefaultValue:self.configuredDefaultValue];
+        }
     }
     
     return self;

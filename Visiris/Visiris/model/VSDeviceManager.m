@@ -120,6 +120,7 @@ static NSURL* devicesFolderURL;
 
 #pragma mark - Methods
 
+
 -(void) resetAvailableInputsRepresentation{
     for(VSExternalInputRepresentation *representation in self.availableInputsRepresentation){
         [representation reset];

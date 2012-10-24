@@ -19,6 +19,7 @@
 
 
 @synthesize range                   = _range;
+@synthesize value = _value;
 
 -(id) initWithExternalInput:(VSExternalInput*) externalInput{
     if(self = [self init]){
@@ -26,7 +27,7 @@
         self.name = @"Name";
         self.range = externalInput.range;
         self.selected = NO;
-        DDLogInfo(@"val: %@",self.externalInput.value);
+        _value = self.externalInput.value;
     }
     
     return self;
@@ -36,6 +37,7 @@
     self.name = @"Name";
     self.range = self.externalInput.range;
     self.selected = NO;
+    _value = self.externalInput.value;
 }
 
 
@@ -52,8 +54,7 @@
 }
 
 -(id) value{
-    DDLogInfo(@"val: %@",self.externalInput.value);
-    return self.externalInput.value;
+    return _value;
 }
 
 -(NSString*) parameterDataType{
