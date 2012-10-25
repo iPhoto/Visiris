@@ -32,7 +32,7 @@
 
 @interface VSOSCInputManager ()
 {
-    NSRange                                             _observablePorts;
+    VSRange                                             _observablePorts;
     
     NSTimer                                             *_portObserverTimer;
     NSTimer                                             *_activePortListRefreshTimer;
@@ -77,8 +77,8 @@
         self.referenceCountingPorts = [[VSReferenceCounting alloc] init];
         self.referencCountingAdresses = [[VSReferenceCounting alloc] init];
         
-        _observablePorts = NSMakeRange(12340,12350);
-        
+        _observablePorts = VSMakeRange(12340,12350);
+
         /* TODO: Implement Preference Panel
          observablePorts.location = [[NSUserDefaults standardUserDefaults] integerForKey:kVSOSCInputManager_inputRangeStart];
          observablePorts.length = [[NSUserDefaults standardUserDefaults] integerForKey:kVSOSCInputManager_inputRangeEnd];
@@ -90,9 +90,9 @@
         _oscPortUpdateTimer = NULL;
         
         
-        _lastAssignedPort = (unsigned int)_observablePorts.location - 1;
+        _lastAssignedPort = (unsigned int)_observablePorts.min - 1;
         
-        NSUInteger oscPortCount = _observablePorts.length - _observablePorts.location;
+        NSUInteger oscPortCount = _observablePorts.max - _observablePorts.min;
         
         _numberOfInputClients =  oscPortCount < kVSOSCInputManager_numberOfDefalutOSCListenPorts ? oscPortCount : kVSOSCInputManager_numberOfDefalutOSCListenPorts;
         
@@ -203,8 +203,16 @@
 - (unsigned int)getNextAvailableOSCPort
 {
     _lastAssignedPort++;
-    if ( _lastAssignedPort > _observablePorts.length ) {
-        _lastAssignedPort = (unsigned int)_observablePorts.location;
+    
+    if ( _lastAssignedPort > _observablePorts.max ) {
+        _lastAssignedPort = (unsigned int)_observablePorts.min;
+    }
+    
+    id object = [self.activeOSCClients objectForKey:[NSNumber numberWithUnsignedInt:(unsigned int)_lastAssignedPort]];
+    
+    if(object)
+    {
+        _lastAssignedPort = [self getNextAvailableOSCPort];
     }
     
     return _lastAssignedPort;
@@ -248,6 +256,8 @@
         }
         
         isInputForAddressActive = [self startOSCClientOnPort:port];
+        
+        [self updateNumberOfSniffer];
         
         [self.referencCountingAdresses incrementReferenceOfKey:[NSString stringFromAddress:address atPort:port]];
         [self.referenceCountingPorts incrementReferenceOfKey:[NSNumber numberWithUnsignedInt:port]];
@@ -375,7 +385,7 @@
     }
     
     
-    [self printDebugLog];
+//    [self printDebugLog];
     
     return oscClientStarted;
 }
@@ -417,39 +427,44 @@
     {
         [self.discoveredPorts setObject:discoveredPort forKey:[NSNumber numberWithUnsignedInt:discoveredPort.port]];
         
-        
         VSOSCInput *tempInput = [discoveredPort.addresses objectAtIndex:0];
-        if ([tempInput hasRange]) {
+        if ([tempInput hasRange])
+        {
             if ([tempInput.value respondsToSelector:@selector(floatValue)])
             {
                 tempInput.range = VSMakeRange([tempInput.value floatValue], [tempInput.value floatValue]);
             }
         }
         
-        if([self delegateRespondsToSelector:@selector(inputManager:startedReceivingExternalInputs:)]){
+        if([self delegateRespondsToSelector:@selector(inputManager:startedReceivingExternalInputs:)])
+        {
             [self.delegate inputManager:self startedReceivingExternalInputs:discoveredPort.addresses];
         }
-        
     }
     else
     {
         port.lastMessageReceivedTimestamp = discoveredPort.lastMessageReceivedTimestamp;
         
-        VSOSCInput *address = [discoveredPort.addresses objectAtIndex:0];
+        VSOSCInput *input = [discoveredPort.addresses objectAtIndex:0];
         
         BOOL containsAddress = NO;
         
         for (VSOSCInput *tempInput in port.addresses)
         {
-            if ([tempInput.address isEqualToString:address.address])
+            if ([tempInput.address isEqualToString:input.address])
             {
-                tempInput.lastReceivedAddressTimestamp = address.lastReceivedAddressTimestamp;
+                tempInput.value = input.value;
+//                tempInput.oscParameterType = input.oscParameterType;
+                tempInput.lastReceivedAddressTimestamp = input.lastReceivedAddressTimestamp;
                 
-                
-                if ([tempInput hasRange]) {
+                if ([tempInput hasRange])
+                {
                     if ([tempInput.value respondsToSelector:@selector(floatValue)])
                     {
-                        
+                        if ([tempInput.value floatValue] > tempInput.range.max)
+                            tempInput.range = VSMakeRange(tempInput.range.min, [tempInput.value floatValue]);
+                        else if ([tempInput.value floatValue] < tempInput.range.min)
+                            tempInput.range = VSMakeRange([tempInput.value floatValue], tempInput.range.max);
                     }
                 }
                 
@@ -463,20 +478,10 @@
             {
                 [self.delegate inputManager:self startedReceivingExternalInputs:discoveredPort.addresses];
             }
-            [port addAddress:address];
+            [port addAddress:input];
         }
     }
 }
-
-
-#pragma mark - OSCInPort Delegate
-//- (void)receivedOSCMessage:(OSCMessage *)message
-//{
-//    NSLog(@"did received message: %@", message);
-//
-//
-//}
-
 
 #pragma mark - Private Methods
 - (unsigned int)portForAddress:(NSString *)address
@@ -494,7 +499,8 @@
     return requestedPort;
 }
 
--(void) addRepresentationOfExternalInput:(VSExternalInput*) externalInput{
+-(void) addRepresentationOfExternalInput:(VSExternalInput*) externalInput
+{
     VSExternalInputRepresentation *newRepresentation = [[VSExternalInputRepresentation alloc] initWithExternalInput:externalInput];
     
     [self.externalInputRepresentations addObject:newRepresentation];
@@ -522,6 +528,24 @@
     }
     
     NSLog(@"====================");
+}
+
+- (void)updateNumberOfSniffer
+{
+    NSInteger counter = _observablePorts.max - _observablePorts.min;
+    
+    for (NSNumber *key in [self.activeOSCClients allKeys]) {
+        if ([key integerValue] >= _observablePorts.min && [key integerValue] <= _observablePorts.max)
+        {
+            counter --;
+        }
+    }
+    
+//    NSLog(@"Number of sniffing ports: %ld", counter);
+    if (counter < _numberOfInputClients) {
+//        NSLog(@"TO MANY SNIFFER - HANDLE THIS!");
+        _observablePorts.max++;
+    }
 }
 
 /**

@@ -459,4 +459,11 @@
     return nil;
 }
 
+- (void)dealloc
+{
+//    if (self.deviceParameterMapper) {
+//        [self.deviceParameterMapper deactivateDeviceParameter];
+//    }
+}
+
 @end

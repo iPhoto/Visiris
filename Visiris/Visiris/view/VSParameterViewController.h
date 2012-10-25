@@ -82,7 +82,7 @@
 @property (strong) NSComboBox * comboBox;
 
 /** Delegate VSParameterViewController calls like definend in VSParameterViewKeyFrameDelegate */
-@property id<VSParameterViewKeyFrameDelegate> keyFrameDelegate;
+@property (weak) id<VSParameterViewKeyFrameDelegate> keyFrameDelegate;
 
 /** Currently selected keyFrame. */
 @property VSKeyFrame *selectedKeyframe;

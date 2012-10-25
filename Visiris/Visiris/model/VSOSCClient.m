@@ -71,6 +71,7 @@
         {
             id newValue = [self valueForOSCValue:message.value];
             [self signalDelegateThatClientDidReceivedMessage:[VSOSCMessage messageWithValue:newValue forAddress:message.address atPort:self.port]];
+            [self signalDelegateThatClientDiscoveredActivePortWithMessage:message];
         }
         break;
             

@@ -37,7 +37,6 @@
 
 
 
-
 @implementation VSAnimationTrackViewController
 
 @synthesize pixelTimeRatio  = _pixelTimeRatio;

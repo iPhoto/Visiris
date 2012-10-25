@@ -18,10 +18,18 @@
 
 #import "VSCoreServices.h"
 
+#define ELEMENTNAMEDEVICE @"deciveName"
+#define ELEMENTNAMEPARAMETER @"parameter"
+#define ATTRIBUTENAME @"name"
+#define ATTRIBUTEIDENTIFIER @"identifier"
+#define ATTRIBUTEDATATYPE @"dataType"
+#define ATTRIBUTEFROMVALUE @"fromValue"
+#define ATTRIBUTETOVALUE @"toValue"
+
+
 @interface VSDeviceManager()
 
 @property VSDeviceLoader *deviceLoader;
-
 
 @end
 
@@ -172,6 +180,7 @@ static NSURL* devicesFolderURL;
 -(BOOL) createDeviceWithName:(NSString *)deviceName andParameters:(NSArray *)parameters{
     VSDevice *newDevice = [[VSDevice alloc] initWithID:[VSMiscUtlis stringWithUUID] andName:deviceName];
     
+    //todo range abfragen
     for(VSExternalInputRepresentation *representation in parameters){
         VSDeviceParameter *deviceParameter = [[VSDeviceParameter alloc] initWithName:representation.name
                                                                               ofType:representation.externalInput.deviceParameterDataType
@@ -184,22 +193,24 @@ static NSURL* devicesFolderURL;
     
     [self addDevicesObject:newDevice];
     
-    
-    NSXMLElement *root = (NSXMLElement *)[NSXMLNode elementWithName:@"device"];
+
+    NSXMLElement *root = (NSXMLElement *)[NSXMLNode elementWithName:ELEMENTNAMEDEVICE];
     NSXMLDocument *xmlDoc = [[NSXMLDocument alloc] initWithRootElement:root];
-    
 
-    [root addAttribute:[NSXMLNode attributeWithName:@"name" stringValue:deviceName]];
+    [root addAttribute:[NSXMLNode attributeWithName:ATTRIBUTENAME stringValue:deviceName]];
     
-    
-
-    
-    for(VSExternalInputRepresentation *representation in parameters){
+    for(VSExternalInputRepresentation *representation in parameters)
+    {
+        NSXMLElement *element = [NSXMLElement elementWithName:ELEMENTNAMEPARAMETER];
+        [element addAttribute:[NSXMLNode attributeWithName:ATTRIBUTENAME stringValue:representation.name]];
+        [element addAttribute:[NSXMLNode attributeWithName:ATTRIBUTEIDENTIFIER stringValue:representation.identifier]];
+        [element addAttribute:[NSXMLNode attributeWithName:ATTRIBUTEDATATYPE stringValue:[VSDeviceParameterUtils stringForDeviceParameterDataType:representation.externalInput.deviceParameterDataType]]];
         
-        NSXMLElement *element = [NSXMLElement elementWithName:@"parameter"];
-        [element addAttribute:[NSXMLNode attributeWithName:@"name" stringValue:representation.name]];
-        [element addAttribute:[NSXMLNode attributeWithName:@"identifier" stringValue:representation.identifier]];
-        [element addAttribute:[NSXMLNode attributeWithName:@"dataType" stringValue:[VSDeviceParameterUtils stringForDeviceParameterDataType:representation.externalInput.deviceParameterDataType]]];
+        if ([representation hasRange])
+        {
+            [element addAttribute:[NSXMLNode attributeWithName:ATTRIBUTEFROMVALUE stringValue:[NSString stringWithFormat:@"%f",representation.range.min]]];
+            [element addAttribute:[NSXMLNode attributeWithName:ATTRIBUTETOVALUE stringValue:[NSString stringWithFormat:@"%f",representation.range.max]]];
+        }
         [root addChild:element];
     }
 
@@ -295,28 +306,28 @@ static NSURL* devicesFolderURL;
     
     NSXMLElement *deviceNode = [xmlDocument rootElement];
     
-    NSString *name = [[deviceNode attributeForName:@"name"] stringValue];
+    NSString *name = [[deviceNode attributeForName:ATTRIBUTENAME] stringValue];
     
     VSDevice *device = [[VSDevice alloc] initWithID:[VSMiscUtlis stringWithUUID] andName:name];
     
-    NSArray *parameterNodes = [deviceNode elementsForName:@"parameter"];
+    NSArray *parameterNodes = [deviceNode elementsForName:ELEMENTNAMEPARAMETER];
     
     for(NSXMLElement *parameterNode in parameterNodes){
         
-        NSString *name= [[parameterNode attributeForName:@"name"] stringValue];
-        NSString *identifier= [[parameterNode attributeForName:@"identifier"] stringValue];
+        NSString *name= [[parameterNode attributeForName:ATTRIBUTENAME] stringValue];
+        NSString *identifier= [[parameterNode attributeForName:ATTRIBUTEIDENTIFIER] stringValue];
         
         BOOL hasRange = NO;
         float fromValue, toValue = 0.0f;
         
-        if([parameterNode attributeForName:@"fromValue"] && [parameterNode attributeForName:@"toValue"]){
-            fromValue = [[[parameterNode attributeForName:@"fromValue"] stringValue] floatValue];
-            toValue = [[[parameterNode attributeForName:@"toValue"] stringValue] floatValue];
+        if([parameterNode attributeForName:ATTRIBUTEFROMVALUE] && [parameterNode attributeForName:ATTRIBUTETOVALUE]){
+            fromValue = [[[parameterNode attributeForName:ATTRIBUTEFROMVALUE] stringValue] floatValue];
+            toValue = [[[parameterNode attributeForName:ATTRIBUTETOVALUE] stringValue] floatValue];
             
             hasRange = YES;
         }
         
-        NSString *dataTypeName = [[parameterNode attributeForName:@"dataType"] stringValue];
+        NSString *dataTypeName = [[parameterNode attributeForName:ATTRIBUTEDATATYPE] stringValue];
         
         NSError *error;
         

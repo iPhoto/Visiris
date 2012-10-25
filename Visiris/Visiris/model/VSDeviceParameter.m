@@ -40,7 +40,7 @@
 #pragma mark - properties
 
 -(float) currentFloatValue{
-    if([self.currentValue isKindOfClass:[NSNumber class]]){
+    if([self.currentValue respondsToSelector:@selector(floatValue)]){
         return [self.currentValue floatValue];
     }
     
@@ -48,7 +48,7 @@
 }
 
 -(BOOL) currentBOOLValue{
-    if([self.currentValue isKindOfClass:[NSNumber class]]){
+    if([self.currentValue respondsToSelector:@selector(boolValue)]){
         return [self.currentValue boolValue];
     }
     
@@ -80,6 +80,5 @@
     
     return invocation;
 }
-
 
 @end
