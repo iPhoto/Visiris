@@ -15,6 +15,7 @@
 
 -(BOOL) unregisterValue:(NSInvocation *)parameterInvocation forIdentifier:(NSString*) identifier;
 
+
 @end
 
 #import "VSExternalInputManager.h"
@@ -26,7 +27,7 @@
 /**
  * VSDeviceManager manages all VSDevices and provides them with values for their parameters
  */
-@interface VSDeviceManager : NSObject<VSDeviceDelegate>
+@interface VSDeviceManager : NSObject<VSDeviceDelegate, NSCoding>
 
 /** Stores the devices */
 @property (strong) NSMutableArray *devices;
@@ -52,5 +53,7 @@
 -(BOOL) createDeviceWithName:(NSString*) deviceName andParameters:(NSArray*) parameters;
 
 -(void) resetAvailableInputsRepresentation;
+
+-(VSDevice*) deviceIdentifiedByID:(NSString*) idString;
 
 @end

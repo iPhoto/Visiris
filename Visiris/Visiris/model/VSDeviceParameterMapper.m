@@ -22,6 +22,7 @@
 #define kDevice @"Device"
 #define kParameterRange @"ParameterRange"
 #define kDeviceParameterRange @"DeviceParamterRange"
+#define kDeviceParameterIdentifier @"DeviceParameterIdentifier"
 #define kHasRange @"HasRange"
 
 -(id) initWithDeviceParameter:(VSDeviceParameter *)deviceParameter ofDevice:(VSDevice *)device deviceParameterRange:(VSRange)deviceParameterRange andParameterRange:(VSRange)parameterRange{
@@ -74,7 +75,7 @@
 #pragma mark - NSCoding
 
 -(void) encodeWithCoder:(NSCoder *)aCoder{
-    [aCoder encodeObject:self.deviceParameter forKey:kDeviceParameter];
+    [aCoder encodeObject:self.deviceParameter.identifier forKey:kDeviceParameterIdentifier];
     [aCoder encodeObject:self.device forKey:kDevice];
     VSRangeEncode(aCoder, self.deviceParameterRange, kDeviceParameterRange);
     VSRangeEncode(aCoder, self.parameterRange, kParameterRange);
@@ -83,8 +84,8 @@
 -(id) initWithCoder:(NSCoder *)aDecoder{
     BOOL hasRange = [aDecoder decodeBoolForKey:kHasRange];
     VSDevice *device = [aDecoder decodeObjectForKey:kDevice];
-    VSDeviceParameter *deviceParameter = [aDecoder decodeObjectForKey:kDeviceParameter];
-    
+    NSString *deviceParameterIdentifier = [aDecoder decodeObjectForKey:kDeviceParameterIdentifier];
+    VSDeviceParameter *deviceParameter = [device parameterIdentifiedBy:deviceParameterIdentifier];
     
     if(hasRange){
         NSError *error;

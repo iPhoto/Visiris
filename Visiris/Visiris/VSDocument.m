@@ -35,6 +35,8 @@
 @implementation VSDocument
 
 #define kTimeline @"Timeline"
+#define kDeviceManager @"DeviceManager"
+
 -(void) dealloc{
     self.mainWindowController = nil;
     self.projectItemRepresentationController =nil;
@@ -56,6 +58,8 @@
         self.projectItemRepresentationController = [[VSProjectItemRepresentationController alloc]initForProjectItemController:self.projectItemController];
         
         self.externalInputManager = [VSExternalInputManager sharedExternalInputManager];
+        
+        
     }
     return self;
 }
@@ -79,6 +83,9 @@
             
             //** Adding 1 new Audrio-Track to the timeline */
             //    [self.timeline addNewTrackNamed:[NSString stringWithFormat:@"%d",i] ofType:AUDIO_TRACK];
+            
+            self.deviceManager = [[VSDeviceManager alloc] init];
+            self.deviceManager.deviceRegisitratingDelegate = self.externalInputManager;
             
             [self initVisiris];
         }
@@ -132,9 +139,6 @@
     
     self.timeline.timelineObjectsDelegate = self.preProcessor;
     
-    self.deviceManager = [[VSDeviceManager alloc] init];
-    self.deviceManager.deviceRegisitratingDelegate = self.externalInputManager;
-    
 }
 
 #pragma mark - NSDocument
@@ -160,6 +164,7 @@
         
         [doc setObject:[NSKeyedArchiver archivedDataWithRootObject:self.timeline]
                 forKey:kTimeline];
+        
         
         data = [NSPropertyListSerialization dataFromPropertyList:doc
                                                           format:NSPropertyListXMLFormat_v1_0

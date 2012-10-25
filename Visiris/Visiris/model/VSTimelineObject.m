@@ -69,6 +69,11 @@
     [super encodeWithCoder:aCoder];
     [aCoder encodeObject:self.sourceObject.projectItem forKey:kProjectItem];
     [aCoder encodeObject:self.sourceObject.parameters forKey:kParameters];
+    [aCoder encodeObject:_devices forKey:kDevices];
+}
+
+-(id) awakeAfterUsingCoder:(NSCoder *)aDecoder{
+    return self;
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder{
@@ -84,6 +89,13 @@
         self.duration = base.duration;
         self.name = base.name;
         self.icon = [VSFileImageCreator createIconForTimelineObject:self.filePath];
+        
+        NSArray *storedDevices = [aDecoder decodeObjectForKey:kDevices];
+        
+        for(VSDevice *device in storedDevices){
+            [self addDevicesObject:device];
+        }
+        
         NSDictionary *parameters = [NSDictionary dictionaryWithDictionary:[aDecoder decodeObjectForKey:kParameters]];
         
         for(id key in parameters){
