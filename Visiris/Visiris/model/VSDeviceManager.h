@@ -27,7 +27,7 @@
 /**
  * VSDeviceManager manages all VSDevices and provides them with values for their parameters
  */
-@interface VSDeviceManager : NSObject<VSDeviceDelegate, NSCoding>
+@interface VSDeviceManager : NSObject<VSDeviceDelegate>
 
 /** Stores the devices */
 @property (strong) NSMutableArray *devices;
@@ -39,6 +39,8 @@
 @property (strong,readonly) NSMutableArray *availableInputsRepresentation;
 
 @property (weak) VSExternalInputManager *externalInputManager;
+
++(VSDevice*) storedDeviceForID:(NSString*) idString;
 
 -(VSDeviceRepresentation*) objectInDeviceRepresentationsAtIndex:(NSUInteger)index;
 

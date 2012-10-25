@@ -42,12 +42,14 @@ static NSString *devicesFolder;
 
 static NSURL* devicesFolderURL;
 
+static NSMutableArray *storedDevices;
+
 @synthesize devices             = _devices;
 @synthesize availableInputsRepresentation     = _availableInputsRepresentation;
 
 #pragma mark - Init
 
-+(void) initialize{
++(void) load{
     NSString *applicationSupportFolder = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     
     NSString *visirisFolderName = [[NSBundle mainBundle] objectForInfoDictionaryKey: (NSString*) kCFBundleNameKey];
@@ -60,6 +62,9 @@ static NSURL* devicesFolderURL;
                               withIntermediateDirectories:YES
                                                attributes:nil
                                                     error:&error];
+    
+    [self loadExisitingDevices];
+    
     
     if(error){
         DDLogInfo(@"%@",error);
@@ -81,34 +86,18 @@ static NSURL* devicesFolderURL;
                                        options:NSKeyValueObservingOptionPrior | NSKeyValueObservingOptionNew
                                        context:nil];
         
-        [self loadExisitingDevices];
+        [self initDevices];
     }
     
     return self;
 }
 
--(id) initWithDevices:(NSArray*) devices{
-    if(self = [super init]){
-        self.deviceRepresentations = [NSMutableArray arrayWithArray:devices];
-        self.devices = [[NSMutableArray alloc]init];
-        _availableInputsRepresentation = [[NSMutableArray alloc] init];
-        self.externalInputManager = [VSExternalInputManager sharedExternalInputManager];
-        
-        for(VSExternalInput *input in self.externalInputManager.availableInputs){
-            [self addRepresentationOfExternalInput:input];
-        }
-        
-        [self.externalInputManager addObserver:self forKeyPath:@"availableInputs"
-                                       options:NSKeyValueObservingOptionPrior | NSKeyValueObservingOptionNew
-                                       context:nil];
-        
-       // [self loadExisitingDevices];
-    }
-    
-    return self;
-}
 
 #pragma mark - NSObject
+
+-(void) dealloc{
+    [self.externalInputManager removeObserver:self forKeyPath:@"availableInputs"];
+}
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     if([keyPath isEqualToString:@"availableInputs"]){
@@ -148,21 +137,6 @@ static NSURL* devicesFolderURL;
     }
 }
 
-#pragma mark - NSCoding implementaion
-
--(void) encodeWithCoder:(NSCoder *)aCoder{
-    [aCoder encodeObject:self.devices forKey:kDevices];
-}
-
--(id) initWithCoder:(NSCoder *)aDecoder{
-    NSArray *devices = [aDecoder decodeObjectForKey:kDevices];
-    
-    if(self = [[VSDeviceManager alloc] initWithDevices:devices]){
-        
-    }
-    
-    return self;
-}
 
 #pragma mark - Methods
 
@@ -331,10 +305,28 @@ static NSURL* devicesFolderURL;
     return nil;
 }
 
-#pragma mark - Private Methods
+#pragma mark - Functions
 
 
--(void) loadExisitingDevices{
++(VSDevice*) storedDeviceForID:(NSString*) idString{
+    NSUInteger indexOfDevice = [storedDevices indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj isKindOfClass:[VSDevice class]]){
+            return [((VSDevice*) obj).ID isEqualToString:idString];
+        }
+        return NO;
+    }];
+    
+    if(indexOfDevice != NSNotFound){
+        return [storedDevices objectAtIndex:indexOfDevice];
+    }
+    
+    return nil;
+}
+
++(void) loadExisitingDevices{
+    
+    storedDevices = [[NSMutableArray alloc] init];
+    
     NSDirectoryEnumerator *dirEnum = [[NSFileManager defaultManager] enumeratorAtPath:devicesFolder];
     
     [dirEnum skipDescendants];
@@ -348,7 +340,7 @@ static NSURL* devicesFolderURL;
     }
 }
 
--(void) loadDeviceFromXMLFile:(NSString*) filePath{
++(void) loadDeviceFromXMLFile:(NSString*) filePath{
     NSError *error;
     
     NSURL *xmlURL = [NSURL fileURLWithPath:filePath];
@@ -412,8 +404,16 @@ static NSURL* devicesFolderURL;
         
     }
     
-    [self addDevicesObject:device];
+    [storedDevices addObject:device];
     
+}
+
+#pragma mark - Private Methods
+
+-(void) initDevices{
+    for(VSDevice *device in storedDevices){
+        [self addDevicesObject:device];
+    }
 }
 
 /**

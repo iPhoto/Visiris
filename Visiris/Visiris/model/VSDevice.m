@@ -55,25 +55,15 @@
 #pragma mark NSCoding Implementation
 
 -(void) encodeWithCoder:(NSCoder *)aCoder{
-    DDLogInfo(@"device: %@",self);
     [aCoder encodeObject:self.ID forKey:kID];
-    [aCoder encodeObject:self.name forKey:kName];
+//    [aCoder encodeObject:self.name forKey:kName];
 //    [aCoder encodeObject:self.parameters forKey:kParameters];
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder{
     NSString *deviceID = [aDecoder decodeObjectForKey:kID];
-    NSString *name = [aDecoder decodeObjectForKey:kName];
     
-    if(self = [[VSDevice alloc] initWithID:deviceID andName:name]){
-//        NSArray *storedParameters = [aDecoder decodeObjectForKey:kParameters];
-        
-//        for(VSDeviceParameter *parameter in storedParameters){
-//            [self addParametersObject:parameter];
-//        }
-    }
-    
-    return self;
+    return [VSDeviceManager storedDeviceForID:deviceID];
 }
 
 -(NSUInteger) indexOfObjectInParameters:(VSDeviceParameter*) parameter{

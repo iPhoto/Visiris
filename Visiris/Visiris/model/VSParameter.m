@@ -128,6 +128,7 @@
     [aCoder encodeObject:self.animation forKey:kAnimation];
     [aCoder encodeObject:self.deviceParameterMapper forKey:kDeviceParameterMapper];
     [aCoder encodeInteger:self.ID forKey:kID];
+    [aCoder encodeBool:self.connectedWithDeviceParameter forKey:kConnectedWithDeviceParameter];
     
 }
 
@@ -139,6 +140,8 @@
         self.defaultValue = [aDecoder decodeObjectForKey:kDefaultValue];
         self.deviceParameterMapper = [aDecoder decodeObjectForKey:kDeviceParameterMapper];
         self.animation = [aDecoder decodeObjectForKey:kAnimation];
+        self.connectedWithDeviceParameter = [aDecoder decodeBoolForKey:kConnectedWithDeviceParameter];
+        
         if(!self.animation){
             self.animation = [[VSAnimation alloc] initWithDefaultValue:self.configuredDefaultValue];
         }

@@ -40,7 +40,7 @@
 
 -(id) initWithDeviceParameter:(VSDeviceParameter *)deviceParameter ofDevice:(VSDevice *)device{
     
-    if(self = [super init]){
+    if(self = [self init]){
         self.device = device;
         self.deviceParameter = deviceParameter;
         self.hasRanges = NO;
@@ -82,12 +82,12 @@
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder{
-    BOOL hasRange = [aDecoder decodeBoolForKey:kHasRange];
+
     VSDevice *device = [aDecoder decodeObjectForKey:kDevice];
     NSString *deviceParameterIdentifier = [aDecoder decodeObjectForKey:kDeviceParameterIdentifier];
     VSDeviceParameter *deviceParameter = [device parameterIdentifiedBy:deviceParameterIdentifier];
     
-    if(hasRange){
+    if(deviceParameter.hasRange){
         NSError *error;
         VSRange parameterDeviceRange = VSRangeDecode(aDecoder, kDeviceParameterRange, &error);
         

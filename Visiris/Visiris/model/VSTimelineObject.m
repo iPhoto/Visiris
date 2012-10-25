@@ -24,6 +24,7 @@
 #import "VSDevice.h"
 #import "VSTimelineObjectFactory.h"
 #import "VSAnimation.h"
+#import "VSDeviceParameterMapper.h"
 
 #import "VSCoreServices.h"
 
@@ -104,9 +105,21 @@
             if([object isKindOfClass:[VSParameter class]]){
                 VSParameter *archivedParameter = (VSParameter*) object;
                 VSParameter *parameter = [self.sourceObject.parameters objectForKey:key];
-
+                
                 parameter.animation = [archivedParameter.animation copy];
                 parameter.defaultValue = archivedParameter.defaultValue;
+                
+                parameter.deviceParameterMapper = archivedParameter.deviceParameterMapper;
+                
+                if(archivedParameter.connectedWithDeviceParameter){
+                    [parameter connectWithDeviceParameter:parameter.deviceParameterMapper.deviceParameter
+                                                 ofDevice:parameter.deviceParameterMapper.device
+                                     deviceParameterRange:parameter.deviceParameterMapper.deviceParameterRange
+                                        andParameterRange:parameter.deviceParameterMapper.parameterRange];
+                }
+                
+                parameter.connectedWithDeviceParameter = archivedParameter.connectedWithDeviceParameter;
+                
             }
             else if([object isKindOfClass:[NSDictionary class]]){
                 NSDictionary *archivedParameters = (NSDictionary*) parameters;
@@ -118,6 +131,17 @@
                     
                     parameter.animation = archivedParameter.animation;
                     parameter.defaultValue = archivedParameter.defaultValue;
+                    
+                    parameter.deviceParameterMapper = archivedParameter.deviceParameterMapper;
+                    
+                    if(archivedParameter.connectedWithDeviceParameter){
+                        [parameter connectWithDeviceParameter:parameter.deviceParameterMapper.deviceParameter
+                                                     ofDevice:parameter.deviceParameterMapper.device
+                                         deviceParameterRange:parameter.deviceParameterMapper.deviceParameterRange
+                                            andParameterRange:parameter.deviceParameterMapper.parameterRange];
+                    }
+                    
+                    parameter.connectedWithDeviceParameter = archivedParameter.connectedWithDeviceParameter;
                 }
             }
             
