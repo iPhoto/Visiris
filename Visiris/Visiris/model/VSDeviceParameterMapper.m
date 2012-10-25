@@ -144,16 +144,23 @@
     
     y = k * x + d;
     
+    y = [self smoothValue:y withSmoothing:0.5f];
+    
     return  y;
 }
 
-- (float)smoothValueWithIntensity:(float)intensity
+- (float)smoothValue:(float)value withSmoothing:(float)smoothness
 {
     float result;
     
+//    result = self.oldValue * intensity + value * (1.0f - intensity);
     
     
     
+    float k = (value - self.oldValue)/smoothness;
+
+    
+    result = k * (smoothness/10) + self.oldValue;
     
     self.oldValue = result;
     return result;
