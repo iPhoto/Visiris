@@ -67,6 +67,10 @@ static NSString* defaultNib = @"VSMainTimelineView";
 
 #pragma mark- Init
 
+-(void) dealloc{
+    
+}
+
 -(id) initWithDefaultNib{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
         self.trackViewControllers = [[NSMutableArray alloc] init];

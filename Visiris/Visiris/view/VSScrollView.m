@@ -102,4 +102,11 @@
     self.lastBounds = ((NSView*) notification.object).bounds;
 }
 
+#pragma mark -
+#pragma mark Object LifeCycle
+
+-(void) dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 @end

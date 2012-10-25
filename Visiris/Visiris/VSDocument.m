@@ -35,7 +35,17 @@
 @implementation VSDocument
 
 #define kTimeline @"Timeline"
-
+-(void) dealloc{
+    self.mainWindowController = nil;
+    self.projectItemRepresentationController =nil;
+    self.postProcessor = nil;
+    self.preProcessor = nil;
+    self.projectItemController = nil;
+    self.timeline = nil;
+    self.playbackController = nil;
+    self.deviceManager = nil;
+    self.outputController = nil;
+}
 #pragma mark - Init
 
 - (id)init
@@ -211,15 +221,6 @@
     }
     
     return result;
-}
-
--(BOOL) readFromURL:(NSURL *)url ofType:(NSString *)type error:(NSError *__autoreleasing *)outError{
-    DDLogError(@"%@",url);
-    return NO;
-}
-
--(NSString*) windowNibName{
-    return  @"MainWindow";
 }
 
 #pragma mark - Methods

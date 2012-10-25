@@ -42,7 +42,7 @@
 @property double pixelTimeRatio;
 
 /** Reference on the DeviceManager */
-@property (strong) VSDeviceManager* deviceManager;
+@property (weak) VSDeviceManager* deviceManager;
 
 #pragma mark - Init
 

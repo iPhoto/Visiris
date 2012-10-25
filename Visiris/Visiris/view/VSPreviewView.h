@@ -15,6 +15,6 @@
 @interface VSPreviewView : NSView
 
 /** Delegate which is informed about changes of the view's frame ad described in VSViewResizingDelegate-Protocoll */
-@property id<VSViewResizingDelegate> frameResizingDelegate;
+@property (weak) id<VSViewResizingDelegate> frameResizingDelegate;
 
 @end
