@@ -135,6 +135,7 @@
 
 -(void) dealloc{
     [self.projectItemController removeObserver:self forKeyPath:@"projectItems"];
+    self.projectItemController = nil;
 }
 
 #pragma mark- Private Methods

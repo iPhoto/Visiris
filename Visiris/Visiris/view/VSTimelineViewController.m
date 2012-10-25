@@ -48,7 +48,6 @@
 }
 
 -(void) dealloc{
-    //    DDLogInfo(@"dealloc");
 }
 
 /**

@@ -82,6 +82,7 @@ static NSString* defaultNib = @"VSTrackView";
 
 -(void) removeObservers{
     [self.track removeObserver:self forKeyPath:@"timelineObjects"];
+    self.track = nil; 
 }
 
 -(void) awakeFromNib{
