@@ -149,13 +149,14 @@
 
 - (float)smoothValueWithIntensity:(float)intensity
 {
+    float result;
     
     
     
     
     
-    
-    return 0.0f;
+    self.oldValue = result;
+    return result;
 }
 
 @end
