@@ -30,7 +30,7 @@
 @property (strong) NSMutableDictionary *animationTrackViewControllers;
 
 /** Reference of the VSPlayhead of the VSTimeline stored in the current VSDocument */
-@property (readwrite, weak) VSPlayHead *playhead;
+@property (strong) VSPlayHead *playhead;
 
 @property (strong) NSPopover *animationCurvePopover;
 
@@ -74,6 +74,19 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     }
     else if ([keyPath isEqualToString:@"duration"]){
         [self computePixelTimeRatio];
+    }
+}
+
+-(void) dealloc{
+    if(self.playhead){
+        [self.playhead removeObserver:self forKeyPath:@"currentTimePosition"];
+        self.playhead = nil;
+    }
+    
+    if(self.timelineObject){
+        [self.timelineObject removeObserver:self forKeyPath:@"duration"];
+        
+        self.timelineObject = nil;
     }
 }
 

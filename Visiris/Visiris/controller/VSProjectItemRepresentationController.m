@@ -130,6 +130,12 @@
     return result;
 }
 
+#pragma mark - 
+#pragma mark Object Life Cylce
+
+-(void) dealloc{
+    [self.projectItemController removeObserver:self forKeyPath:@"projectItems"];
+}
 
 #pragma mark- Private Methods
 

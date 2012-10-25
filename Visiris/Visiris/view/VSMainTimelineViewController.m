@@ -68,7 +68,16 @@ static NSString* defaultNib = @"VSMainTimelineView";
 #pragma mark- Init
 
 -(void) dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
+    [self removeObservers];
+}
+
+-(void) removeObservers{
+    [self.timeline removeObserver:self forKeyPath:@"duration"];
+    [self.timeline.playHead removeObserver:self forKeyPath:@"currentTimePosition"];
+    
+    self.timeline = nil;
 }
 
 -(id) initWithDefaultNib{
