@@ -205,10 +205,10 @@ typedef enum{
 
 
 /** Track the view VSTrackViewController is responsible for */
-@property VSTrack* track;
+@property (weak) VSTrack* track;
 
 /** Delegate to called according to VSTrackViewControllerDelegate*/
-@property id<VSTrackViewControllerDelegate> delegate;
+@property (weak) id<VSTrackViewControllerDelegate> delegate;
 
 /** Pixel Item Ratio as set in VSTimelineViewController */
 @property double pixelTimeRatio;

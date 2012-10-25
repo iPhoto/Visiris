@@ -21,13 +21,13 @@
 @interface VSAnimationTrackViewController ()
 
 /** VSAnimationTrackViewController' view */
-@property VSAnimationTrackView *animationTrackView;
+@property (strong) VSAnimationTrackView *animationTrackView;
 
 /** NSRect where the keyFrames can be positionend and dragged around */
 @property (readonly) NSRect keyFramesArea;
 
 /** VSKeyFrameViewControllers representing the keyFrames the VSAnimationTrackViewController is responsible for */
-@property NSMutableArray *keyFrameViewControllers;
+@property (strong) NSMutableArray *keyFrameViewControllers;
 
 @property BOOL active;
 

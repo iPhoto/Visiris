@@ -67,7 +67,7 @@
 @interface VSTimelineScrollViewDocumentView : NSView<CAAction>
 
 /** Delegate VSTrackHolderView communicates like defined in VSPlayHeadRulerMarkerDelegate*/
-@property id<VSTrackHolderViewDelegate> trackHolderViewDelegate;
+@property (weak) id<VSTrackHolderViewDelegate> trackHolderViewDelegate;
 
 /**
  * Updates the guideline for the given location

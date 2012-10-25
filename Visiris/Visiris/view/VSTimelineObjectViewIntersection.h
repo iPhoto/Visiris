@@ -16,13 +16,13 @@
 @interface VSTimelineObjectViewIntersection : NSObject
 
 /** Stores where the intersectino happend */
-@property NSRect rect;
+@property (assign) NSRect rect;
 
 /** VSTimelineObjectViewController which intersects */
-@property VSTimelineObjectViewController* timelineObjectView;
+@property (weak) VSTimelineObjectViewController* timelineObjectView;
 
 /** Layer to draw the intersection above the timelineObjectView */
-@property CALayer *layer;
+@property (strong) CALayer *layer;
 
 /**
  * Inits the intersection for the given values

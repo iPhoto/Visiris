@@ -136,9 +136,16 @@
     else if ([[tableColumn identifier] isEqualToString:iMin]) {
         if(input.hasRange)
             return [NSNumber numberWithFloat: input.range.min];
+        else{
+            return @"-";
+        }
     }
     else if ([[tableColumn identifier] isEqualToString:iMax]) {
-        return [NSNumber numberWithFloat: input.range.max];
+        if(input.hasRange)
+            return [NSNumber numberWithFloat: input.range.max];
+        else{
+            return @"-";
+        }
     }
     
     return @"empty";
@@ -167,6 +174,15 @@
         input.range = newRange;
     }
     
+}
+
+-(BOOL) tableView:(NSTableView *)tableView shouldEditTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row{
+    if([tableColumn.identifier isEqualToString:iMin] || [tableColumn.identifier isEqualToString:iMax]){
+        if(!((VSExternalInputRepresentation*)[self.availableParameter objectAtIndex:row]).hasRange){
+            return NO;
+        }
+    }
+    return YES;
 }
 
 

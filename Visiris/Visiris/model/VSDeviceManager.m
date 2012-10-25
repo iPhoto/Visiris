@@ -29,7 +29,6 @@
 
 @interface VSDeviceManager()
 
-@property VSDeviceLoader *deviceLoader;
 
 @end
 
@@ -127,6 +126,7 @@ static NSURL* devicesFolderURL;
 
 
 #pragma mark - Methods
+
 
 -(void) resetAvailableInputsRepresentation{
     for(VSExternalInputRepresentation *representation in self.availableInputsRepresentation){

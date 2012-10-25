@@ -15,6 +15,7 @@
 #define kName @"Name"
 #define kStrengthRange @"StrengthRange"
 #define kHasStrength @"HasStrength"
+#define kClassName @"ClassName"
 
 @synthesize strength = _strength;
 
@@ -34,15 +35,19 @@
 #pragma mark - NSCoding
 
 -(void) encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeObject:NSStringFromClass([self class]) forKey:kClassName];
     [aCoder encodeDouble:self.strength forKey:kStrength];
-    [aCoder encodeObject:self.name forKey:kName];
-    [aCoder encodeBool:self.hasStrength forKey:kHasStrength];
-    
-    VSRangeEncode(aCoder, self.strengthRange, kStrengthRange);
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder{
+    NSString *className = [aDecoder decodeObjectForKey:kClassName];
+    self = [VSAnimationCurveFactory createAnimationCurveOfClass:className];
     
+    if(self){
+        self.strength = [aDecoder decodeDoubleForKey:kStrength];
+    }
+    
+    return self;
 }
 
 - (double)valueForTime:(double)time withBeginTime:(double)beginTime toEndTime:(double)endTime withStartValue:(double)startValue toEndValue:(double)endValue

@@ -125,6 +125,7 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
         }
         
         [self.createDeviceViewController reset];
+        
         [self.deviceManager resetAvailableInputsRepresentation];
         
         [[NSApplication sharedApplication] beginSheet:self.createDeviceViewController.createDeviceWindow

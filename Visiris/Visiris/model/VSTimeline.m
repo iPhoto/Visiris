@@ -28,7 +28,7 @@
 @interface VSTimeline()
 
 /** Reference of the Singleton of the timeline object factory. The Factory creates new TimelineObject according to the information stored in their corresponding ProjectItems */
-@property VSTimelineObjectFactory* timelineObjectFactory;
+@property (weak) VSTimelineObjectFactory* timelineObjectFactory;
 
 
 
@@ -135,6 +135,12 @@
                     break;
             }
         }
+    }
+}
+
+-(void) dealloc{
+    for (VSTrack *track in self.tracks){
+        [track removeObserver:self forKeyPath:@"timelineObjects"];
     }
 }
 

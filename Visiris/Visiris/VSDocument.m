@@ -35,7 +35,17 @@
 @implementation VSDocument
 
 #define kTimeline @"Timeline"
-
+-(void) dealloc{
+    self.mainWindowController = nil;
+    self.projectItemRepresentationController =nil;
+    self.postProcessor = nil;
+    self.preProcessor = nil;
+    self.projectItemController = nil;
+    self.timeline = nil;
+    self.playbackController = nil;
+    self.deviceManager = nil;
+    self.outputController = nil;
+}
 #pragma mark - Init
 
 - (id)init
@@ -129,6 +139,13 @@
 
 #pragma mark - NSDocument
 
+-(void) shouldCloseWindowController:(NSWindowController *)windowController delegate:(id)delegate shouldCloseSelector:(SEL)shouldCloseSelector contextInfo:(void *)contextInfo{
+    [super shouldCloseWindowController:windowController delegate:delegate shouldCloseSelector:shouldCloseSelector contextInfo:contextInfo];
+}
+
+-(void) canCloseDocumentWithDelegate:(id)delegate shouldCloseSelector:(SEL)shouldCloseSelector contextInfo:(void *)contextInfo{
+    [super canCloseDocumentWithDelegate:delegate shouldCloseSelector:shouldCloseSelector contextInfo:contextInfo];
+}
 + (BOOL)autosavesInPlace
 {
     return YES;
@@ -204,11 +221,6 @@
     }
     
     return result;
-}
-
--(BOOL) readFromURL:(NSURL *)url ofType:(NSString *)type{
-    DDLogError(@"%@",url);
-    return NO;
 }
 
 #pragma mark - Methods

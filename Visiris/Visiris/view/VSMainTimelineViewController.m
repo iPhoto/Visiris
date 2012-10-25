@@ -38,19 +38,19 @@
 /** Indicates if autoscrolling is active. Is set to YES when a timelineObjectView is started to be dragged around and set to NO when the dragginOperation is done.*/
 @property bool autoscrolling;
 
-/** Timer for autostrolling */
-@property NSTimer *autoScrollingTimer;
+///** Timer for autostrolling */
+//@property (strong) NSTimer *autoScrollingTimer;
 
 /** Virtual mousePosition which is changed while autoscrolling is active */
-@property NSPoint autoscrollMouseLocation;
+@property (assign) NSPoint autoscrollMouseLocation;
 
 /** Instance of VSProjectItemController */
-@property VSProjectItemController *projectItemController;
+@property (weak) VSProjectItemController *projectItemController;
 
 /** Instance of VSProjectItemRepresentationController */
-@property VSProjectItemRepresentationController *projectItemRepresentationController;
+@property (weak) VSProjectItemRepresentationController *projectItemRepresentationController;
 
-@property NSMutableDictionary *temporaryCreatedProjectItems;
+@property (strong) NSMutableDictionary *temporaryCreatedProjectItems;
 
 @end
 
@@ -66,6 +66,10 @@
 static NSString* defaultNib = @"VSMainTimelineView";
 
 #pragma mark- Init
+
+-(void) dealloc{
+    
+}
 
 -(id) initWithDefaultNib{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
@@ -487,7 +491,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
 
 -(void) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController didStopDraggingOnTrack:(VSTrackViewController *)trackViewController{
     self.autoscrolling = NO;
-    [self.autoScrollingTimer invalidate];
+//    [self.autoScrollingTimer invalidate];
     
     [self.view.undoManager beginUndoGrouping];
     [self.view.undoManager setActionName:NSLocalizedString(@"Moved Objects on Timeline", @"Undo Action Name for moving objects on Timeline")];
@@ -1151,9 +1155,9 @@ static NSString* defaultNib = @"VSMainTimelineView";
         DDLogInfo(@"Mouse in right auto scrolling area");
         mouseIsInAutoScrollArea = YES;
         self.autoscrollMouseLocation = [NSEvent mouseLocation];
-        self.autoScrollingTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(autoscrollScrollView) userInfo:nil repeats:YES];
-        
-        [self.autoScrollingTimer fire];
+//        self.autoScrollingTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(autoscrollScrollView) userInfo:nil repeats:YES];
+//        
+//        [self.autoScrollingTimer fire];
         
     }
     else if(NSPointInRect( viewLocation, leftAutoScrollingArea)){
@@ -1161,10 +1165,10 @@ static NSString* defaultNib = @"VSMainTimelineView";
         mouseIsInAutoScrollArea = YES;
     }
     
-    if(!mouseIsInAutoScrollArea && self.autoScrollingTimer && self.autoScrollingTimer.isValid){
-        DDLogInfo(@"Turned off autoscrolling timer");
-        [self.autoScrollingTimer invalidate];
-    }
+//    if(!mouseIsInAutoScrollArea && self.autoScrollingTimer && self.autoScrollingTimer.isValid){
+//        DDLogInfo(@"Turned off autoscrolling timer");
+////        [self.autoScrollingTimer invalidate];
+//    }
 }
 
 -(void) autoscrollScrollView{

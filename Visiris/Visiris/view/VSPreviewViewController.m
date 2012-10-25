@@ -21,20 +21,20 @@
 @interface VSPreviewViewController ()
 
 /** Top Margin of the openGLView to its superview */
-@property NSInteger         openGLViewMarginTop;
+@property (assign) NSInteger         openGLViewMarginTop;
 
 /** Bottom Margin of the openGLView to its superview */
-@property NSInteger         openGLViewMarginBottom;
+@property (assign) NSInteger         openGLViewMarginBottom;
 
 /** Left Margin of the openGLView to its superview */
-@property NSInteger         openGLViewMarginLeft;
+@property (assign) NSInteger         openGLViewMarginLeft;
 
 /** Rigth Margin of the openGLView to its superview */
-@property NSInteger         openGLViewMarginRight;
+@property (assign) NSInteger         openGLViewMarginRight;
 
-@property (strong) NSOpenGLContext *openGLContext;
+@property (weak) NSOpenGLContext *openGLContext;
 
-@property (strong) VSOutputController *outputController;
+@property (weak) VSOutputController *outputController;
 
 
 @end

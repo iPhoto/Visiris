@@ -22,39 +22,39 @@
 @interface VSParameter : NSObject<NSCopying, NSCoding>
 
 /** Type of the parameter like defined in VSParameterTypes.h */
-@property NSString *type;
+@property (strong) NSString *type;
 
 /** Data type of the Parameter */
-@property VSParameterDataType dataType;
+@property (assign) VSParameterDataType dataType;
 
 /** Name of the parameter */
-@property NSString* name;
+@property (strong) NSString* name;
 
 /** Default value of the parameter as set in its description xml. */
-@property id configuredDefaultValue;
+@property (strong) id configuredDefaultValue;
 
 /** Order of the parameter in the list of Parameters */
-@property NSInteger orderNumber;
+@property (assign) NSInteger orderNumber;
 
 /** NO if no ranges are given, YES otherwise. */
-@property BOOL hasRange;
+@property (assign) BOOL hasRange;
 
-@property VSRange range;
+@property (assign) VSRange range;
 
 /** If true, the value of the paramter can be edited */
-@property BOOL editable;
+@property (assign) BOOL editable;
 
 /** If YES the paramter is visible for the user */
-@property BOOL hidden;
+@property (assign) BOOL hidden;
 
 /** Every parameter has its own animation. As soon as an parameter is initialized, a new Keyframe for the timestamp -1 with its default value is added */
 @property (strong) VSAnimation *animation;
 
 /** current value of the parameter according to it's animation and a timestamp given when updateCurrentValue is called */
-@property (readonly) id currentValue;
+@property (readonly, strong) id currentValue;
 
 /** default value of the parameter which is the the same as the configuredDefaultValue when the parameter is created. The default value is changed while no keyFrame is added to the parameter's animation */
-@property id defaultValue;
+@property (strong) id defaultValue;
 
 /** the paramter's ID */
 @property (readonly) NSUInteger ID;
@@ -65,7 +65,7 @@
 
 @property (weak,readonly) VSDevice *deviceConnectedWith;
 
-@property VSDeviceParameterMapper *deviceParameterMapper;
+@property (strong) VSDeviceParameterMapper *deviceParameterMapper;
 
 #pragma mark - Init
 

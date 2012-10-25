@@ -1083,9 +1083,9 @@
 		5B35C0AD1577AF3C009911EC /* mainWindow */ = {
 			isa = PBXGroup;
 			children = (
-				5B35BF9F1577A573009911EC /* MainWindow.xib */,
 				5B35BFA51577A573009911EC /* VSMainWindowController.h */,
 				5B35BFA61577A573009911EC /* VSMainWindowController.m */,
+				5B35BF9F1577A573009911EC /* MainWindow.xib */,
 				5B1994BE1627368C006E9D9E /* VSMainWindow.h */,
 				5B1994BF1627368C006E9D9E /* VSMainWindow.m */,
 			);

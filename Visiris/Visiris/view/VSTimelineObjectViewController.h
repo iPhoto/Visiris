@@ -125,16 +125,16 @@
 @property (strong, readonly) VSTimelineObjectProxy* timelineObjectProxy;
 
 /** Indicates wheter the VSTimelineObjectViewController's VSTimelineObjectProxy is only a temporary object on the track. */
-@property BOOL temporary;
+@property (assign) BOOL temporary;
 
 /** Indicates wheter the views is currently moved */
-@property BOOL moving;
+@property (assign) BOOL moving;
 
 /** if YES the timelineObejct is hidden */
-@property BOOL inactive;
+@property (assign) BOOL inactive;
 
 /** Stores the VSDoubleFrame of VSTimelineObjectViewController's VSTimelineObjectView */
-@property VSDoubleFrame viewsDoubleFrame;
+@property (assign) VSDoubleFrame viewsDoubleFrame;
 
 /** Stores the VSTimelineObjectViewController which's views intersecting the view of the VSTimelineObjectViewController as VSTimelineObjectIntersection */
 @property (strong,readonly) NSMutableDictionary *intersectedTimelineObjectViews;

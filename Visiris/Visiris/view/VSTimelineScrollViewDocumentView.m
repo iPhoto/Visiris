@@ -215,5 +215,12 @@
     self.scrollOffset = NSMakePoint(xOffset, yOffset);
 }
 
+#pragma mark -
+#pragma mark Object LifeCycle
+
+-(void) dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 
 @end

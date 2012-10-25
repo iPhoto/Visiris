@@ -19,16 +19,17 @@
 @property (assign) VSRange range;
 @property (assign) BOOL selected;
 @property (strong, readonly) VSExternalInput *externalInput;
+@property (strong, readonly) id value;
 
 -(NSString*) identifier;
 
--(id) value;
 
 -(NSString*) parameterDataType;
 
 -(NSString*) deviceType;
 
 -(void) reset;
+
 
 -(BOOL) hasRange;
 

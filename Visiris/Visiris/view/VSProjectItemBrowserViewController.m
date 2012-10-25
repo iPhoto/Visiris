@@ -20,9 +20,9 @@
 
 @interface VSProjectItemBrowserViewController ()
 
-@property VSProjectItemRepresentationController *projectItemRepresentationController;
+@property (weak) VSProjectItemRepresentationController *projectItemRepresentationController;
 
-@property VSProjectItemController *projectItemController;
+@property (weak) VSProjectItemController *projectItemController;
 
 @end
 

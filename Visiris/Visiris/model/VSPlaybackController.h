@@ -30,13 +30,13 @@
 @property (readonly, weak) VSTimeline *timeline;
 
 /** The currently active TimeStamp */
-@property double currentTimestamp;
+@property (assign) double currentTimestamp;
 
 /** Indicates if renderFramesForCurrentTimestamp was called after starting the DisplayLink or not. Neccessary to make sure a requested frame was rendered */
-@property BOOL frameWasRender;
+@property (assign) BOOL frameWasRender;
 
 /** Current playbackMode as definend in VSPlaybackMode */
-@property VSPlaybackMode playbackMode;
+@property (assign) VSPlaybackMode playbackMode;
 
 
 /**

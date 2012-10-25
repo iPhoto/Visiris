@@ -21,7 +21,7 @@
 @interface VSOutputController : NSObject
 
 @property (readonly) double             refreshPeriod;
-@property VSPlaybackController          *playbackController;
+@property (weak) VSPlaybackController          *playbackController;
 @property (strong) NSOpenGLPixelFormat  *pixelFormat;
 @property (nonatomic, assign) NSSize    fullScreenSize;
 @property (nonatomic, assign) NSSize    previewSize;

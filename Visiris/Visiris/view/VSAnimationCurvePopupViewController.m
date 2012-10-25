@@ -15,8 +15,8 @@
 #import "VSCoreServices.h"
 
 @interface VSAnimationCurvePopupViewController ()
-@property NSArray *animationCurves;
-@property VSKeyFrame *keyFrame;
+@property (weak) NSArray *animationCurves;
+@property (weak) VSKeyFrame *keyFrame;
 @end
 
 @implementation VSAnimationCurvePopupViewController

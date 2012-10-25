@@ -22,8 +22,8 @@
 @property (strong) VSFullScreenHolderView *holder;
 @property (strong) VSFullScreenWindow *fullScreenWindow;
 @property (weak) NSOpenGLContext *openGLContext;
-@property BOOL visible;
-@property (strong) VSOutputController *outputController;
+@property (assign) BOOL visible;
+@property (weak) VSOutputController *outputController;
 
 @end
 

@@ -85,6 +85,22 @@ static NSString* defaultNib = @"MainWindow";
 
 #pragma mark - NSWindow
 
+-(void) dealloc{
+    for(NSUInteger i = 0; i < self.topSplitView.subviews.count; i++){
+        NSView *subView  = [self.topSplitView.subviews objectAtIndex:i];
+        [subView removeFromSuperview];
+    }
+    
+    for(NSUInteger i = 0; i < self.mainSplitView.subviews.count; i++){
+        NSView *subView  = [self.mainSplitView.subviews objectAtIndex:i];
+        [subView removeFromSuperview];
+    }
+    
+    self.timelineViewController = nil;
+    self.browserViewController = nil;
+    self.propertiesViewController = nil;
+    self.previewViewController = nil;
+}
 
 #pragma mark - Methods
 

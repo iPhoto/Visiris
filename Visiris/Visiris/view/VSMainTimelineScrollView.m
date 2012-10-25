@@ -15,7 +15,7 @@
 @interface VSMainTimelineScrollView()
 
 /** Subclass of NSRulerView, displaying information about the tracks at the left side of the timeline */
-@property VSTrackLabelsRulerView *trackLabelRulerView;
+@property (strong) VSTrackLabelsRulerView *trackLabelRulerView;
 
 @end
 

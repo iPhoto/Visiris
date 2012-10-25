@@ -25,10 +25,10 @@
 @property (strong) NSString* name;
 
 /** Indicates if the Track is an audio- or an Visual-Track */
-@property VSTrackType type;
+@property (assign) VSTrackType type;
 
 /** id of the track */
-@property NSUInteger trackID;
+@property (assign) NSUInteger trackID;
 
 /**
  * Inits a new Track with the given values.

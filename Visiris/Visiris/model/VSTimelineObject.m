@@ -23,6 +23,7 @@
 #import "VisirisCore/VSVideoCoreHandover.h"
 #import "VSDevice.h"
 #import "VSTimelineObjectFactory.h"
+#import "VSAnimation.h"
 
 #import "VSCoreServices.h"
 
@@ -92,7 +93,7 @@
                 VSParameter *archivedParameter = (VSParameter*) object;
                 VSParameter *parameter = [self.sourceObject.parameters objectForKey:key];
 
-                parameter.animation = archivedParameter.animation;
+                parameter.animation = [archivedParameter.animation copy];
                 parameter.defaultValue = archivedParameter.defaultValue;
             }
             else if([object isKindOfClass:[NSDictionary class]]){
