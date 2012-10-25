@@ -81,7 +81,7 @@
     if(self)
     {
         self.startTime = base.startTime;
-        self.duration = [VSFileUtils durationInMillisecondsOfFile:self.filePath];
+        self.duration = base.duration;
         self.name = base.name;
         self.icon = [VSFileImageCreator createIconForTimelineObject:self.filePath];
         NSDictionary *parameters = [NSDictionary dictionaryWithDictionary:[aDecoder decodeObjectForKey:kParameters]];
