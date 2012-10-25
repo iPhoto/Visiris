@@ -10,6 +10,12 @@
 #import "VSDeviceParameter.h"
 #import "VSDevice.h"
 
+@interface VSDeviceParameterMapper()
+
+@property (assign) float oldValue;
+
+@end
+
 @implementation VSDeviceParameterMapper
 
 #define kDeviceParameter @"DeviceParamete"
@@ -25,6 +31,7 @@
         self.deviceParameterRange = deviceParameterRange;
         
         self.hasRanges = YES;
+        self.oldValue = 0.0f;
     }
     
     return self;
@@ -138,6 +145,17 @@
     y = k * x + d;
     
     return  y;
+}
+
+- (float)smoothValueWithIntensity:(float)intensity
+{
+    
+    
+    
+    
+    
+    
+    return 0.0f;
 }
 
 @end
