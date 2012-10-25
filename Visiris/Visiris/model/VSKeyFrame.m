@@ -23,6 +23,7 @@
 
 @synthesize value = _value;
 @synthesize timestamp = _timestamp;
+@synthesize animationCurve = _animationCurve;
 
 #pragma mark - Init
 
@@ -41,7 +42,7 @@
 
 -(id) copyWithZone:(NSZone *)zone{
     VSKeyFrame *copy = [[VSKeyFrame alloc] initWithValue:self.value forTimestamp:self.timestamp andID:self.ID];
-    
+    copy.animationCurve = self.animationCurve;
     return copy;
 }
 
@@ -67,7 +68,12 @@
     double timestamp = [aDecoder decodeFloatForKey:kTimestamp];
     NSUInteger ID = [aDecoder decodeIntegerForKey:kID];
     
-    self = [self initWithValue:value forTimestamp:timestamp andID:ID];
+    if(self = [self init]){
+        self.value = value;
+        self.timestamp = timestamp;
+        self.ID = ID;
+        self.animationCurve = [aDecoder decodeObjectForKey:kAnimationCurve];
+    }
     
     return self;
 }
@@ -112,6 +118,14 @@
 
 -(void) setBoolValue:(BOOL)boolValue{
     self.value = [NSNumber numberWithBool:boolValue];
+}
+
+-(void) setAnimationCurve:(VSAnimationCurve *)animationCurve{
+    _animationCurve = animationCurve;
+}
+
+-(VSAnimationCurve*) animationCurve{
+    return _animationCurve;
 }
 
 @end
