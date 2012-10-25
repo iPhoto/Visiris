@@ -22,11 +22,11 @@
 @property NSTimer *playbackTimer;
 
 /** Timestamp when the playback was started */
-@property double playbackStartTime;
+@property (assign) double playbackStartTime;
 
-@property VSPreProcessor* preProcessor;
+@property (weak) VSPreProcessor* preProcessor;
 
-@property VSTimeline* timeline;
+@property (weak) VSTimeline* timeline;
 
 @property (strong) VSTimelineObject*selectedTimelineObject;
 //todo

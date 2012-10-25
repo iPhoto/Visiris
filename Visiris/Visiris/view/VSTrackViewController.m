@@ -80,6 +80,10 @@ static NSString* defaultNib = @"VSTrackView";
     }
 }
 
+-(void) removeObservers{
+    [self.track removeObserver:self forKeyPath:@"timelineObjects"];
+}
+
 -(void) awakeFromNib{
     self.timelineObjectViewControllers = [[NSMutableArray alloc] init];
     self.temporaryTimelineObjectViewControllers = [[NSMutableArray alloc] init];
@@ -91,7 +95,12 @@ static NSString* defaultNib = @"VSTrackView";
     
 }
 
+
 #pragma mark - NSViewController
+
+-(void) dealloc{
+    [self removeObservers];
+}
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     //Observes if any changes on the timelineObjects of the VSTrack the VSTrackViewController displays occures

@@ -129,6 +129,13 @@
 
 #pragma mark - NSDocument
 
+-(void) shouldCloseWindowController:(NSWindowController *)windowController delegate:(id)delegate shouldCloseSelector:(SEL)shouldCloseSelector contextInfo:(void *)contextInfo{
+    [super shouldCloseWindowController:windowController delegate:delegate shouldCloseSelector:shouldCloseSelector contextInfo:contextInfo];
+}
+
+-(void) canCloseDocumentWithDelegate:(id)delegate shouldCloseSelector:(SEL)shouldCloseSelector contextInfo:(void *)contextInfo{
+    [super canCloseDocumentWithDelegate:delegate shouldCloseSelector:shouldCloseSelector contextInfo:contextInfo];
+}
 + (BOOL)autosavesInPlace
 {
     return YES;
@@ -206,9 +213,13 @@
     return result;
 }
 
--(BOOL) readFromURL:(NSURL *)url ofType:(NSString *)type{
+-(BOOL) readFromURL:(NSURL *)url ofType:(NSString *)type error:(NSError *__autoreleasing *)outError{
     DDLogError(@"%@",url);
     return NO;
+}
+
+-(NSString*) windowNibName{
+    return  @"MainWindow";
 }
 
 #pragma mark - Methods

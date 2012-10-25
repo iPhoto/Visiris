@@ -63,13 +63,13 @@
 #pragma mark - Properties
 
 /** The VSAnimationTrackViewController represents the animation of parameter*/
-@property VSParameter *parameter;
+@property (weak) VSParameter *parameter;
 
 /** Current pixelTimeRatio of the timeline the VSAnimationTrackViewController belongs to. Neccessary for positioning the keyframes right within the track */
 @property double pixelTimeRatio;
 
 /** Delgate the VSAnimationTrackViewController talks to as definend in VSAnimationTrackViewControllerDelegate-Protocoll */
-@property id<VSAnimationTrackViewControllerDelegate> delegate;
+@property (weak) id<VSAnimationTrackViewControllerDelegate> delegate;
 
 
 

@@ -102,19 +102,19 @@
 @property (weak) id<VSTimelineObjectViewDelegate> delegate;
 
 /** if YES, the VSTimelineObjectView is drawn as selected */
-@property BOOL selected;
+@property (assign) BOOL selected;
 
 /** If yes, the view is drawn differently */
-@property BOOL temporary;
+@property (assign) BOOL temporary;
 
 /** If YES the view is moved on mouseDragged-Event */ 
-@property BOOL moving;
+@property (assign) BOOL moving;
 
 /** if YES the view is hidden */
-@property BOOL inactive;
+@property (assign) BOOL inactive;
 
 /** Frame of VSTimelineObjectView as VSDoubleFrame */
-@property VSDoubleFrame doubleFrame;
+@property (assign) VSDoubleFrame doubleFrame;
 
 /**
  * Crates a new Layer for an intersection with the view.

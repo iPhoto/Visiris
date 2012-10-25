@@ -14,9 +14,9 @@
 
 @interface VSProjectItemRepresentationController()
 
-@property VSProjectItemController *projectItemController;
+@property (weak) VSProjectItemController *projectItemController;
 
-@property NSMutableDictionary *temporaryCreatedProjectItems;
+@property (strong) NSMutableDictionary *temporaryCreatedProjectItems;
 
 @end
 

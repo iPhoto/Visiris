@@ -35,7 +35,7 @@
 - (IBAction)toggleFullScreen:(id)sender;
 
 /** Reference to the VSPlaybackController. Its called to start / stop the playback of the project */
-@property VSPlaybackController *playbackController;
+@property (weak) VSPlaybackController *playbackController;
 
 @property (strong) VSFullScreenController       *fullScreenController;
 

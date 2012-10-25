@@ -20,7 +20,6 @@
 
 @interface VSDeviceManager()
 
-@property VSDeviceLoader *deviceLoader;
 
 
 @end

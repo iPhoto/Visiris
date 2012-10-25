@@ -65,7 +65,7 @@
 @property (strong) VSPlayHead *playHead;
 
 /** Reference of the Singleton of VSProjectItemController. Used to get the ProjectItem corresponding to its VSProjectItem representation */
-@property VSProjectItemController *projectItemController;
+@property (weak) VSProjectItemController *projectItemController;
 
 #pragma mark - Init
 

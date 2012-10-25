@@ -36,7 +36,7 @@
 @property (weak) IBOutlet VSMainTimelineScrollView *scrollView;
 
 /** VSTimeline the controller represents */
-@property VSTimeline* timeline;
+@property (weak) VSTimeline* timeline;
 
 /** Ratio between the duration of the timeline and the pixel length of tracksHolderdocumentView */
 @property double pixelTimeRatio;

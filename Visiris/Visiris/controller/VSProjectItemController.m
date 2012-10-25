@@ -21,11 +21,6 @@
 @synthesize projectItems    = _projectItems;
 
 
-/** Instance of the Singleton */
-static VSProjectItemController* sharedProjectItemController = nil;
-
-
-
 #pragma mark- Init
 
 -(id) init{

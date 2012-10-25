@@ -29,7 +29,7 @@
 @property (strong) NSString* timelineObjectSourceClassString;
 
 /** Kind of the file like stored in the VSFileKind-Enum. E.g.: IMAGE, MOVIE, AUDIO, QUARTZ-COMPOSER. According to the fileKind the classString is set. */
-@property VSFileKind fileKind;
+@property (assign) VSFileKind fileKind;
 
 /** Name of the child-class of VSSourceSupplier associated with that fileType. The class is usually depending on the the fileKind. 
  */

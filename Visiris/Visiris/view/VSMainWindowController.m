@@ -47,7 +47,7 @@ static NSString* defaultNib = @"MainWindow";
 #pragma mark - Init
 
 -(id) init{
-    if(self = [self initWithWindowNibName:defaultNib]){
+    if(self = [super init]){
         
     }
     
@@ -84,6 +84,7 @@ static NSString* defaultNib = @"MainWindow";
 }
 
 #pragma mark - NSWindow
+
 
 
 #pragma mark - Methods

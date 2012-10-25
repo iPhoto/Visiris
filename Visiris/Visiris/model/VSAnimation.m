@@ -9,9 +9,10 @@
 #import "VSAnimation.h"
 
 #import "VSKeyFrame.h"
-
 #import "VSCoreServices.h"
 #import "VSAnimationCurve.h"
+
+#import "VSCoreServices.h"
 
 @interface VSAnimation()
 
