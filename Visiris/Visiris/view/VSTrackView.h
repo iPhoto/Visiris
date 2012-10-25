@@ -71,7 +71,7 @@
 @interface VSTrackView : NSView<NSDraggingDestination>
 
 /** Delegate that is informed about objects added to the the VSTrackView as defined in  VSTrackViewDelegate protocoll*/
-@property id<VSTrackViewDelegate> controllerDelegate;
+@property (weak) id<VSTrackViewDelegate> controllerDelegate;
 
 
 @end

@@ -71,6 +71,9 @@ static NSString* defaultNib = @"VSMainTimelineView";
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [self removeObservers];
+    
+    [self.trackViewControllers removeAllObjects];
+    self.trackViewControllers = nil;
 }
 
 -(void) removeObservers{
