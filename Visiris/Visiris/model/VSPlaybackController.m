@@ -26,7 +26,7 @@
 
 @property (weak) VSPreProcessor* preProcessor;
 
-@property (weak) VSTimeline* timeline;
+@property (strong) VSTimeline* timeline;
 
 @property (strong) VSTimelineObject*selectedTimelineObject;
 //todo
@@ -176,6 +176,7 @@
 
 -(void) dealloc{
     [self removeObserves];
+    self.timeline = nil;
 
 }
 

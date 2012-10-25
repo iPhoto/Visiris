@@ -85,7 +85,7 @@
 @property (weak) id<VSKeyFrameEditingDelegate> keyFrameSelectingDelegate;
 
 /** VSTimelineObject the animation-timeline is set up for */
-@property (weak) VSTimelineObject*timelineObject;
+@property (strong) VSTimelineObject*timelineObject;
 
 /** Height of the VSAnimationTrackViews the VSAnimationTimelineViewController sets up for its VSTimelineObject */
 @property float trackHeight;

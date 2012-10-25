@@ -205,7 +205,7 @@ typedef enum{
 
 
 /** Track the view VSTrackViewController is responsible for */
-@property (weak) VSTrack* track;
+@property (strong) VSTrack* track;
 
 /** Delegate to called according to VSTrackViewControllerDelegate*/
 @property (weak) id<VSTrackViewControllerDelegate> delegate;
