@@ -52,7 +52,7 @@ static NSString* defaultNib = @"VSPropertiesView";
         self.timelineObjectPropertiesViewController = [[VSTimelineObjectPropertiesViewController alloc] initWithDefaultNib];
         
         
-        [self initObservers];
+        
     }
     
     return self;
@@ -69,7 +69,7 @@ static NSString* defaultNib = @"VSPropertiesView";
     [self.view setAutoresizesSubviews:YES];
     
     
-    
+    [self initObservers];
 }
 
 -(void) initObservers{

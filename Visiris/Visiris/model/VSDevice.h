@@ -44,12 +44,12 @@
 @property (strong) NSMutableDictionary *parameters;
 
 /** indicates wheter the device is active or not.*/
-@property BOOL active;
+@property (assign) BOOL active;
 
 @property (strong) NSString *name;
 
-@property NSString *ID;
+@property (strong) NSString *ID;
 
-@property id<VSDeviceDelegate> delegate;
+@property (weak) id<VSDeviceDelegate> delegate;
 
 @end

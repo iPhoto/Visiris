@@ -77,6 +77,12 @@ static NSString* defaultNib = @"VSDeviceConfigurationViewController";
                             context:nil];
 }
 
+-(void) dealloc{
+    [self.deviceManager removeObserver:self forKeyPath:@"availableInputsRepresentation"];
+    
+    self.deviceManager = nil;
+}
+
 #pragma mark - NSObject
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{

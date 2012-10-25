@@ -38,8 +38,8 @@
 @property (strong) IBOutlet NSWindow                                        *createDeviceWindow;
 
 
-@property (strong) id<VSCreateDeviceViewControllerDataSource>                 dataSource;
-@property (strong) id<VSCreateDeviceViewControllerDelegate>                   delegate;
+@property (weak) id<VSCreateDeviceViewControllerDataSource>                 dataSource;
+@property (weak) id<VSCreateDeviceViewControllerDelegate>                   delegate;
 
 
 
