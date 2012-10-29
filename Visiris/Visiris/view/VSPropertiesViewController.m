@@ -97,6 +97,10 @@ static NSString* defaultNib = @"VSPropertiesView";
                                                object:nil];
 }
 
+-(void) dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 #pragma mark - Private Methods
 
 /**

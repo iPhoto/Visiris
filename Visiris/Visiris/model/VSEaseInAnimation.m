@@ -44,4 +44,5 @@
     return c * pow(x,self.strength) + d;
 }
 
+
 @end

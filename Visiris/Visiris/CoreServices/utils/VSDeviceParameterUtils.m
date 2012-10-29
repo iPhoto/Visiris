@@ -132,7 +132,6 @@ static NSMutableDictionary *deviceParameterTypeOfString;
     
     BOOL result = NO;
     
-    DDLogInfo(@"%d %d",deviceParameterValueType,parameterDataType);
     NSArray *validDeviceParameterDataTypes = [validDevicParameterTypesForParameterDataTypes objectForKey:[NSNumber numberWithInt:parameterDataType]];
     
     if(validDeviceParameterDataTypes){

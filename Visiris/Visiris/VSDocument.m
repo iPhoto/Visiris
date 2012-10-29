@@ -56,6 +56,9 @@
         self.projectItemRepresentationController = [[VSProjectItemRepresentationController alloc]initForProjectItemController:self.projectItemController];
         
         self.externalInputManager = [VSExternalInputManager sharedExternalInputManager];
+        
+        self.deviceManager = [[VSDeviceManager alloc] init];
+        self.deviceManager.deviceRegisitratingDelegate = self.externalInputManager;
     }
     return self;
 }
@@ -131,9 +134,6 @@
     self.preProcessor.delegate = self.playbackController;
     
     self.timeline.timelineObjectsDelegate = self.preProcessor;
-    
-    self.deviceManager = [[VSDeviceManager alloc] init];
-    self.deviceManager.deviceRegisitratingDelegate = self.externalInputManager;
     
 }
 

@@ -24,6 +24,7 @@
 #import "VSDevice.h"
 #import "VSTimelineObjectFactory.h"
 #import "VSAnimation.h"
+#import "VSDeviceParameterMapper.h"
 
 #import "VSCoreServices.h"
 
@@ -69,6 +70,11 @@
     [super encodeWithCoder:aCoder];
     [aCoder encodeObject:self.sourceObject.projectItem forKey:kProjectItem];
     [aCoder encodeObject:self.sourceObject.parameters forKey:kParameters];
+    [aCoder encodeObject:_devices forKey:kDevices];
+}
+
+-(id) awakeAfterUsingCoder:(NSCoder *)aDecoder{
+    return self;
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder{
@@ -84,6 +90,13 @@
         self.duration = base.duration;
         self.name = base.name;
         self.icon = [VSFileImageCreator createIconForTimelineObject:self.filePath];
+        
+        NSArray *storedDevices = [aDecoder decodeObjectForKey:kDevices];
+        
+        for(VSDevice *device in storedDevices){
+            [self addDevicesObject:device];
+        }
+        
         NSDictionary *parameters = [NSDictionary dictionaryWithDictionary:[aDecoder decodeObjectForKey:kParameters]];
         
         for(id key in parameters){
@@ -92,9 +105,21 @@
             if([object isKindOfClass:[VSParameter class]]){
                 VSParameter *archivedParameter = (VSParameter*) object;
                 VSParameter *parameter = [self.sourceObject.parameters objectForKey:key];
-
+                
                 parameter.animation = [archivedParameter.animation copy];
                 parameter.defaultValue = archivedParameter.defaultValue;
+                
+                parameter.deviceParameterMapper = archivedParameter.deviceParameterMapper;
+                
+                if(archivedParameter.connectedWithDeviceParameter){
+                    [parameter connectWithDeviceParameter:parameter.deviceParameterMapper.deviceParameter
+                                                 ofDevice:parameter.deviceParameterMapper.device
+                                     deviceParameterRange:parameter.deviceParameterMapper.deviceParameterRange
+                                        andParameterRange:parameter.deviceParameterMapper.parameterRange];
+                }
+                
+                parameter.connectedWithDeviceParameter = archivedParameter.connectedWithDeviceParameter;
+                
             }
             else if([object isKindOfClass:[NSDictionary class]]){
                 NSDictionary *archivedParameters = (NSDictionary*) parameters;
@@ -106,6 +131,17 @@
                     
                     parameter.animation = archivedParameter.animation;
                     parameter.defaultValue = archivedParameter.defaultValue;
+                    
+                    parameter.deviceParameterMapper = archivedParameter.deviceParameterMapper;
+                    
+                    if(archivedParameter.connectedWithDeviceParameter){
+                        [parameter connectWithDeviceParameter:parameter.deviceParameterMapper.deviceParameter
+                                                     ofDevice:parameter.deviceParameterMapper.device
+                                         deviceParameterRange:parameter.deviceParameterMapper.deviceParameterRange
+                                            andParameterRange:parameter.deviceParameterMapper.parameterRange];
+                    }
+                    
+                    parameter.connectedWithDeviceParameter = archivedParameter.connectedWithDeviceParameter;
                 }
             }
             

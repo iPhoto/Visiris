@@ -16,6 +16,8 @@
 @implementation VSDeviceParameter
 
 @synthesize dataType = _dataType;
+@synthesize name        = _name;
+@synthesize identifier = _identifier;
 
 -(id) initWithName:(NSString *)name ofType:(VSDeviceParameterDataype)dataType identifier:(NSString *)identifier fromValue:(float)fromValue toValue:(float)toValue{
     if(self = [self initWithName:name ofType:dataType identifier:identifier]){
@@ -28,9 +30,9 @@
 
 -(id) initWithName:(NSString *)name ofType:(VSDeviceParameterDataype)dataType identifier:(NSString *)identifier{
     if(self = [super init]){
-        self.name = name;
+        _name = name;
         self.hasRange = NO;
-        self.identifier = identifier;
+        _identifier = identifier;
         _dataType = dataType;
     }
     

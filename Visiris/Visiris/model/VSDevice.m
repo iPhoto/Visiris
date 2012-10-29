@@ -9,8 +9,14 @@
 #import "VSDevice.h"
 
 #import "VSDeviceParameter.h"
+#import "VSDeviceManager.h"
+#import "VSDocument.h"
 
 @implementation VSDevice
+
+#define kID @"ID"
+#define kName @"Name"
+#define kParameters @"Parameters"
 
 -(id) initWithID:(NSString*) UUID andName:(NSString*) name{
     if(self = [super init]){
@@ -28,6 +34,9 @@
     [self.parameters  setObject:object forKey:object.identifier];
 }
 
+-(VSDeviceParameter*) parameterIdentifiedBy:(NSString*) identifier{
+    return [self.parameters objectForKey:identifier];
+}
 
 -(VSDeviceParameter*)objectInParametersAtIndex:(NSUInteger)index{
     
@@ -40,6 +49,21 @@
     }
     
     return nil;
+}
+
+#pragma mark - 
+#pragma mark NSCoding Implementation
+
+-(void) encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeObject:self.ID forKey:kID];
+//    [aCoder encodeObject:self.name forKey:kName];
+//    [aCoder encodeObject:self.parameters forKey:kParameters];
+}
+
+-(id) initWithCoder:(NSCoder *)aDecoder{
+    NSString *deviceID = [aDecoder decodeObjectForKey:kID];
+    
+    return [VSDeviceManager storedDeviceForID:deviceID];
 }
 
 -(NSUInteger) indexOfObjectInParameters:(VSDeviceParameter*) parameter{

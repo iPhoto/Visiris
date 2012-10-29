@@ -26,7 +26,7 @@
  *
  * VsDevice manages the parameters of the Device and its settings
  */
-@interface VSDevice : NSObject
+@interface VSDevice : NSObject<NSCoding>
 
 -(id) initWithID:(NSString*) UUID andName:(NSString*) name;
 
@@ -35,6 +35,8 @@
 -(VSDeviceParameter*)objectInParametersAtIndex:(NSUInteger)index;
 
 -(NSUInteger) indexOfObjectInParameters:(VSDeviceParameter*) parameter;
+
+-(VSDeviceParameter*) parameterIdentifiedBy:(NSString*) identifier;
 
 -(BOOL) activateParameter:(VSDeviceParameter*) deviceParameter;
 

@@ -15,6 +15,7 @@
 
 -(BOOL) unregisterValue:(NSInvocation *)parameterInvocation forIdentifier:(NSString*) identifier;
 
+
 @end
 
 #import "VSExternalInputManager.h"
@@ -39,6 +40,8 @@
 
 @property (weak) VSExternalInputManager *externalInputManager;
 
++(VSDevice*) storedDeviceForID:(NSString*) idString;
+
 -(VSDeviceRepresentation*) objectInDeviceRepresentationsAtIndex:(NSUInteger)index;
 
 -(VSDevice*)objectInDevicesAtIndex:(NSUInteger)index;
@@ -52,5 +55,7 @@
 -(BOOL) createDeviceWithName:(NSString*) deviceName andParameters:(NSArray*) parameters;
 
 -(void) resetAvailableInputsRepresentation;
+
+-(VSDevice*) deviceIdentifiedByID:(NSString*) idString;
 
 @end

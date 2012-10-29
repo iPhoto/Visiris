@@ -25,6 +25,7 @@
 #define ATTRIBUTEDATATYPE @"dataType"
 #define ATTRIBUTEFROMVALUE @"fromValue"
 #define ATTRIBUTETOVALUE @"toValue"
+#define ATTRIBUTEDEVICEID @"deviceID"
 
 
 @interface VSDeviceManager()
@@ -35,16 +36,20 @@
 
 @implementation VSDeviceManager
 
+#define kDevices @"Devices"
+
 static NSString *devicesFolder;
 
 static NSURL* devicesFolderURL;
+
+static NSMutableArray *storedDevices;
 
 @synthesize devices             = _devices;
 @synthesize availableInputsRepresentation     = _availableInputsRepresentation;
 
 #pragma mark - Init
 
-+(void) initialize{
++(void) load{
     NSString *applicationSupportFolder = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     
     NSString *visirisFolderName = [[NSBundle mainBundle] objectForInfoDictionaryKey: (NSString*) kCFBundleNameKey];
@@ -57,6 +62,9 @@ static NSURL* devicesFolderURL;
                               withIntermediateDirectories:YES
                                                attributes:nil
                                                     error:&error];
+    
+    [self loadExisitingDevices];
+    
     
     if(error){
         DDLogInfo(@"%@",error);
@@ -78,13 +86,18 @@ static NSURL* devicesFolderURL;
                                        options:NSKeyValueObservingOptionPrior | NSKeyValueObservingOptionNew
                                        context:nil];
         
-        [self loadExisitingDevices];
+        [self initDevices];
     }
     
     return self;
 }
 
+
 #pragma mark - NSObject
+
+-(void) dealloc{
+    [self.externalInputManager removeObserver:self forKeyPath:@"availableInputs"];
+}
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     if([keyPath isEqualToString:@"availableInputs"]){
@@ -182,78 +195,76 @@ static NSURL* devicesFolderURL;
     
     //todo range abfragen
     for(VSExternalInputRepresentation *representation in parameters){
-        VSDeviceParameter *deviceParameter = [[VSDeviceParameter alloc] initWithName:representation.name
-                                                                              ofType:representation.externalInput.deviceParameterDataType
-                                                                          identifier:representation.identifier
-                                                                           fromValue:representation.range.min
-                                                                             toValue:representation.range.max];
+        
+        VSDeviceParameter *deviceParameter = nil;
+        if(representation.hasRange){
+            deviceParameter = [[VSDeviceParameter alloc] initWithName:representation.name
+                                                               ofType:representation.externalInput.deviceParameterDataType
+                                                           identifier:representation.identifier
+                                                            fromValue:representation.range.min
+                                                              toValue:representation.range.max];
+        }
+        else{
+            deviceParameter = [[VSDeviceParameter alloc] initWithName:representation.name
+                                                               ofType:representation.externalInput.deviceParameterDataType
+                                                           identifier:representation.identifier];
+        }
         
         [newDevice addParametersObject:deviceParameter];
     }
     
-    [self addDevicesObject:newDevice];
     
+    
+    
+    if( [self saveXMLOfDevice:newDevice]){
+        [self addDevicesObject:newDevice];
+        
+        return YES;
+    }
+    
+    return NO;
+    
+}
 
+-(BOOL) saveXMLOfDevice:(VSDevice*) device{
     NSXMLElement *root = (NSXMLElement *)[NSXMLNode elementWithName:ELEMENTNAMEDEVICE];
     NSXMLDocument *xmlDoc = [[NSXMLDocument alloc] initWithRootElement:root];
-
-    [root addAttribute:[NSXMLNode attributeWithName:ATTRIBUTENAME stringValue:deviceName]];
     
-    for(VSExternalInputRepresentation *representation in parameters)
+    [root addAttribute:[NSXMLNode attributeWithName:ATTRIBUTENAME stringValue:device.name]];
+    [root addAttribute:[NSXMLNode attributeWithName:ATTRIBUTEDEVICEID stringValue:device.ID]];
+    
+    for(VSDeviceParameter *parameter in [device.parameters allValues])
     {
         NSXMLElement *element = [NSXMLElement elementWithName:ELEMENTNAMEPARAMETER];
-        [element addAttribute:[NSXMLNode attributeWithName:ATTRIBUTENAME stringValue:representation.name]];
-        [element addAttribute:[NSXMLNode attributeWithName:ATTRIBUTEIDENTIFIER stringValue:representation.identifier]];
-        [element addAttribute:[NSXMLNode attributeWithName:ATTRIBUTEDATATYPE stringValue:[VSDeviceParameterUtils stringForDeviceParameterDataType:representation.externalInput.deviceParameterDataType]]];
+        [element addAttribute:[NSXMLNode attributeWithName:ATTRIBUTENAME stringValue:parameter.name]];
+        [element addAttribute:[NSXMLNode attributeWithName:ATTRIBUTEIDENTIFIER stringValue:parameter.identifier]];
+        [element addAttribute:[NSXMLNode attributeWithName:ATTRIBUTEDATATYPE stringValue:[VSDeviceParameterUtils stringForDeviceParameterDataType:parameter.dataType]]];
         
-        if ([representation hasRange])
+        if ([parameter hasRange])
         {
-            [element addAttribute:[NSXMLNode attributeWithName:ATTRIBUTEFROMVALUE stringValue:[NSString stringWithFormat:@"%f",representation.range.min]]];
-            [element addAttribute:[NSXMLNode attributeWithName:ATTRIBUTETOVALUE stringValue:[NSString stringWithFormat:@"%f",representation.range.max]]];
+            [element addAttribute:[NSXMLNode attributeWithName:ATTRIBUTEFROMVALUE stringValue:[NSString stringWithFormat:@"%f",parameter.range.min]]];
+            [element addAttribute:[NSXMLNode attributeWithName:ATTRIBUTETOVALUE stringValue:[NSString stringWithFormat:@"%f",parameter.range.max]]];
         }
         [root addChild:element];
     }
-
-    
-    
-    
-
-    
-//    NSXMLNode *node = [NSXMLNode commentWithStringValue:@"Hello world!"];
-//    NSXMLElement *element = [NSXMLElement commentWithStringValue:@"Hello world!"];
-//    
-//
-//    NSXMLNode *node = [[NSXMLNode alloc] initWithKind:NSXMLAttributeKind];
-//    
-//    [node setName:@"attributeName"];    
-//    
-//    [element addAttribute:node];
-    
-    
-//    NSXMLElement *element = [NSXMLElement attributeWithName:@"attributename" stringValue:@"stringvalue"];
-//    [root addChild:element];
-    
-    
-//    [root addChild:element];
-
     
     
     [xmlDoc setVersion:@"1.0"];
     [xmlDoc setCharacterEncoding:@"UTF-8"];
-
+    
     
     
     NSData *xmlData = [xmlDoc XMLDataWithOptions:NSXMLNodePrettyPrint];
     
-    NSString  *path = [NSString stringWithFormat:@"%@/%@.xml",devicesFolder,deviceName];
-                
+    NSString  *path = [NSString stringWithFormat:@"%@/%@_%@.xml",devicesFolder,device.name,device.ID];
+    
     if (![xmlData writeToFile:path atomically:YES]) {
+        return NO;
         DDLogError(@"Could not write document out...");
-    }    
+    }
     
     return YES;
 }
-
 
 #pragma mark - VSDeviceDelegate Implementation
 
@@ -279,11 +290,43 @@ static NSURL* devicesFolderURL;
     return result;
 }
 
+-(VSDevice*) deviceIdentifiedByID:(NSString*) idString{
+    NSUInteger indexOfDevice = [self.devices indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj isKindOfClass:[VSDevice class]]){
+            return [((VSDevice*) obj).ID isEqualToString:idString];
+        }
+        return NO;
+    }];
+    
+    if(indexOfDevice != NSNotFound){
+        return [self.devices objectAtIndex:indexOfDevice];
+    }
+    
+    return nil;
+}
 
-#pragma mark - Private Methods
+#pragma mark - Functions
 
 
--(void) loadExisitingDevices{
++(VSDevice*) storedDeviceForID:(NSString*) idString{
+    NSUInteger indexOfDevice = [storedDevices indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj isKindOfClass:[VSDevice class]]){
+            return [((VSDevice*) obj).ID isEqualToString:idString];
+        }
+        return NO;
+    }];
+    
+    if(indexOfDevice != NSNotFound){
+        return [storedDevices objectAtIndex:indexOfDevice];
+    }
+    
+    return nil;
+}
+
++(void) loadExisitingDevices{
+    
+    storedDevices = [[NSMutableArray alloc] init];
+    
     NSDirectoryEnumerator *dirEnum = [[NSFileManager defaultManager] enumeratorAtPath:devicesFolder];
     
     [dirEnum skipDescendants];
@@ -297,7 +340,7 @@ static NSURL* devicesFolderURL;
     }
 }
 
--(void) loadDeviceFromXMLFile:(NSString*) filePath{
++(void) loadDeviceFromXMLFile:(NSString*) filePath{
     NSError *error;
     
     NSURL *xmlURL = [NSURL fileURLWithPath:filePath];
@@ -307,8 +350,10 @@ static NSURL* devicesFolderURL;
     NSXMLElement *deviceNode = [xmlDocument rootElement];
     
     NSString *name = [[deviceNode attributeForName:ATTRIBUTENAME] stringValue];
+    NSString *guiid = [[deviceNode attributeForName:ATTRIBUTEDEVICEID] stringValue];
     
-    VSDevice *device = [[VSDevice alloc] initWithID:[VSMiscUtlis stringWithUUID] andName:name];
+    
+    VSDevice *device = [[VSDevice alloc] initWithID:guiid andName:name];
     
     NSArray *parameterNodes = [deviceNode elementsForName:ELEMENTNAMEPARAMETER];
     
@@ -359,8 +404,16 @@ static NSURL* devicesFolderURL;
         
     }
     
-    [self addDevicesObject:device];
+    [storedDevices addObject:device];
     
+}
+
+#pragma mark - Private Methods
+
+-(void) initDevices{
+    for(VSDevice *device in storedDevices){
+        [self addDevicesObject:device];
+    }
 }
 
 /**

@@ -22,13 +22,9 @@
 
 @property (assign) VSRange range;
 
-@property (strong) NSString *name;
+@property (strong, readonly) NSString *name;
 
-//@property (strong) NSString *oscPath;
-//
-//@property (assign) NSUInteger port;
-
-@property (strong) NSString *identifier;
+@property (strong, readonly) NSString *identifier;
 
 @property (strong) id currentValue;
 
