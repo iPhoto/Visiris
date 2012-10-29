@@ -24,7 +24,7 @@
 @synthesize audioPlayer = _audioPlayer;
 
 
-#pragma Mark - Init
+#pragma mark - Init
 
 - (id)initWithFilePath:(NSString *)path{
     if (self = [super init]) {

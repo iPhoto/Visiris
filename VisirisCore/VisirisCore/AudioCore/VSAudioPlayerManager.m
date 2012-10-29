@@ -32,7 +32,7 @@
 @synthesize referenceCountingPlayer         = _referenceCountingPlayer;
 
 
-#pragma Mark - Init
+#pragma mark - Init
 
 - (id)init{
     if (self = [super init]) {

@@ -17,14 +17,14 @@
 ///**
 // Return CGColor representation of the NSColor in the RGB color space
 // */
-@property (readonly) CGColorRef CGColor;
+//@property (readonly) CGColorRef CGColor;
 /**
  * Create new NSColor from a CGColorRef
  * @param aColor CGColorRef a NSColor will created for.
  * @retunr NSColor created corresponding the the given CGColorRef
  */
-+ (NSColor*)colorWithCGColor:(CGColorRef)aColor;
-
-- (CGColorRef)CGColor;
+//+ (NSColor*)colorWithCGColor:(CGColorRef)aColor;
+//
+//- (CGColorRef)CGColor;
 
 @end

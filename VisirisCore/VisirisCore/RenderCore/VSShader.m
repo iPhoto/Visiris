@@ -16,7 +16,7 @@
 @synthesize vertexShader = _vertexShader;
 
 
-#pragma Mark - Init
+#pragma mark - Init
 
 -(id)initWithName:(NSString *)name {
     if (self = [super init]) {

@@ -27,12 +27,8 @@
 - (void)startObservingInputs;
 - (void)stopObservingInputs;
 
-
-
-
 - (BOOL)startInputForAddress:(NSString *)address atPort:(unsigned int)port;
 - (BOOL)stopInputForAddress:(NSString *)address atPort:(unsigned int)port;
-
 
 #pragma mark - VSOSCClient Management
 - (BOOL)startOSCClientOnPort:(unsigned int)port;

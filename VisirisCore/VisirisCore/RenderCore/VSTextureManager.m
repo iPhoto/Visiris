@@ -31,7 +31,7 @@
 @synthesize textureToObjectID = _textureToObjectID;
 
 
-#pragma Mark - Init
+#pragma mark - Init
 
 -(id)init{
     if (self = [super init]) {

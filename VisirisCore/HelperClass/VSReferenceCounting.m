@@ -10,13 +10,16 @@
 
 @interface VSReferenceCounting()
 
+/** The Dictionary which holds the input objects as keys and the reference count is saved as an NSNumberobject */
 @property (strong) NSMutableDictionary     *referenceCountingToIDObject;
 
 @end
 
 
 @implementation VSReferenceCounting
-@synthesize referenceCountingToIDObject     = _referenceCountingToIDObject;
+
+
+#pragma mark - Init
 
 - (id)init{
     if (self = [super init]) {
@@ -25,7 +28,11 @@
     return self;
 }
 
-- (void)incrementReferenceOfKey:(id)key{
+
+#pragma mark - Methods
+
+- (void)incrementReferenceOfKey:(id)key
+{
     NSNumber *object = [self.referenceCountingToIDObject objectForKey:key];
     
     if (object) {
@@ -39,8 +46,8 @@
     }
 }
 
-//bool: yes means everything alright. No means the object reached zero.
-- (BOOL)decrementReferenceOfKey:(id)key{
+- (BOOL)decrementReferenceOfKey:(id)key
+{
     NSNumber *object = [self.referenceCountingToIDObject objectForKey:key];
 
     if (object == nil) {
@@ -68,7 +75,6 @@
     else
         return NO;
 }
-
 
 - (void)printDebugLog{
     for (id key in self.referenceCountingToIDObject) {

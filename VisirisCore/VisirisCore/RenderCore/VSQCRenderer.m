@@ -46,7 +46,7 @@
 @synthesize path                = _path;
 @synthesize texture             = _texture;
 
-#pragma Mark - Init
+#pragma mark - Init
 
 - (id)initWithPath:(NSString *)path withSize:(NSSize)size withContext:(NSOpenGLContext *)context withPixelformat:(NSOpenGLPixelFormat *)format withTrackID:(NSInteger)trackid withTexture:(NSNumber *)texture{
     if (self = [super init]) {

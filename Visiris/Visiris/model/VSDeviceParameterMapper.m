@@ -12,7 +12,8 @@
 
 @interface VSDeviceParameterMapper()
 
-@property (assign) float oldValue;
+@property (assign) float    oldValue;
+@property (strong) NSDate   *oldDate;
 
 @end
 
@@ -144,7 +145,7 @@
     
     y = k * x + d;
     
-    y = [self smoothValue:y withSmoothing:0.5f];
+    y = [self smoothValue:y withSmoothing:0.95f];
     
     return  y;
 }
@@ -153,15 +154,13 @@
 {
     float result;
     
-//    result = self.oldValue * intensity + value * (1.0f - intensity);
+    result = self.oldValue * smoothness + value * (1.0f - smoothness);
     
-    
-    
-    float k = (value - self.oldValue)/smoothness;
+//    hier wird die smoothness anders eingestellt
+//    float k = (value - self.oldValue)/smoothness;
+//    result = k * (-[self.oldDate timeIntervalSinceNow]) + self.oldValue;
+//    self.oldDate = [[NSDate alloc] init];
 
-    
-    result = k * (smoothness/10) + self.oldValue;
-    
     self.oldValue = result;
     return result;
 }

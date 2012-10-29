@@ -56,7 +56,7 @@
 @synthesize texture             = _texture;
 
 
-#pragma Mark - Init
+#pragma mark - Init
 
 - (id) initWithCompositionPath:(NSString*)path textureWidth:(unsigned)width textureHeight:(unsigned)height openGLContext:(NSOpenGLContext*)context withTexture:(NSNumber *)texture
 {    
