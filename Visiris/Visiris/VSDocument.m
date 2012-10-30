@@ -21,6 +21,7 @@
 #import "VSOutputController.h"
 #import "VSDeviceManager.h"
 #import "VSExternalInputManager.h"
+#import "VisirisCore/VSCoreReceptionist.h"
 
 #import "VSCoreServices.h"
 
@@ -109,8 +110,8 @@
  */
 -(void) initVisiris{
     
-    
-    self.preProcessor = [[VSPreProcessor alloc] initWithTimeline:self.timeline];
+    self.coreReceptionist = [[VSCoreReceptionist alloc] initWithSize:[VSProjectSettings sharedProjectSettings].frameSize];
+    self.preProcessor = [[VSPreProcessor alloc] initWithTimeline:self.timeline andCoreReceptionist:self.coreReceptionist];
     
     
     self.outputController = [[VSOutputController alloc] initWithOpenGLContext:self.preProcessor.renderCoreReceptionist.openGLContext];

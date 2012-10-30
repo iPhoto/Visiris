@@ -36,11 +36,11 @@
 
 #pragma mark - Init
 
--(id)initWithTimeline:(VSTimeline *)timeline{
+-(id)initWithTimeline:(VSTimeline *)timeline andCoreReceptionist:(VSCoreReceptionist*) coreReceptionist{
     if(self = [super init]){
         self.timeline = timeline;
         self.amountOfLastSentHandovers = 0;
-        self.renderCoreReceptionist = [[VSCoreReceptionist alloc] initWithSize:[VSProjectSettings sharedProjectSettings].frameSize];
+        self.renderCoreReceptionist = coreReceptionist;
     }
     return self;
 }

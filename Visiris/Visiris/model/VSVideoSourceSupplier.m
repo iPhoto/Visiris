@@ -99,7 +99,7 @@
  * @return The returnvalue is the updated VSImgae Object
  */
 -(VSImage *) getFrameForTimestamp:(double)aTimestamp withPlayMode:(VSPlaybackMode)playMode{
-    
+//    DDLogInfo(@"START********************************");
     //TODO this is sparta - no its slow!
     self.videoTimestamp= [self convertToVideoTimestamp:aTimestamp] / 1000.0;
 
@@ -131,6 +131,8 @@
         [self.movieReader cancelReading];
         self.vsImage.needsUpdate = YES;
     }
+//    DDLogInfo(@"END********************************");
+
     return self.vsImage;
 }
 

@@ -66,7 +66,7 @@
 }
 
 -(void) dealloc{
-    [self.device deactivateParameter:self.deviceParameter];
+
 }
 
 -(float)currentMappedParameterFloatValue{
@@ -147,8 +147,8 @@
     
     y = k * x + d;
     
-    //y = [self smoothValue:y withSmoothing:0.5f];
-    DDLogInfo(@"%f - %f",value, y);
+    y = [self smoothValue:y withSmoothing:0.5f];
+
     return  y;
 }
 

@@ -42,7 +42,7 @@
 @property (weak) VSTimeline *timeline;
 
 /** The VSCoreReceptionist is connection to to VSRenderCore. */
-@property (strong) VSCoreReceptionist *renderCoreReceptionist;
+@property (weak) VSCoreReceptionist *renderCoreReceptionist;
 
 /** Delegate the VSPreProcessor talks to when timelinObjects were added to or remove from the VSRenderCore as definend in VSPreProcessorDelegate protocoll */
 @property (weak) id<VSPreProcessorDelegate> delegate;
@@ -54,7 +54,7 @@
  * @param timeline VSTimeline the VSPreProcessor asks for the currently active VSTimelineObjects to send their VSCoreHandovers to VSCoreReceptionist
  * @return self
  */
--(id)initWithTimeline:(VSTimeline *)timeline;
+-(id)initWithTimeline:(VSTimeline *)timeline andCoreReceptionist:(VSCoreReceptionist*) coreReceptionist;
 
 #pragma mark - Methods
 
