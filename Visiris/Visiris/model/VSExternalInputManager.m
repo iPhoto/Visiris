@@ -17,7 +17,6 @@
 @interface VSExternalInputManager ()
 
 @property (strong) NSMutableDictionary                              *availableInputManager;
-@property (strong) NSMutableDictionary                              *availableParameter;
 @property (strong) NSMutableDictionary                              *currentActiveValues;
 
 
@@ -51,15 +50,12 @@ static VSExternalInputManager* sharedExternalInputManager = nil;
     if (self) {
         
         self.availableInputManager = [[NSMutableDictionary alloc] init];
-        
         self.currentActiveValues = [[NSMutableDictionary alloc] init];
-        
         _availableInputs = [[NSMutableArray alloc] init];
-        
         [self registerExternalInputManager];
         
         // TODO: move next line to somewhere usefull (start observing inputs after window did finish loading and app is running in idle mode)
-        [self startObservingInputs];
+        [self startSniffer];
     }
     
     return self;
@@ -68,25 +64,20 @@ static VSExternalInputManager* sharedExternalInputManager = nil;
 
 #pragma mark - Methods
 
-- (void)registerExternalInputManager
-{
-    [self registerInputManagerForClass:[VSOSCInputManager class] withIdentifier:[VSOSCInputManager identifier]];
-}
+
 
 - (BOOL)registerInputManagerForClass:(Class)inputManager withIdentifier:(NSString *)theInputManagerIdentifier
 {
     BOOL registeredInputManagerSuccessfully = NO;
     
-    if (theInputManagerIdentifier) {
-        
+    if (theInputManagerIdentifier)
+    {        
         id newInputManager = [[inputManager alloc] init];
         
-        if ( newInputManager && [newInputManager conformsToProtocol:@protocol(VSExternalInputProtocol)] ) {
-            
+        if ( newInputManager && [newInputManager conformsToProtocol:@protocol(VSExternalInputProtocol)] )
+        {
             [newInputManager setDelegate:self];
-            
             [self.availableInputManager setObject:newInputManager forKey:theInputManagerIdentifier];
-            
             registeredInputManagerSuccessfully = YES;
         }
     }
@@ -100,14 +91,14 @@ static VSExternalInputManager* sharedExternalInputManager = nil;
 {
     id <VSExternalInputProtocol> inputManager = nil;
     
-    if ( aInputManagerIdentifier ) {
+    if ( aInputManagerIdentifier ){
         inputManager = [self.availableInputManager objectForKey:aInputManagerIdentifier];
     }
     return inputManager;
 }
 
 
-- (void)startObservingInputs
+- (void)startSniffer
 {
     for (id<VSExternalInputProtocol> inputManager in [self.availableInputManager allValues]) {
         [inputManager startObservingInputs];
@@ -115,7 +106,7 @@ static VSExternalInputManager* sharedExternalInputManager = nil;
 }
 
 
-- (void)stopObservingInputs
+- (void)stopSniffer
 {
     for (id<VSExternalInputProtocol> inputManager in [self.availableInputManager allValues]) {
         
@@ -193,6 +184,12 @@ static VSExternalInputManager* sharedExternalInputManager = nil;
 
 -(void) inputManager:(id<VSExternalInputProtocol>)inputManager stoppedReceivingExternalInputs:(NSArray *)externalInputs{
     [self.availableInputs removeObjectsInArray:externalInputs];
+}
+
+/** Is for registering an ExternalInputmanager */
+- (void)registerExternalInputManager
+{
+    [self registerInputManagerForClass:[VSOSCInputManager class] withIdentifier:[VSOSCInputManager identifier]];
 }
 
 #pragma mark - Properties

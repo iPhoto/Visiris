@@ -16,7 +16,7 @@
 @synthesize attributePosition   = _attributePosition;
 
 
-#pragma Mark - Init
+#pragma mark - Init
 
 - (id)init{
     if (self = [super initWithName:@"background"]) {

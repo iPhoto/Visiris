@@ -10,6 +10,6 @@
 
 @interface VSWaveForm : NSObject
 
-+ (NSImage *)WaveformOfFile:(NSString *)path;
+//+ (NSImage *)WaveformOfFile:(NSString *)path;
 
 @end

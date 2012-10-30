@@ -8,7 +8,6 @@
 
 #import "VSTexture.h"
 #import <OpenGL/glu.h>
-#import "VSImageContext.h"
 #import "VSImage.h"
 
 @implementation VSTexture
@@ -17,7 +16,7 @@
 @synthesize timeLineObjectId = _timeLineObjectId;
 @synthesize trackId = _trackId;
 
-#pragma Mark - Init
+#pragma mark - Init
 
 -(id)initEmptyTextureWithSize:(NSSize)size trackId:(NSInteger) trackId{
     if(self = [super init]){

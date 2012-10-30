@@ -47,7 +47,7 @@
 @synthesize referenceCountingObjects    = _referenceCountingObjects;
 
 
-#pragma Mark - Init
+#pragma mark - Init
 
 - (id)initWithContext:(NSOpenGLContext *)context{
     if (self = [super init]) {

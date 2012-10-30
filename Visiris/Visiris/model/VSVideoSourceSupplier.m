@@ -58,7 +58,7 @@
 @synthesize videoTimestamp  = _videoTimestamp;
 
 
-#pragma Mark - Init
+#pragma mark - Init
 
 /**
  * Initialization of the Timelineobject

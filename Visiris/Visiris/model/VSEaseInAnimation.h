@@ -8,6 +8,10 @@
 
 #import "VSAnimationCurve.h"
 
+
+/**
+ * VSEaseInAnimation 
+ */
 @interface VSEaseInAnimation : VSAnimationCurve
 
 @end
