@@ -132,6 +132,7 @@
 
 - (float)mapValue:(float)value fromRange:(VSRange)inRange toRange:(VSRange)outRange{
     
+    
     float y, k, deltaY, deltaX, d, x;
     
     x = value - inRange.min;
@@ -145,8 +146,8 @@
     
     y = k * x + d;
     
-    y = [self smoothValue:y withSmoothing:0.5f];
-    
+    //y = [self smoothValue:y withSmoothing:0.5f];
+    DDLogInfo(@"%f - %f",value, y);
     return  y;
 }
 

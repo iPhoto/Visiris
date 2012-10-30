@@ -142,7 +142,8 @@ static VSExternalInputManager* sharedExternalInputManager = nil;
         
         
     }
-    DDLogInfo(@"availableParam: %@",self.currentActiveValues);
+    DDLogInfo(@"registered Parameter with Identifier: %@",identifier);
+    DDLogInfo(@"currently available Parametes: %@",self.currentActiveValues);
     return isValueForAddressOnPortRegistered;
 }
 
@@ -168,7 +169,8 @@ static VSExternalInputManager* sharedExternalInputManager = nil;
         isValueForAddressOnPortUnregistered = [inputManager stopInputForAddress:parameterAddress atPort:(unsigned int)port];
     }
     
-    DDLogInfo(@"availableParam: %@",self.currentActiveValues);
+    DDLogInfo(@"unregistered Parameter with Identifier: %@",identifier);
+    DDLogInfo(@"currently available Parametes: %@",self.currentActiveValues);
     
     return isValueForAddressOnPortUnregistered;
 }
