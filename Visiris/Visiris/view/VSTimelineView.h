@@ -19,12 +19,12 @@
 @interface VSTimelineView : NSView
 
 /** Delegate confirming to VSTimelineViewDelegate */
-@property (weak) id<VSViewResizingDelegate> resizingDelegate;
+@property (strong) id<VSViewResizingDelegate> resizingDelegate;
 
 /** Delegate VSTimelineView informs about mouseEvents as definined in VSViewMouseEventsDelegate-Protocoll */
-@property (weak) id<VSViewMouseEventsDelegate> mouseMoveDelegate;
+@property (strong) id<VSViewMouseEventsDelegate> mouseMoveDelegate;
 
 /** Delegate VSTimelineView informs about keyDownEvens as definend in VSViewKeyDownDelegate-Protocoll */
-@property (weak) id<VSViewKeyDownDelegate> keyDownDelegate;
+@property (strong) id<VSViewKeyDownDelegate> keyDownDelegate;
 
 @end
