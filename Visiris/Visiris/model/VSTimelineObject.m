@@ -122,7 +122,7 @@
                 
             }
             else if([object isKindOfClass:[NSDictionary class]]){
-                NSDictionary *archivedParameters = (NSDictionary*) parameters;
+                NSDictionary *archivedParameters = (NSDictionary*) object;
                 NSDictionary *storedParameters = [self.sourceObject.parameters objectForKey:key];
                 
                 for(id key in storedParameters){

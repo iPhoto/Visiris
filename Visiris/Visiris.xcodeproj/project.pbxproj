@@ -64,6 +64,7 @@
 		5B12792A15C13A500026AAFD /* NSImage+QuickLook.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B12792815C13A500026AAFD /* NSImage+QuickLook.m */; };
 		5B12792C15C13CAD0026AAFD /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B12792B15C13CAD0026AAFD /* QuickLook.framework */; };
 		5B1994C01627368C006E9D9E /* VSMainWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B1994BF1627368C006E9D9E /* VSMainWindow.m */; };
+		5B1AA5F5163FCD98007A22BD /* VisirisCore.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 5B4C602816383DB800B56D2A /* VisirisCore.framework */; };
 		5B250992161088BE003B715F /* VSFrameUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B250991161088BE003B715F /* VSFrameUtils.m */; };
 		5B2A59D31578AF4E003938AB /* VSDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2A59D21578AF4E003938AB /* VSDocumentController.m */; };
 		5B35BF161577A49C009911EC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35BF151577A49C009911EC /* Cocoa.framework */; };
@@ -220,6 +221,7 @@
 			files = (
 				5BE5179A1614A1220096DFB3 /* VVBasics.framework in Copy Files */,
 				5BE5179B1614A1220096DFB3 /* VVMIDI.framework in Copy Files */,
+				5B1AA5F5163FCD98007A22BD /* VisirisCore.framework in Copy Files */,
 				5BE5179C1614A1220096DFB3 /* VVOSC.framework in Copy Files */,
 			);
 			name = "Copy Files";
@@ -1857,7 +1859,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -1878,7 +1880,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx10.7;
 			};
 			name = Release;
 		};
@@ -1905,7 +1907,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1933,7 +1935,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.7;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

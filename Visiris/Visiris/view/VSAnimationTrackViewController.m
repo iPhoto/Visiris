@@ -135,6 +135,8 @@
     [self.parameter removeObserver:self
                         forKeyPath:@"connectedWithDeviceParameter"];
     
+    self.parameter = nil;
+    
 }
 
 #pragma mark - Methods

@@ -69,8 +69,7 @@
     return @"";
 }
 
-- (void)updateCurrentValue:(id)value
-{
+- (void)updateCurrentValue:(id)value{
     self.currentValue = value;
 }
 
