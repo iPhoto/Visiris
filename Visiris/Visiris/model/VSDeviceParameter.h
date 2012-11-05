@@ -14,8 +14,8 @@
 
 
 
-extern float const SMOOTHINGRANGEMIN;
-extern float const SMOOTHINGRANGEMAX;
+extern float const SMOOTHINGRANGEMINPRESENTATION;
+extern float const SMOOTHINGRANGEMAXPRESENTATION;
 
 @interface VSDeviceParameter : NSObject
 

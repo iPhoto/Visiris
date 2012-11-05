@@ -12,6 +12,10 @@
 @class VSDeviceParameter;
 @class VSDevice;
 
+extern float const SMOOTHINGRANGEMIN;
+extern float const SMOOTHINGRANGEMAX;
+
+
 /**
  * The VSDeviceParameterMapper is the connector between parameter and device
  */
@@ -24,8 +28,7 @@
 @property (assign) BOOL hasRanges;
 @property (assign) float smoothing;
 
-
-- (id)initWithDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device deviceParameterRange:(VSRange) deviceParameterRange andParameterRange:(VSRange) parameterRange;
+- (id)initWithDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device deviceParameterRange:(VSRange) deviceParameterRange parameterRange:(VSRange) parameterRange andSmoothing:(float) smoothing;
 
 - (id)initWithDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device andSmoothing:(float)smoothing; 
 

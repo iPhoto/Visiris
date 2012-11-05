@@ -12,8 +12,8 @@
 
 #import "VSCoreServices.h"
 
-float const SMOOTHINGRANGEMIN = 0.75f;
-float const SMOOTHINGRANGEMAX = 0.98f;
+float const SMOOTHINGRANGEMINPRESENTATION = 0.0;
+float const SMOOTHINGRANGEMAXPRESENTATION = 1.0;
 
 @implementation VSDeviceParameter
 
@@ -86,7 +86,7 @@ float const SMOOTHINGRANGEMAX = 0.98f;
 
 - (VSRange)smoothingRange
 {
-    return VSMakeRange(SMOOTHINGRANGEMIN, SMOOTHINGRANGEMAX);
+    return VSMakeRange(SMOOTHINGRANGEMINPRESENTATION, SMOOTHINGRANGEMAXPRESENTATION);
 }
 
 @end
