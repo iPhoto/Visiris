@@ -13,18 +13,18 @@
  NSColor category for converting NSColor<-->CGColor
  */
 
-@interface NSColor (GCColorSupport)
+//@interface NSColor (GCColorSupport)
 /**
  Return CGColor representation of the NSColor in the RGB color space
  */
-@property (readonly) CGColorRef CGColor;
+//@property (readonly) CGColorRef CGColor;
 /**
  * Create new NSColor from a CGColorRef
  * @param aColor CGColorRef a NSColor will created for.
  * @retunr NSColor created corresponding the the given CGColorRef
  */
-+ (NSColor*)colorWithCGColor:(CGColorRef)aColor;
+//+ (NSColor*)colorWithCGColor:(CGColorRef)aColor;
+//
+//- (CGColorRef)CGColor;
 
-- (CGColorRef)CGColor;
-
-@end
+//@end
