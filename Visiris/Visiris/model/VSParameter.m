@@ -298,8 +298,7 @@
 
 #pragma mark Devices
 
--(BOOL) connectWithDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device deviceParameterRange:(VSRange)deviceParameterRange andParameterRange:(VSRange)parameterRange{
-    DDLogInfo(@"%@ - %@",self.deviceParameterMapper.device, device);
+-(BOOL) connectWithDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device deviceParameterRange:(VSRange)deviceParameterRange parameterRange:(VSRange)parameterRange andSmoothing:(float)smoothing{
     if(![self.deviceParameterMapper.deviceParameter isEqual:deviceParameter] || ![self.deviceParameterMapper.device isEqualTo:device]){
         
         [self.deviceParameterMapper deactivateDeviceParameter];

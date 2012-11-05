@@ -16,7 +16,10 @@
 
 #import "VSCoreServices.h"
 
-@interface VSDeviceParameterConnectionViewController ()
+@interface VSDeviceParameterConnectionViewController (){
+    float currentSmoothingValue;
+}
+
 
 @property (weak) VSDevice *currentlySelectedDevice;
 
@@ -28,6 +31,9 @@
 
 @synthesize currentlySelectedDeviceParameter    = _currentlySelectedDeviceParameter;
 @synthesize currentlySelectedDevice             = _currentlySelectedDevice;
+
+#pragma mark -
+#pragma mark Init
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -50,7 +56,8 @@
     
 }
 
-#pragma mark - Methods
+#pragma mark -
+#pragma mark Methods
 
 -(void) showConnectionDialogFor:(VSParameter*) parameter andAvailableDevices:(NSArray*) availableDevices{
     self.parameter = parameter;
@@ -82,11 +89,10 @@
     }
     
     [self.devicePopUpButton selectItemAtIndex:selectedDeviceIndex];
-    
-    DDLogInfo(@"select: %ld",selectedDeviceIndex);
 }
 
-#pragma mark - IBAction
+#pragma mark -
+#pragma mark IBAction
 
 - (IBAction)didClickToggleConnection:(NSButton *)sender {
     
@@ -101,9 +107,7 @@
 }
 
 - (IBAction)didChangeDevicePopUpButton:(NSPopUpButton *)sender {
-    DDLogInfo(@"b: %@",self.currentlySelectedDevice);
     self.currentlySelectedDevice = [self.availableDevices objectAtIndex:[sender indexOfSelectedItem]];
-    DDLogInfo(@"a: %@",self.currentlySelectedDevice);
     
     if(self.parameter.connectedWithDeviceParameter){
         [self connectParameterWithDevice];
@@ -119,7 +123,19 @@
     }
 }
 
-#pragma mark - Private Methods
+- (IBAction)smoothingValueDidChange:(id)sender {
+    if([sender respondsToSelector:@selector(floatValue)]){
+        currentSmoothingValue = [sender floatValue];
+        
+        [self.smoothingSlider setFloatValue:currentSmoothingValue];
+        [self.smoothingTextField setFloatValue:currentSmoothingValue];
+        
+        [self connectParameterWithDevice];
+    }
+}
+
+#pragma mark -
+#pragma mark Private Methods
 
 -(void) connectParameterWithDevice{
     [self.parameter connectWithDeviceParameter:self.currentlySelectedDeviceParameter
@@ -230,7 +246,8 @@
     self.currentlySelectedDeviceParameter = [self.currentlySelectedDevice objectInParametersAtIndex:indexToSelect];
 }
 
-#pragma mark - Properties
+#pragma mark - 
+#pragma mark Properties
 
 -(void) setCurrentlySelectedDevice:(VSDevice *)currentlySelectedDevice{
     if(![currentlySelectedDevice isEqualTo:_currentlySelectedDevice]){
