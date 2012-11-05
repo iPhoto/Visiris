@@ -89,7 +89,7 @@
 
     VSDevice *device = [aDecoder decodeObjectForKey:kDevice];
     NSString *deviceParameterIdentifier = [aDecoder decodeObjectForKey:kDeviceParameterIdentifier];
-    float smoothing = [aDecoder decodeFloatForKey:kSmoothing];
+    self.smoothing = [aDecoder decodeFloatForKey:kSmoothing];
     
     VSDeviceParameter *deviceParameter = [device parameterIdentifiedBy:deviceParameterIdentifier];
     
