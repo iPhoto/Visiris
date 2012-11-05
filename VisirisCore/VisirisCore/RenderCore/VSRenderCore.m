@@ -137,6 +137,9 @@
         self.transformTextureManager = [[VSTransformTextureManager alloc] initWithContext:self.openGLContext];
         
         self.oldSize = size;
+        [self combineTexture:1 with:1 andLayermode:0];
+//        glFlush();
+
     }
     return self;
 }
@@ -196,8 +199,8 @@
         }
     }
         
-    [[self openGLContext] update];
-    glFinish();
+//    [[self openGLContext] update];
+//    glFinish();
 
 	CGLUnlockContext([[self openGLContext] CGLContextObj]);
     
@@ -316,18 +319,20 @@
     glEnableVertexAttribArray(self.layerShader.attributePosition);
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.element_buffer);
-    
+        
     //HERE IS THE PROBLEM
-    NSDate *date1 = [NSDate date];
+//    NSDate *date1 = [NSDate date];
     glDrawElements(GL_TRIANGLE_STRIP,  /* mode */
                    4,                  /* count */
                    GL_UNSIGNED_SHORT,  /* type */
                    (void*)0            /* element array buffer offset */
                    );
-    NSDate *date2 = [NSDate date];
+//    NSDate *date2 = [NSDate date];
 
-    
-//    NSLog(@"timeDiff: %f", [date2 timeIntervalSinceDate:date1]) ;
+//    float timeDiff = [date2 timeIntervalSinceDate:date1];
+//    if (timeDiff > 0.0001) {
+//        NSLog(@"BUUUUUMMMMMMMMM: %f", timeDiff) ;
+//    }
     
     glDisableVertexAttribArray(self.layerShader.attributePosition);
     
