@@ -14,7 +14,9 @@ float const SMOOTHINGRANGEMIN = 0.7;
 float const SMOOTHINGRANGEMAX = 0.98;
 
 
-@interface VSDeviceParameterMapper()
+@interface VSDeviceParameterMapper(){
+    BOOL active;
+}
 
 @property (assign) float    oldValue;
 @property (strong) NSDate   *oldDate;
