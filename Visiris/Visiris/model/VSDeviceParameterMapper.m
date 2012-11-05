@@ -27,12 +27,12 @@
 #define kHasRange @"HasRange"
 #define kSmoothing @"Smoothing"
 
--(id) initWithDeviceParameter:(VSDeviceParameter *)deviceParameter ofDevice:(VSDevice *)device deviceParameterRange:(VSRange)deviceParameterRange andParameterRange:(VSRange)parameterRange{
+-(id) initWithDeviceParameter:(VSDeviceParameter *)deviceParameter ofDevice:(VSDevice *)device deviceParameterRange:(VSRange)deviceParameterRange parameterRange:(VSRange)parameterRange andSmoothing:(float)smoothing{
     
-    if(self = [self initWithDeviceParameter:deviceParameter ofDevice:device]){
+    if(self = [self initWithDeviceParameter:deviceParameter ofDevice:device andSmoothing:smoothing]){
         self.parameterRange = parameterRange;
         self.deviceParameterRange = deviceParameterRange;
-        
+        self.smoothing = smoothing;
         self.hasRanges = YES;
         self.oldValue = 0.0f;
     }
@@ -40,12 +40,13 @@
     return self;
 }
 
--(id) initWithDeviceParameter:(VSDeviceParameter *)deviceParameter ofDevice:(VSDevice *)device{
+-(id) initWithDeviceParameter:(VSDeviceParameter *)deviceParameter ofDevice:(VSDevice *)device andSmoothing:(float)smoothing{
     
     if(self = [self init]){
         self.device = device;
         self.deviceParameter = deviceParameter;
         self.hasRanges = NO;
+        self.smoothing = smoothing;
     }
     
     return self;
@@ -56,11 +57,15 @@
     
     if(self.hasRanges){
         copy = [[VSDeviceParameterMapper allocWithZone:zone] initWithDeviceParameter:self.deviceParameter
-                                                                            ofDevice:self.device];
+                                                                            ofDevice:self.device
+                                                                        andSmoothing:self.smoothing];
     }
     else{
         copy = [[VSDeviceParameterMapper allocWithZone:zone] initWithDeviceParameter:self.deviceParameter
-                                                                            ofDevice:self.device  deviceParameterRange:self.deviceParameterRange andParameterRange:self.parameterRange];
+                                                                            ofDevice:self.device
+                                                                deviceParameterRange:self.deviceParameterRange
+                                                                      parameterRange:self.parameterRange
+                                                                        andSmoothing:self.smoothing];
     }
     
     return copy;
@@ -112,11 +117,13 @@
         return [self initWithDeviceParameter:deviceParameter
                                     ofDevice:device
                         deviceParameterRange:parameterDeviceRange
-                           andParameterRange:parameterRange];
+                              parameterRange:parameterRange
+                                andSmoothing:smoothing];
     }
     else{
         return [self initWithDeviceParameter:deviceParameter
-                                    ofDevice:device];
+                                    ofDevice:device
+                                andSmoothing:smoothing];
     }
 }
 
