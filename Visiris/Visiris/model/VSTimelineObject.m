@@ -115,7 +115,8 @@
                     [parameter connectWithDeviceParameter:parameter.deviceParameterMapper.deviceParameter
                                                  ofDevice:parameter.deviceParameterMapper.device
                                      deviceParameterRange:parameter.deviceParameterMapper.deviceParameterRange
-                                        andParameterRange:parameter.deviceParameterMapper.parameterRange];
+                                           parameterRange:parameter.deviceParameterMapper.deviceParameterRange
+                                             andSmoothing:parameter.deviceParameterMapper.smoothing];
                 }
                 
                 parameter.connectedWithDeviceParameter = archivedParameter.connectedWithDeviceParameter;
@@ -137,8 +138,8 @@
                     if(archivedParameter.connectedWithDeviceParameter){
                         [parameter connectWithDeviceParameter:parameter.deviceParameterMapper.deviceParameter
                                                      ofDevice:parameter.deviceParameterMapper.device
-                                         deviceParameterRange:parameter.deviceParameterMapper.deviceParameterRange
-                                            andParameterRange:parameter.deviceParameterMapper.parameterRange];
+                                          deviceParameterRange:parameter.deviceParameterMapper.deviceParameterRange parameterRange:parameter.deviceParameterMapper.parameterRange
+                                                  andSmoothing:parameter.deviceParameterMapper.smoothing];
                     }
                     
                     parameter.connectedWithDeviceParameter = archivedParameter.connectedWithDeviceParameter;

@@ -68,14 +68,24 @@
     
     self.currentlySelectedDevice = [self.availableDevices objectAtIndex:0];
     
-    if(self.parameter.connectedWithDeviceParameter){
-        self.currentlySelectedDevice = self.parameter.deviceConnectedWith;
-        selectedDeviceIndex = [self.availableDevices indexOfObject:self.currentlySelectedDevice];
-        selectedDeviceParameterIndex = [self.currentlySelectedDevice indexOfObjectInParameters:self.parameter.deviceParamterConnectedWith];
+    if(self.parameter.deviceParameterMapper){
+        
+        if(self.parameter.connectedWithDeviceParameter){
+            self.currentlySelectedDevice = self.parameter.deviceConnectedWith;
+            selectedDeviceIndex = [self.availableDevices indexOfObject:self.currentlySelectedDevice];
+            selectedDeviceParameterIndex = [self.currentlySelectedDevice indexOfObjectInParameters:self.parameter.deviceParamterConnectedWith];
+            
+        }
+        
+        currentSmoothingValue = self.parameter.deviceParameterMapper.smoothing;
     }
     
     [self setRanges];
     [self setToggleButtonStringValue];
+    
+    
+    [self.smoothingSlider setFloatValue:currentSmoothingValue];
+    [self.smoothingTextField setFloatValue:currentSmoothingValue];
     
     NSInteger i = 0;
     
@@ -141,7 +151,8 @@
     [self.parameter connectWithDeviceParameter:self.currentlySelectedDeviceParameter
                                       ofDevice:self.currentlySelectedDevice
                           deviceParameterRange:[self deviceParameterRange]
-                             andParameterRange:[self parameterRange]];
+                                parameterRange:[self parameterRange]
+                                  andSmoothing:currentSmoothingValue];
 }
 
 -(VSRange) deviceParameterRange{
@@ -246,7 +257,7 @@
     self.currentlySelectedDeviceParameter = [self.currentlySelectedDevice objectInParametersAtIndex:indexToSelect];
 }
 
-#pragma mark - 
+#pragma mark -
 #pragma mark Properties
 
 -(void) setCurrentlySelectedDevice:(VSDevice *)currentlySelectedDevice{

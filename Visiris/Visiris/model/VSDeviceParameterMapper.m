@@ -14,7 +14,7 @@
 
 @property (assign) float    oldValue;
 @property (strong) NSDate   *oldDate;
-//@property (assign) BOOL     old
+
 
 @end
 
@@ -36,7 +36,7 @@
         self.hasRanges = YES;
         self.oldValue = 0.0f;
         self.smoothingRange = VSMakeRange(0.5f, 1.0f);
-//        self.
+
     }
     
     return self;
