@@ -12,6 +12,10 @@
 @class VSDeviceParameter;
 @class VSDevice;
 
+extern float const SMOOTHINGRANGEMIN;
+extern float const SMOOTHINGRANGEMAX;
+
+
 /**
  * The VSDeviceParameterMapper is the connector between parameter and device
  */

@@ -326,8 +326,8 @@
                    );
     NSDate *date2 = [NSDate date];
 
-//    date2
-//    NSLog(@"timeDiff: %@", [date2 timeIntervalSinceReferenceDate:date1]) ;
+    
+//    NSLog(@"timeDiff: %f", [date2 timeIntervalSinceDate:date1]) ;
     
     glDisableVertexAttribArray(self.layerShader.attributePosition);
     

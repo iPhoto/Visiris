@@ -273,6 +273,10 @@
     return [self.devices objectsAtIndexes:indexes];
 }
 
+- (void)dealloc{
+    self.sourceObject = nil;
+}
+
 #pragma mark - Properties
 
 -(double) sourceDuration{

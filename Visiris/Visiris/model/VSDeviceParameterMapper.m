@@ -10,6 +10,10 @@
 #import "VSDeviceParameter.h"
 #import "VSDevice.h"
 
+float const SMOOTHINGRANGEMIN = 0.7;
+float const SMOOTHINGRANGEMAX = 0.98;
+
+
 @interface VSDeviceParameterMapper(){
     BOOL active;
 }
@@ -20,6 +24,7 @@
 @end
 
 @implementation VSDeviceParameterMapper
+@synthesize smoothing = _smoothing;
 
 #define kDeviceParameter @"DeviceParamete"
 #define kDevice @"Device"
@@ -166,7 +171,6 @@
 
 - (float)mapValue:(float)value fromRange:(VSRange)inRange toRange:(VSRange)outRange{
     
-    
     float y, k, deltaY, deltaX, d, x;
     
     x = value - inRange.min;
@@ -179,9 +183,12 @@
     k = deltaY/deltaX;
     
     y = k * x + d;
+
+    if (self.smoothing != SMOOTHINGRANGEMIN) {
+        y = [self smoothValue:y withSmoothing:self.smoothing];
+    }
     
-    y = [self smoothValue:y withSmoothing:0.98f];
-    
+
     return  y;
 }
 
@@ -189,6 +196,7 @@
 {
     float result;
     
+        
     result = self.oldValue * smoothness + value * (1.0f - smoothness);
     
     //    hier wird die smoothness anders eingestellt
@@ -198,6 +206,31 @@
     
     self.oldValue = result;
     return result;
+}
+
+- (float)smoothing
+{
+    return _smoothing;
+}
+
+- (void)setSmoothing:(float)smoothing
+{    
+    float k, deltaY, deltaX, d, x;
+    
+    //todo this is called every time. should be changed to a temporary property and only be altered when the somoothingslider is dragged
+    VSRange inRange = [self.deviceParameter smoothingRange];
+    VSRange outRange = VSMakeRange(SMOOTHINGRANGEMIN, SMOOTHINGRANGEMAX);
+    
+    x = smoothing - inRange.min;
+    
+    d = outRange.min;
+    
+    deltaY = outRange.max - outRange.min;
+    deltaX = inRange.max - inRange.min;
+    
+    k = deltaY/deltaX;
+    
+    _smoothing = k * x + d;
 }
 
 @end
