@@ -305,7 +305,10 @@
         
         self.deviceParameterMapper = [[VSDeviceParameterMapper alloc] initWithDeviceParameter:deviceParameter
                                                                                      ofDevice:device deviceParameterRange:deviceParameterRange
-                                                                            andParameterRange:parameterRange];
+                                                                               parameterRange:parameterRange
+                                                                                 andSmoothing:smoothing];
+
+                                                                        
         
         self.connectedWithDeviceParameter = [self.deviceParameterMapper activateDeviceParameter];
         

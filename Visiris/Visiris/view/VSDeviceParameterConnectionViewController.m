@@ -50,10 +50,7 @@
 }
 
 - (IBAction)rangeValueDidChange:(id)sender {
-    if(self.parameter.connectedWithDeviceParameter){
-        [self connectParameterWithDevice];
-    }
-    
+    [self deviceParameterConnectionValuesDidChange];
 }
 
 #pragma mark -
@@ -117,18 +114,14 @@
 - (IBAction)didChangeDevicePopUpButton:(NSPopUpButton *)sender {
     self.currentlySelectedDevice = [self.availableDevices objectAtIndex:[sender indexOfSelectedItem]];
     
-    if(self.parameter.connectedWithDeviceParameter){
-        [self connectParameterWithDevice];
-    }
+    [self deviceParameterConnectionValuesDidChange];
 }
 
 - (IBAction)didChangeDeviceParameterPopUpButton:(NSPopUpButton *)sender {
     
     self.currentlySelectedDeviceParameter = [self.currentlySelectedDevice objectInParametersAtIndex:[sender indexOfSelectedItem]];
     
-    if(self.parameter.connectedWithDeviceParameter){
-        [self connectParameterWithDevice];
-    }
+    [self deviceParameterConnectionValuesDidChange];
 }
 
 - (IBAction)smoothingValueDidChange:(id)sender {
@@ -138,12 +131,18 @@
         [self.smoothingSlider setFloatValue:currentSmoothingValue];
         [self.smoothingTextField setFloatValue:currentSmoothingValue];
         
-        [self connectParameterWithDevice];
+        [self deviceParameterConnectionValuesDidChange];
     }
 }
 
 #pragma mark -
 #pragma mark Private Methods
+
+-(void) deviceParameterConnectionValuesDidChange{
+    if(self.parameter.connectedWithDeviceParameter){
+        [self connectParameterWithDevice];
+    }
+}
 
 -(void) connectParameterWithDevice{
     [self.parameter connectWithDeviceParameter:self.currentlySelectedDeviceParameter
