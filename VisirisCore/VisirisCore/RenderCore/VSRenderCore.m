@@ -316,11 +316,18 @@
     glEnableVertexAttribArray(self.layerShader.attributePosition);
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.element_buffer);
+    
+    //HERE IS THE PROBLEM
+    NSDate *date1 = [NSDate date];
     glDrawElements(GL_TRIANGLE_STRIP,  /* mode */
                    4,                  /* count */
                    GL_UNSIGNED_SHORT,  /* type */
                    (void*)0            /* element array buffer offset */
                    );
+    NSDate *date2 = [NSDate date];
+
+//    date2
+//    NSLog(@"timeDiff: %@", [date2 timeIntervalSinceReferenceDate:date1]) ;
     
     glDisableVertexAttribArray(self.layerShader.attributePosition);
     
