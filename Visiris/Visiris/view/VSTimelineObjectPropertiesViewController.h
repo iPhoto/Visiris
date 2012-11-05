@@ -29,13 +29,18 @@
 #pragma mark - Init
 /** ScrollView's documentView */
 
-@property (weak) IBOutlet NSSplitView *splitView;
+@property (weak) IBOutlet NSSplitView *parametersHolderSplitView;
 
 /** Wrapper for the VSParameterViews*/
 @property (weak) IBOutlet NSView *parametersHolder;
 
 /** Wrapper for the view of the VSAnimationTimelineViewController */
 @property (weak) IBOutlet NSView *animationTimelineHolder;
+
+- (IBAction)toogleParameterVisibility:(NSButton *)sender;
+- (IBAction)toogleDevicesVisibility:(NSButton *)sender;
+
+@property (weak) IBOutlet NSView *deviceHolderView;
 
 /** label for the name of VSTimelineObject */
 @property (strong) NSTextField *nameLabel;
