@@ -77,15 +77,13 @@
             
         }
         
-        currentSmoothingValue = self.parameter.deviceParameterMapper.smoothing;
+        
     }
     
     [self setRanges];
     [self setToggleButtonStringValue];
+    [self setSmoothing];
     
-    
-    [self.smoothingSlider setFloatValue:currentSmoothingValue];
-    [self.smoothingTextField setFloatValue:currentSmoothingValue];
     
     NSInteger i = 0;
     
@@ -255,7 +253,23 @@
         [self.deviceParameterPopUpButton selectItemAtIndex:indexToSelect];
     }
     self.currentlySelectedDeviceParameter = [self.currentlySelectedDevice objectInParametersAtIndex:indexToSelect];
+    
+    [self setSmoothing];
 }
+
+-(void) setSmoothing{
+    
+    currentSmoothingValue = 0;
+    
+    if(self.parameter.deviceParameterMapper)
+        currentSmoothingValue = self.parameter.deviceParameterMapper.smoothing;
+    
+    [self.smoothingSlider setMaxValue:self.currentlySelectedDeviceParameter.smoothingRange.max];
+    [self.smoothingSlider setMinValue:self.currentlySelectedDeviceParameter.smoothingRange.min];
+    [self.smoothingSlider setFloatValue:currentSmoothingValue];
+    [self.smoothingTextField setFloatValue:currentSmoothingValue];
+}
+
 
 #pragma mark -
 #pragma mark Properties

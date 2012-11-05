@@ -84,9 +84,9 @@ float const SMOOTHINGRANGEMAX = 0.98f;
     return invocation;
 }
 
-- (NSRange)smoothingRange
+- (VSRange)smoothingRange
 {
-    return NSMakeRange(SMOOTHINGRANGEMIN, SMOOTHINGRANGEMAX);
+    return VSMakeRange(SMOOTHINGRANGEMIN, SMOOTHINGRANGEMAX);
 }
 
 @end

@@ -22,9 +22,7 @@
 @property (assign) VSRange parameterRange;
 @property (assign) VSRange deviceParameterRange;
 @property (assign) BOOL hasRanges;
-//@property (assign) float smoothing;
-//@property (assign) VSRange smoothingRange;
-
+@property (assign) float smoothing;
 
 - (id)initWithDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device deviceParameterRange:(VSRange) deviceParameterRange andParameterRange:(VSRange) parameterRange;
 

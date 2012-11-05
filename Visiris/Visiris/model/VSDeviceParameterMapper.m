@@ -15,7 +15,6 @@
 @property (assign) float    oldValue;
 @property (strong) NSDate   *oldDate;
 
-
 @end
 
 @implementation VSDeviceParameterMapper
@@ -35,8 +34,6 @@
         
         self.hasRanges = YES;
         self.oldValue = 0.0f;
-        self.smoothingRange = VSMakeRange(0.5f, 1.0f);
-
     }
     
     return self;
