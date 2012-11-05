@@ -50,7 +50,7 @@
     //return if Handovers is nil
     if (theHandovers == nil)
         return;
-        
+    
     //send the texture 0 to the postprocessor if there is object to render
     if (theHandovers.count < 1) {
         [self renderCore:self.renderCore didFinishRenderingTexture:0 forTimestamp:aTimestamp];

@@ -12,6 +12,7 @@
 #import "VSKeyFrame.h"
 #import "VSDeviceParameterMapper.h"
 #import "VSDeviceParameter.h"
+#import "VSDevice.h"
 
 #import "VSCoreServices.h"
 
@@ -149,6 +150,7 @@
     
     return self;
 }
+
 
 #pragma mark - NSCopying
 -(id) copyWithZone:(NSZone *)zone{
@@ -297,8 +299,8 @@
 #pragma mark Devices
 
 -(BOOL) connectWithDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device deviceParameterRange:(VSRange)deviceParameterRange andParameterRange:(VSRange)parameterRange{
-    
-    if(![self.deviceParameterMapper.deviceParameter isEqual:deviceParameter]){
+    DDLogInfo(@"%@ - %@",self.deviceParameterMapper.device, device);
+    if(![self.deviceParameterMapper.deviceParameter isEqual:deviceParameter] || ![self.deviceParameterMapper.device isEqualTo:device]){
         
         [self.deviceParameterMapper deactivateDeviceParameter];
         
@@ -467,11 +469,12 @@
     return nil;
 }
 
+#pragma mark - Object Life Cylce
 - (void)dealloc
 {
-//    if (self.deviceParameterMapper) {
-//        [self.deviceParameterMapper deactivateDeviceParameter];
-//    }
+    if (self.deviceParameterMapper) {
+        [self.deviceParameterMapper deactivateDeviceParameter];
+    }
 }
 
 @end

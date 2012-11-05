@@ -18,6 +18,7 @@
 @class VSOutputController;
 @class VSProjectItemController;
 @class VSProjectItemRepresentationController;
+@class VSCoreReceptionist;
 
 
 
@@ -44,6 +45,8 @@
 @property (strong) VSDeviceManager *deviceManager;
  
 @property (strong) VSExternalInputManager *externalInputManager;
+
+@property (strong) VSCoreReceptionist *coreReceptionist;
 
 @property (strong) VSProjectItemController *projectItemController;
 @property (strong) VSProjectItemRepresentationController *projectItemRepresentationController;

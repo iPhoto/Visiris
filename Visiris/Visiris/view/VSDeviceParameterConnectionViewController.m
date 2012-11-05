@@ -80,6 +80,10 @@
         [[self.devicePopUpButton itemAtIndex:i] setTitle:availableDevice.name];
         i++;
     }
+    
+    [self.devicePopUpButton selectItemAtIndex:selectedDeviceIndex];
+    
+    DDLogInfo(@"select: %ld",selectedDeviceIndex);
 }
 
 #pragma mark - IBAction
@@ -97,7 +101,9 @@
 }
 
 - (IBAction)didChangeDevicePopUpButton:(NSPopUpButton *)sender {
+    DDLogInfo(@"b: %@",self.currentlySelectedDevice);
     self.currentlySelectedDevice = [self.availableDevices objectAtIndex:[sender indexOfSelectedItem]];
+    DDLogInfo(@"a: %@",self.currentlySelectedDevice);
     
     if(self.parameter.connectedWithDeviceParameter){
         [self connectParameterWithDevice];
@@ -105,6 +111,7 @@
 }
 
 - (IBAction)didChangeDeviceParameterPopUpButton:(NSPopUpButton *)sender {
+    
     self.currentlySelectedDeviceParameter = [self.currentlySelectedDevice objectInParametersAtIndex:[sender indexOfSelectedItem]];
     
     if(self.parameter.connectedWithDeviceParameter){
