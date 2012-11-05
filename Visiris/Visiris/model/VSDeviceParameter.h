@@ -12,6 +12,11 @@
 
 #import "VSCoreServices.h"
 
+
+
+extern float const SMOOTHINGRANGEMIN;
+extern float const SMOOTHINGRANGEMAX;
+
 @interface VSDeviceParameter : NSObject
 
 -(id) initWithName:(NSString*) name ofType:(VSDeviceParameterDataype) dataType identifier:(NSString*) identifier  fromValue:(float) fromValue toValue:(float) toValue;
@@ -36,6 +41,10 @@
 
 @property (readonly) VSDeviceParameterDataype dataType;
 
+
+
 - (NSInvocation *)invocationForNewValue;
+
+- (NSRange)smoothingRange;
 
 @end

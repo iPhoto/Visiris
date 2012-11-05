@@ -149,8 +149,8 @@
     k = deltaY/deltaX;
     
     y = k * x + d;
-    
-    y = [self smoothValue:y withSmoothing:0.9f];
+
+    y = [self smoothValue:y withSmoothing:0.98f];
 
     return  y;
 }
