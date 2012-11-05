@@ -319,6 +319,7 @@
         }
         self.deviceParameterMapper.parameterRange = parameterRange;
         self.deviceParameterMapper.deviceParameterRange = deviceParameterRange;
+        self.deviceParameterMapper.smoothing = smoothing;
         self.connectedWithDeviceParameter = true;
     }
     
