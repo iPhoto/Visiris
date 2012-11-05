@@ -97,12 +97,11 @@
     
     NSDictionary *exifData = (__bridge NSDictionary *)CGImageSourceCopyPropertiesAtIndex(source,0,NULL);
     
-    
-    
     return exifData;
 }
 
-#pragma mark - Private Functions
+#pragma mark - 
+#pragma mark Private Functions
 
 //TODO: read out all MetaDAta not only duration and size
 /**

@@ -40,7 +40,7 @@
 #define PARAMETER_VIEW_MINIMUM_WIDTH 150
 #define PARAMETER_VIEW_MAXIMUM_WIDTH 200
 
-@synthesize splitView                   = _splitView;
+@synthesize parametersHolderSplitView                   = _splitView;
 @synthesize parametersHolder            = _parametersHolder;
 @synthesize animationTimelineHolder     = _animationTimelineHolder;
 @synthesize timelineObject              = _timelineObject;
@@ -80,8 +80,8 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
         ((VSTimelineObjectPropertiesView*) self.view).resizingDelegate = self;
     }
     
-    [self.splitView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
-    [self.splitView setAutoresizesSubviews:YES];
+    [self.parametersHolderSplitView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
+    [self.parametersHolderSplitView setAutoresizesSubviews:YES];
     
     [self initAnimationTimeline];
     
@@ -103,7 +103,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     [self.animationTimelineHolder setAutoresizesSubviews:YES];
     [self.animationTimelineHolder setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
     
-    float width = self.view.frame.size.width - PARAMETER_VIEW_MINIMUM_WIDTH - self.splitView.dividerThickness;
+    float width = self.view.frame.size.width - PARAMETER_VIEW_MINIMUM_WIDTH - self.parametersHolderSplitView.dividerThickness;
     
     [self.animationTimelineHolder setFrameSize:NSMakeSize(width, self.view.frame.size.height)];
     
@@ -267,6 +267,27 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     
 }
 
+#pragma mark - 
+#pragma mark IBAction
+
+- (IBAction)toogleParameterVisibility:(NSButton *)sender {
+    if(![sender state]){
+        [self.parametersHolderSplitView removeFromSuperview];
+    }
+    else{
+        [self.view addSubview:self.parametersHolderSplitView positioned:NSWindowAbove relativeTo:self.deviceHolderView];
+    }
+}
+
+- (IBAction)toogleDevicesVisibility:(NSButton *)sender {
+    if(![sender state]){
+        [self.deviceHolderView setHidden:YES];
+    }
+    else{
+        [self.deviceHolderView setHidden:NO];
+    }
+}
+
 #pragma mark - Private Methods
 
 -(void) updateCurrentValueOfParameter:(VSParameter*) parameter{
@@ -362,6 +383,4 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 -(VSTimelineObject*) timelineObject{
     return _timelineObject;
 }
-
-
 @end

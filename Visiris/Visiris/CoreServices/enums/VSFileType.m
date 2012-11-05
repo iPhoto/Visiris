@@ -12,12 +12,15 @@
 
 @implementation VSFileType
 
+/* Defines holding the the key's for storing the objects data in the NSCoder */
 #define kName @"Name"
 #define kUTI @"UTI"
 #define kSourceClassString @"TimelineObjectSourceClassString"
 #define kSupplierClassString @"SupplierClassString"
 #define kFileKind @"FileKind"
 
+#pragma mark -
+#pragma mark Init
 
 -(id)initWithName:(NSString *)name uti:(NSString *)uti ofKind:(VSFileKind) kind timelineObjectSourceClassString:(NSString *)timelineObjectSourceClassString supplierClassString:(NSString *)supplierClassString{
     if(self = [super init]){
@@ -31,7 +34,8 @@
     return self;
 }
 
-#pragma mark -  NSCoding Implementation
+#pragma mark -  
+#pragma mark NSCoding Implementation
 
 -(void) encodeWithCoder:(NSCoder *)aCoder{
     [aCoder encodeObject:self.name forKey:kName];
