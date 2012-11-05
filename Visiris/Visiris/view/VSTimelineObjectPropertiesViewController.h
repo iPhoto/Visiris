@@ -27,8 +27,14 @@
 @property (strong) VSTimelineObject*timelineObject;
 
 #pragma mark - Init
-/** ScrollView's documentView */
 
+@property (weak) IBOutlet NSView *devicesDisclosureWrapperView;
+@property (weak) IBOutlet NSView *parametersDisclosureWrapperView;
+
+@property (weak) IBOutlet NSButton *parametersDisclosureButton;
+@property (weak) IBOutlet NSButton *devicesDisclosureButton;
+
+/** ScrollView's documentView */
 @property (weak) IBOutlet NSSplitView *parametersHolderSplitView;
 
 /** Wrapper for the VSParameterViews*/
@@ -37,8 +43,7 @@
 /** Wrapper for the view of the VSAnimationTimelineViewController */
 @property (weak) IBOutlet NSView *animationTimelineHolder;
 
-- (IBAction)toogleParameterVisibility:(NSButton *)sender;
-- (IBAction)toogleDevicesVisibility:(NSButton *)sender;
+- (IBAction)disclosureButtonStateDidChange:(NSButton*)sender;
 
 @property (weak) IBOutlet NSView *deviceHolderView;
 

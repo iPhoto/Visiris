@@ -259,7 +259,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     
     if(scrollViewToScroll){
         NSPoint newBoundsOrigin = NSMakePoint(scrollViewToScroll.contentView.bounds.origin.x, toBounds.origin.y);
-
+        
         [scrollViewToScroll setBoundsOriginWithouthNotifiying:newBoundsOrigin];
         
     }
@@ -267,26 +267,36 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     
 }
 
-#pragma mark - 
+#pragma mark -
 #pragma mark IBAction
 
-- (IBAction)toogleParameterVisibility:(NSButton *)sender {
-    if(![sender state]){
-        [self.parametersHolderSplitView removeFromSuperview];
+- (IBAction)disclosureButtonStateDidChange:(NSButton*)sender {
+    if([sender isEqual:self.devicesDisclosureButton]){
+        NSView *viewToHide = [self.devicesDisclosureWrapperView.subviews objectAtIndex:0];
+        if(!sender.state){
+            [viewToHide setHidden:YES];
+            NSPoint newOrigin = self.parametersDisclosureWrapperView.frame.origin;
+            newOrigin.y += viewToHide.frame.size.height;
+            [self.parametersDisclosureWrapperView setFrameOrigin:newOrigin];
+        }
+        else{
+            [viewToHide setHidden:NO];
+            NSPoint newOrigin = self.parametersDisclosureWrapperView.frame.origin;
+            newOrigin.y -= viewToHide.frame.size.height;
+            [self.parametersDisclosureWrapperView setFrameOrigin:newOrigin];
+        }
     }
-    else{
-        [self.view addSubview:self.parametersHolderSplitView positioned:NSWindowAbove relativeTo:self.deviceHolderView];
+    else if([sender isEqual:self.parametersDisclosureButton]){
+        NSView *viewToHide = [self.parametersDisclosureWrapperView.subviews objectAtIndex:0];
+        if(!sender.state){
+            [viewToHide setHidden:YES];
+        }
+        else{
+            [viewToHide setHidden:NO];
+        }
     }
 }
 
-- (IBAction)toogleDevicesVisibility:(NSButton *)sender {
-    if(![sender state]){
-        [self.deviceHolderView setHidden:YES];
-    }
-    else{
-        [self.deviceHolderView setHidden:NO];
-    }
-}
 
 #pragma mark - Private Methods
 
@@ -383,4 +393,5 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 -(VSTimelineObject*) timelineObject{
     return _timelineObject;
 }
+
 @end
