@@ -316,6 +316,8 @@
     glEnableVertexAttribArray(self.layerShader.attributePosition);
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.element_buffer);
+    
+    //HERE IS THE PROBLEM
     glDrawElements(GL_TRIANGLE_STRIP,  /* mode */
                    4,                  /* count */
                    GL_UNSIGNED_SHORT,  /* type */
