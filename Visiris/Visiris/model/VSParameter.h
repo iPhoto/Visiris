@@ -181,7 +181,7 @@
  */
 -(void) removeKeyFrame:(VSKeyFrame*) keyFrameToRemove;
 
--(BOOL) connectWithDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device deviceParameterRange:(VSRange)deviceParameterRange andParameterRange:(VSRange)parameterRange;
+-(BOOL) connectWithDeviceParameter:(VSDeviceParameter*) deviceParameter ofDevice:(VSDevice*) device deviceParameterRange:(VSRange)deviceParameterRange parameterRange:(VSRange)parameterRange andSmoothing:(float) smoothing;
 
 -(void) disconnectFromDevice;
 

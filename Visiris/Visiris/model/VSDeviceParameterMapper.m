@@ -14,7 +14,6 @@
 
 @property (assign) float    oldValue;
 @property (strong) NSDate   *oldDate;
-//@property (assign) BOOL     old
 
 @end
 
@@ -26,6 +25,7 @@
 #define kDeviceParameterRange @"DeviceParamterRange"
 #define kDeviceParameterIdentifier @"DeviceParameterIdentifier"
 #define kHasRange @"HasRange"
+#define kSmoothing @"Smoothing"
 
 -(id) initWithDeviceParameter:(VSDeviceParameter *)deviceParameter ofDevice:(VSDevice *)device deviceParameterRange:(VSRange)deviceParameterRange andParameterRange:(VSRange)parameterRange{
     
@@ -35,7 +35,6 @@
         
         self.hasRanges = YES;
         self.oldValue = 0.0f;
-//        self.smoothingRange = VSMakeRange(0.76f, 0.95f);
     }
     
     return self;
@@ -80,14 +79,18 @@
 -(void) encodeWithCoder:(NSCoder *)aCoder{
     [aCoder encodeObject:self.deviceParameter.identifier forKey:kDeviceParameterIdentifier];
     [aCoder encodeObject:self.device forKey:kDevice];
+    [aCoder encodeFloat:self.smoothing forKey:kSmoothing];
     VSRangeEncode(aCoder, self.deviceParameterRange, kDeviceParameterRange);
     VSRangeEncode(aCoder, self.parameterRange, kParameterRange);
+    
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder{
 
     VSDevice *device = [aDecoder decodeObjectForKey:kDevice];
     NSString *deviceParameterIdentifier = [aDecoder decodeObjectForKey:kDeviceParameterIdentifier];
+    float smoothing = [aDecoder decodeFloatForKey:kSmoothing];
+    
     VSDeviceParameter *deviceParameter = [device parameterIdentifiedBy:deviceParameterIdentifier];
     
     if(deviceParameter.hasRange){

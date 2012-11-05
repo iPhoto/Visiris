@@ -16,7 +16,10 @@
 
 #import "VSCoreServices.h"
 
-@interface VSDeviceParameterConnectionViewController ()
+@interface VSDeviceParameterConnectionViewController (){
+    float currentSmoothingValue;
+}
+
 
 @property (weak) VSDevice *currentlySelectedDevice;
 
@@ -28,6 +31,9 @@
 
 @synthesize currentlySelectedDeviceParameter    = _currentlySelectedDeviceParameter;
 @synthesize currentlySelectedDevice             = _currentlySelectedDevice;
+
+#pragma mark -
+#pragma mark Init
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -50,7 +56,8 @@
     
 }
 
-#pragma mark - Methods
+#pragma mark -
+#pragma mark Methods
 
 -(void) showConnectionDialogFor:(VSParameter*) parameter andAvailableDevices:(NSArray*) availableDevices{
     self.parameter = parameter;
@@ -61,14 +68,22 @@
     
     self.currentlySelectedDevice = [self.availableDevices objectAtIndex:0];
     
-    if(self.parameter.connectedWithDeviceParameter){
-        self.currentlySelectedDevice = self.parameter.deviceConnectedWith;
-        selectedDeviceIndex = [self.availableDevices indexOfObject:self.currentlySelectedDevice];
-        selectedDeviceParameterIndex = [self.currentlySelectedDevice indexOfObjectInParameters:self.parameter.deviceParamterConnectedWith];
+    if(self.parameter.deviceParameterMapper){
+        
+        if(self.parameter.connectedWithDeviceParameter){
+            self.currentlySelectedDevice = self.parameter.deviceConnectedWith;
+            selectedDeviceIndex = [self.availableDevices indexOfObject:self.currentlySelectedDevice];
+            selectedDeviceParameterIndex = [self.currentlySelectedDevice indexOfObjectInParameters:self.parameter.deviceParamterConnectedWith];
+            
+        }
+        
+        
     }
     
     [self setRanges];
     [self setToggleButtonStringValue];
+    [self setSmoothing];
+    
     
     NSInteger i = 0;
     
@@ -82,11 +97,10 @@
     }
     
     [self.devicePopUpButton selectItemAtIndex:selectedDeviceIndex];
-    
-    DDLogInfo(@"select: %ld",selectedDeviceIndex);
 }
 
-#pragma mark - IBAction
+#pragma mark -
+#pragma mark IBAction
 
 - (IBAction)didClickToggleConnection:(NSButton *)sender {
     
@@ -101,9 +115,7 @@
 }
 
 - (IBAction)didChangeDevicePopUpButton:(NSPopUpButton *)sender {
-    DDLogInfo(@"b: %@",self.currentlySelectedDevice);
     self.currentlySelectedDevice = [self.availableDevices objectAtIndex:[sender indexOfSelectedItem]];
-    DDLogInfo(@"a: %@",self.currentlySelectedDevice);
     
     if(self.parameter.connectedWithDeviceParameter){
         [self connectParameterWithDevice];
@@ -119,13 +131,26 @@
     }
 }
 
-#pragma mark - Private Methods
+- (IBAction)smoothingValueDidChange:(id)sender {
+    if([sender respondsToSelector:@selector(floatValue)]){
+        currentSmoothingValue = [sender floatValue];
+        
+        [self.smoothingSlider setFloatValue:currentSmoothingValue];
+        [self.smoothingTextField setFloatValue:currentSmoothingValue];
+        
+        [self connectParameterWithDevice];
+    }
+}
+
+#pragma mark -
+#pragma mark Private Methods
 
 -(void) connectParameterWithDevice{
     [self.parameter connectWithDeviceParameter:self.currentlySelectedDeviceParameter
                                       ofDevice:self.currentlySelectedDevice
                           deviceParameterRange:[self deviceParameterRange]
-                             andParameterRange:[self parameterRange]];
+                                parameterRange:[self parameterRange]
+                                  andSmoothing:currentSmoothingValue];
 }
 
 -(VSRange) deviceParameterRange{
@@ -228,9 +253,26 @@
         [self.deviceParameterPopUpButton selectItemAtIndex:indexToSelect];
     }
     self.currentlySelectedDeviceParameter = [self.currentlySelectedDevice objectInParametersAtIndex:indexToSelect];
+    
+    [self setSmoothing];
 }
 
-#pragma mark - Properties
+-(void) setSmoothing{
+    
+    currentSmoothingValue = 0;
+    
+    if(self.parameter.deviceParameterMapper)
+        currentSmoothingValue = self.parameter.deviceParameterMapper.smoothing;
+    
+    [self.smoothingSlider setMaxValue:self.currentlySelectedDeviceParameter.smoothingRange.max];
+    [self.smoothingSlider setMinValue:self.currentlySelectedDeviceParameter.smoothingRange.min];
+    [self.smoothingSlider setFloatValue:currentSmoothingValue];
+    [self.smoothingTextField setFloatValue:currentSmoothingValue];
+}
+
+
+#pragma mark -
+#pragma mark Properties
 
 -(void) setCurrentlySelectedDevice:(VSDevice *)currentlySelectedDevice{
     if(![currentlySelectedDevice isEqualTo:_currentlySelectedDevice]){
