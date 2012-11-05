@@ -16,7 +16,7 @@
 
 #pragma mark - 
 #pragma mark Properties
-@property (strong) VSParameter *parameter;
+@property (weak) VSParameter *parameter;
 
 @property (strong) NSArray *availableDevices;
 

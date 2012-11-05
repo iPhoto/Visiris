@@ -36,11 +36,11 @@
 @implementation VSTimelineObject
 
 
-#define kSourceObject @"SourceObject"
-#define kSupplier @"Supplier"
-#define kDevices @"Devices"
-#define kProjectItem @"ProjectItem"
-#define kParameters @"Parameters"
+#define kSourceObject   @"SourceObject"
+#define kSupplier       @"Supplier"
+#define kDevices        @"Devices"
+#define kProjectItem    @"ProjectItem"
+#define kParameters     @"Parameters"
 
 @synthesize devices = _devices;
 

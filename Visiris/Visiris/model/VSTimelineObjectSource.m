@@ -31,6 +31,13 @@
     return self;
 }
 
+#pragma mark -
+#pragma mark Object Life Cycle
+
+-(void) dealloc{
+    _parameters = nil;
+}
+
 #pragma mark - Functions
 
 +(NSString *) parameterDefinitionXMLFileName{
