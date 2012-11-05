@@ -45,6 +45,6 @@ extern float const SMOOTHINGRANGEMAX;
 
 - (NSInvocation *)invocationForNewValue;
 
-- (NSRange)smoothingRange;
+- (VSRange)smoothingRange;
 
 @end

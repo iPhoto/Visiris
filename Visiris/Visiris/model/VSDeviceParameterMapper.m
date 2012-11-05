@@ -149,7 +149,10 @@
     
     y = k * x + d;
 
-    y = [self smoothValue:y withSmoothing:0.98f];
+    if (self.smoothing != [self.deviceParameter smoothingRange].min) {
+        y = [self smoothValue:y withSmoothing:self.smoothing];
+    }
+    
 
     return  y;
 }
