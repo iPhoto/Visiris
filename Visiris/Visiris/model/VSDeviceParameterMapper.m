@@ -57,6 +57,18 @@ float const SMOOTHINGRANGEMAX = 0.98;
     return self;
 }
 
+-(id) init{
+    if(self = [super init]){
+        active = NO;
+    }
+    
+    return self;
+}
+
+- (void)dealloc{
+    [self deactivateDeviceParameter];
+}
+
 -(id) copyWithZone:(NSZone *)zone{
     VSDeviceParameterMapper *copy;
     
@@ -76,9 +88,6 @@ float const SMOOTHINGRANGEMAX = 0.98;
     return copy;
 }
 
--(void) dealloc{
-
-}
 
 -(float)currentMappedParameterFloatValue{
     return [self mapValue:[self.deviceParameter currentFloatValue] fromRange:self.deviceParameterRange toRange:self.parameterRange];
@@ -96,7 +105,9 @@ float const SMOOTHINGRANGEMAX = 0.98;
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder{
-
+    
+    VSDeviceParameterMapper *newMapper = nil;
+    
     VSDevice *device = [aDecoder decodeObjectForKey:kDevice];
     NSString *deviceParameterIdentifier = [aDecoder decodeObjectForKey:kDeviceParameterIdentifier];
     float smoothing = [aDecoder decodeFloatForKey:kSmoothing];
@@ -119,17 +130,19 @@ float const SMOOTHINGRANGEMAX = 0.98;
             return nil;
         }
         
-        return [self initWithDeviceParameter:deviceParameter
+        newMapper = [self initWithDeviceParameter:deviceParameter
                                     ofDevice:device
                         deviceParameterRange:parameterDeviceRange
                               parameterRange:parameterRange
                                 andSmoothing:smoothing];
     }
     else{
-        return [self initWithDeviceParameter:deviceParameter
+        newMapper = [self initWithDeviceParameter:deviceParameter
                                     ofDevice:device
                                 andSmoothing:smoothing];
     }
+    
+    return newMapper;
 }
 
 -(BOOL) currentDeviceParameterBoolValue{
@@ -137,11 +150,17 @@ float const SMOOTHINGRANGEMAX = 0.98;
 }
 
 -(BOOL) activateDeviceParameter{
-    return [self.device activateParameter:self.deviceParameter];
+    if(!active)
+        active = [self.device activateParameter:self.deviceParameter];
+    
+    return active;
 }
 
 -(BOOL) deactivateDeviceParameter{
-    return [self.device deactivateParameter:self.deviceParameter];
+    if(active)
+        active= [self.device deactivateParameter:self.deviceParameter];
+    
+    return active;
 }
 
 -(NSString*) currentStringValue{
@@ -178,11 +197,11 @@ float const SMOOTHINGRANGEMAX = 0.98;
         
     result = self.oldValue * smoothness + value * (1.0f - smoothness);
     
-//    hier wird die smoothness anders eingestellt
-//    float k = (value - self.oldValue)/smoothness;
-//    result = k * (-[self.oldDate timeIntervalSinceNow]) + self.oldValue;
-//    self.oldDate = [[NSDate alloc] init];
-
+    //    hier wird die smoothness anders eingestellt
+    //    float k = (value - self.oldValue)/smoothness;
+    //    result = k * (-[self.oldDate timeIntervalSinceNow]) + self.oldValue;
+    //    self.oldDate = [[NSDate alloc] init];
+    
     self.oldValue = result;
     return result;
 }

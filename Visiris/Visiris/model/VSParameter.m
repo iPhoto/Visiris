@@ -472,12 +472,4 @@
     return nil;
 }
 
-#pragma mark - Object Life Cylce
-- (void)dealloc
-{
-    if (self.deviceParameterMapper) {
-        [self.deviceParameterMapper deactivateDeviceParameter];
-    }
-}
-
 @end
