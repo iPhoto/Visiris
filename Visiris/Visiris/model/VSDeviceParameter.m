@@ -12,6 +12,8 @@
 
 #import "VSCoreServices.h"
 
+float const SMOOTHINGRANGEMIN = 0.75f;
+float const SMOOTHINGRANGEMAX = 0.98f;
 
 @implementation VSDeviceParameter
 
@@ -80,6 +82,11 @@
     [invocation setSelector:@selector(updateCurrentValue:)];
     
     return invocation;
+}
+
+- (NSRange)smoothingRange
+{
+    return NSMakeRange(SMOOTHINGRANGEMIN, SMOOTHINGRANGEMAX);
 }
 
 @end

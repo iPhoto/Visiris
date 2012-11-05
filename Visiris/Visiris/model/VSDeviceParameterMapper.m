@@ -35,8 +35,7 @@
         
         self.hasRanges = YES;
         self.oldValue = 0.0f;
-        self.smoothingRange = VSMakeRange(0.5f, 1.0f);
-//        self.
+//        self.smoothingRange = VSMakeRange(0.76f, 0.95f);
     }
     
     return self;
@@ -149,8 +148,8 @@
     k = deltaY/deltaX;
     
     y = k * x + d;
-    
-    y = [self smoothValue:y withSmoothing:0.9f];
+
+    y = [self smoothValue:y withSmoothing:0.98f];
 
     return  y;
 }
