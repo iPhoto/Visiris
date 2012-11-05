@@ -18,6 +18,7 @@
 @interface VSFileType : NSObject<NSCoding>
 
 #pragma mark- Properties
+
 /** Name of the VSFileType. Usually its extension. E.g. PNG, MOV,... */
 @property (strong) NSString* name;
 
