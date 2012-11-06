@@ -65,6 +65,7 @@
 		5B12792C15C13CAD0026AAFD /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B12792B15C13CAD0026AAFD /* QuickLook.framework */; };
 		5B1994C01627368C006E9D9E /* VSMainWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B1994BF1627368C006E9D9E /* VSMainWindow.m */; };
 		5B250992161088BE003B715F /* VSFrameUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B250991161088BE003B715F /* VSFrameUtils.m */; };
+		5B26A34B164904440040E72F /* VSDisclosureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B26A34A164904440040E72F /* VSDisclosureView.m */; };
 		5B2A59D31578AF4E003938AB /* VSDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B2A59D21578AF4E003938AB /* VSDocumentController.m */; };
 		5B35BF161577A49C009911EC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35BF151577A49C009911EC /* Cocoa.framework */; };
 		5B35BF201577A49C009911EC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5B35BF1E1577A49C009911EC /* InfoPlist.strings */; };
@@ -307,6 +308,8 @@
 		5B1994BF1627368C006E9D9E /* VSMainWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSMainWindow.m; sourceTree = "<group>"; };
 		5B250990161088BE003B715F /* VSFrameUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFrameUtils.h; sourceTree = "<group>"; };
 		5B250991161088BE003B715F /* VSFrameUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFrameUtils.m; sourceTree = "<group>"; };
+		5B26A349164904440040E72F /* VSDisclosureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDisclosureView.h; sourceTree = "<group>"; };
+		5B26A34A164904440040E72F /* VSDisclosureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDisclosureView.m; sourceTree = "<group>"; };
 		5B2A59D11578AF4E003938AB /* VSDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDocumentController.h; sourceTree = "<group>"; };
 		5B2A59D21578AF4E003938AB /* VSDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDocumentController.m; sourceTree = "<group>"; };
 		5B35BF111577A49C009911EC /* Visiris.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Visiris.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1407,6 +1410,8 @@
 				5BFB870E15DA2F7800D405AF /* timeline */,
 				5BBF2A0415FF42A0009D79C7 /* VSScrollView.h */,
 				5BBF2A0515FF42A0009D79C7 /* VSScrollView.m */,
+				5B26A349164904440040E72F /* VSDisclosureView.h */,
+				5B26A34A164904440040E72F /* VSDisclosureView.m */,
 			);
 			name = base;
 			sourceTree = "<group>";
@@ -1793,6 +1798,7 @@
 				2737AE2D1630453900E19624 /* NSColor+CGColorSupport.m in Sources */,
 				5B4EB1AD162D3DA8002104DB /* VSVisirsConstants.m in Sources */,
 				5B4042CA1635682E0013978B /* VSExternalInputRepresentation.m in Sources */,
+				5B26A34B164904440040E72F /* VSDisclosureView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

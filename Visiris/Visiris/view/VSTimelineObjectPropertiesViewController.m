@@ -20,6 +20,7 @@
 #import "VSKeyFrame.h"
 #import "VSPlayhead.h"
 #import "VSCoreServices.h"
+#import "VSDisclosureView.h"
 
 @interface VSTimelineObjectPropertiesViewController ()
 
@@ -35,17 +36,13 @@
 
 @implementation VSTimelineObjectPropertiesViewController
 
+@synthesize timelineObject = _timelineObject;
+
 /** Height of the parameter views */
 #define PARAMETER_VIEW_HEIGHT 70
 #define PARAMETER_VIEW_MINIMUM_WIDTH 150
 #define PARAMETER_VIEW_MAXIMUM_WIDTH 200
 
-@synthesize parametersHolderSplitView                   = _splitView;
-@synthesize parametersHolder            = _parametersHolder;
-@synthesize animationTimelineHolder     = _animationTimelineHolder;
-@synthesize timelineObject              = _timelineObject;
-@synthesize nameLabel                   = _nameLabel;
-@synthesize nameTextField               = _nameTextField;
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
 static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
@@ -80,8 +77,12 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
         ((VSTimelineObjectPropertiesView*) self.view).resizingDelegate = self;
     }
     
-    [self.parametersHolderSplitView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
-    [self.parametersHolderSplitView setAutoresizesSubviews:YES];
+    
+    
+    [self.leftSplittedView setAutoresizesSubviews:YES];
+    [self.leftSplittedView setAutoresizingMask:NSViewWidthSizable];
+    [self.leftSplittedView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.leftSplittedView setFrameSize:NSMakeSize(PARAMETER_VIEW_MINIMUM_WIDTH, self.leftSplittedView.frame.size.height)];
     
     [self initAnimationTimeline];
     
@@ -129,49 +130,51 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
  * Instantiates a VSTimelineObjectParametersViewController, stores its view as subView of parametersHolder and sets the view's properties
  */
 -(void) initParameterView{
-    [self.parametersHolder setAutoresizesSubviews:YES];
-    [self.parametersHolder setAutoresizingMask: NSViewWidthSizable];
-    [self.parametersHolder setTranslatesAutoresizingMaskIntoConstraints:NO];
     
-    [self.parametersHolder setFrameSize:NSMakeSize(PARAMETER_VIEW_MINIMUM_WIDTH, self.parametersHolder.frame.size.height)];
+    [self.parametersDisclosureView setAutoresizesSubviews:YES];
+    [self.parametersDisclosureView setAutoresizingMask: NSViewWidthSizable];
+    
+    
+    [self.parametersDisclosureView.contentView setAutoresizesSubviews:YES];
+    [self.parametersDisclosureView.contentView setAutoresizingMask: NSViewWidthSizable];
+    
+    
+    
+    [self.parametersDisclosureView setFrameSize:NSMakeSize(PARAMETER_VIEW_MINIMUM_WIDTH, self.parametersDisclosureView.frame.size.height)];
+    [self.parametersDisclosureView.contentView setFrameSize:NSMakeSize(PARAMETER_VIEW_MINIMUM_WIDTH, self.parametersDisclosureView.contentView.frame.size.height)];
     
     self.parametersViewController = [[VSTimelineObjectParametersViewController alloc] initWithDefaultNibAndParameterViewHeight:PARAMETER_VIEW_HEIGHT];
     
     self.parametersViewController.oddColor = [NSColor lightGrayColor];
     self.parametersViewController.evenColor = [NSColor darkGrayColor];
     
-    [self.parametersHolder addSubview:self.parametersViewController.view];
+    [self.parametersDisclosureView.contentView addSubview:self.parametersViewController.view];
     
     [self.parametersViewController.view setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
     [self.parametersViewController.view setAutoresizesSubviews:YES];
     
+    [self.parametersViewController.view setFrameSize:NSMakeSize(PARAMETER_VIEW_MINIMUM_WIDTH, self.parametersViewController.view.frame.size.height)];
+
     float yOffset =self.animationTimelineViewController.scrollView.horizontalRulerView.frame.size.height;
-    NSRect parametersViewFrame = self.parametersHolder.frame;
-    
-    parametersViewFrame.size.height -= yOffset;
-    parametersViewFrame.origin.x = 0;
-    parametersViewFrame.origin.y = yOffset;
-    
-    [self.parametersViewController.view setFrame:parametersViewFrame];
-    
-    
-    
-    NSString *constraintString = [NSString stringWithFormat:@"V:|-%f-[parameterView]|", yOffset];
-    
-    //  [self.parametersHolder removeConstraints:self.parametersHolder.constraints];
-    
-    [self.parametersHolder addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:constraintString
-                                                                                  options:0
-                                                                                  metrics:nil
-                                                                                    views:[NSDictionary dictionaryWithObject:self.parametersViewController.view forKey:@"parameterView"]]];
-    
-    [self.parametersHolder addConstraint:[NSLayoutConstraint constraintWithItem:self.parametersViewController.view
-                                                                      attribute:NSLayoutAttributeHeight
-                                                                      relatedBy:NSLayoutRelationEqual
-                                                                         toItem:self.parametersHolder
-                                                                      attribute:NSLayoutAttributeHeight
-                                                                     multiplier:1.0 constant:yOffset*(-1)]];
-    
+    [self.parametersDisclosureWrapperViewVerticalTopConstraint setConstant:yOffset];
+//
+//    NSRect parametersViewFrame = self.parametersDisclosureWrapperView.frame;
+////    parametersViewFrame.size.height -= yOffset;
+//    parametersViewFrame.size.width = PARAMETER_VIEW_MINIMUM_WIDTH;
+//    parametersViewFrame.origin.x = 0;
+//    parametersViewFrame.origin.y = yOffset;
+//    
+//    [self.parametersDisclosureWrapperView setFrame:parametersViewFrame];
+//    
+//    
+//    NSString *constraintString = [NSString stringWithFormat:@"V:|-%f-[parametersDisclosureWrapperView]|", yOffset];
+//
+////    [self.leftSplittedView removeConstraints:self.leftSplittedView.constraints];
+//
+//    [self.leftSplittedView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:constraintString
+//                                                                                  options:0
+//                                                                                  metrics:nil
+//                                                                                    views:[NSDictionary dictionaryWithObject:self.parametersDisclosureWrapperView forKey:@"parametersDisclosureWrapperView"]]];
     
     self.parametersViewController.scrollView.scrollingDelegate = self;
     
@@ -267,35 +270,35 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     
 }
 
-#pragma mark -
-#pragma mark IBAction
-
-- (IBAction)disclosureButtonStateDidChange:(NSButton*)sender {
-    if([sender isEqual:self.devicesDisclosureButton]){
-        NSView *viewToHide = [self.devicesDisclosureWrapperView.subviews objectAtIndex:0];
-        if(!sender.state){
-            [viewToHide setHidden:YES];
-            NSPoint newOrigin = self.parametersDisclosureWrapperView.frame.origin;
-            newOrigin.y += viewToHide.frame.size.height;
-            [self.parametersDisclosureWrapperView setFrameOrigin:newOrigin];
-        }
-        else{
-            [viewToHide setHidden:NO];
-            NSPoint newOrigin = self.parametersDisclosureWrapperView.frame.origin;
-            newOrigin.y -= viewToHide.frame.size.height;
-            [self.parametersDisclosureWrapperView setFrameOrigin:newOrigin];
-        }
-    }
-    else if([sender isEqual:self.parametersDisclosureButton]){
-        NSView *viewToHide = [self.parametersDisclosureWrapperView.subviews objectAtIndex:0];
-        if(!sender.state){
-            [viewToHide setHidden:YES];
-        }
-        else{
-            [viewToHide setHidden:NO];
-        }
-    }
-}
+//#pragma mark -
+//#pragma mark IBAction
+//
+//- (IBAction)disclosureButtonStateDidChange:(NSButton*)sender {
+//    if([sender isEqual:self.devicesDisclosureButton]){
+//        NSView *viewToHide = [self.devicesDisclosureWrapperView.subviews objectAtIndex:0];
+//        if(!sender.state){
+//            [viewToHide setHidden:YES];
+//            NSPoint newOrigin = self.parametersDisclosureWrapperView.frame.origin;
+//            newOrigin.y += viewToHide.frame.size.height;
+//            [self.parametersDisclosureWrapperView setFrameOrigin:newOrigin];
+//        }
+//        else{
+//            [viewToHide setHidden:NO];
+//            NSPoint newOrigin = self.parametersDisclosureWrapperView.frame.origin;
+//            newOrigin.y -= viewToHide.frame.size.height;
+//            [self.parametersDisclosureWrapperView setFrameOrigin:newOrigin];
+//        }
+//    }
+//    else if([sender isEqual:self.parametersDisclosureButton]){
+//        NSView *viewToHide = [self.parametersDisclosureWrapperView.subviews objectAtIndex:0];
+//        if(!sender.state){
+//            [viewToHide setHidden:YES];
+//        }
+//        else{
+//            [viewToHide setHidden:NO];
+//        }
+//    }
+//}
 
 
 #pragma mark - Private Methods

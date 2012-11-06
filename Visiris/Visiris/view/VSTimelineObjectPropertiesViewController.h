@@ -15,6 +15,7 @@
 
 @class VSTimelineObject;
 @class VSTestView;
+@class VSDisclosureView;
 
 /**
  * Subclass of NSViewController displaying the properties of a VSTimelineObject
@@ -28,22 +29,18 @@
 
 #pragma mark - Init
 
-@property (weak) IBOutlet NSView *devicesDisclosureWrapperView;
-@property (weak) IBOutlet NSView *parametersDisclosureWrapperView;
+@property (weak) IBOutlet NSLayoutConstraint *parametersDisclosureWrapperViewVerticalTopConstraint;
+@property (weak) IBOutlet VSDisclosureView *parametersDisclosureView;
 
-@property (weak) IBOutlet NSButton *parametersDisclosureButton;
-@property (weak) IBOutlet NSButton *devicesDisclosureButton;
+
 
 /** ScrollView's documentView */
 @property (weak) IBOutlet NSSplitView *parametersHolderSplitView;
-
-/** Wrapper for the VSParameterViews*/
-@property (weak) IBOutlet NSView *parametersHolder;
+@property (weak) IBOutlet NSView *leftSplittedView;
 
 /** Wrapper for the view of the VSAnimationTimelineViewController */
 @property (weak) IBOutlet NSView *animationTimelineHolder;
 
-- (IBAction)disclosureButtonStateDidChange:(NSButton*)sender;
 
 @property (weak) IBOutlet NSView *deviceHolderView;
 
