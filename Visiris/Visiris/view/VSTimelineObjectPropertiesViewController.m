@@ -77,6 +77,8 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
         ((VSTimelineObjectPropertiesView*) self.view).resizingDelegate = self;
     }
     
+    [self.mainScrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
+    [self.mainScrollView setAutoresizesSubviews:YES];
     
     
     [self.leftSplittedView setAutoresizesSubviews:YES];
@@ -188,15 +190,15 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 
 #pragma mark - NSViewController
 
--(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-    if ([keyPath isEqualToString:@"name"]) {
-        [self.nameTextField setStringValue:[object valueForKey:keyPath]];
-    }
-    else if([keyPath isEqualToString:@"startTime"]){
-        [self.animationTimelineViewController updatePlayheadPosition];
-        [self updateCurrentValueOfAllParameters];
-    }
-}
+//-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+//    if ([keyPath isEqualToString:@"name"]) {
+//        [self.nameTextField setStringValue:[object valueForKey:keyPath]];
+//    }
+//    else if([keyPath isEqualToString:@"startTime"]){
+//        [self.animationTimelineViewController updatePlayheadPosition];
+//        [self updateCurrentValueOfAllParameters];
+//    }
+//}
 
 #pragma mark - VSParameterViewKeyFrameDelegate Implementation
 
@@ -370,7 +372,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
         if(_timelineObject){
             [self.timelineObject removeObserver:self
                                      forKeyPath:@"startTime"];
-            [self setTimelineObjectName:[self.nameTextField stringValue]];
+//            [self setTimelineObjectName:[self.nameTextField stringValue]];
             [self.parametersViewController resetParameters];
             
         }

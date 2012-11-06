@@ -32,6 +32,7 @@
 @property (weak) IBOutlet NSLayoutConstraint *parametersDisclosureWrapperViewVerticalTopConstraint;
 @property (weak) IBOutlet VSDisclosureView *parametersDisclosureView;
 
+@property (weak) IBOutlet VSScrollView *mainScrollView;
 
 
 /** ScrollView's documentView */
@@ -41,14 +42,6 @@
 /** Wrapper for the view of the VSAnimationTimelineViewController */
 @property (weak) IBOutlet NSView *animationTimelineHolder;
 
-
-@property (weak) IBOutlet NSView *deviceHolderView;
-
-/** label for the name of VSTimelineObject */
-@property (strong) NSTextField *nameLabel;
-
-/** Textfield for the name of VSTimelineObject */
-@property (strong) NSTextField *nameTextField;
 
 /**
  * Inits the controller with the .nib-File stored in defaultNib (VSBrowserView)
