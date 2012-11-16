@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "VSTrackViewController.h"
+#import "VSMainTimelineTrackViewController.h"
 #import "VSMainTimelineView.h"
 #import "VSTimelineViewController.h"
 #import "VSMainTimelineScrollViewDocumentView.h"

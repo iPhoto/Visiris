@@ -46,6 +46,9 @@
 /** Current location of the NSRulerMarker used as representaiton of the timeline's playhead. Property must be implemented in child class. */
 @property (readonly) float currentPlayheadMarkerLocation;
 
+/** NSArray holding the views representing the timeline's tracks */
+@property (strong) NSMutableArray *trackViewControllers;
+
 #pragma mark - Protected Methods
 
 /**

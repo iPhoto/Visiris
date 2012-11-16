@@ -71,6 +71,12 @@
     }
 }
 
+-(void) mouseDown:(NSEvent *)theEvent{
+    if([self mouseMoveDelegateRespondsToSelector:@selector(mouseDown:onView:)]){
+        [self.mouseMoveDelegate mouseDown:theEvent onView:self];
+    }
+}
+
 -(void) mouseEntered:(NSEvent *)theEvent{
     //tells the window to make the view to firstResponder as soon as the mouse is over the trackingArea covering the whole view
     [self.window makeFirstResponder:self];

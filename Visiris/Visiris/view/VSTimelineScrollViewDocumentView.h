@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "VSViewMouseEventsDelegate.h"
+
 @class VSTimelineScrollViewDocumentView;
 
 /**
@@ -53,10 +55,6 @@
 
 
 
-
-
-
-
 @class VSPlayheadMarker;
 
 
@@ -68,6 +66,9 @@
 
 /** Delegate VSTrackHolderView communicates like defined in VSPlayHeadRulerMarkerDelegate*/
 @property (weak) id<VSTrackHolderViewDelegate> trackHolderViewDelegate;
+
+/** delegate is informed about Mouse-Events according to VSViewMouseEventsDelegate */
+@property (weak) id<VSViewMouseEventsDelegate> mouseEventsDelegate;
 
 /**
  * Updates the guideline for the given location
@@ -81,5 +82,9 @@
  * Inits the properties of the view 
  */
 -(void) setViewsProperties;
+
+-(void) showSelectionFrame:(NSRect) selectionFrame;
+
+-(void) hideSelectionFrame;
 
 @end

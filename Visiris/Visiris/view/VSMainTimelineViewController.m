@@ -8,7 +8,7 @@
 
 #import "VSMainTimelineViewController.h"
 
-#import "VSTrackViewController.h"
+#import "VSMainTimelineTrackViewController.h"
 #import "VSTimeline.h"
 #import "VSPlayHead.h"
 #import "VSMainTimelineView.h"
@@ -28,9 +28,6 @@
 @interface VSMainTimelineViewController ()
 
 #define VS_PLAYHEAD_MINIMAL_PIXEL_DIFFERENCE 1
-
-/** NSArray holding the views representing the timeline's tracks */
-@property (strong) NSMutableArray *trackViewControllers;
 
 /** If an timelineObject is dragged to a different track the difference between the source track and the moveto-track is stored in trackOffset */
 @property int trackOffset;
@@ -239,7 +236,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
 
 #pragma mark Adding TimelineObjects
 
--(void) trackViewController:(VSTrackViewController *)trackViewController addTimelineObjectsBasedOnProjectItemRepresentation:(NSArray *)projectItemRepresentations atPositions:(NSArray *)positionArray withWidths:(NSArray *)widthArray{
+-(void) trackViewController:(VSMainTimelineTrackViewController *)trackViewController addTimelineObjectsBasedOnProjectItemRepresentation:(NSArray *)projectItemRepresentations atPositions:(NSArray *)positionArray withWidths:(NSArray *)widthArray{
     
     if ((projectItemRepresentations) && (projectItemRepresentations.count >0)) {
         
@@ -313,20 +310,30 @@ static NSString* defaultNib = @"VSMainTimelineView";
 
 #pragma mark Selecting
 
--(BOOL) timelineObjectProxy:(VSTimelineObjectProxy *)timelineObjectProxy willBeSelectedOnTrackViewController:(VSTrackViewController *)trackViewController exclusively:(BOOL)exclusiveSelection{
+-(BOOL) timelineObjectProxy:(VSTimelineObjectProxy *)timelineObjectProxy willBeSelectedOnTrackViewController:(VSMainTimelineTrackViewController *)trackViewController exclusively:(BOOL)exclusiveSelection{
     
     return [self selectTimelineObjectProxy:timelineObjectProxy onTrack:trackViewController exclusively:exclusiveSelection];
 }
 
+-(void) unselectTimelineObject:(VSTimelineObject *)timelineObject ofTrack:(VSTrackViewController *)trackViewController{
+    [self.view.undoManager setActionName:NSLocalizedString(@"Change Selection", @"Undo Massage of unselecting TimelineObjects")];
+    
+    [self.view.undoManager beginUndoGrouping];
+    
+    [timelineObject setUnselectedAndRegisterUndo:self.view.undoManager];
+    
+    [self.view.undoManager endUndoGrouping];
+}
 
--(void) timelineObjectProxy:(VSTimelineObjectProxy *)timelineObjectProxy wasUnselectedOnTrackViewController:(VSTrackViewController *)trackViewController{
-    [[self.scrollView horizontalRulerView] setNeedsDisplay:YES];
+
+-(void) timelineObjectProxy:(VSTimelineObjectProxy *)timelineObjectProxy wasUnselectedOnTrackViewController:(VSMainTimelineTrackViewController *)trackViewController{
+
     if([timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
         [self unselectTimelineObjects:[NSArray arrayWithObject:((VSTimelineObject*) timelineObjectProxy)]];
     }
 }
 
--(void) didClickViewOfTrackViewController:(VSTrackViewController *)trackViewController{
+-(void) didClickViewOfTrackViewController:(VSMainTimelineTrackViewController *)trackViewController{
     
     NSArray *selectedTimelineObjects = self.timeline.selectedTimelineObjects;
     
@@ -338,16 +345,16 @@ static NSString* defaultNib = @"VSMainTimelineView";
         [timelineObject setUnselectedAndRegisterUndo:self.view.undoManager];
     }
     
-    [self unselectTimelineObjects:self.timeline.selectedTimelineObjects];
-    
     [self.view.undoManager endUndoGrouping];
 }
 
--(NSArray*) files:(NSArray *)filePaths haveEnteredTrack:(VSTrackViewController *)track{
+
+
+-(NSArray*) files:(NSArray *)filePaths haveEnteredTrack:(VSMainTimelineTrackViewController *)track{
     return [self createProjectItemRepresentationsForFiles:filePaths];
 }
 
--(NSArray*) files:(NSArray *)filePaths haveBeenDroppedOnTrack:(VSTrackViewController *)track{
+-(NSArray*) files:(NSArray *)filePaths haveBeenDroppedOnTrack:(VSMainTimelineTrackViewController *)track{
     NSArray *result =  [self createProjectItemsForFiles:filePaths];
     
     [self.temporaryCreatedProjectItems removeAllObjects];
@@ -360,7 +367,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
 
 #pragma mark Removing
 
--(void) timelineObjectProxies:(NSArray *)timelineObjectProxies wereRemovedFromTrack:(VSTrackViewController *)trackViewController{
+-(void) timelineObjectProxies:(NSArray *)timelineObjectProxies wereRemovedFromTrack:(VSMainTimelineTrackViewController *)trackViewController{
     //
     //    NSArray *selectedTimelineObjects = [timelineObjectProxies objectsAtIndexes:[timelineObjectProxies indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
     //        if([obj isKindOfClass:[VSTimelineObjectProxy class]]){
@@ -372,7 +379,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
     ////    [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectsGotUnselected object:selectedTimelineObjects];
 }
 
--(BOOL) removeTimelineObject:(VSTimelineObjectViewController *)timelineObjectViewController fromTrack:(VSTrackViewController *)track{
+-(BOOL) removeTimelineObject:(VSTimelineObjectViewController *)timelineObjectViewController fromTrack:(VSMainTimelineTrackViewController *)track{
     if(timelineObjectViewController.timelineObjectProxy.selected){
         [self unselectTimelineObjects:[NSArray arrayWithObject:timelineObjectViewController.timelineObjectProxy]];
     }
@@ -388,7 +395,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
 
 #pragma mark Resizing
 
--(VSDoubleFrame) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController willBeResizedFrom:(VSDoubleFrame)oldDoubleFrame to:(VSDoubleFrame)newDoubleFrame onTrack:(VSTrackViewController *)trackViewController{
+-(VSDoubleFrame) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController willBeResizedFrom:(VSDoubleFrame)oldDoubleFrame to:(VSDoubleFrame)newDoubleFrame onTrack:(VSMainTimelineTrackViewController *)trackViewController{
     
     if(newDoubleFrame.width < MINIMUM_TIMELINE_OBJECT_PIXEL_WIDTH){
         newDoubleFrame.width = MINIMUM_TIMELINE_OBJECT_PIXEL_WIDTH;
@@ -401,7 +408,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
     return newDoubleFrame;
 }
 
--(void) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController wasResizedOnTrack:(VSTrackViewController *)trackViewController{
+-(void) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController wasResizedOnTrack:(VSMainTimelineTrackViewController *)trackViewController{
     
     [self setTimelineDurationAccordingToTimelineWidth];
 }
@@ -411,14 +418,14 @@ static NSString* defaultNib = @"VSMainTimelineView";
 
 #pragma mark Moving
 
--(NSPoint) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController WillBeDraggedOnTrack:(VSTrackViewController *)trackViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition withSnappingDeltaX:(float)snappingDeltaX{
+-(NSPoint) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController WillBeDraggedOnTrack:(VSMainTimelineTrackViewController *)trackViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition withSnappingDeltaX:(float)snappingDeltaX{
     
     float deltaX = newPosition.x - oldPosition.x;
     
     NSMutableArray *snappingDeltas = [[NSMutableArray alloc] init];
     
     //Calcluates the minimum Snapping-Distances of all selected objects on all tracks
-    for(VSTrackViewController *tmpTrackViewController in self.trackViewControllers){
+    for(VSMainTimelineTrackViewController *tmpTrackViewController in self.trackViewControllers){
         if(tmpTrackViewController != trackViewController){
             
             float tmpSnappingDelta;
@@ -440,7 +447,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
     deltaX = newPosition.x - oldPosition.x;
     
     //tells all tracks to move their selected timelineObjects according to the newPosition and the distance to the snapping point
-    for(VSTrackViewController *tmpTrackViewController in self.trackViewControllers){
+    for(VSMainTimelineTrackViewController *tmpTrackViewController in self.trackViewControllers){
         if(tmpTrackViewController != trackViewController){
             [tmpTrackViewController moveMoveableTimelineObjects:deltaX];
         }
@@ -449,7 +456,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
     return newPosition;
 }
 
--(void) moveTimelineObjectTemporary:(VSTimelineObjectViewController *)timelineObject fromTrack:(VSTrackViewController *)fromTrack toTrackAtPosition:(NSPoint)position{
+-(void) moveTimelineObjectTemporary:(VSTimelineObjectViewController *)timelineObject fromTrack:(VSMainTimelineTrackViewController *)fromTrack toTrackAtPosition:(NSPoint)position{
     
     //stores the new offset from the fromTrack to the track at the position of the given mouse position
     NSInteger newTrackOffset = [self computeTrackOffsetForTrack:fromTrack forMousePosition:position];
@@ -457,7 +464,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
     //if the trackOffset has changed, the temporary timelienObejcts of all tracks have to be removed
     if(newTrackOffset != self.trackOffset){
         
-        for(VSTrackViewController *trackViewController in self.trackViewControllers){
+        for(VSMainTimelineTrackViewController *trackViewController in self.trackViewControllers){
             [trackViewController resetTemporaryTimelineObjects];
             [trackViewController resetIntersections];
             
@@ -470,12 +477,12 @@ static NSString* defaultNib = @"VSMainTimelineView";
         //if the mouse isn't over the fromTrack the selected timelineObjects have to be moved temporarily according to the trackOffset
         if(newTrackOffset != 0){
             for(int i = 0; i<self.trackViewControllers.count; i++){
-                VSTrackViewController *fromTrackViewController = (VSTrackViewController*) [self.trackViewControllers objectAtIndex:i];
+                VSMainTimelineTrackViewController *fromTrackViewController = (VSMainTimelineTrackViewController*) [self.trackViewControllers objectAtIndex:i];
                 
                 NSInteger newIndex = i + newTrackOffset;
                 
                 if(newIndex >= 0  && newIndex < self.trackViewControllers.count){
-                    VSTrackViewController *toTrackViewController = (VSTrackViewController*) [self.trackViewControllers objectAtIndex:newIndex];
+                    VSMainTimelineTrackViewController *toTrackViewController = (VSMainTimelineTrackViewController*) [self.trackViewControllers objectAtIndex:newIndex];
                     
                     
                     [self temporaryMoveSelectedTimelineObjectsFromTrack:fromTrackViewController toTrack:toTrackViewController];
@@ -489,9 +496,9 @@ static NSString* defaultNib = @"VSMainTimelineView";
 }
 
 
--(void) timelineObject: timelineObjectViewController wasDraggedOnTrack:(VSTrackViewController *)trackViewController{
+-(void) timelineObject: timelineObjectViewController wasDraggedOnTrack:(VSMainTimelineTrackViewController *)trackViewController{
     
-    for(VSTrackViewController *tmpTrackViewController in self.trackViewControllers){
+    for(VSMainTimelineTrackViewController *tmpTrackViewController in self.trackViewControllers){
         if(tmpTrackViewController != trackViewController){
             [tmpTrackViewController setTimelineObjectViewsIntersectedByMoveableTimelineObjects];
         }
@@ -501,14 +508,14 @@ static NSString* defaultNib = @"VSMainTimelineView";
 }
 
 
--(void) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController didStopDraggingOnTrack:(VSTrackViewController *)trackViewController{
+-(void) timelineObject:(VSTimelineObjectViewController *)timelineObjectViewController didStopDraggingOnTrack:(VSMainTimelineTrackViewController *)trackViewController{
     self.autoscrolling = NO;
 //    [self.autoScrollingTimer invalidate];
     
     [self.view.undoManager beginUndoGrouping];
     [self.view.undoManager setActionName:NSLocalizedString(@"Moved Objects on Timeline", @"Undo Action Name for moving objects on Timeline")];
     
-    for(VSTrackViewController *tmpTrackViewController in self.trackViewControllers){
+    for(VSMainTimelineTrackViewController *tmpTrackViewController in self.trackViewControllers){
         if(tmpTrackViewController != trackViewController){
             [tmpTrackViewController updateActiveMoveableTimelineObjectsAccordingToViewsFrame];
             [tmpTrackViewController removeInactiveSelectedTimelineObjectViewControllers];
@@ -527,12 +534,12 @@ static NSString* defaultNib = @"VSMainTimelineView";
     
 }
 
--(void) timelineObject: timelineObjectViewController willStartDraggingOnTrack:(VSTrackViewController *)trackViewController{
+-(void) timelineObject: timelineObjectViewController willStartDraggingOnTrack:(VSMainTimelineTrackViewController *)trackViewController{
     
     self.trackOffset = 0;
     self.autoscrolling = YES;
     
-    for(VSTrackViewController *tmpTrackViewController in self.trackViewControllers){
+    for(VSMainTimelineTrackViewController *tmpTrackViewController in self.trackViewControllers){
         if(tmpTrackViewController != trackViewController){
             [tmpTrackViewController setSelectedTimelineObjectsAsMoving];
         }
@@ -540,7 +547,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
     
 }
 
--(BOOL) splitTimelineObject:(VSTimelineObjectViewController *) timelineObjectViewController ofTrack:(VSTrackViewController *)trackViewController byRects:(NSArray *)splittingRects{
+-(BOOL) splitTimelineObject:(VSTimelineObjectViewController *) timelineObjectViewController ofTrack:(VSMainTimelineTrackViewController *)trackViewController byRects:(NSArray *)splittingRects{
     
     VSTimelineObject *tmpTimelineObject = ((VSTimelineObject*) timelineObjectViewController.timelineObjectProxy);
     
@@ -569,7 +576,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
     return YES;
 }
 
--(void) copyTimelineObject:(VSTimelineObjectViewController *)timelineObjectViewController toTrack:(VSTrackViewController *)trackViewController{
+-(void) copyTimelineObject:(VSTimelineObjectViewController *)timelineObjectViewController toTrack:(VSMainTimelineTrackViewController *)trackViewController{
     
     double startTime = [super timestampForPixelValue:timelineObjectViewController.timelineObjectView.doubleFrame.x];
     double duration = [super timestampForPixelValue:timelineObjectViewController.timelineObjectView.doubleFrame.width];
@@ -582,7 +589,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
 
 #pragma mark Devices
 
--(void) addDevices:(NSArray *)devices toTimelineObject:(VSTimelineObject *)timelineObject onTrack:(VSTrackViewController *)trackViewController{
+-(void) addDevices:(NSArray *)devices toTimelineObject:(VSTimelineObject *)timelineObject onTrack:(VSMainTimelineTrackViewController *)trackViewController{
     for(VSDeviceRepresentation *representation in devices){
         VSDevice *newDevice = [self.deviceManager deviceRepresentedBy:representation];
         
@@ -592,19 +599,10 @@ static NSString* defaultNib = @"VSMainTimelineView";
     }
 }
 
+#pragma mark - 
+#pragma mark Private Methods
 
-
-#pragma mark - VSViewMouseEventsDelegate Implementation
-
--(void) mouseDragged:(NSEvent *)theEvent onView:(NSView *)view{
-    if(self.autoscrolling){
-        //  [self scrollIfMouseOutsideContentView];
-    }
-}
-
-#pragma mark - Private Methods
-
-#pragma mark Pixel Time Ratio
+#pragma mark - Pixel Time Ratio
 
 
 /**
@@ -615,7 +613,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
     [super pixelTimeRatioDidChange];
     
     //tells all VSTrackViewControlls in the timeline, that the pixelItemRation has been changed
-    for(VSTrackViewController *controller in self.trackViewControllers){
+    for(VSMainTimelineTrackViewController *controller in self.trackViewControllers){
         [controller pixelTimeRatioDidChange:self.pixelTimeRatio];
         [controller.view setNeedsDisplay:YES];
     }
@@ -672,7 +670,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
  * @param position NSPoint the proxy is places on the timeline
  * @return The newly create VSTimelineObjectProxy if the creation was successfully, nil otherwise
  */
--(VSTimelineObjectProxy*) trackViewController:(VSTrackViewController *)trackViewController createTimelineObjectProxyBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *)item atPosition:(NSPoint)position{
+-(VSTimelineObjectProxy*) trackViewController:(VSMainTimelineTrackViewController *)trackViewController createTimelineObjectProxyBasedOnProjectItemRepresentation:(VSProjectItemRepresentation *)item atPosition:(NSPoint)position{
     
     double timePosition = [super timestampForPixelValue:position.x];
     
@@ -777,7 +775,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
  * @param exclusiveSelection IF yes the currently selected objects are set as unselected
  * @return YES if the selection was done successfully, NO otherwise
  */
--(BOOL) selectTimelineObjectProxy:(VSTimelineObjectProxy*) timelineObjectProxy onTrack:(VSTrackViewController*) trackViewController exclusively:(BOOL) exclusiveSelection{
+-(BOOL) selectTimelineObjectProxy:(VSTimelineObjectProxy*) timelineObjectProxy onTrack:(VSMainTimelineTrackViewController*) trackViewController exclusively:(BOOL) exclusiveSelection{
     
     if([timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
         [self.view.undoManager setActionName:NSLocalizedString(@"Change Selection", @"Undo Massage of unselecting TimelineObjects")];
@@ -828,7 +826,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
  * @param trackViewController VSTrackViewController the given VSTimelineObjectViewController is on
  * @param segments NSArray of rects the VSTimelineObjectViewController is divided into
  */
--(void) segmentTimelineObject:(VSTimelineObjectViewController*) timelineObjectViewController onTrack:(VSTrackViewController*) trackViewController intoSegments:(NSArray*) segments{
+-(void) segmentTimelineObject:(VSTimelineObjectViewController*) timelineObjectViewController onTrack:(VSMainTimelineTrackViewController*) trackViewController intoSegments:(NSArray*) segments{
     int i = 0;
     
     VSTimelineObject *tmpTimelineObject = ((VSTimelineObject*) timelineObjectViewController.timelineObjectProxy);
@@ -920,7 +918,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
     float maxFrameX = 0.0;
     
     //Computes the farest left point of all currenlty moved timelineObjects
-    for(VSTrackViewController *tmpTrackViewController in self.trackViewControllers){
+    for(VSMainTimelineTrackViewController *tmpTrackViewController in self.trackViewControllers){
         NSArray *moveableObjects = [tmpTrackViewController movableTimelineObjectViewControllers];
         
         for(VSTimelineObjectViewController *timelineObjectViewController in moveableObjects){
@@ -951,7 +949,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
  * @param mousePosition Current position of the mouse.
  * @return Returns the difference between indizes in the trackViewControllers-Array of the fromTrack and the track the mousePosition is over. 0: mouse is over the fromTrack or over none other track.
  */
--(NSInteger) computeTrackOffsetForTrack:(VSTrackViewController*) fromTrack forMousePosition:(NSPoint) mousePosition{
+-(NSInteger) computeTrackOffsetForTrack:(VSMainTimelineTrackViewController*) fromTrack forMousePosition:(NSPoint) mousePosition{
     
     
     NSPoint positionInView = [self.scrollView.documentView convertPoint:mousePosition fromView:nil];
@@ -970,7 +968,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
     for(int i = 0; i < self.trackViewControllers.count; i++){
         //the given track has already been checked above
         if(i != fromTrackArrayIndex){
-            VSTrackViewController *trackViewController = (VSTrackViewController*) [self.trackViewControllers objectAtIndex:i];
+            VSMainTimelineTrackViewController *trackViewController = (VSMainTimelineTrackViewController*) [self.trackViewControllers objectAtIndex:i];
             if(NSPointInRect(positionInView,  trackViewController.view.frame)){
                 newTrackOffset = i - fromTrackArrayIndex;
                 break;
@@ -997,8 +995,8 @@ static NSString* defaultNib = @"VSMainTimelineView";
     if(trackOffset >0){
         
         for(NSInteger i = self.trackViewControllers.count-1; i>=self.trackViewControllers.count-trackOffset; i--){
-            if([[self.trackViewControllers objectAtIndex:i] isKindOfClass:[VSTrackViewController class]]){
-                if([((VSTrackViewController *)[self.trackViewControllers objectAtIndex:i]) selectedTimelineObjectViewControllers].count){
+            if([[self.trackViewControllers objectAtIndex:i] isKindOfClass:[VSMainTimelineTrackViewController class]]){
+                if([((VSMainTimelineTrackViewController *)[self.trackViewControllers objectAtIndex:i]) selectedTimelineObjectViewControllers].count){
                     offsetCorrection--;
                 }
             }
@@ -1006,8 +1004,8 @@ static NSString* defaultNib = @"VSMainTimelineView";
     }
     else if(trackOffset < 0){
         for(int i =0; i<trackOffset*(-1); i++){
-            if([[self.trackViewControllers objectAtIndex:i] isKindOfClass:[VSTrackViewController class]]){
-                if([((VSTrackViewController *)[self.trackViewControllers objectAtIndex:i]) selectedTimelineObjectViewControllers].count){
+            if([[self.trackViewControllers objectAtIndex:i] isKindOfClass:[VSMainTimelineTrackViewController class]]){
+                if([((VSMainTimelineTrackViewController *)[self.trackViewControllers objectAtIndex:i]) selectedTimelineObjectViewControllers].count){
                     offsetCorrection++;
                 }
             }
@@ -1027,7 +1025,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
  * @param fromTrack VSTrackViewController the selectedTimelineObjects are moved from.
  * @param toTrack VSTrackViewController the selectedTimelineObjects of the fromTrack are moved to.
  */
--(void) temporaryMoveSelectedTimelineObjectsFromTrack:(VSTrackViewController*) fromTrack toTrack:(VSTrackViewController*) toTrack{
+-(void) temporaryMoveSelectedTimelineObjectsFromTrack:(VSMainTimelineTrackViewController*) fromTrack toTrack:(VSMainTimelineTrackViewController*) toTrack{
     
     for (VSTimelineObjectViewController *timelineObjectViewController in [fromTrack selectedTimelineObjectViewControllers]) {
         
@@ -1077,7 +1075,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
 -(void) moveToNextCutAndSearchForward:(BOOL) forward{
     float distanceToNextCut = 0;
     
-    for(VSTrackViewController *trackViewController in self.trackViewControllers){
+    for(VSMainTimelineTrackViewController *trackViewController in self.trackViewControllers){
         float distance = [trackViewController distanceToNearestCutFromPosition:[self currentPlayheadMarkerLocation] forward:forward];
         
         if(abs(distance) > 0.01){
@@ -1108,7 +1106,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
     
     
     
-    VSTrackViewController* newTrackViewController = [[VSTrackViewController alloc]initWithDefaultNibAccordingToTrack:track andTrackHeight:VSTrackViewHeight];
+    VSMainTimelineTrackViewController* newTrackViewController = [[VSMainTimelineTrackViewController alloc]initWithDefaultNibAccordingToTrack:track andTrackHeight:VSTrackViewHeight];
     
     //set the autoresizing masks
     [[newTrackViewController view] setAutoresizingMask:NSViewWidthSizable];
@@ -1136,7 +1134,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
  * Creates a new label for the given Track and sends it to the trackLabelsViewController to display the label
  * @param aTrack VSTrackViewController the label is added for
  */
--(void) addNewTrackLabelForTrack:(VSTrackViewController*) aTrack{
+-(void) addNewTrackLabelForTrack:(VSMainTimelineTrackViewController*) aTrack{
     NSRect labelRect = NSMakeRect(0, aTrack.view.frame.origin.y, TRACK_LABEL_WIDTH, aTrack.view.frame.size.height);
     
     //NSLog(@"labelRect: %@",NSStringFromRect(labelRect));

@@ -42,4 +42,8 @@
     return [NSColor lightGrayColor];
 }
 
++(NSColor*) invisible{
+    return [NSColor colorWithCalibratedRed:0 green:0 blue:0 alpha:0];
+}
+
 @end

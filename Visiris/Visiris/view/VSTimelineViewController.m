@@ -12,11 +12,15 @@
 #import "VSPlayHead.h"
 #import "VSDocumentController.h"
 #import "VSDocument.h"
+#import "VSTrackViewController.h"
 
 #import "VSCoreServices.h"
 
 
-@interface VSTimelineViewController ()
+@interface VSTimelineViewController (){
+    NSPoint _mouseDownPoint;
+    BOOL _mouseDownOnView;
+}
 
 @end
 
@@ -47,8 +51,7 @@
     }
 }
 
--(void) dealloc{
-}
+
 
 /**
  * Sets the frame of the trackHolder and the AutoresizingMasks
@@ -56,6 +59,8 @@
 -(void) initScrollView{
     self.scrollView.zoomingDelegate = self;
     self.scrollView.playheadMarkerDelegate = self;
+    
+    self.scrollView.trackHolderView.mouseEventsDelegate = self;
 }
 
 
@@ -159,6 +164,46 @@
     return location;
 }
 
+
+#pragma mark -
+#pragma mark VSViewMouseEventsDelegate Implementation
+
+-(void) mouseDragged:(NSEvent *)theEvent onView:(NSView *)view{
+    if([view isEqual:self.scrollView.trackHolderView]){
+        if(_mouseDownOnView){
+            NSPoint currentMousePosition = [self.scrollView.trackHolderView convertPoint:[theEvent locationInWindow] fromView:nil];
+            
+            
+            NSRect selectionFrameRect;
+            selectionFrameRect.origin.x =  fminf(_mouseDownPoint.x, currentMousePosition.x);
+            selectionFrameRect.origin.y =  fminf(_mouseDownPoint.y, currentMousePosition.y);
+            selectionFrameRect.size.width = fabs(_mouseDownPoint.x - currentMousePosition.x);
+            selectionFrameRect.size.height = fabs(currentMousePosition.y - _mouseDownPoint.y);
+            
+            [self.scrollView.trackHolderView showSelectionFrame:selectionFrameRect];
+            
+            for (VSTrackViewController *trackViewController in self.trackViewControllers){
+                NSRect intersectionRect = NSIntersectionRect(trackViewController.view.frame, selectionFrameRect);
+                intersectionRect.origin.y = 0;
+                [trackViewController selectionFrameIntersectsTrack:intersectionRect];
+            }
+        }
+    }
+}
+
+-(void) mouseDown:(NSEvent *)theEvent onView:(NSView *)view{
+    if([view isEqual:self.scrollView.trackHolderView]){
+        _mouseDownOnView = YES;
+        _mouseDownPoint = [self.scrollView.trackHolderView convertPoint:[theEvent locationInWindow] fromView:nil];
+    }
+}
+
+-(void) mouseUp:(NSEvent *)theEvent onView:(NSView *)view{
+    if([view isEqual:self.scrollView.trackHolderView]){
+        _mouseDownOnView = NO;
+        [self.scrollView.trackHolderView hideSelectionFrame];
+    }
+}
 
 #pragma mark - Protected Methods
 

@@ -26,4 +26,6 @@
 
 +(NSColor*) disclosureViewConteViewColor;
 
++(NSColor*) invisible;
+
 @end
