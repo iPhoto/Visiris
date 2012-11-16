@@ -23,6 +23,8 @@
 -(void) awakeFromNib{
     [super setViewsProperties];
     [self setAutoresizingMask:NSViewWidthSizable];
+    
+//    [self.layer setBackgroundColor:[[NSColor redColor] CGColor]];
 }
 
 @end

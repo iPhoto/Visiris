@@ -300,4 +300,16 @@
     return self.timelineRulerView.ruleThickness;
 }
 
+-(float) documentsContentHeight{
+    float totalHeight = 0.0f;
+    
+    for(NSView *subview in [self.documentView subviews]){
+        if(NSMaxY(subview.frame) > totalHeight){
+            totalHeight = NSMaxY(subview.frame);
+        }
+    }
+    
+    return totalHeight;
+}
+
 @end

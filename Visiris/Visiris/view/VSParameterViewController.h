@@ -89,8 +89,7 @@
 @property (weak) IBOutlet NSButton *nextKeyframeButton;
 @property (weak) IBOutlet NSButton *prevKeyframeButton;
 @property (weak) IBOutlet NSButton *setKeyframeButton;
-
-@property (weak) IBOutlet NSView *deviceConnectorsHolder;
+@property (weak) IBOutlet NSButton *deviceConnectionButton;
 
 @property (strong) IBOutlet VSDeviceParameterConnectionViewController *deviceParameterConnectionPopoverViewController;
 
@@ -154,6 +153,8 @@
  * @param sender Control that called the action.
  */
 - (IBAction)keyFrameButton:(id)sender;
+
+- (IBAction)toggleParameterDeviceConnection:(id)sender;
 
 #pragma mark - init
 

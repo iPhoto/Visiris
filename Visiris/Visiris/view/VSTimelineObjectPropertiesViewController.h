@@ -12,6 +12,7 @@
 #import "VSScrollView.h"
 #import "VSParameterViewController.h"
 #import "VSAnimationTimelineViewController.h"
+#import "VSDisclosureView.h"
 
 @class VSTimelineObject;
 @class VSTestView;
@@ -22,7 +23,7 @@
  *
  * Creates a VSParameterViewController for everey parameter of its VSTimelineObject
  */
-@interface VSTimelineObjectPropertiesViewController : NSViewController<NSSplitViewDelegate, VSViewResizingDelegate, VSScrollViewScrollingDelegate, VSParameterViewKeyFrameDelegate, VSKeyFrameEditingDelegate>
+@interface VSTimelineObjectPropertiesViewController : NSViewController<NSSplitViewDelegate, VSScrollViewScrollingDelegate, VSParameterViewKeyFrameDelegate, VSKeyFrameEditingDelegate, VSDisclosureViewDelegate>
 
 /** VSTimelineObject which properties VSTimelineObjectPropertiesViewController is representing */
 @property (strong) VSTimelineObject*timelineObject;
@@ -32,16 +33,16 @@
 @property (weak) IBOutlet NSLayoutConstraint *parametersDisclosureWrapperViewVerticalTopConstraint;
 @property (weak) IBOutlet VSDisclosureView *parametersDisclosureView;
 
-@property (weak) IBOutlet VSScrollView *mainScrollView;
+@property (weak) IBOutlet VSDisclosureView *deviceDisclosureView;
 
 
 /** ScrollView's documentView */
 @property (weak) IBOutlet NSSplitView *parametersHolderSplitView;
-@property (weak) IBOutlet NSView *leftSplittedView;
 
 /** Wrapper for the view of the VSAnimationTimelineViewController */
 @property (weak) IBOutlet NSView *animationTimelineHolder;
 
+@property (weak) IBOutlet VSScrollView *leftScrollView;
 
 /**
  * Inits the controller with the .nib-File stored in defaultNib (VSBrowserView)

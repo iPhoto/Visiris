@@ -94,6 +94,10 @@
 
 -(NSArray*) devicesAtIndexes:(NSIndexSet *)indexes;
 
+-(VSDevice*) deviceIdentifiedBy:(NSString*) deviceID;
 
+-(void) disconnectDevice:(VSDevice*) device;
+
+-(void) removeDevice:(VSDevice*)device;
 
 @end

@@ -38,4 +38,8 @@
     return [NSColor blackColor];
 }
 
++(NSColor*) disclosureViewConteViewColor{
+    return [NSColor lightGrayColor];
+}
+
 @end

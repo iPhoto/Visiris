@@ -142,6 +142,13 @@
 /** Thicknes of the horizontalRuler displaying the timecodes */
 @property (readonly) CGFloat timelecodeRulerThickness;
 
+
+/**
+ * Returns the height of the scrollviews documentView according to its subviews 
+ * @return Height of the scrollView's documentView
+ */
+-(float) documentsContentHeight;
+
 /**
  * Moves the marker representing the playHead to the given location in the horizontal rulerView
  * @param location Loction in the horizontal rulverView the playhead marker should be moved to

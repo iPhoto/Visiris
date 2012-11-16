@@ -273,6 +273,67 @@
     return [self.devices objectsAtIndexes:indexes];
 }
 
+-(VSDevice*) deviceIdentifiedBy:(NSString*) deviceID{
+    
+    VSDevice *result = nil;
+    
+    if(self.devices.count){
+    
+    NSInteger indexOfDevice = [self.devices indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj isKindOfClass:[VSDevice class]]){
+            if([((VSDevice*)obj).ID isEqualToString:deviceID]){
+                return YES;
+            }
+        }
+        return NO;
+    }];
+        
+        if(indexOfDevice != NSNotFound){
+            result = [self.devices objectAtIndex:indexOfDevice];
+        }
+    }
+    
+    return result;
+
+}
+
+-(void) removeDevice:(VSDevice*)device{
+    NSSet *keyOfParametersConnectWithDevice = [self keysOfParametersConnectWithDevice:device];
+    
+    for(id key in keyOfParametersConnectWithDevice){
+        VSParameter *parameter = (VSParameter*) [self.sourceObject.parameters objectForKey:key];
+        
+        [parameter disconnectFromDevice];
+        parameter.deviceParameterMapper = nil;
+    }
+    
+    [self.devices removeObject:device];
+}
+
+-(NSSet*) keysOfParametersConnectWithDevice:(VSDevice*) device{
+    return [self.sourceObject.parameters keysOfEntriesPassingTest:^BOOL(id key, id obj, BOOL *stop) {
+        if([obj isKindOfClass:[VSParameter class]]){
+            VSParameter *parameter = (VSParameter*) obj;
+            
+            if(parameter.deviceParameterMapper && [parameter.deviceParameterMapper.device isEqual:device]){
+                return YES;
+            }
+        }
+        
+            return NO;
+    }];
+}
+
+-(void) disconnectDevice:(VSDevice*) device{
+    NSSet *keyOfParametersConnectWithDevice = [self keysOfParametersConnectWithDevice:device];
+    
+    for(id key in keyOfParametersConnectWithDevice){
+        VSParameter *parameter = (VSParameter*) [self.sourceObject.parameters objectForKey:key];
+        
+        [parameter disconnectFromDevice];
+    }
+}
+
 - (void)dealloc{
     self.sourceObject = nil;
 }

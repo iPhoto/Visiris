@@ -21,16 +21,21 @@
 #import "VSPlayhead.h"
 #import "VSCoreServices.h"
 #import "VSDisclosureView.h"
+#import "VSTimelineObjectDevicesViewController.h"
+#import "VSEmtpyRuler.h"
 
 @interface VSTimelineObjectPropertiesViewController ()
 
 @property NSView *documentView;
 
+/** Takes care for displaying a VSAnimationTimelineView for every parameter of the VSTimelineObject */
 @property (strong) VSAnimationTimelineViewController *animationTimelineViewController;
 
+/** Takes care for displaying a VSParameterView for every parameter of the VSTimelineObject */
 @property (strong) VSTimelineObjectParametersViewController *parametersViewController;
 
-@property int numberOfParameters;
+/** Takes care for displaying a VSTimelineObjectDevicesView for every device of the VSTimelineObject */
+@property (strong) VSTimelineObjectDevicesViewController *timelineObjectDevicesViewController;
 
 @end
 
@@ -40,20 +45,20 @@
 
 /** Height of the parameter views */
 #define PARAMETER_VIEW_HEIGHT 70
-#define PARAMETER_VIEW_MINIMUM_WIDTH 150
-#define PARAMETER_VIEW_MAXIMUM_WIDTH 200
+
+/** Height of the device views */
+#define DEVICE_VIEW_HEIGHT 50
 
 
 /** Name of the nib that will be loaded when initWithDefaultNib is called */
 static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 
 
+
 #pragma mark - Init
 
 -(id) initWithDefaultNib{
     if(self = [self initWithNibName:defaultNib bundle:nil]){
-        
-        
     }
     
     return self;
@@ -72,26 +77,21 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 
 - (void) awakeFromNib{
     [super awakeFromNib];
+
     
-    if([self.view isKindOfClass:[VSTimelineObjectPropertiesView class] ]){
-        ((VSTimelineObjectPropertiesView*) self.view).resizingDelegate = self;
-    }
+    [self.parametersHolderSplitView setAutoresizingMask:NSViewWidthSizable];
+    [self.parametersHolderSplitView setAutoresizesSubviews:NO];
     
-    [self.mainScrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
-    [self.mainScrollView setAutoresizesSubviews:YES];
-    
-    
-    [self.leftSplittedView setAutoresizesSubviews:YES];
-    [self.leftSplittedView setAutoresizingMask:NSViewWidthSizable];
-    [self.leftSplittedView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.leftSplittedView setFrameSize:NSMakeSize(PARAMETER_VIEW_MINIMUM_WIDTH, self.leftSplittedView.frame.size.height)];
     
     [self initAnimationTimeline];
     
-    [self initParameterView];
+    /** inits the properties view and the devices view */
+    [self initLeftScrollView];
     
+    /** inits the animation timeline */
     [self animationTimelineHolder];
     
+    /** observes if the scroller style was changed while showing the properties */
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(scrollerStyleDidChange:)
                                                  name:NSPreferredScrollerStyleDidChangeNotification
@@ -106,11 +106,12 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     [self.animationTimelineHolder setAutoresizesSubviews:YES];
     [self.animationTimelineHolder setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable ];
     
-    float width = self.view.frame.size.width - PARAMETER_VIEW_MINIMUM_WIDTH - self.parametersHolderSplitView.dividerThickness;
+    float width = self.view.frame.size.width - self.parametersHolderSplitView.dividerThickness;
     
     [self.animationTimelineHolder setFrameSize:NSMakeSize(width, self.view.frame.size.height)];
     
-    self.animationTimelineViewController = [[VSAnimationTimelineViewController alloc]initWithDefaultNibAndTrackHeight:PARAMETER_VIEW_HEIGHT];
+    self.animationTimelineViewController = [[VSAnimationTimelineViewController alloc]initWithDefaultNibAndTrackHeight:PARAMETER_VIEW_HEIGHT
+                                                                                                 andMarginTop:self.parametersDisclosureView.controlAreaHeight];
     
     [self.animationTimelineHolder addSubview:self.animationTimelineViewController.view];
     
@@ -119,9 +120,9 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     [self.animationTimelineViewController.view setAutoresizesSubviews:YES];
     [self.animationTimelineViewController.view setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
     
+    /** sets the color for the tracks */
     self.animationTimelineViewController.oddTrackColor = [NSColor lightGrayColor];
     self.animationTimelineViewController.evenTrackColor = [NSColor darkGrayColor];
-    
     
     self.animationTimelineViewController.keyFrameSelectingDelegate = self;
     self.animationTimelineViewController.scrollView.scrollingDelegate = self;
@@ -129,58 +130,93 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 }
 
 /**
+ * Inits the VSScrollView in the left part of the splitView and inits it's subviews
+ */
+-(void) initLeftScrollView{
+    
+    [self.leftScrollView setAutoresizesSubviews:YES];
+    self.leftScrollView.scrollingDelegate = self;
+    
+    [self.leftScrollView setHorizontalRulerView:[[VSEmtpyRuler alloc] initWithScrollView:self.leftScrollView
+                                                                             orientation:NSHorizontalRuler]];
+    
+    //adds an empty rulerview above the parameters that the are on the same height as the animation timline*/
+    [self.leftScrollView.horizontalRulerView setRuleThickness:self.animationTimelineViewController.scrollView.horizontalRulerView.ruleThickness];
+    
+    [self.leftScrollView setHasHorizontalRuler:YES];
+    [self.leftScrollView setRulersVisible:YES];
+    
+    
+    [((NSView*)self.leftScrollView.documentView) setAutoresizingMask:NSViewWidthSizable];
+    [self.leftScrollView.documentView setAutoresizesSubviews:YES];
+    
+    [self.leftScrollView.documentView setFrameSize:self.leftScrollView.visibleRect.size];
+    
+    [self initParameterView];
+    [self initDevicesView];
+}
+
+/**
  * Instantiates a VSTimelineObjectParametersViewController, stores its view as subView of parametersHolder and sets the view's properties
  */
 -(void) initParameterView{
+    [self.leftScrollView.documentView addSubview:self.parametersDisclosureView];
     
     [self.parametersDisclosureView setAutoresizesSubviews:YES];
     [self.parametersDisclosureView setAutoresizingMask: NSViewWidthSizable];
+
     
-    
-    [self.parametersDisclosureView.contentView setAutoresizesSubviews:YES];
-    [self.parametersDisclosureView.contentView setAutoresizingMask: NSViewWidthSizable];
-    
-    
-    
-    [self.parametersDisclosureView setFrameSize:NSMakeSize(PARAMETER_VIEW_MINIMUM_WIDTH, self.parametersDisclosureView.frame.size.height)];
-    [self.parametersDisclosureView.contentView setFrameSize:NSMakeSize(PARAMETER_VIEW_MINIMUM_WIDTH, self.parametersDisclosureView.contentView.frame.size.height)];
+    [self.parametersDisclosureView setFrameSize:NSMakeSize(self.leftScrollView.visibleRect.size.width, self.parametersDisclosureView.frame.size.height)];
     
     self.parametersViewController = [[VSTimelineObjectParametersViewController alloc] initWithDefaultNibAndParameterViewHeight:PARAMETER_VIEW_HEIGHT];
     
+    //sets the zebra-colors
     self.parametersViewController.oddColor = [NSColor lightGrayColor];
     self.parametersViewController.evenColor = [NSColor darkGrayColor];
     
-    [self.parametersDisclosureView.contentView addSubview:self.parametersViewController.view];
-    
-    [self.parametersViewController.view setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
+    [self.parametersViewController.view setAutoresizingMask:NSViewWidthSizable];
     [self.parametersViewController.view setAutoresizesSubviews:YES];
     
-    [self.parametersViewController.view setFrameSize:NSMakeSize(PARAMETER_VIEW_MINIMUM_WIDTH, self.parametersViewController.view.frame.size.height)];
-
-    float yOffset =self.animationTimelineViewController.scrollView.horizontalRulerView.frame.size.height;
-    [self.parametersDisclosureWrapperViewVerticalTopConstraint setConstant:yOffset];
-//
-//    NSRect parametersViewFrame = self.parametersDisclosureWrapperView.frame;
-////    parametersViewFrame.size.height -= yOffset;
-//    parametersViewFrame.size.width = PARAMETER_VIEW_MINIMUM_WIDTH;
-//    parametersViewFrame.origin.x = 0;
-//    parametersViewFrame.origin.y = yOffset;
-//    
-//    [self.parametersDisclosureWrapperView setFrame:parametersViewFrame];
-//    
-//    
-//    NSString *constraintString = [NSString stringWithFormat:@"V:|-%f-[parametersDisclosureWrapperView]|", yOffset];
-//
-////    [self.leftSplittedView removeConstraints:self.leftSplittedView.constraints];
-//
-//    [self.leftSplittedView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:constraintString
-//                                                                                  options:0
-//                                                                                  metrics:nil
-//                                                                                    views:[NSDictionary dictionaryWithObject:self.parametersDisclosureWrapperView forKey:@"parametersDisclosureWrapperView"]]];
+    [self.parametersViewController.view setFrameSize:NSMakeSize(100, self.parametersViewController.view.frame.size.height)];
     
-    self.parametersViewController.scrollView.scrollingDelegate = self;
+    [self.parametersDisclosureView.contentView addSubview:self.parametersViewController.view];
+}
+
+/**
+ * Allocs VSTimelineObjectDevicesViewController inits its view and sets it as subview of leftScrollView's documentView
+ */
+-(void) initDevicesView{
+    [self.leftScrollView.documentView addSubview:self.deviceDisclosureView];
+    
+    NSRect deviceDisclosureViewFrame;
+    deviceDisclosureViewFrame.origin = NSMakePoint(self.deviceDisclosureView.frame.origin.x,
+                                                   NSMaxY(self.parametersDisclosureView.frame));
+    
+    deviceDisclosureViewFrame.size = NSMakeSize(self.leftScrollView.visibleRect.size.width,
+                                                self.parametersDisclosureView.frame.size.height);
+
+    
+    [self.deviceDisclosureView setFrame:deviceDisclosureViewFrame];
+    
+    [self.deviceDisclosureView setAutoresizesSubviews:YES];
+    [self.deviceDisclosureView setAutoresizingMask: NSViewWidthSizable];
+    
+    
+    self.timelineObjectDevicesViewController = [[VSTimelineObjectDevicesViewController alloc] initWithDefaultNibAndDeviceViewHeight:DEVICE_VIEW_HEIGHT];
+    
+    [self.deviceDisclosureView.contentView addSubview:self.timelineObjectDevicesViewController.view];
+    
+    [self.timelineObjectDevicesViewController.view setFrameSize:NSMakeSize(self.deviceDisclosureView.frame.size.width,
+                                                                self.parametersViewController.view.frame.size.height)];
+    
+    
+    [self.timelineObjectDevicesViewController.view setAutoresizesSubviews:YES];
+    [self.timelineObjectDevicesViewController.view setAutoresizingMask:NSViewWidthSizable];
     
 }
+
+#pragma mark -
+#pragma mark Methods
 
 -(void) willBeHidden{
     [self.animationTimelineViewController resetTimeline];
@@ -188,17 +224,6 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     self.timelineObject = nil;
 }
 
-#pragma mark - NSViewController
-
-//-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-//    if ([keyPath isEqualToString:@"name"]) {
-//        [self.nameTextField setStringValue:[object valueForKey:keyPath]];
-//    }
-//    else if([keyPath isEqualToString:@"startTime"]){
-//        [self.animationTimelineViewController updatePlayheadPosition];
-//        [self updateCurrentValueOfAllParameters];
-//    }
-//}
 
 #pragma mark - VSParameterViewKeyFrameDelegate Implementation
 
@@ -249,6 +274,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     return YES;
 }
 
+#pragma mark
 #pragma mark - VSScrollViewScrollingDelegate Implementation
 
 -(void) scrollView:(NSScrollView *)scrollView changedBoundsFrom:(NSRect)fromBounds to:(NSRect)toBounds{
@@ -256,9 +282,9 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     VSScrollView *scrollViewToScroll = nil;
     
     if([scrollView isEqual:self.animationTimelineViewController.scrollView]){
-        scrollViewToScroll = self.parametersViewController.scrollView;
+        scrollViewToScroll = self.leftScrollView;
     }
-    else if([scrollView isEqual:self.parametersViewController.scrollView]){
+    else if([scrollView isEqual:self.leftScrollView]){
         scrollViewToScroll = self.animationTimelineViewController.scrollView;
     }
     
@@ -272,43 +298,69 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     
 }
 
-//#pragma mark -
-//#pragma mark IBAction
-//
-//- (IBAction)disclosureButtonStateDidChange:(NSButton*)sender {
-//    if([sender isEqual:self.devicesDisclosureButton]){
-//        NSView *viewToHide = [self.devicesDisclosureWrapperView.subviews objectAtIndex:0];
-//        if(!sender.state){
-//            [viewToHide setHidden:YES];
-//            NSPoint newOrigin = self.parametersDisclosureWrapperView.frame.origin;
-//            newOrigin.y += viewToHide.frame.size.height;
-//            [self.parametersDisclosureWrapperView setFrameOrigin:newOrigin];
-//        }
-//        else{
-//            [viewToHide setHidden:NO];
-//            NSPoint newOrigin = self.parametersDisclosureWrapperView.frame.origin;
-//            newOrigin.y -= viewToHide.frame.size.height;
-//            [self.parametersDisclosureWrapperView setFrameOrigin:newOrigin];
-//        }
-//    }
-//    else if([sender isEqual:self.parametersDisclosureButton]){
-//        NSView *viewToHide = [self.parametersDisclosureWrapperView.subviews objectAtIndex:0];
-//        if(!sender.state){
-//            [viewToHide setHidden:YES];
-//        }
-//        else{
-//            [viewToHide setHidden:NO];
-//        }
-//    }
-//}
+#pragma mark - VSDisclosureViewDelegate
+
+-(BOOL) willShowContentOfDisclosureView:(VSDisclosureView *)disclosureView{
+    if([disclosureView isEqual:self.parametersDisclosureView]){
+        NSSize newSize = [self.animationTimelineViewController.scrollView.documentView frame].size;
+        newSize.height = self.animationTimelineViewController.scrollView.documentsContentHeight;
+        [((NSView*) self.animationTimelineViewController.scrollView.documentView).animator setFrameSize:newSize];
+    }
+    
+    return YES;
+}
+
+-(BOOL) willHideContentOfDisclosureView:(VSDisclosureView *)disclosureView{
+    if([disclosureView isEqual:self.parametersDisclosureView]){
+        NSSize newSize = [self.animationTimelineViewController.scrollView.documentView frame].size;
+        newSize.height = 0;
+        [((NSView*) self.animationTimelineViewController.scrollView.documentView).animator setFrameSize:newSize];
+    }
+    
+    return YES;
+}
+
+-(void) didHideContentOfDisclosureView:(VSDisclosureView *)disclosureView{
+    [self updateSubviewSizes];
+}
+
+-(void) didShowContentOfDisclosureView:(VSDisclosureView *)disclosureView{
+    [self updateSubviewSizes];
+}
+
+-(void) contentSizeDidChangeOfDisclosureView:(VSDisclosureView *)disclosureView{
+    if([disclosureView isEqual:self.parametersDisclosureView]){
+        NSRect newRect = self.parametersDisclosureView.frame;
+        newRect.size.height = self.parametersDisclosureView.intrinsicContentSize.height;
+        [self.parametersDisclosureView setFrameSize:NSMakeSize([self.leftScrollView.documentView frame].size.width, self.parametersDisclosureView.intrinsicContentSize.height)];
+        
+        [self.deviceDisclosureView setFrameOrigin:NSMakePoint(self.deviceDisclosureView.frame.origin.x, NSMaxY(self.parametersDisclosureView.frame))];
+    }
+    else if([disclosureView isEqual:self.deviceDisclosureView]){
+        [self.deviceDisclosureView setFrameSize:self.deviceDisclosureView.intrinsicContentSize];
+        [self.deviceDisclosureView setFrameSize:NSMakeSize([self.leftScrollView.documentView frame].size.width, self.deviceDisclosureView.intrinsicContentSize.height)];
+    }
+    
+    [self updateSubviewSizes];
+}
 
 
-#pragma mark - Private Methods
 
+#pragma mark - 
+#pragma mark Private Methods
+
+/**
+ * Updates the currentValue of the parameter according of the currentTimePosition of the animationTimeline's playhead
+ *
+ * @param parameter VSParameter which currentValue is going to be update
+ */
 -(void) updateCurrentValueOfParameter:(VSParameter*) parameter{
     [parameter updateCurrentValueForTimestamp: [self.timelineObject localTimestampOfGlobalTimestamp:self.animationTimelineViewController.playhead.currentTimePosition]];
 }
 
+/**
+ * Updates the currentValue of all parameters of the timelineobject according of the currentTimePosition of the animationTimeline's playhead
+ */
 -(void) updateCurrentValueOfAllParameters{
     for (VSParameter *parameter in self.timelineObject.visibleParameters){
         [self updateCurrentValueOfParameter:parameter];
@@ -325,19 +377,53 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     }
 }
 
+
+#pragma mark - Show Propertis
+
 /**
  * Tells the parametersViewController to show the parameters of the timelineObject
  */
 -(void) showParameters{
-    [self.parametersViewController showParametersOfTimelineObject:self.timelineObject connectedWithDelegate:self];
+    
+    [self.parametersViewController showParametersOfTimelineObject:self.timelineObject
+                                            connectedWithDelegate:self];
+    
+}
+
+/**
+ * tells timelineObjectDevicesViewController to display all devices connected with the timelineObject
+ */
+-(void) showDevices{
+    [self.timelineObjectDevicesViewController reset];
+    
+    [self.timelineObjectDevicesViewController showDevicesOfTimelineObject:self.timelineObject];
+}
+
+
+/**
+ * Updates the heights of the documentViews of the scrollViews stored in the left and right splitview to make them the same height.
+ */
+-(void) updateSubviewSizes{
+    
+    float totalHeight = self.parametersDisclosureView.frame.size.height + self.deviceDisclosureView.intrinsicContentSize.height;
+    
+    NSRect newFrame = [self.parametersHolderSplitView frame];
+    newFrame.size.height = totalHeight;
+    
+    NSSize leftScrollViewSize = [self.leftScrollView.documentView frame].size;
+    NSSize animationScrollViewSize = [self.animationTimelineViewController.scrollView.documentView frame].size;
+
+    leftScrollViewSize.height = newFrame.size.height;
+    animationScrollViewSize.height  = newFrame.size.height;
     
     if([NSScroller preferredScrollerStyle] == NSScrollerStyleLegacy){
-        NSSize newSize = [self.parametersViewController.scrollView.documentView frame].size;
-        
-        newSize.height += self.animationTimelineViewController.scrollView.horizontalScroller.frame.size.height;
-        
-        [self.parametersViewController.scrollView.documentView setFrameSize:newSize];
+        leftScrollViewSize.height += self.animationTimelineViewController.scrollView.horizontalScroller.frame.size.height;
     }
+    
+    
+    [self.leftScrollView.documentView setFrameSize:leftScrollViewSize];
+    [self.animationTimelineViewController.scrollView.documentView setFrameSize:animationScrollViewSize];
+    
 }
 
 /**
@@ -347,9 +433,15 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     [self.animationTimelineViewController showTimelineForTimelineObject:self.timelineObject];
 }
 
+
+/**
+ * Called when the style of the scroller ("hide automatically") has been changed in the systems preferences
+ *
+ * @param notification NSNotification of the Evenet
+ */
 -(void) scrollerStyleDidChange:(NSNotification*) notification{
     
-    NSSize newSize = [self.parametersViewController.scrollView.documentView frame].size;
+    NSSize newSize = [self.leftScrollView.documentView frame].size;
     
     if([NSScroller preferredScrollerStyle] == NSScrollerStyleLegacy){
         newSize.height += self.animationTimelineViewController.scrollView.horizontalScroller.frame.size.height;
@@ -358,9 +450,11 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
         newSize.height -= self.animationTimelineViewController.scrollView.horizontalScroller.frame.size.height;
     }
     
-    [self.parametersViewController.scrollView.documentView setFrameSize:newSize];
+    [self.leftScrollView.documentView setFrameSize:newSize];
     
 }
+
+
 
 
 #pragma mark - Properties
@@ -368,29 +462,22 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 -(void) setTimelineObject:(VSTimelineObject *)timelineObject{
     if(_timelineObject != timelineObject){
         
-        
         if(_timelineObject){
-            [self.timelineObject removeObserver:self
-                                     forKeyPath:@"startTime"];
-//            [self setTimelineObjectName:[self.nameTextField stringValue]];
-            [self.parametersViewController resetParameters];
-            
         }
         
         _timelineObject = timelineObject;
         
-        [self.timelineObject addObserver:self
-                              forKeyPath:@"startTime"
-                                 options:0
-                                 context:nil];
-        
-        self.numberOfParameters = [timelineObject visibleParameters].count;
-        
-        [self showAnimationTimeline];
-        [self showParameters];
-        
-        [self.animationTimelineViewController.scrollView setBoundsOriginWithouthNotifiying:NSZeroPoint];
-        [self.parametersViewController.scrollView setBoundsOriginWithouthNotifiying:NSZeroPoint];
+        if(_timelineObject){
+            
+            [self showAnimationTimeline];
+            [self showParameters];
+            [self showDevices];
+            
+            [self updateSubviewSizes];
+            
+            [self.animationTimelineViewController.scrollView setBoundsOriginWithouthNotifiying:NSZeroPoint];
+            [self.leftScrollView setBoundsOriginWithouthNotifiying:NSZeroPoint];
+        }
         
     }
 }

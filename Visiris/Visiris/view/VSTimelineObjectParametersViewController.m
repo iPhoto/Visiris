@@ -56,12 +56,7 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
 }
 
 -(void) awakeFromNib{
-    [self.view setAutoresizingMask:NSViewWidthSizable ];
     [self.view setAutoresizesSubviews:YES];
-    
-    [self.scrollView setAutoresizingMask:NSViewWidthSizable ];
-    
-    [((NSView*) self.scrollView.documentView) setAutoresizingMask:NSViewWidthSizable];
 }
 
 #pragma mark - NSViewController
@@ -86,12 +81,10 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
             case NSKeyValueChangeRemoval:
             {
                 if([[change valueForKey:@"notificationIsPrior"] boolValue]){
-                    if(![[change valueForKey:@"notificationIsPrior"] boolValue]){
-                        NSArray *newDevices = [self.timelineObject devicesAtIndexes:[change valueForKey:@"indexes"]];
-                        
-                        for(VSDevice *newDevice in newDevices){
-                            [self timelineObjectWasDisconnectedFromDevice:newDevice];
-                        }
+                    NSArray *newDevices = [self.timelineObject devicesAtIndexes:[change valueForKey:@"indexes"]];
+                    
+                    for(VSDevice *newDevice in newDevices){
+                        [self timelineObjectWasDisconnectedFromDevice:newDevice];
                     }
                 }
                 break;
@@ -125,13 +118,13 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
     
     VSParameterViewController *lastParameterController;
     
-
+    
     [self.timelineObject addObserver:self
                           forKeyPath:@"devices"
                              options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionPrior
                              context:nil];
-
-
+    
+    
     if(parameters && parameters.count){
         
         int i = 0;
@@ -141,22 +134,18 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
             NSColor *backgroundColor = i++%2==0?self.evenColor:self.oddColor;
             
             VSParameterViewController *parameteViewController = [[VSParameterViewController alloc] initWithDefaultNibAndBackgroundColor:backgroundColor];
-
-
+            
+            [self.view addSubview:parameteViewController.view];
+            
+            [parameteViewController.view setFrameSize:NSMakeSize( self.view.frame.size.width, parameteViewController.view.frame.size.width)];
+            
+            [parameteViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
+            
             parameteViewController.keyFrameDelegate = delegate;
             [parameteViewController showParameter:parameter andAvailableDevices:self.timelineObject.devices];
             
-            [self.scrollView.documentView addSubview:parameteViewController.view];
-
-            
-            [parameteViewController.view setAutoresizingMask:NSViewWidthSizable];
-            [parameteViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
             [self.view addConstraints:[self constrainsForParameterView:parameteViewController.view
                                                                  below:lastParameterController.view]];
-            
-            
-            
-            
             
             [self.parameterViewControllers setObject:parameteViewController
                                               forKey:[NSNumber numberWithInteger:parameter.ID]];
@@ -166,11 +155,13 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
         }
         
         [self.view.window recalculateKeyViewLoop];
+        NSRect newFrame = self.view.frame;
+        newFrame.size = NSMakeSize(self.view.frame.size.width, (parameters.count) * self.parameterViewHeight);
         
-        [self.scrollView.documentView setFrameSize:NSMakeSize(((NSView*)self.scrollView.documentView).frame.size.width, (parameters.count) * self.parameterViewHeight)];  
+        [self.view setFrame:newFrame];
     }
 }
- 
+
 -(NSArray*) constrainsForParameterView:(NSView*) view below:(NSView*) viewBelow{
     NSMutableArray *constraints = [[NSMutableArray alloc] init];
     
@@ -186,10 +177,10 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
                                                           constant:0.0]];
     
     if(!self.parameterViewControllers.count){
-        [self.scrollView.documentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|[parameterView(==%f)]",self.parameterViewHeight]
-                                                                                             options:0
-                                                                                             metrics:nil
-                                                                                               views:viewsDictionary]];
+        [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|[parameterView(==%f)]",self.parameterViewHeight]
+                                                                          options:0
+                                                                          metrics:nil
+                                                                            views:viewsDictionary]];
     }
     else{
         [constraints addObject: [NSLayoutConstraint constraintWithItem:view
@@ -262,5 +253,5 @@ static NSString* defaultNib = @"VSTimelineObjectParametersView";
         parameterViewController.selectedKeyframe = nil;
     }
 }
-     
+
 @end

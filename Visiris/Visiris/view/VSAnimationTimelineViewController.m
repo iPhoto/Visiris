@@ -24,7 +24,9 @@
 
 #import "VSCoreServices.h"
 
-@interface VSAnimationTimelineViewController ()
+@interface VSAnimationTimelineViewController (){
+    float _marginTop;
+}
 
 /** Dictionary holding the VSAnimationTrackViewControllers the timeline sets up for its VSTimelineObject. The ID of the VSParameter the different tracks are representing is used as key. The key is neccessary to provide fast queries between the different Parameters and their corresponding tracks. */
 @property (strong) NSMutableDictionary *animationTrackViewControllers;
@@ -48,10 +50,12 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
 
 #pragma mark - Init
 
--(id) initWithDefaultNibAndTrackHeight:(float) trackHeight{
+-(id) initWithDefaultNibAndTrackHeight:(float) trackHeight andMarginTop:(float) marginTop{
     if(self = [super initWithNibName:defaultNib bundle:nil]){
         self.animationTrackViewControllers = [[NSMutableDictionary alloc]init];
         self.trackHeight = trackHeight;
+        
+        _marginTop = marginTop;
     }
     
     return self;
@@ -293,7 +297,7 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
             
             float width = self.scrollView.visibleTrackViewsHolderWidth;
             
-            NSRect trackRect = NSMakeRect(0, self.animationTrackViewControllers.count*self.trackHeight , width, self.trackHeight);
+            NSRect trackRect = NSMakeRect(0, self.animationTrackViewControllers.count*self.trackHeight + _marginTop , width, self.trackHeight);
             
             NSColor *trackColor = self.animationTrackViewControllers.count % 2 == 0 ? self.evenTrackColor : self.oddTrackColor;
             

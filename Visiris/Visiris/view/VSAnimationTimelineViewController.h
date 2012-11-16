@@ -100,7 +100,7 @@
  *
  * @return self
  */
--(id) initWithDefaultNibAndTrackHeight:(float) trackHeight;
+-(id) initWithDefaultNibAndTrackHeight:(float) trackHeight andMarginTop:(float) marginTop;
 
 #pragma mark - Methods
 

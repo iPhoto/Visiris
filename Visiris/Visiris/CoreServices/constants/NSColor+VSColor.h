@@ -24,4 +24,6 @@
 
 +(NSColor*) playheadGuiderColor;
 
++(NSColor*) disclosureViewConteViewColor;
+
 @end

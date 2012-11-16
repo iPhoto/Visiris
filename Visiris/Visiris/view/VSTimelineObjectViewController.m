@@ -71,11 +71,7 @@ static NSString* defaultNib = @"VSTimelineObjectView";
         self.timelineObjectProxy = timelineObjectProxy;
         [self initTimelineObjectProxyObservers];
         
-        if(self.timelineObject){
-            for (VSDevice* device in self.timelineObject.devices){
-                [self newDeviceWasAdded:device atIndex:[self.timelineObject.devices indexOfObject:device]];
-            }
-        }
+        [self showDeviceIcons];
         
 //        if(self.timelineObject.fileType.fileKind == VSFileKindVideo || self.timelineObject.fileType.fileKind == VSFileKindAudio){
 //            NSImage *testImage = [VSWaveForm WaveformOfFile:self.timelineObject.filePath];
@@ -174,7 +170,9 @@ static NSString* defaultNib = @"VSTimelineObjectView";
             }
             case NSKeyValueChangeRemoval:
             {
-
+                if(![[change valueForKey:@"notificationIsPrior"] boolValue]){
+                    [self updateDeviceIcons];
+                }
                 break;
             }
         }
@@ -436,6 +434,24 @@ static NSString* defaultNib = @"VSTimelineObjectView";
     [self.view.layer addSublayer:deviceLayer];
     
     [self.deviceIconLayers insertObject:deviceLayer atIndex:index];
+}
+
+-(void) updateDeviceIcons{
+    for(CALayer *subLayer in self.deviceIconLayers){
+        [subLayer removeFromSuperlayer];
+    }
+    
+    [self.deviceIconLayers removeAllObjects];
+    
+    [self showDeviceIcons];
+}
+
+-(void) showDeviceIcons{
+    if(self.timelineObject){
+        for (VSDevice* device in self.timelineObject.devices){
+            [self newDeviceWasAdded:device atIndex:[self.timelineObject.devices indexOfObject:device]];
+        }
+    }
 }
 
 #pragma mark - Propertes

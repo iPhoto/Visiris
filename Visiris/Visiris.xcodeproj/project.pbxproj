@@ -167,6 +167,7 @@
 		5B4ABA70161D647300BE5248 /* VSDeviceRepresentation.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B4ABA6F161D647300BE5248 /* VSDeviceRepresentation.m */; };
 		5B4ABA84161DA3F500BE5248 /* VSDeviceParameterConnectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B4ABA82161DA3F500BE5248 /* VSDeviceParameterConnectionViewController.m */; };
 		5B4ABA85161DA3F500BE5248 /* VSDeviceParameterConnectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B4ABA83161DA3F500BE5248 /* VSDeviceParameterConnectionView.xib */; };
+		5B4B67E91651238600BA268F /* VSDisclosureContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B4B67E81651238600BA268F /* VSDisclosureContentView.m */; };
 		5B4EB1AD162D3DA8002104DB /* VSVisirsConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B4EB1AC162D3DA8002104DB /* VSVisirsConstants.m */; };
 		5B603FA9157F824A0045A1EA /* VSPlayHead.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B603FA8157F824A0045A1EA /* VSPlayHead.m */; };
 		5B60CC5B16135EE800557892 /* VSOutputController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B60CC5A16135EE800557892 /* VSOutputController.m */; };
@@ -177,6 +178,10 @@
 		5B84D72116247C47006DDC12 /* VSAnimationCurvePopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B84D72016247C47006DDC12 /* VSAnimationCurvePopup.xib */; };
 		5B84D72416247C5A006DDC12 /* VSAnimationCurvePopupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B84D72316247C5A006DDC12 /* VSAnimationCurvePopupViewController.m */; };
 		5B8FEA421647F51400E570BA /* VisirisCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B8FEA411647F51400E570BA /* VisirisCore.framework */; };
+		5B989470164A88C6004CB73A /* VSTimelineObjectDevicesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B98946F164A88C6004CB73A /* VSTimelineObjectDevicesView.m */; };
+		5B989475164A88EB004CB73A /* VSTimelineObjectDevicesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B989473164A88EB004CB73A /* VSTimelineObjectDevicesViewController.m */; };
+		5B989476164A88EB004CB73A /* VSTimelineObjectDevicesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B989474164A88EB004CB73A /* VSTimelineObjectDevicesView.xib */; };
+		5BAB983F165295EF009FBE55 /* VSEmtpyRuler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAB983E165295EF009FBE55 /* VSEmtpyRuler.m */; };
 		5BAC770616034B9400DF3BB0 /* VSKeyFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAC770516034B9400DF3BB0 /* VSKeyFrameView.m */; };
 		5BAC770916034BA100DF3BB0 /* VSKeyFrameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BAC770816034BA100DF3BB0 /* VSKeyFrameViewController.m */; };
 		5BBF2A0615FF42A0009D79C7 /* VSScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BBF2A0515FF42A0009D79C7 /* VSScrollView.m */; };
@@ -496,6 +501,8 @@
 		5B4ABA81161DA3F500BE5248 /* VSDeviceParameterConnectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDeviceParameterConnectionViewController.h; sourceTree = "<group>"; };
 		5B4ABA82161DA3F500BE5248 /* VSDeviceParameterConnectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDeviceParameterConnectionViewController.m; sourceTree = "<group>"; };
 		5B4ABA83161DA3F500BE5248 /* VSDeviceParameterConnectionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VSDeviceParameterConnectionView.xib; sourceTree = "<group>"; };
+		5B4B67E71651238600BA268F /* VSDisclosureContentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDisclosureContentView.h; sourceTree = "<group>"; };
+		5B4B67E81651238600BA268F /* VSDisclosureContentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSDisclosureContentView.m; sourceTree = "<group>"; };
 		5B4D1E6515B7F67900158404 /* VSViewResizingDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSViewResizingDelegate.h; sourceTree = "<group>"; };
 		5B4EB1AB162D3DA8002104DB /* VSVisirsConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSVisirsConstants.h; sourceTree = "<group>"; };
 		5B4EB1AC162D3DA8002104DB /* VSVisirsConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSVisirsConstants.m; sourceTree = "<group>"; };
@@ -519,6 +526,12 @@
 		5B84D72216247C5A006DDC12 /* VSAnimationCurvePopupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSAnimationCurvePopupViewController.h; sourceTree = "<group>"; };
 		5B84D72316247C5A006DDC12 /* VSAnimationCurvePopupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSAnimationCurvePopupViewController.m; sourceTree = "<group>"; };
 		5B8FEA411647F51400E570BA /* VisirisCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisirisCore.framework; path = "/Users/martin/Documents/FH/MMT/Master Projekt/code/_visiris 0.4/VisirisCore/build/Release/VisirisCore.framework"; sourceTree = "<absolute>"; };
+		5B98946016496A4D004CB73A /* VSSubViewDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VSSubViewDelegate.h; sourceTree = "<group>"; };
+		5B98946E164A88C6004CB73A /* VSTimelineObjectDevicesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineObjectDevicesView.h; sourceTree = "<group>"; };
+		5B98946F164A88C6004CB73A /* VSTimelineObjectDevicesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineObjectDevicesView.m; sourceTree = "<group>"; };
+		5B989472164A88EB004CB73A /* VSTimelineObjectDevicesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineObjectDevicesViewController.h; sourceTree = "<group>"; };
+		5B989473164A88EB004CB73A /* VSTimelineObjectDevicesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSTimelineObjectDevicesViewController.m; sourceTree = "<group>"; };
+		5B989474164A88EB004CB73A /* VSTimelineObjectDevicesView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VSTimelineObjectDevicesView.xib; sourceTree = "<group>"; };
 		5B98D1CA161C8EF0002CDE1F /* VSFullScreenHolderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSFullScreenHolderView.h; sourceTree = "<group>"; };
 		5B98D1CB161C8EF0002CDE1F /* VSFullScreenHolderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSFullScreenHolderView.m; sourceTree = "<group>"; };
 		5B98D1D9161CACFF002CDE1F /* VSDeviceLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSDeviceLoader.h; sourceTree = "<group>"; };
@@ -526,6 +539,8 @@
 		5B98D1E3161CC54E002CDE1F /* VSMiscUtlis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSMiscUtlis.h; sourceTree = "<group>"; };
 		5B98D1E4161CC54E002CDE1F /* VSMiscUtlis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSMiscUtlis.m; sourceTree = "<group>"; };
 		5BAB35D315B4153D008B4793 /* VSTimelineScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSTimelineScrollView.h; sourceTree = "<group>"; };
+		5BAB983D165295EF009FBE55 /* VSEmtpyRuler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSEmtpyRuler.h; sourceTree = "<group>"; };
+		5BAB983E165295EF009FBE55 /* VSEmtpyRuler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSEmtpyRuler.m; sourceTree = "<group>"; };
 		5BAC770416034B9400DF3BB0 /* VSKeyFrameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSKeyFrameView.h; sourceTree = "<group>"; };
 		5BAC770516034B9400DF3BB0 /* VSKeyFrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VSKeyFrameView.m; sourceTree = "<group>"; };
 		5BAC770716034BA100DF3BB0 /* VSKeyFrameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VSKeyFrameViewController.h; sourceTree = "<group>"; };
@@ -1067,6 +1082,7 @@
 				5B35BFC01577A573009911EC /* VSTimelineObjectPropertiesViewController.m */,
 				5BCDF1DA15D50291002AA5BD /* VSTimelineObjectPropertiesView.h */,
 				5BCDF1DB15D50291002AA5BD /* VSTimelineObjectPropertiesView.m */,
+				5B989471164A88D2004CB73A /* devices */,
 			);
 			name = timelineObjectProperties;
 			sourceTree = "<group>";
@@ -1111,6 +1127,7 @@
 		5B35C0AF1577AF49009911EC /* parameter */ = {
 			isa = PBXGroup;
 			children = (
+				5B4ABA76161DA15700BE5248 /* parameterDeviceConnector */,
 				5B35BFAA1577A573009911EC /* VSParameterViewController.h */,
 				5B35BFA71577A573009911EC /* VSParameterView.h */,
 				5B35BFAB1577A573009911EC /* VSParameterViewController.m */,
@@ -1348,12 +1365,24 @@
 			name = parameterDeviceConnector;
 			sourceTree = "<group>";
 		};
+		5B4B67E51651236F00BA268F /* disclosureView */ = {
+			isa = PBXGroup;
+			children = (
+				5B26A349164904440040E72F /* VSDisclosureView.h */,
+				5B26A34A164904440040E72F /* VSDisclosureView.m */,
+				5B4B67E71651238600BA268F /* VSDisclosureContentView.h */,
+				5B4B67E81651238600BA268F /* VSDisclosureContentView.m */,
+			);
+			name = disclosureView;
+			sourceTree = "<group>";
+		};
 		5B4D1E6415B7F57D00158404 /* protocolls */ = {
 			isa = PBXGroup;
 			children = (
 				5B4D1E6515B7F67900158404 /* VSViewResizingDelegate.h */,
 				5BF875BE15B95E4200CEBBDD /* VSViewMouseEventsDelegate.h */,
 				5B05472216009868002FF9A9 /* VSViewKeyDownDelegate.h */,
+				5B98946016496A4D004CB73A /* VSSubViewDelegate.h */,
 			);
 			name = protocolls;
 			sourceTree = "<group>";
@@ -1366,6 +1395,18 @@
 				5B84D72316247C5A006DDC12 /* VSAnimationCurvePopupViewController.m */,
 			);
 			name = animationCurvePopover;
+			sourceTree = "<group>";
+		};
+		5B989471164A88D2004CB73A /* devices */ = {
+			isa = PBXGroup;
+			children = (
+				5B98946E164A88C6004CB73A /* VSTimelineObjectDevicesView.h */,
+				5B98946F164A88C6004CB73A /* VSTimelineObjectDevicesView.m */,
+				5B989472164A88EB004CB73A /* VSTimelineObjectDevicesViewController.h */,
+				5B989473164A88EB004CB73A /* VSTimelineObjectDevicesViewController.m */,
+				5B989474164A88EB004CB73A /* VSTimelineObjectDevicesView.xib */,
+			);
+			name = devices;
 			sourceTree = "<group>";
 		};
 		5B9AD00F15C01ACA00A1D1C0 /* timeline */ = {
@@ -1410,8 +1451,9 @@
 				5BFB870E15DA2F7800D405AF /* timeline */,
 				5BBF2A0415FF42A0009D79C7 /* VSScrollView.h */,
 				5BBF2A0515FF42A0009D79C7 /* VSScrollView.m */,
-				5B26A349164904440040E72F /* VSDisclosureView.h */,
-				5B26A34A164904440040E72F /* VSDisclosureView.m */,
+				5B4B67E51651236F00BA268F /* disclosureView */,
+				5BAB983D165295EF009FBE55 /* VSEmtpyRuler.h */,
+				5BAB983E165295EF009FBE55 /* VSEmtpyRuler.m */,
 			);
 			name = base;
 			sourceTree = "<group>";
@@ -1429,7 +1471,6 @@
 		5BD35BE015D95F31001A74E0 /* parameters */ = {
 			isa = PBXGroup;
 			children = (
-				5B4ABA76161DA15700BE5248 /* parameterDeviceConnector */,
 				5B35C0AF1577AF49009911EC /* parameter */,
 				5BD35BDB15D95F27001A74E0 /* VSTimelineObjectParametersViewController.h */,
 				5BD35BDC15D95F28001A74E0 /* VSTimelineObjectParametersViewController.m */,
@@ -1614,6 +1655,7 @@
 				A986A5FA161CC8430068F3CA /* VSCreateDeviceViewController.xib in Resources */,
 				5B4ABA85161DA3F500BE5248 /* VSDeviceParameterConnectionView.xib in Resources */,
 				5B84D72116247C47006DDC12 /* VSAnimationCurvePopup.xib in Resources */,
+				5B989476164A88EB004CB73A /* VSTimelineObjectDevicesView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1799,6 +1841,10 @@
 				5B4EB1AD162D3DA8002104DB /* VSVisirsConstants.m in Sources */,
 				5B4042CA1635682E0013978B /* VSExternalInputRepresentation.m in Sources */,
 				5B26A34B164904440040E72F /* VSDisclosureView.m in Sources */,
+				5B989470164A88C6004CB73A /* VSTimelineObjectDevicesView.m in Sources */,
+				5B989475164A88EB004CB73A /* VSTimelineObjectDevicesViewController.m in Sources */,
+				5B4B67E91651238600BA268F /* VSDisclosureContentView.m in Sources */,
+				5BAB983F165295EF009FBE55 /* VSEmtpyRuler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

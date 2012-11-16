@@ -15,7 +15,7 @@
 /**
  * Shows the parameters for given timelineObject
  */
-@interface VSTimelineObjectParametersViewController : NSViewController
+@interface VSTimelineObjectParametersViewController : NSViewController 
 
 #pragma mark - Properties
 
@@ -24,9 +24,6 @@
 
 /** Height of the controller's view */
 @property float parameterViewHeight;
-
-/** ScrollView holding the parameters */
-@property (weak) IBOutlet VSScrollView *scrollView;
 
 /** Color for parameters with an odd index */
 @property (strong) NSColor *oddColor;
