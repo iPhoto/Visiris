@@ -67,6 +67,8 @@
 
 -(BOOL) draggingInfo:(id<NSDraggingInfo>) draggingInfo isDroppedOnTimelineObjectView:(VSTimelineObjectView*) timelineObjectView;
 
+-(void) mouseUpOnTimelineObjectView:(VSTimelineObjectView*) timelineObjectView;
+
 @optional
 
 /**

@@ -140,14 +140,18 @@ static NSString* defaultNib = @"VSPropertiesView";
  */
 -(void) timelineObjectsGotSelected:(NSNotification *) notification{
     if ([[notification.userInfo objectForKey:VSSendersDocumentKeyInUserInfoDictionary] isEqualTo:[VSDocumentController documentOfView:self.view]]){
-        if([[notification object] isKindOfClass:[NSArray class]]){
-            NSArray *selectedTimelineObjects = (NSArray*) [notification object];
-            
-            if(selectedTimelineObjects && selectedTimelineObjects.count > 0){
-                if([[selectedTimelineObjects objectAtIndex:0] isKindOfClass:[VSTimelineObject class]]){
-                    VSTimelineObject *timelineObject = (VSTimelineObject*) [selectedTimelineObjects objectAtIndex:0];
-                    [self showSubview:self.timelineObjectPropertiesViewController.view];
-                    self.timelineObjectPropertiesViewController.timelineObject = timelineObject;
+        if([notification object]){
+            if([[notification object] isKindOfClass:[VSTimelineObject class]]){
+                [self showSubview:self.timelineObjectPropertiesViewController.view];
+                [self.timelineObjectPropertiesViewController reset];
+                self.timelineObjectPropertiesViewController.timelineObject = [notification object];
+            }
+        }
+        else{
+            if(self.view.subviews.count > 0){
+                if([[self.view subviews] objectAtIndex:0] == self.timelineObjectPropertiesViewController.view){
+                    [self.timelineObjectPropertiesViewController reset];
+                    [self.timelineObjectPropertiesViewController.view removeFromSuperview];
                 }
             }
         }
@@ -164,7 +168,7 @@ static NSString* defaultNib = @"VSPropertiesView";
     if ([[notification.userInfo objectForKey:VSSendersDocumentKeyInUserInfoDictionary] isEqualTo:[VSDocumentController documentOfView:self.view]]){
         if(self.view.subviews.count > 0){
             if([[self.view subviews] objectAtIndex:0] == self.timelineObjectPropertiesViewController.view){
-                [self.timelineObjectPropertiesViewController willBeHidden];
+                [self.timelineObjectPropertiesViewController reset];
                 [self.timelineObjectPropertiesViewController.view removeFromSuperview];
             }
         }

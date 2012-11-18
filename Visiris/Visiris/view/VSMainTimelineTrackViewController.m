@@ -21,9 +21,6 @@
 
 @interface VSMainTimelineTrackViewController ()
 
-/** NSMutableArray storing all VSTimelineObjectViewControllers of the VSTimelineObjectViews added to the VSTrackViewController */
-@property (strong) NSMutableArray *timelineObjectViewControllers;
-
 /** NSMutableArray storing all VSTimelineObjectViewControllers of the VSTimelineObjectViews which's VSTimelineObjects were dragged onto the VSTrackView but not dropped yet. Neccessary to give the user a preview where the newly added VSTimelineObject will be placed on the timeline */
 @property (strong) NSMutableArray *temporaryTimelineObjectViewControllers;
 
@@ -212,31 +209,8 @@ static NSString* defaultNib = @"VSMainTimelineTrackView";
     return NO;
 }
 
--(void) selectionFrameIntersectsTrack:(NSRect)selectionFrame{
-    [super selectionFrameIntersectsTrack:selectionFrame];
-    
-    if(!NSEqualRects(selectionFrame, NSZeroRect)){
-        for (VSTimelineObjectViewController *timelineObjectViewController in self.timelineObjectViewControllers){
-            
-            if(NSIntersectsRect(timelineObjectViewController.view.frame, selectionFrame)){
-                if(!timelineObjectViewController.timelineObjectProxy.selected){
-                    [self selectTimelineObject:timelineObjectViewController.timelineObjectProxy exclusively:NO];
-                }
-            }
-            else if(timelineObjectViewController.timelineObjectProxy.selected){
-                [self unselectTimelineObjectProxy:timelineObjectViewController.timelineObjectProxy];
-            }
-        }
-    }
-    else{
-        for(VSTimelineObjectViewController *timelineObjectViewController in self.timelineObjectViewControllers){
-            [self unselectTimelineObjectProxy:timelineObjectViewController.timelineObjectProxy];
-        }
-    }
-}
 
-
-#pragma mark Moving
+#pragma mark - Moving
 
 -(void) updateActiveMoveableTimelineObjectsAccordingToViewsFrame{
     NSMutableArray *activeMoveableObjects = [NSMutableArray arrayWithArray:[self selectedAndActiveTimelineObjectViewControllers]];
@@ -294,7 +268,7 @@ static NSString* defaultNib = @"VSMainTimelineTrackView";
 
 
 
-#pragma mark Snapping
+#pragma mark - Snapping
 
 -(BOOL) computeSnappingXValueForMoveableActiveTimelineObjectsMovedAccordingToDeltaX:(float)deltaX snappingDeltaX:(float *)snappingDeltaX{
     
@@ -454,7 +428,7 @@ static NSString* defaultNib = @"VSMainTimelineTrackView";
 
 
 
-#pragma mark Selection
+#pragma mark  - Selection
 
 -(NSArray*) selectedTimelineObjectViewControllers{
     NSIndexSet *indexSetOfSelectedTimelineObjects = [self.timelineObjectViewControllers indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
@@ -493,9 +467,30 @@ static NSString* defaultNib = @"VSMainTimelineTrackView";
     return moveableTimelineObjects;
 }
 
+-(void) selectionFrameIntersectsTrack:(NSRect)selectionFrame{
+    [super selectionFrameIntersectsTrack:selectionFrame];
+    
+    if(!NSEqualRects(selectionFrame, NSZeroRect)){
+        for (VSTimelineObjectViewController *timelineObjectViewController in self.timelineObjectViewControllers){
+            
+            if(NSIntersectsRect(timelineObjectViewController.view.frame, selectionFrame)){
+                if(!timelineObjectViewController.timelineObjectProxy.selected){
+                    [self selectTimelineObject:timelineObjectViewController.timelineObjectProxy exclusively:NO];
+                }
+            }
+            else if(timelineObjectViewController.timelineObjectProxy.selected){
+                [self unselectTimelineObjectProxy:timelineObjectViewController.timelineObjectProxy];
+            }
+        }
+    }
+    else{
+        for(VSTimelineObjectViewController *timelineObjectViewController in self.selectedTimelineObjectViewControllers){
+            [self unselectTimelineObjectProxy:timelineObjectViewController.timelineObjectProxy];
+        }
+    }
+}
 
-
-#pragma mark Intersection
+#pragma mark - Intersection
 
 -(void) applyIntersectionToTimelineObjects{
     
@@ -777,6 +772,10 @@ addTimelineObjectsBasedOnProjectItemRepresentation:droppedProjectItems
     }
 }
 
+
+-(void) timelineObjectWantsToBeUnselected:(VSTimelineObjectViewController *)timelineObjectViewController{
+    [self unselectTimelineObjectProxy:timelineObjectViewController.timelineObjectProxy];
+}
 
 
 

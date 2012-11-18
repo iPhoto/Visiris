@@ -53,6 +53,6 @@
 /**
  * Called before the VSTimelineObjectPropertiesViewController is removed from superview. Tells its subviews to reset.
  */
--(void) willBeHidden;
+-(void) reset;
 
 @end

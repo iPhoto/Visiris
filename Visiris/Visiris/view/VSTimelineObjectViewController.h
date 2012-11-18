@@ -103,9 +103,14 @@
  * @param NSRect the frame of the VSTimelineObjectViewController's view will be set to
  */
 -(VSDoubleFrame) timelineObjectWillResize:(VSTimelineObjectViewController *)timelineObjectViewController fromFrame:(VSDoubleFrame)oldFrame toFrame:(VSDoubleFrame)newFrame;
+
+/**
+ * Called when an the VSTimelineObjectViewController wants to be set as unselected
+ * @param timelineObjectViewController VSTimelineObjectViewController that wants to be unselected
+ */
+-(void) timelineObjectWantsToBeUnselected:(VSTimelineObjectViewController*) timelineObjectViewController;
+
 @end
-
-
 
 
 

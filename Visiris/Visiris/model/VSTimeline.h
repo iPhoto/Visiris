@@ -210,4 +210,8 @@
  */
 -(NSArray*) selectedTimelineObjects;
 
+
+
+-(void) selectTimelineObjects:(NSArray *)timelineObjectsToSelect onTrack:(VSTrack *)aTrack;
+
 @end

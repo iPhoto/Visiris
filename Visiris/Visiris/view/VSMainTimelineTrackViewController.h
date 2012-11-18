@@ -122,7 +122,7 @@
  */
 -(void) copyTimelineObject:(VSTimelineObjectViewController*) timelineObjectViewController toTrack:(VSMainTimelineTrackViewController*) trackViewController;
 
--(void) unselectTimelineObject:(VSTimelineObject*) timelineObject ofTrack:(VSTrackViewController*) trackViewController;
+-(void) unselectTimelineObject:(VSTimelineObject*) timelineObject ofTrack:(VSMainTimelineTrackViewController*) trackViewController;
 
 
 @optional
@@ -215,7 +215,8 @@ typedef enum{
 /** Pixel Item Ratio as set in VSTimelineViewController */
 @property double pixelTimeRatio;
 
-
+/** NSMutableArray storing all VSTimelineObjectViewControllers of the VSTimelineObjectViews added to the VSTrackViewController */
+@property (strong) NSMutableArray *timelineObjectViewControllers;
 
 
 /**

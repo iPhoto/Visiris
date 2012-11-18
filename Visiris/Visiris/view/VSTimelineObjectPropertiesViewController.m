@@ -218,7 +218,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 #pragma mark -
 #pragma mark Methods
 
--(void) willBeHidden{
+-(void) reset{
     [self.animationTimelineViewController resetTimeline];
     [self.parametersViewController resetParameters];
     self.timelineObject = nil;

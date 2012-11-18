@@ -17,6 +17,7 @@
 #import "VSTimelineObjectProxy.h"
 #import "VSPlayHead.h"
 #import "VSTimelineObjectSource.h"
+#import "VSDocumentController.h"
 
 #import "VSCoreServices.h"
 
@@ -276,9 +277,15 @@
     }
 }
 
+-(void) selectTimelineObjects:(NSArray *)timelineObjectsToSelect onTrack:(VSTrack *)aTrack{
+    for(VSTimelineObject *timelineObject in timelineObjectsToSelect){
+        [self selectTimelineObject:timelineObject onTrack:aTrack];
+    }
+}
+
 -(void) unselectTimelineObject:(VSTimelineObject *)timelineObjectToUnselect onTrack:(VSTrack *)aTrack{
     if([self.tracks containsObject:aTrack]){
-        [aTrack selectTimelineObject:timelineObjectToUnselect];
+        [aTrack unselectTimelineObject:timelineObjectToUnselect];
     }
 }
 
@@ -290,6 +297,7 @@
             [track unselectAllTimelineObjects];
         }
     }
+
 }
 
 -(NSArray*) selectedTimelineObjects{

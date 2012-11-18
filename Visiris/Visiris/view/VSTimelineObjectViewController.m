@@ -258,6 +258,14 @@ static NSString* defaultNib = @"VSTimelineObjectView";
     }
 }
 
+-(void) mouseUpOnTimelineObjectView:(VSTimelineObjectView *)timelineObjectView{
+    if(self.timelineObject.selected){
+        if([self delegateRespondsToSelector:@selector(timelineObjectWantsToBeUnselected:)]){
+            [self.delegate timelineObjectWantsToBeUnselected:self];
+        }
+    }
+}
+
 -(void) timelineObjectViewWasResized:(VSTimelineObjectView *)timelineObjectView{
     if([self delegateRespondsToSelector:@selector(timelineObjectProxyWasResized:)]){
         [self.delegate timelineObjectProxyWasResized:self];

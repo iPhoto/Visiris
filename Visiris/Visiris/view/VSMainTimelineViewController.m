@@ -291,22 +291,6 @@ static NSString* defaultNib = @"VSMainTimelineView";
     [self.view.window makeFirstResponder:self.view];
 }
 
-#pragma mark toPirvate
-
-
--(void) unselectTimelineObjects:(NSArray*) timelineObjectsToUnselect{
-    
-    if(timelineObjectsToUnselect.count){
-        NSDictionary *userInfo = [NSDictionary dictionaryWithObject: [VSDocumentController documentOfView:self.view]
-                                                             forKey:VSSendersDocumentKeyInUserInfoDictionary];
-        
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectsGotUnselected
-                                                            object:timelineObjectsToUnselect
-                                                          userInfo:userInfo];
-    }
-}
-
 
 #pragma mark Selecting
 
@@ -315,37 +299,17 @@ static NSString* defaultNib = @"VSMainTimelineView";
     return [self selectTimelineObjectProxy:timelineObjectProxy onTrack:trackViewController exclusively:exclusiveSelection];
 }
 
--(void) unselectTimelineObject:(VSTimelineObject *)timelineObject ofTrack:(VSTrackViewController *)trackViewController{
-    [self.view.undoManager setActionName:NSLocalizedString(@"Change Selection", @"Undo Massage of unselecting TimelineObjects")];
-    
-    [self.view.undoManager beginUndoGrouping];
-    
-    [timelineObject setUnselectedAndRegisterUndo:self.view.undoManager];
-    
-    [self.view.undoManager endUndoGrouping];
+-(void) unselectTimelineObject:(VSTimelineObject *)timelineObject ofTrack:(VSMainTimelineTrackViewController *)trackViewController{
+    [self setTimelineObjectUnselect:timelineObject ofTrack:trackViewController.track];
 }
 
 
 -(void) timelineObjectProxy:(VSTimelineObjectProxy *)timelineObjectProxy wasUnselectedOnTrackViewController:(VSMainTimelineTrackViewController *)trackViewController{
 
-    if([timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
-        [self unselectTimelineObjects:[NSArray arrayWithObject:((VSTimelineObject*) timelineObjectProxy)]];
-    }
 }
 
 -(void) didClickViewOfTrackViewController:(VSMainTimelineTrackViewController *)trackViewController{
-    
-    NSArray *selectedTimelineObjects = self.timeline.selectedTimelineObjects;
-    
-    [self.view.undoManager setActionName:NSLocalizedString(@"Change Selection", @"Undo Massage of unselecting TimelineObjects")];
-    
-    [self.view.undoManager beginUndoGrouping];
-    
-    for(VSTimelineObject *timelineObject in selectedTimelineObjects){
-        [timelineObject setUnselectedAndRegisterUndo:self.view.undoManager];
-    }
-    
-    [self.view.undoManager endUndoGrouping];
+    [self unselectAllSelectedTimelineObjects];
 }
 
 
@@ -368,25 +332,12 @@ static NSString* defaultNib = @"VSMainTimelineView";
 #pragma mark Removing
 
 -(void) timelineObjectProxies:(NSArray *)timelineObjectProxies wereRemovedFromTrack:(VSMainTimelineTrackViewController *)trackViewController{
-    //
-    //    NSArray *selectedTimelineObjects = [timelineObjectProxies objectsAtIndexes:[timelineObjectProxies indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-    //        if([obj isKindOfClass:[VSTimelineObjectProxy class]]){
-    //            return ((VSTimelineObjectProxy*) obj).selected;
-    //        }
-    //        return NO;
-    //    }]];
-    ////
-    ////    [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectsGotUnselected object:selectedTimelineObjects];
+
 }
 
 -(BOOL) removeTimelineObject:(VSTimelineObjectViewController *)timelineObjectViewController fromTrack:(VSMainTimelineTrackViewController *)track{
-    if(timelineObjectViewController.timelineObjectProxy.selected){
-        [self unselectTimelineObjects:[NSArray arrayWithObject:timelineObjectViewController.timelineObjectProxy]];
-    }
     
     [self removeTimlineObject:((VSTimelineObject*) timelineObjectViewController.timelineObjectProxy) fromTrack:track.track];
-    
-    DDLogInfo(@"removing TimelineObject");
     
     return YES;
 }
@@ -514,7 +465,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
     
     [self.view.undoManager beginUndoGrouping];
     [self.view.undoManager setActionName:NSLocalizedString(@"Moved Objects on Timeline", @"Undo Action Name for moving objects on Timeline")];
-    
+    int amountOf = 0;
     for(VSMainTimelineTrackViewController *tmpTrackViewController in self.trackViewControllers){
         if(tmpTrackViewController != trackViewController){
             [tmpTrackViewController updateActiveMoveableTimelineObjectsAccordingToViewsFrame];
@@ -524,8 +475,11 @@ static NSString* defaultNib = @"VSMainTimelineView";
             [tmpTrackViewController resetTemporaryTimelineObjects];
             [tmpTrackViewController unsetSelectedTimelineObjectsAsMoving];
             [tmpTrackViewController resetIntersections];
+            
+            amountOf += tmpTrackViewController.timelineObjectViewControllers.count;
         }
     }
+    DDLogInfo(@"amount of object: %d",amountOf);
     
     [self.view.undoManager endUndoGrouping];
     
@@ -642,8 +596,10 @@ static NSString* defaultNib = @"VSMainTimelineView";
  * @param notification NSNotifaction storing the information about which VSTimelineObjects were selected before the propertiesView turned inactive
  */
 -(void) timelineObjectPropertIesDidTurnInactive:(NSNotification*) notification{
-    [self.timeline unselectAllTimelineObjects];
+    [self unselectAllSelectedTimelineObjects];
 }
+
+
 
 /**
  * Enlarges the width of the timeline, but doesn't change the timeline's duration
@@ -701,32 +657,7 @@ static NSString* defaultNib = @"VSMainTimelineView";
 -(NSArray*) createProjectItemRepresentationsForFiles:(NSArray*) filePaths{
     
     return [self.projectItemRepresentationController representationsForFiles:filePaths];
-    //    NSMutableArray *result = [[NSMutableArray alloc] init];
-    //
-    //    NSMutableDictionary *currentTemporaryProjectItems = [NSMutableDictionary dictionaryWithDictionary:self.temporaryCreatedProjectItems];
-    //
-    //    [self.temporaryCreatedProjectItems removeAllObjects];
-    //
-    //    for(NSString *fileName in filePaths){
-    //
-    //        VSProjectItemRepresentation *tmpProjectItemRepresentation = [currentTemporaryProjectItems objectForKey:fileName];
-    //
-    //        if(!tmpProjectItemRepresentation){
-    //
-    //            VSProjectItem *tempProjectItem = [self.projectItemController createNewProjectItemFromFile:fileName];
-    //
-    //            if(tempProjectItem){
-    //                tmpProjectItemRepresentation = [self.projectItemRepresentationController createPresentationOfProjectItem:tempProjectItem];
-    //            }
-    //        }
-    //
-    //        if(tmpProjectItemRepresentation){
-    //            [result addObject:tmpProjectItemRepresentation];
-    //            [self.temporaryCreatedProjectItems setObject:tmpProjectItemRepresentation forKey:fileName];
-    //        }
-    //    }
-    
-    //    return result;
+
 }
 
 /**
@@ -778,36 +709,18 @@ static NSString* defaultNib = @"VSMainTimelineView";
 -(BOOL) selectTimelineObjectProxy:(VSTimelineObjectProxy*) timelineObjectProxy onTrack:(VSMainTimelineTrackViewController*) trackViewController exclusively:(BOOL) exclusiveSelection{
     
     if([timelineObjectProxy isKindOfClass:[VSTimelineObject class]]){
-        [self.view.undoManager setActionName:NSLocalizedString(@"Change Selection", @"Undo Massage of unselecting TimelineObjects")];
+
         [self.view.undoManager beginUndoGrouping];
-        
         if(exclusiveSelection){
             
-            NSArray *selectedTimelineObjects = [self.timeline selectedTimelineObjects];
-            
-            [self unselectTimelineObjects:selectedTimelineObjects];
-            
-            for(VSTimelineObject *timelineObject in selectedTimelineObjects){
-                [timelineObject setUnselectedAndRegisterUndo:self.view.undoManager];
-            }
+            [self.timeline unselectAllTimelineObjects];
         }
         
         [self.timeline selectTimelineObject:((VSTimelineObject*) timelineObjectProxy) onTrack:trackViewController.track];
         
-        if(timelineObjectProxy.selected){
-            [((VSTimelineObject*) timelineObjectProxy) setSelectedAndRegisterUndo:self.view.undoManager];
-            
-            NSDictionary *userInfo = [NSDictionary dictionaryWithObject: [VSDocumentController documentOfView:self.view]
-                                                                 forKey:VSSendersDocumentKeyInUserInfoDictionary];
-            
-            
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectsGotSelected
-                                                                object:[NSArray arrayWithObject:timelineObjectProxy]
-                                                              userInfo:userInfo];
-        }
-        
         [self.view.undoManager endUndoGrouping];
+        
+        [self postNotificationForSelectionOfTimelineObject:[self.timeline.selectedTimelineObjects lastObject]];
         
         return YES;
     }
@@ -817,6 +730,32 @@ static NSString* defaultNib = @"VSMainTimelineView";
     
 }
 
+-(void) setTimelineObjectUnselect:(VSTimelineObject*) timelineObject ofTrack:(VSTrack*) track{
+    [self.view.undoManager setActionName:NSLocalizedString(@"Change Selection", @"Undo Massage of unselecting TimelineObjects")];
+    
+    [self.view.undoManager beginUndoGrouping];
+    
+    [self.timeline unselectTimelineObject:timelineObject onTrack:track];
+    
+    [self postNotificationForSelectionOfTimelineObject:[self.timeline.selectedTimelineObjects lastObject]];
+    
+    [self.view.undoManager endUndoGrouping];
+}
+
+-(void) unselectAllSelectedTimelineObjects{
+    [self.timeline unselectAllTimelineObjects];
+    
+    [self postNotificationForSelectionOfTimelineObject:nil];
+}
+
+-(void) postNotificationForSelectionOfTimelineObject:(VSTimelineObject*) timelineObject{
+    NSDictionary *userInfo = [NSDictionary dictionaryWithObject: [VSDocumentController documentOfView:self.view]
+                                                         forKey:VSSendersDocumentKeyInUserInfoDictionary];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:VSTimelineObjectsGotSelected
+                                                        object:timelineObject
+                                                      userInfo:userInfo];
+}
 
 #pragma mark Moving
 
@@ -1046,8 +985,6 @@ static NSString* defaultNib = @"VSMainTimelineView";
 -(void) removeSelectedTimelineObjects{
     [self.view.undoManager beginUndoGrouping];
     
-    [self unselectTimelineObjects:[NSArray arrayWithObject:((VSTimelineObject*) self.timeline.selectedTimelineObjects)]];
-    
     [self.timeline removeSelectedTimelineObjectsAndRegisterAtUndoManager:self.view.undoManager];
     [self.view.undoManager setActionName:NSLocalizedString(@"Remove Objects", @"Undo Action for removing TimelineObjects from the timeline")];
     [self.view.undoManager endUndoGrouping];
@@ -1060,8 +997,13 @@ static NSString* defaultNib = @"VSMainTimelineView";
  */
 -(void) removeTimlineObject:(VSTimelineObject*) timelineObject fromTrack:(VSTrack*) track{
     [self.view.undoManager beginUndoGrouping];
-    [self.timeline removeTimelineObject:timelineObject fromTrack:track andRegisterAtUndoManager:self.view.undoManager];
+    
+    [self.timeline removeTimelineObject:timelineObject
+                              fromTrack:track
+               andRegisterAtUndoManager:self.view.undoManager];
+    
     [self.view.undoManager setActionName:NSLocalizedString(@"Remove Objects", @"Undo Action for removing TimelineObjects from the timeline")];
+    
     [self.view.undoManager endUndoGrouping];
 }
 
@@ -1137,7 +1079,6 @@ static NSString* defaultNib = @"VSMainTimelineView";
 -(void) addNewTrackLabelForTrack:(VSMainTimelineTrackViewController*) aTrack{
     NSRect labelRect = NSMakeRect(0, aTrack.view.frame.origin.y, TRACK_LABEL_WIDTH, aTrack.view.frame.size.height);
     
-    //NSLog(@"labelRect: %@",NSStringFromRect(labelRect));
     [self.scrollView addTrackLabel:[[VSTrackLabel alloc] initWithName:aTrack.track.name forTrack:aTrack.track.trackID forFrame:labelRect]];
 }
 

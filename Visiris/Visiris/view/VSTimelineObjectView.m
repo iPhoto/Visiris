@@ -8,7 +8,14 @@
 
 #import "VSTimelineObjectView.h"
 
-@interface VSTimelineObjectView ()
+@interface VSTimelineObjectView (){
+    
+    //indicated if an mouseDownWas happend on the view
+    BOOL _mouseDownOnView;
+    
+    //indidactes wheter the timelineObject was selected before the mouseDown-Event happend
+    BOOL _gotSelectedCurrentMouseDownEvent;
+}
 
 #define RESIZING_FROM_LEFT 0
 #define RESIZING_FROM_RIGHT 1
@@ -67,13 +74,16 @@ static int resizingAreaWidth = 10;
     self = [super initWithFrame:frame];
     if (self) {
         
-//        [self setResizingAreas];
+        //        [self setResizingAreas];
     }
     
     return self;
 }
 
 -(void) awakeFromNib{
+    
+    _mouseDownOnView = NO;
+    _gotSelectedCurrentMouseDownEvent = NO;
     
     [self registerForDraggedTypes:[NSArray arrayWithObjects:VSDevicePasteboardType, nil]];
     
@@ -133,6 +143,8 @@ static int resizingAreaWidth = 10;
 
 -(void) mouseDown:(NSEvent *)theEvent{
     
+    _mouseDownOnView = YES;
+    
     //stores the current values of mouse, neccessary for latter dragging operations
     self.lastMousePosition = [theEvent locationInWindow];
     self.mouseDownMousePosition = self.lastMousePosition;
@@ -145,14 +157,16 @@ static int resizingAreaWidth = 10;
         if([self delegateImplementsSelector:@selector(timelineObjectViewWasClicked:withModifierFlags:)]){
             [self.delegate timelineObjectViewWasClicked:self withModifierFlags:theEvent.modifierFlags];
         }
-    }
-    else{
-        [self setDraggingModeDependingOnMousePosition:self.lastMousePosition];
+        _gotSelectedCurrentMouseDownEvent  = YES;
     }
 }
 
 -(void) mouseDragged:(NSEvent *)theEvent{
     NSPoint newMousePosition =[theEvent locationInWindow];
+    
+    if(!self.selected && !self.resizing){
+        [self setDraggingModeDependingOnMousePosition:self.lastMousePosition];
+    }
     
     if(self.selected){
         //if the the event was entered first time after a mouse down the kind of drgging operation has to be set
@@ -187,27 +201,51 @@ static int resizingAreaWidth = 10;
 
 -(void) mouseUp:(NSEvent *)theEvent{
     
-    [self mouseDragged:theEvent];
     
-    if(self.moving){
-        //sets the moving-flag to NO and tells its delegate that the draggin has ended
-        self.moving = NO;
+    if(_mouseDownOnView){
         
-        if([self delegateImplementsSelector:@selector(timelineObjectDidStopDragging:)]){
-            [self.delegate timelineObjectDidStopDragging:self];
+        if(self.moving){
+            [self mouseDragged:theEvent];
+            
+            //sets the moving-flag to NO and tells its delegate that the draggin has ended
+            self.moving = NO;
+            
+            if([self delegateImplementsSelector:@selector(timelineObjectDidStopDragging:)]){
+                [self.delegate timelineObjectDidStopDragging:self];
+            }
         }
-    }
-    else if(self.resizing){
-        //Resets the cursor and the resizingDirection and set the resizing flag to NO
-        [[NSCursor resizeLeftRightCursor] pop];
-        self.resizing = NO;
-        self.resizingDirection = -1;
+        else if(self.resizing){
+            [self mouseDragged:theEvent];
+            
+            //Resets the cursor and the resizingDirection and set the resizing flag to NO
+            [[NSCursor resizeLeftRightCursor] pop];
+            self.resizing = NO;
+            self.resizingDirection = -1;
+            
+            //tells its delegate that the resizing operation has been finished
+            if ([self delegateImplementsSelector:@selector(timelineObjectDidStopResizing:)]) {
+                [self.delegate timelineObjectDidStopResizing:self];
+            }
+        }
+        else{
+            if(self.selected && !_gotSelectedCurrentMouseDownEvent){
+                if([self delegateImplementsSelector:@selector(mouseUpOnTimelineObjectView:)]){
+                    [self.delegate mouseUpOnTimelineObjectView:self];
+                }
+            }
+        }
         
-        //tells its delegate that the resizing operation has been finished
-        if ([self delegateImplementsSelector:@selector(timelineObjectDidStopResizing:)]) {
-            [self.delegate timelineObjectDidStopResizing:self];
-        }
     }
+    else{
+        [self.nextResponder mouseUp:theEvent];
+    }
+    
+    _mouseDownOnView = NO;
+    _gotSelectedCurrentMouseDownEvent = NO;
+}
+
+-(void) mouseExited:(NSEvent *)theEvent{
+    _mouseDownOnView = NO;
 }
 
 -(void) mouseMoved:(NSEvent *)theEvent{
@@ -513,7 +551,7 @@ static int resizingAreaWidth = 10;
     if(!VSEqualDoubleFrame(_doubleFrame, doubleFrame)){
         _doubleFrame = doubleFrame;
         
-       [self updateFrame];
+        [self updateFrame];
     }
 }
 
