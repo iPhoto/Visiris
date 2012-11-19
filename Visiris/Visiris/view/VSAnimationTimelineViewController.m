@@ -358,6 +358,7 @@ static NSString* defaultNib = @"VSAnimationTimelineView";
     [self removeTimelineObjectOberservers];
     
     for(VSAnimationTrackViewController *animationTrackViewController in [self.animationTrackViewControllers allValues]){
+        [animationTrackViewController reset];
         [animationTrackViewController.view removeFromSuperview];
     }
     

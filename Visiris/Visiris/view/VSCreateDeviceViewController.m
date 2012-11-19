@@ -66,12 +66,6 @@
 
 - (IBAction)didPressCreateDeviceButton:(NSButton *)button
 {
-   NSInteger editedColumn = [self.parameterTableView editedColumn];
-    
-    if(editedColumn != -1){
-        NSInteger editedRow = [self.parameterTableView editedRow];
-
-    }
     [self.parameterTableView abortEditing];
     NSIndexSet *selectedParametIndizes = [self.availableParameter indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
         if([obj isKindOfClass:[VSExternalInputRepresentation class]]){

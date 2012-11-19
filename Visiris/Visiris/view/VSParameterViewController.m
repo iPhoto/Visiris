@@ -99,13 +99,11 @@ static NSString* defaultNib = @"VSParameterView";
 
 #pragma mark - Methods
 
--(void) removeObservers{
-    [self.parameter removeObserver:self
-                        forKeyPath:@"currentValue"];
-    
-    [self.parameter removeObserver:self
-                        forKeyPath:@"connectedWithDeviceParameter"];
+-(void) reset{
+    [self removeObservers];
 }
+
+
 
 -(void) showParameter:(VSParameter *)parameter andAvailableDevices:(NSArray*) availableDevices{
     
@@ -260,6 +258,15 @@ static NSString* defaultNib = @"VSParameterView";
 
 
 #pragma mark - Private Methods
+
+
+-(void) removeObservers{
+    [self.parameter removeObserver:self
+                        forKeyPath:@"currentValue"];
+    
+    [self.parameter removeObserver:self
+                        forKeyPath:@"connectedWithDeviceParameter"];
+}
 
 -(void) showDeviceParameterConnectionDialogRelativeToView:(NSView*)relativeToView{
     

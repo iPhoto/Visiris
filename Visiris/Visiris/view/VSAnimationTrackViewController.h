@@ -148,4 +148,11 @@
  * @return VSKeyFrameViewController if one was left of the position, nil otherwise
  */
 -(VSKeyFrameViewController*) nearestKeyFrameViewLeftOfXPosition:(float) xPosition;
+
+/**
+ * Resets the object and removes all observers it is holding
+ */
+-(void) reset;
+
+
 @end

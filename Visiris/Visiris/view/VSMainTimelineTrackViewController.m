@@ -122,6 +122,7 @@ static NSString* defaultNib = @"VSMainTimelineTrackView";
             case NSKeyValueChangeRemoval:
             {
                 if([[change valueForKey:@"notificationIsPrior"] boolValue]){
+
                     NSArray *allTimelineObjects = [object valueForKey:keyPath];
                     NSArray *removedTimelineObjects = [allTimelineObjects objectsAtIndexes:[change  objectForKey:@"indexes"]];
                     
@@ -208,7 +209,6 @@ static NSString* defaultNib = @"VSMainTimelineTrackView";
     
     return NO;
 }
-
 
 #pragma mark - Moving
 
@@ -406,12 +406,10 @@ static NSString* defaultNib = @"VSMainTimelineTrackView";
 
 -(void) removeInactiveSelectedTimelineObjectViewControllers{
     if([self delegateRespondsToSelector:@selector(removeTimelineObject:fromTrack:)]){
-        NSArray *selectedTimelineObjectViewControllers = [self selectedTimelineObjectViewControllers];
+        NSArray *selectedInactiveTimelineObjectViewControllers = [self inactiveTimelineObjectViewControllers];
         
-        for(VSTimelineObjectViewController *selectedTimelineObjectViewController in selectedTimelineObjectViewControllers){
-            if(selectedTimelineObjectViewController.inactive){
+        for(VSTimelineObjectViewController *selectedTimelineObjectViewController in selectedInactiveTimelineObjectViewControllers){
                 [self.delegate removeTimelineObject:selectedTimelineObjectViewController fromTrack:self];
-            }
         }
     }
 }
@@ -467,6 +465,19 @@ static NSString* defaultNib = @"VSMainTimelineTrackView";
     return moveableTimelineObjects;
 }
 
+-(NSArray* )inactiveTimelineObjectViewControllers{
+    NSIndexSet *indizesOfInactiveTimelineObjects = [self.timelineObjectViewControllers indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj isKindOfClass:[VSTimelineObjectViewController class]]){
+            if(((VSTimelineObjectViewController*)obj).inactive){
+                return YES;
+            }
+        }
+        return NO;
+    }];
+    
+    return [self.timelineObjectViewControllers objectsAtIndexes:indizesOfInactiveTimelineObjects];
+}
+
 -(void) selectionFrameIntersectsTrack:(NSRect)selectionFrame{
     [super selectionFrameIntersectsTrack:selectionFrame];
     
@@ -475,17 +486,17 @@ static NSString* defaultNib = @"VSMainTimelineTrackView";
             
             if(NSIntersectsRect(timelineObjectViewController.view.frame, selectionFrame)){
                 if(!timelineObjectViewController.timelineObjectProxy.selected){
-                    [self selectTimelineObject:timelineObjectViewController.timelineObjectProxy exclusively:NO];
+                    [self selectTimelineObject:timelineObjectViewController.timelineObject exclusively:NO];
                 }
             }
             else if(timelineObjectViewController.timelineObjectProxy.selected){
-                [self unselectTimelineObjectProxy:timelineObjectViewController.timelineObjectProxy];
+                [self unselectTimelineObjectProxy:timelineObjectViewController.timelineObject];
             }
         }
     }
     else{
         for(VSTimelineObjectViewController *timelineObjectViewController in self.selectedTimelineObjectViewControllers){
-            [self unselectTimelineObjectProxy:timelineObjectViewController.timelineObjectProxy];
+            [self unselectTimelineObjectProxy:timelineObjectViewController.timelineObject];
         }
     }
 }
@@ -748,11 +759,12 @@ addTimelineObjectsBasedOnProjectItemRepresentation:droppedProjectItems
 
 
 
-#pragma mark- VSTimelineObjectViewControllerDelegate implementation
+#pragma mark- 
+#pragma mark VSTimelineObjectViewControllerDelegate implementation
 
 
 
-#pragma mark Selecting
+#pragma mark  - Selecting
 
 -(BOOL)timelineObjectProxyWillBeSelected:(VSTimelineObjectProxy *)timelineObjectProxy exclusively:(BOOL)exclusiveSelection{
     return [self selectTimelineObject:timelineObjectProxy exclusively:exclusiveSelection];
@@ -774,12 +786,12 @@ addTimelineObjectsBasedOnProjectItemRepresentation:droppedProjectItems
 
 
 -(void) timelineObjectWantsToBeUnselected:(VSTimelineObjectViewController *)timelineObjectViewController{
-    [self unselectTimelineObjectProxy:timelineObjectViewController.timelineObjectProxy];
+    [self unselectTimelineObjectProxy:timelineObjectViewController.timelineObject];
 }
 
 
 
-#pragma mark Resizing
+#pragma mark - Resizing
 
 -(BOOL) timelineObjectWillStartResizing:(VSTimelineObjectViewController *)timelineObjectViewController{
     BOOL result = YES;
@@ -880,7 +892,7 @@ IntersectedByTimelineObjectViews:[NSArray arrayWithObject:timelineObjectViewCont
 
 
 
-#pragma mark Dragging (Moving)
+#pragma mark - Dragging (Moving)
 
 -(NSPoint) timelineObjectWillBeDragged:(VSTimelineObjectViewController *)timelineObjectViewController fromPosition:(NSPoint)oldPosition toPosition:(NSPoint)newPosition forMousePosition:(NSPoint)mousePosition{
     
@@ -1119,7 +1131,7 @@ IntersectedByTimelineObjectViews:[NSArray arrayWithObject:timelineObjectViewCont
  *
  * @param timelineObjectProxy VSTimelineObjectProxy to be unselected
  */
--(BOOL) unselectTimelineObjectProxy:(VSTimelineObjectProxy *)timelineObjectProxy{
+-(BOOL) unselectTimelineObjectProxy:(VSTimelineObject *)timelineObjectProxy{
     
     if([self delegateRespondsToSelector:@selector(unselectTimelineObject:ofTrack:)]){
         [self.delegate unselectTimelineObject:timelineObjectProxy ofTrack:self];
@@ -1269,10 +1281,8 @@ IntersectedByTimelineObjectViews:[NSArray arrayWithObject:timelineObjectViewCont
     
     [self.timelineObjectViewControllers removeObjectAtIndex:indexOfObjectToDelete];
     
-    [self.view setNeedsDisplay:YES];
-    [self.view.layer setNeedsDisplay];
-    
-    
+    [self.view.superview setNeedsDisplay:YES];
+    [self.view.superview.layer setNeedsDisplay];
 }
 
 

@@ -129,12 +129,7 @@
 
 
 -(void) dealloc{
-    [self.parameter.animation removeObserver:self
-                                  forKeyPath:@"keyFrames"];
-    
-    [self.parameter removeObserver:self
-                        forKeyPath:@"connectedWithDeviceParameter"];
-    
+    [self removeObservers];
     self.parameter = nil;
     
 }
@@ -253,6 +248,10 @@
     return keyFrameViewController.keyFrame.floatValue;
 }
 
+-(void) reset{
+    [self removeObservers];
+}
+
 #pragma mark - VSViewMouseEventsDelegate Implementation
 
 -(void) rightMouseDown:(NSEvent *)theEvent onView:(NSView *)view{
@@ -351,6 +350,14 @@
 }
 
 #pragma mark - Private Methods
+
+-(void) removeObservers{
+    [self.parameter.animation removeObserver:self
+                                  forKeyPath:@"keyFrames"];
+    
+    [self.parameter removeObserver:self
+                        forKeyPath:@"connectedWithDeviceParameter"];
+}
 
 -(void) updateConnectionPaths{
     NSMutableArray *connections = [[NSMutableArray alloc] init];

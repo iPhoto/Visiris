@@ -180,7 +180,7 @@
     [[NSAnimationContext currentContext] setDuration:0.2];
     
     if([self delegateRespondsToSelector:@selector(willShowContentOfDisclosureView:)]){
-        BOOL result = [delegate willShowContentOfDisclosureView:self];
+        [delegate willShowContentOfDisclosureView:self];
     }
     
     NSSize newContentFrameSize = self.frame.size;

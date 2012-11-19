@@ -16,7 +16,7 @@
     float _deviceViewHeight;
 }
 
-@property VSTimelineObject *timelineObject;
+@property (strong) VSTimelineObject *timelineObject;
 
 @end
 
@@ -72,7 +72,7 @@ static NSString* defaultNib = @"VSTimelineObjectDevicesView";
             case NSKeyValueChangeRemoval:
             {
                 if(![[change valueForKey:@"notificationIsPrior"] boolValue]){
-                    [self reset];
+                    [self removeAllSubViews];
                     [self showDevices:self.timelineObject.devices];
                     
                 }
@@ -109,8 +109,6 @@ static NSString* defaultNib = @"VSTimelineObjectDevicesView";
 #pragma mark -
 #pragma mark Methods
 -(void) showDevicesOfTimelineObject:(VSTimelineObject*)timelineObject{
-    
-    [self reset];
     self.timelineObject = timelineObject;
     
     [self.timelineObject addObserver:self
@@ -134,6 +132,12 @@ static NSString* defaultNib = @"VSTimelineObjectDevicesView";
 }
 
 -(void) reset{
+    [self removeAllSubViews];
+    [self.timelineObject removeObserver:self
+                             forKeyPath:@"devices"];
+}
+
+-(void) removeAllSubViews{
     for(NSInteger i = self.view.subviews.count-1; i >= 0; i--){
         [((NSView*)[self.view.subviews objectAtIndex:i]) removeFromSuperview];
     }

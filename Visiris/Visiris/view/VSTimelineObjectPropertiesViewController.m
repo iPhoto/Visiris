@@ -77,7 +77,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 
 - (void) awakeFromNib{
     [super awakeFromNib];
-
+    
     
     [self.parametersHolderSplitView setAutoresizingMask:NSViewWidthSizable];
     [self.parametersHolderSplitView setAutoresizesSubviews:NO];
@@ -111,7 +111,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     [self.animationTimelineHolder setFrameSize:NSMakeSize(width, self.view.frame.size.height)];
     
     self.animationTimelineViewController = [[VSAnimationTimelineViewController alloc]initWithDefaultNibAndTrackHeight:PARAMETER_VIEW_HEIGHT
-                                                                                                 andMarginTop:self.parametersDisclosureView.controlAreaHeight];
+                                                                                                         andMarginTop:self.parametersDisclosureView.controlAreaHeight];
     
     [self.animationTimelineHolder addSubview:self.animationTimelineViewController.view];
     
@@ -164,7 +164,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     
     [self.parametersDisclosureView setAutoresizesSubviews:YES];
     [self.parametersDisclosureView setAutoresizingMask: NSViewWidthSizable];
-
+    
     
     [self.parametersDisclosureView setFrameSize:NSMakeSize(self.leftScrollView.visibleRect.size.width, self.parametersDisclosureView.frame.size.height)];
     
@@ -194,7 +194,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     
     deviceDisclosureViewFrame.size = NSMakeSize(self.leftScrollView.visibleRect.size.width,
                                                 self.parametersDisclosureView.frame.size.height);
-
+    
     
     [self.deviceDisclosureView setFrame:deviceDisclosureViewFrame];
     
@@ -207,7 +207,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     [self.deviceDisclosureView.contentView addSubview:self.timelineObjectDevicesViewController.view];
     
     [self.timelineObjectDevicesViewController.view setFrameSize:NSMakeSize(self.deviceDisclosureView.frame.size.width,
-                                                                self.parametersViewController.view.frame.size.height)];
+                                                                           self.parametersViewController.view.frame.size.height)];
     
     
     [self.timelineObjectDevicesViewController.view setAutoresizesSubviews:YES];
@@ -219,9 +219,12 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 #pragma mark Methods
 
 -(void) reset{
-    [self.animationTimelineViewController resetTimeline];
-    [self.parametersViewController resetParameters];
-    self.timelineObject = nil;
+    if(self.timelineObject){
+        [self.animationTimelineViewController resetTimeline];
+        [self.parametersViewController resetParameters];
+        [self.timelineObjectDevicesViewController reset];
+        self.timelineObject = nil;
+    }
 }
 
 
@@ -346,7 +349,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
 
 
 
-#pragma mark - 
+#pragma mark -
 #pragma mark Private Methods
 
 /**
@@ -394,8 +397,6 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
  * tells timelineObjectDevicesViewController to display all devices connected with the timelineObject
  */
 -(void) showDevices{
-    [self.timelineObjectDevicesViewController reset];
-    
     [self.timelineObjectDevicesViewController showDevicesOfTimelineObject:self.timelineObject];
 }
 
@@ -412,7 +413,7 @@ static NSString* defaultNib = @"VSTimelineObjectPropertiesView";
     
     NSSize leftScrollViewSize = [self.leftScrollView.documentView frame].size;
     NSSize animationScrollViewSize = [self.animationTimelineViewController.scrollView.documentView frame].size;
-
+    
     leftScrollViewSize.height = newFrame.size.height;
     animationScrollViewSize.height  = newFrame.size.height;
     

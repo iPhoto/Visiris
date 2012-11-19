@@ -89,12 +89,6 @@ static NSString* defaultNib = @"VSPropertiesView";
                                              selector:@selector(timelineObjectsGotSelected:)
                                                  name:VSTimelineObjectsGotSelected
                                                object:nil];
-    
-    //Adding Observer for TimelineObjects got unselected
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(timelineObjectsGotUnselected:)
-                                                 name:VSTimelineObjectsGotUnselected
-                                               object:nil];
 }
 
 -(void) dealloc{
@@ -153,23 +147,6 @@ static NSString* defaultNib = @"VSPropertiesView";
                     [self.timelineObjectPropertiesViewController reset];
                     [self.timelineObjectPropertiesViewController.view removeFromSuperview];
                 }
-            }
-        }
-    }
-}
-
-/**
- * Called when a VSTimelineObjectsGotUnselected-Notification was received.
- *
- * Hides the currently visible TimelineObjectPropertyView
- * @param notification NSNotification storing the selected VSTimelineObject
- */
--(void) timelineObjectsGotUnselected:(NSNotification *) notification{
-    if ([[notification.userInfo objectForKey:VSSendersDocumentKeyInUserInfoDictionary] isEqualTo:[VSDocumentController documentOfView:self.view]]){
-        if(self.view.subviews.count > 0){
-            if([[self.view subviews] objectAtIndex:0] == self.timelineObjectPropertiesViewController.view){
-                [self.timelineObjectPropertiesViewController reset];
-                [self.timelineObjectPropertiesViewController.view removeFromSuperview];
             }
         }
     }
